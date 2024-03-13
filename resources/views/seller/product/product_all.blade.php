@@ -95,14 +95,6 @@
 
                                             <td class="td-price">$95.97</td>
 
-                                            <td class="col-sm-9">
-                                                <label class="switch">
-                                                    <input type="checkbox" checked=""><span
-                                                        class="switch-state"></span>
-                                                </label>
-                                            </td>
-
-
                                             <td>
                                                 <ul>
                                                     <li>

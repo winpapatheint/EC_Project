@@ -51,6 +51,9 @@
                                                 </ul>
                                             </td>
                                             <td>The Product is No Longer Needed</td>
+                                            <td class="td-check">
+                                                <i class="ri-checkbox-circle-line"></i>
+                                            </td>
                                         </tr>
 
                                         <tr>

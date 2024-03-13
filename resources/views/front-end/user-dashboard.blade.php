@@ -1,5 +1,10 @@
-//Header/Footer Layout Start
 <x-guest-layout>
+    <style>
+        ul.nav{
+            list-style-type: none !important;
+        }
+
+    </style>
     
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
@@ -64,34 +69,34 @@
 
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-dashboard-tab" data-bs-toggle="pill"
+                            <a class="nav-link active" id="pills-dashboard-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-dashboard" type="button" style="font-size: 12px; text-align: center;"><i data-feather="home"></i>
-                                    DashBoard</button>
+                                    DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-order-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-order" type="button" style="font-size: 12px; text-align: center;"><i
-                                        data-feather="shopping-bag"></i>Orders</button>
+                                <a class="nav-link" id="pills-order-tab" 
+                                    style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-order')}}"><i
+                                        data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="delivery-detail" data-bs-toggle="pill"
-                                    data-bs-target="#order-details-contain" type="button" style="font-size: 12px; text-align: center;"><i data-feather="box"></i>
-                                    Delivery Status</button>
+                                <a class="nav-link" id="delivery-detail" 
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}"><i data-feather="box"></i>
+                                    Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-address-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-address" type="button" role="tab" style="font-size: 12px; text-align: center;"><i
-                                        data-feather="map-pin"></i>Address</button>
+                                <a class="nav-link" id="pills-address-tab"
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-address')}}"><i
+                                        data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-card-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-card" type="button" role="tab" style="font-size: 12px; text-align: center;"><i
-                                        data-feather="credit-card"></i>Payment Method</button>
+                                <a class="nav-link" id="pills-card-tab"
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
+                                        data-feather="credit-card"></i>Payment Method</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-profile" type="button" role="tab" style="font-size: 12px; text-align: center;"><i data-feather="user"></i>
-                                    Profile</button>
+                                <a class="nav-link" id="pills-profile-tab"
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    Profile</a>
                             </li>
                         </ul>
                     </div>
@@ -178,8 +183,10 @@
                                             </div>
                                             <div class="dashboard-detail">
                                                 <h6 class="text-content">MARK JECNO</h6>
+                                                
                                                 <h6 class="text-content">vicki.pope@gmail.com</h6>
-                                                <a href="javascript:void(0)">Change Password</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#changePassword"
+                                                        href="javascript:void(0)">Change Password</a>
                                             </div>
                                         </div>
 
@@ -227,1459 +234,7 @@
                             </div>
                             <!-- Dashboard View End -->
 
-                            <!-- Orders View Start -->
-                            <div class="tab-pane fade" id="pills-order" role="tabpanel">
-                                <div class="dashboard-order">
-                                    <div class="title">
-                                        <h2>Orders</h2>
-                                        <span class="title-leaf title-leaf-gray">
-                                            <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                    <div class="table-responsive dashboard-bg-box">
-                                        <table class="table product-table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">No</th>
-                                                    <th scope="col">Date/Time</th>
-                                                    <th scope="col">Order Image</th>
-                                                    <th scope="col">Order Code</th>
-                                                    <th scope="col">Payment Method</th>
-                                                    <th scope="col">Price</th>
-                                                    <th scope="col">Option</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <h6>03</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>2024/01/28 16:30</h6>
-                                                    </td>
-                                                    <td class="product-image">
-                                                        <img src="../assets/images/vegetable/product/1.png"
-                                                            class="img-fluid" alt="">
-                                                    </td>
-                                                    <td>
-                                                        <h6>00001</h6>
-                                                    </td>
-
-                                                    <td>
-                                                        <h6>Paypal</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="theme-color fw-bold">¥200</h6>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="order-detail.html">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="btn btn-sm btn-solid text-white"
-                                                                    href="order-tracking.html">
-                                                                    <h6>Tracking</h6>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-                                                        <h6>02</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>2024/01/28 14:30</h6>
-                                                    </td>
-                                                    <td class="product-image">
-                                                        <img src="../assets/images/vegetable/product/2.png"
-                                                            class="img-fluid" alt="">
-                                                    </td>
-                                                    <td>
-                                                        <h6>00002</h6>
-                                                    </td>
-
-                                                    <td>
-                                                        <h6>Paypal</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="theme-color fw-bold">¥320</h6>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="order-detail.html">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="btn btn-sm btn-solid text-white"
-                                                                    href="order-tracking.html">
-                                                                    <h6>Tracking</h6>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-                                                        <h6>01</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>2024/02/24 13:30</h6>
-                                                    </td>
-                                                    <td class="product-image">
-                                                        <img src="../assets/images/vegetable/product/2.png"
-                                                            class="img-fluid" alt="">
-                                                    </td>
-                                                    <td>
-                                                        <h6>00003</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>Paypal</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="theme-color fw-bold">¥320</h6>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="order-detail.html">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="btn btn-sm btn-solid text-white"
-                                                                    href="order-tracking.html">
-                                                                    <h6>Tracking</h6>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                 </tbody>
-                                        </table>
-                                    </div>
-                                    <div>
-                                        <nav class="custom-pagination">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                                        <i class="fa-solid fa-angles-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">
-                                                        <i class="fa-solid fa-angles-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Order View End --> 
-
-                            <!-- Delivery Status View Start -->
-                            <div class="tab-pane fade" id="order-details-contain" role="tabpanel">
-                                <div class="dashboard-order">
-                                    <div class="title">
-                                        <h2>Delivery Details</h2>
-                                        <span class="title-leaf title-leaf-gray">
-                                            <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                    <div class="table-responsive dashboard-bg-box">
-                                        <table class="table product-table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">No</th>
-                                                    <th scope="col">Date/Time</th>
-                                                    <th scope="col">Order Code</th>
-                                                    <th scope="col">Order Image</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Location</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td><h6>03</h6></td>
-                                                    <td><h6>2024/01/28 16:30</h6></td> 
-                                                    <td><h6>0001</h6></td>
-                                                    <td><h6>Shirt</h6></td>
-                                                    <td class="status-close"><h6>Shipped</h6></td>
-                                                    <td><h6>Home</h6></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><h6>02</h6></td>
-                                                    <td><h6>2024/01/28 14:30</h6></td> 
-                                                    <td><h6>0002</h6></td>
-                                                    <td><h6>Shoes</h6></td>
-                                                    <td class="status-success"><h6>Success</h6></td>
-                                                    <td><h6>Office</h6></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><h6>01</h6></td> 
-                                                    <td><h6>2024/02/24 13:30</h6></td> 
-                                                    <td><h6>0003</h6></td>
-                                                    <td><h6>Oven</h6></td>
-                                                    <td class="status-danger"><h6>Pending</h6></td>
-                                                    <td><h6>Home</h6></td>
-                                                </tr>
-                                        </table>
-                                    </div>
-                                    <div>
-                                        <nav class="custom-pagination">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                                        <i class="fa-solid fa-angles-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">
-                                                        <i class="fa-solid fa-angles-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Delivery Status View End -->
-
-                            <!-- Delivery Status View Start -->
-                            <!-- <div class="tab-pane fade" id="order-details-contain" role="tabpanel">
-                                <div class="title">
-                                    <h2>Delivery Status</h2>
-                                    <span class="title-leaf title-leaf-gray">
-                                        <svg class="icon-width bg-gray">
-                                            <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                        </svg>
-                                    </span>
-                                </div> -->
-
-                                <!-- Order Table Section Start -->
-                                <!-- <section class="order-table-section section-b-space"> -->
-                                    <!--<div class="container-fluid-lg">-->
-                                   <!-- <div class="row">-->
-                                    <!-- <div class="col-12"> -->
-                                        <!-- <div class="table-responsive">
-                                            <table class="table order-tab-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Order Code</th>
-                                                        <th>Order Item</th>
-                                                        <th>Description</th>
-                                                        <th>Date</th>
-                                                        <th>Time</th>
-                                                        <th>Location</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>0001</td>
-                                                        <td>Shirt</td>
-                                                        <td>Order Placed</td>
-                                                        <td>26 Sep 2021</td>
-                                                        <td>12:00 AM</td>
-                                                        <td>Home</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>0002</td>
-                                                        <td>Shoes</td>
-                                                        <td>Preparing to Ship</td>
-                                                        <td>03 Oct 2021</td>
-                                                        <td>12:00 AM</td>
-                                                        <td>Office</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>0003</td>
-                                                        <td>Oven</td>
-                                                        <td>Shipped</td>
-                                                        <td>04 Oct 2021</td>
-                                                        <td>12:00 AM</td>
-                                                        <td>Home</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div> -->
-                            <!-- Delivery Status View End -->
-                       
-                            <!-- Address View Start -->
-                            <div class="tab-pane fade" id="pills-address" role="tabpanel">
-                                <div class="dashboard-address">
-                                    <div class="title title-flex">
-                                        <div>
-                                            <h2>Address</h2>
-                                            <span class="title-leaf">
-                                                <svg class="icon-width bg-gray">
-                                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                                </svg>
-                                            </span>
-                                        </div>
-
-                                        <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
-                                            data-bs-toggle="modal" data-bs-target="#add-address"><i data-feather="plus"
-                                                class="me-2"></i>Add New Address</button>
-                                    </div>
-
-                                    <div class="row g-sm-4 g-3">
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault2" checked>
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Home</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Jack Jennas</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>8424 James Lane South San Francisco, CA 94080
-                                                                        </p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+380</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 812-710-3798</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault3">
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Office</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Terry S. Sutton</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>2280 Rose Avenue Kenner, LA 70062</p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+25</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 504-228-0969</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault4">
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Neighbour</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Juan M. McKeon</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>1703 Carson Street Lexington, KY 40593</p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+78</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 859-257-0509</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault5">
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Home 2</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Gary M. Bailey</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>2135 Burning Memory Lane Philadelphia, PA
-                                                                            19135</p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+26</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 215-335-9916</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault1">
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Home 2</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Gary M. Bailey</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>2135 Burning Memory Lane Philadelphia, PA
-                                                                            19135</p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+26</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 215-335-9916</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Address View End -->
-
-                            <!-- Payment Method View Start -->
-                            <div class="tab-pane fade" id="pills-card" role="tabpanel">
-                                <div class="dashboard-card">
-                                    <div class="title title-flex">
-                                        <div>
-                                            <h2>Payment Method</h2>
-                                            <span class="title-leaf">
-                                                <svg class="icon-width bg-gray">
-                                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                                </svg>
-                                            </span>
-                                        </div>
-
-                                        <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
-                                            data-bs-toggle="modal" data-bs-target="#editCard"><i data-feather="plus"
-                                                class="me-2"></i>Add New Card</button>
-                                    </div>
-
-                                    <div class="row g-4">
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                            <div class="payment-card-detail">
-                                                <div class="card-details">
-                                                    <div class="card-number">
-                                                        <h4>XXXX - XXXX - XXXX - 2548</h4>
-                                                    </div>
-
-                                                    <div class="valid-detail">
-                                                        <div class="title">
-                                                            <span>valid</span>
-                                                            <span>thru</span>
-                                                        </div>
-                                                        <div class="date">
-                                                            <h3>08/05</h3>
-                                                        </div>
-                                                        <div class="primary">
-                                                            <span class="badge bg-pill badge-light">primary</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="name-detail">
-                                                        <div class="name">
-                                                            <h5>Audrey Carol</h5>
-                                                        </div>
-                                                        <div class="card-img">
-                                                            <img src="../assets/images/payment-icon/1.jpg"
-                                                                class="img-fluid blur-up lazyloaded" alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="edit-card">
-                                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i
-                                                            class="far fa-minus-square"></i> delete</a>
-                                                </div>
-                                            </div>
-
-                                            <div class="edit-card-mobile">
-                                                <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                    href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                                    delete</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                            <div class="payment-card-detail">
-                                                <div class="card-details card-visa">
-                                                    <div class="card-number">
-                                                        <h4>XXXX - XXXX - XXXX - 1536</h4>
-                                                    </div>
-
-                                                    <div class="valid-detail">
-                                                        <div class="title">
-                                                            <span>valid</span>
-                                                            <span>thru</span>
-                                                        </div>
-                                                        <div class="date">
-                                                            <h3>12/23</h3>
-                                                        </div>
-                                                        <div class="primary">
-                                                            <span class="badge bg-pill badge-light">primary</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="name-detail">
-                                                        <div class="name">
-                                                            <h5>Leah Heather</h5>
-                                                        </div>
-                                                        <div class="card-img">
-                                                            <img src="../assets/images/payment-icon/2.jpg"
-                                                                class="img-fluid blur-up lazyloaded" alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="edit-card">
-                                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i
-                                                            class="far fa-minus-square"></i> delete</a>
-                                                </div>
-                                            </div>
-
-                                            <div class="edit-card-mobile">
-                                                <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                    href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                                    delete</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                            <div class="payment-card-detail">
-                                                <div class="card-details debit-card">
-                                                    <div class="card-number">
-                                                        <h4>XXXX - XXXX - XXXX - 1366</h4>
-                                                    </div>
-
-                                                    <div class="valid-detail">
-                                                        <div class="title">
-                                                            <span>valid</span>
-                                                            <span>thru</span>
-                                                        </div>
-                                                        <div class="date">
-                                                            <h3>05/21</h3>
-                                                        </div>
-                                                        <div class="primary">
-                                                            <span class="badge bg-pill badge-light">primary</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="name-detail">
-                                                        <div class="name">
-                                                            <h5>mark jecno</h5>
-                                                        </div>
-                                                        <div class="card-img">
-                                                            <img src="../assets/images/payment-icon/3.jpg"
-                                                                class="img-fluid blur-up lazyloaded" alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="edit-card">
-                                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i
-                                                            class="far fa-minus-square"></i> delete</a>
-                                                </div>
-                                            </div>
-
-                                            <div class="edit-card-mobile">
-                                                <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                                    href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                                <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                                    delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Payment Method View End -->
-
-                            <!-- User Profile Start -->
-                            <div class="tab-pane fade" id="pills-profile" role="tabpanel">
-                                <div class="dashboard-profile">
-                                    <div class="title">
-                                        <h2>Profile</h2>
-                                        <span class="title-leaf">
-                                            <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                            </svg>
-                                        </span>
-                                    </div>
-
-                                    <div class="profile-detail dashboard-bg-box">
-                                        <div class="dashboard-title">
-                                            <h3>Profile Name</h3>
-                                        </div>
-                                        <div class="profile-name-detail">
-                                            <div class="d-sm-flex align-items-center d-block">
-                                                <h3>Vicki E. Pope</h3>
-                                                <div class="product-rating profile-rating">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                data-bs-target="#editProfile">Edit</a>
-                                        </div>
-
-                                        <div class="location-profile">
-                                            <ul>
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="map-pin"></i>
-                                                        <h6>Downers Grove, IL</h6>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="mail"></i>
-                                                        <h6>vicki.pope@gmail.com</h6>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="check-square"></i>
-                                                        <h6>Licensed for 2 years</h6>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="profile-description">
-                                            <p>Residences can be classified by and how they are connected to
-                                                neighbouring residences and land. Different types of housing tenure can
-                                                be used for the same physical type.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="profile-about dashboard-bg-box">
-                                        <div class="row">
-                                            <div class="col-xxl-7">
-                                                <div class="dashboard-title mb-3">
-                                                    <h3>Profile About</h3>
-                                                </div>
-
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Gender :</td>
-                                                                <td>Female</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Birthday :</td>
-                                                                <td>21/05/1997</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Phone Number :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)"> +91 846 - 547 -
-                                                                        210</a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Address :</td>
-                                                                <td>549 Sulphur Springs Road, Downers, IL</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                <div class="dashboard-title mb-3">
-                                                    <h3>Login Details</h3>
-                                                </div>
-
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Email :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)">vicki.pope@gmail.com
-                                                                        <span data-bs-toggle="modal"
-                                                                            data-bs-target="#editProfile">Edit</span></a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Password :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)">●●●●●●
-                                                                        <span data-bs-toggle="modal"
-                                                                            data-bs-target="#editProfile">Edit</span></a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xxl-5">
-                                                <div class="profile-image">
-                                                    <img src="../assets/images/inner-page/dashboard-profile.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="pills-download" role="tabpanel">
-                                <div class="dashboard-download">
-                                    <div class="title">
-                                        <h2>My Download</h2>
-                                        <span class="title-leaf">
-                                            <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                            </svg>
-                                        </span>
-                                    </div>
-
-                                    <div class="download-detail dashboard-bg-box">
-                                        <form>
-                                            <div class="input-group download-form">
-                                                <input type="text" class="form-control"
-                                                    placeholder="Search your download">
-                                                <button class="btn theme-bg-color text-light" type="button"
-                                                    id="button-addon2">Search</button>
-                                            </div>
-                                        </form>
-
-                                        <div class="select-filter-box">
-                                            <select class="form-select">
-                                                <option selected="">All marketplaces</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                            </select>
-
-
-                                            <ul class="nav nav-pills filter-box" id="pills-tab" role="tablist">
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link active" id="pills-data-tab"
-                                                        data-bs-toggle="pill" data-bs-target="#pills-data"
-                                                        type="button">Data Purchased</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="pills-title-tab" data-bs-toggle="pill"
-                                                        data-bs-target="#pills-title" type="button">Title</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="pills-rating-tab" data-bs-toggle="pill"
-                                                        data-bs-target="#pills-rating" type="button">My Rating</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="pills-recent-tab" data-bs-toggle="pill"
-                                                        data-bs-target="#pills-recent" type="button">Recent
-                                                        Updates</button>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="tab-content" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-data" role="tabpanel">
-                                                <div class="download-table">
-                                                    <div class="table-responsive">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>No</th>
-                                                                    <th>Image</th>
-                                                                    <th>Name</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/1.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Sheltos - Real Estate Angular 17 Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/2.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Oslo - Multipurpose Shopify Theme. Fast, Clean,
-                                                                        and
-                                                                        Flexible. OS 2.0</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/3.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Boho - React JS Admin Dashboard Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-title">
-                                                <div class="download-table">
-                                                    <div class="table-responsive">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>No</th>
-                                                                    <th>Image</th>
-                                                                    <th>Name</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/1.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Sheltos - Real Estate Angular 17 Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/2.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Oslo - Multipurpose Shopify Theme. Fast, Clean,
-                                                                        and
-                                                                        Flexible. OS 2.0</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/3.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Boho - React JS Admin Dashboard Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-rating">
-                                                <div class="download-table">
-                                                    <div class="table-responsive">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>No</th>
-                                                                    <th>Image</th>
-                                                                    <th>Name</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/1.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Sheltos - Real Estate Angular 17 Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/2.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Oslo - Multipurpose Shopify Theme. Fast, Clean,
-                                                                        and
-                                                                        Flexible. OS 2.0</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/3.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Boho - React JS Admin Dashboard Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-recent">
-                                                <div class="download-table">
-                                                    <div class="table-responsive">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>No</th>
-                                                                    <th>Image</th>
-                                                                    <th>Name</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/1.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Sheltos - Real Estate Angular 17 Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/2.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Oslo - Multipurpose Shopify Theme. Fast, Clean,
-                                                                        and
-                                                                        Flexible. OS 2.0</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td>
-                                                                        <img src="../assets/images/theme-icon/3.png"
-                                                                            class="img-fluid" alt="">
-                                                                    </td>
-                                                                    <td>Boho - React JS Admin Dashboard Template</td>
-                                                                    <td>
-                                                                        <div class="dropdown download-dropdown">
-                                                                            <button class="btn dropdown-toggle"
-                                                                                type="button"
-                                                                                data-bs-toggle="dropdown">Download</button>
-                                                                            <ul class="dropdown-menu">
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">All files
-                                                                                        & documentation</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (PDF)</a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">License
-                                                                                        certificate & purchase code
-                                                                                        (text)</a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <!-- User Profile View End -->
+                            
 
                     </div>
                 </div>
@@ -1687,6 +242,445 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
-
-//Header/Footer Layout End
 </x-guest-layout>
+
+    <!-- Bg overlay Start -->
+    <div class="bg-overlay"></div>
+    <!-- Bg overlay End -->
+
+    <!-- Add address modal box start -->
+    <div class="modal fade theme-modal" id="add-address" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add a new address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-floating mb-4 theme-form-floating">
+                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
+                            <label for="fname">First Name</label>
+                        </div>
+                    </form>
+
+                    <form>
+                        <div class="form-floating mb-4 theme-form-floating">
+                            <input type="text" class="form-control" id="lname" placeholder="Enter Last Name">
+                            <label for="lname">Last Name</label>
+                        </div>
+                    </form>
+
+                    <form>
+                        <div class="form-floating mb-4 theme-form-floating">
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
+                            <label for="email">Email Address</label>
+                        </div>
+                    </form>
+
+                    <form>
+                        <div class="form-floating mb-4 theme-form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
+                                style="height: 100px"></textarea>
+                            <label for="address">Enter Address</label>
+                        </div>
+                    </form>
+
+                    <form>
+                        <div class="form-floating mb-4 theme-form-floating">
+                            <input type="email" class="form-control" id="pin" placeholder="Enter Pin Code">
+                            <label for="pin">Pin Code</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add address modal box end -->
+
+    <!-- Location Modal Start -->
+    <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Choose your Delivery Location</h5>
+                    <p class="mt-1 text-content">Enter your address and we will specify the offer for your area.</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="location-list">
+                        <div class="search-input">
+                            <input type="search" class="form-control" placeholder="Search Your Area">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <div class="disabled-box">
+                            <h6>Select a Location</h6>
+                        </div>
+
+                        <ul class="location-select custom-height">
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Alabama</h6>
+                                    <span>Min: $130</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Arizona</h6>
+                                    <span>Min: $150</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>California</h6>
+                                    <span>Min: $110</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Colorado</h6>
+                                    <span>Min: $140</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Florida</h6>
+                                    <span>Min: $160</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Georgia</h6>
+                                    <span>Min: $120</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Kansas</h6>
+                                    <span>Min: $170</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Minnesota</h6>
+                                    <span>Min: $120</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>New York</h6>
+                                    <span>Min: $110</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h6>Washington</h6>
+                                    <span>Min: $130</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Location Modal End -->
+
+    <!-- Edit Profile Start -->
+    <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-xxl-12">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="pname" value="Jack Jennas">
+                                    <label for="pname">Full Name</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="email" class="form-control" id="email1" value="vicki.pope@gmail.com">
+                                    <label for="email1">Email Address</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input class="form-control" type="tel" value="4567891234" name="mobile" id="mobile"
+                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            this.value.slice(0, this.maxLength);">
+                                    <label for="mobile">Phone No</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-12">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="address1"
+                                        value="8424 James Lane South San Francisco">
+                                    <label for="address1">Add Address</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-12">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="address2" value="CA 94080">
+                                    <label for="address2">Add Address 2</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-4">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <select class="form-select" id="floatingSelect1">
+                                        <option selected>Choose Your Country</option>
+                                        <option value="kingdom">United Kingdom</option>
+                                        <option value="states">United States</option>
+                                        <option value="fra">France</option>
+                                        <option value="china">China</option>
+                                        <option value="spain">Spain</option>
+                                        <option value="italy">Italy</option>
+                                        <option value="turkey">Turkey</option>
+                                        <option value="germany">Germany</option>
+                                        <option value="russian">Russian Federation</option>
+                                        <option value="malay">Malaysia</option>
+                                        <option value="mexico">Mexico</option>
+                                        <option value="austria">Austria</option>
+                                        <option value="hong">Hong Kong SAR, China</option>
+                                        <option value="ukraine">Ukraine</option>
+                                        <option value="thailand">Thailand</option>
+                                        <option value="saudi">Saudi Arabia</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="singa">Singapore</option>
+                                    </select>
+                                    <label for="floatingSelect">Country</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-4">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <select class="form-select" id="floatingSelect">
+                                        <option selected>Choose Your City</option>
+                                        <option value="kingdom">India</option>
+                                        <option value="states">Canada</option>
+                                        <option value="fra">Dubai</option>
+                                        <option value="china">Los Angeles</option>
+                                        <option value="spain">Thailand</option>
+                                    </select>
+                                    <label for="floatingSelect">City</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-4">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="address3" value="94080">
+                                    <label for="address3">Pin Code</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                        data-bs-dismiss="modal">Close</button>
+                    <button type="button" data-bs-dismiss="modal"
+                        class="btn theme-bg-color btn-md fw-bold text-light">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Profile End -->
+
+     <!-- Change Password Start -->
+     <div class="modal fade theme-modal" id="changePassword" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel8">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="finame" value="markjohn@gmail.com">
+                                    <label for="finame">Email Address</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="laname" value="********">
+                                    <label for="laname">Old Password</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-4">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="laname" value="********">
+                                    <label for="laname">New Password</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Change Password End -->
+
+    <!-- Edit Card Start -->
+    <div class="modal fade theme-modal" id="editCard" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel8">Edit Card</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="finame" value="Mark">
+                                    <label for="finame">First Name</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-6">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="laname" value="Jecno">
+                                    <label for="laname">Last Name</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-xxl-4">
+                            <form>
+                                <div class="form-floating theme-form-floating">
+                                    <select class="form-select" id="floatingSelect12">
+                                        <option selected>Card Type</option>
+                                        <option value="kingdom">Visa Card</option>
+                                        <option value="states">MasterCard Card</option>
+                                        <option value="fra">RuPay Card</option>
+                                        <option value="china">Contactless Card</option>
+                                        <option value="spain">Maestro Card</option>
+                                    </select>
+                                    <label for="floatingSelect12">Card Type</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Card End -->
+
+    <!-- Remove Profile Modal Start -->
+    <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>The permission for the use/group, preview is inherited from the object, object will create a
+                            new permission for this object</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
+                        data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box text-center">
+                        <h4 class="text-content">It's Removed.</h4>
+                    </div>
+                </div>
+                <div class="modal-footer pt-0">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Remove Profile Modal End -->

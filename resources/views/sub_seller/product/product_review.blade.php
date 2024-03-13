@@ -51,8 +51,11 @@
                                                 </ul>
                                             </td>
                                             <td>The Product is No Longer Needed</td>
-                                            <td class="td-check">
-                                                <i class="ri-checkbox-circle-line"></i>
+                                            <td class="col-sm-9">
+                                                <label class="switch">
+                                                    <input type="checkbox" checked=""><span
+                                                        class="switch-state"></span>
+                                                </label>
                                             </td>
                                         </tr>
 
@@ -80,8 +83,11 @@
                                                 </ul>
                                             </td>
                                             <td>The Product is No Longer Needed</td>
-                                            <td class="td-check">
-                                                <i class="ri-checkbox-circle-line"></i>
+                                            <td class="col-sm-9">
+                                                <label class="switch">
+                                                    <input type="checkbox" checked=""><span
+                                                        class="switch-state"></span>
+                                                </label>
                                             </td>
                                         </tr>
 

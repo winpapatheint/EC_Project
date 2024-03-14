@@ -18,7 +18,8 @@
                                     id="table_id">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <th>No</th>
+                                            <th>Date</th>
                                             <th>Customer Name</th>
                                             <th>Product Name</th>
                                             <th>Rating</th>
@@ -28,7 +29,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>01</td>
+                                            <td>10</td>
+                                            <td>2022-12-26 12:24</td>
                                             <td>Maureen Biologist</td>
                                             <td>Outwear & Coats</td>
                                             <td>
@@ -51,16 +53,14 @@
                                                 </ul>
                                             </td>
                                             <td>The Product is No Longer Needed</td>
-                                            <td class="col-sm-9">
-                                                <label class="switch">
-                                                    <input type="checkbox" checked=""><span
-                                                        class="switch-state"></span>
-                                                </label>
+                                            <td class="td-check">
+                                                <i class="ri-checkbox-circle-line"></i>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td>02</td>
+                                            <td>9</td>
+                                            <td>2022-12-26 13:24</td>
                                             <td>Caroline Harris</td>
                                             <td>Slim Fit Plastic Coat</td>
                                             <td>
@@ -83,16 +83,14 @@
                                                 </ul>
                                             </td>
                                             <td>The Product is No Longer Needed</td>
-                                            <td class="col-sm-9">
-                                                <label class="switch">
-                                                    <input type="checkbox" checked=""><span
-                                                        class="switch-state"></span>
-                                                </label>
+                                            <td class="td-check">
+                                                <i class="ri-checkbox-circle-line"></i>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td>03</td>
+                                            <td>8</td>
+                                            <td>2022-12-25 10:24</td>
                                             <td>Lucy Morile</td>
                                             <td>Men's Sweatshirt</td>
                                             <td>
@@ -121,7 +119,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>04</td>
+                                            <td>7</td>
+                                            <td>2022-12-24 12:24</td>
                                             <td>Jennifer Straight</td>
                                             <td>Men's Hoodie t-shirt</td>
                                             <td>
@@ -150,7 +149,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>05</td>
+                                            <td>6</td>
+                                            <td>2022-12-25 11:24</td>
                                             <td>Kevin Millett</td>
                                             <td>Outwear & Coats</td>
                                             <td>
@@ -179,7 +179,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>06</td>
+                                            <td>5</td>
+                                            <td>2022-12-24 13:24</td>
                                             <td>czxc</td>
                                             <td>Slim Fit Plastic Coat</td>
                                             <td>
@@ -208,7 +209,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>07</td>
+                                            <td>4</td>
+                                            <td>2022-12-4 12:24</td>
                                             <td>Kevin Millett</td>
                                             <td>Men's Sweatshirt</td>
                                             <td>
@@ -237,7 +239,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>08</td>
+                                            <td>3</td>
+                                            <td>2022-12-23 12:24</td>
                                             <td>Dillon Bradshaw</td>
                                             <td>Men's Hoodie t-shirt</td>
                                             <td>
@@ -266,7 +269,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>09</td>
+                                            <td>2</td>
+                                            <td>2022-12-22 12:24</td>
                                             <td>Lorna Bonner</td>
                                             <td>Outwear & Coats</td>
                                             <td>
@@ -295,7 +299,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>10</td>
+                                            <td>1</td>
+                                            <td>2022-12-20 12:24</td>
                                             <td>Richard Johnson</td>
                                             <td>Slim Fit Plastic Coat </td>
                                             <td>
@@ -322,35 +327,6 @@
                                                 <i class="ri-checkbox-circle-line"></i>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td>11</td>
-                                            <td>Lorraine McDowell</td>
-                                            <td>Men's Sweatshirt</td>
-                                            <td>
-                                                <ul class="rating">
-                                                    <li>
-                                                        <i class="fas fa-star theme-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fas fa-star theme-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fas fa-star theme-color"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fas fa-star"></i>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fas fa-star"></i>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                            <td>The Product is No Longer Needed</td>
-                                            <td class="td-check">
-                                                <i class="ri-checkbox-circle-line"></i>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -358,6 +334,31 @@
                     </div>
                     <!-- Table End -->
                 </div>
+            </div>
+            <div style="bottom:28px">
+                <nav class="custom-pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">
+                                <i class="ri-arrow-right-s-line"></i>
+                             </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

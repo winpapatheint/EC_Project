@@ -11,7 +11,7 @@
                             <div class="card card-table">
                                 <div class="card-body">
                                     <div class="title-header option-title">
-                                        <h5>All SubUsers</h5>
+                                        <h5>All Users</h5>
                                       
                                     </div>
 
@@ -24,6 +24,8 @@
                                                         <th>Date</th>
                                                         <th>Name</th>
                                                         <th>Email</th>
+                                                        <th>Type</th>
+                                                        <th>Status</th>
                                                         <th>Option</th>
                                                     </tr>
                                                 </thead>
@@ -43,6 +45,10 @@
                                                   
 
                                                     <td>EverettCGreen@rhyta.com</td>
+                                                    <td>Buyer</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -81,6 +87,10 @@
                                                    
 
                                                     <td>CarolineLHarris@rhyta.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -119,6 +129,10 @@
                                                  
 
                                                     <td>LucyMorile456@gmail.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -158,6 +172,10 @@
                                                   
 
                                                     <td>JenniferAStraight@rhyta.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Pending</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -195,7 +213,10 @@
 
                                                   
 
-                                                    <td>KevinAMillett@jourrapide.com</td>
+                                                    <td>KevinAMillett@jourrapide.com</td><td></td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -234,6 +255,10 @@
                                                   
 
                                                     <td>scott.thomas@packiu.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -272,6 +297,10 @@
                                                   
 
                                                     <td>KevinAMillett@jourrapide.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -310,6 +339,10 @@
                                                  
 
                                                     <td>DillonJBradshaw@teleworm.us</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -348,6 +381,10 @@
                                                   
 
                                                     <td>LornaMBonner@teleworm.us</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -386,6 +423,10 @@
                                                   
 
                                                     <td>EverettCGreen@rhyta.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -424,6 +465,10 @@
                                                     
 
                                                     <td>LorraineDMcDowell@dayrep.com</td>
+                                                    <td>Seller</td>
+                                                    <td class="status-close">
+                                                        <span>Approved</span>
+                                                    </td>
 
                                                     <td>
                                                         <ul>

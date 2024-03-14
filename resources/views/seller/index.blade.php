@@ -474,145 +474,84 @@
                     <div class="card-body">
                         <div>
                             <div class="table-responsive">
-                                <table class="user-table list-table table">
+                                <table class="user-table ticket-table review-table theme-table table">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
+                                            <th>Date</th>
                                             <th>Transfer Id</th>
                                             <th>Name</th>
-                                            <th>Date</th>
+                                            <th>Order Id</th>
+                                            <th>Product Id</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
                                             <th>Total</th>
-                                            <th>Options</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>14783112</td>
+                                            <td>5</td>
+                                            <td>20-05-2020 15:23</td>
+                                            <td>B-83112</td>
                                             <td>Gray Brody</td>
-                                            <td>20-05-2020</td>
-                                            <td>$369</td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <span class="ri-eye-line"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-pencil"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-trash"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
+                                            <td>O-83112</td>
+                                            <td>14783112</td>
+                                            <td>Meat</td>
+                                            <td>3</td>
+                                            <td>￥700</td>
+                                            <td>￥2100</td>
                                         </tr>
 
                                         <tr>
-                                            <td>87541221</td>
-                                            <td>Perez Alonzo</td>
-                                            <td>07-12-2020</td>
-                                            <td>$546</td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <span class="ri-eye-line"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-pencil"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-trash"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
+                                            <td>4</td>
+                                            <td>16-05-2020 15:23</td>
+                                            <td>B-83112</td>
+                                            <td>Gray Brody</td>
+                                            <td>O-83112</td>
+                                            <td>14783112</td>
+                                            <td>Costemic</td>
+                                            <td>1</td>
+                                            <td>￥1200</td>
+                                            <td>￥1200</td>
                                         </tr>
 
                                         <tr>
-                                            <td>213514462</td>
-                                            <td>woters maxine</td>
-                                            <td>12-12-2020</td>
-                                            <td>$369</td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <span class="ri-eye-line"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-pencil"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-trash"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
+                                            <td>3</td>
+                                            <td>10-05-2020 15:23</td>
+                                            <td>B-83112</td>
+                                            <td>Gray Brody</td>
+                                            <td>14783112</td>
+                                            <td>Fruit</td>
+                                            <td>5</td>
+                                            <td>￥200</td>
+                                            <td>￥1000</td>
                                         </tr>
 
                                         <tr>
-                                            <td>235896144</td>
-                                            <td>christian</td>
-                                            <td>16-05-2020</td>
-                                            <td>$4699</td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <span class="ri-eye-line"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-pencil"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-trash"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
+                                            <td>2</td>
+                                            <td>20-05-2020 15:23</td>
+                                            <td>B-83112</td>
+                                            <td>Gray Brody</td>
+                                            <td>O-83112</td>
+                                            <td>14783112</td>
+                                            <td>Meat</td>
+                                            <td>3</td>
+                                            <td>￥700</td>
+                                            <td>￥2100</td>
                                         </tr>
 
                                         <tr>
-                                            <td>461178242</td>
-                                            <td>Lane Skylar</td>
-                                            <td>25-10-2020</td>
-                                            <td>$1342</td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <span class="ri-eye-line"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-pencil"></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <span class="lnr lnr-trash"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
+                                            <td>1</td>
+                                            <td>20-05-2020 15:23</td>
+                                            <td>B-83112</td>
+                                            <td>Gray Brody</td>
+                                            <td>O-83112</td>
+                                            <td>14783112</td>
+                                            <td>Meat</td>
+                                            <td>3</td>
+                                            <td>￥700</td>
+                                            <td>￥2100</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -620,6 +559,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div style="bottom:28px">
+                <nav class="custom-pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">
+                                <i class="ri-arrow-right-s-line"></i>
+                             </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <!-- Booking history  end-->
         </div>

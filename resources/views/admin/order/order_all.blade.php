@@ -47,12 +47,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="{{ route('seller.detail.order') }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -103,12 +103,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -157,12 +157,12 @@
                                                 <span>Pending</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -211,12 +211,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -265,12 +265,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -313,12 +313,12 @@
                                                 <span>Cancel</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -362,12 +362,12 @@
                                                 <span>Cancel</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -416,12 +416,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -470,12 +470,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -525,12 +525,12 @@
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -578,12 +578,12 @@
                                                 <span>Pending</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>¥15</td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.detail.order') }}">
+                                                        <a href="order-detail.html">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>

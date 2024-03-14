@@ -71,15 +71,6 @@
     </div>
     <!-- New Subseller Add End -->
 </div>
-
-<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
-<script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
-<script>
-    $(document).on('submit', 'form', function(event) {
-    event.preventDefault();
-});
-</script>
 <script>
     function mainThamUrl(input){
         if(input.files && input.files[0]){

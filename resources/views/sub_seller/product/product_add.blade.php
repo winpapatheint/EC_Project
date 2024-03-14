@@ -78,22 +78,22 @@
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_tags" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
+                                        <div class="col-sm-9" data-role="tagsinput">
+                                            <input type="text" class="form-control" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter">
+                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" >
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter">
+                                            <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink">
                                         </div>
                                     </div>
 
@@ -162,14 +162,6 @@
     <!-- New Product Add End -->
 </div>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
-<script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
-<script>
-    $(document).on('submit', 'form', function(event) {
-    event.preventDefault();
-});
-</script>
 <script>
     ClassicEditor
         .create(document.querySelector('#ckeditor'))

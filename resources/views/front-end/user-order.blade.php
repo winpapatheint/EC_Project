@@ -156,6 +156,8 @@
                                                 </li>
                                                 <li>
                                                     <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
+                                                    <!-- <a class="btn btn-sm btn-solid text-white" href="admin.order.order_tracking"> </a> -->
+                                                    <!-- <h6>Tracking</h6> -->
                                                     </a>
                                                 </li>
                                             </ul>

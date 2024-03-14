@@ -260,12 +260,7 @@
                                     </ul>
                                 </li>
 
-                                  <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.brand') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Brand</span>
-                                    </a>
-                                </li>
+                                 
 
 
                                  <li class="sidebar-list">
@@ -302,8 +297,7 @@
           <span>SubAdmin</span>
       </a>
   </li>
-
-  <li class="sidebar-list">
+   <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>

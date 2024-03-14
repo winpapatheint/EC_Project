@@ -158,6 +158,12 @@
                                             <input class="form-control" type="number" placeholder="0">
                                         </div>
                                     </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Commision</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="number" placeholder="0">
+                                        </div>
+                                    </div>
 
                                     <button type="submit" class="btn btn-animation ms-auto fw-bold">Update</button>
                                 </form>

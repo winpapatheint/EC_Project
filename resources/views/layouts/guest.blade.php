@@ -34,13 +34,10 @@
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
 
-    <!-- Status button-->
-    <link rel="stylesheet" href="{{ asset('backend/assets/scss/components/_badge.scss') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/scss/components/_table.scss') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/scss/components/_buttons.scss') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/scss/vendors/bpptstrap/mixins/_utilities.scss') }}">
 
+    
     <style>
     
     header .navbar.navbar-expand-xl .navbar-nav .nav-link .menu::before

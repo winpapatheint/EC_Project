@@ -22,6 +22,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Date</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
@@ -32,7 +33,158 @@
 
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
+                                            <td>7</td>
+                                            <td>2022-12-27 10:24</td>
+                                            <td>Takahashi</td>
+                                            <td>takahashi@gmail.com</td>
+                                            <td>08060980220</td>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
+                                                        alt="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.edit.subseller') }}">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>6</td>
+                                            <td>2022-12-26 10:24</td>
+                                            <td>Takahashi</td>
+                                            <td>takahashi@gmail.com</td>
+                                            <td>08060980220</td>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
+                                                        alt="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.edit.subseller') }}">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>5</td>
+                                            <td>2022-12-24 10:24</td>
+                                            <td>Takahashi</td>
+                                            <td>takahashi@gmail.com</td>
+                                            <td>08060980220</td>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
+                                                        alt="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.edit.subseller') }}">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>4</td>
+                                            <td>2022-12-23 10:24</td>
+                                            <td>Takahashi</td>
+                                            <td>takahashi@gmail.com</td>
+                                            <td>08060980220</td>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
+                                                        alt="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.edit.subseller') }}">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3</td>
+                                            <td>2022-12-23 10:24</td>
+                                            <td>Takahashi</td>
+                                            <td>takahashi@gmail.com</td>
+                                            <td>08060980220</td>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
+                                                        alt="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.edit.subseller') }}">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>2022-12-22 10:24</td>
                                             <td>Takahashi</td>
                                             <td>takahashi@gmail.com</td>
                                             <td>08060980220</td>
@@ -62,151 +214,7 @@
 
                                         <tr>
                                             <td>1</td>
-                                            <td>Takahashi</td>
-                                            <td>takahashi@gmail.com</td>
-                                            <td>08060980220</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.edit.subseller') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Takahashi</td>
-                                            <td>takahashi@gmail.com</td>
-                                            <td>08060980220</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.edit.subseller') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Takahashi</td>
-                                            <td>takahashi@gmail.com</td>
-                                            <td>08060980220</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.edit.subseller') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Takahashi</td>
-                                            <td>takahashi@gmail.com</td>
-                                            <td>08060980220</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.edit.subseller') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Takahashi</td>
-                                            <td>takahashi@gmail.com</td>
-                                            <td>08060980220</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.edit.subseller') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
+                                            <td>2022-12-21 10:24</td>
                                             <td>Takahashi</td>
                                             <td>takahashi@gmail.com</td>
                                             <td>08060980220</td>

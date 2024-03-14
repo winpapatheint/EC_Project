@@ -21,6 +21,8 @@
                                 <table class="table all-package theme-table table-product" id="table_id">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
+                                            <th>Date</th>
                                             <th>Product Image</th>
                                             <th>Product Name</th>
                                             <th>Category</th>
@@ -33,6 +35,8 @@
 
                                     <tbody>
                                         <tr>
+                                            <td>10</td>
+                                            <td>2022-12-26 12:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/1.png" class="img-fluid"
@@ -48,8 +52,11 @@
 
                                             <td class="td-price">$95.97</td>
 
-                                            <td class="status-danger">
-                                                <span>Pending</span>
+                                            <td class="col-sm-9">
+                                                <label class="switch">
+                                                    <input type="checkbox" checked=""><span
+                                                        class="switch-state"></span>
+                                                </label>
                                             </td>
 
                                             <td>
@@ -77,6 +84,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>9</td>
+                                            <td>2022-12-25 10:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/2.png" class="img-fluid"
@@ -121,6 +130,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>8</td>
+                                            <td>2022-12-25 12:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/3.png" class="img-fluid"
@@ -164,6 +175,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>7</td>
+                                            <td>2022-12-24 23:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/4.png" class="img-fluid"
@@ -207,6 +220,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>6</td>
+                                            <td>2022-12-22 12:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/5.png" class="img-fluid"
@@ -251,6 +266,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>5</td>
+                                            <td>2022-12-23 11:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/6.png" class="img-fluid"
@@ -295,6 +312,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>4</td>
+                                            <td>2022-12-22 12:20</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/7.png" class="img-fluid"
@@ -339,6 +358,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>3</td>
+                                            <td>2022-12-20 12:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/11.png"
@@ -383,6 +404,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>2</td>
+                                            <td>2022-12-20 10:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/8.png" class="img-fluid"
@@ -426,6 +449,8 @@
                                         </tr>
 
                                         <tr>
+                                            <td>1</td>
+                                            <td>2022-12-20 05:24</td>
                                             <td>
                                                 <div class="table-image">
                                                     <img src="assets/images/product/9.png" class="img-fluid"
@@ -468,56 +493,37 @@
                                                 </ul>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/10.png"
-                                                        class="img-fluid" alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Classic Coffee</td>
-
-                                            <td>Coffee</td>
-
-                                            <td>25</td>
-
-                                            <td class="td-price">$86.35</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('seller.detail.product') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div style="bottom:28px">
+                <nav class="custom-pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">
+                                <i class="ri-arrow-right-s-line"></i>
+                             </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

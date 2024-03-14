@@ -64,6 +64,20 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">Shop Name</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="shop" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">Establilshed</label>
+                                             <div class="col-sm-10">
+                                                <input class="form-control" type="date" name="built" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Phone
                                                 Number</label>
                                             <div class="col-sm-10">

@@ -353,9 +353,6 @@
     <script src="{{ asset('backend/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/chart-custom.js') }}"></script>
 
-    <!-- customizer js -->
-    <script src="{{ asset('backend/assets/js/customizer.js') }}"></script>
-
     <!-- ratio js -->
     <script src="{{ asset('backend/assets/js/ratio.js') }}"></script>
 

@@ -21,7 +21,7 @@
                                             <th>Current Qty</th>
                                             <th>Price</th>
                                             <th>Status</th>
-                                            <th>Commision(%)</th>
+                                            <th>Comission(%)</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
@@ -43,10 +43,13 @@
 
                                             <td>12</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-danger">
                                                 <span>Pending</span>
+                                            </td>
+                                              <td >
+                                               
                                             </td>
 
                                             <td>
@@ -89,10 +92,13 @@
 
                                             <td>10</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
+                                            </td>
+                                             <td >
+                                               
                                             </td>
 
                                             <td>
@@ -135,10 +141,13 @@
 
                                             <td>9</td>
 
-                                            <td class="td-price">$86.35</td>
+                                            <td class="td-price">¥86.35</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
+                                            </td>
+                                             <td >
+                                               
                                             </td>
                                             <td>
                                                 <ul>
@@ -180,12 +189,14 @@
 
                                             <td>8</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-danger">
                                                 <span>Pending</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+                                             <td >
+                                               
+                                            </td>
                                             <td>
                                                 <ul>
                                                     <li>
@@ -226,14 +237,14 @@
 
                                             <td>23</td>
 
-                                            <td class="td-price">$95.97</td>
-                                            
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
-
+ <td >
+                                               
+                                            </td>
                                             <td>
                                                 <ul>
                                                     <li>
@@ -274,12 +285,15 @@
 
                                             <td>50</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+                                             <td >
+                                               
+                                            </td>
+
                                             <td>
                                                 <ul>
                                                     <li>
@@ -320,12 +334,15 @@
 
                                             <td>25</td>
 
-                                            <td class="td-price">$121.43</td>
+                                            <td class="td-price">¥121.43</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+                                             <td >
+                                               
+                                            </td>
+
                                             <td>
                                                 <ul>
                                                     <li>
@@ -366,10 +383,13 @@
 
                                             <td>6</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-danger">
                                                 <span>Pending</span>
+                                            </td>
+                                             <td >
+                                               
                                             </td>
 
                                             <td>
@@ -412,12 +432,14 @@
 
                                             <td>11</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+                                             <td >
+                                               
+                                            </td>
                                             <td>
                                                 <ul>
                                                     <li>
@@ -458,12 +480,14 @@
 
                                             <td>18</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">¥95.97</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+                                             <td >
+                                               
+                                            </td>
 
                                             <td>
                                                 <ul>
@@ -505,12 +529,14 @@
 
                                             <td>25</td>
 
-                                            <td class="td-price">$86.35</td>
+                                            <td class="td-price">¥86.35</td>
 
                                             <td class="status-close">
                                                 <span>Approved</span>
                                             </td>
-                                            <td class="td-price">10%</td>
+ <td >
+                                               
+                                            </td>
                                             <td>
                                                 <ul>
                                                     <li>

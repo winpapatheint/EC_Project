@@ -19,7 +19,14 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-Route::get('/user', function () {return view('front-end.user-dashboard');});
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
+Route::get('/user/orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
+Route::get('/user/delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+Route::get('/user/address', function () {return view('front-end.user-address');})->name('front-end.user-address');
+Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
+Route::get('/user/profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
+Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
+Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
 Route::get('/register', function () {return view('front-end.register');});
 Route::get('/login', function () {return view('front-end.login');});
@@ -75,19 +82,20 @@ Route::get('/admin/all/editsubuser', function () {return view('admin.editsubuser
 
 //enduser
 
-//starthelp
-
-Route::get('/admin/indexhelp', function () {return view('admin.indexhelp');})->name('admin.indexhelp');
-Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name('admin.addhelp');
-
-//endhelp
-
 //startblog
 Route::get('/admin/all/blog', function () {return view('admin.blog.blog');})->name('admin.all.blog');
 Route::get('/admin/add/blog', function () {return view('admin.blog.addblog');})->name('admin.add.blog');
 Route::get('/admin/detail/blog', function () {return view('admin.blog.blog_detail');})->name('admin.detail.blog');
 Route::get('/admin/edit/blog', function () {return view('admin.blog.blog_edit');})->name('admin.edit.blog');
 //endblog
+
+
+//starthelp
+
+Route::get('/admin/indexhelp', function () {return view('admin.indexhelp');})->name('admin.indexhelp');
+Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name('admin.addhelp');
+
+//endhelp
 
 //startbrand
 Route::get('/admin/all/brand', function () {return view('admin.brand');})->name('admin.all.brand');
@@ -111,7 +119,7 @@ Route::get('/admin/edit/subcategory', function () {return view('admin.editsubcat
 Route::get('/admin/detail/product', function () {return view('admin.product.product_detail');})->name('admin.detail.product');
 Route::get('/admin/edit/product', function () {return view('admin.product.product_edit');})->name('admin.edit.product');
 
-//AdminOrder
+//SellerOrder
 Route::get('/admin/all/order', function () {return view('admin.order.order_all');})->name('admin.all.order');
 Route::get('/admin/detail/order', function () {return view('admin.order.order_detail');})->name('admin.detail.order');
 Route::get('/admin/tracking/order', function () {return view('admin.order.order_tracking');})->name('admin.order-tracking');

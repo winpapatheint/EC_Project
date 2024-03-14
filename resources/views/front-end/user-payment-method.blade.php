@@ -32,6 +32,7 @@
 
     <!-- User Dashboard Section Start -->
     <section class="user-dashboard-section section-b-space">
+
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-xxl-3 col-lg-4">
@@ -66,11 +67,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pills-dashboard-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-dashboard" type="button" style="font-size: 12px; text-align: center;"><i data-feather="home"></i>
+                            <a class="nav-link" id="pills-dashboard-tab"
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}"><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -89,7 +89,7 @@
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-card-tab"
+                                <a class="nav-link active" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
                                         data-feather="credit-card"></i>Payment Method</a>
                             </li>
@@ -102,142 +102,172 @@
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
+                <div class="col-xxl-9 col-lg-8" class="tab-pane fade" id="pills-card" role="tabpanel">
+                    <!-- Payment Method View Start -->
+                    <div class="dashboard-card">
+                        <div class="title title-flex">
+                            <div>
+                                <h2>Payment Method</h2>
+                                <span class="title-leaf">
+                                    <svg class="icon-width bg-gray">
+                                        <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                    </svg>
+                                </span>
+                            </div>
 
-                <!-- Dashboard view Start -->
-                <div class="col-xxl-9 col-lg-8">
-                    <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
-                        Menu</button>
-                    <div class="dashboard-right-sidebar">
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
-                                <div class="dashboard-home">
-                                    <div class="title">
-                                        <h2>DashBoard</h2>
-                                        <span class="title-leaf">
-                                            <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                            </svg>
-                                        </span>
-                                    </div>
+                            <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
+                                data-bs-toggle="modal" data-bs-target="#editCard"><i data-feather="plus"
+                                    class="me-2"></i> Add New Card</button>
+                        </div>
 
-                                    <div class="dashboard-user-name">
-                                        <h6 class="text-content">Hello, <b class="text-title">Vicki E. Pope</b></h6>
-                                        <p class="text-content">From your My Account Dashboard you have the ability to
-                                            view a snapshot of your recent account activity and update your account
-                                            information. Select a link below to view or edit information.</p>
-                                    </div>
+                        <div class="row g-4">
+                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
+                                <div class="payment-card-detail">
+                                    <div class="card-details">
+                                        <div class="card-number">
+                                            <h4>XXXX - XXXX - XXXX - 2548</h4>
+                                        </div>
 
-                                    <div class="total-box">
-                                        <div class="row g-sm-4 g-3">
-                                            <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div class="total-contain">
-                                                    <img src="../assets/images/svg/order.svg"
-                                                        class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
-                                                        alt="">
-                                                    <div class="total-detail">
-                                                        <h5>Total Order</h5>
-                                                        <h3>3658</h3>
-                                                    </div>
-                                                </div>
+                                        <div class="valid-detail">
+                                            <div class="title">
+                                                <span>valid</span>
+                                                <span>thru</span>
                                             </div>
-
-                                            <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div class="total-contain">
-                                                    <img src="../assets/images/svg/pending.svg"
-                                                        class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/pending.svg" class="blur-up lazyload"
-                                                        alt="">
-                                                    <div class="total-detail">
-                                                        <h5>Total Pending Order</h5>
-                                                        <h3>254</h3>
-                                                    </div>
-                                                </div>
+                                            <div class="date">
+                                                <h3>08/05</h3>
                                             </div>
+                                            <div class="primary">
+                                                <span class="badge bg-pill badge-light">primary</span>
+                                            </div>
+                                        </div>
 
-                                            <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div class="total-contain">
-                                                    <img src="../assets/images/svg/wishlist.svg"
-                                                        class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/wishlist.svg"
-                                                        class="blur-up lazyload" alt="">
-                                                    <div class="total-detail">
-                                                        <h5>Total Wishlist</h5>
-                                                        <h3>32158</h3>
-                                                    </div>
-                                                </div>
+                                        <div class="name-detail">
+                                            <div class="name">
+                                                <h5>Audrey Carol</h5>
+                                            </div>
+                                            <div class="card-img">
+                                                <img src="../assets/images/payment-icon/1.jpg"
+                                                    class="img-fluid blur-up lazyloaded" alt="">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="dashboard-title">
-                                        <h3>Account Information</h3>
-                                    </div>
-
-                                    <div class="row g-4">
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Contact Information <a href="javascript:void(0)"
-                                                        data-bs-toggle="modal" data-bs-target="#editProfile">Edit</a>
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">MARK JECNO</h6>
-                                                
-                                                <h6 class="text-content">vicki.pope@gmail.com</h6>
-                                                <a data-bs-toggle="modal" data-bs-target="#changePassword"
-                                                        href="javascript:void(0)">Change Password</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Newsletters <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">You are currently not subscribed to any
-                                                    newsletter</h6>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <div class="dashboard-content-title">
-                                                <h4>Address Book <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
-                                            </div>
-
-                                            <div class="row g-4">
-                                                <div class="col-xxl-6">
-                                                    <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Billing Address</h6>
-                                                        <h6 class="text-content">You have not set a default billing
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Shipping Address</h6>
-                                                        <h6 class="text-content">You have not set a default shipping
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="edit-card">
+                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                            data-bs-target="#removeProfile"><i
+                                                class="far fa-minus-square"></i> delete</a>
                                     </div>
                                 </div>
+
+                                <div class="edit-card-mobile">
+                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
+                                        delete</a>
+                                </div>
                             </div>
-                            <!-- Dashboard View End -->
 
-                            
+                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
+                                <div class="payment-card-detail">
+                                    <div class="card-details card-visa">
+                                        <div class="card-number">
+                                            <h4>XXXX - XXXX - XXXX - 1536</h4>
+                                        </div>
 
+                                        <div class="valid-detail">
+                                            <div class="title">
+                                                <span>valid</span>
+                                                <span>thru</span>
+                                            </div>
+                                            <div class="date">
+                                                <h3>12/23</h3>
+                                            </div>
+                                            <div class="primary">
+                                                <span class="badge bg-pill badge-light">primary</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="name-detail">
+                                            <div class="name">
+                                                <h5>Leah Heather</h5>
+                                            </div>
+                                            <div class="card-img">
+                                                <img src="../assets/images/payment-icon/2.jpg"
+                                                    class="img-fluid blur-up lazyloaded" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="edit-card">
+                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                            data-bs-target="#removeProfile"><i
+                                                 class="far fa-minus-square"></i> delete</a>
+                                    </div>
+                                </div>
+
+                                <div class="edit-card-mobile">
+                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
+                                        delete</a>
+                                </div>
+                            </div>
+
+                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
+                                <div class="payment-card-detail">
+                                    <div class="card-details debit-card">
+                                        <div class="card-number">
+                                            <h4>XXXX - XXXX - XXXX - 1366</h4>
+                                        </div>
+
+                                        <div class="valid-detail">
+                                            <div class="title">
+                                                <span>valid</span>
+                                                <span>thru</span>
+                                            </div>
+                                            <div class="date">
+                                                <h3>05/21</h3>
+                                            </div>
+                                            <div class="primary">
+                                                <span class="badge bg-pill badge-light">primary</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="name-detail">
+                                            <div class="name">
+                                                <h5>mark jecno</h5>
+                                            </div>
+                                            <div class="card-img">
+                                                <img src="../assets/images/payment-icon/3.jpg"
+                                                    class="img-fluid blur-up lazyloaded" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="edit-card">
+                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                            data-bs-target="#removeProfile"><i
+                                                class="far fa-minus-square"></i> delete</a>
+                                    </div>
+                                 </div>
+
+                                <div class="edit-card-mobile">
+                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
+                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
+                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
+                                        delete</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Payment Method View End -->
             </div>
         </div>
     </section>

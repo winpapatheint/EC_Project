@@ -123,7 +123,7 @@
                                             </div>
                                         </div>
 
-                                      
+                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
                                     </form>
                                 </div>
                             </div>

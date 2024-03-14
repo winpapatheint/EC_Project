@@ -28,6 +28,8 @@
 
                                     <tbody>
                                         <tr>
+                                            <td>10</td>
+                                            <td>2022-12-26 12:24</td>
                                             <td>
                                                 <a class="d-block">
                                                     <span class="order-image">
@@ -36,23 +38,16 @@
                                                     </span>
                                                 </a>
                                             </td>
-
                                             <td> 406-4883635</td>
-
-                                            <td>Jul 20, 2022</td>
-
                                             <td>Paypal</td>
-
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
-
-                                            <td>$15</td>
-
+                                            <td>￥15</td>
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('sub_seller.detail.order') }}">
+                                                        <a href="{{ route('seller.detail.order') }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
@@ -78,7 +73,7 @@
 
                                                     <li>
                                                         <a class="btn btn-sm btn-solid text-white"
-                                                            href="{{ route('sub_seller.order-tracking') }}">
+                                                            href="{{ route('seller.order-tracking') }}">
                                                             Tracking
                                                         </a>
                                                     </li>
@@ -87,24 +82,19 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>9</td>
+                                            <td>2022-12-26 11:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/2.png" alt="users">
                                                 </span>
                                             </td>
-
                                             <td> 573-685572</td>
-
-                                            <td>Jul 25, 2022</td>
-
                                             <td>Paypal</td>
-
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
-
-                                            <td>$15</td>
-
+                                            <td>￥15</td>
                                             <td>
                                                 <ul>
                                                     <li>
@@ -141,6 +131,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>8</td>
+                                            <td>2022-12-26 10:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/3.png" alt="users">
@@ -149,15 +141,13 @@
 
                                             <td> 759-4568734</td>
 
-                                            <td>Jul 29, 2022</td>
-
                                             <td>Stripe</td>
 
                                             <td class="order-pending">
                                                 <span>Pending</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -195,6 +185,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>7</td>
+                                            <td>2022-12-5 11:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/4.png" alt="users">
@@ -203,15 +195,13 @@
 
                                             <td> 546-7664537</td>
 
-                                            <td>Jul 30, 2022</td>
-
                                             <td>Paypal</td>
 
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -249,6 +239,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>6</td>
+                                            <td>2022-12-25 10:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/5.png" alt="users">
@@ -257,15 +249,13 @@
 
                                             <td> 479-7533144</td>
 
-                                            <td>Aug 01, 2022</td>
-
                                             <td>Stripe</td>
 
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -288,6 +278,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="javascript:void(0)" >
+                                                            <i class="icon-cloud-down"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a class="btn btn-sm btn-solid text-white"
                                                             href="order-tracking.html">
                                                             Tracking
@@ -298,6 +293,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>5</td>
+                                            <td>2022-12-24 12:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/6.png" alt="users">
@@ -306,15 +303,13 @@
 
                                             <td> 456-1245789</td>
 
-                                            <td>Aug 10, 2022</td>
-
                                             <td>Stripe</td>
 
                                             <td class="order-cancle">
                                                 <span>Cancel</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -337,6 +332,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="javascript:void(0)" >
+                                                            <i class="icon-cloud-down"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a class="btn btn-sm btn-solid text-white"
                                                             href="order-tracking.html">
                                                             Tracking
@@ -347,6 +347,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>4</td>
+                                            <td>2022-12-24 12:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/7.png" alt="users">
@@ -355,15 +357,13 @@
 
                                             <td> 057-3657895</td>
 
-                                            <td>Aug 18, 2022</td>
-
                                             <td>Paypal</td>
 
                                             <td class="order-cancle">
                                                 <span>Cancel</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -386,6 +386,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="javascript:void(0)" >
+                                                            <i class="icon-cloud-down"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a class="btn btn-sm btn-solid text-white"
                                                             href="order-tracking.html">
                                                             Tracking
@@ -396,6 +401,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>3</td>
+                                            <td>2022-12-24 16:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/8.png" alt="users">
@@ -404,15 +411,13 @@
 
                                             <td> 123-1234567</td>
 
-                                            <td>Aug 29, 2022</td>
-
                                             <td>Paypla</td>
 
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -435,6 +440,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="javascript:void(0)" >
+                                                            <i class="icon-cloud-down"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a class="btn btn-sm btn-solid text-white"
                                                             href="order-tracking.html">
                                                             Tracking
@@ -445,6 +455,8 @@
                                         </tr>
 
                                         <tr data-bs-toggle="offcanvas" href="#order-details">
+                                            <td>2</td>
+                                            <td>2022-12-26 12:24</td>
                                             <td>
                                                 <span class="order-image">
                                                     <img src="assets/images/product/9.png" alt="users">
@@ -453,15 +465,13 @@
 
                                             <td> 987-9876543</td>
 
-                                            <td>Sep 09, 2022</td>
-
                                             <td>Paypal</td>
 
                                             <td class="order-success">
                                                 <span>Success</span>
                                             </td>
 
-                                            <td>$15</td>
+                                            <td>￥15</td>
 
                                             <td>
                                                 <ul>
@@ -484,104 +494,13 @@
                                                             <i class="ri-delete-bin-line"></i>
                                                         </a>
                                                     </li>
+
                                                     <li>
-                                                        <a class="btn btn-sm btn-solid text-white"
-                                                            href="order-tracking.html">
-                                                            Tracking
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr data-bs-toggle="offcanvas" href="#order-details">
-                                            <td>
-                                                <span class="order-image">
-                                                    <img src="assets/images/product/10.png" alt="users">
-                                                </span>
-                                            </td>
-
-                                            <td> 147-3692584</td>
-
-                                            <td>Sep 17, 2022</td>
-
-                                            <td>Stripe</td>
-
-                                            <td class="order-success">
-                                                <span>Success</span>
-                                            </td>
-
-                                            <td>$15</td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
+                                                        <a href="javascript:void(0)" >
+                                                            <i class="icon-cloud-down"></i>
                                                         </a>
                                                     </li>
 
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="btn btn-sm btn-solid text-white"
-                                                            href="order-tracking.html">
-                                                            Tracking
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr data-bs-toggle="offcanvas" href="#order-details">
-                                            <td>
-                                                <span class="order-image">
-                                                    <img src="assets/images/product/11.png" alt="users">
-                                                </span>
-                                            </td>
-
-                                            <td> 586-5865224</td>
-
-                                            <td>Sep 20, 2022</td>
-
-                                            <td>Stripe</td>
-
-                                            <td class="order-pending">
-                                                <span>Pending</span>
-                                            </td>
-
-                                            <td>$15</td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
                                                     <li>
                                                         <a class="btn btn-sm btn-solid text-white"
                                                             href="order-tracking.html">
@@ -597,6 +516,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div style="bottom:28px">
+                <nav class="custom-pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">
+                                <i class="ri-arrow-right-s-line"></i>
+                             </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

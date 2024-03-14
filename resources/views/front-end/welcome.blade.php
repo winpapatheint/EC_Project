@@ -471,7 +471,12 @@
                                                             </a>
                                                         </li>
 
-                                                       
+                                                        <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            title="Compare">
+                                                            <a href="compare.html">
+                                                                <i data-feather="refresh-cw"></i>
+                                                            </a>
+                                                        </li>
 
                                                         <li data-bs-toggle="tooltip" data-bs-placement="top"
                                                             title="Wishlist">

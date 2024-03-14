@@ -1,3 +1,4 @@
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 @extends('seller.seller_dashboard')
 @section('seller')
 <div class="page-body">

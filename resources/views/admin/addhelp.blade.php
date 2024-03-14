@@ -19,7 +19,14 @@
                                             <div class="row">
                                                 <div class="mb-4 row align-items-center">
                                                     <label
-                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
+                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Name</label>
+                                                    <div class="col-md-9 col-lg-10">
+                                                        <input class="form-control" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label
+                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Email</label>
                                                     <div class="col-md-9 col-lg-10">
                                                         <input class="form-control" type="text">
                                                     </div>
@@ -27,11 +34,13 @@
 
                                                 <div class="mb-4 row align-items-center">
                                                     <label
-                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="file">
+                                                        <input class="form-control" type="text">
                                                     </div>
                                                 </div>
+
+                                                
 
                                                 <div class="row align-items-center">
                                                     <label

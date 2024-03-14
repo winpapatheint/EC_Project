@@ -78,21 +78,21 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_tags" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
+                                            <input type="text" class="form-control" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter">
+                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter">
+                                            <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter">
                                         </div>
                                     </div>
 
@@ -149,7 +149,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">Save</button>
+                                    <button type="submit" class="btn btn-animation">Save</button>
                                 </form>
                             </div>
                         </div>
@@ -160,6 +160,7 @@
     </div>
     <!-- New Product Add End -->
 </div>
+
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
@@ -182,7 +183,7 @@
             reader.onload = function(e){
                 $('#mainThmb').attr('src', e.target.result).width(70).height(70);
             };
-            reader.readAsDataURL(input.files[0]); // Corrected method name
+            reader.readAsDataURL(input.files[0]);
         }
     }
 </script>

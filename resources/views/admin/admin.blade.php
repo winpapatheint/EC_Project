@@ -10,7 +10,7 @@
                                 <div class="media align-items-center static-top-widget">
                                     <div class="media-body p-0">
                                         <span class="m-0">Total Revenue</span>
-                                        <h4 class="mb-0 counter">$6659
+                                        <h4 class="mb-0 counter">¥6659
                                             <span class="badge badge-light-primary grow">
                                                 <i data-feather="trending-up"></i>8.5%</span>
                                         </h4>
@@ -145,7 +145,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$29.00</h5>
+                                                            <h5>¥29.00</h5>
                                                         </div>
                                                     </td>
 
@@ -166,7 +166,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Amount</h6>
-                                                            <h5>$1,798</h5>
+                                                            <h5>¥1,798</h5>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -188,7 +188,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$29.00</h5>
+                                                            <h5>¥29.00</h5>
                                                         </div>
                                                     </td>
 
@@ -209,7 +209,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Amount</h6>
-                                                            <h5>$1,798</h5>
+                                                            <h5>¥1,798</h5>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -231,7 +231,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$29.00</h5>
+                                                            <h5>¥29.00</h5>
                                                         </div>
                                                     </td>
 
@@ -252,7 +252,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Amount</h6>
-                                                            <h5>$1,798</h5>
+                                                            <h5>¥1,798</h5>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -314,7 +314,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$250.00</h5>
+                                                            <h5>¥250.00</h5>
                                                         </div>
                                                     </td>
 
@@ -354,7 +354,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$250.00</h5>
+                                                            <h5>¥250.00</h5>
                                                         </div>
                                                     </td>
 
@@ -394,7 +394,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$250.00</h5>
+                                                            <h5>¥250.00</h5>
                                                         </div>
                                                     </td>
 
@@ -434,7 +434,7 @@
                                                     <td>
                                                         <div class="product-detail-box">
                                                             <h6>Price</h6>
-                                                            <h5>$250.00</h5>
+                                                            <h5>¥250.00</h5>
                                                         </div>
                                                     </td>
 
@@ -505,11 +505,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                               
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -530,11 +526,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                               
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -556,11 +548,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                                
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -582,11 +570,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                              
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -596,7 +580,7 @@
                                                         <td>2022-12-26 15:23</td>
                                                         <td>235896144</td>
                                                        
-                                                        <td>479-7533144	</td>
+                                                        <td>479-7533144 </td>
                                                         <td>CN-1234</td>
                                                         <td>christian</td>
                                                         <td>woters</td>
@@ -608,11 +592,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                              
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -622,7 +602,7 @@
                                                         <td>2022-12-26 15:23</td>
                                                         <td>461178242</td>
                                                   
-                                                        <td>586-5865224	</td>
+                                                        <td>586-5865224 </td>
                                                         <td>CN-1220</td>
                                                         <td>Lane Skylar</td>
                                                         <td>Lane</td>
@@ -634,11 +614,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        <span class="lnr lnr-trash"></span>
-                                                                    </a>
-                                                                </li>
+                                                              
                                                             </ul>
                                                         </td>
                                                     </tr>

@@ -13,10 +13,10 @@
                                                 class="align-items-center btn btn-theme d-flex">
                                                 <i data-feather="plus-square"></i>Add New
                                             </a>
-                                </form>
+                                        </form>
                         </div>
                         <div>
-                        <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table class="table all-package theme-table table-product" id="table_id">
                                     <thead>
                                         <tr>

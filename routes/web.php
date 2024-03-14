@@ -95,7 +95,7 @@ Route::get('/admin/add/brand', function () {return view('admin.addbrand');})->na
 Route::get('/admin/edit/brand', function () {return view('admin.brand_edit');})->name('admin.edit.brand');
 //endbrand
 
-//startcategory 
+//startcategory
 Route::get('/admin/all/category', function () {return view('admin.category');})->name('admin.all.category');
 Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
 Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');

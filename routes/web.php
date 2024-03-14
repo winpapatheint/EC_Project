@@ -95,7 +95,7 @@ Route::get('/admin/add/brand', function () {return view('admin.addbrand');})->na
 Route::get('/admin/edit/brand', function () {return view('admin.brand_edit');})->name('admin.edit.brand');
 //endbrand
 
-//startcategory 
+//startcategory
 Route::get('/admin/all/category', function () {return view('admin.category');})->name('admin.all.category');
 Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
 Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');
@@ -118,6 +118,7 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
+Route::get('/seller/register', function () {return view('seller.seller_register');})->name('seller.register');
 Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
 Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
 Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');

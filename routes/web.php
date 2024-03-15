@@ -126,6 +126,7 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
+Route::get('/seller/register', function () {return view('seller.seller_register');})->name('seller.register');
 Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
 Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
 Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');

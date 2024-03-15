@@ -37,9 +37,9 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
 
 
-    
+
     <style>
-    
+
     header .navbar.navbar-expand-xl .navbar-nav .nav-link .menu::before
     {
         content:"" !important;
@@ -49,7 +49,7 @@
         -webkit-transform:translateY(-50%) !important;
         transform:translateY(-50%) !important;
     }
-    
+
     </style>
 </head>
 
@@ -758,20 +758,20 @@
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
                                             <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/') }}">Home</a>                                       
+                                            <a class="nav-link " href="{{ url('/') }}">Home</a>
                                             </li>
 
                                              <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/products') }}">Products</a>   
+                                            <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
 
                                             <li class="nav-item dropdown">
                                             <a class="nav-link " href="{{ url('/seller-grid') }}"
-                                                   >Shop</a>   
+                                                   >Shop</a>
                                             </li>
 
-                                         
+
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
                                                     href="javascript:void(0)" data-bs-toggle="dropdown">
@@ -853,16 +853,16 @@
 
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>
-                                             
+
                                             </li>
 
                                             <li class="nav-item dropdown new-nav-item">
                                                 <label class="new-dropdown">New</label>
                                                 <a class="nav-link"  href="{{ url('/blog-list') }}">New</a>
-                                              
+
                                             </li>
 
-                                       
+
                                         </ul>
                                     </div>
                                 </div>
@@ -935,7 +935,7 @@
                         <div class="service-contain">
                             <div class="service-box">
                                 <div class="service-image">
-                                    <img src="../assets/svg/product.svg" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/product.svg') }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="service-detail">
@@ -945,7 +945,7 @@
 
                             <div class="service-box">
                                 <div class="service-image">
-                                    <img src="../assets/svg/delivery.svg" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/delivery.svg') }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="service-detail">
@@ -955,7 +955,7 @@
 
                             <div class="service-box">
                                 <div class="service-image">
-                                    <img src="../assets/svg/discount.svg" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/discount.svg') }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="service-detail">
@@ -965,7 +965,7 @@
 
                             <div class="service-box">
                                 <div class="service-image">
-                                    <img src="../assets/svg/market.svg" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/market.svg') }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="service-detail">

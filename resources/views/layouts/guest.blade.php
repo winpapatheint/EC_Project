@@ -35,12 +35,6 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 2b7583c5d5696f3a34c54293d919579d49e3c7d1
     <style>
 
     header .navbar.navbar-expand-xl .navbar-nav .nav-link .menu::before

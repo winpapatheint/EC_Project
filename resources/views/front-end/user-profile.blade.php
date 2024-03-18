@@ -102,18 +102,23 @@
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
-                <div class="col-xxl-9 col-lg-8" class="tab-pane fade" id="pills-profile" role="tabpanel">
-                    <!-- User Profile Start -->
-                    <div class="dashboard-profile">
-                        <div class="title">
-                            <h2>Profile</h2>
-                            <span class="title-leaf">
-                                <svg class="icon-width bg-gray">
-                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                </svg>
-                            </span>
-                        </div>
-
+                <div class="col-xxl-9 col-lg-8">
+                    <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
+                        Menu</button>
+                    <div class="dashboard-right-sidebar">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
+                                <div class="dashboard-profile">
+                                    <div class="title title-flex">
+                                        <div>
+                                            <h2>Profile</h2>
+                                            <span class="title-leaf">
+                                                <svg class="icon-width bg-gray">
+                                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
                         <div class="profile-detail dashboard-bg-box">
                             <div class="dashboard-title">
                                 <h3>Profile Name</h3>

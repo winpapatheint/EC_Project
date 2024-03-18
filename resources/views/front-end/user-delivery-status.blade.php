@@ -103,12 +103,16 @@
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
-                <div class="col-xxl-9 col-lg-8" class="tab-pane fade" id="pills-order" role="tabpanel">
-                <!-- Delivery Status View Start -->
-                                <div class="dashboard-order">
+                <div class="col-xxl-9 col-lg-8">
+                    <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
+                        Menu</button>
+                    <div class="dashboard-right-sidebar">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
+                                <div class="dashboard-home">
                                     <div class="title">
-                                        <h2>Delivery Details</h2>
-                                        <span class="title-leaf title-leaf-gray">
+                                        <h2>Delivery Status</h2>
+                                        <span class="title-leaf">
                                             <svg class="icon-width bg-gray">
                                                 <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
                                             </svg>

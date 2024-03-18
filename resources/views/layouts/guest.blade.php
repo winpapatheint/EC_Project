@@ -35,6 +35,12 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
+
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/feather-icon/_feather-icon.scss') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/pages/_inner_pages.scss') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/bootstrap/_reboot.scss') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/bootstrap/_grid.scss') }}">
     <style>
 
     header .navbar.navbar-expand-xl .navbar-nav .nav-link .menu::before

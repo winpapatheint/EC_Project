@@ -29,7 +29,7 @@ Route::get('/user/profile', function () {return view('front-end.user-profile');}
 Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-route::post('/adduser',[UserController::class,'POST'])->name('adduser');
+route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
 
 //Route::get('/register', function () {return view('front-end.register');});
 

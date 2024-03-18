@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="input-box">
-                                <form class="row g-4" action="" method="POST">
+                                <form class="row g-4" action="{{route ('adduser')}}" method="POST">
                                 @csrf
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">

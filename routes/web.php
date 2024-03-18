@@ -61,6 +61,8 @@ Route::get('/admin', function () {return view('admin.admin');})->name('admin.das
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', function () {return view('back-end.category');});
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
+
+Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
 Route::get('/admin/users', function () {return view('back-end.users');});
 
 Route::get('/subadmin', function () {return view('admin.subadmin');})->name('admin.subadmin');

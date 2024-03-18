@@ -32,47 +32,94 @@
                         </div>
 
                         <div class="input-box">
-                            <form class="row g-4">
+                            <form method="POST" action="{{ route('seller.register') }}" enctype="multipart/form-data" class="row g-4">
+                                @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="fullname" placeholder="Type your shop name">
-                                        <label for="fullname">Shop Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Type your shop name" required>
+                                        <label>Shop Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" class="form-control" id="date">
-                                        <label for="fullname">Established Year</label>
+                                        <input type="date" class="form-control" id="date" required>
+                                        <label>Established Year</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="file" class="form-control" id="password">
-                                        <label for="logo">Shop Logo</label>
+                                        <input type="file" class="form-control" id="shop_logo" required>
+                                        <label>Shop Logo</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="zip" placeholder="Zip Code">
-                                        <label for="zip">Zip Code</label>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-md-6">
-                                    <div class="form-floating theme-form-floating">
-                                        <input type="number" class="form-control" id="phone" placeholder="Phone">
-                                        <label for="phone">Phone</label>
+                                        <input type="number" class="form-control" id="phone" placeholder="Phone" required>
+                                        <label>Phone</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="address" placeholder="Address">
-                                        <label for="address">Address</label>
+                                        <input type="text" class="form-control" id="zip" placeholder="Zip Code" required>
+                                        <label>Zip Code</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" class="form-control" id="url" placeholder="Shop Link">
+                                        <label>Shop Link</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" class="form-control" id="address" placeholder="Address" required>
+                                        <label>Address</label>
+                                    </div>
+                                </div>
+
+                                <h3>Bank Information</h3>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" class="form-control" id="address" placeholder="Bank Name" required>
+                                        <label>Bank Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <select class="form-control" name="state">
+                                            <option>普通</option>
+                                            <option>当座</option>
+                                            <option>貯蓄</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" class="form-control" id="branch" placeholder="Branch Name" required>
+                                        <label>Branch Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" class="form-control" id="bank_acc_name" placeholder="Bank Account Name" required>
+                                        <label>Bank Account Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="number" class="form-control" id="bank_acc" placeholder="Bank Account Number" required>
+                                        <label>Bank Account Number</label>
                                     </div>
                                 </div>
 
@@ -80,29 +127,29 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="fullname" placeholder="Name">
-                                        <label for="fullname">Username</label>
+                                        <input type="text" class="form-control" id="fullname" placeholder="Name" required>
+                                        <label>Username</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Email Address">
-                                        <label for="email">Email Address</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                                        <label>Email Address</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Password">
-                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                        <label>Password</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Password">
-                                        <label for="password">Confirm Password</label>
+                                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                        <label>Confirm Password</label>
                                     </div>
                                 </div>
 
@@ -110,7 +157,7 @@
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
-                                            <label class="form-check-label" for="flexCheckDefault">I agree with <span>Terms</span> and <span>Privacy</span></label>
+                                            <label class="form-check-label" >I agree with <span>Terms</span> and <span>Privacy</span></label>
                                         </div>
                                     </div>
                                 </div>

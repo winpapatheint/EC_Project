@@ -13,7 +13,8 @@
                                     <h5>Product Information</h5>
                                 </div>
 
-                                <form class="theme-form theme-form-2 mega-form">
+                                <form class="theme-form theme-form-2 mega-form" action="#">
+                                    @csrf
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                         <div class="col-sm-9">
@@ -30,15 +31,35 @@
 
                                     <div class="mb-4 row align-items-center">
                                         <label
-                                            class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                            class="col-sm-3 col-form-label form-label-title">Made-in</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100">
-                                                <option disabled>Brand Menu</option>
-                                                <option value="puma">Puma</option>
-                                                <option value="hrx">HRX</option>
-                                                <option value="roadster">Roadster</option>
-                                                <option value="zara">Zara</option>
+                                            <select class="js-example-basic-single w-100" name="state">
+                                                <option disabled>Choose country</option>
+                                                <option>Japan</option>
+                                                <option>China</option>
+                                                <option>Korea</option>
+                                                <option>Austrilia</option>
+                                                <option>Myanmar</option>
+                                                <option>Vietnam</option>
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label for="selectOption" class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <select class="custom-select" id="selectOption" name="selectOption">
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <a href="{{ route('add.brand') }}">
+                                                    <button type="button" class="btn btn-light" >
+                                                        <i data-feather="plus-square"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -160,6 +181,34 @@
     </div>
     <!-- New Product Add End -->
 </div>
+
+<!-- Modal Start -->
+<div class="modal fade" id="addbrand" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+   aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog  modal-dialog-centered">
+       <div class="modal-content">
+           <div class="modal-body">
+                <form id="myForm" method="POST" action="{{ route('store.brand') }}" enctype="multipart/form-data">
+                    @csrf
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Brand</h5>
+                    <div class="mb-4">
+                        <label class="form-label-title col-sm-3 mb-0">Brand Name:</label>
+                        <input type="text" class="form-control" name="brand_name" placeholder="Brand Name">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label-title col-sm-3 mb-0">Brand Logo:</label>
+                        <input type="file" src="#" alt="" class="form-control" name="brand_logo">
+                    </div>
+                    <div class="button-box">
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    </div>
+               </form>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+       </div>
+   </div>
+</div>
+<!-- Modal End -->
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>

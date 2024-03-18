@@ -63,7 +63,7 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}">
-   
+
 
 </head>
 <body>
@@ -178,13 +178,17 @@
                                         </a>
                                     </li>
                                 </div>
-                               
+
+
                                 <li>
-                                    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                        href="javascript:void(0)">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                    <a
+                                        href="route('logout'))" onclick="event.preventDefault(); this.closest('form').submit();">
                                         <i data-feather="log-out"></i>
                                         <span>Log out</span>
                                     </a>
+                                    </form>
                                 </li>
                             </ul>
                         </li>
@@ -260,7 +264,7 @@
                                     </ul>
                                 </li>
 
-                                 
+
 
 
                                  <li class="sidebar-list">

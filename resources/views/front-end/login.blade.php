@@ -1,5 +1,6 @@
 <x-guest-layout>
 
+
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -24,37 +25,58 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- log in section start -->
+
+    @php $subtitle=__('auth.userlogin'); @endphp
+
     <section class="log-in-section background-image-2 section-b-space">
         <div class="container-fluid-lg w-100">
-            <div class="row">
-                <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
-                    <div class="image-contain">
-                        <img src="{{ asset('frontend/assets/images/inner-page/log-in.png ') }}" class="img-fluid" alt="">
-                    </div>
+
+          <div class="row">
+            <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
+                <div class="image-contain">
+                    <img src="../assets/images/inner-page/log-in.png" class="img-fluid" alt="">
                 </div>
+            </div>
 
-                <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
-                    <div class="log-in-box">
-                        <div class="log-in-title">
-                            <h3>Welcome To Fastkart</h3>
-                            <h4>Log In Your Account</h4>
-                        </div>
-
-                        <div class="input-box">
-                            <form class="row g-4">
-                                <div class="col-12">
-                                    <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="email" class="form-control" id="email" placeholder="Email Address">
-                                        <label for="email">Email Address</label>
+            <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
+                <div class="log-in-box">
+                    <div class="log-in-title">
+                        <h3>Welcome To Fastkart</h3>
+                        <h4>Log In Your Account</h4>
+                    </div>
+                      @php $error = $errors->toArray(); @endphp
+                      <div class="input-box">
+                <form id="contact-form" class="contact-form" method="POST" action="{{ route('login') }}">
+                    @csrf
+                        <div class="error-container"></div>
+                            <div class="row g-4">
+                                <div class="col-12 mx-auto">
+                                    <div class="form-group">
+                                        <label for="email"><b>{{ __('auth.mailaddress') }}</b></label>
+                                        <input class="form-control form-control-email" placeholder="{{ __('auth.mailaddress') }}" name="email" id="email"
+                                            type="text" value="{{ old('email') }}" autofocus>
+                                            @if (!empty($error['inflhide']))
+                                                @foreach ($error['inflhide'] as  $key => $value)
+                                                    <p class="inflhide error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @elseif (!empty($error['email']))
+                                                @foreach ($error['email'] as  $key => $value)
+                                                    <p class="email error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                     </div>
                                 </div>
 
-                                <div class="col-12">
-                                    <div class="form-floating theme-form-floating log-in-form">
-                                        <input type="password" class="form-control" id="password"
-                                            placeholder="Password">
-                                        <label for="password">Password</label>
+                                <div class="col-12 mx-auto">
+                                    <div class="form-group">
+                                        <label for="pwd"><b>{{ __('auth.password') }}</b></label>
+                                        <input class="form-control form-control-password" placeholder="{{ __('auth.password') }}" name="password" id="password"
+                                            type="password" autocomplete="current-password">
+                                            @if (!empty($error['password']))
+                                                @foreach ($error['password'] as  $key => $value)
+                                                    <p class="password error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                     </div>
                                 </div>
 
@@ -69,47 +91,19 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12">
-                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">Log
-                                        In</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="other-log-in">
-                            <h6>or</h6>
-                        </div>
-
-                        <div class="log-in-button">
-                            <ul>
-                                <li>
-                                    <a href="https://www.google.com/" class="btn google-button w-100">
-                                        <img src="../assets/images/inner-page/google.png" class="blur-up lazyload"
-                                            alt=""> Log In with Google
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.facebook.com/" class="btn google-button w-100">
-                                        <img src="../assets/images/inner-page/facebook.png" class="blur-up lazyload"
-                                            alt=""> Log In with Facebook
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="other-log-in">
-                            <h6></h6>
-                        </div>
-
-                        <div class="sign-up-box">
-                            <h4>Don't have an account?</h4>
-                            <a href="sign-up.html">Sign Up</a>
+                            <div class="text-center">
+                                <button class="btn btn-animation w-100 justify-content-center" type="submit">Log
+                                In</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </form><!-- Contact form end -->
+             </div>
+          </div>
+       </div>
+       <div class="speaker-shap">
+          <img class="shap1" src="images/shap/home_schedule_memphis2.png" alt="">
+       </div>
     </section>
-    <!-- log in section end -->
+</x-guest-layout>
 
-    </x-guest-layout>

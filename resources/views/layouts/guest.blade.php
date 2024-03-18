@@ -855,7 +855,7 @@
 
                                             <li class="nav-item dropdown new-nav-item">
                                                 <label class="new-dropdown">New</label>
-                                                <a class="nav-link"  href="{{ url('/blog-list') }}">New</a>
+                                                <a class="nav-link"  href="{{ url('/news') }}">New</a>
 
                                             </li>
 

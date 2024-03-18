@@ -29,7 +29,7 @@ Route::get('/user/order/details', function () {return view('front-end.user-order
 Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
 Route::get('/register', function () {return view('front-end.register');});
-Route::get('/login', function () {return view('front-end.login');});
+
 
 Route::get('/products', function () {return view('front-end.products');});
 Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
@@ -46,7 +46,7 @@ Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-s
 
 Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
 
-Route::get('/blog-list', function () {return view('front-end.blog-list');});
+Route::get('/news', function () {return view('front-end.blog-list');});
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 

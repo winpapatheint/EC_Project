@@ -29,14 +29,11 @@ Route::get('/user/profile', function () {return view('front-end.user-profile');}
 Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-route::post('/adduser',[UserController::class,"adduser"]);
+route::post('/adduser',[UserController::class,'POST'])->name('adduser');
 
-Route::get('/register', function () {return view('front-end.register');});
-<<<<<<< HEAD
-Route::get('/login', function () {return view('front-end.login');})->name('front-end.login');
-=======
+//Route::get('/register', function () {return view('front-end.register');});
 
->>>>>>> ea6c4a81e1c5dd3c776b822063a60c083a8ad9dd
+
 
 Route::get('/products', function () {return view('front-end.products');});
 Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});

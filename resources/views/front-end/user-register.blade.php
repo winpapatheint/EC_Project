@@ -33,7 +33,8 @@
                             </div>
 
                             <div class="input-box">
-                                <form class="row g-4">
+                                <form class="row g-4" action="" method="POST">
+                                @csrf
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
                                             <input type="text" class="form-control" id="fullname" placeholder="Type your shop name" required="">
@@ -79,7 +80,7 @@
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>
-                                <a href="{{route ('front-end.login')}}">Log In</a>
+                                <a href="">Log In</a>
                             </div>
                         </div>
                     </div>

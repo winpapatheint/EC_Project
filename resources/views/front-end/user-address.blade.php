@@ -125,57 +125,56 @@
                         </div>
 
                         <div class="row g-sm-4 g-3">
-                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                            <div class="address-box">
-                                                <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jack"
-                                                            id="flexRadioDefault2" checked>
-                                                    </div>
-
-                                                    <div class="label">
-                                                        <label>Home</label>
-                                                    </div>
-
-                                                    <div class="table-responsive address-table">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">Jack Jennas</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Address :</td>
-                                                                    <td>
-                                                                        <p>8424 James Lane South San Francisco, CA 94080
-                                                                        </p>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Pin Code :</td>
-                                                                    <td>+380</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td>Phone :</td>
-                                                                    <td>+ 812-710-3798</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                                        Edit</button>
-                                                    <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                                        data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                                        Remove</button>
-                                                </div>
-                                            </div>
+                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
+                                <div class="address-box">
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="jack"
+                                                id="flexRadioDefault2" checked>
                                         </div>
+
+                                        <div class="label">
+                                            <label>Home</label>
+                                        </div>
+
+                                        <div class="table-responsive address-table">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="2">Jack Jennas</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>Address :</td>
+                                                        <td>
+                                                            <p>8424 James Lane South San Francisco, CA 94080</p>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>Pin Code :</td>
+                                                        <td>+380</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>Phone :</td>
+                                                        <td>+ 812-710-3798</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="button-group">
+                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
+                                            data-bs-target="#editProfile"><i data-feather="edit"></i>
+                                            Edit</button>
+                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
+                                            data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
+                                            Remove</button>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
                                 <div class="address-box">
                                      <div>

@@ -101,17 +101,21 @@
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
-                <div class="col-xxl-9 col-lg-8" class="tab-pane fade" id="pills-order" role="tabpanel">
-                    <!-- Orders View Start -->
-                    <div class="dashboard-order">
-                        <div class="title">
-                            <h2>Orders</h2>
-                            <span class="title-leaf title-leaf-gray">
-                                <svg class="icon-width bg-gray">
-                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                                </svg>
-                            </span>
-                        </div>
+                <div class="col-xxl-9 col-lg-8">
+                    <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
+                        Menu</button>
+                    <div class="dashboard-right-sidebar">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
+                                <div class="dashboard-order">
+                                    <div class="title">
+                                        <h2>Orders</h2>
+                                        <span class="title-leaf">
+                                            <svg class="icon-width bg-gray">
+                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                            </svg>
+                                        </span>
+                                    </div>
                         <div class="table-responsive dashboard-bg-box">
                             <table class="table product-table">
                                 <thead>
@@ -186,55 +190,54 @@
                                         <td>
                                             <ul>
                                                 <li>
-                                                                <a href="order-detail.html">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
+                                                    </a>
+                                                </li>
+                                             </ul>
+                                        </td>
+                                     </tr>
 
-                                                <tr>
-                                                    <td>
-                                                        <h6>01</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>2024/02/24 13:30</h6>
-                                                    </td>
-                                                    <td class="product-image">
-                                                        <img src="../assets/images/vegetable/product/2.png"
-                                                            class="img-fluid" alt="">
-                                                    </td>
-                                                    <td>
-                                                        <h6>00001</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>Paypal</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="theme-color fw-bold">¥320</h6>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="order-detail.html">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                 </tbody>
-                                        </table>
+                                    <tr>
+                                        <td>
+                                            <h6>01</h6>
+                                        </td>
+                                        <td>
+                                            <h6>2024/02/24 13:30</h6>
+                                        </td>
+                                        <td class="product-image">
+                                            <img src="../assets/images/vegetable/product/2.png"
+                                                class="img-fluid" alt="">
+                                        </td>
+                                        <td>
+                                            <h6>00001</h6>
+                                        </td>
+                                        <td>
+                                            <h6>Paypal</h6>
+                                        </td>
+                                        <td>
+                                            <h6 class="theme-color fw-bold">¥320</h6>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{route ('front-end.user-order-details')}}">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                </table>
                                     </div>
                                     <div>
                                         <nav class="custom-pagination">
@@ -265,7 +268,8 @@
                             </div>  
                         </div>
                     </div>
-                <!-- Order View End -->
+                    <!-- Order View End -->
+                </div>
             </div>
         </div>
     </section>

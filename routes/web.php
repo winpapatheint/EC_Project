@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +19,7 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
+Route::get('/user/registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
 Route::get('/user/orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
 Route::get('/user/delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
@@ -28,8 +29,10 @@ Route::get('/user/profile', function () {return view('front-end.user-profile');}
 Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
+route::post('/adduser',[UserController::class,"adduser"]);
+
 Route::get('/register', function () {return view('front-end.register');});
-Route::get('/login', function () {return view('front-end.login');});
+Route::get('/login', function () {return view('front-end.login');})->name('front-end.login');
 
 Route::get('/products', function () {return view('front-end.products');});
 Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});

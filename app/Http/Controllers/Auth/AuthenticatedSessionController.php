@@ -21,16 +21,16 @@ class AuthenticatedSessionController extends Controller
         if (!empty(Auth::user()->role)) {
             if (Auth::user()->role == 'admin') {
                 return redirect()->intended(RouteServiceProvider::ADMIN);
-            } else if (Auth::user()->role == 'hcompany') {
-                return redirect()->intended(RouteServiceProvider::HCOMPANY);
-            } else if (Auth::user()->role == 'host') {
-                return redirect()->intended(RouteServiceProvider::HOST);
+            } else if (Auth::user()->role == 'seller') {
+                return redirect()->intended(RouteServiceProvider::SELLER);
+            } else if (Auth::user()->role == 'buyer') {
+                return redirect()->intended(RouteServiceProvider::USER);
             } else {
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
         }
 
-        return view('front-end.login');
+        return view('auth.login');
     }
 
     /**
@@ -54,13 +54,13 @@ class AuthenticatedSessionController extends Controller
 
         else if (Auth::user()->role == 'seller') {
 
-            return redirect()->intended(RouteServiceProvider::HCOMPANY);
-        } else if (Auth::user()->role == 'host') {
-            return redirect()->intended(RouteServiceProvider::HOST);
+            return redirect()->intended(RouteServiceProvider::SELLER);
+        } else if (Auth::user()->role == 'buyer') {
+            return redirect()->intended(RouteServiceProvider::USER);
         } else {
             return redirect()->intended(RouteServiceProvider::HOME);
         }
-        dd(Auth::user()->role);
+
     }
 
     /**

@@ -55,6 +55,7 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}">
 </head>
 
@@ -223,7 +224,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.all.product') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="#">
                                         <i class="ri-store-3-line"></i>
                                         <span>Product</span>
                                     </a>

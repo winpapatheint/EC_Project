@@ -1,0 +1,9 @@
+.input-group {
+    display: flex;
+}
+
+.input-group .custom-select {
+    flex-grow: 1;
+    margin-right: 3px;
+}
+

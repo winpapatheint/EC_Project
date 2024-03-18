@@ -181,7 +181,7 @@
 
 
                                 <li>
-                                    <form method="POST" action="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('adminlogout') }}">
                                         @csrf
                                     <a
                                         href="route('logout'))" onclick="event.preventDefault(); this.closest('form').submit();">

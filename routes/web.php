@@ -32,7 +32,11 @@ Route::get('/user/order/tracking', function () {return view('front-end.user-orde
 route::post('/adduser',[UserController::class,"adduser"]);
 
 Route::get('/register', function () {return view('front-end.register');});
+<<<<<<< HEAD
 Route::get('/login', function () {return view('front-end.login');})->name('front-end.login');
+=======
+
+>>>>>>> ea6c4a81e1c5dd3c776b822063a60c083a8ad9dd
 
 Route::get('/products', function () {return view('front-end.products');});
 Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
@@ -49,7 +53,7 @@ Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-s
 
 Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
 
-Route::get('/blog-list', function () {return view('front-end.blog-list');});
+Route::get('/news', function () {return view('front-end.blog-list');});
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 

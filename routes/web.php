@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\UserController;
-=======
+
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 
->>>>>>> 657dffc13780e47487e07efa8d8b21235b764e42
+
 
 /*
 |--------------------------------------------------------------------------

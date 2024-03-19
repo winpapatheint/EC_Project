@@ -159,5 +159,5 @@ Route::get('/subseller/detail/order', function () {return view('sub_seller.order
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
 Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
-
+require __DIR__.'/auth.php';
 

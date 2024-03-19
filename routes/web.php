@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\UserController;
-=======
+
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 
->>>>>>> 657dffc13780e47487e07efa8d8b21235b764e42
+
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +71,8 @@ Route::get('/admin', function () {return view('admin.admin');})->name('admin.das
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', function () {return view('back-end.category');});
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
+
+Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
 Route::get('/admin/users', function () {return view('back-end.users');});
 
 Route::get('/subadmin', function () {return view('admin.subadmin');})->name('admin.subadmin');
@@ -183,7 +185,7 @@ Route::get('/subseller/detail/order', function () {return view('sub_seller.order
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
 Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
-
+require __DIR__.'/auth.php';
 
 
 

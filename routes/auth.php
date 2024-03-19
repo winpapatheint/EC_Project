@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -37,3 +38,5 @@ Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
                 ->middleware('guest')
                 ->name('password.update');
+=======
+>>>>>>> e46684fd6794d15c598c89c02ae597f3facc543e

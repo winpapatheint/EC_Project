@@ -181,12 +181,9 @@
                                     </li>
                                 </div>
 
-
                                 <li>
-                                    <form method="POST" action="{{ route('adminlogout') }}">
-                                        @csrf
-                                    <a
-                                        href="route('logout'))" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                        href="javascript:void(0)">
                                         <i data-feather="log-out"></i>
                                         <span>Log out</span>
                                     </a>

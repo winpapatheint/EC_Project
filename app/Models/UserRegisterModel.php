@@ -12,10 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 use Config;
 
-class UserRegister extends Model
+class UserRegisterModel extends Model
 {
-    protected $table = 'Users';
-    protected $fillable = ['name','email','password','role'];
+    
+  protected $Users = ['name', 'email', 'password','role'];
+
 }
-
-

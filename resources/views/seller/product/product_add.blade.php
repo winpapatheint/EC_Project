@@ -18,14 +18,14 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Product Code">
+                                            <input class="form-control" name="product_code" type="text" placeholder="Product Code">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Product Name">
+                                            <input class="form-control" name="product_name" type="text" placeholder="Product Name">
                                         </div>
                                     </div>
 
@@ -33,14 +33,11 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">Made-in</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="state">
-                                                <option disabled>Choose country</option>
-                                                <option>Japan</option>
-                                                <option>China</option>
-                                                <option>Korea</option>
-                                                <option>Austrilia</option>
-                                                <option>Myanmar</option>
-                                                <option>Vietnam</option>
+                                            <select class="js-example-basic-single w-100" name="country">
+                                                <option>Choose country</option>
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -49,7 +46,8 @@
                                         <label for="selectOption" class="col-sm-3 col-form-label form-label-title">Brand</label>
                                         <div class="col-sm-9">
                                             <div class="input-group">
-                                                <select class="custom-select" id="selectOption" name="selectOption">
+                                                <select class="custom-select" id="selectOption" name="brand">
+                                                    <option>Choose brand</option>
                                                     @foreach ($brands as $brand)
                                                         <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                                                     @endforeach
@@ -63,7 +61,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 row align-items-center">
+                                    {{-- <div class="mb-4 row align-items-center">
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">Category</label>
                                         <div class="col-sm-9">
@@ -94,12 +92,12 @@
                                                 <option>Beauty & Grooming</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
+                                            <input type="text" name="product_tag" class="form-control" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
                                         </div>
                                     </div>
 
@@ -120,20 +118,20 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="short-descp" ></textarea>
+                                            <textarea class="form-control" name="short_descp" ></textarea>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long-descp" id="ckeditor" ></textarea>
+                                            <textarea class="form-control" name="long_descp" id="ckeditor" ></textarea>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label
-                                            class="col-sm-3 col-form-label form-label-title">Thumbnail
+                                            class="col-sm-3 col-form-label form-label-title">Thambnail
                                             Image</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)">
@@ -144,7 +142,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" multiple="" name="multi_img[]" id="multiImg" onchange="previewImages()">
+                                            <input type="file" class="form-control" multiple="" name="multi_img" id="multiImg" onchange="previewImages()">
                                             <div class="row" id="preview_img"></div>
                                         </div>
                                     </div>
@@ -152,21 +150,28 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="number" placeholder="0">
+                                            <input class="form-control" name="selling_price" type="number" placeholder="0">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 form-label-title">Discount Price</label>
+                                        <label class="col-sm-3 form-label-title">Discount Percentage</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="number" placeholder="0">
+                                            <input class="form-control" name="discount_percent" type="number" placeholder="0">
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Product Quantity</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="number" placeholder="0">
+                                            <input class="form-control" name="product_qty" type="number" placeholder="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Estimated Date</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" name="estimate_date" type="number" placeholder="0">
                                         </div>
                                     </div>
 

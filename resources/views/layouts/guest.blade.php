@@ -319,6 +319,7 @@
                                                 <li class="product-box-contain">
                                                     <a href="{{ url('/register') }}">Buyer Register</a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </li>

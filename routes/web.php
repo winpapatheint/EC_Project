@@ -69,7 +69,8 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 //Admin
 Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
-Route::get('/admin/category', function () {return view('back-end.category');});
+Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
+
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
@@ -110,10 +111,12 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 //endhelp
 
 //startcategory
-Route::get('/admin/all/category', function () {return view('admin.category');})->name('admin.all.category');
+route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
+Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
+
 Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
 Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');
-Route::get('/admin/all/addsubtitle', function () {return view('admin.addsubtitle');})->name('admin.all.addsubtitle');
+Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
 Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');
 Route::get('/admin/edit/category', function () {return view('admin.editcategory');})->name('admin.edit.category');

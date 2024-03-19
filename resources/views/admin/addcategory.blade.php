@@ -1,5 +1,14 @@
 <x-auth-layout>
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<style>
+    .error{
+        margin:0 auto;
+        display:flex;
+    }
+</style>
+
+@php $error = $errors->toArray(); if(!isset($editmode)){$editmode = false;} if(!isset($editother)){$editother = false;}
+@endphp
 <div class="page-body">
 <!-- New Product Add Start -->
     <div class="container-fluid">
@@ -12,94 +21,58 @@
                                 <div class="card-header-2">
                                     <h5>Category Information</h5>
                                 </div>
+                                @php $action= route('registercategory'); @endphp
 
-                                <form class="theme-form theme-form-2 mega-form">
-                                    <div class="mb-4 row align-items-center">
+                                <form class="theme-form theme-form-2 mega-form" id="registerblog" class="contact-form" method="POST" action="{{ $action }}" enctype="multipart/form-data">
+                                    @csrf
+
+                                    @if ($editmode)
+                                    <input type="hidden" name="id" value="{{ $data->id }}">
+                                    @endif
+
+                                    <div class="mb-4 row  align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Category Name</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Category Name">
+                                            <input class="form-control" type="text" placeholder="Category Name" name="title" id="title"
+                                                value="{{ old('name') ?? $data->category_name ?? '' }}">
+                                            <p style="display:none" class="title error text-danger"></p>
+                                            @if (!empty($error['title']))
+                                                @foreach ($error['title'] as  $key => $value)
+                                                    <p class="title error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
 
-
-                                  <div class="mb-4 row align-items-center">
-                                                    <div class="col-sm-3 form-label-title">Select Category Icon</div>
-                                                    <div class="col-sm-9">
-                                                        <div class="dropdown icon-dropdown">
-                                                            <button class="btn dropdown-toggle" type="button"
-                                                                id="dropdownMenuButton1" data-bs-toggle="dropdown">
-                                                                Select Icon
-                                                            </button>
-                                                            <ul class="dropdown-menu"
-                                                                aria-labelledby="dropdownMenuButton1">
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/vegetable.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/cup.svg') }}"
-                                                                            class="blur-up lazyload" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/meats.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/breakfast.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/frozen.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/biscuit.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/grocery.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/drink.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/milk.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <img src="{{ asset('frontend/assets/svg/1/pet.svg') }}"
-                                                                            class="img-fluid" alt="">
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Select Category Icon</label>
+                                        <div class="col-sm-9">
+                                            <input type="file" name="image" id="image" class="form-control" >
+                                                <img id="preview-image-before-upload" alt="your image"
+                                                    @if(!empty($data->category_icon))
+                                                        src="{{ asset('images/'.($data->category_icon ?? 'blog/blog-details.jpg')   ) }}"
+                                                        style="max-width: 100%;"
+                                                    @else
+                                                        style="display: none; max-width: 100%;"
+                                                    @endif
+                                                 />
+                                                 <p style="display:none" class="image error text-danger"></p>
+                                                    @if (!empty($error['image']))
+                                                        @foreach ($error['image'] as  $key => $value)
+                                                            <p class="image error text-danger">{{ $value }}</p>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
-                                            </div>
-
-
-                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">Save</button>
+                                    </div>
+                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">
+                                        @if (!$editmode)
+                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                            {{ __('auth.doregister') }}
+                                        @else
+                                            <i class="fa fa-edit" aria-hidden="true"></i>
+                                            {{ __('auth.yeschange') }}
+                                        @endif
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -146,6 +119,14 @@
             reader.readAsDataURL(file);
         });
     });
+</script>
+
+<script>
+    function selectIcon(iconPath) {
+        document.getElementById('selectedIcon').value = iconPath;
+        document.getElementById('selectedIconPreview').src = iconPath;
+        document.getElementById('selectedIconPreview').style.display = 'block';
+    }
 </script>
 
 </x-auth-layout>

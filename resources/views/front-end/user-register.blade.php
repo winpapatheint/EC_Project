@@ -24,59 +24,58 @@
     <!-- Breadcrumb Section End -->
     
         <section class="log-in-section section-b-space">
-            <div class="container-fluid-lg">
-                <div class="row justify-content-center">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
                     <div class="col-lg-8 col-md-10 col-sm-12">
-                        <div class="log-in-box">
+                        <div class="log-in-box center">
                             <div class="log-in-title">
                                 <h3>Create Account</h3>
                             </div>
 
-                            <div class="input-box">
-                                <form class="row g-4" action="{{route ('adduser')}}" method="POST">
+                                @if(Session::get('success'))
+                                    <div class="alert alert-success">
+                                        {{ Session::get('success')}}
+                                    </div>
+                                @endif
+
+                                @if(Session::get('fail'))
+                                    <div class="alert alert-danger">
+                                        {{ Session::get('fail')}}
+                                    </div>
+                                @endif
+
+                                <form method="post" action="{{ route('adduser') }}" class="row g-4" >
                                 @csrf
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
-                                            <input type="text" class="form-control" id="fullname" placeholder="Type your shop name" required="">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
                                             <label for="fullname">Name</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
-                                            <input type="email" class="form-control" id="email" placeholder="Email Address" required="">
-                                            <label for="email">Email Address</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
-                                            <input type="password" class="form-control" id="password" placeholder="Password" required="">
-                                            <label for="password">Password</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
-                                            <input type="password" class="form-control" id="password" placeholder="Password">
-                                            <label for="password">Confirm Password</label>
+                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name">
+                                            <!--<span style="color:red">@error('name'){{$message}} @enderror</span> -->
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
-                                        <div class="forgot-box">
-                                            <div class="form-check ps-0 m-0 remember-box">
-                                                <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">I agree with <span>Terms</span> and <span>Privacy</span></label>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="email">Email Address</label>
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+                                            
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="role" value="buyer">
 
                                     <div class="col-md-12">
                                         <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>
                                     </div>
                                 </form>
-                            </div>
+                        
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>
@@ -87,8 +86,4 @@
                 </div>
             </div>
         </section>
-
-
-
-
 </x-guest-layout>

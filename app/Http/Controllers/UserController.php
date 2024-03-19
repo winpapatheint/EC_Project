@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -11,25 +14,30 @@ class UserController extends Controller
     function index(){
         return view('front-end.user-register');
     }
-    //
-    function adduser(Request $request){
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required',
-            'password'=>'required',
-        ]);
-        $query = DB::table('Users')->insert([
-            'name'->$request->input('name'),
-            'email'->$request->nput('emailS'),
-            'password'->$request->input('password'),
-            'role'->$request->input('buyer'),
-        ]);
+    
+    function add(Request $request){
+       
+       
+     
 
-        if($query){
-            return back()->with('success','Data have been successfully registration');
-        }else{
-            return back()->with('fail','Something went wrong');
-        }
+if(empty($request->id))
+{
+ 
+        $user = User::create([
+            'role' => "buyer",
+            'name' => $request->name,
+            
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            
+        ]);
+        $user->save();
+        
+      
+       
+
+
     }
+}
     
 }

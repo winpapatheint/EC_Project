@@ -14,7 +14,8 @@ use Config;
 
 class UserRegister extends Model
 {
-    
-  protected $Users = ['name', 'email', 'password','role'];
-
+    protected $table = 'Users';
+    protected $fillable = ['name','email','password','role'];
 }
+
+

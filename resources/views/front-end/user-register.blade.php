@@ -49,23 +49,25 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="fullname">Name</label>
-                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name">
-                                            <!--<span style="color:red">@error('name'){{$message}} @enderror</span> -->
+                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}">
+                                            <span style="color:red">@error('name'){{$message}} @enderror</span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="email">Email Address</label>
-                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
-                                            
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}">
+                                            <span style="color:red">@error('email'){{ $message }} @enderror</span>
+
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}">
+                                            <span style="color:red">@error('password'){{$message}} @enderror</span>
                                         </div>
                                     </div>
 

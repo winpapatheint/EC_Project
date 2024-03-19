@@ -37,6 +37,8 @@ Route::get('/user/order/tracking', function () {return view('front-end.user-orde
 
 route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
 
+
+
 //Route::get('/register', function () {return view('front-end.register');});
 
 

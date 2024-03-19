@@ -19,9 +19,9 @@ class User extends Authenticatable implements MustVerifyEmail
      {
         parent::boot();
         static::creating(function($model)
-        {   
+        {
             if (Auth::user()){
-                $user = Auth::user();           
+                $user = Auth::user();
                 $model->created_by = $user->id;
                 // $model->updated_by = $user->id;
             }
@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         // {
         //     $user = Auth::user();
         //     $model->updated_by = $user->id;
-        // });       
+        // });
     }
 
     /**
@@ -41,31 +41,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'role',
         'name',
-        'furiname',
         'email',
         'password',
-        'monthlylesson',
-        'extralesson',
-        'lessonvalid',
-        'url',
-        'cartlist',
-        'dob',       
-        'zoomapi',
-        'profileimg',
-        'likejson',
-        'profile',
-        'bunrui',
-        'agerange',
-        'selfintro',
-        'interest',
-        'noti',
-        'lineid',
-        'linestr',
-        'freetill',
+        'user_photo',
         'address',
         'phone',
+        'status',
         'gender',
         'email_verified_at',
+        'created_by',
 
     ];
 
@@ -124,6 +108,5 @@ class User extends Authenticatable implements MustVerifyEmail
 
       return false;
     }
-
 
 }

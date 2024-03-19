@@ -128,14 +128,7 @@
                                             <a class="dropdown-item" href="javascript:void(0)" id="france">
                                                 <img src="../assets/images/country/germany.png"
                                                     class="img-fluid blur-up lazyload" alt="">
-                                                <span>Germany</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="chinese">
-                                                <img src="../assets/images/country/turkish.png"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>Turki</span>
+                                                <span>Japanese</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -324,7 +317,7 @@
                                                 </li>
 
                                                 <li class="product-box-contain">
-                                                    <a href="{{ url('/register') }}">Register</a>
+                                                    <a href="{{ url('/register') }}">Buyer Register</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -861,7 +854,7 @@
 
                                             <li class="nav-item dropdown new-nav-item">
                                                 <label class="new-dropdown">New</label>
-                                                <a class="nav-link"  href="{{ url('/blog-list') }}">New</a>
+                                                <a class="nav-link"  href="{{ url('/news') }}">New</a>
 
                                             </li>
 
@@ -1071,7 +1064,7 @@
                         <div class="footer-contain">
                             <ul>
                                 <li>
-                                    <a href="order-success.html" class="text-content">Your Order</a>
+                                    <a href="{{ route('seller.register') }}" class="text-content">Seller Register</a>
                                 </li>
                                 <li>
                                     <a href="user-dashboard.html" class="text-content">Your Account</a>

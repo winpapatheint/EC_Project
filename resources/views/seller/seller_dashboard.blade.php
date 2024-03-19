@@ -224,7 +224,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="#">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.all.product') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Product</span>
                                     </a>

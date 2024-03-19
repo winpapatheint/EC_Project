@@ -32,53 +32,53 @@
                         </div>
 
                         <div class="input-box">
-                            <form method="POST" action="{{ route('seller.register') }}" enctype="multipart/form-data" class="row g-4">
+                            <form method="POST" action="{{ route('seller.registered') }}" enctype="multipart/form-data" class="row g-4">
                                 @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Type your shop name" required>
+                                        <input type="text" name="shop_name" class="form-control" placeholder="Type your shop name" required>
                                         <label>Shop Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" class="form-control" id="date" required>
+                                        <input type="date" name="shop_establish" class="form-control" required>
                                         <label>Established Year</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="file" class="form-control" id="shop_logo" required>
+                                        <input type="file" name="shop_logo" class="form-control" required>
                                         <label>Shop Logo</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" class="form-control" id="phone" placeholder="Phone" required>
+                                        <input type="text" name="phone" class="form-control" placeholder="Phone" required>
                                         <label>Phone</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="zip" placeholder="Zip Code" required>
+                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" required>
                                         <label>Zip Code</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="url" placeholder="Shop Link">
+                                        <input type="text" name="url" class="form-control" placeholder="Shop Link">
                                         <label>Shop Link</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="address" placeholder="Address" required>
+                                        <input type="text" name="address" class="form-control" placeholder="Address" required>
                                         <label>Address</label>
                                     </div>
                                 </div>
@@ -87,14 +87,14 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="address" placeholder="Bank Name" required>
+                                        <input type="text" name="bank_name" class="form-control" placeholder="Bank Name" required>
                                         <label>Bank Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="state">
+                                        <select class="form-control" name="bank_acc_type">
                                             <option>普通</option>
                                             <option>当座</option>
                                             <option>貯蓄</option>
@@ -104,21 +104,21 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="branch" placeholder="Branch Name" required>
+                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" required>
                                         <label>Branch Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="bank_acc_name" placeholder="Bank Account Name" required>
+                                        <input type="text" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" required>
                                         <label>Bank Account Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" class="form-control" id="bank_acc" placeholder="Bank Account Number" required>
+                                        <input type="number" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" required>
                                         <label>Bank Account Number</label>
                                     </div>
                                 </div>
@@ -127,40 +127,40 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" class="form-control" id="fullname" placeholder="Name" required>
+                                        <input type="text" name="name" class="form-control" placeholder="Name" required>
                                         <label>Username</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                                        <input type="email" name="email" class="form-control" placeholder="Email Address" required>
                                         <label>Email Address</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                        <input type="password" name="password" class="form-control" placeholder="Password" required>
                                         <label>Password</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                        <input type="password" name="password_confirmation" class="form-control" placeholder="Password" required>
                                         <label>Confirm Password</label>
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" >I agree with <span>Terms</span> and <span>Privacy</span></label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-12">
                                     <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>
@@ -170,7 +170,7 @@
 
                         <div class="sign-up-box">
                             <h4>Already have an account?</h4>
-                            <a href="login.html">Log In</a>
+                            <a href="#">Log In</a>
                         </div>
                     </div>
                 </div>

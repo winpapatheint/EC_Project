@@ -2,12 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
-use App\Http\Controllers\UserController;
-
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\Auth\RegisterController;
 
 
 /*
@@ -35,6 +32,7 @@ Route::get('/user/profile', function () {return view('front-end.user-profile');}
 Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
+<<<<<<< HEAD
 route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
 
 
@@ -42,6 +40,10 @@ route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
 //Route::get('/register', function () {return view('front-end.register');});
 
 
+=======
+Route::get('/register', function () {return view('front-end.register');});
+Route::get('/login', function () {return view('front-end.login');});
+>>>>>>> baf7abfc7b051c0edcd32b2284026095633ec5a0
 
 Route::get('/products', function () {return view('front-end.products');});
 Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
@@ -71,7 +73,8 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 //Admin
 Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
-Route::get('/admin/category', function () {return view('back-end.category');});
+Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
+
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
@@ -112,10 +115,12 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 //endhelp
 
 //startcategory
-Route::get('/admin/all/category', function () {return view('admin.category');})->name('admin.all.category');
+route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
+Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
+
 Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
 Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');
-Route::get('/admin/all/addsubtitle', function () {return view('admin.addsubtitle');})->name('admin.all.addsubtitle');
+Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
 Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');
 Route::get('/admin/edit/category', function () {return view('admin.editcategory');})->name('admin.edit.category');
@@ -133,8 +138,10 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
-//Route::get('/seller/registration', [RegisterController::class, 'registration'])->name('seller.register');
-Route::get('/seller/register', function () {return view('seller.seller_register');})->name('seller.register');
+Route::controller(RegisterController::class)->group(function(){
+    Route::get('/seller/register','SellerRegister')->name('seller.register');
+    Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
+});
 Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
 Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
 Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
@@ -143,19 +150,19 @@ Route::get('/seller/add/help', function () {return view('seller.help.help_add');
 
 //Brand
 Route::controller(BrandController::class)->group(function(){
-    Route::get('/add_brand','AddBrand')->name('add.brand');
+    Route::get('/add/brand','AddBrand')->name('add.brand');
     Route::post('/store/brand','StoreBrand')->name('store.brand');
 });
 
-
 //SellerProduct
 Route::controller(ProductController::class)->group(function(){
-    // Route::get('/seller/all/product','AllProduct')->name('all.product');
-    Route::get('/seller/add/product','AddProduct')->name('add.product');
-    // Route::post('/seller/store/product','StoreProduct')->name('store.product');
-    // Route::get('/seller/detail/product/{id}','EditProduct')->name('edit.product');
-    // Route::post('/seller/edit/product/{id}','UpdateProduct')->name('update.product');
-    // Route::get('/seller/delete/product/{id}','DeleteProduct')->name('delete.product');
+    Route::get('/seller/all/product','AllProduct')->name('seller.all.product');
+    Route::get('/seller/detail/product','DetailProduct')->name('seller.detail.product');
+    Route::get('/seller/add/product','AddProduct')->name('seller.add.product');
+    Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
+    Route::get('/seller/edit/product','EditProduct')->name('seller.edit.product');
+    Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
+    Route::get('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
 });
 
 //SellerOrder

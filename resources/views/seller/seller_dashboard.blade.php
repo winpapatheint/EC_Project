@@ -56,7 +56,8 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
 </head>
 
 <body>
@@ -323,7 +324,8 @@
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script>
+    {{-- <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script> --}}
+    <script src="{{ asset('backend/assets/input-tags/js/tagsinput.js') }}"></script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('backend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>

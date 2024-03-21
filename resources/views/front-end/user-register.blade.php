@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <x-guest-layout>
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
@@ -90,5 +90,3 @@
             </div>
         </section>
 </x-guest-layout>
-=======
->>>>>>> baf7abfc7b051c0edcd32b2284026095633ec5a0

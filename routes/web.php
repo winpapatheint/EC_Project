@@ -73,6 +73,7 @@ Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middle
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
+Route::post('admin/registersubtitle', [AdminController::class, 'storesubtitle'])->name('registersubtitle');
 Route::get('/admin/users', function () {return view('back-end.users');});
 
 Route::get('/subadmin', function () {return view('admin.subadmin');})->name('admin.subadmin');
@@ -111,12 +112,15 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 
 //startcategory
 route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
+route::get('/admin/all/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
+Route::get('/admin/all/subtitle', [AdminController::class,'indexsubtitle'])->name('admin.all.subtitle');
 Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
 
 Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
-Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');
+
 Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
 Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
+Route::get('/admin/all/addsubcategory', function () {return view('admin.addsubcategory');})->name('admin.all.addsubcategory');
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');
 Route::get('/admin/edit/category', function () {return view('admin.editcategory');})->name('admin.edit.category');
 Route::get('/admin/edit/subcategory', function () {return view('admin.editsubcategory');})->name('admin.edit.subcategory');

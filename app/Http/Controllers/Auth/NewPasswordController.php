@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 class NewPasswordController extends Controller
 {
+
     /**
      * Display the password reset view.
      *

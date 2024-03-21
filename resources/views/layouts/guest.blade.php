@@ -317,7 +317,7 @@
                                                 </li>
 
                                                 <li class="product-box-contain">
-                                                    <a href="{{ url('/register') }}">Buyer Register</a>
+                                                    <a href="{{route ('front-end.user-register')}}">Buyer Register</a>
                                                 </li>
 
                                             </ul>

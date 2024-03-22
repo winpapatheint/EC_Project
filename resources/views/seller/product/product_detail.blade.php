@@ -123,7 +123,9 @@
                                                 <p>30</p>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
+                                        <a href="{{ route('seller.edit.product') }}">
+                                            <button type="button" class="btn btn-animation">Edit</button>
+                                        </a>
                                     </form>
                                 </div>
                             </div>

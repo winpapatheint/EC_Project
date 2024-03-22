@@ -156,7 +156,7 @@ Route::controller(BrandController::class)->group(function(){
 //SellerProduct
 Route::controller(ProductController::class)->group(function(){
     Route::get('/seller/all/product','AllProduct')->name('seller.all.product');
-    Route::get('/seller/detail/product','DetailProduct')->name('seller.detail.product');
+    Route::get('/seller/detail/product/{id}','DetailProduct')->name('seller.detail.product');
     Route::get('/seller/add/product','AddProduct')->name('seller.add.product');
     Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
     Route::get('/seller/edit/product','EditProduct')->name('seller.edit.product');

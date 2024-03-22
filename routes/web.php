@@ -162,6 +162,7 @@ Route::controller(ProductController::class)->group(function(){
     Route::get('/seller/edit/product','EditProduct')->name('seller.edit.product');
     Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
     Route::get('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/product/status', 'changeStatus')->name('changeStatus');
 });
 
 //SellerOrder

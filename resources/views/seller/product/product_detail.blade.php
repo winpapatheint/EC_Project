@@ -17,14 +17,14 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                             <div class="col-sm-9">
-                                                <p>CN-1230</p>
+                                                <p>{{ $data->product_code }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                             <div class="col-sm-9">
-                                                <p>Orange</p>
+                                                <p>{{ $data->product_name }}</p>
                                             </div>
                                         </div>
 
@@ -123,7 +123,6 @@
                                                 <p>30</p>
                                             </div>
                                         </div>
-
                                         <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
                                     </form>
                                 </div>

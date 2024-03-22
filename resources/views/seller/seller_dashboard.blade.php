@@ -12,6 +12,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Fastkart - Reports</title>
 
     <!-- Google font-->
@@ -56,8 +57,9 @@
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
+
 </head>
 
 <body>
@@ -326,6 +328,7 @@
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
     {{-- <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script> --}}
     <script src="{{ asset('backend/assets/input-tags/js/tagsinput.js') }}"></script>
+    <script src="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.min.js') }}"></script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('backend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>

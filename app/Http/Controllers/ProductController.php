@@ -9,19 +9,21 @@ use App\Models\Product;
 use App\Models\MultiImg;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
     public function AllProduct()
     {
-        // $products = Product::latest()->get();
-        // return view('seller.product.product_all',compact('products'));
-        return view('seller.product.product_all');
+        $products = Product::latest()->get();
+        return view('seller.product.product_all',compact('products'));
+        // return view('seller.product.product_all');
     }
 
-    public function DetailProduct()
+    public function DetailProduct($id)
     {
-        return view('seller.product.product_detail');
+        $data = Product::find($id);
+        return view('seller.product.product_detail',compact('data'));
     }
 
     public function AddProduct()
@@ -33,8 +35,10 @@ class ProductController extends Controller
 
     public function StoreProduct(Request $request)
     {
-        $request->hasFile('product_thambnail');
-        $filename = $request->file('product_thambnail')->store('upload/product_thambnail');
+        $file = $request->file('product_thambnail');
+        $ext = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $ext;
+        $file->move('upload/product_thambnail', $filename);
 
         $product_id = Product::insertGetId([
             'brand_id' => $request->brand_id,
@@ -58,15 +62,18 @@ class ProductController extends Controller
 
         $images = $request->file('multi_img');
         foreach ($images as $img) {
-            $path = $img->store('upload/product/multi_img');
+            $ext = $img->getClientOriginalExtension();
+            $filename = time() . '_' . rand(100, 999) . '.' . $ext;
+            $img->move('upload/multiImg', $filename);
             MultiImg::create([
                 'product_id' => $product_id,
-                'photo_name' => $path,
+                'photo_name' => $filename,
                 'created_at' => Carbon::now(),
             ]);
         }
 
-        return view('seller.product.product_all');
+
+        return redirect('/seller/all/product');
     }
 
 
@@ -83,5 +90,13 @@ class ProductController extends Controller
     public function DeleteProduct()
     {
         return view('seller.product.product_all');
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $product->status = $request->status;
+        $product->save();
+        return response()->json(['success' => 'Status updated successfully']);
     }
 }

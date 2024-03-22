@@ -1,5 +1,12 @@
 <x-auth-layout>
 
+    <style>
+        .table>:not(caption)>*>*
+        {
+            border-bottom-width:0px !important;
+        }
+    </style>
+
     <div class="page-body">
         <div class="container-fluid">
         <div class="row">
@@ -9,9 +16,9 @@
                         <div class="title-header option-title d-sm-flex d-block">
                             <h5>News</h5>
                                <form class="d-inline-flex">
-                                            <a href="{{ route('admin.add.blog') }}"
-                                                class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
+                                    <a href="{{ route('admin.addblog') }}"
+                                        class="align-items-center btn btn-theme d-flex">
+                                            <i data-feather="plus-square"></i>Add New
                                             </a>
                                         </form>
                         </div>
@@ -29,403 +36,37 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr>
-                                            <td>11</td>
-                                            <td>2022-12-26 15:23</td>
+                                        @foreach( $lists as $key => $list )
 
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
+                                    <tr>
+                                      <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                      <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                      <td data-label="タイトル">{{ $list->title }}</td>
+                                      <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                      <td>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('admin.detail.blog') }}">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
 
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
+                                            <li>
+                                                <a href='{{ url("/editblog/".$list->id ) }}'>
+                                                    <i class="ri-pencil-line"></i>
+                                                </a>
+                                            </li>
 
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>10</td>
-                                            <td>2022-12-26 15:23</td>
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>9</td>
-                                            <td>2022-12-26 15:23</td>
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>8</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>7</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>6</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>5</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>4</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>2022-12-26 15:23</td>
-
-                                            <td>Agriculture Conference Harvest 2022 In Paris</td>
-
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="{{ asset('backend/assets/images/product/1.png') }}" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{{ route('admin.detail.blog') }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ route('admin.edit.blog') }}">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                            <li>
+                                                <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -465,7 +106,8 @@
     <!-- Container-fluid Ends-->
 </div>
  <!-- Delete Modal Box Start -->
- <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+ @foreach( $lists as $key => $list )
+ <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header d-block text-center">
@@ -481,13 +123,19 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
-                    data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                <form method="POST" action="{{ route('deleteblog') }}" >
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $list->id }}">
+                    <button type="submit"class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
+                    data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
+                  </form>
+
             </div>
         </div>
     </div>
 </div>
+@endforeach
 
 <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

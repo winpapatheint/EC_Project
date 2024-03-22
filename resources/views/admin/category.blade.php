@@ -1,6 +1,5 @@
-<x-auth-layout>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<x-auth-layout>
     <!-- bootstrap  css -->
     <style>
         .table>:not(caption)>*>*
@@ -20,8 +19,16 @@
                                     <h5>All Category</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.all.addcategory') }}"
+                                        class="align-items-center btn btn-theme d-flex">
+                                        <i data-feather="plus-square"></i>Add Main Category
+                                       </a>&nbsp;&nbsp;
+                                       <a href="{{ route('admin.all.addsubtitle') }}"
+                                       class="align-items-center btn btn-theme d-flex">
+                                       <i data-feather="plus-square"></i>Add SubTitle Category
+                                      </a>&nbsp;&nbsp;
+                                        <a href="{{ route('admin.all.addsubcategory') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                            <i data-feather="plus-square"></i>Add New
+                                            <i data-feather="plus-square"></i>Add SubCategory
                                         </a>
                                     </form>
                                 </div>
@@ -32,20 +39,22 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Date</th>
-                                                    <th>Category Name</th>
-                                                    <th>Icon</th>
+                                                    <th>Main Category Name</th>
+                                                    <th>SubTitle Category Name</th>
+                                                    <th>SubCategory Name</th>
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 @foreach( $lists as $key => $list )
+
                                             <tr>
                                               <th data-label="登録日" >{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                              <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                              <td data-label="タイトル">{{ $list->category_name }}</td>
-                                              <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->category_icon)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                              <td data-label="タイトル">{{ $list->category }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_titlename ?? '' }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_name ?? '' }}</td>
+
                                               <td>
                                                 <ul>
                                                     <li>
@@ -54,11 +63,10 @@
                                                         </a>
                                                     </li>
 
-
-
                                                     <li>
-                                                        <a class="" href="" role="button" data-toggle="modal"  data-target="#deleteConfirmModal{{ $list->id }}">
-                                                             <i class="ri-delete-bin-line"></i></a>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -98,32 +106,6 @@
                             </ul>
                         </nav>
                     </div>
-
-                    @foreach( $lists as $key => $list )
-                    <div class="modal fade" id="deleteConfirmModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-                       <div class="modal-dialog" role="document">
-                       <div class="modal-content">
-                          <div class="modal-header">
-                             <h4 class="modal-title" id="deleteConfirmModalLabel">新着情報を削除</h4>
-                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                             <span aria-hidden="true">&times;</span>
-                             </button>
-                          </div>
-                          <div class="modal-body">
-                             <p>削除しますか？</p>
-                          </div>
-                          <div class="modal-footer">
-                           <form method="POST" action="{{ route('deletecategory') }}" >
-                             @csrf
-                             <input type="hidden" name="id" value="{{ $list->id }}">
-                             <button type="submit" class="btn btn-danger">削除する</button>
-                             <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                           </form>
-                          </div>
-                       </div>
-                       </div>
-                    </div>
-                    @endforeach
                 </div>
 
             </div>

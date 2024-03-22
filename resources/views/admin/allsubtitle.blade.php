@@ -49,7 +49,7 @@
                                               <td>
                                                 <ul>
                                                     <li>
-                                                        <a href='{{ url("/editcategory/".$list->id ) }}'>
+                                                        <a href='{{ url("/editsubtitle/".$list->id ) }}'>
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
                                                     </li>

@@ -13,19 +13,19 @@
                                     <h5>Product Information</h5>
                                 </div>
 
-                                <form class="theme-form theme-form-2 mega-form" action="#">
+                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('seller.store.product') }}" enctype="multipart/form-data" id="tagsForm">
                                     @csrf
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="product_code" type="text" placeholder="Product Code">
+                                            <input class="form-control" name="product_code" type="text" placeholder="Product Code" required>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="product_name" type="text" placeholder="Product Name">
+                                            <input class="form-control" name="product_name" type="text" placeholder="Product Name" required>
                                         </div>
                                     </div>
 
@@ -33,8 +33,8 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">Made-in</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="country">
-                                                <option>Choose country</option>
+                                            <select class="js-example-basic-single w-100" name="country_id">
+                                                <option disabled>Choose country</option>
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                 @endforeach
@@ -46,8 +46,8 @@
                                         <label for="selectOption" class="col-sm-3 col-form-label form-label-title">Brand</label>
                                         <div class="col-sm-9">
                                             <div class="input-group">
-                                                <select class="custom-select" id="selectOption" name="brand">
-                                                    <option>Choose brand</option>
+                                                <select class="custom-select" name="brand_id">
+                                                    <option disabled>Choose brand</option>
                                                     @foreach ($brands as $brand)
                                                         <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                                                     @endforeach
@@ -97,7 +97,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
-                                            <input type="text" name="product_tag" class="form-control" data-role="tagsinput" value="new product,new" placeholder="Type tag & hit enter">
+                                            <input type="text" name="product_tags" class="form-control" data-role="tagsinput" id="product_tags" value="new product,new" placeholder="Type tag & hit enter">
                                         </div>
                                     </div>
 
@@ -118,14 +118,14 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="short_descp" ></textarea>
+                                            <textarea class="form-control" name="short_desc" required></textarea>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long_descp" id="ckeditor" ></textarea>
+                                            <textarea class="form-control" name="long_desc" id="ckeditor"></textarea>
                                         </div>
                                     </div>
 
@@ -134,7 +134,7 @@
                                             class="col-sm-3 col-form-label form-label-title">Thambnail
                                             Image</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)">
+                                            <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)" required>
                                             <img src="" id="mainThmb">
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" multiple="" name="multi_img" id="multiImg" onchange="previewImages()">
+                                            <input type="file" class="form-control" multiple="" name="multi_img[]" id="multiImg" required>
                                             <div class="row" id="preview_img"></div>
                                         </div>
                                     </div>
@@ -150,28 +150,28 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="selling_price" type="number" placeholder="0">
+                                            <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" required>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Discount Percentage</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="discount_percent" type="number" placeholder="0">
+                                            <input class="form-control" name="discount_percent" type="number" placeholder="0-100" min="1" max="100" >
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Product Quantity</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="product_qty" type="number" placeholder="0">
+                                            <input class="form-control" name="product_qty" type="number" placeholder="0" min="1" required>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Estimated Date</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="estimate_date" type="number" placeholder="0">
+                                            <input class="form-control" name="estimate_date" type="number" placeholder="0" min="1" required>
                                         </div>
                                     </div>
 
@@ -187,42 +187,15 @@
     <!-- New Product Add End -->
 </div>
 
-<!-- Modal Start -->
-<div class="modal fade" id="addbrand" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-   <div class="modal-dialog  modal-dialog-centered">
-       <div class="modal-content">
-           <div class="modal-body">
-                <form id="myForm" method="POST" action="{{ route('store.brand') }}" enctype="multipart/form-data">
-                    @csrf
-                    <h5 class="modal-title" id="staticBackdropLabel">Add New Brand</h5>
-                    <div class="mb-4">
-                        <label class="form-label-title col-sm-3 mb-0">Brand Name:</label>
-                        <input type="text" class="form-control" name="brand_name" placeholder="Brand Name">
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label-title col-sm-3 mb-0">Brand Logo:</label>
-                        <input type="file" src="#" alt="" class="form-control" name="brand_logo">
-                    </div>
-                    <div class="button-box">
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
-                    </div>
-               </form>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-           </div>
-       </div>
-   </div>
-</div>
-<!-- Modal End -->
-
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
-<script>
+{{-- <script>
     $(document).on('submit', 'form', function(event) {
     event.preventDefault();
 });
-</script>
+</script> --}}
+
 <script>
     ClassicEditor
         .create(document.querySelector('#ckeditor'))

@@ -160,7 +160,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">Update</button>
+                                    <button type="button" class="btn btn-animation">Update</button>
                                 </form>
                             </div>
                         </div>

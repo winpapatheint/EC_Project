@@ -25,50 +25,55 @@
                                             <th>Date</th>
                                             <th>Product Image</th>
                                             <th>Product Name</th>
-                                            <th>Category</th>
                                             <th>Current Qty</th>
                                             <th>Price</th>
+                                            <th>Discount</th>
                                             <th>Status</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
+                                        @foreach ($products as $key => $item)
                                         <tr>
-                                            <td>10</td>
-                                            <td>2022-12-26 12:24</td>
+                                            <td>{{ $key+=1 }}</td>
+                                            <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <div class="table-image">
-                                                    <img src="assets/images/product/1.png" class="img-fluid"
-                                                        alt="">
+                                                    <img width="100" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
                                                 </div>
                                             </td>
 
-                                            <td>Aata Buscuit</td>
+                                            <td>{{ $item->product_name }}</td>
 
-                                            <td>Buscuit</td>
+                                            <td>{{ $item->product_qty }}</td>
 
-                                            <td>12</td>
+                                            <td class="td-price">{{ $item->selling_price }}</td>
 
-                                            <td class="td-price">$95.97</td>
+                                            <td class="td-price">
+                                                @if ($item->discount_percent == NULL)
+                                                    <p>No Discount</p>
+                                                @else
+                                                <p>{{ $item->discount_percent }}%</p>
+                                                @endif
+                                            </td>
 
                                             <td class="col-sm-9">
                                                 <label class="switch">
-                                                    <input type="checkbox" checked=""><span
-                                                        class="switch-state"></span>
+                                                    <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>
                                                 </label>
                                             </td>
 
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('seller.detail.product') }}">
+                                                        <a href="{{ route('seller.detail.product',$item->id) }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ route('seller.edit.product') }}">
+                                                        <a href="{{ route('seller.edit.product',$item->id) }}">
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
                                                     </li>
@@ -82,417 +87,7 @@
                                                 </ul>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td>9</td>
-                                            <td>2022-12-25 10:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/2.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Cold Brew Coffee</td>
-
-                                            <td>Drinks</td>
-
-                                            <td>10</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>8</td>
-                                            <td>2022-12-25 12:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/3.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Peanut Butter Cookies</td>
-
-                                            <td>Cookies</td>
-
-                                            <td>9</td>
-
-                                            <td class="td-price">$86.35</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>7</td>
-                                            <td>2022-12-24 23:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/4.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Wheet Flakes</td>
-
-                                            <td>Flakes</td>
-
-                                            <td>8</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-danger">
-                                                <span>Pending</span>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>6</td>
-                                            <td>2022-12-22 12:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/5.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Potato Chips</td>
-
-                                            <td>Chips</td>
-
-                                            <td>23</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>5</td>
-                                            <td>2022-12-23 11:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/6.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Tuwer Dal</td>
-
-                                            <td>Dals</td>
-
-                                            <td>50</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>4</td>
-                                            <td>2022-12-22 12:20</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/7.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Almond Milk</td>
-
-                                            <td>Milk</td>
-
-                                            <td>25</td>
-
-                                            <td class="td-price">$121.43</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>2022-12-20 12:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/11.png"
-                                                        class="img-fluid" alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Wheat Bread</td>
-
-                                            <td>Breads</td>
-
-                                            <td>6</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-danger">
-                                                <span>Pending</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>2022-12-20 10:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/8.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Dog Food</td>
-
-                                            <td>Pet Food</td>
-
-                                            <td>11</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>1</td>
-                                            <td>2022-12-20 05:24</td>
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="assets/images/product/9.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </td>
-
-                                            <td>Fresh Meat</td>
-
-                                            <td>Meats</td>
-
-                                            <td>18</td>
-
-                                            <td class="td-price">$95.97</td>
-
-                                            <td class="status-close">
-                                                <span>Approved</span>
-                                            </td>
-
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="order-detail.html">
-                                                            <i class="ri-eye-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -500,6 +95,7 @@
                     </div>
                 </div>
             </div>
+
             <div style="bottom:28px">
                 <nav class="custom-pagination">
                     <ul class="pagination justify-content-center">
@@ -548,7 +144,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
-                    data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                    data-bs-toggle="modal" data-bs-dismiss="modal"><a href="{{route('seller.delete.product',$item->id)}}"></a>Yes</button>
             </div>
         </div>
     </div>
@@ -581,4 +177,31 @@
     </div>
 </div>
 <!-- Delete Modal Box End -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(function() {
+        $('.toggle-class').change(function() {
+            var status = $(this).prop('checked') ? 1 : 0;
+            var product_id = $(this).data('id');
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/seller/product/status',
+                data: {
+                    'status': status,
+                    'product_id': product_id,
+                    '_token': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                },
+                success: function(data) {
+                    console.log(data.success);
+                }
+            });
+        });
+    });
+    </script>
+
+
 @endsection

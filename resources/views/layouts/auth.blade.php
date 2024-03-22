@@ -4,7 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
         content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
@@ -182,12 +184,12 @@
                                 </div>
 
                                 <li>
-                                    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                        href="javascript:void(0)">
-                                        <i data-feather="log-out"></i>
-                                        <span>Log out</span>
-                                    </a>
-                                    </form>
+                                    <form method="POST" action="{{ route('adminlogout') }}">
+                                        @csrf
+                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"> logout</a>
+                                        </form>
+
+
                                 </li>
                             </ul>
                         </li>
@@ -244,25 +246,13 @@
                                     </a>
                                 </li>
 
-                                 <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-list-check-2"></i>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.subcategory') }}">
+                                        <i class="ri-store-3-line"></i>
                                         <span>Category</span>
                                     </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('admin.all.category') }}">Category List</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('admin.all.subtitle') }}">Sub Category Titlelist</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('admin.all.subcategory') }}">Sub Category List</a>
-                                        </li>
-                                    </ul>
                                 </li>
-
 
 
 
@@ -396,6 +386,7 @@
     <script src="{{ asset('backend/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/chart-custom.js') }}"></script>
+
 
     <!-- customizer js -->
     <script src="{{ asset('backend/assets/js/customizer.js') }}"></script>

@@ -1,3 +1,4 @@
+
 <x-auth-layout>
     <!-- bootstrap  css -->
     <style>
@@ -18,8 +19,16 @@
                                     <h5>All Category</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.all.addcategory') }}"
+                                        class="align-items-center btn btn-theme d-flex">
+                                        <i data-feather="plus-square"></i>Add Main Category
+                                       </a>&nbsp;&nbsp;
+                                       <a href="{{ route('admin.all.addsubtitle') }}"
+                                       class="align-items-center btn btn-theme d-flex">
+                                       <i data-feather="plus-square"></i>Add SubTitle Category
+                                      </a>&nbsp;&nbsp;
+                                        <a href="{{ route('admin.all.addsubcategory') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                            <i data-feather="plus-square"></i>Add New
+                                            <i data-feather="plus-square"></i>Add SubCategory
                                         </a>
                                     </form>
                                 </div>
@@ -30,20 +39,22 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Date</th>
-                                                    <th>Category Name</th>
-                                                    <th>Icon</th>
+                                                    <th>Main Category Name</th>
+                                                    <th>SubTitle Category Name</th>
+                                                    <th>SubCategory Name</th>
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 @foreach( $lists as $key => $list )
+
                                             <tr>
-                                              <th >{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                              <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                              <td data-label="タイトル">{{ $list->category_name }}</td>
-                                              <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->category_icon)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                              <th data-label="登録日" >{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                              <td data-label="タイトル">{{ $list->category }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_titlename ?? '' }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_name ?? '' }}</td>
+
                                               <td>
                                                 <ul>
                                                     <li>

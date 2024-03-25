@@ -20,73 +20,72 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-header-2">
-                                        <h5>Category Information</h5>
+                                        <h5>Blog Information</h5>
                                     </div>
                                     @php $action= route('registerblog'); @endphp
-
                                     <form class="theme-form theme-form-2 mega-form" id="registerblog" class="contact-form" method="POST" action="{{ $action }}" enctype="multipart/form-data">
                                         @csrf
-
-                                        @if ($editmode)
-                                        <input type="hidden" name="id" value="{{ $data->id }}">
-                                        @endif
-
-                                        <div class="mb-4 row  align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">News Name</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control" type="text" placeholder="Blog Name" name="title" id="title"
-                                                    value="{{ old('name') ?? $data->title ?? '' }}">
-                                                <p style="display:none" class="title error text-danger"></p>
-                                                @if (!empty($error['title']))
-                                                    @foreach ($error['title'] as  $key => $value)
-                                                        <p class="title error text-danger">{{ $value }}</p>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4 row  align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Description</label>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" name="content" id="ckeditor" value="{{ old('content') ?? $data->content ?? '' }}" ></textarea>
-                                                <p style="display:none" class="content error text-danger"></p>
-                                                @if (!empty($error['content']))
-                                                    @foreach ($error['content'] as  $key => $value)
-                                                        <p class="content error text-danger">{{ $value }}</p>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Select Category Icon</label>
-                                        <div class="col-sm-9">
-                                            <input type="file" name="image" id="image" class="form-control" >
-                                                <img id="preview-image-before-upload" alt="your image"
-                                                    @if(!empty($data->image))
-                                                        src="{{ asset('images/'.($data->image ?? 'blog/blog-details.jpg')   ) }}"
-                                                        style="max-width: 100%;"
-                                                    @else
-                                                        style="display: none; max-width: 100%;"
-                                                    @endif
-                                                 />
-                                                 <p style="display:none" class="image error text-danger"></p>
-                                                    @if (!empty($error['image']))
-                                                        @foreach ($error['image'] as  $key => $value)
-                                                            <p class="image error text-danger">{{ $value }}</p>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                    </div>
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">
-                                            @if (!$editmode)
-                                                <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                {{ __('auth.doregister') }}
-                                            @else
-                                                <i class="fa fa-edit" aria-hidden="true"></i>
-                                                {{ __('auth.yeschange') }}
+                                            @if ($editmode)
+                                                <input type="hidden" name="id" value="{{ $data->id }}">
                                             @endif
-                                        </button>
+
+                                            <div class="mb-4 row  align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">News Name</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text" placeholder="Blog Name" name="title" id="title"
+                                                        value="{{ old('title') ?? $data->title ?? '' }}">
+                                                    <p style="display:none" class="title error text-danger"></p>
+                                                        @if (!empty($error['title']))
+                                                            @foreach ($error['title'] as  $key => $value)
+                                                                <p class="title error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row  align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Description</label>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" name="content" id="ckeditor" value="{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}" >{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}</textarea>
+                                                    <p style="display:none" class="content error text-danger"></p>
+                                                        @if (!empty($error['content']))
+                                                            @foreach ($error['content'] as  $key => $value)
+                                                                <p class="content error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Select Image</label>
+                                                <div class="col-sm-9">
+                                                    <input type="file" name="image" id="image" class="form-control" >
+                                                    <img id="preview-image-before-upload" alt="your image"
+                                                        @if(!empty($data->image))
+                                                            src="{{ asset('images/'.($data->image ?? 'blog/blog-details.jpg')   ) }}"
+                                                            style="max-width: 100%;"
+                                                        @else
+                                                            style="display: none; max-width: 100%;"
+                                                        @endif
+                                                    />
+                                                    <p style="display:none" class="image error text-danger"></p>
+                                                        @if (!empty($error['image']))
+                                                            @foreach ($error['image'] as  $key => $value)
+                                                                <p class="image error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-animation ms-auto fw-bold">
+                                                @if (!$editmode)
+                                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                        {{ __('auth.doregister') }}
+                                                @else
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                        {{ __('auth.yeschange') }}
+                                                @endif
+                                            </button>
                                     </form>
                                 </div>
                             </div>
@@ -143,5 +142,5 @@
         }
     </script>
 
-    </x-auth-layout>
+</x-auth-layout>
 

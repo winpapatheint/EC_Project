@@ -1,9 +1,9 @@
 
 <x-auth-layout>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
     <!-- bootstrap  css -->
     <style>
         .table>:not(caption)>*>*
@@ -68,9 +68,11 @@
                                                     </li>
                                                     <li>
                                                         @if(empty($list->sub_category_name))
-                                                        <a href="" data-toggle="modal" data-target="#deleteConfirmModal{{ $list->id }}">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
+                                                            <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                <i class="ri-delete-bin-line"></i>
+                                                            </a>
+
                                                         @endif
                                                     </li>
                                                 </ul>
@@ -93,31 +95,65 @@
 
             </div>
 
-            @foreach( $lists as $key => $list )
-            <div class="modal fade" id="deleteConfirmModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-               <div class="modal-dialog" role="document">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h4 class="modal-title" id="deleteConfirmModalLabel">{{ __('auth.newsdeleteconfirmtitle') }}</h4>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                  </div>
-                  <div class="modal-body">
-                     <p>{{ __('auth.deleteaskconfirm') }}</p>
-                  </div>
-                  <div class="modal-footer">
-                   <form method="POST" action="{{ route('deletecategory') }}" >
-                     @csrf
-                     <input type="hidden" name="id" value="{{ $list->id }}">
-                     <button type="submit" class="btn btn-danger">{{ __('auth.dodelete') }}</button>
-                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('auth.close') }}</button>
-                   </form>
-                  </div>
-               </div>
-               </div>
+           <!-- Delete Modal Box Start -->
+ @foreach( $lists as $key => $list )
+ <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            @endforeach
+            <div class="modal-body">
+                <div class="remove-box">
+                    <p>The permission for the use/group, preview is inherited from the object, object will create a
+                        new permission for this object</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <form method="POST" action="{{ route('deletecategory') }}" style="display:flex;">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $list->id }}">
+                    <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                    data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                  </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="remove-box text-center">
+                    <div class="wrapper">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                    </div>
+                    <h4 class="text-content">It's Removed.</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- All User Table Ends-->
 
     </div>

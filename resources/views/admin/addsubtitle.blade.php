@@ -56,31 +56,31 @@
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <input class="form-control" type="text" placeholder="Sub Title" name="subtitle[]" id="subtitle"
-                                                        value="{{ old('sub_category_titlename') ?? $subtitle->sub_category_titlename ?? '' }}">
+                                                            value="{{ old('sub_category_titlename') ?? $subtitle->sub_category_titlename ?? '' }}">
                                                         <div class="input-group-append align-self-center mx-auto justify-content-center">
                                                             <a href="#" class="align-items-center d-flex" id="add-more-field">
                                                                 <i data-feather="plus-square"></i> Add
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div id="dynamic-form"></div>
-                                                    <p style="display:none" class="subtitle error text-danger"></p>
-                                                        @if (!empty($error['subtitle']))
-                                                            @foreach ($error['subtitle'] as  $key => $value)
-                                                            <p class="subtitle error text-danger">{{ $value }}</p>
-                                                        @endforeach
-                                            @endif
+                                                        <div id="dynamic-form"></div>
+                                                            <p style="display:none" class="subtitle error text-danger"></p>
+                                                                @if (!empty($error['subtitle']))
+                                                                    @foreach ($error['subtitle'] as  $key => $value)
+                                                                        <p class="subtitle error text-danger">{{ $value }}</p>
+                                                                    @endforeach
+                                                                @endif
+                                                        </div>
                                                 </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-animation ms-auto fw-bold">
-                                                @if (!$editmode)
-                                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                    {{ __('auth.doregister') }}
-                                                @else
-                                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                                    {{ __('auth.yeschange') }}
-                                                @endif
-                                            </button>
+                                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">
+                                                        @if (!$editmode)
+                                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                                {{ __('auth.doregister') }}
+                                                        @else
+                                                            <i class="fa fa-edit" aria-hidden="true"></i>
+                                                                {{ __('auth.yeschange') }}
+                                                        @endif
+                                                    </button>
                                         </form>
                                     </div>
                                 </div>
@@ -129,44 +129,45 @@
             });
         </script>
 
-    <script>
-        // Function to add new input field
-        function addInputField() {
-            var inputGroup = document.createElement('div');
-            inputGroup.classList.add('mb-4', 'row', 'align-items-center');
-            inputGroup.innerHTML = `
+        <script>
+            // Function to add new input field
+            function addInputField()
+            {
+                var inputGroup = document.createElement('div');
+                inputGroup.classList.add('mb-4', 'row', 'align-items-center');
+                inputGroup.innerHTML = `
 
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Sub Title" name="subtitle[]">
-                        <div class="input-group-append align-self-center mx-auto justify-content-center">
-                            <a href="#" class="align-items-center d-flex remove-field">
-                                <i data-feather="minus-square"></i> Remove
-                            </a>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Sub Title" name="subtitle[]">
+                            <div class="input-group-append align-self-center mx-auto justify-content-center">
+                                <a href="#" class="align-items-center d-flex remove-field">
+                                    <i data-feather="minus-square"></i> Remove
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            document.getElementById('dynamic-form').appendChild(inputGroup);
-            feather.replace(); // Refresh Feather icons
-        }
-
-        // Add event listener to the add button
-        document.getElementById('add-more-field').addEventListener('click', function(event) {
-            event.preventDefault();
-            addInputField();
-        });
-
-        // Event delegation to handle remove button click
-        document.getElementById('dynamic-form').addEventListener('click', function(event) {
-            if (event.target.classList.contains('remove-field')) {
-                event.preventDefault();
-                event.target.closest('.row').remove();
+                `;
+                document.getElementById('dynamic-form').appendChild(inputGroup);
+                feather.replace(); // Refresh Feather icons
             }
-        });
-    </script>
 
-        </x-auth-layout>
+                // Add event listener to the add button
+                document.getElementById('add-more-field').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    addInputField();
+                });
+
+                // Event delegation to handle remove button click
+                document.getElementById('dynamic-form').addEventListener('click', function(event) {
+                    if (event.target.classList.contains('remove-field')) {
+                        event.preventDefault();
+                        event.target.closest('.row').remove();
+                    }
+                });
+        </script>
+
+    </x-auth-layout>
 
 
 

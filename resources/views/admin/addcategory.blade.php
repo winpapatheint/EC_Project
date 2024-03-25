@@ -34,7 +34,7 @@
                                         <label class="form-label-title col-sm-3 mb-0">Category Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" type="text" placeholder="Category Name" name="title" id="title"
-                                                value="{{ old('name') ?? $data->category_name ?? '' }}">
+                                                value="{{ old('title') ?? $data->category_name ?? '' }}">
                                             <p style="display:none" class="title error text-danger"></p>
                                             @if (!empty($error['title']))
                                                 @foreach ($error['title'] as  $key => $value)

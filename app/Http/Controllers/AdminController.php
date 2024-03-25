@@ -77,7 +77,6 @@ class AdminController extends Controller
         $lists = DB::table('Blog')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
-
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -116,6 +115,19 @@ class AdminController extends Controller
         return view('admin.allsubcategory',compact('lists','ttlpage','ttl'));
     }
 
+    public function blogdetail($id)
+    {
+        $blog = DB::table('blog')
+                    ->select( 'blog.*')
+                    ->where('blog.id',$id)->get();
+
+        // print_r($blog[0]->created_at);die;
+        $blog = $blog[0];
+
+        return view('admin.blog.blog_detail',compact('blog'));
+    }
+
+
     public function indexsubtitle()
     {
         $limit = 10;
@@ -145,8 +157,18 @@ class AdminController extends Controller
     public function deletecategory(Request $request)
     {
 
-        $data = DB::table('Sub_categories_title')
-                    ->delete($request->id);
+        $catlist =  DB::table('Category')
+                        ->whereIn('id', function ($query) use ($request) {
+                        $query->select('category_id')
+                        ->from('Sub_categories_title')
+                        ->where('id',$request->id);
+                        })
+
+                        ->delete();
+
+        $subtitlelist = DB::table('Sub_categories_title')
+        ->delete($request->id);
+
         return redirect('/admin/all/subcategory')->with('success','削除されました。');
 
     }
@@ -374,11 +396,12 @@ class AdminController extends Controller
        } else {
 
            $updval = array('title' => $request->title,
+                           'content' => $request->content,
                            'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 
            if (!empty($request->image)) {
-               $updval['content'] = $imageName;
+               $updval['image'] = $imageName;
            }
 
            DB::table('Blog')->where('id',$request->id)->update($updval);

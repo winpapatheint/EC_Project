@@ -380,7 +380,8 @@
                                                   <div class="mb-4 row align-items-center">
                                                                                       <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
                                                                                       <div class="col-sm-9">
-                                                                                          <input class="form-control" name="subname" id="subname" type="text" placeholder="SubCategory Name">
+                                                                                          <input class="form-control" name="subname" id="subname" type="text" placeholder="SubCategory Name"
+                                                                                          value="{{ old('subname')}}">
                                                                                           <p style="display:none" class="subcategory error text-danger"></p>
                                                         @if (!empty($error['subname']))
                                                             @foreach ($error['subname'] as  $key => $value)

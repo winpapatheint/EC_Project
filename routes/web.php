@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -37,7 +38,7 @@ route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
 //Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/register', function () {return view('front-end.register');});
-Route::get('/login', function () {return view('front-end.login');});
+
 
 
 Route::get('/products', function () {return view('front-end.products');});

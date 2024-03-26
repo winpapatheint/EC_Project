@@ -46,7 +46,7 @@
                                 <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
-
+                            
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
@@ -61,15 +61,17 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>Vicki E. Pope</h3>
-                                    <h6 class="text-content">vicki.pope@gmail.com</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
+                            
                         </div>
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-dashboard-tab"
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}"><i data-feather="home"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}">
+                                    <i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -79,12 +81,13 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}"><i data-feather="box"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}">
+                                    <i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-address')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('showAddress')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -94,7 +97,8 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}">
+                                    <i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>
@@ -121,152 +125,56 @@
                                         <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
                                             data-bs-toggle="modal" data-bs-target="#add-address"><i data-feather="plus"
                                                 class="me-2"></i> Add New Address</button>
-                                    </div>      
-                        </div>
+                                    </div>   
+                                </div>   
+                            </div>
 
                         <div class="row g-sm-4 g-3">
+                            @foreach($data as $item)
                             <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
                                 <div class="address-box">
-                                    <div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jack"
-                                                id="flexRadioDefault2" checked>
-                                        </div>
-
-                                        <div class="label">
-                                            <label>Home</label>
+                                       
+                                                <input class="form-check-input" type="radio" name="selected_address" 
+                                                value="{{ $item->id }}" id="address_{{ $item->id }}">
                                         </div>
 
                                         <div class="table-responsive address-table">
                                             <table class="table">
                                                 <tbody>
                                                     <tr>
-                                                        <td colspan="2">Jack Jennas</td>
+                                                        <td colspan="2">{{ $item->name }}</td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Address :</td>
+                                                        <td>Address:</td>
                                                         <td>
-                                                            <p>8424 James Lane South San Francisco, CA 94080</p>
+                                                            <p>{{ $item->address }}</p>
                                                         </td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Pin Code :</td>
-                                                        <td>+380</td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>Phone :</td>
-                                                        <td>+ 812-710-3798</td>
+                                                        <td>Phone:</td>
+                                                        <td>{{ $item->phone }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
+                                  
 
                                     <div class="button-group">
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                            Edit</button>
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                            Remove</button>
+                                            <button class="btn btn-sm add-button edit-btn w-100" data-bs-toggle="modal" 
+                                            data-bs-target="#editModal{{ $item->id }}" ><i data-feather="edit"></i>Edit</button>
+
+                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile" 
+                                        onclick="showDeleteModal('{{ $item->id }}')">
+                                            <i data-feather="trash-2"></i> Remove
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                <div class="address-box">
-                                     <div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jack"
-                                                id="flexRadioDefault3">
-                                        </div>
-                                        <div class="label">
-                                            <label>Office</label>
-                                        </div>
-                                        <div class="table-responsive address-table">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="2">Terry S. Sutton</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Address :</td>
-                                                        <td>
-                                                            <p>2280 Rose Avenue Kenner, LA 70062</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Pin Code :</td>
-                                                        <td>+25</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phone :</td>
-                                                        <td>+ 504-228-0969</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                            Edit</button>
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                            Remove</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                <div class="address-box">
-                                    <div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jack"
-                                                id="flexRadioDefault4">
-                                        </div>
-
-                                        <div class="label">
-                                            <label>Neighbour</label>
-                                        </div>
-
-                                        <div class="table-responsive address-table">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td colspan="2">Juan M. McKeon</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Address :</td>
-                                                        <td>
-                                                            <p>1703 Carson Street Lexington, KY 40593</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Pin Code :</td>
-                                                        <td>+78</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phone :</td>
-                                                        <td>+ 859-257-0509</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="button-group">
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#editProfile"><i data-feather="edit"></i>
-                                            Edit</button>
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i data-feather="trash-2"></i>
-                                            Remove</button>
-                                    </div>
-                                </div>
-                            </div>
+                          @endforeach
                         </div>
                     </div>
                 </div>
@@ -277,7 +185,7 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
-</x-guest-layout>
+
 
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
@@ -293,388 +201,141 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
-                            <label for="fname">First Name</label>
-                        </div>
-                    </form>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="lname" placeholder="Enter Last Name">
-                            <label for="lname">Last Name</label>
-                        </div>
-                    </form>
+                    <form method="post" action="{{ route('updateUserInfo') }}" class="row g-4" >
+                    @csrf
+                        <div class="modal-body">
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                                <label for="name">Name</label>
+                            </div>
+        
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
+                                <label for="email">Email</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
-                            <label for="email">Email Address</label>
-                        </div>
-                    </form>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="division" name="division" placeholder="Division">
+                                <label for="division">Division</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
-                                style="height: 100px"></textarea>
-                            <label for="address">Enter Address</label>
-                        </div>
-                    </form>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="district" name="district" placeholder="District">
+                                <label for="district">District</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="pin" placeholder="Enter Pin Code">
-                            <label for="pin">Pin Code</label>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
+                                <label for="post_code">Post Code</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="address" name="address"
+                                    style="height: 100px"></textarea>
+                                <label for="address">Enter Address</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others">
+                                <label for="place">Place</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                                <label for="phone">Enter Phone Number</label>
+                            </div>
+                            <input type="hidden" name="buyer_id" value="1">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                        changes</button>
-                </div>
+                   
+                        <div class="modal-footer">
+                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
+                                changes</button>
+                        </div>
+                    </form> 
             </div>
         </div>
     </div>
     <!-- Add address modal box end -->
 
-    <!-- Location Modal Start -->
-    <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
+
+    <!-- Edit Address Start -->
+    @foreach($data as $item)
+    <div class="modal fade theme-modal" id="editModal{{ $item->id }}" >
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Choose your Delivery Location</h5>
-                    <p class="mt-1 text-content">Enter your address and we will specify the offer for your area.</p>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit address</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="location-list">
-                        <div class="search-input">
-                            <input type="search" class="form-control" placeholder="Search Your Area">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <form method="post" action="{{ route('updateAddress') }}" class="row g-4" >
+                    @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
+                        <div class="modal-body">
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $item->name }}">
+                                <label for="name">Name</label>
+                            </div>
+        
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="{{ $item->useremail }}">
+                                <label for="email">Email</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="division" name="division" placeholder="Division" value="{{ $item->division }}">
+                                <label for="division">Division</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="district" name="district" placeholder="District" value="{{ $item->district }}">
+                                <label for="district">District</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
+                                <label for="post_code">Post Code</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <textarea class="form-control" placeholder="
+                                " id="address" name="address"
+                                    style="height: 100px" value="{{ $item->add }}"></textarea>
+                                <label for="address">Enter Address</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others" value="{{ $item->place }}">
+                                <label for="place">Place</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
+                                <label for="phone">Enter Phone Number</label>
+                            </div>
+                            <input type="hidden" name="buyer_id" value="1">
                         </div>
+                   
+                        <div class="modal-footer">
+                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
 
-                        <div class="disabled-box">
-                            <h6>Select a Location</h6>
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
+                                changes</button>
                         </div>
-
-                        <ul class="location-select custom-height">
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Alabama</h6>
-                                    <span>Min: $130</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Arizona</h6>
-                                    <span>Min: $150</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>California</h6>
-                                    <span>Min: $110</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Colorado</h6>
-                                    <span>Min: $140</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Florida</h6>
-                                    <span>Min: $160</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Georgia</h6>
-                                    <span>Min: $120</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Kansas</h6>
-                                    <span>Min: $170</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Minnesota</h6>
-                                    <span>Min: $120</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>New York</h6>
-                                    <span>Min: $110</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Washington</h6>
-                                    <span>Min: $130</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    </form> 
             </div>
         </div>
     </div>
-    <!-- Location Modal End -->
+    @endforeach
+    <!-- Edit Address End -->
 
-    <!-- Edit Profile Start -->
-    <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Edit Profile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="pname" value="Jack Jennas">
-                                    <label for="pname">Full Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="email" class="form-control" id="email1" value="vicki.pope@gmail.com">
-                                    <label for="email1">Email Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input class="form-control" type="tel" value="4567891234" name="mobile" id="mobile"
-                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                            this.value.slice(0, this.maxLength);">
-                                    <label for="mobile">Phone No</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address1"
-                                        value="8424 James Lane South San Francisco">
-                                    <label for="address1">Add Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address2" value="CA 94080">
-                                    <label for="address2">Add Address 2</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect1">
-                                        <option selected>Choose Your Country</option>
-                                        <option value="kingdom">United Kingdom</option>
-                                        <option value="states">United States</option>
-                                        <option value="fra">France</option>
-                                        <option value="china">China</option>
-                                        <option value="spain">Spain</option>
-                                        <option value="italy">Italy</option>
-                                        <option value="turkey">Turkey</option>
-                                        <option value="germany">Germany</option>
-                                        <option value="russian">Russian Federation</option>
-                                        <option value="malay">Malaysia</option>
-                                        <option value="mexico">Mexico</option>
-                                        <option value="austria">Austria</option>
-                                        <option value="hong">Hong Kong SAR, China</option>
-                                        <option value="ukraine">Ukraine</option>
-                                        <option value="thailand">Thailand</option>
-                                        <option value="saudi">Saudi Arabia</option>
-                                        <option value="canada">Canada</option>
-                                        <option value="singa">Singapore</option>
-                                    </select>
-                                    <label for="floatingSelect">Country</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect">
-                                        <option selected>Choose Your City</option>
-                                        <option value="kingdom">India</option>
-                                        <option value="states">Canada</option>
-                                        <option value="fra">Dubai</option>
-                                        <option value="china">Los Angeles</option>
-                                        <option value="spain">Thailand</option>
-                                    </select>
-                                    <label for="floatingSelect">City</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address3" value="94080">
-                                    <label for="address3">Pin Code</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Close</button>
-                    <button type="button" data-bs-dismiss="modal"
-                        class="btn theme-bg-color btn-md fw-bold text-light">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Profile End -->
-
-     <!-- Change Password Start -->
-     <div class="modal fade theme-modal" id="changePassword" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel8">Change Password</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="finame" value="markjohn@gmail.com">
-                                    <label for="finame">Email Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="********">
-                                    <label for="laname">Old Password</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="********">
-                                    <label for="laname">New Password</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Password</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Change Password End -->
-
-    <!-- Edit Card Start -->
-    <div class="modal fade theme-modal" id="editCard" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel8">Edit Card</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="finame" value="Mark">
-                                    <label for="finame">First Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="Jecno">
-                                    <label for="laname">Last Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect12">
-                                        <option selected>Card Type</option>
-                                        <option value="kingdom">Visa Card</option>
-                                        <option value="states">MasterCard Card</option>
-                                        <option value="fra">RuPay Card</option>
-                                        <option value="china">Contactless Card</option>
-                                        <option value="spain">Maestro Card</option>
-                                    </select>
-                                    <label for="floatingSelect12">Card Type</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Card End -->
-
-    <!-- Remove Profile Modal Start -->
-    <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1">
+    <!-- Remove Address Modal Start -->
+    @foreach($data as $item)
+    <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
@@ -685,18 +346,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="remove-box">
-                        <p>The permission for the use/group, preview is inherited from the object, object will create a
-                            new permission for this object</p>
+                        <p>You cannot see this address nomore in your address book.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
-                        data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <form action="{{ route('user-removeAddress', ['id' => $item->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    @endforeach
     <div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
@@ -718,4 +382,110 @@
             </div>
         </div>
     </div>
-    <!-- Remove Profile Modal End -->
+    <!-- Remove Address Modal End -->
+    
+<!-- Delete -->
+<script>
+    function showDeleteModal(id) {
+        $('#removeProfile').modal('show');
+        // Update the form action URL dynamically with the selected address id
+        $('#removeProfile form').attr('action', '/remove-address/' + id);
+    }
+</script>
+<!-- Edit -->
+<script>
+    $(document).ready(function() {
+    $('.edit-btn').on('click', function() {
+        var addressData = JSON.parse($(this).data('address'));
+        $('#address_id').val(addressData.id);
+        $('#edit_name').val(addressData.name);
+        $('#edit_email').val(addressData.email);
+        $('#edit_division').val(addressData.division);
+        $('#edit_district').val(addressData.district); // Corrected field name
+        $('#edit_post_code').val(addressData.post_code);
+        $('#edit_address').val(addressData.address);
+        $('#edit_place').val(addressData.place);
+        $('#edit_phone').val(addressData.phone);
+    });
+
+    $('#saveChanges').on('click', function() {
+        var addressId = $('#address_id').val();
+        var newName = $('#edit_name').val();
+        var newEmail = $('#edit_email').val();
+        var newDivision = $('#edit_division').val();
+        var newDistrict = $('#edit_district').val();
+        var newPostCode = $('#edit_post_code').val();
+        var newAddress = $('#edit_address').val();
+        var newPlace = $('#edit_place').val();
+        var newPhone = $('#edit_phone').val();
+
+        // Perform AJAX request to update data in the controller
+        $.ajax({
+            url: '{{ route("updateAddress") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: addressId,
+                name: newName,
+                email: newEmail,
+                division: newDivision,
+                district: newDistrict, // Corrected field name
+                post_code: newPostCode,
+                address: newAddress,
+                place: newPlace,
+                phone: newPhone
+            },
+            success: function(response) {
+            alert("123");
+                // Handle success response
+                console.log(response);
+                // Close the modal
+                $('#editModal').modal('hide');
+            },
+            error: function(xhr) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+</script>
+
+<script>
+</script>
+   <!-- latest jquery-->
+   <script src="../assets/js/jquery-3.6.0.min.js"></script>
+
+<!-- jquery ui-->
+<script src="../assets/js/jquery-ui.min.js"></script>
+
+<!-- Bootstrap js-->
+<script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/bootstrap/bootstrap-notify.min.js"></script>
+<script src="../assets/js/bootstrap/popper.min.js"></script>
+
+<!-- feather icon js-->
+<script src="../assets/js/feather/feather.min.js"></script>
+<script src="../assets/js/feather/feather-icon.js"></script>
+
+<!-- Lazyload Js -->
+<script src="../assets/js/lazysizes.min.js"></script>
+
+<!-- Slick js-->
+<script src="../assets/js/slick/slick.js"></script>
+<script src="../assets/js/slick/custom_slick.js"></script>
+
+<!-- Quantity js -->
+<script src="../assets/js/quantity-2.js"></script>
+
+<!-- Nav & tab upside js -->
+<script src="../assets/js/nav-tab.js"></script>
+
+<!-- script js -->
+<script src="../assets/js/script.js"></script>
+
+<!-- theme setting js -->
+<script src="../assets/js/theme-setting.js"></script>
+
+</x-guest-layout>

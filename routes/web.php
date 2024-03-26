@@ -103,7 +103,7 @@ Route::get('/admin/all/blog', [AdminController::class,'indexblog'])->name('admin
 Route::get('/admin/add/blog', function () {return view('admin.blog.addblog');})->name('admin.addblog');
 route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name('deleteblog');
 Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
-Route::get('/admin/detail/blog', function () {return view('admin.blog.blog_detail');})->name('admin.detail.blog');
+Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
 Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
 
 //endblog

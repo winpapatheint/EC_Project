@@ -336,7 +336,7 @@
                                             <form class="theme-form theme-form-2 mega-form" id="registersubcategory" class="contact-form" method="POST" action="{{ $action }}" enctype="multipart/form-data">
                                                 @csrf
                                                 @if ($editmode)
-                                                <input type="hidden" name="id" value="{{ $subtitle->id }}">
+                                                <input type="hidden" name="id" value="{{ $subtitle->id  }}">
 
                                                 @endif
 
@@ -359,8 +359,9 @@
                                                         class="col-sm-3 col-form-label form-label-title">SubCategory  Title</label>
                                                     <div class="col-sm-9">
                                                         <select class="js-example-basic-single w-100 get_subcategory" name="subcategory" id="subcategory">
-                                                            <option value="{{ $subtitle->sub_category_titlename   }}">{{ $subtitle->sub_category_titlename   }}</option>
+                                                            <option value="0">{{ $subcategory_titlename->sub_category_titlename   }}</option>
                                                         </select>
+
                                                     </div>
                                                 </div>
 
@@ -420,7 +421,7 @@
                             let all_options = "<option value=''>Select Sub Category</option>";
                             let all_subcategories = res.subcategories;
                             $.each(all_subcategories, function(index, value) {
-                                all_options += "<option value='" + value.sub_category_titlename +
+                                all_options += "<option value='" + value.id+
                                     "'>" + value.sub_category_titlename + "</option>";
                             });
                             $(".get_subcategory").html(all_options);

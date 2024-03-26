@@ -13,10 +13,10 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-header-2">
-                                        <h5>Users Information</h5>
+                                        <h5>Buyer Information</h5>
                                     </div>
                                     @if (!$editmode)
-                                    @php $action= route('registersubadmin') ; @endphp
+                                    @php $action= route('registerconfirm') ; @endphp
                                     @else
                                     @php $action= route('edituser') ; @endphp
                                     @endif
@@ -30,10 +30,9 @@
                                         @endif
 
                                             @if ($editmode)
-
                                             <input type="hidden" name="id" value="{{ $edituser['id'] }}">
                                             @else
-                                            <input type="hidden" name="role" value="admin">
+                                            <input type="hidden" name="role" value="hcompany">
                                             @endif
 
                                             <!-- <input type="hidden" name="freecount" value="{{ $_GET['freecount'] ?? ''}}"> -->
@@ -49,6 +48,14 @@
                                                 </div>
                                         </div>
 
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-email" placeholder="name" name="name" id="name"
+                                                        type="text" value="{{ old('name') ?? $edituser['name'] ?? '' }}" >
+                                                    <p style="display:none" class="name error text-danger"></p>
+                                                </div>
+                                        </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Email</label>
@@ -77,37 +84,8 @@
                                                 </div>
                                         </div>
 
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Phone</label>
-                                                <div class="col-sm-9">
-                                                    <input class="form-control form-control-email" placeholder="Phone" name="phone" id="phone"
-                                                        type="number" value="{{ old('phone') ?? $edituser['phone'] ?? '' }}" >
-                                                    <p style="display:none" class="phone error text-danger"></p>
-                                                </div>
-                                        </div>
-
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Address</label>
-                                                <div class="col-sm-9">
-                                                    <input class="form-control form-control-email" placeholder="Address" name="address" id="address"
-                                                        type="text" value="{{ old('address') ?? $edituser['address'] ?? '' }}" >
-                                                    <p style="display:none" class="address error text-danger"></p>
-                                                </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button class="btn btn-animation ms-auto fw-bold" type="submit">
-                                          @if (!$editmode)
-                                              <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                               登録する
-                                          @else
-                                              <i class="fa fa-edit" aria-hidden="true"></i>
-                                               情報を修正する
-                                          @endif
-                                            </button>
-                                         </div>
-
-
+                                        <button type="submit" class="btn btn-animation ms-auto fw-bold"> <i class="fa fa-edit" aria-hidden="true"></i>
+                                            {{ __('auth.dochange') }}</button>
                                     </form>
                                 </div>
                             </div>

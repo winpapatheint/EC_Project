@@ -1,535 +1,160 @@
 
 <x-auth-layout>
 
+    <style>
+        .table>:not(caption)>*>*
+        {
+            border-bottom-width:0px !important;
+        }
+    </style>
 
-            <!-- Container-fluid starts-->
-            <div class="page-body">
-                <!-- All User Table Start -->
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card card-table">
-                                <div class="card-body">
-                                    <div class="title-header option-title">
-                                        <h5>All Users</h5>
-                                      
-                                    </div>
+    <div class="page-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+                            <div class="title-header option-title d-sm-flex d-block">
+                                <h5>All Users</h5>
 
-                                    <div class="table-responsive category-table">
-                                        <div>
-                                            <table class="table all-package theme-table" id="table_id">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Date</th>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th>Type</th>
-                                                        <th>Status</th>
-                                                        <th>Option</th>
-                                                    </tr>
-                                                </thead>
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table all-package theme-table table-product" id="table_id">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Option</th>
+                                            </tr>
+                                        </thead>
 
-                                                <tbody>
-                                                    <tr>
-                                                    <td>11</td>
-                                                    <td>2022-12-26 15:23</td>
-
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Everett C. Green</span>
-                                                            <span>Essex Court</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>EverettCGreen@rhyta.com</td>
-                                                    <td>Buyer</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                        <tbody>
+                                            @foreach( $subadmins as $key => $user )
 
                                                 <tr>
-                                                    <td>10</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Caroline L. Harris</span>
-                                                            <span>Davis Lane</span>
-                                                        </div>
-                                                    </td>
+                                                    <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($users->firstItem() + $key) }}</th>
+                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($user->created_at)) }}<br>{{ date('H:i', strtotime($user->created_at)) }}</td>
+                                                    <td data-label="氏名"><a @if($user->role == 'buyer') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
+                                                        @if($user->role == 'seller') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
+                                                      >{{ $user->name }}</a></td>
+                                                    <td data-label="タイトル">{{ $user->email }}</td>
+                                                    <td data-label="タイトル">{{ $user->role }}</td>
+                                                    <td class="col-sm-9">
 
-                                                   
-
-                                                    <td>CarolineLHarris@rhyta.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
+                                                        <label class="switch">
+                                                            <input data-width="100" data-id="{{$user->id}}" class="toggle-class" type="checkbox"
+                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive" >
+                                                        </label>
                                                     </td>
 
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
+                                                                <a href="{{ url("/userdetail/".user->id ) }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
 
                                                             <li>
-                                                                <a href="{{ route('admin.edituser') }}">
+                                                                <a href="{{ url('/edit/'.$user->role.'/'.rand ( 10000 , 99999 ).$user->id ) }}">
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>
-
                                                             <li>
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
+                                                                    data-bs-target="#deleteConfirmModal{{ $user->id }}">
                                                                     <i class="ri-delete-bin-line"></i>
                                                                 </a>
                                                             </li>
                                                         </ul>
                                                     </td>
                                                 </tr>
-
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Lucy j. Morile</span>
-                                                            <span>Clifton</span>
-                                                        </div>
-                                                    </td>
-
-                                                 
-
-                                                    <td>LucyMorile456@gmail.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>8</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                     
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Jennifer A. Straight</span>
-                                                            <span>Brunswick</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>JenniferAStraight@rhyta.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Pending</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Louise J. Stiles</span>
-                                                            <span>Indianapolis</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>KevinAMillett@jourrapide.com</td><td></td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Scott T. Thomas</span>
-                                                            <span>Kotzebue</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>scott.thomas@packiu.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Everett C. Green</span>
-                                                            <span>Essex Court</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>KevinAMillett@jourrapide.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Dillon J. Bradshaw</span>
-                                                            <span>Redbud Drive</span>
-                                                        </div>
-                                                    </td>
-
-                                                 
-
-                                                    <td>DillonJBradshaw@teleworm.us</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Lorna M. Bonner</span>
-                                                            <span>Broadway Street</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>LornaMBonner@teleworm.us</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Everett C. Green</span>
-                                                            <span>Essex Court</span>
-                                                        </div>
-                                                    </td>
-
-                                                  
-
-                                                    <td>EverettCGreen@rhyta.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>
-                                                        <div class="user-name">
-                                                            <span>Lorraine D. McDowell</span>
-                                                            <span>Woodland Terrace</span>
-                                                        </div>
-                                                    </td>
-
-                                                    
-
-                                                    <td>LorraineDMcDowell@dayrep.com</td>
-                                                    <td>Seller</td>
-                                                    <td class="status-close">
-                                                        <span>Approved</span>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.usersdetail') }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ route('admin.edituser') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                         <!--pagination -->
-                        <div style="bottom:28px">
-                            <nav class="custom-pagination">
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                            <i class="fa-solid fa-angles-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="javascript:void(0)">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)">
-                                            <i class="fa-solid fa-angles-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                    </div>
+                </div>
+                    <!--pagination -->
+                    @include('components.pagination')
+
+
+
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+    </div>
+        <!-- Delete Modal Box Start -->
+            @foreach( $users as $key => $user )
+                <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $user->id }}" aria-hidden="true" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header d-block text-center">
+                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="remove-box">
+                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
+                                        new permission for this object</p>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <form method="POST" action="{{ route('deleteuser') }}" style="display:flex;">
+                                    @csrf
+                                        <input type="hidden" name="id" value="{{ $user->id }}">
+                                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- All User Table Ends-->
-</div>
+            @endforeach
+
+            <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="remove-box text-center">
+                                <div class="wrapper">
+                                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-content">It's Removed.</h4>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Delete Modal Box End -->
+
+
+
 </x-auth-layout>
+
+
 
 

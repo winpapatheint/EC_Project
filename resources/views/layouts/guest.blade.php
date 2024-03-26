@@ -313,7 +313,7 @@
                                             <ul class="user-box-name">
                                                 <li class="product-box-contain">
                                                     <i></i>
-                                                    <a href="{{ url('/login') }}">Log In</a>
+                                                    <a href="{{ route('login') }}">Log In</a>
                                                 </li>
 
                                                 <li class="product-box-contain">

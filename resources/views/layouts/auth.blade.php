@@ -175,6 +175,7 @@
 
                             <ul class="profile-dropdown onhover-show-div">
                                <div>
+
                                     <li>
                                         <a href="{{ route('admin.profile') }}">
                                             <i data-feather="user"></i>
@@ -285,26 +286,25 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-list">
-      <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.subadmin') }}">
-          <i class="ri-admin-line"></i>
-          <span>SubAdmin</span>
-      </a>
-  </li>
-   <li class="sidebar-list">
+
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/subadmin') }}">
+                                        <i class="ri-admin-line"></i>
+                                        <span>SubAdmin</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
                                     </a>
                                 </li>
 
-
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.profile') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                         <i class="ri-profile-line"></i>
                                         <span>Profile</span>
                                     </a>
-                                </li>
-
+                               </li>
                             </ul>
                         </div>
 

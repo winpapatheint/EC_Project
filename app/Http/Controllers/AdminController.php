@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +32,7 @@ use App\Notifications\MsgNotiAdminUser;
 use App\Notifications\MsgNotiAdminHcompany;
 use App\Notifications\MsgNotiHcompanyHost;
 use App\Notifications\MsgNotiHostHcompany;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 
 class AdminController extends Controller
@@ -42,6 +44,183 @@ class AdminController extends Controller
         return view('front-end.index');
 
     }
+    public function validatesubadmin($request, $editpassword = true , $editmode = false, $emailuniquecheck = true, $needimg = true)
+    {
+
+        $check = [
+            'name' => 'required|string|max:255',
+            // 'agerange' => 'required|not_in:0',
+            'phone' => ['required', 'regex:/^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/'],
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6|confirmed',
+            'gender' => 'required|not_in:0',
+            'agerange' => 'required|not_in:0',
+            // 'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+
+        if (!$editpassword) {
+            unset($check['password']);
+        }
+
+        if ($editmode) {
+            unset($check['check']);
+        }
+
+        if ($emailuniquecheck) {
+            $check['email'] .= '|unique:users' ;
+        }
+
+        if (!$needimg) {
+            unset($check['image']);
+        }
+        // print_r("$request->check");die;
+        $validator = Validator::make($request->all(), $check,
+        [
+            'check.required' => __('validation.pleasecheck'),
+            // 'phone.regex' => '有効な電話番号を入力してください。',
+            'image.mimes' => '画像ファイルをアップロードしてください。',
+            'image.required' => '画像ファイルをアップロードしてください。',
+        ]);
+
+        return $validator;
+
+    }
+
+    public function updateuser(Request $request)
+    {
+        if (!empty($request->id)) {
+           $userprofile = User::find($request->id);
+           $sellerprofile = Seller::find($request->id);
+        } else {
+           $userprofile = Auth::user();
+        }
+
+        if ($userprofile->role == 'admin') {
+
+            $checkpassword = true;
+            if ( empty($request->password) AND empty($request->password_confirmation)) {
+                $checkpassword = false;
+            }
+
+            if ($userprofile->email == $request->email) {
+                $emailuniquecheck = false;
+            }else {
+                $emailuniquecheck = true;
+            }
+            $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
+        //return response()->json(['error'=>'123']);
+        }
+
+        if ($userprofile->role == 'buyer' OR $userprofile->role == 'seller') {
+        //return response()->json(['error'=>'456']);
+
+            $checkpassword = true;
+            if ( empty($request->password) AND empty($request->password_confirmation)) {
+                $checkpassword = false;
+            }
+
+            if ($userprofile->email == $request->email) {
+                $emailuniquecheck = false;
+            }else {
+                $emailuniquecheck = true;
+            }
+            // return response()->json(['success'=>$checkpassword]);
+            $validator = (new RegisteredUserController)->validateuser($request,$checkpassword,true,$emailuniquecheck);
+
+        }
+
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+                return response()->json(['success'=>'allpasses']);
+            }
+            return response()->json(['error'=>$validator->errors()]);
+
+        }
+
+        $newval = array('name' => $request->name,
+                        'email' => $request->email,
+                    );
+
+
+        if (!empty($request->shopname)) {
+            $newval['shop_name'] = $request->shopname;
+        }
+
+        if (!empty($request->shopyear)) {
+            $newval['shop_establish'] = $request->shopyear;
+        }
+
+        if (!empty($request->phone)) {
+            $newval['phone'] = $request->phone;
+        }
+
+        if (!empty($request->zipcode)) {
+            $newval['zip_code'] = $request->zipcode;
+        }
+
+        if (!empty($request->shoplink)) {
+            $newval['url'] = $request->shoplink;
+        }
+
+        if (!empty($request->address)) {
+            $newval['address'] = $request->address;
+        }
+
+
+        // Bank
+
+        if (!empty($request->bankname)) {
+            $newval['bank_name'] = $request->bankname;
+        }
+
+        if (!empty($request->accounttype)) {
+            $newval['bank_acc_type'] = $request->accounttype;
+        }
+
+        if (!empty($request->branchname)) {
+            $newval['bank_branch'] = $request->branchname;
+        }
+
+        if (!empty($request->bankaccountname)) {
+            $newval['bank_acc_name'] = $request->bankaccountname;
+        }
+
+        if (!empty($request->bankaccountnumber)) {
+            $newval['bank_acc_no'] = $request->bankaccountnumber;
+        }
+        //END Bank
+
+        if (!empty($request->password)) {
+            $newval['password'] = Hash::make($request->password);
+        }
+
+        if (!empty($request->shoplogo)) {
+            $time = new DateTime();
+            $imageName = time().'.'.$request->shoplogo->extension();
+            $request->shoplogo->move(public_path('images'), $imageName);
+            $newval['shop_logo'] = $imageName;
+        }
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $newval['user_photo'] = $imageName;
+        }
+
+        // print_r($upd);die;
+        if ($userprofile->role == 'admin' OR $userprofile->role == 'seller' OR $userprofile->role == 'buyer') {
+        $upd = $userprofile->update($newval);
+        }
+        if ($userprofile->role == 'seller') {
+        $sellerupd = $sellerprofile->update($newval);
+        }
+        // print_r($userprofile->role);die;
+        $msg = __('auth.donechange');
+
+        return back()->with('success',$msg);
+
+    }
+
 
     public function indexcategory()
     {
@@ -96,17 +275,33 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Category')
-        ->select('Category.id', 'Category.category_name as category', 'Category.*', 'Sb.*', 'S.*')
-        ->leftJoin('Sub_categories_title as S', function ($join) {
-            $join->on('Category.id', '=', 'S.category_id');
+     $lists = DB::table('Categorys')
+        ->select('Sb.id', 'Categorys.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
+        ->leftJoin('Sub_category_titles as S', function ($join) {
+            $join->on('Categorys.id', '=', 'S.category_id');
         })
         ->leftJoin('Sub_categories as Sb', function ($join) {
             $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'Category.id');
+            $join->on('Sb.category_id', '=', 'Categorys.id');
         })
 
         ->orderBy('Sb.created_at', 'desc')
+        ->paginate($limit);
+
+        $listss = DB::table('Sub_categories')
+        ->select('Sub_categories.*','Categorys.category_name as category','S.*')
+
+
+        ->rightJoin('Categorys', function ($join) {
+            $join->on('Categorys.id', '=', 'Sub_categories.category_id');
+
+        })
+
+        ->rightJoin('Sub_category_titles as S', function ($join) {
+            $join->on('Sub_categories.sub_category_title_id', '=', 'S.id');
+        })
+
+        ->orderBy('Sub_categories.created_at', 'desc')
         ->paginate($limit);
 
         $ttl = $lists->total();
@@ -127,6 +322,173 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
+    public function editdata(Request $request, $role, $id)
+    {
+        if (empty($role)) {
+            $role = Auth::user()->role;
+        }
+        //
+        $edituser = Auth::user();
+
+        if (strlen($id) > 5) {
+
+            // print_r(substr($id, 5));die;
+            $id = substr($id, 5);
+
+        if ($role == 'buyer' OR $role == 'admin')  {
+            $edituser = User::find($id);
+        }
+        if ($role == 'seller')  {
+            $editseller = DB::table('users')
+                        ->select('sellers.*','users.*','users.id')
+                        ->join('sellers', function ($join) {
+                        $join->on('users.id', '=', 'sellers.id');
+                    })
+                    ->where('users.id',$id)
+                    ->orderBy('users.created_at', 'desc')->first();
+
+        }
+
+
+            $editother = true;
+
+        } else {
+            $editother = false;
+        }
+        $editmode = true;
+
+        if ($role == 'admin') {
+            return view('admin.edituser',compact('editmode','editother','edituser'));
+        } else if ($role == 'buyer') {
+            return view('admin.editbuyerprofile',compact('editmode','editother','edituser'));
+        } else if ($role == 'seller') {
+            return view('admin.editsellerprofile',compact('editmode','editother','editseller'));
+        } else {
+            return view('admin.edituser',compact('editmode','editother','edituser'));
+        }
+    }
+
+    public function userdetail($id)
+    {
+        $userlist = DB::table('users')
+                    ->select( 'users.*')
+                    ->where('users.id',$id)->get();
+
+        // print_r($blog[0]->created_at);die;
+        $user = $userlist[0];
+
+        return view('admin.usersdetail',compact('user'));
+    }
+
+    public function takeremote(Request $request, $id)
+    {
+
+        $adminid = Auth::user()->id;
+
+        $adminrole = Auth::user()->role;
+        if (strlen($id) > 5) {
+
+            // print_r(substr($id, 5));die;
+            $id = substr($id, 5);
+            $edituser = User::find($id);
+            $editother = true;
+
+        }
+       Auth::loginUsingId($id);
+        // $user = User::find($id);
+        // die(url()->previous());
+
+        session(['isadmincontrol' => $adminid , 'rolecontrol' => $adminrole , 'returnurl' => url()->previous()]);
+        print_r(session()->all());
+        // print_r(Auth::user()->role);die;
+        // print_r(Auth::user()->role);die();
+        if (Auth::user()->role == 'admin' OR Auth::user()->role == 'subadmin') {
+            return redirect()->intended(RouteServiceProvider::ADMIN);
+        } else if (Auth::user()->role == 'buyer') {
+            return redirect()->intended(RouteServiceProvider::USER);
+        } else if (Auth::user()->role == 'seller' OR Auth::user()->role == 'idlehost') {
+            return redirect()->intended(RouteServiceProvider::SELLER);
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        // die($id);
+
+    }
+
+    public function indexuser()
+    {
+
+        $limit = 10;
+        // print_r($type);die;
+
+        $users = DB::table('users')->whereIn('role',['seller','buyer'])
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $users->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.users',compact('users','ttlpage','ttl'));
+    }
+
+    public function indexsubadmin()
+    {
+
+        if (Auth::user()->id != '1') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $limit = 10;
+
+        $subadmins = User::where('role','admin')
+                    ->where('id', '!=' , 1)
+
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $ttl = $subadmins->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.subadmin',compact('subadmins','ttlpage','ttl'));
+    }
+
+
+    public function registersubadmin(Request $request)
+    {
+
+        //*******************************************************
+
+        if (empty($request->role)) {
+            $role = 'admin';
+        } else {
+            $role = $request->role;
+        }
+
+
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
+        }
+
+ // print_r($request->all());die;
+
+        $user = User::create([
+            'role' => $role,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'user_photo' => $imageName,
+        ]);
+
+        $user->markEmailAsVerified();
+
+        event(new Registered($user));
+
+        return redirect('admin/subadmin')->with('success','「'.$request->name.'」登録されました。');
+
+    }
 
     public function indexsubtitle()
     {
@@ -137,10 +499,10 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Sub_categories_title')
-                    ->select('C.category_name as category','Sub_categories_title.*')
-                    ->join('Category as C', function ($join) {
-                    $join->on('Sub_categories_title.category_id', '=', 'C.id');
+        $lists = DB::table('Sub_category_titles')
+                    ->select('C.category_name as category','Sub_category_titles.*')
+                    ->join('Categorys as C', function ($join) {
+                    $join->on('Sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
 
@@ -157,16 +519,16 @@ class AdminController extends Controller
     public function deletecategory(Request $request)
     {
 
-        $catlist =  DB::table('Category')
+        $catlist =  DB::table('Categorys')
                         ->whereIn('id', function ($query) use ($request) {
                         $query->select('category_id')
-                        ->from('Sub_categories_title')
+                        ->from('Sub_category_titles')
                         ->where('id',$request->id);
                         })
 
                         ->delete();
 
-        $subtitlelist = DB::table('Sub_categories_title')
+        $subtitlelist = DB::table('Sub_category_titles')
         ->delete($request->id);
 
         return redirect('/admin/all/subcategory')->with('success','削除されました。');
@@ -181,19 +543,28 @@ class AdminController extends Controller
         return redirect('/admin/all/blog')->with('success','削除されました。');
 
     }
+
+    public function deleteuser(Request $request)
+    {
+
+        $data = DB::table('users')
+                    ->delete($request->id);
+        return redirect('/admin/all/users')->with('success','削除されました。');
+
+    }
     public function addsubtitle()
     {
-        $categories = DB::table('Category')
-                    ->select('Category.*')
-                    ->orderBy('Category.created_at', 'asc')->get();
+        $categories = DB::table('Categorys')
+                    ->select('Categorys.*')
+                    ->orderBy('Categorys.created_at', 'asc')->get();
         return view('admin.addsubtitle',compact('categories'));
     }
 
     public function addsubcategory()
     {
-        $categories = DB::table('Category')
-                    ->select('Category.*')
-                    ->orderBy('Category.created_at', 'asc')->get();
+        $categories = DB::table('Categorys')
+                    ->select('Categorys.*')
+                    ->orderBy('Categorys.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
 
@@ -201,7 +572,7 @@ class AdminController extends Controller
 
     public function editcategory($id)
     {
-        $data = DB::table('Category')
+        $data = DB::table('Categorys')
                     ->find($id);
         $editmode = true;
 
@@ -220,15 +591,15 @@ class AdminController extends Controller
     }
     public function editsubtitle($id)
     {
-        $subtitle = DB::table('Sub_categories_title')
+        $subtitle = DB::table('Sub_category_titles')
                     ->find($id);
 
-        $categories = DB::table('Category')
-                    ->select('Category.*')
-                    ->orderBy('Category.created_at', 'asc')->get();
+        $categories = DB::table('Categorys')
+                    ->select('Categorys.*')
+                    ->orderBy('Categorys.created_at', 'asc')->get();
 
-        $category = DB::table('Category')
-                    ->select('Category.*')
+        $category = DB::table('Categorys')
+                    ->select('Categorys.*')
                     ->where('id', $subtitle->sub_category_id)
                     ->pluck('id')->toArray();
 
@@ -240,33 +611,35 @@ class AdminController extends Controller
     public function editsubcategory($id)
     {
 
-       $subtitle = DB::table('Sub_categories_title')
+        $subtitle = DB::table('Sub_categories')
                     ->find($id);
-       $categories = DB::table('Category')
-                    ->select('Category.*')
-                    ->orderBy('Category.created_at', 'asc')->get();
+
+        $subcat_id = DB::table('Sub_categories')
+                    ->select('Sub_categories.sub_category_title_id')
+                    ->where('id',$id)->first();
+
+        $subcategory_titlename = DB::table('Sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
+
+        $categories = DB::table('Categorys')
+                    ->select('Categorys.*')
+                    ->orderBy('Categorys.created_at', 'asc')->get();
 
 
-        $category = DB::table('Sub_categories_title')
+        $category = DB::table('Sub_category_titles')
                     ->select('S.sub_category_name as subcategory_name')
                     ->join('Sub_categories as S', function ($join) {
-                        $join->on('Sub_categories_title.sub_category_id', '=', 'S.sub_category_title_id');
-                    })
-                    ->orderBy('Sub_categories_title.created_at', 'desc')->get();
+                    $join->on('Sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
+                })
+                ->orderBy('Sub_category_titles.created_at', 'desc')->get();
 
         $subcategory_name = DB::table('Sub_categories')
-                       ->select('Sub_categories.sub_category_name')
-                       ->where('sub_category_title_id', $id)
-                       ->first();
-
-        $subcategory_title = DB::table('Sub_categories_title')
-                       ->select('Sub_categories_title.*')
-                       ->where('id',$id)
-                       ->orderBy('Sub_categories_title.created_at', 'desc')->first();
+                            ->select('Sub_categories.sub_category_name')
+                            ->where('id', $id)
+                            ->first();
 
         $editmode = true;
 
-        return view('admin.editcategory',compact('subtitle','categories','subcategory_title','subcategory_name','editmode'));
+        return view('admin.editcategory',compact('subcat_id','subtitle','categories','subcategory_titlename','subcategory_name','editmode'));
 
     }
 
@@ -285,7 +658,7 @@ class AdminController extends Controller
         if (empty($request->id)) {
 
             foreach ($subtitle_arr as $subtitle) {
-                DB::table('Sub_categories_title')->insertOrIgnore([
+                DB::table('Sub_category_titles')->insertOrIgnore([
                     'category_id' => $request->category,
                     'sub_category_id' => $request->category,
                     'sub_category_titlename' => $subtitle,
@@ -306,7 +679,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_categories_title')->where('id',$request->id)->update($updval);
+            DB::table('Sub_category_titles')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
@@ -339,24 +712,17 @@ class AdminController extends Controller
         } else {
 
             $updval = array( 'category_id' => $request->category,
-                            'sub_category_id' => $request->category,
-                            'sub_category_titlename' => $request->subcategory,
+                             'sub_category_name' => $request->subname ?? '',
+                             'sub_category_title_id' => $request->subcategory ?? '',
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_categories_title')->where('id',$request->id)->update($updval);
+            DB::table('Sub_categories')->where('id',$request->id)->update($updval);
 
-            $updval = array( 'category_id' => $request->category,
-            'sub_category_name' => $request->subname,
-            'sub_category_title_id' => $request->id,
-            'updated_at' => $time->format('Y-m-d H:i:s')
-            );
-            DB::table('Sub_categories')->where('sub_category_title_id',$request->id)->update($updval);
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
 
     }
-
 
     public function storeblog(Request $request)
     {
@@ -443,7 +809,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('Category')->insert([
+            DB::table('Categorys')->insert([
                 'category_name' => $request->title,
                 'category_icon' => $imageName,
                 'created_at' => $time->format('Y-m-d H:i:s'),
@@ -462,7 +828,7 @@ class AdminController extends Controller
                 $updval['category_icon'] = $imageName;
             }
 
-            DB::table('Category')->where('id',$request->id)->update($updval);
+            DB::table('Categorys')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -472,7 +838,7 @@ class AdminController extends Controller
 
     public function getSubcategories(Request $request) {
 
-        $subcategories =   DB::table('Sub_categories_title')->where('sub_category_id','=',$request->category)->get();
+        $subcategories =   DB::table('Sub_category_titles')->where('sub_category_id','=',$request->category)->get();
         return response()->json([
             'status' => 'success',
             'subcategories' => $subcategories,

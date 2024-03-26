@@ -23,17 +23,22 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-Route::get('/user/registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
+//user
+Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
-Route::get('/user/orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
-Route::get('/user/delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
-Route::get('/user/address', function () {return view('front-end.user-address');})->name('front-end.user-address');
-Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
-Route::get('/user/profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
-Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
-Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+Route::get('user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
 
-route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
+Route::get('/user-address', [UserController::class, 'showAddress'])->name('showAddress');
+route::post('/adduser',[UserController::class,'store'])->name('adduser');
+Route::post('/update-user-info', [UserController::class, 'updateUserInfo'])->name('updateUserInfo');
+Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('user-removeAddress');
+Route::post('/edit-address', [UserController::class, 'updateAddress'])->name('updateAddress');
+
+Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
+Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
+Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
+Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
 //Route::get('/register', function () {return view('front-end.register');});
 

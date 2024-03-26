@@ -60,7 +60,7 @@ class UserController extends Controller
         $data = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
-                     //dd($data->pluck('address'));
+                     //dd($data->pluck('division'));
         $user = Buyers::first();
                     return view('front-end.user-address',compact('data','user'));
     }
@@ -114,7 +114,6 @@ class UserController extends Controller
             $buyerAddress->update([
                 'id'=> $request->id,
                 'name' => $request->name,
-                'email' => $request->eamil,
                 'division' => $request->eamil,
                 'district' => $request->eamil,
                 'post_code' => $request->eamil,
@@ -122,10 +121,9 @@ class UserController extends Controller
                 'place' => $request->place,
                 'phone' => $request->phone,
             ]);
-
             
             // Return a success response
-            return response()->json(['message' => 'Address updated successfully']);
+            return redirect()->route('showAddress');
         } else {
             // Return an error response
             return response()->json(['error' => 'Address not found'], 404);

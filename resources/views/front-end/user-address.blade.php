@@ -209,11 +209,6 @@
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                                 <label for="name">Name</label>
                             </div>
-        
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
-                                <label for="email">Email</label>
-                            </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input type="text" class="form-control" id="division" name="division" placeholder="Division">
@@ -280,11 +275,6 @@
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $item->name }}">
                                 <label for="name">Name</label>
                             </div>
-        
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="{{ $item->useremail }}">
-                                <label for="email">Email</label>
-                            </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input type="text" class="form-control" id="division" name="division" placeholder="Division" value="{{ $item->division }}">
@@ -297,24 +287,23 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
+                                <input type="text" class="form-control" id="post_code" name="post_code" value="{{ $item->post_code }}">
                                 <label for="post_code">Post Code</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <textarea class="form-control" placeholder="
-                                " id="address" name="address"
-                                    style="height: 100px" value="{{ $item->add }}"></textarea>
+                                <textarea class="form-control"  id="address" name="address"
+                                    style="height: 100px" value="{{ $item->address }}"></textarea>
                                 <label for="address">Enter Address</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others" value="{{ $item->place }}">
+                                <input type="text" class="form-control" id="place" name="place" value="{{ $item->place }}">
                                 <label for="place">Place</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
+                                <input class="form-control" id="phone" name="phone" value="{{ $item->phone }}">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
                             <input type="hidden" name="buyer_id" value="1">
@@ -399,7 +388,6 @@
         var addressData = JSON.parse($(this).data('address'));
         $('#address_id').val(addressData.id);
         $('#edit_name').val(addressData.name);
-        $('#edit_email').val(addressData.email);
         $('#edit_division').val(addressData.division);
         $('#edit_district').val(addressData.district); // Corrected field name
         $('#edit_post_code').val(addressData.post_code);
@@ -411,7 +399,6 @@
     $('#saveChanges').on('click', function() {
         var addressId = $('#address_id').val();
         var newName = $('#edit_name').val();
-        var newEmail = $('#edit_email').val();
         var newDivision = $('#edit_division').val();
         var newDistrict = $('#edit_district').val();
         var newPostCode = $('#edit_post_code').val();
@@ -427,7 +414,6 @@
                 _token: '{{ csrf_token() }}',
                 id: addressId,
                 name: newName,
-                email: newEmail,
                 division: newDivision,
                 district: newDistrict, // Corrected field name
                 post_code: newPostCode,

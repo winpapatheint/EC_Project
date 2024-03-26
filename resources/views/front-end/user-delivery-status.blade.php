@@ -86,7 +86,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-address')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.showAddress')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">

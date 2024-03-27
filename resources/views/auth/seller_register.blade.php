@@ -95,6 +95,7 @@
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
                                         <select class="form-control" name="bank_acc_type">
+                                            <option>Choose Bank Account Type</option>
                                             <option>普通</option>
                                             <option>当座</option>
                                             <option>貯蓄</option>

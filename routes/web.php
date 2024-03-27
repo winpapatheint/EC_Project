@@ -201,10 +201,12 @@ Route::controller(ProductController::class)->group(function(){
     Route::get('/seller/detail/product/{id}','DetailProduct')->name('seller.detail.product');
     Route::get('/seller/add/product','AddProduct')->name('seller.add.product');
     Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
-    Route::get('/seller/edit/product','EditProduct')->name('seller.edit.product');
+    Route::get('/seller/edit/product/{id}','EditProduct')->name('seller.edit.product');
     Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
-    Route::get('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
-    Route::post('/seller/product/status', 'changeStatus')->name('changeStatus');
+    Route::get('/seller/delete/product/{id}','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
+    Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
+    Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
 });
 
 //SellerOrder

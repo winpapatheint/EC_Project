@@ -6,10 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
-<<<<<<< HEAD
-=======
 
->>>>>>> 0dea4ba53485ce8a382864516d725d65e9f9e0e0
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +23,7 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-<<<<<<< HEAD
+
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
@@ -43,7 +40,7 @@ Route::get('/user-profile', function () {return view('front-end.user-profile');}
 Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-=======
+
 //user
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
@@ -60,7 +57,7 @@ Route::get('/user/payment', function () {return view('front-end.user-payment-met
 Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
 Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
->>>>>>> 0dea4ba53485ce8a382864516d725d65e9f9e0e0
+
 
 //Route::get('/register', function () {return view('front-end.register');});
 

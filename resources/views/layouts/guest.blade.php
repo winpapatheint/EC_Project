@@ -312,14 +312,8 @@
                                         <div class="onhover-div onhover-div-login">
                                             <ul class="user-box-name">
                                                 <li class="product-box-contain">
-                                                    <i></i>
-<<<<<<< HEAD
                                                     <a href="{{ route('login') }}">Log In</a>
-=======
-                                                    <a href="{{ url('login') }}">Log In</a>
->>>>>>> 0dea4ba53485ce8a382864516d725d65e9f9e0e0
                                                 </li>
-
                                                 <li class="product-box-contain">
                                                     <a href="{{route ('front-end.user-register')}}">Buyer Register</a>
                                                 </li>

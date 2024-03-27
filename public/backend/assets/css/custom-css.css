@@ -7,3 +7,8 @@
     margin-right: 3px;
 }
 
+.input-group input,
+.input-group button {
+    margin-right: 5px;
+    border-radius: 0%;
+}

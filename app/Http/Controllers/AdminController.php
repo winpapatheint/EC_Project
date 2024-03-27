@@ -35,8 +35,6 @@ use App\Notifications\MsgNotiHostHcompany;
 
 class AdminController extends Controller
 {
-
-
     public function welcome()
     {
         return view('front-end.index');
@@ -55,12 +53,8 @@ class AdminController extends Controller
         $lists = DB::table('Category')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
-
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
-
-        // $hcompanies = array();
-        // print_r($lists);die;
 
         return view('admin.category',compact('lists','ttlpage','ttl'));
     }

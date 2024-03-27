@@ -161,8 +161,6 @@
             </div>
         <!-- Delete Modal Box End -->
 
-
-
 </x-auth-layout>
 
 

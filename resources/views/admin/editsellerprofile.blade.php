@@ -22,12 +22,7 @@
                                     @endif
                                     <form class="theme-form theme-form-2 mega-form" id="registeruserform" method="POST" action="{{ $action }}">
                                         @csrf
-                                        @if ($message = Session::get('success'))
-                                        <div class="alert alert-success alert-block" id="alert-success">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
-                                            <strong>{{ $message }}</strong>
-                                        </div>
-                                        @endif
+                                            @include('components.messagebox')
 
                                             @if ($editmode)
                                             <input type="hidden" name="id" value="{{ $editseller->id }}">
@@ -59,11 +54,23 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Shop Logo</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Shop Logo</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control form-control-email" placeholder="Shop Logo" name="shoplogo" id="shoplogo"
-                                                        type="file" value="{{ old('shoplogo') ?? $editseller->shop_logo?? '' }}" >
+                                                    <input type="file" name="shoplogo" id="shoplogo" class="form-control" >
+                                                    <img id="preview-image-before-upload" alt="your image"
+                                                        @if(!empty($editseller->shop_logo))
+                                                            src="{{ asset('upload/shop'.( $editseller->shop_logo ?? 'blog/blog-details.jpg')   ) }}"
+                                                            style="max-width: 100%;"
+                                                        @else
+                                                            style="display: none; max-width: 100%;"
+                                                        @endif
+                                                    />
                                                     <p style="display:none" class="shoplogo error text-danger"></p>
+                                                    @if (!empty($error['shoplogo']))
+                                                        @foreach ($error['shoplogo'] as  $key => $value)
+                                                            <p class="shoplogo error text-danger">{{ $value }}</p>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                         </div>
 
@@ -71,7 +78,7 @@
                                             <label class="form-label-title col-sm-3 mb-0">Phone</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control form-control-email" placeholder="Phone" name="phone" id="phone"
-                                                        type="file" value="{{ old('phone') ?? $editseller->phone ?? '' }}" >
+                                                        type="text" value="{{ old('phone') ?? $editseller->phone ?? '' }}" >
                                                     <p style="display:none" class="phone error text-danger"></p>
                                                 </div>
                                         </div>
@@ -80,7 +87,7 @@
                                             <label class="form-label-title col-sm-3 mb-0">Zip Code</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control form-control-email" placeholder="Zip Code" name="zipcode" id="zipcode"
-                                                        type="file" value="{{ old('zipcode') ?? $editseller->zip_code ?? '' }}" >
+                                                        type="text" value="{{ old('zipcode') ?? $editseller->zip_code ?? '' }}" >
                                                     <p style="display:none" class="zipcode error text-danger"></p>
                                                 </div>
                                         </div>
@@ -186,8 +193,51 @@
                                                 </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold"> <i class="fa fa-edit" aria-hidden="true"></i>
-                                            {{ __('auth.dochange') }}</button>
+                                        <div class="text-center">
+                                            <button class="btn btn-submit btn-animation ms-auto fw-bold" type="submit">
+                                                @if (!$editmode)
+                                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                        登録する
+                                                @else
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                        情報を修正する
+                                                @endif
+                                            </button>
+                                        </div>
+
+
+
+                                            <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header d-block text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="remove-box">
+                                                                <p>The permission for the use/group, preview is inherited from the object, object will create a
+                                                                    new permission for this object</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+
+                                                            <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
+                                                                @if (!$editmode)
+                                                                    登録する
+                                                                @else
+                                                                    修正する
+                                                                @endif
+                                                            </button>
+                                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">キャンセル</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -199,42 +249,88 @@
         <!-- New Product Add End -->
     </div>
 
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#ckeditor'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
-    <script>
-        function mainThamUrl(input){
-            if(input.files && input.files[0]){
-                var reader = new FileReader();
-                reader.onload = function(e){
-                    $('#mainThmb').attr('src', e.target.result).width(70).height(70);
-                };
-                reader.readAsDataURL(input.files[0]); // Corrected method name
-            }
-        }
-    </script>
-    <script>
-        document.getElementById('multiImg').addEventListener('change', function(event) {
-            const preview = document.getElementById('preview_img');
-            preview.innerHTML = '';
+    <script type="text/javascript">
 
-            Array.from(event.target.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '100px';
-                    img.style.maxHeight = '100px';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
+        $(document).ready(function() {
+
+            $('#shoplogo').change(function(){
+                let reader = new FileReader();
+                    reader.onload = (e) => {
+                        $('#preview-image-before-upload').attr('src', e.target.result);
+                        $('#preview-image-before-upload').show();
+                    }
+                    reader.readAsDataURL(this.files[0]);
             });
-        });
+
+            var pwdchnge = false;
+                $("#password,#password_confirmation").on("input", function(){
+                    pwdchnge = true;
+                });
+
+                $("#registeradminform").submit(function() {
+                // alert(pwdchnge);
+                    if (!pwdchnge) {
+                    // alert('remove');
+                        $('#password').remove();
+                        $('#password_confirmation').remove();
+                    }
+                });
+
+                $(".btn-submit").click(function(e){
+
+                    e.preventDefault();
+                        var _token = $("input[name='_token']").val();
+                        let formData = new FormData(registeradminform);
+
+                        $.ajax({
+                            url: "{{ $action }}",
+                            type:'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+
+                            success: function(data) {
+                                if($.isEmptyObject(data.error)){
+                                // alert("success");
+                                    console.log(data.success);
+                                    $('.error').hide()
+                                    $('#confirmModal').modal('show');
+                                }else{
+                                    // alert("err");
+                                    console.log(data.error);
+                                    $('.error').hide()
+                                    $.each( data.error, function( key, value ) {
+                                        if (key == 'password') {
+                                            $.each( value, function( k, val ) {
+                                                if (val == 'パスワードが一致しません') {
+                                                    $('.error.password_confirmation').text(val)
+                                                    $('.error.password_confirmation').show()
+                                                    // alert('unset')
+                                                } else {
+                                                    $('.error.'+key).text(val)
+                                                    $('.error.'+key).show()
+                                                }
+                                            });
+                                        } else {
+
+                                            $('.error.'+key).text(value[0])
+                                            $('.error.'+key).show()
+                                        }
+                                    });
+                                }
+                            },
+                            fail: function(data) {
+                                alert("エラー：ajax error");
+                            }
+                        });
+
+                    });
+
+                });
+
+
     </script>
+
 
     </x-auth-layout>
 

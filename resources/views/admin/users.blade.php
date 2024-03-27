@@ -34,7 +34,7 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $subadmins as $key => $user )
+                                            @foreach( $users as $key => $user )
 
                                                 <tr>
                                                     <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($users->firstItem() + $key) }}</th>
@@ -55,7 +55,7 @@
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/userdetail/".user->id ) }}">
+                                                                <a href="{{ url("/userdetail/".$user->id ) }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>

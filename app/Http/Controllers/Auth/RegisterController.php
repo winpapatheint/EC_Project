@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Seller;
@@ -38,6 +37,7 @@ class RegisterController extends Controller
                 'email' => $request->input('email'),
                 'role' => 'seller',
                 'password' => Hash::make($request->input('password')),
+
             ]);
 
             $seller = new Seller($request->all());

@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
 
-use Validator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 
 use Mail;
@@ -33,7 +34,12 @@ use App\Notifications\MsgNotiAdminHcompany;
 use App\Notifications\MsgNotiHcompanyHost;
 use App\Notifications\MsgNotiHostHcompany;
 use App\Http\Controllers\Auth\RegisteredUserController;
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 
 class AdminController extends Controller
 {
@@ -47,16 +53,27 @@ class AdminController extends Controller
     public function validatesubadmin($request, $editpassword = true , $editmode = false, $emailuniquecheck = true, $needimg = true)
     {
 
+
         $check = [
             'name' => 'required|string|max:255',
             // 'agerange' => 'required|not_in:0',
             'phone' => ['required', 'regex:/^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/'],
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6|confirmed',
-            'gender' => 'required|not_in:0',
-            'agerange' => 'required|not_in:0',
-            // 'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'address' => 'required|string|max:255',
+
         ];
+
+        $messages = [
+            'name.required' => 'The name field is required.',
+            'email.required' => 'The email field is required.',
+            'password.required' => 'The password field is required.',
+            'address.required' => 'The address field is required.',
+            'image.mimes' => '画像ファイルをアップロードしてください。',
+            'image.required' => '画像ファイルをアップロードしてください。',
+            // Add more custom error messages as needed
+        ];
+
 
         if (!$editpassword) {
             unset($check['password']);
@@ -73,24 +90,28 @@ class AdminController extends Controller
         if (!$needimg) {
             unset($check['image']);
         }
-        // print_r("$request->check");die;
-        $validator = Validator::make($request->all(), $check,
-        [
-            'check.required' => __('validation.pleasecheck'),
-            // 'phone.regex' => '有効な電話番号を入力してください。',
-            'image.mimes' => '画像ファイルをアップロードしてください。',
-            'image.required' => '画像ファイルをアップロードしてください。',
-        ]);
+
+        $validator = Validator::make($request->all(), $check, $messages);
+
 
         return $validator;
 
     }
-
     public function updateuser(Request $request)
     {
         if (!empty($request->id)) {
            $userprofile = User::find($request->id);
-           $sellerprofile = Seller::find($request->id);
+
+            $userid = DB::table('users')
+                    ->select('users.id','users.email')
+                    ->where('id', $request->id)->get()->pluck('email');
+
+            $sellerid = DB::table('sellers')
+                    ->select('sellers.id')
+                    ->where('email', $userid[0])->pluck('id');
+
+            $sellerprofile = Seller::find($sellerid[0]);
+
         } else {
            $userprofile = Auth::user();
         }
@@ -107,6 +128,7 @@ class AdminController extends Controller
             }else {
                 $emailuniquecheck = true;
             }
+
             $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
         //return response()->json(['error'=>'123']);
         }
@@ -197,12 +219,14 @@ class AdminController extends Controller
 
         if (!empty($request->shoplogo)) {
             $time = new DateTime();
-            $imageName = time().'.'.$request->shoplogo->extension();
-            $request->shoplogo->move(public_path('images'), $imageName);
+            $imageNames = time().'.'.$request->shoplogo->extension();
+
+            $request->shoplogo->move(public_path('upload/shop'), $imageName);
             $newval['shop_logo'] = $imageName;
         }
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
+
             $request->image->move(public_path('images'), $imageName);
             $newval['user_photo'] = $imageName;
         }
@@ -212,6 +236,7 @@ class AdminController extends Controller
         $upd = $userprofile->update($newval);
         }
         if ($userprofile->role == 'seller') {
+
         $sellerupd = $sellerprofile->update($newval);
         }
         // print_r($userprofile->role);die;
@@ -264,6 +289,28 @@ class AdminController extends Controller
 
         return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
     }
+
+    public function indexproduct()
+    {
+        $limit = 10;
+        if (!empty($_GET['kword'])) {
+            $kword = $_GET['kword'];
+        } else {
+            $kword = '';
+        }
+
+        $lists = DB::table('Products')
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        // $hcompanies = array();
+        // print_r($lists);die;
+
+        return view('admin.product.product_all',compact('lists','ttlpage','ttl'));
+    }
+
 
 
     public function indexsubcategory()
@@ -342,13 +389,11 @@ class AdminController extends Controller
             $editseller = DB::table('users')
                         ->select('sellers.*','users.*','users.id')
                         ->join('sellers', function ($join) {
-                        $join->on('users.id', '=', 'sellers.id');
+                        $join->on('users.email', '=', 'sellers.email');
                     })
                     ->where('users.id',$id)
                     ->orderBy('users.created_at', 'desc')->first();
-
         }
-
 
             $editother = true;
 
@@ -378,6 +423,18 @@ class AdminController extends Controller
         $user = $userlist[0];
 
         return view('admin.usersdetail',compact('user'));
+    }
+
+    public function subadmindetail($id)
+    {
+        $subadminlist = DB::table('users')
+                    ->select( 'users.*')
+                    ->where('users.id',$id)->get();
+
+        // print_r($blog[0]->created_at);die;
+        $subadmin = $subadminlist[0];
+
+        return view('admin.subadmindetail',compact('subadmin'));
     }
 
     public function takeremote(Request $request, $id)
@@ -453,6 +510,19 @@ class AdminController extends Controller
 
     public function registersubadmin(Request $request)
     {
+
+
+        $validator = $this->validatesubadmin($request);
+
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+
+                return response()->json(['success'=>'allpasses']);
+            }
+            return response()->json(['error'=>$validator->errors()]);
+
+        }
 
         //*******************************************************
 
@@ -544,12 +614,31 @@ class AdminController extends Controller
 
     }
 
+    public function deleteproduct(Request $request)
+    {
+
+        $data = DB::table('Products')
+                    ->delete($request->id);
+        return redirect('/admin/all/product')->with('success','削除されました。');
+
+    }
+
+
     public function deleteuser(Request $request)
     {
 
         $data = DB::table('users')
                     ->delete($request->id);
         return redirect('/admin/all/users')->with('success','削除されました。');
+
+    }
+
+    public function deletesubadmin(Request $request)
+    {
+
+        $data = DB::table('users')
+                    ->delete($request->id);
+        return redirect('/admin/subadmin')->with('success','削除されました。');
 
     }
     public function addsubtitle()

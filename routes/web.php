@@ -111,13 +111,14 @@ Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
 //AdminProduct
-Route::get('/admin/all/product', function () {return view('admin.product.product_all');})->name('admin.all.product');
-
+Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
 Route::get('/takeremote/{id}', [AdminController::class, 'takeremote'])->middleware(['auth','role:admin']);
 Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
+Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
 Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
 Route::post('edituser', [AdminController::class, 'updateuser'])->name('edituser');
 Route::get('/admin/all/subuserdetail', function () {return view('admin.subuserdetail');})->name('admin.subuserdetail');
@@ -125,7 +126,7 @@ Route::get('/admin/all/addsubadmin', function () {return view('admin.addsubadmin
 Route::get('/admin/all/edituser', function () {return view('admin.edituser');})->name('admin.edituser');
 Route::get('/admin/all/editsubuser', function () {return view('admin.editsubuser');})->name('admin.editsubuser');
 route::post('/admin/deleteuser',[AdminController::class,'deleteuser'])->name('deleteuser');
-
+route::post('/admin/deletesubadmin',[AdminController::class,'deletesubadmin'])->name('deletesubadmin');
 //enduser
 
 //startblog

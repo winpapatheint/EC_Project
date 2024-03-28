@@ -2,21 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-<<<<<<< HEAD
+
 
 use App\Http\Controllers\UserController;
 
-=======
->>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\UserController;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +31,7 @@ Route::get('/', function () {
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
+Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
 Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
 

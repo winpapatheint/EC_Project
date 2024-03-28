@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Buyers;
 use App\Models\Buyer_addresses;
 use App\Models\Buyer_payments;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -17,6 +18,17 @@ class UserController extends Controller
     public function index()
     {
         return view('user_register');
+    }
+    public function indexuser()
+    {
+        if (Auth::check()) {
+            $user = DB::table('users')->where('id',Auth::user()->id)->first();
+           
+            return view('front-end.user-dashboard',compact('user'));
+        } else {
+            return redirect()->route('login');
+        }
+        return view('front-end.user-dashboard');
     }
     //for new user registration for login
     public function store(Request $request)

@@ -62,40 +62,40 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>Vicki E. Pope</h3>
-                                    <h6 class="text-content">vicki.pope@gmail.com</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
                         </div>
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-dashboard-tab"
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}"><i data-feather="home"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_dashboard')}}"><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-order-tab" 
-                                    style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-order')}}"><i
+                                    style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}"><i data-feather="box"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('showAddress')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-card-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
-                                        data-feather="credit-card"></i>Payment Method</a>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_cards')}}"><i
+                                        data-feather="credit-card"></i>Payment Methods</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>
@@ -111,7 +111,7 @@
                                 <div class="dashboard-card">
                                     <div class="title title-flex">
                                         <div>
-                                            <h2>Payment Method</h2>
+                                            <h2>Payment Methods</h2>
                                             <span class="title-leaf">
                                                 <svg class="icon-width bg-gray">
                                                     <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
@@ -120,157 +120,72 @@
                                         </div>
 
                             <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
-                                data-bs-toggle="modal" data-bs-target="#editCard"><i data-feather="plus"
-                                    class="me-2"></i> Add New Card</button>
+                                data-bs-toggle="modal" data-bs-target="#addCard"><i data-feather="plus"
+                                    class="me-2"></i> Add New Payment Method</button>
                         </div>
 
-                        <div class="row g-4">
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                <div class="payment-card-detail">
-                                    <div class="card-details">
-                                        <div class="card-number">
-                                            <h4>XXXX - XXXX - XXXX - 2548</h4>
+                        <div class="row g-sm-4 g-3">
+                        @foreach($data as $item)
+                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
+                                <div class="address-box">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                        <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="selected_card" 
+                                                value="{{ $item->id }}" id="card_{{ $item->id }}">
                                         </div>
-
-                                        <div class="valid-detail">
-                                            <div class="title">
-                                                <span>valid</span>
-                                                <span>thru</span>
-                                            </div>
-                                            <div class="date">
-                                                <h3>08/05</h3>
-                                            </div>
-                                            <div class="primary">
-                                                <span class="badge bg-pill badge-light">primary</span>
-                                            </div>
                                         </div>
-
-                                        <div class="name-detail">
-                                            <div class="name">
-                                                <h5>Audrey Carol</h5>
-                                            </div>
-                                            <div class="card-img">
-                                                <img src="../assets/images/payment-icon/1.jpg"
-                                                    class="img-fluid blur-up lazyloaded" alt="">
-                                            </div>
+                                        <div class="col-md-10">    
+                                                <label>{{ $item->card_type }}</label>
                                         </div>
                                     </div>
+                                        <div class="table-responsive address-table">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{ $item->acc_no }}</td>
+                                                        <td>
+                                                            <p></p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Valid Date :</td>
+                                                        <td>
+                                                            <p>{{ $item->expired_date }}</p>
+                                                        </td>
+                                                    </tr>
 
-                                    <div class="edit-card">
-                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i
-                                                class="far fa-minus-square"></i> delete</a>
-                                    </div>
-                                </div>
-
-                                <div class="edit-card-mobile">
-                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                        delete</a>
-                                </div>
-                            </div>
-
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                <div class="payment-card-detail">
-                                    <div class="card-details card-visa">
-                                        <div class="card-number">
-                                            <h4>XXXX - XXXX - XXXX - 1536</h4>
+                                                    <tr>
+                                                        <td>{{ $item->acc_name }}</td>
+                                                        <td>
+                                                            <p></p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
-                                        <div class="valid-detail">
-                                            <div class="title">
-                                                <span>valid</span>
-                                                <span>thru</span>
-                                            </div>
-                                            <div class="date">
-                                                <h3>12/23</h3>
-                                            </div>
-                                            <div class="primary">
-                                                <span class="badge bg-pill badge-light">primary</span>
-                                            </div>
-                                        </div>
+                                    <div class="button-group">
+                                        <button class="btn btn-sm add-button w-100 edit-address-btn" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editCard{{ $item->id }}"
+                                                onclick="">
+                                            <i data-feather="edit"></i> Edit
+                                        </button>
 
-                                        <div class="name-detail">
-                                            <div class="name">
-                                                <h5>Leah Heather</h5>
-                                            </div>
-                                            <div class="card-img">
-                                                <img src="../assets/images/payment-icon/2.jpg"
-                                                    class="img-fluid blur-up lazyloaded" alt="">
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeCard" 
+                                        onclick=>
+                                            <i data-feather="trash-2"></i> Remove
+                                        </button>
+
                                     </div>
 
-                                    <div class="edit-card">
-                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i
-                                                 class="far fa-minus-square"></i> delete</a>
-                                    </div>
-                                </div>
-
-                                <div class="edit-card-mobile">
-                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                        delete</a>
                                 </div>
                             </div>
-
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-sm-6">
-                                <div class="payment-card-detail">
-                                    <div class="card-details debit-card">
-                                        <div class="card-number">
-                                            <h4>XXXX - XXXX - XXXX - 1366</h4>
-                                        </div>
-
-                                        <div class="valid-detail">
-                                            <div class="title">
-                                                <span>valid</span>
-                                                <span>thru</span>
-                                            </div>
-                                            <div class="date">
-                                                <h3>05/21</h3>
-                                            </div>
-                                            <div class="primary">
-                                                <span class="badge bg-pill badge-light">primary</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="name-detail">
-                                            <div class="name">
-                                                <h5>mark jecno</h5>
-                                            </div>
-                                            <div class="card-img">
-                                                <img src="../assets/images/payment-icon/3.jpg"
-                                                    class="img-fluid blur-up lazyloaded" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="edit-card">
-                                        <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                            href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                            data-bs-target="#removeProfile"><i
-                                                class="far fa-minus-square"></i> delete</a>
-                                    </div>
-                                 </div>
-
-                                <div class="edit-card-mobile">
-                                    <a data-bs-toggle="modal" data-bs-target="#editCard"
-                                        href="javascript:void(0)"><i class="far fa-edit"></i> edit</a>
-                                    <a href="javascript:void(0)"><i class="far fa-minus-square"></i>
-                                        delete</a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                </div>
+                </div>                        
                 <!-- Payment Method View End -->
             </div>
         </div>
@@ -278,402 +193,118 @@
     <!-- User Dashboard Section End -->
 </x-guest-layout>
 
-    <!-- Bg overlay Start -->
-    <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
-
-    <!-- Add address modal box start -->
-    <div class="modal fade theme-modal" id="add-address" tabindex="-1">
+    <!-- Add New Card Modal Box Start -->
+    <div class="modal fade theme-modal" id="addCard" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add a new address</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add a payment method</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
-                            <label for="fname">First Name</label>
-                        </div>
-                    </form>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="lname" placeholder="Enter Last Name">
-                            <label for="lname">Last Name</label>
-                        </div>
-                    </form>
+                    <form method="POST" action="{{ route('add_newcard') }}" class="row g-4" >
+                    @csrf
+                    <div class="modal-body">
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="acc_name" name="acc_name" placeholder="Your account name">
+                                <label for="acc_name">Name on card</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
-                            <label for="email">Email Address</label>
-                        </div>
-                    </form>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="acc_no" name="acc_no" placeholder="Your account number">
+                                <label for="acc_no">Card Number</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
-                                style="height: 100px"></textarea>
-                            <label for="address">Enter Address</label>
-                        </div>
-                    </form>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="expired_date" name="expired_date" placeholder="Your card valid date">
+                                <label for="expired_date">Expiration Date</label>
+                            </div>
 
-                    <form>
-                        <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="pin" placeholder="Enter Pin Code">
-                            <label for="pin">Pin Code</label>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-select" id="floatingSelect12" name="card_type" placeholder="Your card type">
+                                    <option selected>Card Type</option>
+                                    <option value="Visa">Visa Card</option>
+                                    <option value="Master">Master Card</option>
+                                    <option value="RuPay">RuPay Card</option>
+                                    <option value="Maestro">Maestro Card</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="buyer_id" value="1">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                        changes</button>
-                </div>
+                   
+                        <div class="modal-footer">
+                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
+                            </button>
+                        </div>
+                    </form> 
             </div>
         </div>
     </div>
-    <!-- Add address modal box end -->
+    <!-- Add Address Modal Box End -->
 
-    <!-- Location Modal Start -->
-    <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
+    <!-- Edit Card Modal Start -->
+    @foreach($data as $item)
+    <div class="modal fade theme-modal" id="editCard{{ $item->id }}" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Choose your Delivery Location</h5>
-                    <p class="mt-1 text-content">Enter your address and we will specify the offer for your area.</p>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit payment method</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="location-list">
-                        <div class="search-input">
-                            <input type="search" class="form-control" placeholder="Search Your Area">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <form method="post" action="{{ route('edit_card') }}" class="row g-4" >
+                    @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
+                        
+                        <div class="modal-body">
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="acc_name" name="acc_name" value="{{ $item->acc_name }}">
+                                <label for="acc_name">Name on card</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="acc_no" name="acc_no" value="{{ $item->acc_no }}">
+                                <label for="acc_no">Card Number</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="expired_date" name="expired_date" value="{{ $item->expired_date }}">
+                                <label for="expired_date">Expiration Date</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-select" id="floatingSelect12" name="card_type" value="{{ $item->card_type }}">
+                                    <option selected>Card Type</option>
+                                    <option value="Visa">Visa Card</option>
+                                    <option value="Master">Master Card</option>
+                                    <option value="RuPay">RuPay Card</option>
+                                    <option value="Maestro">Maestro Card</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="buyer_id" value="1">
                         </div>
+                   
+                        <div class="modal-footer">
+                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
 
-                        <div class="disabled-box">
-                            <h6>Select a Location</h6>
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
+                                changes</button>
                         </div>
-
-                        <ul class="location-select custom-height">
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Alabama</h6>
-                                    <span>Min: $130</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Arizona</h6>
-                                    <span>Min: $150</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>California</h6>
-                                    <span>Min: $110</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Colorado</h6>
-                                    <span>Min: $140</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Florida</h6>
-                                    <span>Min: $160</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Georgia</h6>
-                                    <span>Min: $120</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Kansas</h6>
-                                    <span>Min: $170</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Minnesota</h6>
-                                    <span>Min: $120</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>New York</h6>
-                                    <span>Min: $110</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Washington</h6>
-                                    <span>Min: $130</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    </form> 
             </div>
         </div>
     </div>
-    <!-- Location Modal End -->
+    @endforeach
+    <!-- Edit Card Modal End -->
 
-    <!-- Edit Profile Start -->
-    <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Edit Profile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="pname" value="Jack Jennas">
-                                    <label for="pname">Full Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="email" class="form-control" id="email1" value="vicki.pope@gmail.com">
-                                    <label for="email1">Email Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input class="form-control" type="tel" value="4567891234" name="mobile" id="mobile"
-                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                            this.value.slice(0, this.maxLength);">
-                                    <label for="mobile">Phone No</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address1"
-                                        value="8424 James Lane South San Francisco">
-                                    <label for="address1">Add Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address2" value="CA 94080">
-                                    <label for="address2">Add Address 2</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect1">
-                                        <option selected>Choose Your Country</option>
-                                        <option value="kingdom">United Kingdom</option>
-                                        <option value="states">United States</option>
-                                        <option value="fra">France</option>
-                                        <option value="china">China</option>
-                                        <option value="spain">Spain</option>
-                                        <option value="italy">Italy</option>
-                                        <option value="turkey">Turkey</option>
-                                        <option value="germany">Germany</option>
-                                        <option value="russian">Russian Federation</option>
-                                        <option value="malay">Malaysia</option>
-                                        <option value="mexico">Mexico</option>
-                                        <option value="austria">Austria</option>
-                                        <option value="hong">Hong Kong SAR, China</option>
-                                        <option value="ukraine">Ukraine</option>
-                                        <option value="thailand">Thailand</option>
-                                        <option value="saudi">Saudi Arabia</option>
-                                        <option value="canada">Canada</option>
-                                        <option value="singa">Singapore</option>
-                                    </select>
-                                    <label for="floatingSelect">Country</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect">
-                                        <option selected>Choose Your City</option>
-                                        <option value="kingdom">India</option>
-                                        <option value="states">Canada</option>
-                                        <option value="fra">Dubai</option>
-                                        <option value="china">Los Angeles</option>
-                                        <option value="spain">Thailand</option>
-                                    </select>
-                                    <label for="floatingSelect">City</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address3" value="94080">
-                                    <label for="address3">Pin Code</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Close</button>
-                    <button type="button" data-bs-dismiss="modal"
-                        class="btn theme-bg-color btn-md fw-bold text-light">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Profile End -->
-
-     <!-- Change Password Start -->
-     <div class="modal fade theme-modal" id="changePassword" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel8">Change Password</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="finame" value="markjohn@gmail.com">
-                                    <label for="finame">Email Address</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="********">
-                                    <label for="laname">Old Password</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="********">
-                                    <label for="laname">New Password</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Password</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Change Password End -->
-
-    <!-- Edit Card Start -->
-    <div class="modal fade theme-modal" id="editCard" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel8">Edit Card</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="finame" value="Mark">
-                                    <label for="finame">First Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="laname" value="Jecno">
-                                    <label for="laname">Last Name</label>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect12">
-                                        <option selected>Card Type</option>
-                                        <option value="kingdom">Visa Card</option>
-                                        <option value="states">MasterCard Card</option>
-                                        <option value="fra">RuPay Card</option>
-                                        <option value="china">Contactless Card</option>
-                                        <option value="spain">Maestro Card</option>
-                                    </select>
-                                    <label for="floatingSelect12">Card Type</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Card End -->
-
-    <!-- Remove Profile Modal Start -->
-    <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1">
+    <!-- Remove Card Modal Start -->
+    @foreach($data as $item)
+    <div class="modal fade theme-modal remove-profile" id="removeCard" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
@@ -684,18 +315,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="remove-box">
-                        <p>The permission for the use/group, preview is inherited from the object, object will create a
-                            new permission for this object</p>
+                        <p>You cannot see this address nomore in your address book.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
-                        data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <form action="{{ route('remove_card', ['id' => $item->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    @endforeach
     <div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
@@ -717,4 +351,62 @@
             </div>
         </div>
     </div>
-    <!-- Remove Profile Modal End -->
+    <!-- Remove Card Modal End -->
+
+<!-- Edit Address Script-->
+<script>
+    $(document).ready(function() {
+    $('.edit-btn').on('click', function() {
+        var cardData = JSON.parse($(this).data('card'));
+        $('#id').val(cardData.id);
+        $('#acc_name').val(cardData.acc_name);
+        $('#acc_no').val(cardData.acc_no);
+        $('#expired_date').val(cardData.expired_date);
+        $('#card_type').val(cardData.card_type);
+
+    });
+
+    $('#saveChanges').on('click', function() {
+        var newcardId = $('#address_id').val();
+        var newName = $('#edit_name').val();
+        var newNumber = $('#acc_no').val();
+        var newExpireddate = $('#expired_date').val();
+        var newCardtype = $('#card_type').val();
+
+
+        // Perform AJAX request to update data in the controller
+        $.ajax({
+            url: '{{ route("edit_card") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: newcardId,
+                acc_name: newName,
+                acc_no: newNumber,
+                expired_date: newExpireddate,
+                card_type: newCardtype, 
+            },
+            success: function(response) {
+            alert("123");
+                // Handle success response
+                console.log(response);
+                // Close the modal
+                $('#editCard').modal('hide');
+            },
+            error: function(xhr) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
+<!-- Remove Address Script -->
+<script>
+    function showDeleteModal(id) {
+        $('#removeCard').modal('show');
+        // Update the form action URL dynamically with the selected address id
+        $('#removeCard form').attr('action', '/remove_card/' + id);
+    }
+</script>

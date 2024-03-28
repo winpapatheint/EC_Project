@@ -80,17 +80,17 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-address')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
-                                        data-feather="credit-card"></i>Payment Method</a>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_cards')}}"><i
+                                        data-feather="credit-card"></i>Payment Methods</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>

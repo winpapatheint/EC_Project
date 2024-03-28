@@ -2,11 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+<<<<<<< HEAD
+
+use App\Http\Controllers\UserController;
+
+=======
+>>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 
 /*
 |--------------------------------------------------------------------------
@@ -23,37 +33,35 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
+<<<<<<< HEAD
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
 Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+=======
 
-Route::get('/user-address', [UserController::class, 'showAddress'])->name('showAddress');
-route::post('/adduser',[UserController::class,'store'])->name('adduser');
-Route::post('/update-user-info', [UserController::class, 'updateUserInfo'])->name('updateUserInfo');
-Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('user-removeAddress');
-Route::post('/update-address', [UserController::class, 'updateAddress'])->name('updateAddress');
+Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
+route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
+>>>>>>> 0dcd92a8d08ab42804e8c1b6ab5e903972702ae0
 
-Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
-Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
-Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
-Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
+Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
 
+Route::get('/user-addresses/show-addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
+Route::post('/user-addresses/new-address', [UserController::class, 'createNewaddress'])->name('add_newaddress');
+Route::post('/user-addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
+Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
 
-//user
-Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
-Route::get('user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
-Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+Route::get('/user-cards/show-cards', [UserController::class, 'showCard'])->name('user_cards');
+Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->name('add_newcard');
+Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
+Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
 
-Route::get('/user-address', [UserController::class, 'showAddress'])->name('showAddress');
-route::post('/adduser',[UserController::class,'store'])->name('adduser');
-Route::post('/update-user-info', [UserController::class, 'updateUserInfo'])->name('updateUserInfo');
-Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('user-removeAddress');
-Route::post('/edit-address', [UserController::class, 'updateAddress'])->name('updateAddress');
+Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
 
-Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
-Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
+Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
+
 Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
 Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 

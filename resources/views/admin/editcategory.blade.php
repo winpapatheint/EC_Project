@@ -280,12 +280,12 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-list">
-      <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.subadmin') }}">
-          <i class="ri-admin-line"></i>
-          <span>SubAdmin</span>
-      </a>
-  </li>
-   <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/subadmin' )}}">
+                                        <i class="ri-admin-line"></i>
+                                        <span>SubAdmin</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
@@ -346,7 +346,7 @@
                                                             <select class="js-example-basic-single w-100" name="category" id="category">
                                                                 <option>select Category</option>
                                                                 @foreach($categories as $category)
-                                                                    <option value="{{ $category -> id }}"  @if($category -> id ==$subtitle->category_id ) selected @endif >
+                                                                    <option value="{{ $category -> id }}"  @if($category -> id == $subtitle->category_id ) selected @endif >
                                                                         {{ $category -> category_name }}  </option>
                                                                 @endforeach
 
@@ -359,7 +359,7 @@
                                                         class="col-sm-3 col-form-label form-label-title">SubCategory  Title</label>
                                                     <div class="col-sm-9">
                                                         <select class="js-example-basic-single w-100 get_subcategory" name="subcategory" id="subcategory">
-                                                            <option value="0">{{ $subcategory_titlename->sub_category_titlename   }}</option>
+                                                            <option value="{{ $subcategory_titlename->id  }}">{{ $subcategory_titlename->sub_category_titlename   }}</option>
                                                         </select>
 
                                                     </div>

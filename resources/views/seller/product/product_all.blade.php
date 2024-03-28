@@ -135,6 +135,7 @@
 <script>
     $(function() {
         $('.toggle-class').change(function() {
+            alert('123');
             var status = $(this).prop('checked') ? 1 : 0;
             var product_id = $(this).data('id');
 

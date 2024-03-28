@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Product;
 use App\Models\Seller;
+use App\Models\MultiImg;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -363,6 +365,22 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
+    public function productdetail($id)
+    {
+        $products = DB::table('Products')
+                    ->select( 'Products.*','Brands.*')
+                    ->join('Brands', function ($join) {
+                        $join->on('Brands.id', '=', 'Products.brand_id');
+                    })
+                    ->where('Products.id',$id)->get();
+
+        // print_r($blog[0]->created_at);die;
+        $product = $products[0];
+
+        return view('admin.product.product_detail',compact('product'));
+    }
+
+
     public function editdata(Request $request, $role, $id)
     {
         if (empty($role)) {
@@ -465,6 +483,15 @@ class AdminController extends Controller
 
         // die($id);
 
+    }
+
+
+    public function indexstatus(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $product->status = $request->status;
+        $product->save();
+        return redirect()->back();
     }
 
     public function indexuser()
@@ -672,6 +699,25 @@ class AdminController extends Controller
         return view('admin.blog.addblog',compact('data','editmode'));
 
     }
+
+    public function editproduct($id)
+    {
+        $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
+        $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('Categorys')->orderBy('created_at', 'desc')->get();
+        $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
+        $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        $data = DB::table('Products as P')
+                ->where('P.id',$id)
+                ->orderBy('P.created_at', 'desc')->first();
+
+        $editmode = true;
+
+        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs'));
+
+    }
+
     public function editsubtitle($id)
     {
         $subtitle = DB::table('Sub_category_titles')
@@ -772,13 +818,17 @@ class AdminController extends Controller
 
     public function storesubcategory(Request $request)
     {
+
+
         $valarr = [
             'category' => 'not_in:0',
             'subcategory' => 'required|string|max:255',
             'subname' => 'required|string|max:255', // Validate each subtitle individually
         ];
-
+        if (empty($request->id))
+        {
         $request->validate($valarr);
+    }
         $time = new DateTime();
         if (empty($request->id)) {
 
@@ -860,6 +910,61 @@ class AdminController extends Controller
        }
 
    }
+
+   public function storeproduct(Request $request)
+     {
+        $time = new DateTime();
+
+        //commision calculate
+        $originalPrice = $request->selling_price;
+        $discountPercentage = $request->discount_percent;
+        $discountAmount = ($originalPrice * $discountPercentage) / 100;
+        $discountedPrice = $originalPrice - $discountAmount;
+
+        $commisonPrice = $request->commision;
+        $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
+        $sellerAmount = $discountedPrice - $commisonAmount;
+
+        $adminAmount = $discountedPrice -  $sellerAmount;
+
+        $updval = array('product_code' => $request->productcode,
+                        'product_name' => $request->productname,
+                        'country_id' => $request->country,
+                        'brand_id' => $request->brand,
+                        'category_id' => $request->category,
+                        'sub_category_title_id' => $request->subcattitle,
+                        'sub_category_id' => $request->subcategory,
+                        'product_tags' => $request->product_tags,
+                        'product_size' => $request->product_size,
+                        'product_color' => $request->product_color,
+                        'short_desc' => $request->short_desc,
+                        'long_desc' => $request->long_desc,
+
+                        'selling_price' => $request->selling_price,
+                        'discount_percent' => $request->discount_percent,
+                        'product_qty' => $request->product_qty,
+                        'estimate_date' => $request->estimate_date,
+                        'commission' => $request->commision,
+                        'com_price' => $adminAmount,
+                        'seller_amount' => $sellerAmount,
+                        'updated_at' => $time->format('Y-m-d H:i:s')
+                        );
+
+                        if (!empty($request->product_thambnail)) {
+                            $imageName = time().'.'.$request->product_thambnail->extension();
+                            $request->product_thambnail->move(public_path('upload/product_thambnail/'), $imageName);
+                        } else {
+                            $imageName = '';
+                        }
+
+            if (!empty($request->product_thambnail)) {
+                $updval['product_thambnail'] = $imageName;
+            }
+
+            DB::table('Products')->where('id',$request->id)->update($updval);
+
+            return redirect('/admin/all/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+    }
 
     public function storecategory(Request $request)
      {

@@ -23,7 +23,6 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
@@ -112,7 +111,13 @@ Route::get('/admin/profile', function () {return view('admin.profile');})->name(
 Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
+Route::get('product/{productid}', [AdminController::class, 'productdetail']);
+
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
+
+Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -136,6 +141,7 @@ route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name
 Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
 Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
 Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
+
 
 //endblog
 

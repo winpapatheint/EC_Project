@@ -66,8 +66,10 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
 
 </head>
 <body>
@@ -356,7 +358,9 @@
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script>
+    <script src="{{ asset('backend/assets/input-tags/js/tagsinput.js') }}"></script>
+    <script src="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/toastr/toastr.min.js') }}"></script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('backend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
@@ -377,7 +381,7 @@
 
     <!-- Plugins js -->
     <script src="{{ asset('backend/assets/js/sidebar-menu.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/notify/bootstrap-notify.min.js') }}"></script>
+    {{-- <script src="{{ asset('backend/assets/js/notify/bootstrap-notify.min.js') }}"></script> --}}
     <script src="{{ asset('backend/assets/js/notify/index.js') }}"></script>
 
     <!-- Apexchar js -->
@@ -386,10 +390,6 @@
     <script src="{{ asset('backend/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/chart-custom.js') }}"></script>
-
-
-    <!-- customizer js -->
-    <script src="{{ asset('backend/assets/js/customizer.js') }}"></script>
 
     <!-- ratio js -->
     <script src="{{ asset('backend/assets/js/ratio.js') }}"></script>

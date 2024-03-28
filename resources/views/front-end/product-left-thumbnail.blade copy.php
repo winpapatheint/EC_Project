@@ -1041,65 +1041,72 @@
 
         <!-- Review Modal Start -->
         <div class="modal fade" id="writereview" tabindex="-1" aria-labellabedby="exambleModelLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form action="{{ route('reviews_store', ['product' => $product->id])}}"  method="POST">
-                        @csrf
-                        <input type="hidden" name="product" value="{{ $product->id }}">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            
-                                <div class="product-wrapper">
-                                        <div class="product-image">
-                                            <img class="img-fluid" alt="Solid Collared Tshirts"
-                                                src="../assets/images/fashion/product/26.jpg">
-                                        </div>
-                                        <div class="product-content">
-                                            <h5 class="name">Solid Collared Tshirts</h5>
-                                            <div class="product-review-rating">
-                                                <div class="product-rating">
-                                                    <h6 class="price-number">$16.00</h6>
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="product-review-form">
+                                            <div class="product-wrapper">
+                                                <div class="product-image">
+                                                    <img class="img-fluid" alt="Solid Collared Tshirts"
+                                                        src="../assets/images/fashion/product/26.jpg">
+                                                </div>
+                                                <div class="product-content">
+                                                    <h5 class="name">Solid Collared Tshirts</h5>
+                                                    <div class="product-review-rating">
+                                                        <div class="product-rating">
+                                                            <h6 class="price-number">$16.00</h6>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="review-box">
+                                                <div class="product-review-rating">
+                                                    <label>Rating</label>
+                                                    <div class="product-rating">
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i data-feather="star"></i>
+                                                            </li>
+                                                            <li>
+                                                                <i data-feather="star"></i>
+                                                            </li>
+                                                            <li>
+                                                                <i data-feather="star"></i>
+                                                            </li>
+                                                            <li>
+                                                                <i data-feather="star"></i>
+                                                            </li>
+                                                            <li>
+                                                                <i data-feather="star"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="review-box">
+                                                <label for="content" class="form-label">Comments</label>
+                                                <textarea id="content" rows="3" class="form-control" placeholder="Comments"></textarea>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="rating-css">
-                                        <div class="star-icon">
-                                            <input type="radio" value="1" name="rating" checked id="rating1">
-                                            <label for="rating1" class="fa fa-star"></label>
-                                            <input type="radio" value="2" name="rating" id="rating2">
-                                            <label for="rating2" class="fa fa-star"></label>
-                                            <input type="radio" value="3" name="rating" id="rating3">
-                                            <label for="rating3" class="fa fa-star"></label>
-                                            <input type="radio" value="4" name="rating" id="rating4">
-                                            <label for="rating4" class="fa fa-star"></label>
-                                            <input type="radio" value="5" name="rating" id="rating5">
-                                            <label for="rating5" class="fa fa-star"></label>
-                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
                                     </div>
-                                    <div class="review-box">
-                                        <label for="content" class="form-label">Comments</label>
-                                        <textarea id="content" rows="3" class="form-control" placeholder="Comments"></textarea>
-                                    </div>
-                                </form>
-                        
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Review Modal End -->
-            <!-- Bg overlay Start -->
-        <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
+                        <!-- Review Modal End -->
+                        <!-- Bg overlay Start -->
+                        <div class="bg-overlay"></div>
+                        <!-- Bg overlay End -->
 
     <!-- Related Product Section Start -->
     <section class="product-list-section section-b-space">

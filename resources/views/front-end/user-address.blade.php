@@ -46,7 +46,7 @@
                                 <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
-                            
+
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
@@ -65,40 +65,36 @@
                                     <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
-                            
                         </div>
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-dashboard-tab"
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}">
-                                    <i data-feather="home"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_dashboard')}}"><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-order-tab" 
-                                    style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-order')}}"><i
+                                    style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}">
-                                    <i data-feather="box"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('showAddress')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
-                                        data-feather="credit-card"></i>Payment Method</a>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_cards')}}"><i
+                                        data-feather="credit-card"></i>Payment Methods</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}">
-                                    <i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>
@@ -133,19 +129,26 @@
                             @foreach($data as $item)
                             <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
                                 <div class="address-box">
+                                    <div class="row">
+                                        <div class="col-md-2">
                                         <div class="form-check">
-                                       
                                                 <input class="form-check-input" type="radio" name="selected_address" 
                                                 value="{{ $item->id }}" id="address_{{ $item->id }}">
                                         </div>
-
+                                        </div>
+                                        <div class="col-md-10">    
+                                                <label>{{ $item->place }}</label>
+                                        </div>
+                                    </div>
                                         <div class="table-responsive address-table">
                                             <table class="table">
                                                 <tbody>
                                                     <tr>
-                                                        <td colspan="2">{{ $item->name }}</td>
+                                                        <td>Name:</td>
+                                                        <td>
+                                                            <p>{{ $item->name }}</p>
+                                                        </td>
                                                     </tr>
-
                                                     <tr>
                                                         <td>Address:</td>
                                                         <td>
@@ -160,11 +163,15 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                  
+
 
                                     <div class="button-group">
-                                            <button class="btn btn-sm add-button edit-btn w-100" data-bs-toggle="modal" 
-                                            data-bs-target="#editModal{{ $item->id }}" ><i data-feather="edit"></i>Edit</button>
+                                        <button class="btn btn-sm add-button w-100 edit-address-btn" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editAddress{{ $item->id }}"
+                                                onclick="">
+                                            <i data-feather="edit"></i> Edit
+                                        </button>
 
                                         <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile" 
                                         onclick="showDeleteModal('{{ $item->id }}')">
@@ -172,9 +179,10 @@
                                         </button>
 
                                     </div>
+
                                 </div>
                             </div>
-                          @endforeach
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -185,13 +193,9 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
+    </x-guest-layout>
 
-
-    <!-- Bg overlay Start -->
-    <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
-
-    <!-- Add address modal box start -->
+    <!-- Add Address Modal Box Start -->
     <div class="modal fade theme-modal" id="add-address" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
@@ -202,7 +206,7 @@
                     </button>
                 </div>
 
-                    <form method="post" action="{{ route('updateUserInfo') }}" class="row g-4" >
+                    <form method="POST" action="{{ route('add_newaddress') }}" class="row g-4" >
                     @csrf
                         <div class="modal-body">
                             <div class="form-floating mb-4 theme-form-floating form-group">
@@ -252,12 +256,10 @@
             </div>
         </div>
     </div>
-    <!-- Add address modal box end -->
-
-
-    <!-- Edit Address Start -->
+    <!-- Add Address Modal Box End -->
+    <!-- Edit Address Modal Box Start -->
     @foreach($data as $item)
-    <div class="modal fade theme-modal" id="editModal{{ $item->id }}" >
+    <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
@@ -267,9 +269,10 @@
                     </button>
                 </div>
 
-                    <form method="post" action="{{ route('updateAddress') }}" class="row g-4" >
+                    <form method="post" action="{{ route('edit_address') }}" class="row g-4" >
                     @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
+                        
                         <div class="modal-body">
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $item->name }}">
@@ -287,23 +290,22 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" value="{{ $item->post_code }}">
+                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
                                 <label for="post_code">Post Code</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <textarea class="form-control"  id="address" name="address"
-                                    style="height: 100px" value="{{ $item->address }}"></textarea>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ $item->address }}">
                                 <label for="address">Enter Address</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" value="{{ $item->place }}">
+                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others" value="{{ $item->place }}">
                                 <label for="place">Place</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" value="{{ $item->phone }}">
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
                             <input type="hidden" name="buyer_id" value="1">
@@ -320,8 +322,7 @@
         </div>
     </div>
     @endforeach
-    <!-- Edit Address End -->
-
+    <!-- Edit Address Modal Box End -->
     <!-- Remove Address Modal Start -->
     @foreach($data as $item)
     <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1" aria-hidden="true">
@@ -340,7 +341,7 @@
                 </div>
                 <div class="modal-footer">
                         <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <form action="{{ route('user-removeAddress', ['id' => $item->id]) }}" method="POST">
+                    <form action="{{ route('remove_address', ['id' => $item->id]) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
@@ -372,22 +373,15 @@
         </div>
     </div>
     <!-- Remove Address Modal End -->
-    
-<!-- Delete -->
-<script>
-    function showDeleteModal(id) {
-        $('#removeProfile').modal('show');
-        // Update the form action URL dynamically with the selected address id
-        $('#removeProfile form').attr('action', '/remove-address/' + id);
-    }
-</script>
-<!-- Edit -->
+
+<!-- Edit Address Script-->
 <script>
     $(document).ready(function() {
     $('.edit-btn').on('click', function() {
         var addressData = JSON.parse($(this).data('address'));
         $('#address_id').val(addressData.id);
         $('#edit_name').val(addressData.name);
+        $('#edit_email').val(addressData.email);
         $('#edit_division').val(addressData.division);
         $('#edit_district').val(addressData.district); // Corrected field name
         $('#edit_post_code').val(addressData.post_code);
@@ -399,6 +393,7 @@
     $('#saveChanges').on('click', function() {
         var addressId = $('#address_id').val();
         var newName = $('#edit_name').val();
+        var newEmail = $('#edit_email').val();
         var newDivision = $('#edit_division').val();
         var newDistrict = $('#edit_district').val();
         var newPostCode = $('#edit_post_code').val();
@@ -408,12 +403,13 @@
 
         // Perform AJAX request to update data in the controller
         $.ajax({
-            url: '{{ route("updateAddress") }}',
+            url: '{{ route("edit_address") }}',
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
                 id: addressId,
                 name: newName,
+                email: newEmail,
                 division: newDivision,
                 district: newDistrict, // Corrected field name
                 post_code: newPostCode,
@@ -426,7 +422,7 @@
                 // Handle success response
                 console.log(response);
                 // Close the modal
-                $('#editModal').modal('hide');
+                $('#editAddress').modal('hide');
             },
             error: function(xhr) {
                 // Handle error response
@@ -435,43 +431,12 @@
         });
     });
 });
-
 </script>
-
+<!-- Remove Address Script -->
 <script>
+    function showDeleteModal(id) {
+        $('#removeProfile').modal('show');
+        // Update the form action URL dynamically with the selected address id
+        $('#removeProfile form').attr('action', '/remove-address/' + id);
+    }
 </script>
-   <!-- latest jquery-->
-   <script src="../assets/js/jquery-3.6.0.min.js"></script>
-
-<!-- jquery ui-->
-<script src="../assets/js/jquery-ui.min.js"></script>
-
-<!-- Bootstrap js-->
-<script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="../assets/js/bootstrap/bootstrap-notify.min.js"></script>
-<script src="../assets/js/bootstrap/popper.min.js"></script>
-
-<!-- feather icon js-->
-<script src="../assets/js/feather/feather.min.js"></script>
-<script src="../assets/js/feather/feather-icon.js"></script>
-
-<!-- Lazyload Js -->
-<script src="../assets/js/lazysizes.min.js"></script>
-
-<!-- Slick js-->
-<script src="../assets/js/slick/slick.js"></script>
-<script src="../assets/js/slick/custom_slick.js"></script>
-
-<!-- Quantity js -->
-<script src="../assets/js/quantity-2.js"></script>
-
-<!-- Nav & tab upside js -->
-<script src="../assets/js/nav-tab.js"></script>
-
-<!-- script js -->
-<script src="../assets/js/script.js"></script>
-
-<!-- theme setting js -->
-<script src="../assets/js/theme-setting.js"></script>
-
-</x-guest-layout>

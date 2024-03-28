@@ -71,32 +71,32 @@
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-dashboard-tab"
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}"><i data-feather="home"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_dashboard')}}"><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-order-tab" 
-                                    style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-order')}}"><i
+                                    style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="delivery-detail" 
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}"><i data-feather="box"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.showAddress')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
-                                        data-feather="credit-card"></i>Payment Method</a>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_cards')}}"><i
+                                        data-feather="credit-card"></i>Payment Methods</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>

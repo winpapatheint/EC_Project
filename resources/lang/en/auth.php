@@ -16,7 +16,7 @@ return [
     'msgwith' => 'Message with MR/MRS :name',
     'doneregister' => '「:name」 had been Registered.',
     'msgwithnobody' => 'MESSAGE',
-
+    'doregister' => 'Register',
     'failed' => '正しいメールアドレスとパスワードを入力してください',
     'notactive' => 'Inactive Account',
     'password' => 'Please enter the right email address and password',
@@ -98,7 +98,7 @@ return [
      'category12' => "Education, Culture, Recruiting",
      'category13' => "machinery, tools",
      'category14' => "Quaternary Industry, Content, Platform",
-     
+
     'position' => 'Position',
     'position0' => 'Please Select',
     'position1' => 'Executive',
@@ -191,7 +191,7 @@ return [
     'inflstatus8' => 'CONFIRM',
     'inflstatus9' => 'FINISH',
 
-  
+
     'phone' => 'Phone',
     'address' => 'Address',
     'policy' => 'Agree with Privacy Policy',
@@ -211,7 +211,7 @@ return [
 
     'dochange' => 'EDIT',
     'confirmchange?' => 'Confirm to edit?',
-    'yeschange' => 'EDIT',
+    'yeschange' => 'Edit',
     'docancel' => 'Cancel',
     'donechange' => 'Edited',
 
@@ -219,7 +219,7 @@ return [
     'profileedit' => 'Profile Edit',
     'inflname' => 'Buyer Name',
     'profileimg' => 'Profile Image',
-    
+
     'msgtitle' => 'The Title field is required.',
     'msgcontent' => 'The Content field is required.',
 
@@ -337,7 +337,7 @@ return [
      'transferconfirmmessage' => 'Did you confirm the transfer? ',
      'ok' => 'yes',
      'setshippingdate' => 'Set Shipping Date',
-     'dosetting' => 'Set', 
+     'dosetting' => 'Set',
 
     'buyerordermanage' => 'Manage Order',
     'doorder' => 'Order',
@@ -396,22 +396,22 @@ return [
     'deleteaskconfirm' => 'Are you sure to delete ?',
     'dodelete' => 'Delete',
     'donedelete' => 'Delete Complete',
-    
+
     'cantordercount' => 'Can not submit order.',
     'pleaseinputmorethan0' => 'Please input value more than 0',
     'pleaseinputnumeric' => 'Please input number',
 ];
 
 
-            
-
-            
 
 
 
 
 
 
-        
+
+
+
+
 
 

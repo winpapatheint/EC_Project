@@ -1,4 +1,12 @@
+
 <x-auth-layout>
+    <!-- bootstrap  css -->
+    <style>
+        .table>:not(caption)>*>*
+        {
+            border-bottom-width:0px !important;
+        }
+    </style>
 
     <div class="page-body">
         <!-- All User Table Start -->
@@ -16,7 +24,7 @@
                                         </a>
                                     </form>
                                 </div>
-
+                                @include('components.messagebox')
                                 <div class="table-responsive category-table">
                                     <div>
                                         <table class="table all-package theme-table" id="table_id">
@@ -26,293 +34,44 @@
                                                     <th>Date</th>
                                                     <th>Category Name</th>
                                                     <th>SubCategory Title</th>
-            
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                <tr>                                          
-                                                    <td>11</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>buscuit</td>
-                                                    <td>Meat</td>
-                                        
+                                                @foreach( $lists as $key => $list )
+                                            <tr>
+                                              <th data-label="登録日" >{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                              <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                              <td data-label="タイトル">{{ $list->category }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_titlename }}</td>
 
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
+                                              <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href='{{ url("/editsubtitle/".$list->id ) }}'>
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
 
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                        data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>                                                
-                                                    <td>10</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>coffee</td>  
-                                                     <td>Meat</td>                                             
-                                          
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>cookies</td> 
-                                                     <td>Meat</td>                                           
-                                             
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>                          
-                                                    <td>8</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>flakes</td>
-                                                    <td>Meat</td>
-                                           
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>chips</td>
-                                                    <td>Seafoods</td>
-                                      
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>dal</td>
-                                                    <td>Meat</td>
-                                          
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>5</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>milk</td>
-                                                    <td>Meat</td>
-                                        
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>4</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>bread</td>
-                                                    <td>Meat</td>
-                                          
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2022-12-26 15:23</td>                           
-                                                    <td>dog Food</td>
-                                                    <td>Meat</td>
-                                         
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>2</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>meat</td>
-                                                    <td>Meat</td>
-                                        
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>1</td>
-                                                    <td>2022-12-26 15:23</td>           
-                                                    <td>coffee</td>
-                                                     <td>Meat</td>
-                                       
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.editsubtitle') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                    <!-- pagination -->
                     <div style="bottom:28px">
                         <nav class="custom-pagination">
                             <ul class="pagination justify-content-center">
@@ -339,8 +98,10 @@
                         </nav>
                     </div>
                 </div>
+
             </div>
         <!-- All User Table Ends-->
+
     </div>
 
 </x-auth-layout>

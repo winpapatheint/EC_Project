@@ -16,15 +16,11 @@ class BrandController extends Controller
     {
         $brands = new Brand();
         if ($request->hasFile('brand_icon')) {
-            $file = $request->file('brand_icon');
-
-            $ext = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $ext;
-            $file->move('upload/brand', $filename);
+            $filename = $request->file('brand_icon')->store('upload/brand');
             $brands->brand_icon = $filename;
         }
         $brands->brand_name = $request->input('brand_name');
         $brands->save();
-        return redirect()->route('add.product');
+        return redirect()->route('seller.add.product');
     }
 }

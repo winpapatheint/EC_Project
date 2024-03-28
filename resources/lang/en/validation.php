@@ -168,23 +168,23 @@ return [
     | of "email". This simply helps us make our message more expressive.
     |
     */
-   
+
     'attributes' => [
         'email' => 'メールアドレス',
          'checks' => 'チェック',
          'emails' => 'メールアドレス',
          'editemail' => 'メールアドレス',
-       
+
         'password' => 'パスワード',
         'passwords' => 'パスワード',
         'password_confirmations'=>'パスワード',
-       
+
         'name' => '氏名（漢字)',
         'names' => '氏名',
         'startdate' => 'チェックイン',
         'enddate' => 'チェックアウト',
         'guest' => '人数',
-     
+
         'furiname' => '氏名（カタカナ）',
         'gender' => '性別',
         'agerange' => '年齢',
@@ -203,7 +203,7 @@ return [
         'title' => 'タイトル',
         'category' => 'カテゴリー',
         'content' => '内容',
-          'contents' => '内容',
+        'contents' => '内容',
         'image' => 'イメージ',
         'bunrui' => '分類',
         'qname' => '問題名',
@@ -222,9 +222,9 @@ return [
         'entity' => '事業形態',
         'purpose' => 'リスト閲覧の目的',
         'compindustry' => '業種',
-      
+
         'position' => '役職',
-        
+
         'deliveryperiod' => '選定時期',
         'contactmethod' => '連絡方法',
         'budget' => '予算',
@@ -243,11 +243,22 @@ return [
         'monthlyfee'=>'入学金',
         'tutorlimitday'=>'授業変更不可日数(講師)',
         'studentlimitday'=>'授業変更不可日数(講師)',
-        
+
         'guideline'=>'ガイドライン',
         'comment'=>'コメント',
         'price'=>'価格(税込)',
-
+        'product_code'=>'商品コード',
+        'product_name'=>'商品名',
+        'product_tags'=>'タグ',
+        'product_size'=>'サイズ',
+        'product_color'=>'色',
+        'short_desc'=>'短商材',
+        'long_desc'=>'商材説明',
+        'product_thambnail'=>'画像',
+        'multi_img'=>'画像',
+        'selling_price'=>'販売価格',
+        'product_qty'=>'在庫数',
+        'estimate_date'=>'配送期間',
 
     ],
 

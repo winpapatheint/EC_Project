@@ -2,13 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+<<<<<<< HEAD
 
 use App\Http\Controllers\UserController;
 
+=======
+>>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserController;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 
 /*
 |--------------------------------------------------------------------------
@@ -25,19 +33,45 @@ Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-Route::get('/user/registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
-Route::get('/user/orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
-Route::get('/user/delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
-Route::get('/user/address', function () {return view('front-end.user-address');})->name('front-end.user-address');
-Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
-Route::get('/user/profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
-Route::get('/user/order/details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
-Route::get('/user/order/tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-route::post('/adduser',[UserController::class,'adduser'])->name('adduser');
+Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
+Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+
+Route::get('/user-address', [UserController::class, 'showAddress'])->name('showAddress');
+route::post('/adduser',[UserController::class,'store'])->name('adduser');
+Route::post('/update-user-info', [UserController::class, 'updateUserInfo'])->name('updateUserInfo');
+Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('user-removeAddress');
+Route::post('/update-address', [UserController::class, 'updateAddress'])->name('updateAddress');
+
+Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
+Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
+Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
+Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+
+
+//user
+Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
+Route::get('user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+
+Route::get('/user-address', [UserController::class, 'showAddress'])->name('showAddress');
+route::post('/adduser',[UserController::class,'store'])->name('adduser');
+Route::post('/update-user-info', [UserController::class, 'updateUserInfo'])->name('updateUserInfo');
+Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('user-removeAddress');
+Route::post('/edit-address', [UserController::class, 'updateAddress'])->name('updateAddress');
+
+Route::get('/user/payment', function () {return view('front-end.user-payment-method');})->name('front-end.user-payment');
+Route::get('/user-profile', function () {return view('front-end.user-profile');})->name('front-end.user-profile');
+Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
+Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+
 
 //Route::get('/register', function () {return view('front-end.register');});
+
+Route::get('/register', function () {return view('front-end.register');});
 
 
 
@@ -69,34 +103,50 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 //Admin
 Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
-Route::get('/admin/category', function () {return view('back-end.category');});
+Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
+
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
+
+Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
+Route::post('admin/registersubtitle', [AdminController::class, 'storesubtitle'])->name('registersubtitle');
+Route::post('admin/registersubcategory', [AdminController::class, 'storesubcategory'])->name('registersubcategory');
+
 Route::get('/admin/users', function () {return view('back-end.users');});
 
-Route::get('/subadmin', function () {return view('admin.subadmin');})->name('admin.subadmin');
-
+Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin']);
+Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
+Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
 //AdminProduct
-Route::get('/admin/all/product', function () {return view('admin.product.product_all');})->name('admin.all.product');
-
+Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 //startuser
-Route::get('/admin/all/users', function () {return view('admin.users');})->name('admin.all.users');
-Route::get('/admin/all/usersdetail', function () {return view('admin.usersdetail');})->name('admin.usersdetail');
+
+Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
+Route::get('/takeremote/{id}', [AdminController::class, 'takeremote'])->middleware(['auth','role:admin']);
+Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
+Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
+Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
+Route::post('edituser', [AdminController::class, 'updateuser'])->name('edituser');
 Route::get('/admin/all/subuserdetail', function () {return view('admin.subuserdetail');})->name('admin.subuserdetail');
 Route::get('/admin/all/addsubadmin', function () {return view('admin.addsubadmin');})->name('admin.addsubadmin');
 Route::get('/admin/all/edituser', function () {return view('admin.edituser');})->name('admin.edituser');
 Route::get('/admin/all/editsubuser', function () {return view('admin.editsubuser');})->name('admin.editsubuser');
-
+route::post('/admin/deleteuser',[AdminController::class,'deleteuser'])->name('deleteuser');
+route::post('/admin/deletesubadmin',[AdminController::class,'deletesubadmin'])->name('deletesubadmin');
 //enduser
 
 //startblog
-Route::get('/admin/all/blog', function () {return view('admin.blog.blog');})->name('admin.all.blog');
-Route::get('/admin/add/blog', function () {return view('admin.blog.addblog');})->name('admin.add.blog');
-Route::get('/admin/detail/blog', function () {return view('admin.blog.blog_detail');})->name('admin.detail.blog');
-Route::get('/admin/edit/blog', function () {return view('admin.blog.blog_edit');})->name('admin.edit.blog');
+Route::get('/admin/all/blog', [AdminController::class,'indexblog'])->name('admin.all.blog');
+Route::get('/admin/add/blog', function () {return view('admin.blog.addblog');})->name('admin.addblog');
+route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name('deleteblog');
+Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
+Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
+Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
+
 //endblog
 
 
@@ -108,13 +158,23 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 //endhelp
 
 //startcategory
-Route::get('/admin/all/category', function () {return view('admin.category');})->name('admin.all.category');
-Route::get('/admin/all/subcategory', function () {return view('admin.allsubcategory');})->name('admin.all.subcategory');
-Route::get('/admin/all/subtitle', function () {return view('admin.allsubtitle');})->name('admin.all.subtitle');
-Route::get('/admin/all/addsubtitle', function () {return view('admin.addsubtitle');})->name('admin.all.addsubtitle');
+route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
+route::post('/admin/all/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
+Route::get('/admin/all/subtitle', [AdminController::class,'indexsubtitle'])->name('admin.all.subtitle');
+Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
+Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);
+Route::get('/editsubcategory/{categoryid}', [AdminController::class, 'editsubcategory']);
+
+Route::get('/admin/all/subcategory', [AdminController::class,'indexsubcategory'])->name('admin.all.subcategory');
+
+Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
 Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
+Route::get('/admin/all/addsubcategory', [AdminController::class,'addsubcategory'])->name('admin.all.addsubcategory');
+Route::post('get-subcategories', [AdminController::class,'getSubcategories'])->name('getSubcategories');
+
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');
 Route::get('/admin/edit/category', function () {return view('admin.editcategory');})->name('admin.edit.category');
+
 Route::get('/admin/edit/subcategory', function () {return view('admin.editsubcategory');})->name('admin.edit.subcategory');
 //endcategory
 
@@ -129,8 +189,10 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
-//Route::get('/seller/registration', [RegisterController::class, 'registration'])->name('seller.register');
-Route::get('/seller/register', function () {return view('seller.seller_register');})->name('seller.register');
+Route::controller(RegisterController::class)->group(function(){
+    Route::get('/seller/register','SellerRegister')->name('seller.register');
+    Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
+});
 Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
 Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
 Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
@@ -139,19 +201,22 @@ Route::get('/seller/add/help', function () {return view('seller.help.help_add');
 
 //Brand
 Route::controller(BrandController::class)->group(function(){
-    Route::get('/add_brand','AddBrand')->name('add.brand');
+    Route::get('/add/brand','AddBrand')->name('add.brand');
     Route::post('/store/brand','StoreBrand')->name('store.brand');
 });
 
-
 //SellerProduct
 Route::controller(ProductController::class)->group(function(){
-    // Route::get('/seller/all/product','AllProduct')->name('all.product');
-    Route::get('/seller/add/product','AddProduct')->name('add.product');
-    // Route::post('/seller/store/product','StoreProduct')->name('store.product');
-    // Route::get('/seller/detail/product/{id}','EditProduct')->name('edit.product');
-    // Route::post('/seller/edit/product/{id}','UpdateProduct')->name('update.product');
-    // Route::get('/seller/delete/product/{id}','DeleteProduct')->name('delete.product');
+    Route::get('/seller/all/product','AllProduct')->name('seller.all.product');
+    Route::get('/seller/detail/product/{id}','DetailProduct')->name('seller.detail.product');
+    Route::get('/seller/add/product','AddProduct')->name('seller.add.product');
+    Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
+    Route::get('/seller/edit/product/{id}','EditProduct')->name('seller.edit.product');
+    Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
+    Route::get('/seller/delete/product/{id}','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
+    Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
+    Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
 });
 
 //SellerOrder
@@ -183,7 +248,7 @@ Route::get('/subseller/detail/order', function () {return view('sub_seller.order
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
 Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
-
+require __DIR__.'/auth.php';
 
 
 

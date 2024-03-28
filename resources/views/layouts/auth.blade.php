@@ -4,7 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
         content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
@@ -23,6 +25,8 @@
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+
+
 
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
@@ -171,6 +175,7 @@
 
                             <ul class="profile-dropdown onhover-show-div">
                                <div>
+
                                     <li>
                                         <a href="{{ route('admin.profile') }}">
                                             <i data-feather="user"></i>
@@ -179,16 +184,13 @@
                                     </li>
                                 </div>
 
-
                                 <li>
-                                    <form method="POST" action="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('adminlogout') }}">
                                         @csrf
-                                    <a
-                                        href="route('logout'))" onclick="event.preventDefault(); this.closest('form').submit();">
-                                        <i data-feather="log-out"></i>
-                                        <span>Log out</span>
-                                    </a>
-                                    </form>
+                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"> logout</a>
+                                        </form>
+
+
                                 </li>
                             </ul>
                         </li>
@@ -245,25 +247,13 @@
                                     </a>
                                 </li>
 
-                                 <li class="sidebar-list">
-                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
-                                        <i class="ri-list-check-2"></i>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.subcategory') }}">
+                                        <i class="ri-store-3-line"></i>
                                         <span>Category</span>
                                     </a>
-                                    <ul class="sidebar-submenu">
-                                        <li>
-                                            <a href="{{ route('admin.all.category') }}">Category List</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('admin.all.subtitle') }}">Sub Category Titlelist</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('admin.all.subcategory') }}">Sub Category List</a>
-                                        </li>
-                                    </ul>
                                 </li>
-
 
 
 
@@ -296,26 +286,25 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-list">
-      <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.subadmin') }}">
-          <i class="ri-admin-line"></i>
-          <span>SubAdmin</span>
-      </a>
-  </li>
-   <li class="sidebar-list">
+
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/subadmin') }}">
+                                        <i class="ri-admin-line"></i>
+                                        <span>SubAdmin</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
                                     </a>
                                 </li>
 
-
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.profile') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                         <i class="ri-profile-line"></i>
                                         <span>Profile</span>
                                     </a>
-                                </li>
-
+                               </li>
                             </ul>
                         </div>
 
@@ -397,6 +386,7 @@
     <script src="{{ asset('backend/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/chart-custom.js') }}"></script>
+
 
     <!-- customizer js -->
     <script src="{{ asset('backend/assets/js/customizer.js') }}"></script>

@@ -17,14 +17,14 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                             <div class="col-sm-9">
-                                                <p>CN-1230</p>
+                                                <p>{{ $data->product_code }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                             <div class="col-sm-9">
-                                                <p>Orange</p>
+                                                <p>{{ $data->product_name }}</p>
                                             </div>
                                         </div>
 
@@ -32,11 +32,11 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Brand</label>
                                             <div class="col-sm-9">
-                                                <p>Grocery</p>
+                                                <p>{{ $data->brand->brand_name }}</p>
                                             </div>
                                         </div>
 
-                                        <div class="mb-2 row align-items-center">
+                                        {{-- <div class="mb-2 row align-items-center">
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Category</label>
                                             <div class="col-sm-9">
@@ -50,40 +50,40 @@
                                             <div class="col-sm-9">
                                                 <p>-</p>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                             <div class="col-sm-9">
-                                                <p>Tags</p>
+                                                <p>{{ $data->product_tags }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                             <div class="col-sm-9">
-                                                <p>30g</p>
+                                                <p>{{ $data->product_size }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                             <div class="col-sm-9">
-                                                <p>-</p>
+                                                <p>{{ $data->product_color }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                             <div class="col-sm-9">
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+                                                <p>{{ $data->short_desc }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                             <div class="col-sm-9">
-                                                <p>Doloribus tenetur, fugit maxime soluta aperiam obcaecati velit blanditiis magnam earum eum incidunt, quis amet deserunt at laborum modi quisquam quidem rerum?</p>
+                                                <p>{{ $data->long_desc }}</p>
                                             </div>
                                         </div>
 
@@ -92,39 +92,46 @@
                                                 class="col-sm-3 col-form-label form-label-title">Thumbnail
                                                 Image</label>
                                             <div class="col-sm-9">
-                                                <p>Image</p>
+                                                <img width="100" src="{{ asset('upload/product_thambnail/'.$data-> product_thambnail) }}">
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                             <div class="col-sm-9">
-                                                <p>Images</p>
+                                                <img width="100" src="{{ asset('upload/multiImg/'.$data-> multi_img[]) }}">
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price</label>
                                             <div class="col-sm-9">
-                                                <p>120</p>
+                                                <p>{{ $data->selling_price }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label class="col-sm-3 form-label-title">Discount Price</label>
+                                            <label class="col-sm-3 form-label-title">Discount</label>
                                             <div class="col-sm-9">
-                                                <p>100</p>
+                                                <p>{{ $data->discount_percent }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Product Quantity</label>
                                             <div class="col-sm-9">
-                                                <p>30</p>
+                                                <p>{{ $data->product_qty }}</p>
                                             </div>
                                         </div>
-
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Delivey Estimate Day</label>
+                                            <div class="col-sm-9">
+                                                <p>{{ $data->estimate_date }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('seller.edit.product') }}">
+                                            <button type="button" class="btn btn-animation">Edit</button>
+                                        </a>
                                     </form>
                                 </div>
                             </div>

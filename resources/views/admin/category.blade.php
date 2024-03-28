@@ -1,4 +1,12 @@
+
 <x-auth-layout>
+    <!-- bootstrap  css -->
+    <style>
+        .table>:not(caption)>*>*
+        {
+            border-bottom-width:0px !important;
+        }
+    </style>
 
     <div class="page-body">
         <!-- All User Table Start -->
@@ -11,343 +19,60 @@
                                     <h5>All Category</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.all.addcategory') }}"
+                                        class="align-items-center btn btn-theme d-flex">
+                                        <i data-feather="plus-square"></i>Add Main Category
+                                       </a>&nbsp;&nbsp;
+                                       <a href="{{ route('admin.all.addsubtitle') }}"
+                                       class="align-items-center btn btn-theme d-flex">
+                                       <i data-feather="plus-square"></i>Add SubTitle Category
+                                      </a>&nbsp;&nbsp;
+                                        <a href="{{ route('admin.all.addsubcategory') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                            <i data-feather="plus-square"></i>Add New
+                                            <i data-feather="plus-square"></i>Add SubCategory
                                         </a>
                                     </form>
                                 </div>
-                            
+                                @include('components.messagebox')
                                 <div class="table-responsive category-table">
                                     <div>
                                         <table class="table all-package theme-table" id="table_id">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Date</th>
-                                                    <th>Category Name</th>
-                                                    <th>Icon</th>
+                                                    <th>Main Category Name</th>
+                                                    <th>SubTitle Category Name</th>
+                                                    <th>SubCategory Name</th>
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                <tr>                                          
-                                                    <td>11</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>buscuit</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/vegetable.svg') }}"
-                                                                class="img-fluid" alt="">
-                                                        </div>
-                                                    </td>
+                                                @foreach( $lists as $key => $list )
 
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
+                                            <tr>
+                                              <th data-label="登録日" >{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                              <td data-label="タイトル">{{ $list->category }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_titlename ?? '' }}</td>
+                                              <td data-label="タイトル">{{ $list->sub_category_name ?? '' }}</td>
 
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                        data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                              <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href='{{ url("/editcategory/".$list->id ) }}'>
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
 
-                                                <tr>                                                
-                                                    <td>10</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>coffee</td>                                               
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/cup.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>cookies</td>                                            
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/meats.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>                          
-                                                    <td>8</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>flakes</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/breakfast.svg') }}"
-                                                                class="img-fluid" alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>chips</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/frozen.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>dal</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/biscuit.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>5</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>milk</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/milk.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>4</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>bread</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/grocery.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2022-12-26 15:23</td>                           
-                                                    <td>dog Food</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/drink.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>2</td>
-                                                    <td>2022-12-26 15:23</td>
-                                                    <td>meat</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/milk.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-
-                                                    <td>1</td>
-                                                    <td>2022-12-26 15:23</td>           
-                                                    <td>coffee</td>
-                                                    <td>
-                                                        <div class="category-icon">
-                                                            <img src="{{ asset('frontend/assets/svg/1/pet.svg') }}" class="img-fluid"
-                                                                alt="">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('admin.edit.category') }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalToggle">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -382,10 +107,10 @@
                         </nav>
                     </div>
                 </div>
-                
+
             </div>
         <!-- All User Table Ends-->
-        
+
     </div>
 
 </x-auth-layout>

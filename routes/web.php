@@ -2,21 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-<<<<<<< HEAD
-
 use App\Http\Controllers\UserController;
-
-=======
->>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\UserController;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3d4838ab7c9a64280170b4426e4929a35b99f7b0
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,20 +21,23 @@ use App\Http\Controllers\UserController;
 |
 */
 
+//Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
+//route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
+
 Route::get('/', function () {
     return view('front-end.welcome');
 });
 
-<<<<<<< HEAD
-Route::get('/user-registration', function () {return view('front-end.user-register');})->name('front-end.user-register');
+
+
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
 Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
-=======
+
 
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
->>>>>>> 0dcd92a8d08ab42804e8c1b6ab5e903972702ae0
+
 
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
@@ -87,7 +82,8 @@ Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-s
 
 Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
 
-Route::get('/news', function () {return view('front-end.blog-list');});
+Route::get('/news', [AdminController::class, 'news']);
+
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 
@@ -98,7 +94,7 @@ Route::get('/cart', function () {return view('front-end.cart');});
 Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
-Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
+Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 
@@ -114,6 +110,7 @@ Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middlew
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
+Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
 
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
@@ -134,6 +131,7 @@ Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
 Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
 Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
 Route::post('edituser', [AdminController::class, 'updateuser'])->name('edituser');
+Route::post('edithost', [AdminController::class, 'updatehost'])->name('edithost');
 Route::get('/admin/all/subuserdetail', function () {return view('admin.subuserdetail');})->name('admin.subuserdetail');
 Route::get('/admin/all/addsubadmin', function () {return view('admin.addsubadmin');})->name('admin.addsubadmin');
 Route::get('/admin/all/edituser', function () {return view('admin.edituser');})->name('admin.edituser');
@@ -197,7 +195,8 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get('/seller/register','SellerRegister')->name('seller.register');
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
-Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
+
+Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
 Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
 Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');

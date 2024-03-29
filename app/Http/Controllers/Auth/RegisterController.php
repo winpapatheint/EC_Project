@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
     public function SellerRegister()
@@ -39,7 +39,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->input('password')),
 
             ]);
-
+            event(new Registered($user));
             $seller = new Seller($request->all());
             $seller->password = Hash::make($request->input('password'));
             if (isset($filename)) {
@@ -55,11 +55,16 @@ class RegisterController extends Controller
 
             DB::commit();
 
-            return redirect('/seller');
+
+
         } catch (\Exception $e) {
             DB::rollback();
             Log::error('Failed to register seller: ' . $e->getMessage());
             return back()->withInput()->withErrors(['error' => 'Failed to register seller.']);
         }
+               //verify email
+               $email = $request->email;
+               return view('auth.verify-email',compact('email'));
+               //return redirect()->route('auth.verify-email', compact('email'));
     }
 }

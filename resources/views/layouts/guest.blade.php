@@ -316,7 +316,7 @@
                                                     <a href="{{ route('login') }}">Log In</a>
                                                 </li>
                                                 <li class="product-box-contain">
-                                                    <a href="{{route ('front-end.user-register')}}">Buyer Register</a>
+                                                    <a href="{{route ('user_register')}}">Buyer Register</a>
                                                 </li>
 
                                             </ul>

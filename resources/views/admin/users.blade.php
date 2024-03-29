@@ -1,9 +1,6 @@
 
 <x-auth-layout>
 
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
-
     <style>
         .table>:not(caption)>*>*
         {
@@ -154,31 +151,31 @@
             </div>
         <!-- Delete Modal Box End -->
 
-<!-- Ensure jQuery and Bootstrap Toggle are included before this script -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
     $(function() {
         $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') ? 1 : 0;
-            var user_id = $(this).data('id');
 
+            var status = $(this).prop('checked') ? 1 : 0;
+            var userid = $(this).data('id');
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: '/seller/product/status',
+                url: "{{ route('ss') }}",
                 data: {
                     'status': status,
-                    'product_id': product_id,
+                    'userid': userid,
                     '_token': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
+                    alert(data.success);
                     console.log(data.success);
                 }
             });
         });
     });
     </script>
-
 
 </x-auth-layout>
 

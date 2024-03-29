@@ -50,9 +50,23 @@ class AdminController extends Controller
         return view('front-end.index');
 
     }
+
+    public function news()
+    {
+        $limit = 10;
+        $blogs = DB::table('Blog')
+                ->select(  'Blog.*')
+                ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $blogs->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl'));
+
+    }
+
     public function validatesubadmin($request, $editpassword = true , $editmode = false, $emailuniquecheck = true, $needimg = true)
     {
-
 
         $check = [
             'name' => 'required|string|max:255',
@@ -100,19 +114,11 @@ class AdminController extends Controller
     public function updateuser(Request $request)
     {
         if (!empty($request->id)) {
-           $userprofile = User::find($request->id);
 
-            $userid = DB::table('users')
-                    ->select('users.id','users.email')
-                    ->where('id', $request->id)->get()->pluck('email');
+            $userprofile = User::find($request->id);
+        }
 
-            $sellerid = DB::table('sellers')
-                    ->select('sellers.id')
-                    ->where('email', $userid[0])->pluck('id');
-
-            $sellerprofile = Seller::find($sellerid[0]);
-
-        } else {
+         else {
            $userprofile = Auth::user();
         }
 
@@ -128,6 +134,143 @@ class AdminController extends Controller
             }else {
                 $emailuniquecheck = true;
             }
+
+
+            $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
+        //return response()->json(['error'=>'123']);
+        }
+
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+                return response()->json(['success'=>'allpasses']);
+            }
+            return response()->json(['error'=>$validator->errors()]);
+
+        }
+
+        $newval = array('name' => $request->name,
+                        'email' => $request->email,
+                    );
+
+
+        if (!empty($request->shopname)) {
+            $newval['shop_name'] = $request->shopname;
+        }
+
+        if (!empty($request->shopyear)) {
+            $newval['shop_establish'] = $request->shopyear;
+        }
+
+        if (!empty($request->phone)) {
+            $newval['phone'] = $request->phone;
+        }
+
+        if (!empty($request->zipcode)) {
+            $newval['zip_code'] = $request->zipcode;
+        }
+
+        if (!empty($request->shoplink)) {
+            $newval['url'] = $request->shoplink;
+        }
+
+        if (!empty($request->address)) {
+            $newval['address'] = $request->address;
+        }
+
+
+        // Bank
+
+        if (!empty($request->bankname)) {
+            $newval['bank_name'] = $request->bankname;
+        }
+
+        if (!empty($request->accounttype)) {
+            $newval['bank_acc_type'] = $request->accounttype;
+        }
+
+        if (!empty($request->branchname)) {
+            $newval['bank_branch'] = $request->branchname;
+        }
+
+        if (!empty($request->bankaccountname)) {
+            $newval['bank_acc_name'] = $request->bankaccountname;
+        }
+
+        if (!empty($request->bankaccountnumber)) {
+            $newval['bank_acc_no'] = $request->bankaccountnumber;
+        }
+        //END Bank
+
+        if (!empty($request->password)) {
+            $newval['password'] = Hash::make($request->password);
+        }
+
+        if (!empty($request->shoplogo)) {
+            $time = new DateTime();
+            $imageNames = time().'.'.$request->shoplogo->extension();
+
+            $request->shoplogo->move(public_path('upload/shop'), $imageName);
+            $newval['shop_logo'] = $imageName;
+        }
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+
+            $request->image->move(public_path('images'), $imageName);
+            $newval['user_photo'] = $imageName;
+        }
+
+        // print_r($upd);die;
+        if ($userprofile->role == 'admin' OR $userprofile->role == 'seller' OR $userprofile->role == 'buyer') {
+        $upd = $userprofile->update($newval);
+        }
+        if ($userprofile->role == 'seller') {
+
+        $sellerupd = $sellerprofile->update($newval);
+        }
+        // print_r($userprofile->role);die;
+        $msg = __('auth.donechange');
+
+        return back()->with('success',$msg);
+
+    }
+
+
+
+    public function updatehost(Request $request)
+    {
+        if (!empty($request->id)) {
+
+            $userprofile = User::find($request->id);
+
+            $userid = DB::table('users')
+                    ->select('users.id','users.email')
+                ->where('id', $request->id)->get()->pluck('email');
+
+            $sellerid = DB::table('sellers')
+                    ->select('sellers.id')
+                    ->where('email', $userid[0])->pluck('id');
+
+            $sellerprofile = Seller::find($sellerid[0]);
+
+        }
+        else {
+           $userprofile = Auth::user();
+        }
+
+        if ($userprofile->role == 'admin') {
+
+            $checkpassword = true;
+            if ( empty($request->password) AND empty($request->password_confirmation)) {
+                $checkpassword = false;
+            }
+
+            if ($userprofile->email == $request->email) {
+                $emailuniquecheck = false;
+            }else {
+                $emailuniquecheck = true;
+            }
+
 
             $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
         //return response()->json(['error'=>'123']);
@@ -415,6 +558,7 @@ class AdminController extends Controller
         $editmode = true;
 
         if ($role == 'admin') {
+
             return view('admin.edituser',compact('editmode','editother','edituser'));
         } else if ($role == 'buyer') {
             return view('admin.editbuyerprofile',compact('editmode','editother','edituser'));
@@ -485,7 +629,6 @@ class AdminController extends Controller
 
     }
 
-
     public function indexstatus(Request $request)
     {
         $product = Product::find($request->product_id);
@@ -494,14 +637,33 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function indexuserstatus(Request $request)
+    {
+        $user = User::find($request->userid);
+        $user->status = $request->status;
+        $user->save();
+        return redirect('/admin/profile')->back();
+    }
+
     public function indexuser()
     {
 
         $limit = 10;
+
         // print_r($type);die;
 
+        $updval = array('status' => '1');
         $users = DB::table('users')->whereIn('role',['seller','buyer'])
+                    ->where('email_verified_at','<>','')
+                    ->where(function ($query) {
+                        $query->whereNotNull('email_verified_at')
+                    ->orWhereNull('email_verified_at');
+                    })
                     ->orderBy('created_at', 'desc')->paginate($limit);
+
+        foreach ($users as $user) {
+            DB::table('users')->where('id', $user->id)->update($updval);
+        }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));

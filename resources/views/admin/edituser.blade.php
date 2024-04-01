@@ -1,121 +1,163 @@
+
 <x-auth-layout>
-<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    @php $error = $errors->toArray(); if(!isset($editmode)){$editmode = false;} if(!isset($editother)){$editother = false;} @endphp
+
+    <div class="page-body">
+    <!-- New Product Add Start -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-8 m-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Users Information</h5>
+                                    </div>
+                                    @if (!$editmode)
+                                    @php $action= route('registersubadmin') ; @endphp
+                                    @else
+                                    @php $action= route('edituser') ; @endphp
+                                    @endif
+                                    <form class="theme-form theme-form-2 mega-form" id="registeruserform" method="POST" action="{{ $action }}">
+                                        @csrf
+                                        @if ($message = Session::get('success'))
+                                        <div class="alert alert-success alert-block" id="alert-success">
+                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            <strong>{{ $message }}</strong>
+                                        </div>
+                                        @endif
+
+                                            @if ($editmode)
+
+                                            <input type="hidden" name="id" value="{{ $edituser['id'] }}">
+                                            @else
+                                            <input type="hidden" name="role" value="admin">
+                                            @endif
+
+                                            <!-- <input type="hidden" name="freecount" value="{{ $_GET['freecount'] ?? ''}}"> -->
+
+                                             <div class="error-container"></div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-email" placeholder="name" name="name" id="name"
+                                                        type="text" value="{{ old('name') ?? $edituser['name'] ?? '' }}" >
+                                                    <p style="display:none" class="name error text-danger"></p>
+                                                </div>
+                                        </div>
 
 
-<div class="page-body">
-<!-- New Product Add Start -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-sm-8 m-auto">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-header-2">
-                                    <h5>Users Information</h5>
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Email</label>
+                                            <div class="col-sm-9">
+                                                <input class="form-control form-control-email" placeholder="{{ __('auth.mailaddress') }}" name="email" id="email"
+                                                    type="email" value="{{ old('email') ?? $edituser['email'] ?? '' }}" >
+                                                <p style="display:none" class="email error text-danger"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Password</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-password" placeholder="{{ __('auth.password') }}" id="password"
+                                                        type="password"  autocomplete="new-password" value="{{ $edituser['password'] ?? '' }}">
+                                                    <p style="display:none" class="password error text-danger"></p>
+                                                </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Confirm Password</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-password" placeholder="{{ __('auth.confirmpassword') }}" id="password_confirmation"
+                                                        type="password" value="{{ $edituser['password'] ?? '' }}">
+                                                    <p style="display:none" class="password_confirmation  error text-danger"></p>
+                                                </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Phone</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-email" placeholder="Phone" name="phone" id="phone"
+                                                        type="number" value="{{ old('phone') ?? $edituser['phone'] ?? '' }}" >
+                                                    <p style="display:none" class="phone error text-danger"></p>
+                                                </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Address</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-control-email" placeholder="Address" name="address" id="address"
+                                                        type="text" value="{{ old('address') ?? $edituser['address'] ?? '' }}" >
+                                                    <p style="display:none" class="address error text-danger"></p>
+                                                </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button class="btn btn-animation ms-auto fw-bold" type="submit">
+                                          @if (!$editmode)
+                                              <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                               登録する
+                                          @else
+                                              <i class="fa fa-edit" aria-hidden="true"></i>
+                                               情報を修正する
+                                          @endif
+                                            </button>
+                                         </div>
+
+
+                                    </form>
                                 </div>
-
-                                <form class="theme-form theme-form-2 mega-form">
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Username</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Username">
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Email</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" type="email" name="email" value="" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
-     <label class="form-label-title col-sm-3 mb-0">Password</label>
-     <div class="col-sm-9">
-     <input class="form-control" type="password" name="password" value=""  id="password" required>
-     </div>
- </div>
-
- <div class="mb-4 row align-items-center">
- <label class="form-label-title col-sm-3 mb-0">Confirm Password</label>
- <div class="col-sm-9">
- <input class="form-control" type="password" id="confirm_password" required>
-<span id="confirm-password-error" style="color: red;"></span>
- </div>
-</div>
-
-<div class="mb-4 row align-items-center">
-    <label class="form-label-title col-sm-3 mb-0">Photo</label>
-    <div class="col-sm-9">
-    <input class="form-control form-choose" type="file" id="image" name="photo">
-  {{-- <img src="#" alt="profile" width="100" id="showImage"> --}}
-    </div>
-</div>
-
-
-<div class="mb-4 row align-items-center">
-    <label class="form-label-title col-sm-3 mb-0">Phone Number</label>
-    <div class="col-sm-9">
-    <input class="form-control" type="number" name="phone" value="">
-    </div>
-</div>
-
-<div class="mb-4 row align-items-center">
-    <label class="form-label-title col-sm-3 mb-0">Address</label>
-    <div class="col-sm-9">
-    <input class="form-control" type="text" name="address" value="">
-    </div>
-</div>
-
-
-                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">Update</button>
-                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- New Product Add End -->
     </div>
-    <!-- New Product Add End -->
-</div>
 
-<script>
-    ClassicEditor
-        .create(document.querySelector('#ckeditor'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
-<script>
-    function mainThamUrl(input){
-        if(input.files && input.files[0]){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#mainThmb').attr('src', e.target.result).width(70).height(70);
-            };
-            reader.readAsDataURL(input.files[0]); // Corrected method name
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#ckeditor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        function mainThamUrl(input){
+            if(input.files && input.files[0]){
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#mainThmb').attr('src', e.target.result).width(70).height(70);
+                };
+                reader.readAsDataURL(input.files[0]); // Corrected method name
+            }
         }
-    }
-</script>
-<script>
-    document.getElementById('multiImg').addEventListener('change', function(event) {
-        const preview = document.getElementById('preview_img');
-        preview.innerHTML = '';
+    </script>
+    <script>
+        document.getElementById('multiImg').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview_img');
+            preview.innerHTML = '';
 
-        Array.from(event.target.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '100px';
-                img.style.maxHeight = '100px';
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+            Array.from(event.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100px';
+                    img.style.maxHeight = '100px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
         });
-    });
-</script>
+    </script>
 
-</x-auth-layout>
+    </x-auth-layout>
+
+
+
+

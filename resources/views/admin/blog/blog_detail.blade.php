@@ -1,6 +1,6 @@
 <x-auth-layout>
-<div class="page-body">
-    <!-- Product Detail Start -->
+    <div class="page-body">
+        <!-- Blog Detail Start -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -13,29 +13,34 @@
                                     </div>
 
                                     <form class="theme-form theme-form-2 mega-form">
-
+                                        <img class="img-fluid" src="{{ asset('images/'.($blog->headimg ?? 'blog/blog-details.jpg')   ) }}" alt="">
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Blog Name</label>
                                             <div class="col-sm-9">
-                                                <p>Agriculture Conference Harvest 2022 In Paris</p>
+                                                <p>{{ $blog->title }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Created Date</label>
+                                            <div class="col-sm-9">
+                                                <span class="post-meta-date">{{ date('Y\年m\月d\日', strtotime($blog->created_at)) }}</span>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Description</label>
                                             <div class="col-sm-9">
-                                                <p>Doloribus tenetur, fugit maxime soluta aperiam obcaecati velit blanditiis magnam earum eum incidunt, quis amet deserunt at laborum modi quisquam quidem rerum?</p>
+                                                <p>{!! $blog->content !!}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Images</label>
                                             <div class="col-sm-9">
-                                                <p>Images</p>
+                                                <p> <img class="img-fluid" src="{{ asset('images/'.($blog->image ?? 'blog/blog-details.jpg')   ) }}" alt=""></p>
                                             </div>
                                         </div>
-
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
                                     </form>
                                 </div>
                             </div>
@@ -44,6 +49,6 @@
                 </div>
             </div>
         </div>
-        <!-- Product Detail End -->
-</div>
+        <!-- Blog Detail End -->
+    </div>
 </x-auth-layout>

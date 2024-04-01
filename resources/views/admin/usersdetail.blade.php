@@ -16,14 +16,14 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Roles</label>
                                             <div class="col-sm-9">
-                                                <p>Buyer</p>
+                                                <p>{{ $user->role }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">User Name</label>
                                             <div class="col-sm-9">
-                                                <p>Everett C. Green</p>
+                                                <p>{{ $user->name }}</p>
                                             </div>
                                         </div>
 
@@ -31,7 +31,7 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Phone</label>
                                             <div class="col-sm-9">
-                                                <p>+ 802 - 370 - 2430</p>
+                                                <p>{{ $user->phone }}</p>
                                             </div>
                                         </div>
 
@@ -39,18 +39,17 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Email</label>
                                             <div class="col-sm-9">
-                                                <p>EverettCGreen@rhyta.com</p>
+                                                <p>{{ $user->email }}</p>
                                             </div>
                                         </div>
                                         <div class="mb-2 row align-items-center">
      <label
          class="col-sm-3 col-form-label form-label-title">Address</label>
      <div class="col-sm-9">
-         <p>Tokyo</p>
+         <p>{{ $user->address }}</p>
      </div>
  </div>
 
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
                                     </form>
                                 </div>
                             </div>
@@ -62,3 +61,9 @@
         <!-- Product Detail End -->
 </div>
 </x-auth-layout>
+
+
+
+
+
+

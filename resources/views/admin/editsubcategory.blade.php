@@ -15,7 +15,7 @@
                                 </div>
 
                                 <form class="theme-form theme-form-2 mega-form">
-                                  
+
                                     <div class="mb-4 row align-items-center">
       <label
           class="col-sm-3 col-form-label form-label-title">Category</label>
@@ -43,7 +43,7 @@
 
           </select>
       </div>
-  </div>
+    </div>
 
     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
 
-         
+
                                     <button type="submit" class="btn btn-animation ms-auto fw-bold">Update</button>
                                 </form>
                             </div>

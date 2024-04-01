@@ -13,7 +13,7 @@
     <link rel="icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Fastkart - Reports</title>
+    <title>Seller</title>
 
     <!-- Google font-->
     <link
@@ -159,10 +159,14 @@
                         </li>
                         <li class="profile-nav onhover-dropdown pe-0 me-0">
                             <div class="media profile-media">
-                                <img class="user-profile rounded-circle" src="{{ asset('backend/assets/images/users/4.jpg') }}" alt="">
+                                @if(Auth::user()->user_photo)
+                                    <img src="{{ asset('upload/profile/' . Auth::user()->user_photo) }}" class="user-profile rounded-circle">
+                                @else
+                                    <img src="{{ asset('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
+                                @endif
                                 <div class="user-name-hide media-body">
-                                    <span>Emay Walter</span>
-                                    <p class="mb-0 font-roboto">Seller<i class="middle ri-arrow-down-s-line"></i></p>
+                                    <span>{{ Auth::user()->name }}</span>
+                                    {{-- <p class="mb-0 font-roboto">{{ Auth::user()->name }}<i class="middle ri-arrow-down-s-line"></i></p> --}}
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
@@ -317,7 +321,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
                         <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                        <form action="{{ route('adminlogout')}}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn  btn--yes btn-primary">Yes</button>
+                        </form>
                     </div>
                 </div>
             </div>

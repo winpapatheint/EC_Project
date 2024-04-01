@@ -9,10 +9,7 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'photo',
+        'user_id',
         'bank_name',
         'bank_acc_type',
         'bank_branch',
@@ -26,4 +23,10 @@ class Seller extends Model
         'address',
         'url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

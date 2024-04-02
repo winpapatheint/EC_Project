@@ -182,6 +182,7 @@
                                         <i data-feather="log-out"></i>
                                         <span>Log out</span>
                                     </a>
+
                                 </li>
                             </ul>
                         </li>

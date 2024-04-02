@@ -26,7 +26,7 @@ class Product extends Model
         'short_desc',
         'long_desc',
         'product_thambnail',
-        'comession',
+        'commission',
         'com_price',
         'status',
         'estimate_date',

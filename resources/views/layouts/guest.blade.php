@@ -35,6 +35,7 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/review.min.css') }}">
 
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/feather-icon/_feather-icon.scss') }}">
@@ -315,7 +316,7 @@
                                                     <a href="{{ route('login') }}">Log In</a>
                                                 </li>
                                                 <li class="product-box-contain">
-                                                    <a href="{{route ('front-end.user-register')}}">Buyer Register</a>
+                                                    <a href="{{route ('user_register')}}">Buyer Register</a>
                                                 </li>
 
                                             </ul>

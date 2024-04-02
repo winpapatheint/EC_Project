@@ -16,14 +16,14 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                             <div class="col-sm-9">
-                                                <p>CN-1230</p>
+                                                <p>{{ $product->product_code }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                             <div class="col-sm-9">
-                                                <p>Orange</p>
+                                                <p>{{ $product->product_name }}</p>
                                             </div>
                                         </div>
 
@@ -31,11 +31,11 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Brand</label>
                                             <div class="col-sm-9">
-                                                <p>Grocery</p>
+                                                <p>{{ $product->brand_name }}</p>
                                             </div>
                                         </div>
 
-                                        <div class="mb-2 row align-items-center">
+                                        {{-- <div class="mb-2 row align-items-center">
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Category</label>
                                             <div class="col-sm-9">
@@ -49,40 +49,40 @@
                                             <div class="col-sm-9">
                                                 <p>-</p>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                             <div class="col-sm-9">
-                                                <p>Tags</p>
+                                                <p>{{ $product->product_tags }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                             <div class="col-sm-9">
-                                                <p>30g</p>
+                                                <p>{{ $product->product_size }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                             <div class="col-sm-9">
-                                                <p>-</p>
+                                                <p>{{ $product->product_color }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                             <div class="col-sm-9">
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+                                                <p>{{ $product->short_desc }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                             <div class="col-sm-9">
-                                                <p>Doloribus tenetur, fugit maxime soluta aperiam obcaecati velit blanditiis magnam earum eum incidunt, quis amet deserunt at laborum modi quisquam quidem rerum?</p>
+                                                <p>{{ $product->long_desc }}</p>
                                             </div>
                                         </div>
 
@@ -91,39 +91,39 @@
                                                 class="col-sm-3 col-form-label form-label-title">Thumbnail
                                                 Image</label>
                                             <div class="col-sm-9">
-                                                <p>Image</p>
+                                                <img width="100" src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}">
                                             </div>
                                         </div>
 
-                                        <div class="mb-2 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
-                                            <div class="col-sm-9">
-                                                <p>Images</p>
-                                            </div>
-                                        </div>
+
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price</label>
                                             <div class="col-sm-9">
-                                                <p>120</p>
+                                                <p>{{ $product->selling_price }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label class="col-sm-3 form-label-title">Discount Price</label>
+                                            <label class="col-sm-3 form-label-title">Discount</label>
                                             <div class="col-sm-9">
-                                                <p>100</p>
+                                                <p>{{ $product->discount_percent }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Product Quantity</label>
                                             <div class="col-sm-9">
-                                                <p>30</p>
+                                                <p>{{ $product->product_qty }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Delivey Estimate Day</label>
+                                            <div class="col-sm-9">
+                                                <p>{{ $product->estimate_date }}</p>
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-animation ms-auto fw-bold">Edit</button>
                                     </form>
                                 </div>
                             </div>

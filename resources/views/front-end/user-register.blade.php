@@ -50,7 +50,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="fullname">Name</label>
-                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}">
+                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}" required>
                                             <span style="color:red">@error('name'){{$message}} @enderror</span>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="email">Email Address</label>
-                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}">
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}" required>
                                             <span style="color:red">@error('email'){{ $message }} @enderror</span>
 
                                         </div>
@@ -67,8 +67,24 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}">
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}" required>
                                             <span style="color:red">@error('password'){{$message}} @enderror</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <input type="address" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
+                                            <span style="color:red">@error('address'){{$message}} @enderror</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <input type="phone" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
+                                            <span style="color:red">@error('phone'){{$message}} @enderror</span>
                                         </div>
                                     </div>
 

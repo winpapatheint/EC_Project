@@ -15,7 +15,7 @@
                     <div class="card card-table">
                         <div class="card-body">
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>All Users</h5>
+                                <h5>All SubAdmin</h5>
                                 <form class="d-inline-flex">
                                     <a href="{{ url('/admin/registersubadmin' ) }}"
                                         class="align-items-center btn btn-theme d-flex">
@@ -53,14 +53,14 @@
 
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$user->id}}" class="toggle-class" type="checkbox"
-                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive" >
+                                                                data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive">
                                                         </label>
                                                     </td>
 
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/userdetail/".user->id ) }}">
+                                                                <a href="{{ url("/subadmindetail/".$user->id ) }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
@@ -120,7 +120,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <form method="POST" action="{{ route('deleteuser') }}" style="display:flex;">
+                                <form method="POST" action="{{ route('deletesubadmin') }}" style="display:flex;">
                                     @csrf
                                         <input type="hidden" name="id" value="{{ $user->id }}">
                                             <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"

@@ -70,38 +70,41 @@
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-dashboard-tab"
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-dashboard')}}"><i data-feather="home"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_dashboard')}}"><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-order-tab" 
-                                    style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-order')}}"><i
+                                    style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
-                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-delivery')}}"><i data-feather="box"></i>
+                                    type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('showAddress')}}"><i
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Address</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-payment')}}"><i
-                                        data-feather="credit-card"></i>Payment Method</a>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_cards')}}"><i
+                                        data-feather="credit-card"></i>Payment Methods</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-profile-tab"
-                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('front-end.user-profile')}}"><i data-feather="user"></i>
+                                    type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
+
+                <!-- Show Profile Start -->
+                <input type="hidden" name="name" value="1">
                 <div class="col-xxl-9 col-lg-8">
                     <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
@@ -119,14 +122,15 @@
                                             </span>
                                         </div>
                                     </div>
+                        @foreach ($profile as $list)
                         <div class="profile-detail dashboard-bg-box">
                             <div class="dashboard-title">
-                                <h3>Profile Name</h3>
+                                <h3>{{ $list->name }}</h3>
                             </div>
-                            <div class="profile-name-detail">
+                            <!--<div class="profile-name-detail">
                                 <div class="d-sm-flex align-items-center d-block">
-                                    <h3>Vicki E. Pope</h3>
-                                    <div class="product-rating profile-rating">
+                                    <h3>Honey Zin</h3>
+                                     <div class="product-rating profile-rating">
                                         <ul class="rating">
                                             <li>
                                                 <i data-feather="star" class="fill"></i>
@@ -144,7 +148,7 @@
                                                 <i data-feather="star"></i>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> 
                                 </div>
 
                                 <a href="javascript:void(0)" data-bs-toggle="modal"
@@ -174,43 +178,34 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> 
 
                             <div class="profile-description">
                                 <p>Residences can be classified by and how they are connected to
                                     neighbouring residences and land. Different types of housing tenure can
                                     be used for the same physical type.</p>
-                            </div>
+                            </div>-->
                         </div>
 
                         <div class="profile-about dashboard-bg-box">
                             <div class="row">
                                 <div class="col-xxl-7">
                                     <div class="dashboard-title mb-3">
-                                        <h3>Profile About</h3>
+                                        <h3>Your Account</h3>
                                     </div>
 
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tbody>
                                                 <tr>
-                                                    <td>Gender :</td>
-                                                    <td>Female</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Birthday :</td>
-                                                    <td>21/05/1997</td>
-                                                </tr>
-                                                <tr>
                                                     <td>Phone Number :</td>
                                                     <td>
-                                                        <a href="javascript:void(0)"> +91 846 - 547 -
-                                                            210</a>
+                                                        <a href="javascript:void(0)"> +91 {{ $list->phone }}</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Address :</td>
-                                                    <td>549 Sulphur Springs Road, Downers, IL</td>
+                                                    <td>{{ $list->address }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -226,7 +221,7 @@
                                                 <tr>
                                                     <td>Email :</td>
                                                     <td>
-                                                        <a href="javascript:void(0)">vicki.pope@gmail.com
+                                                        <a href="javascript:void(0)">{{ $list->email }}
                                                             <span data-bs-toggle="modal"
                                                                 data-bs-target="#editProfile">Edit</span></a>
                                                     </td>
@@ -239,7 +234,7 @@
                                                                 data-bs-target="#editProfile">Edit</span></a> -->
 
                                                         <a data-bs-toggle="modal"
-                                                        href="javascript:void(0)">********<span data-bs-toggle="modal"
+                                                        href="javascript:void(0)">{{ $list->password }}<span data-bs-toggle="modal"
                                                                 data-bs-target="#changePassword">Edit</span></a>
                                                     </td>
                                                 </tr>
@@ -248,10 +243,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>   
+                        </div>  
+                        @endforeach 
                     </div>
                     <!-- User Profile View End -->
                 </div>
+
             </div>
         </div>
     </section>

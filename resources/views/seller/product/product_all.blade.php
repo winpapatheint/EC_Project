@@ -62,9 +62,9 @@
                                                 @endif
                                             </td>
 
-                                            <td class="col-sm-9">
+                                            <td>
                                                 <label class="switch">
-                                                    <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>
+                                                    <input data-width="80" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>
                                                 </label>
                                             </td>
 

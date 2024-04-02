@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Shop;
 use App\Models\User;
 use App\Models\Seller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Prefecture;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
     public function SellerRegister()
     {
-        return view('auth.seller_register');
+        $prefecture = Prefecture::get();
+        return view('auth.seller_register',compact('prefecture'));
     }
 
     public function SellerRegistered(Request $request)
@@ -55,5 +54,4 @@ class RegisterController extends Controller
         ]);
         return redirect('/login');
     }
-
 }

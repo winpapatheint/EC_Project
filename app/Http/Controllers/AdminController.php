@@ -47,21 +47,33 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        return view('front-end.index');
+        $list = DB::table('Categorys as C')
+                    ->select('C.*')
+                    ->orderBy('C.created_at', 'desc')->paginate(999);
 
+        return view('front-end.welcome',compact('list'));
     }
 
     public function news()
     {
         $limit = 10;
+
         $blogs = DB::table('Blog')
-                ->select(  'Blog.*')
-                ->orderBy('created_at', 'desc')->paginate($limit);
+                    ->select( 'U.name as authorby', 'Blog.*')
+                    ->join('users as U', function ($join) {
+                        $join->on('Blog.created_by', '=', 'U.id');
+                    })
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $limit = 4;
+        $latestblog = DB::table('Blog')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate($limit);
 
         $ttl = $blogs->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.blog-list',compact('blogs','ttlpage','ttl'));
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog'));
 
     }
 
@@ -499,13 +511,32 @@ class AdminController extends Controller
     public function blogdetail($id)
     {
         $blog = DB::table('blog')
-                    ->select( 'blog.*')
-                    ->where('blog.id',$id)->get();
+        ->select( 'blog.*')
+        ->where('blog.id',$id)->get();
 
-        // print_r($blog[0]->created_at);die;
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
+    }
+
+    public function bloglistdetail($id)
+    {
+        $blog = DB::table('blog')
+                    ->select( 'U.name as authorby', 'blog.*')
+                    ->join('users as U', function ($join) {
+                        $join->on('blog.created_by', '=', 'U.id');
+                    })
+                    ->where('blog.id',$id)->get();
+
+        $blog = $blog[0];
+
+        $limit = 4;
+        $latestblog = DB::table('Blog')
+                    ->where('id','<>',$id)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate($limit);
+
+        return view('front-end.blog-detail',compact('blog','latestblog'));
     }
 
     public function productdetail($id)
@@ -1048,6 +1079,8 @@ class AdminController extends Controller
                'title' => $request->title,
                'content' => $request->content,
                'image' => $imageName,
+               'created_by' => Auth::user()->id,
+               'author' => Auth::user()->name,
                'created_at' => $time->format('Y-m-d H:i:s'),
                'updated_at' => $time->format('Y-m-d H:i:s')
            ]);
@@ -1058,6 +1091,8 @@ class AdminController extends Controller
 
            $updval = array('title' => $request->title,
                            'content' => $request->content,
+                           'created_by' => Auth::user()->id,
+                           'author' => Auth::user()->name,
                            'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 

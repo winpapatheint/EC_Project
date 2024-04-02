@@ -170,8 +170,8 @@
                             <div class="media profile-media">
                                 <img class="user-profile rounded-circle" src="{{ asset('backend/assets/images/users/4.jpg') }}" alt="">
                                 <div class="user-name-hide media-body">
-                                    <span>Emay Walter</span>
-                                    <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
+                                    <span>{{ auth()->user()->name }}</span>
+                                    <p class="mb-0 font-roboto">{{ auth()->user()->role }}<i class="middle ri-arrow-down-s-line"></i></p>
                                 </div>
                             </div>
 
@@ -189,10 +189,11 @@
                                 <li>
                                     <form method="POST" action="{{ route('adminlogout') }}">
                                         @csrf
-                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"> logout</a>
-                                        </form>
-
-
+                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            <i data-feather="log-out"></i>
+                                            <span>Log Out</span>
+                                        </a>
+                                    </form>
                                 </li>
                             </ul>
                         </li>

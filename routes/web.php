@@ -24,10 +24,11 @@ use App\Http\Controllers\Auth\RegisterController;
 //Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
-Route::get('/', function () {
-    return view('front-end.welcome');
-});
+//Route::get('/', function () {
+   //return view('front-end.welcome');
+//});
 
+route::get('/',[AdminController::class,'welcome']);
 
 
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
@@ -80,10 +81,10 @@ Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
 
 Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
 
-Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
+
 
 Route::get('/news', [AdminController::class, 'news']);
-
+Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 

@@ -32,15 +32,23 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Brand</label>
                                             <div class="col-sm-9">
+                                                <p>{{ $data->country->name }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2 row align-items-center">
+                                            <label
+                                                class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                            <div class="col-sm-9">
                                                 <p>{{ $data->brand->brand_name }}</p>
                                             </div>
                                         </div>
 
-                                        {{-- <div class="mb-2 row align-items-center">
+                                        <div class="mb-2 row align-items-center">
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Category</label>
                                             <div class="col-sm-9">
-                                                <p>Fruit</p>
+                                                <p>{{ $data->category->category_name }}</p>
                                             </div>
                                         </div>
 
@@ -48,9 +56,17 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Subcategory</label>
                                             <div class="col-sm-9">
-                                                <p>-</p>
+                                                <p>{{ $data->subcategory->sub_category_name }}</p>
                                             </div>
-                                        </div> --}}
+                                        </div>
+
+                                        <div class="mb-2 row align-items-center">
+                                            <label
+                                                class="col-sm-3 col-form-label form-label-title">Subcategory Title</label>
+                                            <div class="col-sm-9">
+                                                <p>{{ $data->subcategorytitle->sub_category_titlename }}</p>
+                                            </div>
+                                        </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
@@ -99,7 +115,9 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                             <div class="col-sm-9">
-                                                <img width="100" src="{{ asset('upload/multiImg/'.$data-> multi_img[]) }}">
+                                                @foreach ($multiImgs as $key => $img)
+                                                    <img width="100" src="{{ asset('upload/multiImg/'.$img->photo_name) }}">
+                                                @endforeach
                                             </div>
                                         </div>
 
@@ -129,7 +147,7 @@
                                                 <p>{{ $data->estimate_date }}</p>
                                             </div>
                                         </div>
-                                        <a href="{{ route('seller.edit.product') }}">
+                                        <a href="{{ route('seller.edit.product',$data->id) }}">
                                             <button type="button" class="btn btn-animation">Edit</button>
                                         </a>
                                     </form>

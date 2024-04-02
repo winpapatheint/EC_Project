@@ -12,10 +12,10 @@
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                        <form method="POST" action="{{ route('seller.help.store') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
+                                        <form method="POST" action="{{ route('seller.help.add') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
                                             @csrf
                                             <div class="card-header-1">
-                                                <h5>Contact Us</h5>
+                                                <h5>{{ $helps->title }} Detail</h5>
                                             </div>
 
                                             <div class="row">
@@ -23,29 +23,32 @@
                                                     <label
                                                         class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="text" name="title">
+                                                        <p>{{ $helps->title }}</p>
                                                     </div>
                                                 </div>
 
-                                                <div class="mb-4 row align-items-center">
-                                                    <label
-                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
-                                                    <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="file" name="image">
+                                                @if (!empty($helps->img))
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                                                        <div class="col-md-9 col-lg-10">
+                                                            <img width="200" src="{{ asset('upload/shop/'.$helps->img) }}">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endif
 
                                                 <div class="row align-items-center">
                                                     <label
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">Message
                                                         </label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <textarea class="form-control" name="reason" id="" rows="5"></textarea>
+                                                        <p>{{ $helps->reason }}</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-grid gap-2 d-md-block">
-                                                <button class="btn btn-animation" type="submit">Send</button>
+                                            <div class="d-grid gap-2 d-md-block"  style="margin-top: 20px;">
+                                                <a href="{{ route('seller.help.add') }}">
+                                                    <button class="btn btn-animation" type="submit">Reply</button>
+                                                </a>
                                             </div>
                                         </form>
                                     </div>

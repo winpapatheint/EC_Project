@@ -29,9 +29,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_code" type="text" placeholder="Product Code" value="{{ $products->product_code }}">
-                                            @error('product_code')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -39,9 +36,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" placeholder="Product Name" value="{{ $products->product_name }}">
-                                            @error('product_name')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -120,9 +114,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
                                             <input type="text" name="product_tags" class="form-control" data-role="tagsinput" id="product_tags" value="New product,New" placeholder="Type tag & hit enter" value="{{ $products->product_tags  }}">
-                                            @error('product_tags')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -130,9 +121,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter" value="{{ $products->product_size }}">
-                                            @error('product_size')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -140,9 +128,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter" value="{{ $products->product_color }}">
-                                            @error('product_color')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -150,9 +135,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="short_desc">{{ $products->short_desc }}</textarea>
-                                            @error('short_desc')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -160,9 +142,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="long_desc" id="ckeditor">{{ $products->long_desc }}</textarea>
-                                            @error('long_desc')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -180,9 +159,6 @@
                                         <label class="col-sm-3 form-label-title">Price</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" value="{{  $products->selling_price }}">
-                                            @error('selling_price')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -197,9 +173,6 @@
                                         <label class="col-sm-3 form-label-title">Product Quantity</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_qty" type="number" placeholder="0" min="1" value="{{ $products->product_qty }}">
-                                            @error('product_qty')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -207,9 +180,6 @@
                                         <label class="col-sm-3 form-label-title">Estimated Date</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="estimate_date" type="number" placeholder="0" min="1" value="{{ $products->estimate_date }}">
-                                            @error('estimate_date')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 

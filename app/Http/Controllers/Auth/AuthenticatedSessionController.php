@@ -17,6 +17,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
+        if (!empty(Auth::user()->role)) {
+            return redirect('/'.Auth::user()->role);
+        }
 
         if (!empty(Auth::user()->role)) {
             if (Auth::user()->role == 'admin') {
@@ -50,7 +53,7 @@ class AuthenticatedSessionController extends Controller
         // print_r(Auth::user()->role);die();
         if (Auth::user()->role == 'admin') {
 
-            return redirect()->intended(RouteServiceProvider::ADMIN);
+            return redirect('/admin');
         }
 
         else if (Auth::user()->role == 'seller') {

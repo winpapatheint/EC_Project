@@ -62,9 +62,9 @@
                                                 @endif
                                             </td>
 
-                                            <td class="col-sm-9">
+                                            <td>
                                                 <label class="switch">
-                                                    <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>
+                                                    <input data-width="80" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>
                                                 </label>
                                             </td>
 
@@ -104,31 +104,6 @@
     </div>
     <!-- Container-fluid Ends-->
 </div>
-<!-- Delete Modal Box Start -->
- {{-- <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="remove-box">
-                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                        new permission for this object</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <a class="btn btn-animation" href="{{route('seller.delete.product',$item->id)}}">Yes</a>
-            </div>
-            @endif
-        </div>
-    </div>
-</div> --}}
-<!-- Delete Modal Box End -->
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

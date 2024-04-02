@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Product;
 use App\Models\Seller;
+use App\Models\MultiImg;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -48,9 +50,23 @@ class AdminController extends Controller
         return view('front-end.index');
 
     }
+
+    public function news()
+    {
+        $limit = 10;
+        $blogs = DB::table('Blog')
+                ->select(  'Blog.*')
+                ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $blogs->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl'));
+
+    }
+
     public function validatesubadmin($request, $editpassword = true , $editmode = false, $emailuniquecheck = true, $needimg = true)
     {
-
 
         $check = [
             'name' => 'required|string|max:255',
@@ -98,19 +114,11 @@ class AdminController extends Controller
     public function updateuser(Request $request)
     {
         if (!empty($request->id)) {
-           $userprofile = User::find($request->id);
 
-            $userid = DB::table('users')
-                    ->select('users.id','users.email')
-                    ->where('id', $request->id)->get()->pluck('email');
+            $userprofile = User::find($request->id);
+        }
 
-            $sellerid = DB::table('sellers')
-                    ->select('sellers.id')
-                    ->where('email', $userid[0])->pluck('id');
-
-            $sellerprofile = Seller::find($sellerid[0]);
-
-        } else {
+         else {
            $userprofile = Auth::user();
         }
 
@@ -126,6 +134,143 @@ class AdminController extends Controller
             }else {
                 $emailuniquecheck = true;
             }
+
+
+            $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
+        //return response()->json(['error'=>'123']);
+        }
+
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+                return response()->json(['success'=>'allpasses']);
+            }
+            return response()->json(['error'=>$validator->errors()]);
+
+        }
+
+        $newval = array('name' => $request->name,
+                        'email' => $request->email,
+                    );
+
+
+        if (!empty($request->shopname)) {
+            $newval['shop_name'] = $request->shopname;
+        }
+
+        if (!empty($request->shopyear)) {
+            $newval['shop_establish'] = $request->shopyear;
+        }
+
+        if (!empty($request->phone)) {
+            $newval['phone'] = $request->phone;
+        }
+
+        if (!empty($request->zipcode)) {
+            $newval['zip_code'] = $request->zipcode;
+        }
+
+        if (!empty($request->shoplink)) {
+            $newval['url'] = $request->shoplink;
+        }
+
+        if (!empty($request->address)) {
+            $newval['address'] = $request->address;
+        }
+
+
+        // Bank
+
+        if (!empty($request->bankname)) {
+            $newval['bank_name'] = $request->bankname;
+        }
+
+        if (!empty($request->accounttype)) {
+            $newval['bank_acc_type'] = $request->accounttype;
+        }
+
+        if (!empty($request->branchname)) {
+            $newval['bank_branch'] = $request->branchname;
+        }
+
+        if (!empty($request->bankaccountname)) {
+            $newval['bank_acc_name'] = $request->bankaccountname;
+        }
+
+        if (!empty($request->bankaccountnumber)) {
+            $newval['bank_acc_no'] = $request->bankaccountnumber;
+        }
+        //END Bank
+
+        if (!empty($request->password)) {
+            $newval['password'] = Hash::make($request->password);
+        }
+
+        if (!empty($request->shoplogo)) {
+            $time = new DateTime();
+            $imageNames = time().'.'.$request->shoplogo->extension();
+
+            $request->shoplogo->move(public_path('upload/shop'), $imageName);
+            $newval['shop_logo'] = $imageName;
+        }
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+
+            $request->image->move(public_path('images'), $imageName);
+            $newval['user_photo'] = $imageName;
+        }
+
+        // print_r($upd);die;
+        if ($userprofile->role == 'admin' OR $userprofile->role == 'seller' OR $userprofile->role == 'buyer') {
+        $upd = $userprofile->update($newval);
+        }
+        if ($userprofile->role == 'seller') {
+
+        $sellerupd = $sellerprofile->update($newval);
+        }
+        // print_r($userprofile->role);die;
+        $msg = __('auth.donechange');
+
+        return back()->with('success',$msg);
+
+    }
+
+
+
+    public function updatehost(Request $request)
+    {
+        if (!empty($request->id)) {
+
+            $userprofile = User::find($request->id);
+
+            $userid = DB::table('users')
+                    ->select('users.id','users.email')
+                ->where('id', $request->id)->get()->pluck('email');
+
+            $sellerid = DB::table('sellers')
+                    ->select('sellers.id')
+                    ->where('email', $userid[0])->pluck('id');
+
+            $sellerprofile = Seller::find($sellerid[0]);
+
+        }
+        else {
+           $userprofile = Auth::user();
+        }
+
+        if ($userprofile->role == 'admin') {
+
+            $checkpassword = true;
+            if ( empty($request->password) AND empty($request->password_confirmation)) {
+                $checkpassword = false;
+            }
+
+            if ($userprofile->email == $request->email) {
+                $emailuniquecheck = false;
+            }else {
+                $emailuniquecheck = true;
+            }
+
 
             $validator = $this->validatesubadmin($request,$checkpassword,true,$emailuniquecheck);
         //return response()->json(['error'=>'123']);
@@ -363,6 +508,22 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
+    public function productdetail($id)
+    {
+        $products = DB::table('Products')
+                    ->select( 'Products.*','Brands.*')
+                    ->join('Brands', function ($join) {
+                        $join->on('Brands.id', '=', 'Products.brand_id');
+                    })
+                    ->where('Products.id',$id)->get();
+
+        // print_r($blog[0]->created_at);die;
+        $product = $products[0];
+
+        return view('admin.product.product_detail',compact('product'));
+    }
+
+
     public function editdata(Request $request, $role, $id)
     {
         if (empty($role)) {
@@ -397,6 +558,7 @@ class AdminController extends Controller
         $editmode = true;
 
         if ($role == 'admin') {
+
             return view('admin.edituser',compact('editmode','editother','edituser'));
         } else if ($role == 'buyer') {
             return view('admin.editbuyerprofile',compact('editmode','editother','edituser'));
@@ -467,14 +629,41 @@ class AdminController extends Controller
 
     }
 
+    public function indexstatus(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $product->status = $request->status;
+        $product->save();
+        return redirect()->back();
+    }
+
+    public function indexuserstatus(Request $request)
+    {
+        $user = User::find($request->userid);
+        $user->status = $request->status;
+        $user->save();
+        return redirect('/admin/profile')->back();
+    }
+
     public function indexuser()
     {
 
         $limit = 10;
+
         // print_r($type);die;
 
+        $updval = array('status' => '1');
         $users = DB::table('users')->whereIn('role',['seller','buyer'])
+                    ->where('email_verified_at','<>','')
+                    ->where(function ($query) {
+                        $query->whereNotNull('email_verified_at')
+                    ->orWhereNull('email_verified_at');
+                    })
                     ->orderBy('created_at', 'desc')->paginate($limit);
+
+        foreach ($users as $user) {
+            DB::table('users')->where('id', $user->id)->update($updval);
+        }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -672,6 +861,25 @@ class AdminController extends Controller
         return view('admin.blog.addblog',compact('data','editmode'));
 
     }
+
+    public function editproduct($id)
+    {
+        $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
+        $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('Categorys')->orderBy('created_at', 'desc')->get();
+        $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
+        $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        $data = DB::table('Products as P')
+                ->where('P.id',$id)
+                ->orderBy('P.created_at', 'desc')->first();
+
+        $editmode = true;
+
+        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs'));
+
+    }
+
     public function editsubtitle($id)
     {
         $subtitle = DB::table('Sub_category_titles')
@@ -772,13 +980,17 @@ class AdminController extends Controller
 
     public function storesubcategory(Request $request)
     {
+
+
         $valarr = [
             'category' => 'not_in:0',
             'subcategory' => 'required|string|max:255',
             'subname' => 'required|string|max:255', // Validate each subtitle individually
         ];
-
+        if (empty($request->id))
+        {
         $request->validate($valarr);
+    }
         $time = new DateTime();
         if (empty($request->id)) {
 
@@ -860,6 +1072,61 @@ class AdminController extends Controller
        }
 
    }
+
+   public function storeproduct(Request $request)
+     {
+        $time = new DateTime();
+
+        //commision calculate
+        $originalPrice = $request->selling_price;
+        $discountPercentage = $request->discount_percent;
+        $discountAmount = ($originalPrice * $discountPercentage) / 100;
+        $discountedPrice = $originalPrice - $discountAmount;
+
+        $commisonPrice = $request->commision;
+        $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
+        $sellerAmount = $discountedPrice - $commisonAmount;
+
+        $adminAmount = $discountedPrice -  $sellerAmount;
+
+        $updval = array('product_code' => $request->productcode,
+                        'product_name' => $request->productname,
+                        'country_id' => $request->country,
+                        'brand_id' => $request->brand,
+                        'category_id' => $request->category,
+                        'sub_category_title_id' => $request->subcattitle,
+                        'sub_category_id' => $request->subcategory,
+                        'product_tags' => $request->product_tags,
+                        'product_size' => $request->product_size,
+                        'product_color' => $request->product_color,
+                        'short_desc' => $request->short_desc,
+                        'long_desc' => $request->long_desc,
+
+                        'selling_price' => $request->selling_price,
+                        'discount_percent' => $request->discount_percent,
+                        'product_qty' => $request->product_qty,
+                        'estimate_date' => $request->estimate_date,
+                        'commission' => $request->commision,
+                        'com_price' => $adminAmount,
+                        'seller_amount' => $sellerAmount,
+                        'updated_at' => $time->format('Y-m-d H:i:s')
+                        );
+
+                        if (!empty($request->product_thambnail)) {
+                            $imageName = time().'.'.$request->product_thambnail->extension();
+                            $request->product_thambnail->move(public_path('upload/product_thambnail/'), $imageName);
+                        } else {
+                            $imageName = '';
+                        }
+
+            if (!empty($request->product_thambnail)) {
+                $updval['product_thambnail'] = $imageName;
+            }
+
+            DB::table('Products')->where('id',$request->id)->update($updval);
+
+            return redirect('/admin/all/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+    }
 
     public function storecategory(Request $request)
      {

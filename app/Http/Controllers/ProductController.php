@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Brand;
+use App\Models\Review;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
@@ -26,7 +27,8 @@ class ProductController extends Controller
     public function DetailProduct($id)
     {
         $data = Product::find($id);
-        return view('seller.product.product_detail',compact('data'));
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        return view('seller.product.product_detail',compact('data','multiImgs'));
     }
 
     public function AddProduct()
@@ -41,7 +43,7 @@ class ProductController extends Controller
 
     public function StoreProduct(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'brand_id' => 'required|string|max:255',
             'country_id' => 'required|string|max:255',
             'category_id' => 'required|string|max:255',
@@ -98,7 +100,6 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
         }
-
         return redirect('/seller/all/product')->with('flash_message', 'Data added successfully');
     }
 
@@ -117,8 +118,20 @@ class ProductController extends Controller
 
     public function UpdateProduct(Request $request)
     {
-        $product_id = $request->id;
+        $product = Product::find($request->id);
         $old_img = $request->old_img;
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'product_code' => 'required|string|max:255',
+            'product_qty' => 'required|numeric',
+            'product_tags' => 'required|string|max:255',
+            'product_size' => 'required|string|max:255',
+            'product_color' => 'required|string|max:255',
+            'selling_price' => 'required|numeric',
+            'short_desc' => 'required|string|max:255',
+            'long_desc' => 'required|string|max:255',
+            'estimate_date' => 'required|string|max:255',
+        ]);
 
         if($request->hasFile('product_thambnail')) {
             if(File::exists($old_img)) {
@@ -130,46 +143,42 @@ class ProductController extends Controller
         } else {
             $filename = $old_img;
         }
-
-        Product::findOrFail($product_id)->update([
-            'brand_id' => $request->brand_id,
-            'country_id' => $request->country_id,
-            'seller_id' => Auth::user()->id,
-            'category_id' => $request->category_id,
-            'subcategory_id' => $request->subcategory_id,
-            'sub_category_title_id' => $request->sub_category_title_id,
-            'product_name' => $request->product_name,
-            'product_code' => $request->product_code,
-            'product_qty' => $request->product_qty,
-            'product_tags' => $request->product_tags,
-            'product_size' => $request->product_size,
-            'product_color' => $request->product_color,
-            'selling_price' => $request->selling_price,
-            'discount_percent' => $request->discount_percent,
-            'short_desc' => $request->short_desc,
-            'long_desc' => $request->long_desc,
-            'product_thambnail' => $filename,
-            'status' => 1,
-            'estimate_date' => $request->estimate_date,
-            'created_at' => Carbon::now(),
-        ]);
+        $product->brand_id = $request->brand_id;
+        $product->country_id = $request->country_id;
+        $product->seller_id = $request->seller_id;
+        $product->category_id= $request->category_id;
+        $product->sub_category_id= $request->subcategory_id;
+        $product->sub_category_title_id= $request->sub_category_title_id;
+        $product->product_name= $request->product_name;
+        $product->product_code= $request->product_code;
+        $product->product_qty= $request->product_qty;
+        $product->product_tags= $request->product_tags;
+        $product->product_size= $request->product_size;
+        $product->product_color= $request->product_color;
+        $product->selling_price= $request->selling_price;
+        $product->discount_percent= $request->discount_percent;
+        $product->short_desc= $request->short_desc;
+        $product->long_desc= $request->long_desc;
+        $product->product_thambnail= $filename;
+        $product->estimate_date= $request->estimate_date;
+        $product->status= 1;
+        $product->updated_at= Carbon::now();
+        $product->update();
         return redirect('/seller/all/product')->with('flash_message', 'Data updated successfully');
     }
 
-    public function DeleteProduct($id)
-{
-    $product = Product::findOrFail($id);
-    File::delete($product->product_thambnail);
-    Product::findOrFail($id)->delete();
-    $images = MultiImg::where('product_id',$id)->get();
-    foreach($images as $img){
-        File::delete($img->photo_name);
-        MultiImg::where('product_id',$id)->delete();
+        public function DeleteProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        File::delete($product->product_thambnail);
+        Product::findOrFail($id)->delete();
+        $images = MultiImg::where('product_id',$id)->get();
+        foreach($images as $img){
+            File::delete($img->photo_name);
+            MultiImg::where('product_id',$id)->delete();
+        }
+        return back()->with('flash_message', 'Data deleted successfully');
     }
-    return back()->with('flash_message', 'Data deleted successfully');
-}
-
-
 
     public function ChangeStatus(Request $request)
     {
@@ -203,4 +212,20 @@ class ProductController extends Controller
         MultiImg::findOrFail($id)->delete();
         return redirect()->back()->with('flash_message', 'Image deleted successfully');
     }
+
+    public function Review(Request $request)
+    {
+        $id = Auth::user()->id;
+        $review = Review::where('user_id',$id)->orderBy('id','DESC')->get();
+        return view('seller.product.product_review',compact('review'));
+    }
+
+    public function ChangeRtStatus(Request $request)
+    {
+        $star = Review::find($request->review_id);
+        $star->status = $request->status;
+        $star->save();
+        return redirect()->back();
+    }
+
 }

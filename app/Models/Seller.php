@@ -9,10 +9,8 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'photo',
+        'user_id',
+        'prefecture_id',
         'bank_name',
         'bank_acc_type',
         'bank_branch',
@@ -23,7 +21,20 @@ class Seller extends Model
         'shop_establish',
         'phone',
         'zip_code',
-        'address',
+        'city',
+        'chome',
+        'building',
+        'room',
         'url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    function prefecture() {
+        return $this->belongsTo(Prefecture::class,'prefecture_id');
+    }
+
 }

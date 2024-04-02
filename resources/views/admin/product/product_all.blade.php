@@ -1,5 +1,6 @@
 <x-auth-layout>
 
+
     <style>
         .table>:not(caption)>*>*
         {
@@ -44,26 +45,26 @@
                                                     <td data-label="">{{ $list->product_name }}</td>
                                                     <td data-label="">{{ $list->product_qty }}</td>
                                                     <td data-label="">{{ $list->selling_price }}</td>
-                                                    <td data-label=""> {{ $list->discount_percent ??  'No Discount' }} </td>
-
+                                                    <td data-label=""> {{ $list->discount_percent ? $list->discount_percent . '%' :  'No Discount' }} </td>
+                                                    <td class="col-sm-9">
+                                                        {{ $list->commission ? $list->commission . '%' : '' }}
+                                                    </td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>
-                                                    <td class="col-sm-9">
 
-                                                    </td>
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/blog/".$list->id ) }}">
+                                                                <a href="{{ url("/product/".$list->id ) }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
 
                                                             <li>
-                                                                <a href='{{ url("/editblog/".$list->id ) }}'>
+                                                                <a href='{{ url("/editproduct/".$list->id ) }}'>
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>
@@ -151,4 +152,32 @@
                 </div>
             </div>
         <!-- Delete Modal Box End -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $(function() {
+                $('.toggle-class').change(function() {
+
+                    var status = $(this).prop('checked') ? 1 : 0;
+
+                    var product_id = $(this).data('id');
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "{{ route('tt') }}",
+                        data: {
+                            'status': status,
+                            'product_id': product_id,
+                            '_token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+                            alert('2');
+                            console.log(data.success);
+                        }
+                    });
+                });
+            });
+            </script>
 </x-auth-layout>

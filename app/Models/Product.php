@@ -26,13 +26,31 @@ class Product extends Model
         'short_desc',
         'long_desc',
         'product_thambnail',
-        'comession',
+        'commission',
         'com_price',
         'status',
         'estimate_date',
         'updated_name',
     ];
+
+    function Country() {
+        return $this->belongsTo(Country::class,'country_id');
+    }
+
     function Brand() {
         return $this->belongsTo(Brand::class,'brand_id');
     }
+
+    function Category() {
+        return $this->belongsTo(Category::class,'category_id');
+    }
+
+    function SubCategory() {
+        return $this->belongsTo(SubCategory::class,'sub_category_id');
+    }
+
+    function SubCategoryTitle() {
+        return $this->belongsTo(SubCategoryTitle::class,'sub_category_title_id');
+    }
+
 }

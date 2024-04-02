@@ -1,16 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\AdminController;
 
 
 use App\Http\Controllers\UserController;
 
+=======
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+>>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +34,29 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
+//Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
+//route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
+
 Route::get('/', function () {
     return view('front-end.welcome');
 });
 
 
+
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
+Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
+
+
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
+<<<<<<< HEAD
 Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
+=======
+
+Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
+>>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
 Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
 
@@ -74,7 +99,8 @@ Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-s
 
 Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
 
-Route::get('/news', function () {return view('front-end.blog-list');});
+Route::get('/news', [AdminController::class, 'news']);
+
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 
@@ -85,7 +111,7 @@ Route::get('/cart', function () {return view('front-end.cart');});
 Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
-Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
+Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 
@@ -101,12 +127,19 @@ Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middlew
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
+Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
 
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
+Route::get('product/{productid}', [AdminController::class, 'productdetail']);
+
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
+
+Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -115,6 +148,7 @@ Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
 Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
 Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
 Route::post('edituser', [AdminController::class, 'updateuser'])->name('edituser');
+Route::post('edithost', [AdminController::class, 'updatehost'])->name('edithost');
 Route::get('/admin/all/subuserdetail', function () {return view('admin.subuserdetail');})->name('admin.subuserdetail');
 Route::get('/admin/all/addsubadmin', function () {return view('admin.addsubadmin');})->name('admin.addsubadmin');
 Route::get('/admin/all/edituser', function () {return view('admin.edituser');})->name('admin.edituser');
@@ -130,6 +164,7 @@ route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name
 Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
 Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
 Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
+
 
 //endblog
 
@@ -177,11 +212,18 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get('/seller/register','SellerRegister')->name('seller.register');
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
-Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
-Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
-Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
-Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
-Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
+
+Route::controller(SellerController::class)->group(function(){
+    Route::get('/seller','Dashboard')->name('seller.dashboard');
+    Route::get('/seller/profile','Profile')->name('seller.profile');
+    Route::post('/seller/profile/store','StoreProfile')->name('seller.store.profile');
+    Route::post('/seller/shop/update','UpdateShop')->name('seller.update.shop');
+    Route::get('/seller/help','Help')->name('seller.help');
+    Route::get('/seller/help/add','AddHelp')->name('seller.help.add');
+    Route::post('/seller/help/store','StoreHelp')->name('seller.help.store');
+    Route::get('/seller/help/detail/{id}','DetailHelp')->name('seller.help.detail');
+    Route::get('/seller/help/{id}','DeleteHelp')->name('seller.help.delete');
+});
 
 //Brand
 Route::controller(BrandController::class)->group(function(){
@@ -201,12 +243,16 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
+    Route::get('/seller/product/review','Review')->name('seller.product.review');
+    Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
 });
 
 //SellerOrder
-Route::get('/seller/all/order', function () {return view('seller.order.order_all');})->name('seller.all.order');
-Route::get('/seller/detail/order', function () {return view('seller.order.order_detail');})->name('seller.detail.order');
-Route::get('/seller/tracking/order', function () {return view('seller.order.order_tracking');})->name('seller.order-tracking');
+Route::controller(OrderController::class)->group(function(){
+    Route::get('/seller/all/order','SellerAllOrder')->name('seller.all.order');
+    // Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
+    // Route::get('/seller/tracking/order','SellerTrackingOrder')->name('seller.tracking.order');
+});
 
 //SellerSubSeller
 Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('seller.all.subseller');

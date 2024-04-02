@@ -12,7 +12,8 @@
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                        <form class="theme-form theme-form-2 mega-form">
+                                        <form method="POST" action="{{ route('seller.help.store') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
+                                            @csrf
                                             <div class="card-header-1">
                                                 <h5>Contact Us</h5>
                                             </div>
@@ -22,7 +23,7 @@
                                                     <label
                                                         class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="text">
+                                                        <input class="form-control" type="text" name="title">
                                                     </div>
                                                 </div>
 
@@ -30,7 +31,7 @@
                                                     <label
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="file">
+                                                        <input class="form-control" type="file" name="image">
                                                     </div>
                                                 </div>
 
@@ -39,7 +40,7 @@
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">Message
                                                         </label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <textarea class="form-control" name="" id="" rows="5"></textarea>
+                                                        <textarea class="form-control" name="reason" id="" rows="5"></textarea>
                                                     </div>
                                                 </div>
                                             </div>

@@ -872,7 +872,7 @@
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </a>
 
-                                        <ul class="product-option">
+                                        <ul class="product-option d-flex justify-content-center">
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                     data-bs-target="#view-product{{ $product->id }}" data-product="{{ $product->id }}">
@@ -880,11 +880,11 @@
                                                 </a>
                                             </li>
 
-                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                            {{-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
                                                 <a href="{{ url('/compare') }}">
                                                     <i data-feather="refresh-cw"></i>
                                                 </a>
-                                            </li>
+                                            </li> --}}
 
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">

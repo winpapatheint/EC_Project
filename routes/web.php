@@ -81,7 +81,7 @@ Route::get('/product-circle', function () {return view('front-end.product-circle
 
 Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
 
-Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
+Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
 
 
 
@@ -116,7 +116,7 @@ Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
 
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
-Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
+Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);

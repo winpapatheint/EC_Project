@@ -141,16 +141,17 @@
                         <div class="category-menu">
                             <h3>Category</h3>
                             <ul>
-
+                                @foreach($categories as $list)
                                 <li>
+
                                     <div class="category-list">
                                         <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}"></a>
+                                            <a href="{{ url("/shopsidebar/".$list->id ) }}">{{ $list->category_name }}</a>
                                         </h5>
                                     </div>
                                 </li>
-
+                                @endforeach
                             </ul>
 
                             <ul class="value-list">

@@ -28,6 +28,11 @@
                                     </thead>
 
                                     <tbody>
+                                        @if ($order->isEmpty())
+                                            <tr>
+                                                <td colspan="9">No data available</td>
+                                            </tr>
+                                        @else
                                         @foreach($order as $key => $item)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
@@ -82,6 +87,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -89,31 +95,7 @@
                     </div>
                 </div>
             </div>
-            <div style="bottom:28px">
-                <nav class="custom-pagination">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                <i class="ri-arrow-left-s-line"></i>
-                            </a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="javascript:void(0)">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">
-                                <i class="ri-arrow-right-s-line"></i>
-                             </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            {{ $order->links() }}
         </div>
     </div>
     <!-- Table End -->
@@ -136,9 +118,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <a href="{{ route('seller.delete.product', ['id' => $item->id]) }}">
+                {{-- <a href="{{ route('seller.delete.product', ['id' => $item->id]) }}">
                     <button type="button" class="btn btn-animation btn-md fw-bold">Yes</button>
-                </a>
+                </a> --}}
             </div>
         </div>
     </div>

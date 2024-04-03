@@ -86,7 +86,7 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-                            <div class="filter-category">
+                            {{-- <div class="filter-category">
                                 <div class="filter-title">
                                     <h2>Filters</h2>
                                     <a href="javascript:void(0)">Clear All</a>
@@ -108,7 +108,7 @@
                                         <a href="javascript:void(0)">Meat</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
 
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
@@ -784,32 +784,32 @@
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
-                                        <span>Most Popular</span> <i class="fa-solid fa-angle-down"></i>
+                                        <span>Choose Sorting</span> <i class="fa-solid fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li>
+                                        {{-- <li>
                                             <a class="dropdown-item" id="pop" href="javascript:void(0)">Popularity</a>
-                                        </li>
+                                        </li> --}}
                                         <li>
-                                            <a class="dropdown-item" id="low" href="javascript:void(0)">Low - High
+                                            <a class="dropdown-item" id="low" href="{{ route('show-product', ['sort' => '1']) }}">Low - High
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="high" href="javascript:void(0)">High - Low
+                                            <a class="dropdown-item" id="high" href="{{ route('show-product', ['sort' => '2']) }}">High - Low
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="rating" href="javascript:void(0)">Average
+                                            <a class="dropdown-item" id="rating" href="{{ route('show-product', ['sort' => '3']) }}">Average
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="aToz" href="javascript:void(0)">A - Z Order</a>
+                                            <a class="dropdown-item" id="aToz" href="{{ route('show-product', ['sort' => '4']) }}">A - Z Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="zToa" href="javascript:void(0)">Z - A Order</a>
+                                            <a class="dropdown-item" id="zToa" href="{{ route('show-product', ['sort' => '5']) }}">Z - A Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="off" href="javascript:void(0)">% Off - Hight To
+                                            <a class="dropdown-item" id="off" href="{{ route('show-product', ['sort' => '6']) }}">% Off - Hight To
                                                 Low</a>
                                         </li>
                                     </ul>

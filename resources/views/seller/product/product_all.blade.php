@@ -118,13 +118,12 @@
             </div>
             <div class="modal-body">
                 <div class="remove-box">
-                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                        new permission for this object</p>
+                    <p>The data will be deleted permanently.</p>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <a href="{{ route('seller.delete.product',$products->id) }}">
+                <a href="{{ route('seller.delete.product', ['id' => $item->id]) }}">
                     <button type="button" class="btn btn-animation btn-md fw-bold">Yes</button>
                 </a>
             </div>

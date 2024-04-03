@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function AllProduct()
     {
         $id = Auth::user()->id;
-        $products = Product::where('seller_id',$id)->latest()->paginate(4);
+        $products = Product::where('seller_id',$id)->latest()->paginate(10);
         return view('seller.product.product_all',compact('products'));
     }
 

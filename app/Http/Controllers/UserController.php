@@ -255,4 +255,30 @@ class UserController extends Controller
         //}
 
    }
+
+    //Show cart product
+    public function showCart(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $products = DB::table('products')
+                ->join('sellers', 'products.seller_id', '=', 'sellers.id')
+                ->select('products.*', 'sellers.*')
+                ->get();
+        $discountedPrices = [];
+            foreach ($products as $product) {
+                $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                $discountedPrice = $product->selling_price - $discountAmount;
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+                //dd($discountedPrices);
+                //$difference = $products->pluck('original_price')->diff($products->pluck('selling_price'))->all();
+        
+        return view('front-end.cart', compact('products', 'user', 'discountedPrices'));
+
+            }
+    }
 }

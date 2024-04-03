@@ -3,12 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ShowProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,8 +56,9 @@ Route::get('/user-cards/show-cards', [UserController::class, 'showCard'])->name(
 Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->name('add_newcard');
 Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
+Route::post('user-orders/cart', [UserController::class, 'showCart'])->name('show_cart');
 
-Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
+// Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
 
 Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
 
@@ -66,10 +70,8 @@ Route::get('/user-order_tracking', function () {return view('front-end.user-orde
 
 Route::get('/register', function () {return view('front-end.register');});
 
-
-
-Route::get('/products', function () {return view('front-end.products');});
-Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
+Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
+Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
@@ -79,7 +81,7 @@ Route::get('/product-circle', function () {return view('front-end.product-circle
 
 Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
 
-Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
+Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
 
 
 
@@ -197,12 +199,6 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
 
-Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
-Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
-Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
-Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
-Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
-
 Route::controller(SellerController::class)->group(function(){
     Route::get('/seller','Dashboard')->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');
@@ -266,7 +262,7 @@ Route::get('/subseller/edit/product', function () {return view('sub_seller.produ
 Route::get('/subseller/all/order', function () {return view('sub_seller.order.order_all');})->name('sub_seller.all.order');
 Route::get('/subseller/detail/order', function () {return view('sub_seller.order.order_detail');})->name('sub_seller.detail.order');
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
-Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
+//Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
 require __DIR__.'/auth.php';
 

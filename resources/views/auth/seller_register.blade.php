@@ -76,7 +76,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code">
+                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
                                         <label>Zip Code</label>
                                         @error('zip_code')
                                             <div class="text-danger">{{ $message }}</div>
@@ -93,7 +93,7 @@
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="bank_acc_type">
+                                        <select class="form-control" name="prefecture">
                                             <option>Choose Prefecture</option>
                                             @foreach ($prefecture as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>

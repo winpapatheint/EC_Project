@@ -229,8 +229,10 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
-    Route::get('/seller/product/review','Review')->name('seller.product.review');
+    Route::get('/seller/product/review','Review')->name('seller.review');
     Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
+    Route::post('/seller/product/review/update', 'UpdateReview')->name('seller.review.update');
+    Route::get('/seller/delete/review/{id}','DeleteReview')->name('seller.review.delete');
 });
 
 //SellerOrder

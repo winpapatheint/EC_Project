@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
@@ -55,6 +56,7 @@ Route::get('/user-cards/show-cards', [UserController::class, 'showCard'])->name(
 Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->name('add_newcard');
 Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
+Route::post('user-orders/cart', [UserController::class, 'showCart'])->name('show_cart');
 
 // Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
 

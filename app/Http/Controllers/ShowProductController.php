@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Order;
 
 class ShowProductController extends Controller
 {
@@ -26,6 +27,7 @@ class ShowProductController extends Controller
     {
         $product = Product::find($id);
         $reviews = Review::all();
-        return view('front-end.product-left-thumbnail',compact('product','reviews'));
+        $productOrdered = Order::where('product_id', $id)->get();
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered'));
     }
 }

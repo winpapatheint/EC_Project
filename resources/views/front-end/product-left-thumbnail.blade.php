@@ -183,7 +183,7 @@
                                     </p>
                                 </div>
 
-                                <div class="product-package">
+                                {{-- <div class="product-package">
                                     <div class="product-title">
                                         <h4>Weight</h4>
                                     </div>
@@ -204,7 +204,7 @@
                                             <a href="javascript:void(0)">With Pink Roses</a>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> --}}
 
                                 <div class="note-box product-package">
                                     <div class="cart_qty qty-box product-qty">
@@ -221,16 +221,30 @@
                                         </div>
                                     </div>
 
-                                    <button onclick="location.href = 'cart.html';"
+                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                        @csrf
+                                    <button type="submit"
                                         class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                    </form>
                                 </div>
 
                                 <div class="progress-sec">
                                     <div class="left-progressbar">
-                                        <h6>Please hurry! Only {{ $product->product_qty }} left in stock</h6>
+                                    @php
+                                        $orderedCount = 0;
+                                    @endphp
+                                    @foreach ($productOrdered as $ordered)
+                                        @php
+                                            $orderedCount += $ordered->qty;
+                                        @endphp
+                                    @endforeach
+                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                style="width: 50%;"></div>
+                                            <?php
+                                            // Calculate the percentage of ordered items
+                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            ?>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -248,14 +262,14 @@
                                 </div>
 
                                 <div class="pickup-box">
-                                    <div class="product-title">
+                                    {{-- <div class="product-title">
                                         <h4>Store Information</h4>
                                     </div>
 
                                     <div class="pickup-detail">
                                         <h4 class="text-content">Lollipop cake chocolate chocolate cake dessert jujubes.
                                             Shortbread sugar plum dessert powder cookie sweet brownie.</h4>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="product-info">
                                         <ul class="product-info-list product-info-list-2">
@@ -338,17 +352,10 @@
                                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                                         <div class="product-description">
                                             <div class="nav-desh">
-                                                <p>Jelly beans carrot cake icing biscuit oat cake gummi bears tart.
-                                                    Lemon drops carrot cake pudding sweet gummi bears. Chocolate cake
-                                                    tart cupcake donut topping liquorice sugar plum chocolate bar. Jelly
-                                                    beans tiramisu caramels jujubes biscuit liquorice chocolate. Pudding
-                                                    toffee jujubes oat cake sweet roll. Lemon drops dessert croissant
-                                                    danish cake cupcake. Sweet roll candy chocolate toffee jelly sweet
-                                                    roll halvah brownie topping. Marshmallow powder candy sesame snaps
-                                                    jelly beans candy canes marshmallow gingerbread pie.</p>
+                                                <p>{{ $product->long_desc}}</p>
                                             </div>
 
-                                            <div class="nav-desh">
+                                            {{-- <div class="nav-desh">
                                                 <div class="desh-title">
                                                     <h5>Organic:</h5>
                                                 </div>
@@ -399,7 +406,7 @@
                                                     chocolate. Ice cream cookie dragée cake sweet roll sweet roll.Lemon
                                                     drops cookie muffin carrot cake chocolate marzipan gingerbread
                                                     topping chocolate bar. Soufflé tiramisu pastry sweet dessert.</p>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
 
@@ -408,36 +415,45 @@
                                             <table class="table info-table">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Specialty</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Ingredient Type</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Brand</td>
-                                                        <td>Lavian Exotique</td>
+                                                        <td>
+                                                            @php
+                                                                $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                            @endphp
+                                                            {{ $brand->brand_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Form</td>
-                                                        <td>Bar Brownie</td>
+                                                        <td>
+                                                            @php
+                                                                $country = DB::table('Countries')->where('id',$product->country_id)->first();
+                                                            @endphp
+                                                            {{ $country->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Package Information</td>
-                                                        <td>Box</td>
+                                                        <td>Category</td>
+                                                        <td>
+                                                            @php
+                                                                $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                            @endphp
+                                                            {{ $category->category_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Manufacturer</td>
-                                                        <td>Prayagh Nutri Product Pvt Ltd</td>
+                                                        <td>Seller</td>
+                                                        <td>
+                                                            @php
+                                                                $seller = DB::table('sellers')->where('id',$product->seller_id)->first();
+                                                                $seller_name = DB::table('users')->where('id',$seller->user_id)->first();
+                                                            @endphp
+                                                            {{ $seller_name->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Item part number</td>
-                                                        <td>LE 014 - 20pcs Crème Bakes (Pack of 2)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Net Quantity</td>
-                                                        <td>40.00 count</td>
+                                                        <td>Estimated Date</td>
+                                                        <td>{{ $product->estimate_date }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

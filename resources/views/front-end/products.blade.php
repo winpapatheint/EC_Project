@@ -844,6 +844,7 @@
                     <div
                         class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section list-style">
                         @foreach ($products as $product)
+                            @if ($product->status == 1)
                             @php
                                 $starRating = 0;
                                 $count = 0;
@@ -899,7 +900,7 @@
                                         <a href="{{ url('/product-left-thumbnail') }}">
                                             <h5 class="name">{{ $product->product_name }}</h5>
                                         </a>
-                                        <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc_desc }}</p>
+                                        <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc }}</p>
                                         <div class="product-rating mt-2">
                                             <ul class="rating">
                                                 @for ($i = 1; $i <= 5; $i++)
@@ -944,6 +945,7 @@
                                 </div>
                             </div>
                         </div>
+                            @endif
                         @endforeach
                     </div>
 

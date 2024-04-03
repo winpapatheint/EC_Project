@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Models\Seller;
+use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Prefecture;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -36,7 +37,9 @@ class RegisterController extends Controller
             'role' => 'seller',
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             $user = User::create([
@@ -76,6 +79,8 @@ class RegisterController extends Controller
 =======
 =======
 >>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
+=======
+>>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
         $seller = Seller::create([
             'user_id' => $user->id,
             'bank_name' => $request->input('bank_name') ,
@@ -91,10 +96,15 @@ class RegisterController extends Controller
             'address' => $request->input('address'),
             'url' => $request->input('url')
         ]);
+<<<<<<< HEAD
         return redirect('/login');
 <<<<<<< HEAD
 >>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
 =======
 >>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
+=======
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
+>>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
     }
 }

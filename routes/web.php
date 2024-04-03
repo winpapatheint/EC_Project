@@ -21,6 +21,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 =======
@@ -29,6 +30,8 @@ use App\Http\Controllers\Auth\RegisterController;
 =======
 >>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 >>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
+=======
+>>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
 
 /*
 |--------------------------------------------------------------------------
@@ -221,6 +224,15 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
 
+<<<<<<< HEAD
+=======
+Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
+Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
+Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
+Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
+Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
+
+>>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
 Route::controller(SellerController::class)->group(function(){
     Route::get('/seller','Dashboard')->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');

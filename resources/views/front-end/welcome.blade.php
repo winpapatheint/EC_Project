@@ -141,16 +141,16 @@
                         <div class="category-menu">
                             <h3>Category</h3>
                             <ul>
-                                @foreach($list as $data)
+
                                 <li>
                                     <div class="category-list">
                                         <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">{{ $data->category_name }}</a>
+                                            <a href="{{ url('/shop-left-sidebar') }}"></a>
                                         </h5>
                                     </div>
                                 </li>
-                                @endforeach
+
                             </ul>
 
                             <ul class="value-list">
@@ -2470,6 +2470,7 @@
                         </span>
                         <p>A virtual assistant collects the products from your list</p>
                     </div>
+
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
                         <div>
                             <div class="blog-box">
@@ -2535,6 +2536,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -15,26 +15,58 @@ class GuestLayout extends Component
     public function render()
     {
 
+        // $categories = DB::table('Categorys')
+        // ->select('Categorys.id', 'Categorys.category_name as category_name',
+        // 'Sub_category_titles.category_id as subcategory_id', 'Sub_category_titles.sub_category_titlename as subcategory_name')
+        // ->leftJoin('Sub_category_titles', 'Categorys.id', '=', 'Sub_category_titles.category_id')
+        // ->leftJoin('Sub_categories', 'Categorys.id', '=', 'Sub_categories.category_id' and 'Sub_category_titles.id','=',
+        // 'sub_category_title_id')
+        // ->get();
 
-$categories = DB::table('Categorys')
-->leftJoin('Sub_category_titles AS subcategories', 'Categorys.id', '=', 'subcategories.category_id')
-->select('Categorys.id', 'Categorys.category_name AS category_name', 'subcategories.sub_category_titlename AS subcategory_title')
+        $categories = DB::table('Categories')
+            ->select(
+                'Categories.id',
+                'Categories.category_name as category_name',
+        'Sub_category_titles.category_id as subcategory_id',
+        'Sub_categories.sub_category_title_id as subcategorytitle_id',
+        'Sub_category_titles.sub_category_titlename as subcategory_name',
+        'Sub_categories.sub_category_name as sub_name'
+    )
+    ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
+    ->Join('Sub_categories', function($join) {
+        $join
+            ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
+    })
+    ->get();
 
-->get();
+       // Organize categories and their subcategories
+        $organizedCategories = [];
+            foreach ($categories as $category) {
+                $categoryId = $category->id;
+                    if (!isset($organizedCategories[$categoryId])) {
+                        $organizedCategories[$categoryId] = [
+                            'id' => $categoryId,
+                            'name' => $category->category_name,
+                            'subcategories' => [],
+                            'sub' => []
+                        ];
+                    }
+                    if (!is_null($category->subcategory_id)) {
+                        $organizedCategories[$categoryId]['subcategories'][] = [
+                            'id' => $category->subcategory_id,
+                            'subid' => $category->subcategorytitle_id,
+                            'name' => $category->subcategory_name
+                        ];
+                    }
 
-        // $list = DB::table('Categorys as C')
-        //             ->select('C.*','C.id')
-        //             ->orderBy('C.created_at', 'desc')->paginate(999);
+                    if (!is_null($category->subcategorytitle_id)) {
+                        $organizedCategories[$categoryId]['sub'][] = [
+                            'id' => $category->subcategorytitle_id,
+                            'name' => $category->sub_name
+                        ];
+                    }
+            }
+        return view('layouts.guest', ['categories' => $organizedCategories]);
 
-        // $subtitle = DB::table('Categorys as C')
-        //             ->select('Subtitle.sub_category_titlename as subtitle','Subtitle.*')
-        //             ->join('Sub_category_titles as Subtitle', function ($join) {
-        //                 $join->on('C.id', '=', 'Subtitle.category_id');
-        //             })
-
-
-
-
-        return view('layouts.guest',compact('categories'));
     }
 }

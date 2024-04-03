@@ -3,16 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
 
 
 /*
@@ -202,13 +197,6 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
 
-<<<<<<< HEAD
-Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
-Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
-Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
-Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
-Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
-=======
 Route::controller(SellerController::class)->group(function(){
     Route::get('/seller','Dashboard')->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');
@@ -221,7 +209,6 @@ Route::controller(SellerController::class)->group(function(){
     Route::get('/seller/help/{id}','DeleteHelp')->name('seller.help.delete');
     Route::get('/seller/review','Review')->name('seller.review');
 });
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
 
 //Brand
 Route::controller(BrandController::class)->group(function(){

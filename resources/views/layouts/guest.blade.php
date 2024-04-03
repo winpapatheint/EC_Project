@@ -349,53 +349,45 @@
                                 </div>
 
                                 <ul class="category-list">
-                                    @foreach($categories as $category)
+                                @foreach ($categories as $category)
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="../assets/svg/1/vegetable.svg" alt="">
-                                            <h6>{{ $category -> category_name }}</h6>
-
+                                            <h6>{{ $category['name'] }}</h6>
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
 
                                         <div class="onhover-category-box">
-
-                                            @if($category->subcategory_title)
-                                                <div class="list-1">
-                                                    <div class="category-title-box">
-                                                        <h5>{{ $category->subcategory_title }}</h5>
-                                                    </div>
-                                                    <ul>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Potato & Tomato</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Cucumber & Capsicum</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Leafy Vegetables</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Root Vegetables</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Beans & Okra</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Cabbage & Cauliflower</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Gourd & Drumstick</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">Specialty</a>
-                                                        </li>
-                                                    </ul>
+                                            @if (!empty($category['subcategories']))
+                                            @php
+                                            $displayedCategories = [];
+                                            @endphp
+                                            @foreach ($category['subcategories'] as $subcategory)
+                                            @if (!in_array($subcategory['subid'], $displayedCategories))
+                                            <div class="list-1">
+                                                <div class="category-title-box">
+                                                    <h5>{{ $subcategory['name'] }}</h5>
                                                 </div>
+                                                <ul>
+                                                    @foreach ($category['sub'] as $sub)
+                                                    @if($sub['id']==$subcategory['subid'])
+                                                    <li>
+                                                        <a href="javascript:void(0)">{{ $sub['name'] }}</a>
+                                                    </li>
+                                                    @endif
+                                                    @endforeach
+                                                </ul>
+
+                                            </div>
+                                            @php
+                                            $displayedCategories[] = $subcategory['subid'];
+                                            @endphp
+                                            @endif
+                                            @endforeach
                                             @endif
                                         </div>
                                     </li>
-                                    @endforeach
+                                @endforeach
 
                                 </ul>
                             </div>

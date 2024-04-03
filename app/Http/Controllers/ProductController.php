@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Brand;
+use App\Models\Review;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
@@ -211,4 +212,20 @@ class ProductController extends Controller
         MultiImg::findOrFail($id)->delete();
         return redirect()->back()->with('flash_message', 'Image deleted successfully');
     }
+
+    public function Review(Request $request)
+    {
+        $id = Auth::user()->id;
+        $review = Review::where('user_id',$id)->orderBy('id','DESC')->get();
+        return view('seller.product.product_review',compact('review'));
+    }
+
+    public function ChangeRtStatus(Request $request)
+    {
+        $star = Review::find($request->review_id);
+        $star->status = $request->status;
+        $star->save();
+        return redirect()->back();
+    }
+
 }

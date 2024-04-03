@@ -1,20 +1,20 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use App\Models\Shop;
+
 use App\Models\User;
 use App\Models\Seller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Prefecture;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
+
 class RegisterController extends Controller
 {
     public function SellerRegister()
     {
-        return view('auth.seller_register');
+        $prefecture = Prefecture::get();
+        return view('auth.seller_register',compact('prefecture'));
     }
 
     public function SellerRegistered(Request $request)
@@ -37,6 +37,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             $user = User::create([
                 'name' => $request->input('name'),
@@ -73,6 +74,8 @@ class RegisterController extends Controller
                return view('auth.verify-email',compact('email'));
                //return redirect()->route('auth.verify-email', compact('email'));
 =======
+=======
+>>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
         $seller = Seller::create([
             'user_id' => $user->id,
             'bank_name' => $request->input('bank_name') ,
@@ -89,7 +92,9 @@ class RegisterController extends Controller
             'url' => $request->input('url')
         ]);
         return redirect('/login');
+<<<<<<< HEAD
 >>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
+=======
+>>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
     }
-
 }

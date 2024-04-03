@@ -10,7 +10,6 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,10 +24,11 @@ use App\Http\Controllers\Auth\RegisterController;
 //Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
-Route::get('/', function () {
-    return view('front-end.welcome');
-});
+//Route::get('/', function () {
+   //return view('front-end.welcome');
+//});
 
+route::get('/',[AdminController::class,'welcome']);
 
 
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
@@ -81,10 +81,10 @@ Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
 
 Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
 
-Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
+
 
 Route::get('/news', [AdminController::class, 'news']);
-
+Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 
@@ -196,6 +196,12 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get('/seller/register','SellerRegister')->name('seller.register');
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
+
+Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
+Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
+Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
+Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
+Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
 
 Route::controller(SellerController::class)->group(function(){
     Route::get('/seller','Dashboard')->name('seller.dashboard');

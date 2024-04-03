@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Models\Seller;
+use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Prefecture;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -36,6 +37,7 @@ class RegisterController extends Controller
             'role' => 'seller',
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
 
         $seller = Seller::create([
             'user_id' => $user->id,
@@ -52,6 +54,7 @@ class RegisterController extends Controller
             'address' => $request->input('address'),
             'url' => $request->input('url')
         ]);
-        return redirect('/login');
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
     }
 }

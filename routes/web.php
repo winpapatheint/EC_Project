@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -39,6 +40,7 @@ Route::get('/user-delivery', function () {return view('front-end.user-delivery-s
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
+Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
 
 Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
 Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
@@ -205,7 +207,6 @@ Route::controller(SellerController::class)->group(function(){
     Route::post('/seller/help/store','StoreHelp')->name('seller.help.store');
     Route::get('/seller/help/detail/{id}','DetailHelp')->name('seller.help.detail');
     Route::get('/seller/help/{id}','DeleteHelp')->name('seller.help.delete');
-    Route::get('/seller/review','Review')->name('seller.review');
 });
 
 //Brand
@@ -226,12 +227,16 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
+    Route::get('/seller/product/review','Review')->name('seller.product.review');
+    Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
 });
 
 //SellerOrder
-Route::get('/seller/all/order', function () {return view('seller.order.order_all');})->name('seller.all.order');
-Route::get('/seller/detail/order', function () {return view('seller.order.order_detail');})->name('seller.detail.order');
-Route::get('/seller/tracking/order', function () {return view('seller.order.order_tracking');})->name('seller.order-tracking');
+Route::controller(OrderController::class)->group(function(){
+    Route::get('/seller/all/order','SellerAllOrder')->name('seller.all.order');
+    // Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
+    // Route::get('/seller/tracking/order','SellerTrackingOrder')->name('seller.tracking.order');
+});
 
 //SellerSubSeller
 Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('seller.all.subseller');

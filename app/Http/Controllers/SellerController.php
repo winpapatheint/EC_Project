@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Help;
 use App\Models\User;
 use App\Models\Seller;
+use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -23,7 +24,8 @@ class SellerController extends Controller
         $id = Auth::user()->id;
         $data = User::find($id);
         $shop = Seller::where('user_id', $id)->first();
-        return view('seller.profile',compact('data','shop'));
+        $prefecture = Prefecture::get();
+        return view('seller.profile',compact('data','shop','prefecture'));
     }
 
     public function StoreProfile(Request $request)
@@ -61,7 +63,10 @@ class SellerController extends Controller
             'shop_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room' => 'required|string|max:255',
             'bank_name' => 'required|string|max:255',
             'bank_branch' => 'required|string|max:255',
             'bank_acc_type' => 'required|string|max:255',
@@ -86,7 +91,10 @@ class SellerController extends Controller
         $seller->shop_establish = $request->shop_establish;
         $seller->phone = $request->phone;
         $seller->zip_code = $request->zip_code;
-        $seller->address = $request->address;
+        $seller->city = $request->city;
+        $seller->chome = $request->chome;
+        $seller->building = $request->building;
+        $seller->room = $request->room;
         $seller->url = $request->url;
         $seller->bank_name = $request->bank_name;
         $seller->bank_branch = $request->bank_branch;
@@ -147,12 +155,5 @@ class SellerController extends Controller
         $help->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }
-
-    public function Review()
-    {
-        $id = Auth::user()->id;
-
-    }
-
 
 }

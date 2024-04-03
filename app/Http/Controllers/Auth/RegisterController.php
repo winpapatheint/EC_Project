@@ -1,20 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use App\Models\Shop;
+
 use App\Models\User;
 use App\Models\Seller;
+use App\Models\Prefecture;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+
 class RegisterController extends Controller
 {
     public function SellerRegister()
     {
-        return view('auth.seller_register');
+        $prefecture = Prefecture::get();
+        return view('auth.seller_register',compact('prefecture'));
     }
 
     public function SellerRegistered(Request $request)
@@ -36,43 +37,7 @@ class RegisterController extends Controller
             'role' => 'seller',
             'password' => Hash::make($request->input('password')),
         ]);
-
-<<<<<<< HEAD
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'role' => 'seller',
-                'password' => Hash::make($request->input('password')),
-
-            ]);
-            event(new Registered($user));
-            $seller = new Seller($request->all());
-            $seller->password = Hash::make($request->input('password'));
-            if (isset($filename)) {
-                $seller->shop_logo = $filename;
-            }
-            $seller->save();
-
-            $shop = new Shop($request->only(['shop_name', 'shop_establish']));
-            if (isset($filename)) {
-                $shop->shop_logo = $filename;
-            }
-            $shop->save();
-
-            DB::commit();
-
-
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Failed to register seller: ' . $e->getMessage());
-            return back()->withInput()->withErrors(['error' => 'Failed to register seller.']);
-        }
-               //verify email
-               $email = $request->email;
-               return view('auth.verify-email',compact('email'));
-               //return redirect()->route('auth.verify-email', compact('email'));
-=======
+        event(new Registered($user));
         $seller = Seller::create([
             'user_id' => $user->id,
             'bank_name' => $request->input('bank_name') ,
@@ -88,8 +53,7 @@ class RegisterController extends Controller
             'address' => $request->input('address'),
             'url' => $request->input('url')
         ]);
-        return redirect('/login');
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
     }
-
 }

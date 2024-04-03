@@ -177,24 +177,14 @@
                                     </a>
                                 </li>
 
-                               <!--  <li>
+                                <li>
                                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                         href="javascript:void(0)">
                                         <i data-feather="log-out"></i>
                                         <span>Log out</span>
                                     </a>
 
-                                </li> -->
-                                <li>
-                                    <form method="POST" action="{{ route('adminlogout') }}">
-                                        @csrf
-                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
-
-                                            <span>Log Out</span>
-                                        </a>
-                                    </form>
                                 </li>
-
                             </ul>
                         </li>
                     </ul>
@@ -258,7 +248,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.product.review') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="">
                                         <i class="ri-star-line"></i>
                                         <span>Review</span>
                                     </a>

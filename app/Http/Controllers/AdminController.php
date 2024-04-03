@@ -47,11 +47,57 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        $list = DB::table('Categorys as C')
-                    ->select('C.*')
-                    ->orderBy('C.created_at', 'desc')->paginate(999);
+        $categories = DB::table('Categories')
+            ->select(
+                'Categories.id',
+                'Categories.category_name as category_name',
+                'Sub_category_titles.category_id as subcategory_id',
+                'Sub_categories.sub_category_title_id as subcategorytitle_id',
+                'Sub_category_titles.sub_category_titlename as subcategory_name',
+                'Sub_categories.sub_category_name as sub_name'
+            )
+            ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
+            ->Join('Sub_categories', function($join) {
+                $join
+                ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
+            })
+            ->get();
 
-        return view('front-end.welcome',compact('list'));
+        // Organize categories and their subcategories
+        $organizedCategories = [];
+            foreach ($categories as $category) {
+                $categoryId = $category->id;
+                    if (!isset($organizedCategories[$categoryId])) {
+                        $organizedCategories[$categoryId] = [
+                            'id' => $categoryId,
+                            'name' => $category->category_name,
+                            'subcategories' => [],
+                            'sub' => []
+                        ];
+                    }
+                    if (!is_null($category->subcategory_id)) {
+                        $organizedCategories[$categoryId]['subcategories'][] = [
+                            'id' => $category->subcategory_id,
+                            'subid' => $category->subcategorytitle_id,
+                            'name' => $category->subcategory_name
+                        ];
+                    }
+
+                    if (!is_null($category->subcategorytitle_id)) {
+                        $organizedCategories[$categoryId]['sub'][] = [
+                            'id' => $category->subcategorytitle_id,
+                            'name' => $category->sub_name
+                        ];
+                    }
+            }
+        $blogs = DB::table('Blog')
+        ->select( 'U.name as authorby', 'Blog.*')
+        ->join('users as U', function ($join) {
+            $join->on('Blog.created_by', '=', 'U.id');
+        })
+        ->orderBy('created_at', 'desc')->paginate(2);
+
+        return view('front-end.welcome',compact('blogs',['categories' => $organizedCategories]));
     }
 
     public function news()
@@ -473,25 +519,25 @@ class AdminController extends Controller
             $kword = '';
         }
 
-     $lists = DB::table('Categorys')
-        ->select('Sb.id', 'Categorys.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
+     $lists = DB::table('Categories')
+        ->select('Sb.id', 'Categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
         ->leftJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Categorys.id', '=', 'S.category_id');
+            $join->on('Categories.id', '=', 'S.category_id');
         })
         ->leftJoin('Sub_categories as Sb', function ($join) {
             $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'Categorys.id');
+            $join->on('Sb.category_id', '=', 'Categories.id');
         })
 
         ->orderBy('Sb.created_at', 'desc')
         ->paginate($limit);
 
         $listss = DB::table('Sub_categories')
-        ->select('Sub_categories.*','Categorys.category_name as category','S.*')
+        ->select('Sub_categories.*','Categories.category_name as category','S.*')
 
 
-        ->rightJoin('Categorys', function ($join) {
-            $join->on('Categorys.id', '=', 'Sub_categories.category_id');
+        ->rightJoin('Categories', function ($join) {
+            $join->on('Categories.id', '=', 'Sub_categories.category_id');
 
         })
 
@@ -785,7 +831,7 @@ class AdminController extends Controller
 
         $lists = DB::table('Sub_category_titles')
                     ->select('C.category_name as category','Sub_category_titles.*')
-                    ->join('Categorys as C', function ($join) {
+                    ->join('Categories as C', function ($join) {
                     $join->on('Sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
@@ -803,7 +849,7 @@ class AdminController extends Controller
     public function deletecategory(Request $request)
     {
 
-        $catlist =  DB::table('Categorys')
+        $catlist =  DB::table('Categories')
                         ->whereIn('id', function ($query) use ($request) {
                         $query->select('category_id')
                         ->from('Sub_category_titles')
@@ -857,17 +903,17 @@ class AdminController extends Controller
     }
     public function addsubtitle()
     {
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
         return view('admin.addsubtitle',compact('categories'));
     }
 
     public function addsubcategory()
     {
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
 
@@ -875,7 +921,7 @@ class AdminController extends Controller
 
     public function editcategory($id)
     {
-        $data = DB::table('Categorys')
+        $data = DB::table('Categories')
                     ->find($id);
         $editmode = true;
 
@@ -897,7 +943,7 @@ class AdminController extends Controller
     {
         $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
         $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
-        $categorylist = DB::table('Categorys')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('Categories')->orderBy('created_at', 'desc')->get();
         $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
         $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
         $multiImgs = MultiImg::where('product_id',$id)->get();
@@ -916,12 +962,12 @@ class AdminController extends Controller
         $subtitle = DB::table('Sub_category_titles')
                     ->find($id);
 
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
 
-        $category = DB::table('Categorys')
-                    ->select('Categorys.*')
+        $category = DB::table('Categories')
+                    ->select('Categories.*')
                     ->where('id', $subtitle->sub_category_id)
                     ->pluck('id')->toArray();
 
@@ -942,9 +988,9 @@ class AdminController extends Controller
 
         $subcategory_titlename = DB::table('Sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
 
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
 
 
         $category = DB::table('Sub_category_titles')
@@ -1194,7 +1240,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('Categorys')->insert([
+            DB::table('Categories')->insert([
                 'category_name' => $request->title,
                 'category_icon' => $imageName,
                 'created_at' => $time->format('Y-m-d H:i:s'),
@@ -1213,7 +1259,7 @@ class AdminController extends Controller
                 $updval['category_icon'] = $imageName;
             }
 
-            DB::table('Categorys')->where('id',$request->id)->update($updval);
+            DB::table('Categories')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 

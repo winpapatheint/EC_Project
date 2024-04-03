@@ -118,9 +118,41 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-2 mb-0">Address</label>
+                                            <label class="form-label-title col-sm-2 mb-0">Prefecture</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="address" value="{{ $shop->address }}">
+                                                <select class="js-example-basic-single w-100" name="category_id">
+                                                    @foreach ($prefecture as $item)
+                                                    <option value="{{ $item->id }}" {{ $item->id == $shop->prefecture_id  ? 'selected' : '' }}>{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">City, Ward, Town</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="city" value="{{ $shop->city }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">Chome, Banchi, Go</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="chome" value="{{ $shop->chome }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">Building / Apt / Company name</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="building" value="{{ $shop->building }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="form-label-title col-sm-2 mb-0">Unit / Room no.</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="room" value="{{ $shop->room }}">
                                             </div>
                                         </div>
 

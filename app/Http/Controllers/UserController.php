@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Buyers;
 use App\Models\Buyer_addresses;
 use App\Models\Buyer_payments;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -17,6 +18,17 @@ class UserController extends Controller
     public function index()
     {
         return view('user_register');
+    }
+    public function indexuser()
+    {
+        if (Auth::check()) {
+            $user = DB::table('users')->where('id',Auth::user()->id)->first();
+           
+            return view('front-end.user-dashboard',compact('user'));
+        } else {
+            return redirect()->route('login');
+        }
+        return view('front-end.user-dashboard');
     }
     //for new user registration for login
     public function store(Request $request)
@@ -31,7 +43,7 @@ class UserController extends Controller
                 'password' => 'required|string|min:6',
                 'address' => 'required|string|max:255',
                 'phone' => 'required|string|max:255',
-                
+
             ]);
 
             if(empty($request->id))
@@ -55,7 +67,7 @@ class UserController extends Controller
                     'phone' => $request->phone,
 
                 ]);
-    
+
                 // Commit the transaction if both inserts are successful
                 DB::commit();
                 return back()->with('success','Data have been successfully inserted.');
@@ -66,7 +78,7 @@ class UserController extends Controller
             DB::rollback();
             return back()->with('fail','Something went wrong.');
         }
-        
+
     }
     //Show Addresses
     public function showAddresses(Request $request)
@@ -74,7 +86,7 @@ class UserController extends Controller
         $data = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
-                
+
         $user = Buyers::first();
             return view('front-end.user-address',compact('data','user'));
     }
@@ -91,11 +103,11 @@ class UserController extends Controller
             'place' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
         ]);
-            
-   
+
+
         if(empty($request->id))
         {
-    
+
                 $Buyer_addresses = Buyer_addresses::create([
 
                     'buyer_id' => "1",
@@ -106,18 +118,18 @@ class UserController extends Controller
                     'address' => $request->address,
                     'place' => $request->place,
                     'phone' => $request->phone,
-                    
+
                 ]);
                 $saved = $Buyer_addresses->save();
                 return redirect()->route('user_addresses');
-                
-        } 
+
+        }
     }
     //Edit Address
     public function editAddress(Request $request)
     {
         $buyerAddress = Buyer_addresses::find($request->id);
-    
+
         if ($buyerAddress) {
 
             $buyerAddress->update([
@@ -134,6 +146,7 @@ class UserController extends Controller
         } else {
             // Return an error response
             return response()->json(['error' => 'Address not found'], 404);
+
         }
     }
     //Remove Address
@@ -164,33 +177,33 @@ class UserController extends Controller
         $data = Buyer_payments::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
         ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
         ->get();
-                        
+
         $user = Buyers::first();
         return view('front-end.user-payment-method',compact('data','user'));
     }
     //Add New Card
     public function createNewcard(Request $request)
     {
-     
+
         //dd($request->card_type) ;
-    
+
         $validatedData = $request->validate([
-    
+
                 'acc_name' => 'required|string|max:255',
                 'acc_no' => 'required|string|max:255',
                 'expired_date' => 'required|string|max:255',
                 'card_type' => 'required|string|max:255',
 
         ]);
-       
+
         $Buyer_cards = Buyer_payments::create([
-    
+
             'buyer_id' => "1",
             'acc_name' => $request->acc_name,
             'acc_no' => $request->acc_no,
             'expired_date' => $request->expired_date,
             'card_type' => $request->card_type,
-                        
+
         ]);
         $saved = $Buyer_cards->save();
         return redirect()->route('user_cards');
@@ -240,6 +253,6 @@ class UserController extends Controller
             $profile = Buyers::all();
             return view('front-end.user-profile', compact('profile'));
         //}
-        
+
    }
 }

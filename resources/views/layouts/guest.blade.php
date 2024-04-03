@@ -349,7 +349,7 @@
                                 </div>
 
                                 <ul class="category-list">
-                                @foreach ($categories as $category)
+                                @foreach ($categories as $category)p
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="../assets/svg/1/vegetable.svg" alt="">

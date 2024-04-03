@@ -51,45 +51,9 @@ class AdminController extends Controller
             ->select(
                 'Categories.id',
                 'Categories.category_name as category_name',
-                'Sub_category_titles.category_id as subcategory_id',
-                'Sub_categories.sub_category_title_id as subcategorytitle_id',
-                'Sub_category_titles.sub_category_titlename as subcategory_name',
-                'Sub_categories.sub_category_name as sub_name'
             )
-            ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
-            ->Join('Sub_categories', function($join) {
-                $join
-                ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
-            })
+            ->groupby( 'Categories.id')
             ->get();
-
-        // Organize categories and their subcategories
-        $organizedCategories = [];
-            foreach ($categories as $category) {
-                $categoryId = $category->id;
-                    if (!isset($organizedCategories[$categoryId])) {
-                        $organizedCategories[$categoryId] = [
-                            'id' => $categoryId,
-                            'name' => $category->category_name,
-                            'subcategories' => [],
-                            'sub' => []
-                        ];
-                    }
-                    if (!is_null($category->subcategory_id)) {
-                        $organizedCategories[$categoryId]['subcategories'][] = [
-                            'id' => $category->subcategory_id,
-                            'subid' => $category->subcategorytitle_id,
-                            'name' => $category->subcategory_name
-                        ];
-                    }
-
-                    if (!is_null($category->subcategorytitle_id)) {
-                        $organizedCategories[$categoryId]['sub'][] = [
-                            'id' => $category->subcategorytitle_id,
-                            'name' => $category->sub_name
-                        ];
-                    }
-            }
         $blogs = DB::table('Blog')
         ->select( 'U.name as authorby', 'Blog.*')
         ->join('users as U', function ($join) {
@@ -97,7 +61,7 @@ class AdminController extends Controller
         })
         ->orderBy('created_at', 'desc')->paginate(2);
 
-        return view('front-end.welcome',compact('blogs',['categories' => $organizedCategories]));
+        return view('front-end.welcome',compact('blogs','categories'));
     }
 
     public function news()
@@ -563,6 +527,24 @@ class AdminController extends Controller
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
+    }
+
+    public function indexshop($id)
+    {
+        $limit =14;
+        $shoplist = DB::table('Categories as C')
+                        ->select('P.*','C.*')
+                        ->Join('Products as P', function ($join) {
+                            $join->on('C.id', '=', 'P.category_id');
+                        })
+                        ->where('P.category_id',$id)
+                        ->orderBy('P.created_at', 'desc')
+                        ->paginate($limit);
+
+        $ttl = $shoplist->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
     }
 
     public function bloglistdetail($id)

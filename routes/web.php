@@ -79,7 +79,7 @@ Route::get('/product-circle', function () {return view('front-end.product-circle
 
 Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
 
-Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
+Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
 
 
 

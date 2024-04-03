@@ -83,7 +83,8 @@
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ route('seller.delete.product',$item->id) }}" >
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
                                                             <i class="ri-delete-bin-line"></i>
                                                         </a>
                                                     </li>
@@ -105,6 +106,32 @@
     <!-- Container-fluid Ends-->
 </div>
 
+<!-- Delete Modal Box Start -->
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="remove-box">
+                    <p>The permission for the use/group, preview is inherited from the object, object will create a
+                        new permission for this object</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                <a href="{{ route('seller.delete.product',$products->id) }}">
+                    <button type="button" class="btn btn-animation btn-md fw-bold">Yes</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal Box End -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>

@@ -248,7 +248,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.product.review') }}">
                                         <i class="ri-star-line"></i>
                                         <span>Review</span>
                                     </a>

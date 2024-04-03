@@ -12,7 +12,6 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -20,13 +19,15 @@ class ProductController extends Controller
 {
     public function AllProduct()
     {
-        $products = Product::latest()->paginate(4);
+        $id = Auth::user()->id;
+        $products = Product::where('seller_id',$id)->latest()->paginate(4);
         return view('seller.product.product_all',compact('products'));
     }
 
     public function DetailProduct($id)
     {
-        $data = Product::find($id);
+        $seller_id = Auth::user()->id;
+        $data = Product::where('seller_id',$seller_id)->find($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
         return view('seller.product.product_detail',compact('data','multiImgs'));
     }

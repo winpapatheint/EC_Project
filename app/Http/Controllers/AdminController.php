@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
 use Illuminate\Http\Request;
@@ -455,14 +456,15 @@ class AdminController extends Controller
     public function indexreview()
     {
         $limit = 10;
+
         $lists = DB::table('Reviews')
-                    ->select( 'U.name as authorby', 'Reviews.*','U.*')
+                    ->select( 'U.name as authorby', 'Reviews.*','U.*','Reviews.id','Reviews.status')
                     ->join('users as U', function ($join) {
                         $join->on('Reviews.user_id', '=', 'U.id');
                     })
-                    ->whereIn('role',['seller','buyer'])
-                    ->get();
 
+                    ->whereIn('role',['seller','buyer'])
+                    ->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -617,14 +619,23 @@ class AdminController extends Controller
             // print_r(substr($id, 5));die;
             $id = substr($id, 5);
 
-        if ($role == 'buyer' OR $role == 'admin')  {
+        if ($role == 'admin')  {
             $edituser = User::find($id);
+        }
+        if ($role == 'buyer')  {
+            $edituser = DB::table('users')
+                        ->select('buyers.*','users.*','users.id')
+                        ->join('buyers', function ($join) {
+                        $join->on('users.id', '=', 'buyers.user_id');
+                    })
+                    ->where('users.id',$id)
+                    ->orderBy('users.created_at', 'desc')->first();
         }
         if ($role == 'seller')  {
             $editseller = DB::table('users')
                         ->select('sellers.*','users.*','users.id')
                         ->join('sellers', function ($join) {
-                        $join->on('users.email', '=', 'sellers.email');
+                        $join->on('users.id', '=', 'sellers.user_id');
                     })
                     ->where('users.id',$id)
                     ->orderBy('users.created_at', 'desc')->first();
@@ -717,9 +728,33 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function  indexsubadminstatus(Request $request)
+    {
+        $user = User::find($request->userid);
+        $user->status = $request->status;
+        $user->save();
+        return redirect('/admin/profile')->back();
+    }
+
+
+
     public function indexuserstatus(Request $request)
     {
         $user = User::find($request->userid);
+        $user->status = $request->status;
+        // if(empty($user->status))
+        // {
+        //     User::where('id', $request->userid)->update(['role' => 'idleuser']);
+
+        // }
+        $user->save();
+
+        return redirect('/admin/profile')->back();
+    }
+
+    public function indexreviewstatus(Request $request)
+    {
+        $user = Review::find($request->review_id);
         $user->status = $request->status;
         $user->save();
         return redirect('/admin/profile')->back();
@@ -764,6 +799,7 @@ class AdminController extends Controller
                     ->where('id', '!=' , 1)
 
                     ->orderBy('created_at', 'desc')->paginate($limit);
+
         $ttl = $subadmins->total();
         $ttlpage = (ceil($ttl / $limit));
 

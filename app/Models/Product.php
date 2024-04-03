@@ -28,6 +28,7 @@ class Product extends Model
         'product_thambnail',
         'commission',
         'com_price',
+        'seller_amount',
         'status',
         'estimate_date',
         'updated_name',

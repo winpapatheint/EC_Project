@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Creamy Chocolate Cake</h2>
+                        <h2>{{ $product->product_name }}</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                     </a>
                                 </li>
 
-                                <li class="breadcrumb-item active">Creamy Chocolate Cake</li>
+                                <li class="breadcrumb-item active">{{ $product->product_name }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -38,48 +38,48 @@
                                         <div class="product-main-2 no-arrow">
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/1.jpg" id="img-1"
-                                                        data-zoom-image="../assets/images/product/category/1.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}" id="img-1"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-0 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/2.jpg"
-                                                        data-zoom-image="../assets/images/product/category/2.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-1 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/3.jpg"
-                                                        data-zoom-image="../assets/images/product/category/3.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-2 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/4.jpg"
-                                                        data-zoom-image="../assets/images/product/category/4.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-3 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/5.jpg"
-                                                        data-zoom-image="../assets/images/product/category/5.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-4 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/6.jpg"
-                                                        data-zoom-image="../assets/images/product/category/6.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-5 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
@@ -137,42 +137,53 @@
 
                         <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="right-box-contain">
-                                <h6 class="offer-top">30% Off</h6>
-                                <h2 class="name">Creamy Chocolate Cake</h2>
+                                <h6 class="offer-top">{{ $product-> discount_percent }}% Off</h6>
+                                <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    <h3 class="theme-color price">$49.50 <del class="text-content">$58.46</del> <span
-                                            class="offer theme-color">(8% off)</span></h3>
+                                    @if ($product->discount_percent != null)
+                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                    @else
+                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                    @endif
+                                     <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
+                                    @php
+                                        $starRating = 0;
+                                        $count = 0;
+                                    @endphp
+                                    @foreach ($reviews as $review)
+                                        @if ($product->id == $review->product_id)
+                                            @php
+                                                $count += 1;
+                                                $starRating += $review->rating;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($count != 0)
+                                        @php
+                                            $starRating = $starRating / $count;
+                                        @endphp
+                                    @endif
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star"></i>
-                                            </li>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $starRating)
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                @else
+                                                    <li><i data-feather="star"></i></li>
+                                                @endif
+                                            @endfor
                                         </ul>
-                                        <span class="review">23 Customer Review</span>
+                                        <span class="review"><?php echo $count; ?> Customer Review</span>
                                     </div>
                                 </div>
 
                                 <div class="product-contain">
-                                    <p>Lollipop cake chocolate chocolate cake dessert jujubes. Shortbread sugar plum
-                                        dessert
-                                        powder cookie sweet brownie. Cake cookie apple pie dessert sugar plum muffin
-                                        cheesecake.
+                                    <p>
+                                        {{ $product->short_desc }}
                                     </p>
                                 </div>
 
-                                <div class="product-package">
+                                {{-- <div class="product-package">
                                     <div class="product-title">
                                         <h4>Weight</h4>
                                     </div>
@@ -193,48 +204,7 @@
                                             <a href="javascript:void(0)">With Pink Roses</a>
                                         </li>
                                     </ul>
-                                </div>
-
-                                <div class="time deal-timer product-deal-timer mx-md-0 mx-auto" id="clockdiv-1"
-                                    data-hours="1" data-minutes="2" data-seconds="3">
-                                    <div class="product-title">
-                                        <h4>Hurry up! Sales Ends In</h4>
-                                    </div>
-                                    <ul>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="days d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Days</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="hours d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Hours</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="minutes d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Min</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="seconds d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Sec</h6>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                </div> --}}
 
                                 <div class="note-box product-package">
                                     <div class="cart_qty qty-box product-qty">
@@ -251,16 +221,30 @@
                                         </div>
                                     </div>
 
-                                    <button onclick="location.href = 'cart.html';"
+                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                        @csrf
+                                    <button type="submit"
                                         class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                    </form>
                                 </div>
 
                                 <div class="progress-sec">
                                     <div class="left-progressbar">
-                                        <h6>Please hurry! Only 5 left in stock</h6>
+                                    @php
+                                        $orderedCount = 0;
+                                    @endphp
+                                    @foreach ($productOrdered as $ordered)
+                                        @php
+                                            $orderedCount += $ordered->qty;
+                                        @endphp
+                                    @endforeach
+                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                style="width: 50%;"></div>
+                                            <?php
+                                            // Calculate the percentage of ordered items
+                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            ?>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -278,14 +262,14 @@
                                 </div>
 
                                 <div class="pickup-box">
-                                    <div class="product-title">
+                                    {{-- <div class="product-title">
                                         <h4>Store Information</h4>
                                     </div>
 
                                     <div class="pickup-detail">
                                         <h4 class="text-content">Lollipop cake chocolate chocolate cake dessert jujubes.
                                             Shortbread sugar plum dessert powder cookie sweet brownie.</h4>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="product-info">
                                         <ul class="product-info-list product-info-list-2">
@@ -368,17 +352,10 @@
                                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                                         <div class="product-description">
                                             <div class="nav-desh">
-                                                <p>Jelly beans carrot cake icing biscuit oat cake gummi bears tart.
-                                                    Lemon drops carrot cake pudding sweet gummi bears. Chocolate cake
-                                                    tart cupcake donut topping liquorice sugar plum chocolate bar. Jelly
-                                                    beans tiramisu caramels jujubes biscuit liquorice chocolate. Pudding
-                                                    toffee jujubes oat cake sweet roll. Lemon drops dessert croissant
-                                                    danish cake cupcake. Sweet roll candy chocolate toffee jelly sweet
-                                                    roll halvah brownie topping. Marshmallow powder candy sesame snaps
-                                                    jelly beans candy canes marshmallow gingerbread pie.</p>
+                                                <p>{{ $product->long_desc}}</p>
                                             </div>
 
-                                            <div class="nav-desh">
+                                            {{-- <div class="nav-desh">
                                                 <div class="desh-title">
                                                     <h5>Organic:</h5>
                                                 </div>
@@ -429,7 +406,7 @@
                                                     chocolate. Ice cream cookie dragée cake sweet roll sweet roll.Lemon
                                                     drops cookie muffin carrot cake chocolate marzipan gingerbread
                                                     topping chocolate bar. Soufflé tiramisu pastry sweet dessert.</p>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
 
@@ -438,36 +415,45 @@
                                             <table class="table info-table">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Specialty</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Ingredient Type</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Brand</td>
-                                                        <td>Lavian Exotique</td>
+                                                        <td>
+                                                            @php
+                                                                $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                            @endphp
+                                                            {{ $brand->brand_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Form</td>
-                                                        <td>Bar Brownie</td>
+                                                        <td>
+                                                            @php
+                                                                $country = DB::table('Countries')->where('id',$product->country_id)->first();
+                                                            @endphp
+                                                            {{ $country->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Package Information</td>
-                                                        <td>Box</td>
+                                                        <td>Category</td>
+                                                        <td>
+                                                            @php
+                                                                $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                            @endphp
+                                                            {{ $category->category_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Manufacturer</td>
-                                                        <td>Prayagh Nutri Product Pvt Ltd</td>
+                                                        <td>Seller</td>
+                                                        <td>
+                                                            @php
+                                                                $seller = DB::table('sellers')->where('id',$product->seller_id)->first();
+                                                                $seller_name = DB::table('users')->where('id',$seller->user_id)->first();
+                                                            @endphp
+                                                            {{ $seller_name->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Item part number</td>
-                                                        <td>LE 014 - 20pcs Crème Bakes (Pack of 2)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Net Quantity</td>
-                                                        <td>40.00 count</td>
+                                                        <td>Estimated Date</td>
+                                                        <td>{{ $product->estimate_date }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -1043,7 +1029,7 @@
         <div class="modal fade" id="writereview" tabindex="-1" aria-labellabedby="exambleModelLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{ route('reviews_store', ['product' => $product->id])}}"  method="POST">
+                    <form action=""  method="POST">
                         @csrf
                         <input type="hidden" name="product" value="{{ $product->id }}">
                         <div class="modal-header">

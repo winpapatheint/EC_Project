@@ -825,7 +825,7 @@
     <!-- Footer Section End -->
 
      <!-- Quick View Modal Box Start -->
-     <div class="modal fade theme-modal view-modal" id="view" tabindex="-1">
+     <div class="modal fade theme-modal view-modal" id="view-product" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header p-0">
@@ -837,8 +837,8 @@
                     <div class="row g-sm-4 g-2">
                         <div class="col-lg-6">
                             <div class="slider-image">
-                                <img src="../assets/images/product/category/1.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
+                                <img src="{{ asset('upload/product_thambnail/1711095325.jpg') }}"
+                                    class="img-fluid blur-up lazyload" alt="">
                             </div>
                         </div>
 
@@ -865,7 +865,7 @@
                                         </li>
                                     </ul>
                                     <span class="ms-2">8 Reviews</span>
-                                    <span class="ms-2 text-danger">6 sold in last 16 hours</span>
+                                    <span class="ms-2 text-danger">9 sold in last 16 hours</span>
                                 </div>
 
                                 <div class="product-detail">

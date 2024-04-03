@@ -526,7 +526,8 @@
     </div>
     <!-- Container-fluid Ends-->
 </div>
- <!-- Delete Modal Box Start -->
+
+<!-- Delete Modal Box Start -->
  <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

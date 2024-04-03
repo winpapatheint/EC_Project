@@ -1,7 +1,5 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-@php $error = $errors->toArray();
-@endphp
 <div class="page-body">
 <!-- New Product Add Start -->
     <div class="container-fluid">

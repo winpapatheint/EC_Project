@@ -17,6 +17,7 @@
                             <div class="table-responsive">
                                 <table class="user-table ticket-table review-table theme-table table"
                                     id="table_id">
+
                                     <thead>
                                         <tr>
                                             <th>No</th>

@@ -3,17 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
-
+use App\Http\Controllers\ShowProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +54,7 @@ Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->n
 Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
 
-Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
+// Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
 
 Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
 
@@ -71,10 +66,8 @@ Route::get('/user-order_tracking', function () {return view('front-end.user-orde
 
 Route::get('/register', function () {return view('front-end.register');});
 
-
-
-Route::get('/products', function () {return view('front-end.products');});
-Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
+Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
+Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
@@ -202,13 +195,6 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
 
-<<<<<<< HEAD
-Route::get('/seller', function () {return view('seller.index');})->middleware(['auth', 'verified','role:seller'])->name('seller.dashboard');
-Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
-Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
-Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
-Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
-=======
 Route::controller(SellerController::class)->group(function(){
     Route::get('/seller','Dashboard')->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');
@@ -221,7 +207,6 @@ Route::controller(SellerController::class)->group(function(){
     Route::get('/seller/help/{id}','DeleteHelp')->name('seller.help.delete');
     Route::get('/seller/review','Review')->name('seller.review');
 });
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
 
 //Brand
 Route::controller(BrandController::class)->group(function(){
@@ -270,7 +255,7 @@ Route::get('/subseller/edit/product', function () {return view('sub_seller.produ
 Route::get('/subseller/all/order', function () {return view('sub_seller.order.order_all');})->name('sub_seller.all.order');
 Route::get('/subseller/detail/order', function () {return view('sub_seller.order.order_detail');})->name('sub_seller.detail.order');
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
-Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
+//Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
 require __DIR__.'/auth.php';
 

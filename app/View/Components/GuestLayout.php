@@ -16,11 +16,6 @@ class GuestLayout extends Component
     {
 
 
-$categories = DB::table('Categorys')
-->leftJoin('Sub_category_titles AS subcategories', 'Categorys.id', '=', 'subcategories.category_id')
-->select('Categorys.id', 'Categorys.category_name AS category_name', 'subcategories.sub_category_titlename AS subcategory_title')
-
-->get();
 
         // $list = DB::table('Categorys as C')
         //             ->select('C.*','C.id')
@@ -35,6 +30,6 @@ $categories = DB::table('Categorys')
 
 
 
-        return view('layouts.guest',compact('categories'));
+        return view('layouts.guest');
     }
 }

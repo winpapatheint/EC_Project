@@ -38,49 +38,6 @@ class RegisterController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
         event(new Registered($user));
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'role' => 'seller',
-                'password' => Hash::make($request->input('password')),
-
-            ]);
-            event(new Registered($user));
-            $seller = new Seller($request->all());
-            $seller->password = Hash::make($request->input('password'));
-            if (isset($filename)) {
-                $seller->shop_logo = $filename;
-            }
-            $seller->save();
-
-            $shop = new Shop($request->only(['shop_name', 'shop_establish']));
-            if (isset($filename)) {
-                $shop->shop_logo = $filename;
-            }
-            $shop->save();
-
-            DB::commit();
-
-
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Failed to register seller: ' . $e->getMessage());
-            return back()->withInput()->withErrors(['error' => 'Failed to register seller.']);
-        }
-               //verify email
-               $email = $request->email;
-               return view('auth.verify-email',compact('email'));
-               //return redirect()->route('auth.verify-email', compact('email'));
-=======
-=======
->>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
-=======
->>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
         $seller = Seller::create([
             'user_id' => $user->id,
             'bank_name' => $request->input('bank_name') ,
@@ -96,15 +53,7 @@ class RegisterController extends Controller
             'address' => $request->input('address'),
             'url' => $request->input('url')
         ]);
-<<<<<<< HEAD
-        return redirect('/login');
-<<<<<<< HEAD
->>>>>>> 57894d7f12fd487bbd28f8f224834025836b61b7
-=======
->>>>>>> b6070b616b42d5bc9da8926f70a2882252856643
-=======
         $email = $request->email;
         return view('auth.verify-email',compact('email'));
->>>>>>> 644b11b6ab7e09d5db1596da59fe8ad8ddaf6144
     }
 }

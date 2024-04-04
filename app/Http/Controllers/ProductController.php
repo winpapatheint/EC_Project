@@ -55,10 +55,10 @@ class ProductController extends Controller
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
-            'selling_price' => 'required|numeric',
+            'original_price' => 'required|numeric',
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
-            'product_thambnail' => 'required',
+            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'multi_img' => 'required',
             'estimate_date' => 'required|string|max:255',
         ]);
@@ -80,13 +80,15 @@ class ProductController extends Controller
             'product_tags' => $request->product_tags,
             'product_size' => $request->product_size,
             'product_color' => $request->product_color,
-            'selling_price' => $request->selling_price,
+            'original_price' => $request->original_price,
             'discount_percent' => $request->discount_percent,
+            'selling_price' => $request->calculated_selling_price,
             'short_desc' => $request->short_desc,
             'long_desc' => $request->long_desc,
             'product_thambnail' => $filename,
             'status' => 1,
             'estimate_date' => $request->estimate_date,
+            'delivery_price' => $request->delivery_price,
             'created_at' => Carbon::now(),
         ]);
 
@@ -127,7 +129,7 @@ class ProductController extends Controller
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
-            'selling_price' => 'required|numeric',
+            'original_price' => 'required|numeric',
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
             'estimate_date' => 'required|string|max:255',
@@ -155,7 +157,7 @@ class ProductController extends Controller
         $product->product_tags= $request->product_tags;
         $product->product_size= $request->product_size;
         $product->product_color= $request->product_color;
-        $product->selling_price= $request->selling_price;
+        $product->original_price= $request->original_price;
         $product->discount_percent= $request->discount_percent;
         $product->short_desc= $request->short_desc;
         $product->long_desc= $request->long_desc;
@@ -167,18 +169,20 @@ class ProductController extends Controller
         return redirect('/seller/all/product')->with('flash_message', 'Data updated successfully');
     }
 
-    public function DeleteProduct($id)
+    public function DeleteProduct(Request $request)
     {
+        $id = $request->id;
         $product = Product::findOrFail($id);
         File::delete($product->product_thambnail);
         Product::findOrFail($id)->delete();
-        $images = MultiImg::where('product_id',$id)->get();
-        foreach($images as $img){
+        $images = MultiImg::where('product_id', $id)->get();
+        foreach ($images as $img) {
             File::delete($img->photo_name);
-            MultiImg::where('product_id',$id)->delete();
+            MultiImg::where('product_id', $id)->delete();
         }
         return back()->with('flash_message', 'Data deleted successfully');
     }
+
 
     public function ChangeStatus(Request $request)
     {
@@ -216,7 +220,7 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Image deleted successfully');
     }
 
-    public function Review(Request $request)
+    public function Review()
     {
         $id = Auth::user()->id;
         $review = Review::where('user_id',$id)->latest()->paginate(10);
@@ -240,8 +244,9 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function DeleteReview($id)
+    public function DeleteReview(Request $request)
     {
+        $id = $request->id;
         Review::findOrFail($id)->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }

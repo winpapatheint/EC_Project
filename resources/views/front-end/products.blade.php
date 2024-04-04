@@ -81,36 +81,21 @@
             <div class="row">
                 <div class="col-custom-3">
                     <div class="left-box wow fadeInUp">
+                    <form id="searchForm" action="{{ route('show-product') }}" method="GET">
                         <div class="shop-left-sidebar">
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-                            {{-- <div class="filter-category">
-                                <div class="filter-title">
-                                    <h2>Filters</h2>
-                                    <a href="javascript:void(0)">Clear All</a>
-                                </div>
-                                <ul>
-                                    <li>
-                                        <a href="javascript:void(0)">Vegetable</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Fruit</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Fresh</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Milk</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Meat</a>
-                                    </li>
-                                </ul>
-                            </div> --}}
-
                             <div class="accordion custom-accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <div class="form-floating theme-form-floating-2 search-box">
+                                        <input type="search" class="form-control" id="search" name="search"
+                                            placeholder="Search .." value="{{ $search }}">
+                                        <label for="search">Search</label>
+                                    </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -120,182 +105,21 @@
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
-                                            <div class="form-floating theme-form-floating-2 search-box">
-                                                <input type="search" class="form-control" id="search"
-                                                    placeholder="Search ..">
-                                                <label for="search">Search</label>
-                                            </div>
 
                                             <ul class="category-list custom-padding custom-height">
+                                            @foreach ($categoryWithProductCount as $category)
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="fruit">
-                                                        <label class="form-check-label" for="fruit">
-                                                            <span class="name">Fruits & Vegetables</span>
-                                                            <span class="number">(15)</span>
+                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}" 
+                                                        name="categories[]" value= "{{ $category->id }}" data-category="{{ $category->id }}"
+                                                        {{ in_array($category->id, $categories) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="{{ $category->category_name }}">
+                                                            <span class="name">{{ $category->category_name }}</span>
+                                                            <span class="number">({{ $category->product_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="cake">
-                                                        <label class="form-check-label" for="cake">
-                                                            <span class="name">Bakery, Cake & Dairy</span>
-                                                            <span class="number">(12)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="behe">
-                                                        <label class="form-check-label" for="behe">
-                                                            <span class="name">Beverages</span>
-                                                            <span class="number">(20)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="snacks">
-                                                        <label class="form-check-label" for="snacks">
-                                                            <span class="name">Snacks & Branded Foods</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="beauty">
-                                                        <label class="form-check-label" for="beauty">
-                                                            <span class="name">Beauty & Household</span>
-                                                            <span class="number">(30)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="pets">
-                                                        <label class="form-check-label" for="pets">
-                                                            <span class="name">Kitchen, Garden & Pets</span>
-                                                            <span class="number">(50)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="egg">
-                                                        <label class="form-check-label" for="egg">
-                                                            <span class="name">Eggs, Meat & Fish</span>
-                                                            <span class="number">(19)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="food">
-                                                        <label class="form-check-label" for="food">
-                                                            <span class="name">Gourment & World Food</span>
-                                                            <span class="number">(30)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="care">
-                                                        <label class="form-check-label" for="care">
-                                                            <span class="name">Baby Care</span>
-                                                            <span class="number">(20)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="fish">
-                                                        <label class="form-check-label" for="fish">
-                                                            <span class="name">Fish & Seafood</span>
-                                                            <span class="number">(10)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="marinades">
-                                                        <label class="form-check-label" for="marinades">
-                                                            <span class="name">Marinades</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="lamb">
-                                                        <label class="form-check-label" for="lamb">
-                                                            <span class="name">Mutton & Lamb</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="other">
-                                                        <label class="form-check-label" for="other">
-                                                            <span class="name">Port & other Meats</span>
-                                                            <span class="number">(06)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="pour">
-                                                        <label class="form-check-label" for="pour">
-                                                            <span class="name">Pourltry</span>
-                                                            <span class="number">(01)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="salami">
-                                                        <label class="form-check-label" for="salami">
-                                                            <span class="name">Sausages, bacon & Salami</span>
-                                                            <span class="number">(03)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingTwo">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                                            <span>Food Preference</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="veget">
-                                                        <label class="form-check-label" for="veget">
-                                                            <span class="name">Vegetarian</span>
-                                                            <span class="number">(08)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="non">
-                                                        <label class="form-check-label" for="non">
-                                                            <span class="name">Non Vegetarian</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                            @endforeach
                                             </ul>
                                         </div>
                                     </div>
@@ -311,7 +135,7 @@
                                     <div id="collapseThree" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
                                             <div class="range-slider">
-                                                <input type="text" class="js-range-slider" value="">
+                                                <input type="text" class="js-range-slider" name="price" value="{{ $price }}">
                                             </div>
                                         </div>
                                     </div>
@@ -329,7 +153,8 @@
                                             <ul class="category-list custom-padding">
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox">
+                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="5"
+                                                        {{ in_array("5", $rating) ? 'checked' : '' }}>
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -348,14 +173,25 @@
                                                                     <i data-feather="star" class="fill"></i>
                                                                 </li>
                                                             </ul>
-                                                            <span class="text-content">(5 Star)</span>
+                                                            @php
+                                                                $ratingCountForFiveStars = $ratingWithProductCount->first(function ($ratingCount) {
+                                                                    return $ratingCount->stars_rated == 5;
+                                                                });
+                                                            @endphp
+
+                                                            @if($ratingCountForFiveStars)
+                                                                <span class="text-content">({{ $ratingCountForFiveStars->product_count }})</span>
+                                                            @else
+                                                                <span class="text-content">(0)</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
 
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox">
+                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="4"
+                                                        {{ in_array("4", $rating) ? 'checked' : '' }}>
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -374,14 +210,25 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            <span class="text-content">(4 Star)</span>
+                                                            @php
+                                                                $ratingCountForFourStars = $ratingWithProductCount->first(function ($ratingCount) {
+                                                                    return $ratingCount->stars_rated == 4;
+                                                                });
+                                                            @endphp
+
+                                                            @if($ratingCountForFourStars)
+                                                                <span class="text-content">({{ $ratingCountForFourStars->product_count }})</span>
+                                                            @else
+                                                                <span class="text-content">(0)</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
 
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox">
+                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="3"
+                                                        {{ in_array("3", $rating) ? 'checked' : '' }}>
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -400,14 +247,25 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            <span class="text-content">(3 Star)</span>
+                                                            @php
+                                                                $ratingCountForThreeStars = $ratingWithProductCount->first(function ($ratingCount) {
+                                                                    return $ratingCount->stars_rated == 3;
+                                                                });
+                                                            @endphp
+
+                                                            @if($ratingCountForThreeStars)
+                                                                <span class="text-content">({{ $ratingCountForThreeStars->product_count }})</span>
+                                                            @else
+                                                                <span class="text-content">(0)</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
 
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox">
+                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="2"
+                                                        {{ in_array("2", $rating) ? 'checked' : '' }}>
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -426,14 +284,25 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            <span class="text-content">(2 Star)</span>
+                                                            @php
+                                                                $ratingCountForTwoStars = $ratingWithProductCount->first(function ($ratingCount) {
+                                                                    return $ratingCount->stars_rated == 2;
+                                                                });
+                                                            @endphp
+
+                                                            @if($ratingCountForTwoStars)
+                                                                <span class="text-content">({{ $ratingCountForTwoStars->product_count }})</span>
+                                                            @else
+                                                                <span class="text-content">(0)</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
 
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox">
+                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="1"
+                                                        {{ in_array("1", $rating) ? 'checked' : '' }}>
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -452,7 +321,17 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            <span class="text-content">(1 Star)</span>
+                                                            @php
+                                                                $ratingCountForOneStars = $ratingWithProductCount->first(function ($ratingCount) {
+                                                                    return $ratingCount->stars_rated == 1;
+                                                                });
+                                                            @endphp
+
+                                                            @if($ratingCountForOneStars)
+                                                                <span class="text-content">({{ $ratingCountForFiveStars->product_count }})</span>
+                                                            @else
+                                                                <span class="text-content">(0)</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </li>
@@ -474,10 +353,11 @@
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault">
+                                                            id="flexCheckDefault" name="discount[]" value="1"
+                                                            {{ in_array("1", $discount) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="flexCheckDefault">
                                                             <span class="name">upto 5%</span>
-                                                            <span class="number">(06)</span>
+                                                            <span class="number">({{ $discountWithProductCount->group_1_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
@@ -485,10 +365,11 @@
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault1">
+                                                            id="flexCheckDefault1" name="discount[]" value="2"
+                                                            {{ in_array("2", $discount) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="flexCheckDefault1">
                                                             <span class="name">5% - 10%</span>
-                                                            <span class="number">(08)</span>
+                                                            <span class="number">({{ $discountWithProductCount->group_2_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
@@ -496,10 +377,11 @@
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault2">
+                                                            id="flexCheckDefault2" name="discount[]" value="3"
+                                                            {{ in_array("3", $discount) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="flexCheckDefault2">
                                                             <span class="name">10% - 15%</span>
-                                                            <span class="number">(10)</span>
+                                                            <span class="number">({{ $discountWithProductCount->group_3_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
@@ -507,10 +389,11 @@
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault3">
+                                                            id="flexCheckDefault3" name="discount[]" value="4"
+                                                            {{ in_array("4", $discount) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="flexCheckDefault3">
                                                             <span class="name">15% - 25%</span>
-                                                            <span class="number">(14)</span>
+                                                            <span class="number">({{ $discountWithProductCount->group_4_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
@@ -518,10 +401,11 @@
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault4">
+                                                            id="flexCheckDefault4" name="discount[]" value="5"
+                                                            {{ in_array("5", $discount) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="flexCheckDefault4">
                                                             <span class="name">More than 25%</span>
-                                                            <span class="number">(13)</span>
+                                                            <span class="number">({{ $discountWithProductCount->group_5_count }})</span>
                                                         </label>
                                                     </div>
                                                 </li>
@@ -530,7 +414,7 @@
                                     </div>
                                 </div>
 
-                                <div class="accordion-item">
+                                {{-- <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingFive">
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseFive">
@@ -764,9 +648,10 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
 
@@ -1105,4 +990,10 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
+    <script>
+    document.getElementById('searchButton').addEventListener('click', function() {
+        document.getElementById('searchForm').submit();
+    });
+</script>
+
 </x-guest-layout>

@@ -193,7 +193,6 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
-    </x-guest-layout>
 
     <!-- Add Address Modal Box Start -->
     <div class="modal fade theme-modal" id="add-address" tabindex="-1">
@@ -373,7 +372,7 @@
         </div>
     </div>
     <!-- Remove Address Modal End -->
-
+</x-guest-layout>
 <!-- Edit Address Script-->
 <script>
     $(document).ready(function() {

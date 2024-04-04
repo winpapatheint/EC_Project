@@ -359,15 +359,14 @@
     $('.edit-btn').on('click', function() {
         var cardData = JSON.parse($(this).data('card'));
         $('#id').val(cardData.id);
-        $('#acc_name').val(cardData.acc_name);
-        $('#acc_no').val(cardData.acc_no);
-        $('#expired_date').val(cardData.expired_date);
-        $('#card_type').val(cardData.card_type);
+        $('#email').val(cardData.email);
+        $('#address').val(cardData.address);
+        $('#phone').val(cardData.phone);
 
     });
 
     $('#saveChanges').on('click', function() {
-        var newcardId = $('#address_id').val();
+        var newcardId = $('#id').val();
         var newName = $('#edit_name').val();
         var newNumber = $('#acc_no').val();
         var newExpireddate = $('#expired_date').val();

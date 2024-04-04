@@ -62,8 +62,8 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>Vicki E. Pope</h3>
-                                    <h6 class="text-content">vicki.pope@gmail.com</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
                         </div>

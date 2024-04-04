@@ -969,7 +969,7 @@
                                 </div> --}}
 
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                    <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add

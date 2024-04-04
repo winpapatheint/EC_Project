@@ -23,7 +23,7 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-    
+
         <section class="log-in-section section-b-space">
             <div class="container">
                 <div class="row justify-content-center align-items-center">
@@ -94,7 +94,7 @@
                                         <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>
                                     </div>
                                 </form>
-                        
+
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>

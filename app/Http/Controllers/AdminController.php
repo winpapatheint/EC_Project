@@ -495,7 +495,22 @@ class AdminController extends Controller
         return view('admin.product.product_all',compact('lists','ttlpage','ttl'));
     }
 
+    public function indexshopproduct($id)
+    {
+        $limit = 10;
 
+        $shoplist = DB::table('products as P')
+                    ->select( 'P.*','C.*')
+                    ->Join('Categories as C', function ($join) {
+                        $join->on('C.id', '=', 'P.category_id');
+                    })
+                    ->where('P.seller_id',$id)->orderBy('P.created_at', 'desc')->paginate($limit);
+
+        $ttl = $shoplist->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
+    }
 
     public function indexsubcategory()
     {
@@ -760,6 +775,25 @@ class AdminController extends Controller
         return redirect('/admin/profile')->back();
     }
 
+
+    public function indexshoplist(Request $request)
+    {
+        $limit=10;
+
+        $lists = DB::table('sellers as S')
+        ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
+        ->join('users as U', 'U.id', '=', 'S.user_id')
+        ->orderBy('S.created_at', 'desc')
+        ->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.seller-grid',compact('lists','ttlpage','ttl'));
+    }
+
+
+
     public function indexuser()
     {
 
@@ -767,8 +801,10 @@ class AdminController extends Controller
 
         // print_r($type);die;
 
-        $updval = array('status' => '1');
-        $users = DB::table('users')->whereIn('role',['seller','buyer'])
+      //  $updval = array('status' => '1');
+        $users = DB::table('users')
+                    ->select('users.id','users.*')
+                    ->whereIn('role',['seller','buyer'])
                     ->where('email_verified_at','<>','')
                     ->where(function ($query) {
                         $query->whereNotNull('email_verified_at')
@@ -776,9 +812,9 @@ class AdminController extends Controller
                     })
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
-        foreach ($users as $user) {
-            DB::table('users')->where('id', $user->id)->update($updval);
-        }
+     //foreach ($users as $user) {
+            //DB::table('users')->where('id', $user->id)->update($updval);
+       // }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));

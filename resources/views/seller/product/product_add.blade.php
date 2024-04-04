@@ -188,10 +188,10 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 form-label-title">Price</label>
+                                        <label class="col-sm-3 form-label-title">Original Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" value="{{ old('selling_price') }}">
-                                            @error('selling_price')
+                                            <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('selling_price') }}">
+                                            @error('original_price')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -199,8 +199,12 @@
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Discount Percentage</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" name="discount_percent" type="number" placeholder="0-100" min="1" max="100" value="{{ old('discount_percent') }}">
+                                        <div class="col-sm-6">
+                                            <input class="form-control" name="discount_percent" id="discount_percent" type="number" placeholder="0-100%" min="1" max="100" value="{{ old('discount_percent') }}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" name="selling_price" id="selling_price" type="number" disabled>
+                                            <input type="hidden" name="calculated_selling_price" id="calculated_selling_price">
                                         </div>
                                     </div>
 
@@ -224,6 +228,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Delivery Price</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" name="delivery_price" type="number" placeholder="400" min="1" value="{{ old('delivery_price') }}">
+                                        </div>
+                                    </div>
+
                                     <button type="submit" class="btn btn-animation">Save</button>
                                 </form>
                             </div>
@@ -238,6 +249,33 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+
+<script>
+    const originalPriceInput = document.getElementById('original_price');
+    const discountPercentInput = document.getElementById('discount_percent');
+    const sellingPriceInput = document.getElementById('selling_price');
+    const calculatedSellingPriceInput = document.getElementById('calculated_selling_price');
+
+    function calculateSellingPrice() {
+        const originalPrice = parseFloat(originalPriceInput.value);
+        const discountPercent = parseFloat(discountPercentInput.value);
+
+        if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+            const discountAmount = originalPrice * (discountPercent / 100);
+            const sellingPrice = originalPrice - discountAmount;
+            sellingPriceInput.value = sellingPrice.toFixed(2);
+            calculatedSellingPriceInput.value = sellingPrice.toFixed(2);
+        } else {
+            sellingPriceInput.value = '';
+            calculatedSellingPriceInput.value = '';
+        }
+    }
+    originalPriceInput.addEventListener('input', calculateSellingPrice);
+    discountPercentInput.addEventListener('input', calculateSellingPrice);
+    calculateSellingPrice();
+</script>
+
 
 <script>
     ClassicEditor

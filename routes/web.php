@@ -116,7 +116,7 @@ Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
 
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
-Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
+Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
@@ -225,20 +225,20 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
     Route::get('/seller/edit/product/{id}','EditProduct')->name('seller.edit.product');
     Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
-    Route::get('/seller/delete/product/{id}','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
     Route::get('/seller/product/review','Review')->name('seller.review');
     Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
     Route::post('/seller/product/review/update', 'UpdateReview')->name('seller.review.update');
-    Route::get('/seller/delete/review/{id}','DeleteReview')->name('seller.review.delete');
+    Route::post('/seller/delete/review','DeleteReview')->name('seller.review.delete');
 });
 
 //SellerOrder
 Route::controller(OrderController::class)->group(function(){
     Route::get('/seller/all/order','SellerAllOrder')->name('seller.all.order');
-    // Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
+    Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
     // Route::get('/seller/tracking/order','SellerTrackingOrder')->name('seller.tracking.order');
 });
 

@@ -54,6 +54,7 @@ class AdminController extends Controller
             )
             ->groupby( 'Categories.id')
             ->get();
+
         $blogs = DB::table('Blog')
         ->select( 'U.name as authorby', 'Blog.*')
         ->join('users as U', function ($join) {
@@ -449,6 +450,26 @@ class AdminController extends Controller
         // print_r($lists);die;
 
         return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
+    }
+
+    public function indexreview()
+    {
+        $limit = 10;
+        $lists = DB::table('Reviews')
+                    ->select( 'U.name as authorby', 'Reviews.*','U.*')
+                    ->join('users as U', function ($join) {
+                        $join->on('Reviews.user_id', '=', 'U.id');
+                    })
+                    ->whereIn('role',['seller','buyer'])
+                    ->get();
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+    // $hcompanies = array();
+        // print_r($lists);die;
+
+        return view('admin.product.product_review',compact('lists','ttlpage','ttl'));
     }
 
     public function indexproduct()

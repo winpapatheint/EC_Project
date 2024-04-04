@@ -19,7 +19,7 @@
                                             <th>No</th>
                                             <th>Date</th>
                                             <th>Order Image</th>
-                                            <th>Order Code</th>
+                                            <th>Order ID</th>
                                             <th>Payment Method</th>
                                             <th>Delivery Status</th>
                                             <th>Amount</th>
@@ -44,7 +44,7 @@
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <td>{{ $item->order_number }}</td>
+                                                <td>{{ $item->id }}</td>
                                                 <td>{{ $item->payment_type }}</td>
                                                 <td class="order-success">
                                                     <span>Success</span>
@@ -53,7 +53,7 @@
                                                 <td>
                                                     <ul>
                                                         <li>
-                                                            <a href="#">
+                                                            <a href="{{ route('seller.detail.order',$item->id) }}">
                                                                 <i class="ri-eye-line"></i>
                                                             </a>
                                                         </li>

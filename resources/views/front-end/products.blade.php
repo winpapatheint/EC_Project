@@ -86,7 +86,7 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-                            <div class="filter-category">
+                            {{-- <div class="filter-category">
                                 <div class="filter-title">
                                     <h2>Filters</h2>
                                     <a href="javascript:void(0)">Clear All</a>
@@ -108,7 +108,7 @@
                                         <a href="javascript:void(0)">Meat</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
 
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
@@ -784,32 +784,32 @@
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
-                                        <span>Most Popular</span> <i class="fa-solid fa-angle-down"></i>
+                                        <span>Choose Sorting</span> <i class="fa-solid fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li>
+                                        {{-- <li>
                                             <a class="dropdown-item" id="pop" href="javascript:void(0)">Popularity</a>
-                                        </li>
+                                        </li> --}}
                                         <li>
-                                            <a class="dropdown-item" id="low" href="javascript:void(0)">Low - High
+                                            <a class="dropdown-item" id="low" href="{{ route('show-product', ['sort' => '1']) }}">Low - High
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="high" href="javascript:void(0)">High - Low
+                                            <a class="dropdown-item" id="high" href="{{ route('show-product', ['sort' => '2']) }}">High - Low
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="rating" href="javascript:void(0)">Average
+                                            <a class="dropdown-item" id="rating" href="{{ route('show-product', ['sort' => '3']) }}">Average
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="aToz" href="javascript:void(0)">A - Z Order</a>
+                                            <a class="dropdown-item" id="aToz" href="{{ route('show-product', ['sort' => '4']) }}">A - Z Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="zToa" href="javascript:void(0)">Z - A Order</a>
+                                            <a class="dropdown-item" id="zToa" href="{{ route('show-product', ['sort' => '5']) }}">Z - A Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="off" href="javascript:void(0)">% Off - Hight To
+                                            <a class="dropdown-item" id="off" href="{{ route('show-product', ['sort' => '6']) }}">% Off - Hight To
                                                 Low</a>
                                         </li>
                                     </ul>
@@ -853,7 +853,7 @@
                                 @if ($product->id == $review->product_id)
                                     @php
                                         $count += 1;
-                                        $starRating += $review->rating;
+                                        $starRating += $review->stars_rated;
                                     @endphp
                                 @endif
                             @endforeach
@@ -872,19 +872,19 @@
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </a>
 
-                                        <ul class="product-option">
+                                        <ul class="product-option d-flex justify-content-center">
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#view-product" data-product="{{ $product->id }}">
+                                                    data-bs-target="#view-product{{ $product->id }}" data-product="{{ $product->id }}">
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
 
-                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                            {{-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
                                                 <a href="{{ url('/compare') }}">
                                                     <i data-feather="refresh-cw"></i>
                                                 </a>
-                                            </li>
+                                            </li> --}}
 
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
@@ -975,4 +975,134 @@
     </section>
     <!-- Shop Section End -->
 
+    @foreach ($products as $product)
+    @if ($product->status == 1)
+    @php
+        $starRating = 0;
+        $count = 0;
+    @endphp
+    @foreach ($reviews as $review)
+        @if ($product->id == $review->product_id)
+            @php
+                $count += 1;
+                $starRating += $review->stars_rated;
+            @endphp
+        @endif
+    @endforeach
+    @if ($count != 0)
+        @php
+            $starRating = $starRating / $count;
+        @endphp
+    @endif
+    <!-- Quick View Modal Box Start -->
+     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                    class="img-fluid blur-up lazyload" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name">{{ $product->product_name }}</h4>
+                                @if ($product->discount_percent != null)
+                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                @else
+                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                @endif
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $starRating)
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span class="ms-2">{{ $count}} Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Product Details :</h4>
+                                    <p>{{ $product->long_desc }}</p>
+                                </div>
+
+                                <ul class="brand-list">
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Brand Name:</h5>
+                                            <h6>
+                                                @php
+                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                @endphp
+                                                {{ $brand->brand_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Product Code:</h5>
+                                            <h6>{{ $product->product_code }}</h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Category:</h5>
+                                            <h6>
+                                                @php
+                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                @endphp
+                                                {{ $category->category_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                {{--<div class="select-size">
+                                    <h4>Cake Size :</h4>
+                                    <select class="form-select select-form-size">
+                                        <option selected>Select Size</option>
+                                        <option value="1.2">1/2 KG</option>
+                                        <option value="0">1 KG</option>
+                                        <option value="1.5">1/5 KG</option>
+                                        <option value="red">Red Roses</option>
+                                        <option value="pink">With Pink Roses</option>
+                                    </select>
+                                </div> --}}
+
+                                <div class="modal-button">
+                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                        @csrf
+                                        <button onclick="location.href = 'cart.html';"
+                                            class="btn btn-md add-cart-button icon">Add
+                                            To Cart</button>
+                                    </form>
+                                    
+                                    <button onclick="location.href = 'product-left.html';"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        View More Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quick View Modal Box End -->
+    @endif
+    @endforeach
 </x-guest-layout>

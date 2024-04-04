@@ -172,7 +172,7 @@
                                 </span>
                             </button>
                             <a href="index.html" class="web-logo nav-logo">
-                                <img src="../assets/images/logo/1.png" class="img-fluid blur-up lazyload" alt="">
+                                <img src="{{ asset('images/logos/logo_foods.png') }}" class="img-fluid blur-up lazyload" alt="">
                             </a>
 
                             <div class="middle-box">
@@ -349,7 +349,7 @@
                                 </div>
 
                                 <ul class="category-list">
-                                @foreach ($categories as $category)p
+                                @foreach ($categories as $category)
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="../assets/svg/1/vegetable.svg" alt="">
@@ -413,7 +413,8 @@
 
 
                                             <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/seller-grid') }}"
+
+                                            <a class="nav-link " href="{{ route('shoplist') }}"
                                                    >Shop</a>
                                             </li>
 

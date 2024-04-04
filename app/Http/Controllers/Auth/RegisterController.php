@@ -70,6 +70,8 @@ class RegisterController extends Controller
             'room' => $request->room,
             'url' => $request->url
         ]);
+
+        event(new Registered($seller));
         $email = $request->email;
         return view('auth.verify-email',compact('email'));
     }

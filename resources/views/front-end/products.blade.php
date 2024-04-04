@@ -125,144 +125,6 @@
                                                     placeholder="Search ..">
                                                 <label for="search">Search</label>
                                             </div>
-
-                                            <ul class="category-list custom-padding custom-height">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="fruit">
-                                                        <label class="form-check-label" for="fruit">
-                                                            <span class="name">Fruits & Vegetables</span>
-                                                            <span class="number">(15)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="cake">
-                                                        <label class="form-check-label" for="cake">
-                                                            <span class="name">Bakery, Cake & Dairy</span>
-                                                            <span class="number">(12)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="behe">
-                                                        <label class="form-check-label" for="behe">
-                                                            <span class="name">Beverages</span>
-                                                            <span class="number">(20)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="snacks">
-                                                        <label class="form-check-label" for="snacks">
-                                                            <span class="name">Snacks & Branded Foods</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="beauty">
-                                                        <label class="form-check-label" for="beauty">
-                                                            <span class="name">Beauty & Household</span>
-                                                            <span class="number">(30)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="pets">
-                                                        <label class="form-check-label" for="pets">
-                                                            <span class="name">Kitchen, Garden & Pets</span>
-                                                            <span class="number">(50)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="egg">
-                                                        <label class="form-check-label" for="egg">
-                                                            <span class="name">Eggs, Meat & Fish</span>
-                                                            <span class="number">(19)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="food">
-                                                        <label class="form-check-label" for="food">
-                                                            <span class="name">Gourment & World Food</span>
-                                                            <span class="number">(30)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="care">
-                                                        <label class="form-check-label" for="care">
-                                                            <span class="name">Baby Care</span>
-                                                            <span class="number">(20)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="fish">
-                                                        <label class="form-check-label" for="fish">
-                                                            <span class="name">Fish & Seafood</span>
-                                                            <span class="number">(10)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="marinades">
-                                                        <label class="form-check-label" for="marinades">
-                                                            <span class="name">Marinades</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="lamb">
-                                                        <label class="form-check-label" for="lamb">
-                                                            <span class="name">Mutton & Lamb</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="other">
-                                                        <label class="form-check-label" for="other">
-                                                            <span class="name">Port & other Meats</span>
-                                                            <span class="number">(06)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="pour">
-                                                        <label class="form-check-label" for="pour">
-                                                            <span class="name">Pourltry</span>
-                                                            <span class="number">(01)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="salami">
-                                                        <label class="form-check-label" for="salami">
-                                                            <span class="name">Sausages, bacon & Salami</span>
-                                                            <span class="number">(03)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -1084,7 +946,7 @@
                                 </div> --}}
 
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                    <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add
@@ -1105,4 +967,36 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
+    <script>
+        // Get all checkboxes
+        const checkboxes = document.querySelectorAll('.checkbox_animated');
+
+        checkboxes.forEach(checkbox => {
+            // Add change event listener to each checkbox
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // If checkbox is checked, make AJAX request
+                    const categoryId = this.getAttribute('data-category');
+                    // AJAX request
+                    fetch(`/products?category_id=${categoryId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Add any additional headers if needed
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Handle the response here, e.g., update UI with products
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                        // Handle errors here
+                    });
+                }
+            });
+        });
+    </script>
 </x-guest-layout>

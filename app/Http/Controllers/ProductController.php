@@ -190,6 +190,9 @@ class ProductController extends Controller
 
     public function UpdateMultiImg(Request $request)
     {
+        $request->validate([
+            'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
         $imgs = $request->multi_img;
         foreach($imgs as $id => $img)
         {

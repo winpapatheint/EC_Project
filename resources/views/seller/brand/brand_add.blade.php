@@ -18,15 +18,21 @@
                                             <label class="form-label-title col-sm-3 mb-0">Brand Name</label>
                                             <div class="col-sm-9 form-group">
                                                 <input class="form-control" type="text"
-                                                    placeholder="Brand Name" name="brand_name" required>
+                                                    placeholder="Brand Name" name="brand_name">
+                                                    @error('brand_name')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Brand Image</label>
                                             <div class="form-group col-sm-9">
-                                                <input class="form-control" type="file" id="image" name="brand_icon" required>
+                                                <input class="form-control" type="file" id="image" name="brand_icon">
                                                 <img width="100" id="showImage">
+                                                    @error('brand_icon')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                             </div>
                                         </div>
 

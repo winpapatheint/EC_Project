@@ -89,7 +89,7 @@
                                             <select class="js-example-basic-single w-100" name="sub_category_id">
                                                 <option>Choose SubCategory</option>
                                                 @foreach ($subcategories as $subcategory)
-                                                    <option value="{{ $subcategory->id }}" {{ $subcategory->id == $products->subcategory_id  ? 'selected' : '' }}>{{ $subcategory->sub_category_name }}</option>
+                                                    <option value="{{ $subcategory->id }}" {{ $subcategory->id == $products->sub_category_id  ? 'selected' : '' }}>{{ $subcategory->sub_category_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -149,7 +149,7 @@
                                             Image</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail">
-                                            <img id="prev_thambnail" src="{{ asset('upload/product_thambnail/'.$products->product_thambnail)}}" width="100">
+                                            <img id="prev_thambnail" src="{{ asset('upload/product_thambnail/'.$products->product_thambnail)}}" width="80">
                                         </div>
                                     </div>
 
@@ -206,7 +206,7 @@
                                             @foreach ($multiImgs as $key => $img)
                                                 <tr>
                                                     <th>{{ $key+1 }}</th>
-                                                    <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="100"> </td>
+                                                    <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="80"> </td>
                                                     <td><input type="file" class="form-control" name="multi_img[{{ $img->id }}]"> </td>
                                                     <td>
                                                         <div class="input-group">

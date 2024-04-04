@@ -12,6 +12,7 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -19,15 +20,13 @@ class ProductController extends Controller
 {
     public function AllProduct()
     {
-        $id = Auth::user()->id;
-        $products = Product::where('seller_id',$id)->latest()->paginate(10);
+        $products = Product::latest()->paginate(4);
         return view('seller.product.product_all',compact('products'));
     }
 
     public function DetailProduct($id)
     {
-        $seller_id = Auth::user()->id;
-        $data = Product::where('seller_id',$seller_id)->find($id);
+        $data = Product::find($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
         return view('seller.product.product_detail',compact('data','multiImgs'));
     }
@@ -146,9 +145,9 @@ class ProductController extends Controller
         }
         $product->brand_id = $request->brand_id;
         $product->country_id = $request->country_id;
-        $product->seller_id = $request->seller_id;
+        $product->seller_id = Auth::user()->id;
         $product->category_id= $request->category_id;
-        $product->sub_category_id= $request->subcategory_id;
+        $product->sub_category_id= $request->sub_category_id;
         $product->sub_category_title_id= $request->sub_category_title_id;
         $product->product_name= $request->product_name;
         $product->product_code= $request->product_code;
@@ -168,7 +167,7 @@ class ProductController extends Controller
         return redirect('/seller/all/product')->with('flash_message', 'Data updated successfully');
     }
 
-        public function DeleteProduct($id)
+    public function DeleteProduct($id)
     {
         $product = Product::findOrFail($id);
         File::delete($product->product_thambnail);
@@ -203,7 +202,7 @@ class ProductController extends Controller
             'photo_name' => $filename,
             'updated_at' => Carbon::now(),
         ]);
-        return redirect()->back()->with('flash_message', 'Image updated successfully');
+        return back()->with('flash_message', 'Image updated successfully');
     }
 
     public function DeleteMultiImg($id)
@@ -211,13 +210,13 @@ class ProductController extends Controller
         $old_img = MultiImg::findOrFail($id);
         File::delete($old_img->photo_name);
         MultiImg::findOrFail($id)->delete();
-        return redirect()->back()->with('flash_message', 'Image deleted successfully');
+        return back()->with('flash_message', 'Image deleted successfully');
     }
 
     public function Review(Request $request)
     {
         $id = Auth::user()->id;
-        $review = Review::where('user_id',$id)->orderBy('id','DESC')->get();
+        $review = Review::where('user_id',$id)->latest()->paginate(10);
         return view('seller.product.product_review',compact('review'));
     }
 
@@ -227,6 +226,21 @@ class ProductController extends Controller
         $star->status = $request->status;
         $star->save();
         return redirect()->back();
+    }
+
+    public function UpdateReview(Request $request)
+    {
+        $review = Review::find($request->review_id);
+        $review->comment = $request->comment;
+        $review->updated_at= Carbon::now();
+        $review->save();
+        return redirect()->back();
+    }
+
+    public function DeleteReview($id)
+    {
+        Review::findOrFail($id)->delete();
+        return back()->with('flash_message', 'Data deleted successfully');
     }
 
 }

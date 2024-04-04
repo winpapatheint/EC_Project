@@ -15,6 +15,11 @@ class BrandController extends Controller
     public function StoreBrand(Request $request)
     {
         $brands = new Brand();
+        $request->validate([
+            'brand_name' => 'required|string|max:255',
+            'brand_icon' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         if ($request->hasFile('brand_icon')) {
             $filename = $request->file('brand_icon')->store('upload/brand');
             $brands->brand_icon = $filename;

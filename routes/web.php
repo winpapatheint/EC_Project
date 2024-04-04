@@ -114,7 +114,7 @@ Route::get('/admin/registersubadmin', function () {return view('admin.edituser')
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
-
+Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
@@ -126,6 +126,8 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
+
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -229,8 +231,10 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
-    Route::get('/seller/product/review','Review')->name('seller.product.review');
+    Route::get('/seller/product/review','Review')->name('seller.review');
     Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
+    Route::post('/seller/product/review/update', 'UpdateReview')->name('seller.review.update');
+    Route::get('/seller/delete/review/{id}','DeleteReview')->name('seller.review.delete');
 });
 
 //SellerOrder

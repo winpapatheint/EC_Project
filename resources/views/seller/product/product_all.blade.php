@@ -123,9 +123,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                <a href="{{ route('seller.delete.product', ['id' => $item->id]) }}">
-                    <button type="button" class="btn btn-animation btn-md fw-bold">Yes</button>
-                </a>
+                @if(isset($item->id))
+                    <a href="{{ route('seller.delete.product', ['id' => $item->id]) }}">
+                        <button type="button" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </a>
+                @endif
             </div>
         </div>
     </div>

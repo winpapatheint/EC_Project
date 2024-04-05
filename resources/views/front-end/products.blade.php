@@ -795,7 +795,7 @@
                                             <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
                                         @endif
                                         </h5>
-                                        <div class="add-to-cart-box bg-white">
+                                        {{-- <div class="add-to-cart-box bg-white">
                                             <button class="btn btn-add-cart addcart-button">Add
                                                 <span class="add-icon bg-light-gray">
                                                     <i class="fa-solid fa-plus"></i>
@@ -816,7 +816,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

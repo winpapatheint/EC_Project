@@ -221,7 +221,7 @@
                                         </div>
                                     </div>
 
-                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                    <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf
                                     <button type="submit"
                                         class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>

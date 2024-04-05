@@ -15,7 +15,7 @@
                                         <form method="POST" action="{{ route('seller.help.add') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
                                             @csrf
                                             <div class="card-header-1">
-                                                <h5>{{ $helps->title }} Detail</h5>
+                                                <h5>Order ID: {{ $helps->id }}</h5>
                                             </div>
 
                                             <div class="row">

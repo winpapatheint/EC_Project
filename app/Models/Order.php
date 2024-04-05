@@ -40,4 +40,12 @@ class Order extends Model
         'cancel_date',
         'return_date',
     ];
+
+    function product() {
+        return $this->belongsTo(Product::class,'product_id');
+    }
+
+    function prefecture() {
+        return $this->belongsTo(Prefecture::class,'prefecture_id');
+    }
 }

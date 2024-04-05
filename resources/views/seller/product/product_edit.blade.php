@@ -181,6 +181,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Delivery Price</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" name="delivery_price" type="number" placeholder="400" min="1" value="{{ $products->delivery_price }}">
+                                        </div>
+                                    </div>
+
                                     <button type="submit" class="btn btn-animation">Update</button>
                                 </form>
                             </div>

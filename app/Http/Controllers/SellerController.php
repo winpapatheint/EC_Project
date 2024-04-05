@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class SellerController extends Controller
 {
@@ -126,23 +127,26 @@ class SellerController extends Controller
 
     public function StoreHelp(Request $request)
     {
+        $help = new Help();
         $request->validate([
             'title' => 'required|string|max:255',
             'reason' => 'required|string|max:255',
         ]);
 
-        $img = $request->file('image');
-        $filename = time() . '.' . $img->getClientOriginalExtension();
-        $img->move('upload/shop', $filename);
+        if($request->hasFile('image'))
+        {
+            $img = $request->file('image');
+            $filename = time() . '.' . $img->getClientOriginalExtension();
+            $img->move('upload/shop', $filename);
+            $help->img = $filename;
+        }
 
-        Help::insertGetId([
-            'user_id' => Auth::user()->id,
-            'title' => $request->title,
-            'reason' => $request->reason,
-            'img' => $filename,
-            'created_at' => Carbon::now(),
-        ]);
-        return redirect('/seller/help');
+        $help->user_id = Auth::user()->id;
+        $help->title = $request->title;
+        $help->reason = $request->reason;
+        $help->created_at = Carbon::now();
+        $help->save();
+        return redirect('/seller/help')->with('flash_message', 'Data added successfully');
     }
 
     public function DeleteHelp($id)

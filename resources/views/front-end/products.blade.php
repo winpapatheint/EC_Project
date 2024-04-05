@@ -89,12 +89,17 @@
 
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
-                                    <div class="form-floating theme-form-floating-2 search-box">
+                                    {{-- <div class="form-floating theme-form-floating-2 search-box">
                                         <input type="search" class="form-control" id="search" name="search"
                                             placeholder="Search .." value="{{ $search }}">
                                         <label for="search">Search</label>
+                                    </div> --}}
+                                    <div style="display: flex; align-items: center;">
+                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" 
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
+                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
@@ -173,14 +178,9 @@
                                                                     <i data-feather="star" class="fill"></i>
                                                                 </li>
                                                             </ul>
-                                                            @php
-                                                                $ratingCountForFiveStars = $ratingWithProductCount->first(function ($ratingCount) {
-                                                                    return $ratingCount->stars_rated == 5;
-                                                                });
-                                                            @endphp
 
-                                                            @if($ratingCountForFiveStars)
-                                                                <span class="text-content">({{ $ratingCountForFiveStars->product_count }})</span>
+                                                            @if($ratingWithProductCount->has(5))
+                                                                <span class="text-content">({{ $ratingWithProductCount[5] }})</span>
                                                             @else
                                                                 <span class="text-content">(0)</span>
                                                             @endif
@@ -210,14 +210,8 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            @php
-                                                                $ratingCountForFourStars = $ratingWithProductCount->first(function ($ratingCount) {
-                                                                    return $ratingCount->stars_rated == 4;
-                                                                });
-                                                            @endphp
-
-                                                            @if($ratingCountForFourStars)
-                                                                <span class="text-content">({{ $ratingCountForFourStars->product_count }})</span>
+                                                            @if($ratingWithProductCount->has(4))
+                                                                <span class="text-content">({{ $ratingWithProductCount[4] }})</span>
                                                             @else
                                                                 <span class="text-content">(0)</span>
                                                             @endif
@@ -247,14 +241,8 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            @php
-                                                                $ratingCountForThreeStars = $ratingWithProductCount->first(function ($ratingCount) {
-                                                                    return $ratingCount->stars_rated == 3;
-                                                                });
-                                                            @endphp
-
-                                                            @if($ratingCountForThreeStars)
-                                                                <span class="text-content">({{ $ratingCountForThreeStars->product_count }})</span>
+                                                            @if($ratingWithProductCount->has(3))
+                                                                <span class="text-content">({{ $ratingWithProductCount[3] }})</span>
                                                             @else
                                                                 <span class="text-content">(0)</span>
                                                             @endif
@@ -284,14 +272,8 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            @php
-                                                                $ratingCountForTwoStars = $ratingWithProductCount->first(function ($ratingCount) {
-                                                                    return $ratingCount->stars_rated == 2;
-                                                                });
-                                                            @endphp
-
-                                                            @if($ratingCountForTwoStars)
-                                                                <span class="text-content">({{ $ratingCountForTwoStars->product_count }})</span>
+                                                            @if($ratingWithProductCount->has(2))
+                                                                <span class="text-content">({{ $ratingWithProductCount[2] }})</span>
                                                             @else
                                                                 <span class="text-content">(0)</span>
                                                             @endif
@@ -321,14 +303,8 @@
                                                                     <i data-feather="star"></i>
                                                                 </li>
                                                             </ul>
-                                                            @php
-                                                                $ratingCountForOneStars = $ratingWithProductCount->first(function ($ratingCount) {
-                                                                    return $ratingCount->stars_rated == 1;
-                                                                });
-                                                            @endphp
-
-                                                            @if($ratingCountForOneStars)
-                                                                <span class="text-content">({{ $ratingCountForFiveStars->product_count }})</span>
+                                                            @if($ratingWithProductCount->has(1))
+                                                                <span class="text-content">({{ $ratingWithProductCount[1] }})</span>
                                                             @else
                                                                 <span class="text-content">(0)</span>
                                                             @endif
@@ -651,9 +627,10 @@
                                 </div> --}}
                             </div>
                         </div>
-                        </form>
                     </div>
                 </div>
+                        <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '0' }}">
+                        </form>
 
                 <div class="col-custom-">
                     <div class="show-button">
@@ -669,32 +646,46 @@
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
-                                        <span>Choose Sorting</span> <i class="fa-solid fa-angle-down"></i>
+                                        @if ($sort == 1)
+                                            <span>Low - High Price</span>
+                                        @elseif ($sort == 2)
+                                            <span>High - Low Price</span>
+                                        @elseif ($sort == 3)
+                                            <span>Average Rating</span>
+                                        @elseif ($sort == 4)
+                                            <span>A - Z Order</span>
+                                        @elseif ($sort == 5)
+                                            <span>Z - A Order</span>
+                                        @elseif ($sort == 6)
+                                            <span>% Off - Hight To Low</span>
+                                        @else
+                                            <span>Choose Sorting</span> 
+                                        @endif
+                                            <i class="fa-solid fa-angle-down"></i>
                                     </button>
+
                                     <ul class="dropdown-menu">
-                                        {{-- <li>
-                                            <a class="dropdown-item" id="pop" href="javascript:void(0)">Popularity</a>
-                                        </li> --}}
                                         <li>
-                                            <a class="dropdown-item" id="low" href="{{ route('show-product', ['sort' => '1']) }}">Low - High
+                                            <a class="dropdown-item" id="drop1" name="sort" value="1" href="#">Low - High Price</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="drop2" name="sort" value="2" href="#">High - Low
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="high" href="{{ route('show-product', ['sort' => '2']) }}">High - Low
-                                                Price</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="rating" href="{{ route('show-product', ['sort' => '3']) }}">Average
+                                            <a class="dropdown-item" id="drop3" name="sort" value="3" href="#">Average
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="aToz" href="{{ route('show-product', ['sort' => '4']) }}">A - Z Order</a>
+                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z 
+                                                Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="zToa" href="{{ route('show-product', ['sort' => '5']) }}">Z - A Order</a>
+                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A 
+                                                Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="off" href="{{ route('show-product', ['sort' => '6']) }}">% Off - Hight To
+                                            <a class="dropdown-item" id="drop6" name="sort" value="6" href="#">% Off - Hight To
                                                 Low</a>
                                         </li>
                                     </ul>
@@ -991,9 +982,33 @@
     @endif
     @endforeach
     <script>
-    document.getElementById('searchButton').addEventListener('click', function() {
-        document.getElementById('searchForm').submit();
-    });
-</script>
+        document.getElementById("drop1").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "1";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("drop2").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "2";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("drop3").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "3";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("drop4").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "4";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("drop5").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "5";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("drop6").addEventListener("click", function() {
+            document.getElementById("sortValue").value = "6";
+            document.getElementById("searchForm").submit();
+        });
+        document.getElementById("searchBtn").addEventListener("click", function() {
+            document.getElementById("searchForm").submit();
+        });
+    </script>
 
 </x-guest-layout>

@@ -1485,68 +1485,16 @@
                     </div>
 
                     <div class="category-slider-2 product-wrapper no-arrow">
+                        @foreach($categories as $list)
                         <div>
-                            <a href=" {{ url('/shop-left-sidebar') }}" class="category-box category-dark">
+                            <a href="{{ url("/shopsidebar/".$list->id ) }}" class="category-box category-dark">
                                 <div>
                                     <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
-                                    <h5>Vegetables & Fruit</h5>
+                                    <h5>{{ $list->category_name }}</h5>
                                 </div>
                             </a>
                         </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/cup.svg" class="blur-up lazyload" alt="">
-                                    <h5>Beverages</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/meats.svg" class="blur-up lazyload" alt="">
-                                    <h5>Meats & Seafood</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/breakfast.svg" class="blur-up lazyload" alt="">
-                                    <h5>Breakfast</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/frozen.svg" class="blur-up lazyload" alt="">
-                                    <h5>Frozen Foods</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/milk.svg" class="blur-up lazyload" alt="">
-                                    <h5>Milk & Dairies</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/pet.svg" class="blur-up lazyload" alt="">
-                                    <h5>Pet Food</h5>
-                                </div>
-                            </a>
-                        </div>
+                        @endforeach
                     </div>
 
                     <div class="section-t-space section-b-space">

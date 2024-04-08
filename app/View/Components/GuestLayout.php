@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class GuestLayout extends Component
 {
@@ -66,7 +67,16 @@ class GuestLayout extends Component
                         ];
                     }
             }
-        return view('layouts.guest', ['categories' => $organizedCategories]);
+
+            $todayDate = Carbon::now()->toDateString();
+
+            $deal = DB::table('products')
+                            ->select('products.*')
+                            ->whereNotNull('discount_percent')
+                            ->whereDate('created_at', $todayDate)
+                            ->get();
+
+        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal'));
 
     }
 }

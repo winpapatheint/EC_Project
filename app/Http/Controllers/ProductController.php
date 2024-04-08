@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Brand;
+use App\Models\Brands;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Product;
@@ -33,7 +33,7 @@ class ProductController extends Controller
 
     public function AddProduct()
     {
-        $brands = Brand::latest()->get();
+        $brands = Brands::latest()->get();
         $countries = Country::latest()->get();
         $categories = Category::latest()->get();
         $subcategories = SubCategory::latest()->get();

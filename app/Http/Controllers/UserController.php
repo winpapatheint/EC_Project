@@ -24,8 +24,7 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        try {
+
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
@@ -43,22 +42,18 @@ class UserController extends Controller
                 'phone' => $request->input('phone'),
             ]);
 
+            $buyer = Buyers::create([
+                'user_id' => $user->id,
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+            ]);
 
+            DB::commit();
+                return view('user_dashboard')->with('success','Data have been successfully inserted.');
 
-                // Commit the transaction if both inserts are successful
-                DB::commit();
-
-                return back()->with('success','Data have been successfully inserted.');
-
-            }
-         catch (\Exception $e) {
-
-            DB::rollback();
-            return back()->with('fail','Something went wrong.');
-        }
-
-        $email = $request->email;
-        return view('auth.verify-email',compact('email'));
 
     }
     //Show Dashboard

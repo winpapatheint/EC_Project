@@ -1,16 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
+
 use App\Http\Controllers\AdminController;
 
 
 use App\Http\Controllers\UserController;
 
-=======
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
->>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
@@ -18,10 +17,6 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
 
 /*
 |--------------------------------------------------------------------------
@@ -42,41 +37,30 @@ Route::get('/', function () {
 });
 
 
-
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
-Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
-Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
-
-
-Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
+Route::get('/user-registration', [UserController::class,'index'])->name('user-register');
+Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-<<<<<<< HEAD
 Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
-=======
+Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
+Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
->>>>>>> 5c639721a605ad2919ce2dd11f8eb1d103ae6e56
-Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
-Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
+Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 
-Route::get('/user-addresses/show-addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
-Route::post('/user-addresses/new-address', [UserController::class, 'createNewaddress'])->name('add_newaddress');
-Route::post('/user-addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
-Route::delete('/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
+Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
+Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');
+Route::post('/user/addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
+Route::delete('/user/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
 
-Route::get('/user-cards/show-cards', [UserController::class, 'showCard'])->name('user_cards');
-Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->name('add_newcard');
-Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
+Route::get('/user/paymentmethod', [UserController::class, 'showCard'])->name('user_cards');
+Route::post('/user/paymentmethod', [UserController::class, 'createNewcard'])->name('add_newcard');
+Route::post('/user-payment/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
 
-Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
-
-Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
-
-Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
-Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
-
+Route::get('/user/profile', [UserController::class, 'showProfile'])->name('user_profile');
+Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
+Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
 //Route::get('/register', function () {return view('front-end.register');});
 
@@ -84,8 +68,13 @@ Route::get('/register', function () {return view('front-end.register');});
 
 
 
-Route::get('/products', function () {return view('front-end.products');});
-Route::get('/product-left-thumbnail', function () {return view('front-end.product-left-thumbnail');});
+Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
+Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
+Route::get('/show-carts', [UserController::class, 'showCarts'])->name('show_carts');
+Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
+Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
+Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
+Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
 
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 

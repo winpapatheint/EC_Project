@@ -185,7 +185,7 @@
                                         </a>
                                     </li>
                                 </div>
-
+                                <div>
                                 <li>
                                     <form method="POST" action="{{ route('adminlogout') }}">
                                         @csrf
@@ -195,6 +195,7 @@
                                         </a>
                                     </form>
                                 </li>
+                            </div>
                             </ul>
                         </li>
                     </ul>

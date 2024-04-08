@@ -33,18 +33,15 @@ use App\Http\Controllers\ShowProductController;
 route::get('/',[AdminController::class,'welcome']);
 
 
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('front-end.user-dashboard');
-Route::get('/user-orders', function () {return view('front-end.user-order');})->name('front-end.user-order');
-Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('front-end.user-delivery');
-
-
 Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
+Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
+Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
+Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
-Route::get('/user', function () {return view('front-end.user-dashboard');})->name('user_dashboard');
-Route::get('/user-orders', function () {return view('front-end.user-order');})->name('user_order');
 Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
 
 Route::get('/user-addresses/show-addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
@@ -56,22 +53,26 @@ Route::get('/user-cards/show-cards', [UserController::class, 'showCard'])->name(
 Route::post('/user-cards/new-card', [UserController::class, 'createNewcard'])->name('add_newcard');
 Route::post('/user-cards/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
-Route::post('user-orders/cart', [UserController::class, 'showCart'])->name('show_cart');
-
-// Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews_store');
 
 Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
+Route::post('/user-profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
+Route::post('user-profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
-Route::get('/user-order_details', function () {return view('front-end.user-order-details');})->name('front-end.user-order-details');
-Route::get('/user-order_tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+
 
 
 //Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/register', function () {return view('front-end.register');});
 
+
+
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
+Route::post('/cart', [UserController::class, 'showCart'])->name('show_carts');
+Route::post('/user/cart', [UserController::class, 'updateCartQty'])->name('update_qty');
+Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
+Route::post('/user-orders/checkout', [UserController::class, 'checkout'])->name('checkout');
 
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
@@ -79,10 +80,11 @@ Route::get('/compare', function () {return view('front-end.compare');});
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
 
-Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
+Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shoplist');
+
 
 Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
-
+Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 
 Route::get('/news', [AdminController::class, 'news']);
@@ -114,7 +116,7 @@ Route::get('/admin/registersubadmin', function () {return view('admin.edituser')
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
-
+Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
@@ -126,6 +128,8 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
+
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -200,7 +204,7 @@ Route::controller(RegisterController::class)->group(function(){
 });
 
 Route::controller(SellerController::class)->group(function(){
-    Route::get('/seller','Dashboard')->name('seller.dashboard');
+    Route::get('/seller','Dashboard')->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');
     Route::post('/seller/profile/store','StoreProfile')->name('seller.store.profile');
     Route::post('/seller/shop/update','UpdateShop')->name('seller.update.shop');

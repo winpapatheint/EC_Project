@@ -5,7 +5,7 @@
         }
 
     </style>
-    
+
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -59,12 +59,12 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div class="profile-name">
                                     <h3>{{ $user->name }}</h3>
                                     <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
-                               
+
                             </div>
                         </div>
 
@@ -75,12 +75,12 @@
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-order-tab" 
+                                <a class="nav-link" id="pills-order-tab"
                                     style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="delivery-detail" 
+                                <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
@@ -98,6 +98,13 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
+
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -136,10 +143,12 @@
                                                         class="img-1 blur-up lazyload" alt="">
                                                     <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
                                                         alt="">
+
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
-                                                        <h3>3658</h3>
+                                                        <h3>{{ $orderCount }}</h3>
                                                     </div>
+
                                                 </div>
                                             </div>
 
@@ -164,68 +173,55 @@
                                                         class="blur-up lazyload" alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Wishlist</h5>
-                                                        <h3>32158</h3>
+                                                        <h3>{{ $wishlistCount }}</h3>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="dashboard-title">
-                                        <h3>Account Information</h3>
+                                    <div class="col-12">
+                                        <div class="dashboard-content-title">
+                                                <h4>Account Information</h4>
+                                            </div>
+
+                                        <div class="row g-4">
+                                            <div class="col-xxl-6">
+
+                                                <div class="dashboard-detail">
+                                                    <h6 class="text-content">{{ $user->name }}</h6>
+                                                    <h6 class="text-content">{{ $user->email }}</h6>
+                                                    <h6 class="text-content">{{ $user->phone }}</h6>
+                                                </div>
+                                            </div>
+
                                     </div>
 
-                                    <div class="row g-4">
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Contact Information <a href="javascript:void(0)"
-                                                        data-bs-toggle="modal" data-bs-target="#editProfile">Edit</a>
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">MARK JECNO</h6>
-                                                
-                                                <h6 class="text-content">vicki.pope@gmail.com</h6>
-                                                <a data-bs-toggle="modal" data-bs-target="#changePassword"
-                                                        href="javascript:void(0)">Change Password</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Newsletters <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">You are currently not subscribed to any
-                                                    newsletter</h6>
-                                            </div>
-                                        </div>
 
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
-                                                <h4>Address Book <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
+                                                <h4>Address Book</h4>
                                             </div>
 
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
+
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Billing Address</h6>
-                                                        <h6 class="text-content">You have not set a default billing
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
+                                                        <h6 class="text-content">Default Home Address</h6>
+                                                        @foreach ($userOrders as $address)
+                                                        <h6 class="text-content">{{ $address->buyer_address }}</h6>
+                                                         @endforeach
                                                     </div>
+
                                                 </div>
 
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
-                                                        <h6 class="text-content">You have not set a default shipping
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
+
+                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -242,6 +238,47 @@
     <!-- User Dashboard Section End -->
 </x-guest-layout>
 
-    <!-- Bg overlay Start -->
-    <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
+<!-- Edit Password Script -->
+<script>
+    $(document).ready(function() {
+    $('.edit-btn').on('click', function() {
+        var passData = JSON.parse($(this).data('password'));
+        $('#id').val(passData.id);
+        $('#email').val(passData.email);
+        $('#password').val(passData.password);
+
+    });
+
+    $('#changePassword').on('click', function() {
+        var passId = $('#id').val();
+        var newEmail = $('#email').val();
+        var newPassword = $('#password').val();
+
+
+        // Perform AJAX request to update data in the controller
+        $.ajax({
+            url: '{{ route("edit_password") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: addressId,
+                email: newEmail,
+                password: newPassword,
+
+            },
+            success: function(response) {
+            alert("123");
+                // Handle success response
+                console.log(response);
+                // Close the modal
+                $('#changePassword').modal('hide');
+            },
+            error: function(xhr) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+

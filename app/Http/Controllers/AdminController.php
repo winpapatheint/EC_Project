@@ -234,8 +234,8 @@ class AdminController extends Controller
             $time = new DateTime();
             $imageNames = time().'.'.$request->shoplogo->extension();
 
-            $request->shoplogo->move(public_path('upload/shop'), $imageName);
-            $newval['shop_logo'] = $imageName;
+            $request->shoplogo->move(public_path('upload/shop'), $imageNames);
+            $newval['shop_logo'] = $imageNames;
         }
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
@@ -388,8 +388,8 @@ class AdminController extends Controller
             $time = new DateTime();
             $imageNames = time().'.'.$request->shoplogo->extension();
 
-            $request->shoplogo->move(public_path('upload/shop'), $imageName);
-            $newval['shop_logo'] = $imageName;
+            $request->shoplogo->move(public_path('upload/shop'), $imageNames);
+            $newval['shop_logo'] = $imageNames;
         }
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
@@ -570,19 +570,150 @@ class AdminController extends Controller
     public function indexshop($id)
     {
         $limit =14;
-        $shoplist = DB::table('Categories as C')
-                        ->select('P.*','C.*')
-                        ->Join('Products as P', function ($join) {
-                            $join->on('C.id', '=', 'P.category_id');
-                        })
-                        ->where('P.category_id',$id)
-                        ->orderBy('P.created_at', 'desc')
-                        ->paginate($limit);
+        $validated = request()->validate([
+            'page' => 'integer|min:1',
+            'sort' => 'integer|min:1',
+            'search' => 'string|nullable',
+            'categories' => 'array',
+            'categories.*' => 'integer|distinct|min:1',
+            'price' => 'string|nullable',
+            'rating' => 'array',
+            'rating.*' => 'integer|distinct|min:1',
+            'discount' => 'array',
+            'discount.*' => 'integer|distinct|min:1',
+        ]);
+
+        $page = $validated['page'] ?? 1;
+        $sort = $validated['sort'] ?? 0;
+        $search = $validated['search'] ?? null;
+        $price = $validated['price'] ?? null;
+        $rating = $validated['rating'] ?? [];
+        $discount = $validated['discount'] ?? [];
+
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($price)) {
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
+        }
+
+        if (!empty($rating)) {
+            $averageRated = Review::select('product_id',
+                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+            )
+            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
+            ->where('Products.category_id', $id)
+            ->groupBy('product_id')
+            ->get();
+            $matchedProductIds = [];
+            foreach ($averageRated as $rated) {
+                if (in_array($rated->average_rating, $rating)) {
+                    $matchedProductIds[] = $rated->product_id;
+                }
+            }
+            if (!empty($matchedProductIds)) {
+                $query->whereIn('id', $matchedProductIds);
+            }
+            else {
+                $query->where('id', null);
+            }
+        }
+
+        if (!empty($discount)) {
+            if (in_array("1", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
+            }
+            if (in_array("2", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10');
+            }
+            if (in_array("3", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15');
+            }
+            if (in_array("4", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25');
+            }
+            if (in_array("5", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
+            }
+        }
+
+        switch ($sort) {
+            case 1:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) ASC');
+                break;
+            case 2:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) DESC');
+                break;
+            case 3:
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                    ->select('products.*', DB::raw('COUNT(reviews.product_id) as review_count'))
+                    ->groupBy('products.id')
+                    ->orderBy('review_count', 'desc');
+                break;
+            case 4:
+                $query->orderBy('product_name', 'ASC');
+                break;
+            case 5:
+                $query->orderBy('product_name', 'DESC');
+                break;
+            case 6:
+                $query->orderByRaw('CAST(discount_percent AS DECIMAL(10,2)) DESC');
+                break;
+            default:
+                // No sorting applied
+                break;
+        }
+
+        $shoplist = $query->where('category_id',$id)
+                          ->orderBy('created_at', 'desc')->paginate($limit);
+
+        // $shoplist = DB::table('Categories as C')
+        //                 ->select('P.*','C.*')
+        //                 ->Join('Products as P', function ($join) {
+        //                     $join->on('C.id', '=', 'P.category_id');
+        //                 })
+        //                 ->where('P.category_id',$id)
+        //                 ->orderBy('P.created_at', 'desc')
+        //                 ->paginate($limit);
 
         $ttl = $shoplist->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
+        $reviews = Review::all();
+
+        $ratingWithProductCount = Review::select(
+                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                    )
+                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
+                                    ->where('Products.category_id', $id)
+                                    ->groupBy('product_id')
+                                    ->get()
+                                    ->groupBy('average_rating')
+                                    ->map(function ($grouped) {
+                                        return $grouped->count();
+                                    });
+
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) < 5 THEN 1 END) as group_1_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10 THEN 1 END) as group_2_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15 THEN 1 END) as group_3_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25 THEN 1 END) as group_4_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
+                                    ->where('category_id', $id)
+                                    ->where('status', '=', '1')
+                                    ->first();
+
+        return view('front-end.shop-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
+        'discount','discountWithProductCount', 'sort', 'reviews'));
     }
 
     public function bloglistdetail($id)

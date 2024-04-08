@@ -33,6 +33,7 @@ class ShowProductController extends Controller
         $price = $validated['price'] ?? null;
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
+        
 
         $limit = 10; // set the number of products per page
 
@@ -47,8 +48,14 @@ class ShowProductController extends Controller
         }
 
         if (!empty($price)) {
-            $maxPrice = (float)$price;
-            $query->whereRaw('CAST(selling_price AS DECIMAL) < ?', [$maxPrice]);
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
         }
 
         if (!empty($rating)) {

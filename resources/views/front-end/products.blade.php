@@ -32,7 +32,7 @@
                     <div class="slider-1 slider-animate product-wrapper no-arrow">
                         <div>
                             <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
                                 <div
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
@@ -45,7 +45,7 @@
 
                         <div>
                             <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
                                 <div
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
@@ -58,7 +58,7 @@
 
                         <div>
                             <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
                                 <div
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
@@ -89,16 +89,16 @@
 
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
-                                    {{-- <div class="form-floating theme-form-floating-2 search-box">
-                                        <input type="search" class="form-control" id="search" name="search"
-                                            placeholder="Search .." value="{{ $search }}">
-                                        <label for="search">Search</label>
-                                    </div> --}}
                                     <div style="display: flex; align-items: center;">
-                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" 
+                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;">
                                         <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <div style="display: flex;justify-content: flex-end;">
+                                        <a href="/products"">Clear All</a>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
@@ -389,248 +389,12 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                {{-- <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingFive">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseFive">
-                                            <span>Pack Size</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseFive" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding custom-height">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault5">
-                                                        <label class="form-check-label" for="flexCheckDefault5">
-                                                            <span class="name">400 to 500 g</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault6">
-                                                        <label class="form-check-label" for="flexCheckDefault6">
-                                                            <span class="name">500 to 700 g</span>
-                                                            <span class="number">(02)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault7">
-                                                        <label class="form-check-label" for="flexCheckDefault7">
-                                                            <span class="name">700 to 1 kg</span>
-                                                            <span class="number">(04)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault8">
-                                                        <label class="form-check-label" for="flexCheckDefault8">
-                                                            <span class="name">120 - 150 g each Vacuum 2 pcs</span>
-                                                            <span class="number">(06)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault9">
-                                                        <label class="form-check-label" for="flexCheckDefault9">
-                                                            <span class="name">1 pc</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault10">
-                                                        <label class="form-check-label" for="flexCheckDefault10">
-                                                            <span class="name">1 to 1.2 kg</span>
-                                                            <span class="number">(06)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault11">
-                                                        <label class="form-check-label" for="flexCheckDefault11">
-                                                            <span class="name">2 x 24 pcs Multipack</span>
-                                                            <span class="number">(03)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault12">
-                                                        <label class="form-check-label" for="flexCheckDefault12">
-                                                            <span class="name">2x6 pcs Multipack</span>
-                                                            <span class="number">(04)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault13">
-                                                        <label class="form-check-label" for="flexCheckDefault13">
-                                                            <span class="name">4x6 pcs Multipack</span>
-                                                            <span class="number">(05)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault14">
-                                                        <label class="form-check-label" for="flexCheckDefault14">
-                                                            <span class="name">5x6 pcs Multipack</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault15">
-                                                        <label class="form-check-label" for="flexCheckDefault15">
-                                                            <span class="name">Combo 2 Items</span>
-                                                            <span class="number">(10)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault16">
-                                                        <label class="form-check-label" for="flexCheckDefault16">
-                                                            <span class="name">Combo 3 Items</span>
-                                                            <span class="number">(14)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault17">
-                                                        <label class="form-check-label" for="flexCheckDefault17">
-                                                            <span class="name">2 pcs</span>
-                                                            <span class="number">(19)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault18">
-                                                        <label class="form-check-label" for="flexCheckDefault18">
-                                                            <span class="name">3 pcs</span>
-                                                            <span class="number">(14)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault19">
-                                                        <label class="form-check-label" for="flexCheckDefault19">
-                                                            <span class="name">2 pcs Vacuum (140 g to 180 g each
-                                                                )</span>
-                                                            <span class="number">(13)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault20">
-                                                        <label class="form-check-label" for="flexCheckDefault20">
-                                                            <span class="name">4 pcs</span>
-                                                            <span class="number">(18)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault21">
-                                                        <label class="form-check-label" for="flexCheckDefault21">
-                                                            <span class="name">4 pcs Vacuum (140 g to 180 g each
-                                                                )</span>
-                                                            <span class="number">(07)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault22">
-                                                        <label class="form-check-label" for="flexCheckDefault22">
-                                                            <span class="name">6 pcs</span>
-                                                            <span class="number">(09)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault23">
-                                                        <label class="form-check-label" for="flexCheckDefault23">
-                                                            <span class="name">6 pcs carton</span>
-                                                            <span class="number">(11)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault24">
-                                                        <label class="form-check-label" for="flexCheckDefault24">
-                                                            <span class="name">6 pcs Pouch</span>
-                                                            <span class="number">(16)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>
                         </div>
                     </div>
                 </div>
-                        <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '0' }}">
-                        </form>
+                <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
+                </form>
 
                 <div class="col-custom-">
                     <div class="show-button">
@@ -696,20 +460,20 @@
                                 <ul>
                                     <li class="three-grid">
                                         <a href="javascript:void(0)">
-                                            <img src="../assets/svg/grid-3.svg" class="blur-up lazyload" alt="">
+                                            <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                     <li class="grid-btn d-xxl-inline-block d-none">
                                         <a href="javascript:void(0)">
-                                            <img src="../assets/svg/grid-4.svg"
+                                            <img src="{{ asset('frontend/assets/svg/grid-4.svg') }}"
                                                 class="blur-up lazyload d-lg-inline-block d-none" alt="">
-                                            <img src="../assets/svg/grid.svg"
+                                            <img src="{{ asset('frontend/assets/svg/grid.svg') }}"
                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
                                         </a>
                                     </li>
                                     <li class="list-btn active">
                                         <a href="javascript:void(0)">
-                                            <img src="../assets/svg/list.svg" class="blur-up lazyload" alt="">
+                                            <img src="{{ asset('frontend/assets/svg/list.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                 </ul>
@@ -787,8 +551,9 @@
                                                     @endif
                                                 @endfor
                                             </ul>
-                                            <span>(<?php echo $starRating; ?>)</span>
+                                            <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
+                                            <h6 class="unit">{{ $product->product_size }}</h6>
                                         @if ($product->discount_percent != null)
                                             <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
                                         @else
@@ -981,6 +746,41 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
+
+    <!-- latest jquery-->
+    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- jquery ui-->
+    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+    
+    <!-- Price Range Js -->
+    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
+
+    <script>
+        jQuery(document).ready(function($) {
+            var rangeSlider = $(".js-range-slider").ionRangeSlider({
+                type: "double",
+                grid: true,
+                min: 0,
+                max: 1000000,
+                from: 0,
+                to: 1000000,
+                prefix: "$"
+            });console.log(rangeSlider);
+
+            var price = "{{ $price }}";
+
+            if (price !== null) {
+                var priceRange = price.split(';');
+
+                rangeSlider.data("ionRangeSlider").update({
+                    from: parseFloat(priceRange[0]),
+                    to: parseFloat(priceRange[1])
+                });
+            }
+        });
+    </script>
+
     <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
@@ -1009,6 +809,7 @@
         document.getElementById("searchBtn").addEventListener("click", function() {
             document.getElementById("searchForm").submit();
         });
+
     </script>
 
 </x-guest-layout>

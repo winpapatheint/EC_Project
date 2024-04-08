@@ -1,22 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 use App\Http\Controllers\AdminController;
-
-
 use App\Http\Controllers\UserController;
 
+<<<<<<< HEAD
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+=======
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
+<<<<<<< HEAD
 
+=======
+use App\Http\Controllers\ShowProductController;
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 
 /*
 |--------------------------------------------------------------------------
@@ -32,21 +40,36 @@ use App\Http\Controllers\Auth\RegisterController;
 //Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
-Route::get('/', function () {
-    return view('front-end.welcome');
-});
+//Route::get('/', function () {
+   //return view('front-end.welcome');
+//});
 
+<<<<<<< HEAD
 
 Route::get('/user-registration', [UserController::class,'index'])->name('user-register');
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
 Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
+=======
+route::get('/',[AdminController::class,'welcome']);
+
+
+Route::get('/user-registration', function () {return view('front-end.user-register');})->name('user_register');
+Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
+route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
+
+Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
 Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
 
+<<<<<<< HEAD
 Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
+=======
+Route::get('/user-delivery', function () {return view('front-end.user-delivery-status');})->name('user_deivery_status');
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 
 Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
 Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');
@@ -58,9 +81,18 @@ Route::post('/user/paymentmethod', [UserController::class, 'createNewcard'])->na
 Route::post('/user-payment/edit-card', [UserController::class, 'editCard'])->name('edit_card');
 Route::delete('/remove-cards/{id}', [UserController::class, 'removeCard'])->name('remove_card');
 
+<<<<<<< HEAD
 Route::get('/user/profile', [UserController::class, 'showProfile'])->name('user_profile');
 Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
 Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
+=======
+Route::get('/user-profile/show-profile', [UserController::class, 'showProfile'])->name('user_profile');
+Route::post('/user-profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
+Route::post('user-profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
+
+
+
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 
 //Route::get('/register', function () {return view('front-end.register');});
 
@@ -70,11 +102,18 @@ Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
+<<<<<<< HEAD
 Route::get('/show-carts', [UserController::class, 'showCarts'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
+=======
+Route::post('/cart', [UserController::class, 'showCart'])->name('show_carts');
+Route::post('/user/cart', [UserController::class, 'updateCartQty'])->name('update_qty');
+Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
+Route::post('/user-orders/checkout', [UserController::class, 'checkout'])->name('checkout');
+>>>>>>> 0ea1f46b719bd0d4975c9b6c81069835cfdd07b1
 
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
@@ -82,14 +121,15 @@ Route::get('/compare', function () {return view('front-end.compare');});
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
 
-Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
+Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shoplist');
 
-Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
 
-Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
+Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
+Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
+
 
 Route::get('/news', [AdminController::class, 'news']);
-
+Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 
@@ -117,9 +157,9 @@ Route::get('/admin/registersubadmin', function () {return view('admin.edituser')
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
-
+Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
-Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
+Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
@@ -129,6 +169,8 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
+
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -203,7 +245,7 @@ Route::controller(RegisterController::class)->group(function(){
 });
 
 Route::controller(SellerController::class)->group(function(){
-    Route::get('/seller','Dashboard')->name('seller.dashboard');
+    Route::get('/seller','Dashboard')->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
     Route::get('/seller/profile','Profile')->name('seller.profile');
     Route::post('/seller/profile/store','StoreProfile')->name('seller.store.profile');
     Route::post('/seller/shop/update','UpdateShop')->name('seller.update.shop');
@@ -228,18 +270,20 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
     Route::get('/seller/edit/product/{id}','EditProduct')->name('seller.edit.product');
     Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
-    Route::get('/seller/delete/product/{id}','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
-    Route::get('/seller/product/review','Review')->name('seller.product.review');
+    Route::get('/seller/product/review','Review')->name('seller.review');
     Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
+    Route::post('/seller/product/review/update', 'UpdateReview')->name('seller.review.update');
+    Route::post('/seller/delete/review','DeleteReview')->name('seller.review.delete');
 });
 
 //SellerOrder
 Route::controller(OrderController::class)->group(function(){
     Route::get('/seller/all/order','SellerAllOrder')->name('seller.all.order');
-    // Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
+    Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
     // Route::get('/seller/tracking/order','SellerTrackingOrder')->name('seller.tracking.order');
 });
 
@@ -265,7 +309,7 @@ Route::get('/subseller/edit/product', function () {return view('sub_seller.produ
 Route::get('/subseller/all/order', function () {return view('sub_seller.order.order_all');})->name('sub_seller.all.order');
 Route::get('/subseller/detail/order', function () {return view('sub_seller.order.order_detail');})->name('sub_seller.detail.order');
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
-Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
+//Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
 require __DIR__.'/auth.php';
 

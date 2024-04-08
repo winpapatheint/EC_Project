@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Models\Seller;
+use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Prefecture;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -23,7 +24,20 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'bank_name' => 'required|string|max:255',
+            'bank_branch' => 'required|string|max:255',
+            'bank_acc_no' => 'required|string|max:255',
+            'bank_acc_name' => 'required|string|max:255',
+            'shop_name' => 'required|string|max:255',
             'shop_logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'shop_establish' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room' => 'required|string|max:255',
+
         ]);
 
         $img = $request->file('shop_logo');
@@ -36,22 +50,29 @@ class RegisterController extends Controller
             'role' => 'seller',
             'password' => Hash::make($request->input('password')),
         ]);
-
+        event(new Registered($user));
         $seller = Seller::create([
             'user_id' => $user->id,
-            'bank_name' => $request->input('bank_name') ,
-            'bank_branch' => $request->input('bank_branch'),
-            'bank_acc_type' => $request->input('bank_acc_type'),
-            'bank_acc_no' => $request->input('bank_acc_no'),
-            'bank_acc_name' => $request->input('bank_acc_name'),
-            'shop_name' => $request->input('shop_name'),
+            'prefecture_id' => $request->prefecture,
+            'bank_name' => $request->bank_name ,
+            'bank_branch' => $request->bank_branch,
+            'bank_acc_type' => $request->bank_acc_type,
+            'bank_acc_no' => $request->bank_acc_no,
+            'bank_acc_name' => $request->bank_acc_name,
+            'shop_name' => $request->shop_name,
             'shop_logo' => $filename,
-            'shop_establish' => $request->input('shop_establish'),
-            'phone' => $request->input('phone'),
-            'zip_code' => $request->input('zip_code'),
-            'address' => $request->input('address'),
-            'url' => $request->input('url')
+            'shop_establish' => $request->shop_establish,
+            'phone' => $request->phone,
+            'zip_code' => $request->zip_code,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room' => $request->room,
+            'url' => $request->url
         ]);
-        return redirect('/login');
+
+        event(new Registered($seller));
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
     }
 }

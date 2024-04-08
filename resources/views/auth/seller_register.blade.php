@@ -38,6 +38,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="shop_name" class="form-control" placeholder="Type your shop name">
                                         <label>Shop Name</label>
+                                        @error('shop_name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -45,6 +48,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="date" name="shop_establish" class="form-control">
                                         <label>Established Year</label>
+                                        @error('shop_establish')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -52,6 +58,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="file" name="shop_logo" class="form-control">
                                         <label>Shop Logo</label>
+                                        @error('shop_logo')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -59,13 +68,19 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="phone" class="form-control" placeholder="Phone">
                                         <label>Phone</label>
+                                        @error('phone')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code">
+                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
                                         <label>Zip Code</label>
+                                        @error('zip_code')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -78,11 +93,11 @@
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="bank_acc_type">
+                                        <select class="form-control" name="prefecture">
                                             <option>Choose Prefecture</option>
                                             @foreach ($prefecture as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                                @endforeach
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -91,6 +106,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
                                         <label>City, Ward, Town</label>
+                                        @error('city')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -98,6 +116,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="chome" class="form-control" placeholder="1-2-3" >
                                         <label>Chome, Banchi, Go</label>
+                                        @error('chome')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -105,6 +126,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="building" class="form-control" placeholder="Example Building" >
                                         <label>Building / Apt / Company name</label>
+                                        @error('building')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -112,6 +136,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="room" class="form-control" placeholder="101" >
                                         <label>Unit / Room no.</label>
+                                        @error('room')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -121,6 +148,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="bank_name" class="form-control" placeholder="Bank Name" >
                                         <label>Bank Name</label>
+                                        @error('bank_name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -139,6 +169,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" >
                                         <label>Branch Name</label>
+                                        @error('bank_branch')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -146,6 +179,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="bank_acc_name" class="form-control" placeholder="Bank Account Name">
                                         <label>Bank Account Name</label>
+                                        @error('bank_acc_name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -153,6 +189,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="number" name="bank_acc_no" class="form-control" placeholder="Bank Account Number">
                                         <label>Bank Account Number</label>
+                                        @error('bank_acc_no')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -162,6 +201,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="text" name="name" class="form-control" placeholder="Name">
                                         <label>Username</label>
+                                        @error('name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -169,6 +211,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="email" name="email" class="form-control" placeholder="Email Address">
                                         <label>Email Address</label>
+                                        @error('email')
+                                                <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -176,6 +221,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="password" name="password" class="form-control" placeholder="Password">
                                         <label>Password</label>
+                                        @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 

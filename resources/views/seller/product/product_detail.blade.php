@@ -124,14 +124,21 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $data->selling_price }}</p>
+                                                <p>¥{{ $data->original_price }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Discount</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $data->discount_percent }}</p>
+                                                <p>{{ $data->discount_percent }}%</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Price</label>
+                                            <div class="col-sm-9">
+                                                <p>¥{{ $data->selling_price }}</p>
                                             </div>
                                         </div>
 
@@ -145,6 +152,12 @@
                                             <label class="col-sm-3 form-label-title">Delivey Estimate Day</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->estimate_date }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Delivey Price</label>
+                                            <div class="col-sm-9">
+                                                <p>¥{{ $data->delivery_price }}</p>
                                             </div>
                                         </div>
                                         <a href="{{ route('seller.edit.product',$data->id) }}">

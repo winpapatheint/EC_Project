@@ -40,16 +40,14 @@
 
                                 <div class="blog-contain blog-contain-2">
                                     <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>   {{ date('Y\年m\月d\日', strtotime($blog->created_at)) }} </span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Mark J.
-                                                Speight</span></span>
+                                        <span class="time"><i data-feather="clock"></i> <span> {{ date('Y\年m\月d\日', strtotime($blog->created_at)) }} </span></span>
+                                        <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
                                     </div>
-                                    <a href="{{ url('/blog-detail') }}">
+                                    <a href="{{ url('/blog/'.$blog->id ) }}">
                                         <h3>{{ $blog->title }}</h3>
                                     </a>
                                     <p>{!! $blog->content !!}</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
+                                    <button onclick="location.href = '{{ url('/blogdetail/'.$blog->id ) }}';" class="blog-button">Read More <i class="fa-solid fa-right-long"></i></button>
                                 </div>
                             </div>
                             @endforeach
@@ -81,61 +79,21 @@
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                                     <div class="accordion-body pt-0">
                                         <div class="recent-post-box">
+                                            @foreach($latestblog as $list)
                                             <div class="recent-box">
                                                 <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/1.jpg"
+                                                    <img src="{{ asset('images/'.$list->image ) }}"
                                                         class="img-fluid blur-up lazyload" alt="">
                                                 </a>
 
                                                 <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Green onion knife and salad placed</h5>
+                                                    <a href="{{ url('/blogdetail/'.$list->id ) }}">
+                                                        <h5 class="recent-name">{{ $list->title }}</h5>
                                                     </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
+                                                    <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} <i data-feather="thumbs-up"></i></h6>
                                                 </div>
                                             </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/2.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Health and skin for your organic</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/3.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Organics mix masala fresh & soft</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/4.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Fresh organics brand and picnic</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

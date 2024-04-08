@@ -17,6 +17,7 @@
                             <div class="table-responsive">
                                 <table class="user-table ticket-table review-table theme-table table"
                                     id="table_id">
+
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -118,15 +119,22 @@
                                                 </label>
                                             </td>
 
-                                                @if ($item->status == 1)
-                                                    <td class="td-check">
-                                                        <i class="ri-checkbox-circle-line"></i>
-                                                    </td>
-                                                @else
-                                                    <td class="td-cross">
-                                                        <i class="ri-close-circle-line"></i>
-                                                    </td>
-                                                @endif
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a class="sidebar-link sidebar-title link-nav" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                            href="javascript:void(0)">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModalToggle{{ $item->id }}">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -145,6 +153,60 @@
 </div>
 <!-- product review section End -->
 
+<!-- Modal Start -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-body">
+            <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
+            @if(isset($item->id))
+                <form action="{{ route('seller.review.update')}}" method="POST">
+                    <input type="hidden" name="review_id" value="{{ $item->id }}">
+                    @csrf
+                    <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn--yes btn-primary">Update</button>
+                    </div>
+                </form>
+            @endif
+        </div>
+    </div>
+</div>
+</div>
+<!-- Modal End -->
+
+<!-- Delete Modal Box Start -->
+@foreach( $review as $key => $item )
+    <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>The data will be deleted permanently.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <form method="POST" action="{{ route('seller.review.delete') }}">
+                        @csrf
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- Delete Modal Box End -->
 
 <script>
 $(function() {

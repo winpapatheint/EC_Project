@@ -16,7 +16,7 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
 
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-                ->middleware('guest');
+                ->middleware('guest')->name('login');
 
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])

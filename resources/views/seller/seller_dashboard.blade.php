@@ -176,6 +176,7 @@
                                         <span>Profile</span>
                                     </a>
                                 </li>
+
                                 <li>
                                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                         href="javascript:void(0)">
@@ -247,7 +248,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.product.review') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.review') }}">
                                         <i class="ri-star-line"></i>
                                         <span>Review</span>
                                     </a>
@@ -274,13 +275,14 @@
                                     </a>
                                 </li>
 
-                                <li class="sidebar-list">
+                             <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     href="javascript:void(0)">
                                         <i data-feather="log-out"></i>
                                         <span>Log Out</span>
                                     </a>
                                 </li>
+
 
                             </ul>
                         </div>
@@ -321,10 +323,10 @@
                     <p>Are you sure you want to log out?</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" style="margin-bottom: 11px;">No</button>
                         <form action="{{ route('adminlogout')}}" method="POST">
                             @csrf
-                            <button type="submit" class="btn  btn--yes btn-primary">Yes</button>
+                            <button type="submit" class="btn btn--yes btn-primary">Yes</button>
                         </form>
                     </div>
                 </div>

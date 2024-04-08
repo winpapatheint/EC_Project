@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
 use Illuminate\Http\Request;
@@ -47,21 +48,44 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        return view('front-end.index');
+        $categories = DB::table('Categories')
+            ->select(
+                'Categories.id',
+                'Categories.category_name as category_name',
+            )
+            ->groupby( 'Categories.id')
+            ->get();
 
+        $blogs = DB::table('Blog')
+        ->select( 'U.name as authorby', 'Blog.*')
+        ->join('users as U', function ($join) {
+            $join->on('Blog.created_by', '=', 'U.id');
+        })
+        ->orderBy('created_at', 'desc')->paginate(2);
+
+        return view('front-end.welcome',compact('blogs','categories'));
     }
 
     public function news()
     {
         $limit = 10;
+
         $blogs = DB::table('Blog')
-                ->select(  'Blog.*')
-                ->orderBy('created_at', 'desc')->paginate($limit);
+                    ->select( 'U.name as authorby', 'Blog.*')
+                    ->join('users as U', function ($join) {
+                        $join->on('Blog.created_by', '=', 'U.id');
+                    })
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $limit = 4;
+        $latestblog = DB::table('Blog')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate($limit);
 
         $ttl = $blogs->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.blog-list',compact('blogs','ttlpage','ttl'));
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog'));
 
     }
 
@@ -429,6 +453,27 @@ class AdminController extends Controller
         return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
     }
 
+    public function indexreview()
+    {
+        $limit = 10;
+
+        $lists = DB::table('Reviews')
+                    ->select( 'U.name as authorby', 'Reviews.*','U.*','Reviews.id','Reviews.status')
+                    ->join('users as U', function ($join) {
+                        $join->on('Reviews.user_id', '=', 'U.id');
+                    })
+
+                    ->whereIn('role',['seller','buyer'])
+                    ->paginate($limit);
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+    // $hcompanies = array();
+        // print_r($lists);die;
+
+        return view('admin.product.product_review',compact('lists','ttlpage','ttl'));
+    }
+
     public function indexproduct()
     {
         $limit = 10;
@@ -450,7 +495,22 @@ class AdminController extends Controller
         return view('admin.product.product_all',compact('lists','ttlpage','ttl'));
     }
 
+    public function indexshopproduct($id)
+    {
+        $limit = 10;
 
+        $shoplist = DB::table('products as P')
+                    ->select( 'P.*','C.*')
+                    ->Join('Categories as C', function ($join) {
+                        $join->on('C.id', '=', 'P.category_id');
+                    })
+                    ->where('P.seller_id',$id)->orderBy('P.created_at', 'desc')->paginate($limit);
+
+        $ttl = $shoplist->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
+    }
 
     public function indexsubcategory()
     {
@@ -461,25 +521,25 @@ class AdminController extends Controller
             $kword = '';
         }
 
-     $lists = DB::table('Categorys')
-        ->select('Sb.id', 'Categorys.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
+     $lists = DB::table('Categories')
+        ->select('Sb.id', 'Categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
         ->leftJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Categorys.id', '=', 'S.category_id');
+            $join->on('Categories.id', '=', 'S.category_id');
         })
         ->leftJoin('Sub_categories as Sb', function ($join) {
             $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'Categorys.id');
+            $join->on('Sb.category_id', '=', 'Categories.id');
         })
 
         ->orderBy('Sb.created_at', 'desc')
         ->paginate($limit);
 
         $listss = DB::table('Sub_categories')
-        ->select('Sub_categories.*','Categorys.category_name as category','S.*')
+        ->select('Sub_categories.*','Categories.category_name as category','S.*')
 
 
-        ->rightJoin('Categorys', function ($join) {
-            $join->on('Categorys.id', '=', 'Sub_categories.category_id');
+        ->rightJoin('Categories', function ($join) {
+            $join->on('Categories.id', '=', 'Sub_categories.category_id');
 
         })
 
@@ -499,13 +559,50 @@ class AdminController extends Controller
     public function blogdetail($id)
     {
         $blog = DB::table('blog')
-                    ->select( 'blog.*')
-                    ->where('blog.id',$id)->get();
+        ->select( 'blog.*')
+        ->where('blog.id',$id)->get();
 
-        // print_r($blog[0]->created_at);die;
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
+    }
+
+    public function indexshop($id)
+    {
+        $limit =14;
+        $shoplist = DB::table('Categories as C')
+                        ->select('P.*','C.*')
+                        ->Join('Products as P', function ($join) {
+                            $join->on('C.id', '=', 'P.category_id');
+                        })
+                        ->where('P.category_id',$id)
+                        ->orderBy('P.created_at', 'desc')
+                        ->paginate($limit);
+
+        $ttl = $shoplist->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
+    }
+
+    public function bloglistdetail($id)
+    {
+        $blog = DB::table('blog')
+                    ->select( 'U.name as authorby', 'blog.*')
+                    ->join('users as U', function ($join) {
+                        $join->on('blog.created_by', '=', 'U.id');
+                    })
+                    ->where('blog.id',$id)->get();
+
+        $blog = $blog[0];
+
+        $limit = 4;
+        $latestblog = DB::table('Blog')
+                    ->where('id','<>',$id)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate($limit);
+
+        return view('front-end.blog-detail',compact('blog','latestblog'));
     }
 
     public function productdetail($id)
@@ -537,14 +634,23 @@ class AdminController extends Controller
             // print_r(substr($id, 5));die;
             $id = substr($id, 5);
 
-        if ($role == 'buyer' OR $role == 'admin')  {
+        if ($role == 'admin')  {
             $edituser = User::find($id);
+        }
+        if ($role == 'buyer')  {
+            $edituser = DB::table('users')
+                        ->select('buyers.*','users.*','users.id')
+                        ->join('buyers', function ($join) {
+                        $join->on('users.id', '=', 'buyers.user_id');
+                    })
+                    ->where('users.id',$id)
+                    ->orderBy('users.created_at', 'desc')->first();
         }
         if ($role == 'seller')  {
             $editseller = DB::table('users')
                         ->select('sellers.*','users.*','users.id')
                         ->join('sellers', function ($join) {
-                        $join->on('users.email', '=', 'sellers.email');
+                        $join->on('users.id', '=', 'sellers.user_id');
                     })
                     ->where('users.id',$id)
                     ->orderBy('users.created_at', 'desc')->first();
@@ -637,13 +743,56 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function indexuserstatus(Request $request)
+    public function  indexsubadminstatus(Request $request)
     {
         $user = User::find($request->userid);
         $user->status = $request->status;
         $user->save();
         return redirect('/admin/profile')->back();
     }
+
+
+
+    public function indexuserstatus(Request $request)
+    {
+        $user = User::find($request->userid);
+        $user->status = $request->status;
+        // if(empty($user->status))
+        // {
+        //     User::where('id', $request->userid)->update(['role' => 'idleuser']);
+
+        // }
+        $user->save();
+
+        return redirect('/admin/profile')->back();
+    }
+
+    public function indexreviewstatus(Request $request)
+    {
+        $user = Review::find($request->review_id);
+        $user->status = $request->status;
+        $user->save();
+        return redirect('/admin/profile')->back();
+    }
+
+
+    public function indexshoplist(Request $request)
+    {
+        $limit=10;
+
+        $lists = DB::table('sellers as S')
+        ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
+        ->join('users as U', 'U.id', '=', 'S.user_id')
+        ->orderBy('S.created_at', 'desc')
+        ->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('front-end.seller-grid',compact('lists','ttlpage','ttl'));
+    }
+
+
 
     public function indexuser()
     {
@@ -652,8 +801,10 @@ class AdminController extends Controller
 
         // print_r($type);die;
 
-        $updval = array('status' => '1');
-        $users = DB::table('users')->whereIn('role',['seller','buyer'])
+      //  $updval = array('status' => '1');
+        $users = DB::table('users')
+                    ->select('users.id','users.*')
+                    ->whereIn('role',['seller','buyer'])
                     ->where('email_verified_at','<>','')
                     ->where(function ($query) {
                         $query->whereNotNull('email_verified_at')
@@ -661,9 +812,9 @@ class AdminController extends Controller
                     })
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
-        foreach ($users as $user) {
-            DB::table('users')->where('id', $user->id)->update($updval);
-        }
+     //foreach ($users as $user) {
+            //DB::table('users')->where('id', $user->id)->update($updval);
+       // }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -684,6 +835,7 @@ class AdminController extends Controller
                     ->where('id', '!=' , 1)
 
                     ->orderBy('created_at', 'desc')->paginate($limit);
+
         $ttl = $subadmins->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -754,7 +906,7 @@ class AdminController extends Controller
 
         $lists = DB::table('Sub_category_titles')
                     ->select('C.category_name as category','Sub_category_titles.*')
-                    ->join('Categorys as C', function ($join) {
+                    ->join('Categories as C', function ($join) {
                     $join->on('Sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
@@ -772,7 +924,7 @@ class AdminController extends Controller
     public function deletecategory(Request $request)
     {
 
-        $catlist =  DB::table('Categorys')
+        $catlist =  DB::table('Categories')
                         ->whereIn('id', function ($query) use ($request) {
                         $query->select('category_id')
                         ->from('Sub_category_titles')
@@ -826,17 +978,17 @@ class AdminController extends Controller
     }
     public function addsubtitle()
     {
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
         return view('admin.addsubtitle',compact('categories'));
     }
 
     public function addsubcategory()
     {
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
 
@@ -844,7 +996,7 @@ class AdminController extends Controller
 
     public function editcategory($id)
     {
-        $data = DB::table('Categorys')
+        $data = DB::table('Categories')
                     ->find($id);
         $editmode = true;
 
@@ -866,7 +1018,7 @@ class AdminController extends Controller
     {
         $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
         $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
-        $categorylist = DB::table('Categorys')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('Categories')->orderBy('created_at', 'desc')->get();
         $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
         $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
         $multiImgs = MultiImg::where('product_id',$id)->get();
@@ -885,12 +1037,12 @@ class AdminController extends Controller
         $subtitle = DB::table('Sub_category_titles')
                     ->find($id);
 
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
 
-        $category = DB::table('Categorys')
-                    ->select('Categorys.*')
+        $category = DB::table('Categories')
+                    ->select('Categories.*')
                     ->where('id', $subtitle->sub_category_id)
                     ->pluck('id')->toArray();
 
@@ -911,9 +1063,9 @@ class AdminController extends Controller
 
         $subcategory_titlename = DB::table('Sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
 
-        $categories = DB::table('Categorys')
-                    ->select('Categorys.*')
-                    ->orderBy('Categorys.created_at', 'asc')->get();
+        $categories = DB::table('Categories')
+                    ->select('Categories.*')
+                    ->orderBy('Categories.created_at', 'asc')->get();
 
 
         $category = DB::table('Sub_category_titles')
@@ -1048,6 +1200,8 @@ class AdminController extends Controller
                'title' => $request->title,
                'content' => $request->content,
                'image' => $imageName,
+               'created_by' => Auth::user()->id,
+               'author' => Auth::user()->name,
                'created_at' => $time->format('Y-m-d H:i:s'),
                'updated_at' => $time->format('Y-m-d H:i:s')
            ]);
@@ -1058,6 +1212,8 @@ class AdminController extends Controller
 
            $updval = array('title' => $request->title,
                            'content' => $request->content,
+                           'created_by' => Auth::user()->id,
+                           'author' => Auth::user()->name,
                            'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 
@@ -1159,7 +1315,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('Categorys')->insert([
+            DB::table('Categories')->insert([
                 'category_name' => $request->title,
                 'category_icon' => $imageName,
                 'created_at' => $time->format('Y-m-d H:i:s'),
@@ -1178,7 +1334,7 @@ class AdminController extends Controller
                 $updval['category_icon'] = $imageName;
             }
 
-            DB::table('Categorys')->where('id',$request->id)->update($updval);
+            DB::table('Categories')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Creamy Chocolate Cake</h2>
+                        <h2>{{ $product->product_name }}</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                     </a>
                                 </li>
 
-                                <li class="breadcrumb-item active">Creamy Chocolate Cake</li>
+                                <li class="breadcrumb-item active">{{ $product->product_name }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -38,48 +38,48 @@
                                         <div class="product-main-2 no-arrow">
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/1.jpg" id="img-1"
-                                                        data-zoom-image="../assets/images/product/category/1.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}" id="img-1"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-0 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/2.jpg"
-                                                        data-zoom-image="../assets/images/product/category/2.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-1 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/3.jpg"
-                                                        data-zoom-image="../assets/images/product/category/3.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-2 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/4.jpg"
-                                                        data-zoom-image="../assets/images/product/category/4.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-3 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/5.jpg"
-                                                        data-zoom-image="../assets/images/product/category/5.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-4 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
 
                                             <div>
                                                 <div class="slider-image">
-                                                    <img src="../assets/images/product/category/6.jpg"
-                                                        data-zoom-image="../assets/images/product/category/6.jpg"
+                                                    <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                                        data-zoom-image="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                         class="img-fluid image_zoom_cls-5 blur-up lazyload" alt="">
                                                 </div>
                                             </div>
@@ -137,42 +137,53 @@
 
                         <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="right-box-contain">
-                                <h6 class="offer-top">30% Off</h6>
-                                <h2 class="name">Creamy Chocolate Cake</h2>
+                                <h6 class="offer-top">{{ $product-> discount_percent }}% Off</h6>
+                                <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    <h3 class="theme-color price">$49.50 <del class="text-content">$58.46</del> <span
-                                            class="offer theme-color">(8% off)</span></h3>
+                                    @if ($product->discount_percent != null)
+                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                    @else
+                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                    @endif
+                                     <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
+                                    @php
+                                        $starRating = 0;
+                                        $count = 0;
+                                    @endphp
+                                    @foreach ($reviews as $review)
+                                        @if ($product->id == $review->product_id)
+                                            @php
+                                                $count += 1;
+                                                $starRating += $review->stars_rated;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($count != 0)
+                                        @php
+                                            $starRating = $starRating / $count;
+                                        @endphp
+                                    @endif
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star"></i>
-                                            </li>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $starRating)
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                @else
+                                                    <li><i data-feather="star"></i></li>
+                                                @endif
+                                            @endfor
                                         </ul>
-                                        <span class="review">23 Customer Review</span>
+                                        <span class="review"><?php echo $count; ?> Customer Review</span>
                                     </div>
                                 </div>
 
                                 <div class="product-contain">
-                                    <p>Lollipop cake chocolate chocolate cake dessert jujubes. Shortbread sugar plum
-                                        dessert
-                                        powder cookie sweet brownie. Cake cookie apple pie dessert sugar plum muffin
-                                        cheesecake.
+                                    <p>
+                                        {{ $product->short_desc }}
                                     </p>
                                 </div>
 
-                                <div class="product-package">
+                                {{-- <div class="product-package">
                                     <div class="product-title">
                                         <h4>Weight</h4>
                                     </div>
@@ -193,48 +204,7 @@
                                             <a href="javascript:void(0)">With Pink Roses</a>
                                         </li>
                                     </ul>
-                                </div>
-
-                                <div class="time deal-timer product-deal-timer mx-md-0 mx-auto" id="clockdiv-1"
-                                    data-hours="1" data-minutes="2" data-seconds="3">
-                                    <div class="product-title">
-                                        <h4>Hurry up! Sales Ends In</h4>
-                                    </div>
-                                    <ul>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="days d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Days</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="hours d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Hours</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="minutes d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Min</h6>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter d-block">
-                                                <div class="seconds d-block">
-                                                    <h5></h5>
-                                                </div>
-                                                <h6>Sec</h6>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                </div> --}}
 
                                 <div class="note-box product-package">
                                     <div class="cart_qty qty-box product-qty">
@@ -251,16 +221,30 @@
                                         </div>
                                     </div>
 
-                                    <button onclick="location.href = 'cart.html';"
+                                    <form method="POST" action="{{ route('show_cart') }}" >
+                                        @csrf
+                                    <button type="submit"
                                         class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                    </form>
                                 </div>
 
                                 <div class="progress-sec">
                                     <div class="left-progressbar">
-                                        <h6>Please hurry! Only 5 left in stock</h6>
+                                    @php
+                                        $orderedCount = 0;
+                                    @endphp
+                                    @foreach ($productOrdered as $ordered)
+                                        @php
+                                            $orderedCount += $ordered->qty;
+                                        @endphp
+                                    @endforeach
+                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                style="width: 50%;"></div>
+                                            <?php
+                                            // Calculate the percentage of ordered items
+                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            ?>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +262,7 @@
                                 </div>
 
                                 <div class="pickup-box">
-                                    <div class="product-title">
+                                    {{-- <div class="product-title">
                                         <h4>Store Information</h4>
                                     </div>
 
@@ -296,13 +280,13 @@
                                             <li>Tags : <a href="javascript:void(0)">Cake,</a> <a
                                                     href="javascript:void(0)">Backery</a></li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="payment-option">
-                                    <div class="product-title">
+                                    {{--<div class="product-title">
                                         <h4>Guaranteed Safe Checkout</h4>
-                                    </div>
+                                    </div> --}}
                                     <ul>
                                         <li>
                                             <a href="javascript:void(0)">
@@ -368,17 +352,10 @@
                                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                                         <div class="product-description">
                                             <div class="nav-desh">
-                                                <p>Jelly beans carrot cake icing biscuit oat cake gummi bears tart.
-                                                    Lemon drops carrot cake pudding sweet gummi bears. Chocolate cake
-                                                    tart cupcake donut topping liquorice sugar plum chocolate bar. Jelly
-                                                    beans tiramisu caramels jujubes biscuit liquorice chocolate. Pudding
-                                                    toffee jujubes oat cake sweet roll. Lemon drops dessert croissant
-                                                    danish cake cupcake. Sweet roll candy chocolate toffee jelly sweet
-                                                    roll halvah brownie topping. Marshmallow powder candy sesame snaps
-                                                    jelly beans candy canes marshmallow gingerbread pie.</p>
+                                                <p>{{ $product->long_desc}}</p>
                                             </div>
 
-                                            <div class="nav-desh">
+                                            {{-- <div class="nav-desh">
                                                 <div class="desh-title">
                                                     <h5>Organic:</h5>
                                                 </div>
@@ -429,7 +406,7 @@
                                                     chocolate. Ice cream cookie dragée cake sweet roll sweet roll.Lemon
                                                     drops cookie muffin carrot cake chocolate marzipan gingerbread
                                                     topping chocolate bar. Soufflé tiramisu pastry sweet dessert.</p>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
 
@@ -438,36 +415,45 @@
                                             <table class="table info-table">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Specialty</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Ingredient Type</td>
-                                                        <td>Vegetarian</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Brand</td>
-                                                        <td>Lavian Exotique</td>
+                                                        <td>
+                                                            @php
+                                                                $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                            @endphp
+                                                            {{ $brand->brand_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Form</td>
-                                                        <td>Bar Brownie</td>
+                                                        <td>
+                                                            @php
+                                                                $country = DB::table('Countries')->where('id',$product->country_id)->first();
+                                                            @endphp
+                                                            {{ $country->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Package Information</td>
-                                                        <td>Box</td>
+                                                        <td>Category</td>
+                                                        <td>
+                                                            @php
+                                                                $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                            @endphp
+                                                            {{ $category->category_name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Manufacturer</td>
-                                                        <td>Prayagh Nutri Product Pvt Ltd</td>
+                                                        <td>Seller</td>
+                                                        <td>
+                                                            @php
+                                                                $seller = DB::table('sellers')->where('id',$product->seller_id)->first();
+                                                                $seller_name = DB::table('users')->where('id',$seller->user_id)->first();
+                                                            @endphp
+                                                            {{ $seller_name->name }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Item part number</td>
-                                                        <td>LE 014 - 20pcs Crème Bakes (Pack of 2)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Net Quantity</td>
-                                                        <td>40.00 count</td>
+                                                        <td>Estimated Date</td>
+                                                        <td>{{ $product->estimate_date }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -506,7 +492,40 @@
                                                         <div class="row">
                                                             <div class="col-xl-12">
                                                                 <div class="product-main-rating">
-                                                                    <h2>3.40
+                                                                @php
+                                                                    $starRating = 0;
+                                                                    $count = 0;
+                                                                    $rate1 = 0;
+                                                                    $rate2 = 0;
+                                                                    $rate3 = 0;
+                                                                    $rate4 = 0;
+                                                                    $rate5 = 0;
+                                                                    $reviews = DB::table('Reviews')->where('product_id',$product->id)->get();
+                                                                @endphp
+                                                                @foreach ($reviews as $review)
+                                                                    @php
+                                                                        $count += 1;
+                                                                        $starRating += $review->stars_rated;
+                                                                        if ($review->stars_rated == 1) {
+                                                                            $rate1 += 1;
+                                                                        } elseif ($review->stars_rated == 2) {
+                                                                            $rate2 += 1;
+                                                                        } elseif ($review->stars_rated == 3) {
+                                                                            $rate3 += 1;
+                                                                        } elseif ($review->stars_rated == 4) {
+                                                                            $rate4 += 1;
+                                                                        } elseif ($review->stars_rated == 5) {
+                                                                            $rate5 += 1;
+                                                                        }
+                                                                    @endphp
+
+                                                                @endforeach
+                                                                @if ($count != 0)
+                                                                    @php
+                                                                        $starRating = $starRating / $count;
+                                                                    @endphp
+                                                                @endif
+                                                                    <h2>{{ $starRating }}
                                                                         <i data-feather="star"></i>
                                                                     </h2>
 
@@ -521,10 +540,10 @@
                                                                             <h5>5<i data-feather="star"></i></h5>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar"
-                                                                                    style="width: 40%;">
+                                                                                    style="width: {{ ($rate1 * 100 / $count)}}%;">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">2</h5>
+                                                                            <h5 class="total">{{ $rate1 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
@@ -532,10 +551,10 @@
                                                                             <h5>4<i data-feather="star"></i></h5>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar"
-                                                                                    style="width: 20%;">
+                                                                                    style="width: {{ ($rate2 * 100 / $count)}}%;">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">1</h5>
+                                                                            <h5 class="total">{{ $rate2 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
@@ -543,10 +562,10 @@
                                                                             <h5>3<i data-feather="star"></i></h5>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar"
-                                                                                    style="width: 0%;">
+                                                                                    style="width: {{ ($rate3 * 100 / $count)}}%;">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">0</h5>
+                                                                            <h5 class="total">{{ $rate3 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
@@ -554,10 +573,10 @@
                                                                             <h5>2<i data-feather="star"></i></h5>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar"
-                                                                                    style="width: 20%;">
+                                                                                    style="width: {{ ($rate4 * 100 / $count)}}%;">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">1</h5>
+                                                                            <h5 class="total">{{ $rate4 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
@@ -565,10 +584,10 @@
                                                                             <h5>1<i data-feather="star"></i></h5>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar"
-                                                                                    style="width: 20%;">
+                                                                                    style="width: {{ ($rate5 * 100 / $count)}}%;">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">1</h5>
+                                                                            <h5 class="total">{{ $rate5 }}</h5>
                                                                         </div>
                                                                     </li>
 
@@ -590,43 +609,34 @@
                                                 <div class="col-xl-7">
                                                     <div class="review-people">
                                                         <ul class="review-list">
+                                                        @foreach ($reviews as $review)
+                                                            @php
+                                                                $user = DB::table('users')->where('id',$review->user_id)->first();
+                                                            @endphp
                                                             <li>
                                                                 <div class="people-box">
                                                                     <div>
                                                                         <div class="people-image people-text">
                                                                             <img alt="user" class="img-fluid "
-                                                                                src="../assets/images/review/1.jpg">
+                                                                                src="{{ asset('upload/product_thambnail/'.$user->user_photo) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="people-comment">
                                                                         <div class="people-name"><a
                                                                                 href="javascript:void(0)"
-                                                                                class="name">Jack Doe</a>
+                                                                                class="name">{{ $user->name }}</a>
                                                                             <div class="date-time">
-                                                                                <h6 class="text-content"> 29 Sep 2023
-                                                                                    06:40:PM
+                                                                                <h6 class="text-content"> {{ \Carbon\Carbon::parse($review->updated_at)->format('d M Y h:i:s A') }}
                                                                                 </h6>
                                                                                 <div class="product-rating">
                                                                                     <ul class="rating">
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"></i>
-                                                                                        </li>
+                                                                                        @for ($i = 1; $i <= 5; $i++)
+                                                                                            @if ($i <= $review->stars_rated)
+                                                                                                <li><i data-feather="star" class="fill"></i></li>
+                                                                                            @else
+                                                                                                <li><i data-feather="star"></i></li>
+                                                                                            @endif
+                                                                                        @endfor
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
@@ -643,221 +653,7 @@
                                                                     </div>
                                                                 </div>
                                                             </li>
-                                                            <li>
-                                                                <div class="people-box">
-                                                                    <div>
-                                                                        <div class="people-image people-text">
-                                                                            <img alt="user" class="img-fluid "
-                                                                                src="../assets/images/review/2.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="people-comment">
-                                                                        <div class="people-name"><a
-                                                                                href="javascript:void(0)"
-                                                                                class="name">Jessica
-                                                                                Miller</a>
-                                                                            <div class="date-time">
-                                                                                <h6 class="text-content"> 29 Sep 2023
-                                                                                    06:34:PM
-                                                                                </h6>
-                                                                                <div class="product-rating">
-                                                                                    <div class="product-rating">
-                                                                                        <ul class="rating">
-                                                                                            <li>
-                                                                                                <i data-feather="star"
-                                                                                                    class="fill"></i>
-                                                                                            </li>
-                                                                                            <li>
-                                                                                                <i data-feather="star"
-                                                                                                    class="fill"></i>
-                                                                                            </li>
-                                                                                            <li>
-                                                                                                <i data-feather="star"
-                                                                                                    class="fill"></i>
-                                                                                            </li>
-                                                                                            <li>
-                                                                                                <i data-feather="star"
-                                                                                                    class="fill"></i>
-                                                                                            </li>
-                                                                                            <li>
-                                                                                                <i
-                                                                                                    data-feather="star"></i>
-                                                                                            </li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="reply">
-                                                                            <p>Honestly, I regret buying this item. The
-                                                                                quality
-                                                                                is subpar, and it feels like a waste of
-                                                                                money. I
-                                                                                wouldn't recommend it to anyone.</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="people-box">
-                                                                    <div>
-                                                                        <div class="people-image people-text">
-                                                                            <img alt="user" class="img-fluid "
-                                                                                src="../assets/images/review/3.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="people-comment">
-                                                                        <div class="people-name"><a
-                                                                                href="javascript:void(0)"
-                                                                                class="name">Rome Doe</a>
-                                                                            <div class="date-time">
-                                                                                <h6 class="text-content"> 29 Sep 2023
-                                                                                    06:18:PM
-                                                                                </h6>
-                                                                                <div class="product-rating">
-                                                                                    <ul class="rating">
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"></i>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="reply">
-                                                                            <p>I am extremely satisfied with this
-                                                                                purchase. The
-                                                                                item arrived promptly, and the quality
-                                                                                is
-                                                                                exceptional. It's evident that the
-                                                                                makers paid
-                                                                                attention to detail. Overall, a
-                                                                                fantastic buy!
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="people-box">
-                                                                    <div>
-                                                                        <div class="people-image people-text">
-                                                                            <img alt="user" class="img-fluid "
-                                                                                src="../assets/images/review/4.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="people-comment">
-                                                                        <div class="people-name"><a
-                                                                                href="javascript:void(0)"
-                                                                                class="name">Sarah
-                                                                                Davis</a>
-                                                                            <div class="date-time">
-                                                                                <h6 class="text-content"> 29 Sep 2023
-                                                                                    05:58:PM
-                                                                                </h6>
-                                                                                <div class="product-rating">
-                                                                                    <ul class="rating">
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"></i>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="reply">
-                                                                            <p>I am genuinely delighted with this item.
-                                                                                It's a
-                                                                                total winner! The quality is superb, and
-                                                                                it has
-                                                                                added so much convenience to my daily
-                                                                                routine.
-                                                                                Highly satisfied customer!</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="people-box">
-                                                                    <div>
-                                                                        <div class="people-image people-text">
-                                                                            <img alt="user" class="img-fluid "
-                                                                                src="../assets/images/review/5.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="people-comment">
-                                                                        <div class="people-name"><a
-                                                                                href="javascript:void(0)"
-                                                                                class="name">John Doe</a>
-                                                                            <div class="date-time">
-                                                                                <h6 class="text-content"> 29 Sep 2023
-                                                                                    05:22:PM
-                                                                                </h6>
-                                                                                <div class="product-rating">
-                                                                                    <ul class="rating">
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"
-                                                                                                class="fill"></i>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <i data-feather="star"></i>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="reply">
-                                                                            <p>Very impressed with this purchase. The
-                                                                                item is of
-                                                                                excellent quality, and it has exceeded
-                                                                                my
-                                                                                expectations.</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
+                                                        @endforeach
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -933,81 +729,34 @@
                                 <h3>Trending Products</h3>
 
                                 <ul class="product-list product-right-sidebar border-0 p-0">
+                                @foreach ($topProducts as $topProduct)
+                                    @php
+                                        $prod = DB::table('products')->where('id',$topProduct->product_id)->first();
+                                    @endphp
                                     <li>
                                         <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/23.png"
+                                            <a href="{{ route('show-product-left-thumbnail', ['id' => $prod->id]) }}" class="offer-image">
+                                                <img src="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}">
-                                                        <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                    <a href="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}">
+                                                        <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 70.00</h6>
+                                                    {{-- <span>450 G</span>
+                                                    <h6 class="price theme-color">$ 70.00</h6> --}}
+                                                    @if ($prod->discount_percent != null)
+                                                        <h6 class="price"><span class="theme-color">${{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>${{ $prod->selling_price }}</del>
+                                                    @else
+                                                        <h5 class="price"><span class="theme-color">${{ $prod->selling_price }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
-
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/24.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}">
-                                                        <h6 class="name">Dates Medjoul Premium Imported</h6>
-                                                    </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 40.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/25.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}">
-                                                        <h6 class="name">Good Life Walnut Kernels</h6>
-                                                    </a>
-                                                    <span>200 G</span>
-                                                    <h6 class="price theme-color">$ 52.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="mb-0">
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/26.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}">
-                                                        <h6 class="name">Apple Red Premium Imported</h6>
-                                                    </a>
-                                                    <span>1 KG</span>
-                                                    <h6 class="price theme-color">$ 80.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -1015,7 +764,7 @@
                     
 
                         <!-- Banner Section -->
-                        <div class="ratio_156 pt-25">
+                        {{-- <div class="ratio_156 pt-25">
                             <div class="home-contain">
                                 <img src="../assets/images/vegetable/banner/8.jpg" class="bg-img blur-up lazyload"
                                     alt="">
@@ -1031,7 +780,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -1043,7 +792,7 @@
         <div class="modal fade" id="writereview" tabindex="-1" aria-labellabedby="exambleModelLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{ route('reviews_store', ['product' => $product->id])}}"  method="POST">
+                    <form action=""  method="POST">
                         @csrf
                         <input type="hidden" name="product" value="{{ $product->id }}">
                         <div class="modal-header">

@@ -87,6 +87,33 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
+<<<<<<< HEAD
+                            {{-- <div class="filter-category">
+                                <div class="filter-title">
+                                    <h2>Filters</h2>
+                                    <a href="javascript:void(0)">Clear All</a>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="javascript:void(0)">Vegetable</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">Fruit</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">Fresh</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">Milk</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">Meat</a>
+                                    </li>
+                                </ul>
+                            </div> --}}
+
+=======
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <div style="display: flex; align-items: center;">
@@ -110,6 +137,43 @@
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
+<<<<<<< HEAD
+                                            <div class="form-floating theme-form-floating-2 search-box">
+                                                <input type="search" class="form-control" id="search"
+                                                    placeholder="Search ..">
+                                                <label for="search">Search</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                            <span>Food Preference</span>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <ul class="category-list custom-padding">
+                                                <li>
+                                                    <div class="form-check ps-0 m-0 category-list-box">
+                                                        <input class="checkbox_animated" type="checkbox" id="veget">
+                                                        <label class="form-check-label" for="veget">
+                                                            <span class="name">Vegetarian</span>
+                                                            <span class="number">(08)</span>
+                                                        </label>
+                                                    </div>
+                                                </li>
+
+                                                <li>
+                                                    <div class="form-check ps-0 m-0 category-list-box">
+                                                        <input class="checkbox_animated" type="checkbox" id="non">
+                                                        <label class="form-check-label" for="non">
+                                                            <span class="name">Non Vegetarian</span>
+                                                            <span class="number">(09)</span>
+=======
 
                                             <ul class="category-list custom-padding custom-height">
                                             @foreach ($categoryWithProductCount as $category)
@@ -121,6 +185,7 @@
                                                         <label class="form-check-label" for="{{ $category->category_name }}">
                                                             <span class="name">{{ $category->category_name }}</span>
                                                             <span class="number">({{ $category->product_count }})</span>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                         </label>
                                                     </div>
                                                 </li>
@@ -410,6 +475,9 @@
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
+<<<<<<< HEAD
+                                        <span>Choose Sorting</span> <i class="fa-solid fa-angle-down"></i>
+=======
                                         @if ($sort == 1)
                                             <span>Low - High Price</span>
                                         @elseif ($sort == 2)
@@ -426,9 +494,35 @@
                                             <span>Choose Sorting</span> 
                                         @endif
                                             <i class="fa-solid fa-angle-down"></i>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                     </button>
 
                                     <ul class="dropdown-menu">
+<<<<<<< HEAD
+                                        {{-- <li>
+                                            <a class="dropdown-item" id="pop" href="javascript:void(0)">Popularity</a>
+                                        </li> --}}
+                                        <li>
+                                            <a class="dropdown-item" id="low" href="{{ route('show-product', ['sort' => '1']) }}">Low - High
+                                                Price</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="high" href="{{ route('show-product', ['sort' => '2']) }}">High - Low
+                                                Price</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="rating" href="{{ route('show-product', ['sort' => '3']) }}">Average
+                                                Rating</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="aToz" href="{{ route('show-product', ['sort' => '4']) }}">A - Z Order</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="zToa" href="{{ route('show-product', ['sort' => '5']) }}">Z - A Order</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="off" href="{{ route('show-product', ['sort' => '6']) }}">% Off - Hight To
+=======
                                         <li>
                                             <a class="dropdown-item" id="drop1" name="sort" value="1" href="#">Low - High Price</a>
                                         </li>
@@ -450,6 +544,7 @@
                                         </li>
                                         <li>
                                             <a class="dropdown-item" id="drop6" name="sort" value="6" href="#">% Off - Hight To
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 Low</a>
                                         </li>
                                     </ul>
@@ -551,9 +646,14 @@
                                                     @endif
                                                 @endfor
                                             </ul>
+<<<<<<< HEAD
+                                            <span>(<?php echo $starRating; ?>)</span>
+                                        </div>
+=======
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                         @if ($product->discount_percent != null)
                                             <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
                                         @else
@@ -574,14 +674,22 @@
                                                     </button>
                                                     <input class="form-control input-number qty-input" type="text"
                                                         name="quantity" value="0"
+<<<<<<< HEAD
+                                                       data-max-quantity="{{ $product->product_qty }}">
+=======
                                                         data-max-quantity="{{ $product->product_qty }}">
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <button type="button" class="qty-right-plus bg-gray"
                                                         data-type="plus" data-field="">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
                                             </div>
+<<<<<<< HEAD
+                                        </div>
+=======
                                         </div> --}}
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                     </div>
                                 </div>
                             </div>
@@ -746,6 +854,40 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
+<<<<<<< HEAD
+    <script>
+        // Get all checkboxes
+        const checkboxes = document.querySelectorAll('.checkbox_animated');
+
+        checkboxes.forEach(checkbox => {
+            // Add change event listener to each checkbox
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // If checkbox is checked, make AJAX request
+                    const categoryId = this.getAttribute('data-category');
+                    // AJAX request
+                    fetch(`/products?category_id=${categoryId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Add any additional headers if needed
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Handle the response here, e.g., update UI with products
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                        // Handle errors here
+                    });
+                }
+            });
+        });
+    </script>
+=======
 
     <!-- latest jquery-->
     <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -812,4 +954,5 @@
 
     </script>
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 </x-guest-layout>

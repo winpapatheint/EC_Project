@@ -105,7 +105,11 @@
                                             <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
+<<<<<<< HEAD
+                                                    <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id) }}">
+=======
                                                     <form method="POST" action="{{ route('update_qty') }}">
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                         @csrf
                                                         <div class="input-group">
                                                             <button type="submit" class="btn qty-left-minus"
@@ -165,14 +169,18 @@
                         </div>
 
                         <div class="summery-contain">
-                            <div class="coupon-cart">
-                                <h6 class="text-content mb-2">Coupon Apply</h6>
-                                <div class="mb-3 coupon-box input-group">
-                                    <input type="email" class="form-control" id="exampleFormControlInput1"
-                                        placeholder="Enter Coupon Code Here...">
-                                    <button class="btn-apply">Apply</button>
+                            <form method="POST" action="{{ route('add_coupon_code') }}" >
+                                    @csrf                 
+                                <div class="coupon-cart">
+                                    <input type="hidden" name="buyer_id" value="{{ $cartlist->buyer_id }}">
+                                    <h6 class="text-content mb-2">Coupon Apply</h6>
+                                    <div class="mb-3 coupon-box input-group">
+                                        <input type="text" class="form-control" name="coupon" id="exampleFormControlInput1"
+                                            placeholder="Enter Coupon Code Here...">
+                                        <button type="submit" class="btn-apply">Apply</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                             <ul>
                                 <li>
                                     <h4>Subtotal</h4>
@@ -193,7 +201,12 @@
 
                                 <li>
                                     <h4>Coupon Discount</h4>
-                                    <h4 class="price">(-) 0.00</h4>
+                                    
+                                        @php 
+                                        $discountPrice  =  $subTotal * ($discount / 100);
+                                        @endphp
+                                   
+                                    <h4 class="price">(-) ¥ {{ $discountPrice }}</h4>
                                 </li>
 
                                 <li class="align-items-start">
@@ -206,6 +219,30 @@
                         <ul class="summery-total">
                             <li class="list-total border-top-0">
                                 <h4>Total (JPY)</h4>
+<<<<<<< HEAD
+                                @if($discountPrice)
+                                    @php 
+                                        $total  = $subTotal + $discountPrice + 500
+                                    @endphp
+                                @else
+                                    @php
+                                        $total  = $subTotal + 500
+                                    @endphp
+                                @endif
+                                <h4 class="price theme-color">¥ {{ $total }}</h4>
+                            </li>
+                        </ul>              
+                        <div class="button-group cart-button">
+                            <ul>
+                                <li>
+                                    <a type="button"
+                                        class="btn btn-animation proceed-btn fw-bold" href="{{ route('checkout') }}">Process To Checkout</a>
+                                </li>
+                                </form>
+                                
+                            </ul>
+                        </div>
+=======
                                 @php 
                                     $total  = $subTotal + 500
                                 @endphp
@@ -227,6 +264,7 @@
                                 </ul>
                             </div>
                         </form>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                     </div>
                 </div>
             </div>
@@ -235,3 +273,8 @@
     <!-- Cart Section End -->
 
 </x-guest-layout>
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3

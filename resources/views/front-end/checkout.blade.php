@@ -44,49 +44,9 @@
                                         <div class="checkout-title">
                                             <h4>Delivery Address</h4>
                                         </div>
-
+                                        @foreach($buyerAddress as $buyeraddress)
                                         <div class="checkout-detail">
                                             <div class="row g-4">
-                                                <div class="col-xxl-6 col-lg-12 col-md-6">
-                                                    <div class="delivery-address-box">
-                                                        <div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="jack"
-                                                                    id="flexRadioDefault1">
-                                                            </div>
-
-                                                            <div class="label">
-                                                                <label>Home</label>
-                                                            </div>
-
-                                                            <ul class="delivery-address-detail">
-                                                                <li>
-                                                                    <h4 class="fw-500">Jack Jennas</h4>
-                                                                </li>
-
-                                                                <li>
-                                                                    <p class="text-content"><span
-                                                                            class="text-title">Address
-                                                                            : </span>8424 James Lane South San
-                                                                        Francisco, CA 94080</p>
-                                                                </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content"><span
-                                                                            class="text-title">Pin Code
-                                                                            :</span> +380</h6>
-                                                                </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content mb-0"><span
-                                                                            class="text-title">Phone
-                                                                            :</span> + 380 (0564) 53 - 29 - 68</h6>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-xxl-6 col-lg-12 col-md-6">
                                                     <div class="delivery-address-box">
                                                         <div>
@@ -96,32 +56,25 @@
                                                             </div>
 
                                                             <div class="label">
-                                                                <label>Office</label>
+                                                                <label>{{ $buyeraddress->place }}</label>
                                                             </div>
 
                                                             <ul class="delivery-address-detail">
                                                                 <li>
-                                                                    <h4 class="fw-500">Jack Jennas</h4>
+                                                                    <h4 class="fw-500">{{ $buyeraddress->name }}</h4>
                                                                 </li>
 
                                                                 <li>
                                                                     <p class="text-content"><span
                                                                             class="text-title">Address
-                                                                            :</span>Nakhimovskiy R-N / Lastovaya Ul.,
-                                                                        bld. 5/A, appt. 12
+                                                                            :</span>{{ $buyeraddress->address }}
                                                                     </p>
-                                                                </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content"><span
-                                                                            class="text-title">Pin Code :</span>
-                                                                        +380</h6>
                                                                 </li>
 
                                                                 <li>
                                                                     <h6 class="text-content mb-0"><span
                                                                             class="text-title">Phone
-                                                                            :</span> + 380 (0564) 53 - 29 - 68</h6>
+                                                                            :</span> + 380 {{ $buyeraddress->phone }}</h6>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -129,92 +82,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                 </li>
 
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/oaflahpk.json"
-                                            trigger="loop-on-hover" colors="primary:#0baf9a" class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Delivery Option</h4>
-                                        </div>
-
-                                        <div class="checkout-detail">
-                                            <div class="row g-4">
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div
-                                                                    class="form-check custom-form-check hide-check-box">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="standard" id="standard" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="standard">Standard
-                                                                        Delivery Option</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div
-                                                                    class="form-check mb-0 custom-form-check show-box-checked">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="standard" id="future">
-                                                                    <label class="form-check-label" for="future">Future
-                                                                        Delivery Option</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 future-box">
-                                                    <div class="future-option">
-                                                        <div class="row g-md-0 gy-4">
-                                                            <div class="col-md-6">
-                                                                <div class="delivery-items">
-                                                                    <div>
-                                                                        <h5 class="items text-content"><span>3
-                                                                                Items</span>@
-                                                                            $693.48</h5>
-                                                                        <h5 class="charge text-content">Delivery Charge
-                                                                            $34.67
-                                                                            <button type="button" class="btn p-0"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-placement="top"
-                                                                                title="Extra Charge">
-                                                                                <i
-                                                                                    class="fa-solid fa-circle-exclamation"></i>
-                                                                            </button>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-6">
-                                                                <form
-                                                                    class="form-floating theme-form-floating date-box">
-                                                                    <input type="date" class="form-control">
-                                                                    <label>Select Date</label>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
 
                                 <li>
                                     <div class="checkout-icon">
@@ -227,7 +98,6 @@
                                         <div class="checkout-title">
                                             <h4>Payment Option</h4>
                                         </div>
-
                                         <div class="checkout-detail">
                                             <div class="accordion accordion-flush custom-accordion"
                                                 id="accordionFlushExample">
@@ -237,24 +107,18 @@
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#flush-collapseFour">
                                                             <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="cash"><input
+                                                                <label class="form-check-label" for="paypal"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="cash" checked> Cash
-                                                                    On Delivery</label>
+                                                                        name="flexRadioDefault" id="paypal" checked> PayPal</label>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="flush-collapseFour"
-                                                        class="accordion-collapse collapse show"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <p class="cod-review">Pay digitally with SMS Pay
-                                                                Link. Cash may not be accepted in COVID restricted
-                                                                areas. <a href="javascript:void(0)">Know more.</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
                                                 </div>
+                                            </div>  
+                                        </div>  
+                                        <div class="checkout-detail">
+                                            <div class="accordion accordion-flush custom-accordion"
+                                                id="accordionFlushExample">
 
                                                 <div class="accordion-item">
                                                     <div class="accordion-header" id="flush-headingOne">
@@ -330,196 +194,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingTwo">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseTwo">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="banking"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="banking">Net
-                                                                    Banking</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseTwo" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Bank
-                                                            </h5>
-                                                            <div class="row g-2">
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank1">
-                                                                        <label class="form-check-label"
-                                                                            for="bank1">Industrial & Commercial
-                                                                            Bank</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank2">
-                                                                        <label class="form-check-label"
-                                                                            for="bank2">Agricultural Bank</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank3">
-                                                                        <label class="form-check-label" for="bank3">Bank
-                                                                            of America</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank4">
-                                                                        <label class="form-check-label"
-                                                                            for="bank4">Construction Bank Corp.</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank5">
-                                                                        <label class="form-check-label" for="bank5">HSBC
-                                                                            Holdings</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="bank6">
-                                                                        <label class="form-check-label"
-                                                                            for="bank6">JPMorgan Chase & Co.</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-12">
-                                                                    <div class="select-option">
-                                                                        <div class="form-floating theme-form-floating">
-                                                                            <select
-                                                                                class="form-select theme-form-select">
-                                                                                <option value="hsbc">HSBC Holdings
-                                                                                </option>
-                                                                                <option value="loyds">Lloyds Banking
-                                                                                    Group</option>
-                                                                                <option value="natwest">Nat West Group
-                                                                                </option>
-                                                                                <option value="Barclays">Barclays
-                                                                                </option>
-                                                                                <option value="other">Others Bank
-                                                                                </option>
-                                                                            </select>
-                                                                            <label>Select Other Bank</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingThree">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseThree">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="wallet"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="wallet">My
-                                                                    Wallet</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseThree" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <h5 class="text-uppercase mb-4">Select Your Wallet
-                                                            </h5>
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <label class="form-check-label"
-                                                                            for="amazon"><input
-                                                                                class="form-check-input mt-0"
-                                                                                type="radio" name="flexRadioDefault"
-                                                                                id="amazon">Amazon Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="gpay">
-                                                                        <label class="form-check-label"
-                                                                            for="gpay">Google Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="airtel">
-                                                                        <label class="form-check-label"
-                                                                            for="airtel">Airtel Money</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="paytm">
-                                                                        <label class="form-check-label"
-                                                                            for="paytm">Paytm Pay</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="jio">
-                                                                        <label class="form-check-label" for="jio">JIO
-                                                                            Money</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="custom-form-check form-check">
-                                                                        <input class="form-check-input mt-0"
-                                                                            type="radio" name="flexRadioDefault"
-                                                                            id="free">
-                                                                        <label class="form-check-label"
-                                                                            for="free">Freecharge</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </div>  
+                                        </div>                                   
                                     </div>
                                 </li>
                             </ul>
@@ -533,99 +209,61 @@
                             <div class="summery-header">
                                 <h3>Order Summery</h3>
                             </div>
-
+                            @foreach($cartLists as $cartlist)
                             <ul class="summery-contain">
                                 <li>
                                     <img src="../assets/images/vegetable/product/1.png"
                                         class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Bell pepper <span>X 1</span></h4>
-                                    <h4 class="price">$32.34</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/2.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Eggplant <span>X 3</span></h4>
-                                    <h4 class="price">$12.23</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/3.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Onion <span>X 2</span></h4>
-                                    <h4 class="price">$18.27</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/4.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Potato <span>X 1</span></h4>
-                                    <h4 class="price">$26.90</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/5.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Baby Chili <span>X 1</span></h4>
-                                    <h4 class="price">$19.28</h4>
-                                </li>
-
-                                <li>
-                                    <img src="../assets/images/vegetable/product/6.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
-                                    <h4>Broccoli <span>X 2</span></h4>
-                                    <h4 class="price">$29.69</h4>
+                                    <h4>{{ $cartlist->product_name }} <span>X {{ $cartlist->quantity }}</span></h4>
+                                    @if($cartlist->discount_percent)
+                                            @php
+                                                $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
+                                                $quantity = $cartlist->quantity;
+                                                $totalAmount = $discountedPrice * $quantity;
+                                            @endphp
+                                            <h4 class="price">¥ {{ $totalAmount }} </h4>
+                                        @else
+                                            @php
+                                                $sellingPrice = $cartlist->selling_price;
+                                                $quantity = $cartlist->quantity;
+                                                $totalAmount1 = $sellingPrice * $quantity;
+                                            @endphp
+                                            <h4 class="price">¥ {{ $totalAmount1 }} </h4>
+                                        @endif
                                 </li>
                             </ul>
-
+                            @endforeach
                             <ul class="summery-total">
                                 <li>
+                                    @php
+                                        $subTotal = $totalAmount + $totalAmount1
+                                    @endphp
                                     <h4>Subtotal</h4>
-                                    <h4 class="price">$111.81</h4>
+                                    <h4 class="price">¥ {{ $subTotal }} </h4>
                                 </li>
 
                                 <li>
                                     <h4>Shipping</h4>
-                                    <h4 class="price">$8.90</h4>
+                                    <h4 class="price">¥ 500</h4>
                                 </li>
 
                                 <li>
-                                    <h4>Tax</h4>
-                                    <h4 class="price">$29.498</h4>
-                                </li>
-
-                                <li>
+                                @php 
+                                    $discountPrice  =  $subTotal * ($discount / 100);
+                                @endphp
                                     <h4>Coupon/Code</h4>
-                                    <h4 class="price">$-23.10</h4>
+                                    <h4 class="price">¥ - {{ $discountPrice }}</h4>
                                 </li>
+                                @php 
+                                    $total  =  $subTotal + 500 + $discountPrice
+                                @endphp
 
                                 <li class="list-total">
-                                    <h4>Total (USD)</h4>
-                                    <h4 class="price">$19.28</h4>
+                                    <h4>Total (JPY)</h4>
+                                    <h4 class="price">¥ {{ $total }}</h4>
                                 </li>
                             </ul>
                         </div>
-
-                        <div class="checkout-offer">
-                            <div class="offer-title">
-                                <div class="offer-icon">
-                                    <img src="../assets/images/inner-page/offer.svg" class="img-fluid" alt="">
-                                </div>
-                                <div class="offer-name">
-                                    <h6>Available Offers</h6>
-                                </div>
-                            </div>
-
-                            <ul class="offer-detail">
-                                <li>
-                                    <p>Combo: BB Royal Almond/Badam Californian, Extra Bold 100 gm...</p>
-                                </li>
-                                <li>
-                                    <p>combo: Royal Cashew Californian, Extra Bold 100 gm + BB Royal Honey 500 gm</p>
-                                </li>
-                            </ul>
-                        </div>
-
                         <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</button>
                     </div>
                 </div>

@@ -45,8 +45,8 @@
                                     </div>
                                 @endif
 
-                                <form method="post" action="{{ route('adduser') }}" class="row g-4" >
-                                @csrf
+                                <form method="POST" action="{{ route('adduser') }}" class="row g-4" >
+                                    @csrf
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="fullname">Name</label>
@@ -75,7 +75,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <input type="address" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
+                                            <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
                                             <span style="color:red">@error('address'){{$message}} @enderror</span>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
-                                            <input type="phone" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
+                                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
                                             <span style="color:red">@error('phone'){{$message}} @enderror</span>
                                         </div>
                                     </div>

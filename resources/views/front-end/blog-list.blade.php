@@ -24,6 +24,7 @@
     </section>
     <!-- Breadcrumb Section End -->
 
+
     <!-- Blog Section Start -->
     <section class="blog-section section-b-space">
         <div class="container-fluid-lg">
@@ -31,249 +32,31 @@
                 <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
                     <div class="row g-4">
                         <div class="col-12">
+                            @foreach( $blogs as $key => $blog )
                             <div class="blog-box blog-list wow fadeInUp">
                                 <div class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/1.jpg" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('images/'.$blog->image ) }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="blog-contain blog-contain-2">
                                     <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Mark J.
-                                                Speight</span></span>
+                                        <span class="time"><i data-feather="clock"></i> <span> {{ date('Y\年m\月d\日', strtotime($blog->created_at)) }} </span></span>
+                                        <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
                                     </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>one pot creamy mediterranean chicken pasta cream.</h3>
+                                    <a href="{{ url('/blog/'.$blog->id ) }}">
+                                        <h3>{{ $blog->title }}</h3>
                                     </a>
-                                    <p>Monterey jack cheese slices cream cheese cream cheese hard cheese roquefort
-                                        emmental lancashire. Who moved my cheese dolcelatte st. agur blue cheese fromage
-                                        mozzarella say cheese mascarpone blue castello.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
+                                    <p>{!! $blog->content !!}</p>
+                                    <button onclick="location.href = '{{ url('/blogdetail/'.$blog->id ) }}';" class="blog-button">Read More <i class="fa-solid fa-right-long"></i></button>
                                 </div>
                             </div>
+                            @endforeach
                         </div>
 
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.05s">
-                                <div class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/2.jpg" class="blur-up lazyload" alt="">
-                                </div>
 
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>rebeus
-                                                hagrid</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Crispy Frozen Vegetable is the on the Tempura.</h3>
-                                    </a>
-                                    <p>Manchego cauliflower cheese st. agur blue cheese red leicester monterey jack
-                                        cheesecake the big cheese edam. Gouda monterey jack roquefort hard cheese feta
-                                        croque monsieur cheeseburger manchego.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="blog-image">
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <img src="../assets/images/inner-page/blog/3.jpg" class="blur-up lazyload"
-                                            alt="">
-                                    </a>
-                                    <label><i class="fa-solid fa-bolt-lightning"></i> popular</label>
-                                </div>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Chris C.
-                                                Hall</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>How to start regrowing green onions and other vegetables.</h3>
-                                    </a>
-                                    <p>Cheese triangles say cheese cheese and biscuits dolcelatte jarlsberg cream cheese
-                                        taleggio fromage frais. Who moved my cheese cottage cheese cheese on toast
-                                        rubber cheese melted cheese ricotta.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.15s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/4.jpg" class="blur-up lazyload" alt="">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>James M.
-                                                Martin</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Starting a vegetable garden: the basics.</h3>
-                                    </a>
-                                    <p>Jarlsberg swiss edam. Goat everyone loves cheese strings ricotta cheese and wine
-                                        pepper jack dolcelatte halloumi. Cream cheese queso croque monsieur camembert de
-                                        normandie cheddar cheesecake cheese slices croque monsieur.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.2s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/5.jpg" class="blur-up lazyload" alt="">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Cecil M.
-                                                Levis</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Adapt this simple pasta salad to whatever vegetable.</h3>
-                                    </a>
-                                    <p>Cream cheese cheese slices chalk and cheese cottage cheese cheddar port-salut
-                                        everyone loves dolcelatte. Cream cheese camembert de normandie cow chalk and
-                                        cheese brie gouda cottage cheese cheesy grin.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.25s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/1.jpg" class="blur-up lazyload" alt="">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Mary R.
-                                                Hernandez</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>With chefs idle and vegetables rotting, China's virus-hit.</h3>
-                                    </a>
-                                    <p>Monterey jack chalk and cheese cheese and biscuits cream cheese fondue say cheese
-                                        stilton halloumi. Gouda everyone loves chalk and cheese everyone loves stinking
-                                        bishop manchego stilton.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.3s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/2.jpg" class="blur-up lazyload" alt="">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Cheryl D.
-                                                Moser</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Turn that bowl of pasta into a supercharged veggie vehicle.</h3>
-                                    </a>
-                                    <p>The big cheese fondue st. agur blue cheese. Cheese on toast paneer lancashire
-                                        cheese and biscuits rubber cheese macaroni cheese queso feta. Stinking bishop
-                                        fromage brie edam cheesy feet smelly cheese fromage frais paneer.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.35s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/3.jpg" alt="" class="blur-up lazyload">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Mina M.
-                                                Short</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Health, care and skin on the for your organic.</h3>
-                                    </a>
-                                    <p>Cheesy grin brie croque monsieur cheesy grin cottage cheese cheese strings
-                                        dolcelatte cheeseburger. Cheesy feet queso red leicester fromage frais hard
-                                        cheese cheeseburger fromage when the cheese comes out everybody's happy.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.4s">
-                                <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                    <img src="../assets/images/inner-page/blog/4.jpg" alt="" class="blur-up lazyload">
-                                </a>
-
-                                <div class="blog-contain blog-contain-2">
-                                    <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span>25 Feg, 2022</span></span>
-                                        <span class="super"><i data-feather="user"></i> <span>Marie S.
-                                                Santiago</span></span>
-                                    </div>
-                                    <a href="{{ url('/blog-detail') }}">
-                                        <h3>Fresh organicsm, brand, fresh and picnic place awesome.</h3>
-                                    </a>
-                                    <p>Macaroni cheese camembert de normandie airedale. Cheese triangles babybel cow
-                                        blue castello cheddar cheese and biscuits jarlsberg melted cheese. Caerphilly
-                                        fromage frais ricotta manchego edam boursin edam swiss.</p>
-                                    <button onclick="location.href = '{{ url('/blog-detail') }}';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
-                    <nav class="custom-pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                    <i class="fa-solid fa-angles-left"></i>
-                                </a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="javascript:void(0)">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">
-                                    <i class="fa-solid fa-angles-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    @include('components.toppagination')
                 </div>
 
                 <div class="col-xxl-3 col-xl-4 col-lg-5 order-lg-1">
@@ -296,61 +79,21 @@
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                                     <div class="accordion-body pt-0">
                                         <div class="recent-post-box">
+                                            @foreach($latestblog as $list)
                                             <div class="recent-box">
                                                 <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/1.jpg"
+                                                    <img src="{{ asset('images/'.$list->image ) }}"
                                                         class="img-fluid blur-up lazyload" alt="">
                                                 </a>
 
                                                 <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Green onion knife and salad placed</h5>
+                                                    <a href="{{ url('/blogdetail/'.$list->id ) }}">
+                                                        <h5 class="recent-name">{{ $list->title }}</h5>
                                                     </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
+                                                    <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} <i data-feather="thumbs-up"></i></h6>
                                                 </div>
                                             </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/2.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Health and skin for your organic</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/3.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Organics mix masala fresh & soft</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
-
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/4.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blog-detail') }}">
-                                                        <h5 class="recent-name">Fresh organics brand and picnic</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

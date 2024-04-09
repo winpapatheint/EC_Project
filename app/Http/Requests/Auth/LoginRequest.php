@@ -45,9 +45,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-          $loginset = array("login" => "user",                   
-                            "admin/login" => "admin",                   
-                            "hcompany/login" => "hcompany",                   
+          $loginset = array("login" => "user",
+                            "admin/login" => "admin",
+                            "hcompany/login" => "hcompany",
                             "host/login" => "host"
                         );
         $route = request()->route()->uri;

@@ -48,7 +48,8 @@
 
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$user->id}}" class="toggle-class" type="checkbox"
-                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive" >
+                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
+                                                            data-off="InActive"  {{ $user->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>
 
@@ -151,7 +152,31 @@
             </div>
         <!-- Delete Modal Box End -->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script>
+    $(function() {
+        $('.toggle-class').change(function() {
+
+            var status = $(this).prop('checked') ? 1 : 0;
+            var userid = $(this).data('id');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('ss') }}",
+                data: {
+                    'status': status,
+                    'userid': userid,
+                    '_token': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    alert(data.success);
+                    console.log(data.success);
+                }
+            });
+        });
+    });
+    </script>
 
 </x-auth-layout>
 

@@ -18,7 +18,7 @@
                                     @if (!$editmode)
                                     @php $action= route('registerconfirm') ; @endphp
                                     @else
-                                    @php $action= route('edituser') ; @endphp
+                                    @php $action= route('edithost') ; @endphp
                                     @endif
                                     <form class="theme-form theme-form-2 mega-form" id="registeruserform" method="POST" action="{{ $action }}">
                                         @csrf

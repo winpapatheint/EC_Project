@@ -1,5 +1,5 @@
-<x-guest-layout>
 
+<x-guest-layout>
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -12,13 +12,12 @@
                         <div class="home-detail p-center-left w-75">
                             <div>
                                 <h6>Exclusive offer <span>30% Off</span></h6>
-                                <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily
-                                        Needs</span></h1>
+                                <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily Needs</span></h1>
                                 <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that are
                                     good for your health.</p>
                                 <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
-                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now <i
-                                        class="fa-solid fa-right-long icon"></i></button>
+                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now
+                                    <i class="fa-solid fa-right-long icon"></i></button>
                             </div>
                         </div>
                     </div>
@@ -142,86 +141,17 @@
                         <div class="category-menu">
                             <h3>Category</h3>
                             <ul>
+                                @foreach($categories as $list)
                                 <li>
+
                                     <div class="category-list">
                                         <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
                                         <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Vegetables & Fruit</a>
+                                            <a href="{{ url("/shopsidebar/".$list->id ) }}">{{ $list->category_name }}</a>
                                         </h5>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/cup.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Beverages</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/meats.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Meats & Seafood</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/breakfast.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Breakfast & Dairy</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/frozen.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Frozen Foods</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/biscuit.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Biscuits & Snacks</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/grocery.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Grocery & Staples</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/drink.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Wines & Alcohol Drinks</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/milk.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Milk & Dairies</a>
-                                        </h5>
-                                    </div>
-                                </li>
-                                <li class="pb-30">
-                                    <div class="category-list">
-                                        <img src="../assets/svg/1/pet.svg" class="blur-up lazyload" alt="">
-                                        <h5>
-                                            <a href="{{ url('/shop-left-sidebar') }}">Pet Foods</a>
-                                        </h5>
-                                    </div>
-                                </li>
+                                @endforeach
                             </ul>
 
                             <ul class="value-list">
@@ -259,7 +189,7 @@
                                         <h3 class="text-uppercase fw-normal"><span
                                                 class="theme-color fw-bold">Freshes</span> Products</h3>
                                         <h3 class="fw-light">every hour</h3>
-                                       
+
                                         <button onclick="location.href = ' {{ url('/shop-left-sidebar') }}';"
                                             class="btn btn-animation btn-md mend-auto">Shop Now <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
@@ -293,7 +223,7 @@
                                 <ul class="product-list border-0 p-0 d-block">
                                     <li>
                                         <div class="offer-product">
-                            
+
                                             <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
                                                 <img src="../assets/images/vegetable/product/23.png"
                                                     class="blur-up lazyload" alt="">
@@ -471,7 +401,7 @@
                                                             </a>
                                                         </li>
 
-                                                       
+
 
                                                         <li data-bs-toggle="tooltip" data-bs-placement="top"
                                                             title="Wishlist">
@@ -1555,68 +1485,16 @@
                     </div>
 
                     <div class="category-slider-2 product-wrapper no-arrow">
+                        @foreach($categories as $list)
                         <div>
-                            <a href=" {{ url('/shop-left-sidebar') }}" class="category-box category-dark">
+                            <a href="{{ url("/shopsidebar/".$list->id ) }}" class="category-box category-dark">
                                 <div>
                                     <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
-                                    <h5>Vegetables & Fruit</h5>
+                                    <h5>{{ $list->category_name }}</h5>
                                 </div>
                             </a>
                         </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/cup.svg" class="blur-up lazyload" alt="">
-                                    <h5>Beverages</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/meats.svg" class="blur-up lazyload" alt="">
-                                    <h5>Meats & Seafood</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/breakfast.svg" class="blur-up lazyload" alt="">
-                                    <h5>Breakfast</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/frozen.svg" class="blur-up lazyload" alt="">
-                                    <h5>Frozen Foods</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/milk.svg" class="blur-up lazyload" alt="">
-                                    <h5>Milk & Dairies</h5>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="category-box category-dark">
-                                <div>
-                                    <img src="../assets/svg/1/pet.svg" class="blur-up lazyload" alt="">
-                                    <h5>Pet Food</h5>
-                                </div>
-                            </a>
-                        </div>
+                        @endforeach
                     </div>
 
                     <div class="section-t-space section-b-space">
@@ -2541,6 +2419,7 @@
                         </span>
                         <p>A virtual assistant collects the products from your list</p>
                     </div>
+
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
                         <div>
                             <div class="blog-box">
@@ -2606,6 +2485,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

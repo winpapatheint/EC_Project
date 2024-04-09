@@ -5,7 +5,7 @@
         }
 
     </style>
-    
+
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -59,12 +59,12 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div class="profile-name">
                                     <h3>{{ $user->name }}</h3>
                                     <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
-                               
+
                             </div>
                         </div>
 
@@ -75,12 +75,12 @@
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-order-tab" 
+                                <a class="nav-link" id="pills-order-tab"
                                     style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="delivery-detail" 
+                                <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 12px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
@@ -98,7 +98,11 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
+<<<<<<< HEAD
                                 
+=======
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                             </li>
                             <li class="nav-item" role="presentation">
                                 <form method="POST" action="{{ route('adminlogout') }}">
@@ -143,12 +147,20 @@
                                                         class="img-1 blur-up lazyload" alt="">
                                                     <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
                                                         alt="">
+<<<<<<< HEAD
                                                     
+=======
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
                                                         <h3>{{ $orderCount }}</h3>
                                                     </div>
+<<<<<<< HEAD
                                                     
+=======
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 </div>
                                             </div>
 
@@ -187,16 +199,27 @@
 
                                         <div class="row g-4">
                                             <div class="col-xxl-6">
+<<<<<<< HEAD
                                           
                                                 <div class="dashboard-detail">           
+=======
+
+                                                <div class="dashboard-detail">
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <h6 class="text-content">{{ $user->name }}</h6>
                                                     <h6 class="text-content">{{ $user->email }}</h6>
                                                     <h6 class="text-content">{{ $user->phone }}</h6>
                                                 </div>
                                             </div>
+<<<<<<< HEAD
                                         
                                     </div>
                                         
+=======
+
+                                    </div>
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
@@ -205,23 +228,38 @@
                                            
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
+<<<<<<< HEAD
                                                 
+=======
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Home Address</h6>
                                                         @foreach ($userOrders as $address)
                                                         <h6 class="text-content">{{ $address->buyer_address }}</h6>
                                                          @endforeach
                                                     </div>
+<<<<<<< HEAD
                                                     
+=======
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 </div>
                                           
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
+<<<<<<< HEAD
                                                         
                                                         <h6 class="text-content">{{ $firstAddress }}</h6>
                                                         
                                                         
+=======
+
+                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
+
+
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     </div>
                                                 </div>
                                             </div>

@@ -3,6 +3,8 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class GuestLayout extends Component
 {
@@ -13,6 +15,68 @@ class GuestLayout extends Component
      */
     public function render()
     {
-        return view('layouts.guest');
+
+        // $categories = DB::table('Categorys')
+        // ->select('Categorys.id', 'Categorys.category_name as category_name',
+        // 'Sub_category_titles.category_id as subcategory_id', 'Sub_category_titles.sub_category_titlename as subcategory_name')
+        // ->leftJoin('Sub_category_titles', 'Categorys.id', '=', 'Sub_category_titles.category_id')
+        // ->leftJoin('Sub_categories', 'Categorys.id', '=', 'Sub_categories.category_id' and 'Sub_category_titles.id','=',
+        // 'sub_category_title_id')
+        // ->get();
+
+        $categories = DB::table('Categories')
+            ->select(
+                'Categories.id',
+                'Categories.category_name as category_name',
+        'Sub_category_titles.category_id as subcategory_id',
+        'Sub_categories.sub_category_title_id as subcategorytitle_id',
+        'Sub_category_titles.sub_category_titlename as subcategory_name',
+        'Sub_categories.sub_category_name as sub_name'
+    )
+    ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
+    ->Join('Sub_categories', function($join) {
+        $join
+            ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
+    })
+    ->get();
+
+       // Organize categories and their subcategories
+        $organizedCategories = [];
+            foreach ($categories as $category) {
+                $categoryId = $category->id;
+                    if (!isset($organizedCategories[$categoryId])) {
+                        $organizedCategories[$categoryId] = [
+                            'id' => $categoryId,
+                            'name' => $category->category_name,
+                            'subcategories' => [],
+                            'sub' => []
+                        ];
+                    }
+                    if (!is_null($category->subcategory_id)) {
+                        $organizedCategories[$categoryId]['subcategories'][] = [
+                            'id' => $category->subcategory_id,
+                            'subid' => $category->subcategorytitle_id,
+                            'name' => $category->subcategory_name
+                        ];
+                    }
+
+                    if (!is_null($category->subcategorytitle_id)) {
+                        $organizedCategories[$categoryId]['sub'][] = [
+                            'id' => $category->subcategorytitle_id,
+                            'name' => $category->sub_name
+                        ];
+                    }
+            }
+
+            $todayDate = Carbon::now()->toDateString();
+
+            $deal = DB::table('products')
+                            ->select('products.*')
+                            ->whereNotNull('discount_percent')
+                            ->whereDate('created_at', $todayDate)
+                            ->get();
+
+        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal'));
+
     }
 }

@@ -30,71 +30,34 @@
                                 </thead>
 
                                 <tbody>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2024/02/29</td>
-                                        <td>Error</td>
-                                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2024/01/20</td>
-                                        <td>Message</td>
-                                        <td>officiis nesciunt qui nostrum quod voluptatem corrupti.<br>amet consectetur adipisicing elit</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2024/02/29</td>
-                                        <td>Error</td>
-                                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                    @if ($helps->isEmpty())
+                                        <tr>
+                                            <td colspan="9">No data available</td>
+                                        </tr>
+                                    @else
+                                    @foreach ($helps as $key => $item)
+                                        <tr>
+                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ $item->created_at }}</td>
+                                            <td>{{ $item->title }}</td>
+                                            <td>{{ strlen($item->reason) > 50 ? substr($item->reason, 0, 50) . '...' : $item->reason }}</td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('seller.help.detail',$item->id) }}">
+                                                            <i class="ri-eye-line"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('seller.help.delete',$item->id) }}">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -104,16 +67,6 @@
         </div>
     </div>
     <!-- All User Table Ends-->
-
-    <div class="container-fluid">
-        <!-- footer start-->
-        <footer class="footer">
-            <div class="footer-copyright text-center">
-                <p class="mb-0">Copyright 2022 © Fastkart theme by pixelstrap</p>
-            </div>
-        </footer>
-        <!-- footer end-->
-    </div>
 </div>
 <!-- Container-fluid end -->
 @endsection

@@ -282,7 +282,7 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-list">
-      <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.subadmin') }}">
+      <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/subadmin' )}}">
           <i class="ri-admin-line"></i>
           <span>SubAdmin</span>
       </a>

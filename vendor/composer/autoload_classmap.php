@@ -11,14 +11,25 @@ return array(
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AdminController' => $baseDir . '/app/Http/Controllers/AdminController.php',
     'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
+    'App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController' => $baseDir . '/app/Http/Controllers/Auth/EmailVerificationNotificationController.php',
+    'App\\Http\\Controllers\\Auth\\EmailVerificationPromptController' => $baseDir . '/app/Http/Controllers/Auth/EmailVerificationPromptController.php',
     'App\\Http\\Controllers\\Auth\\NewPasswordController' => $baseDir . '/app/Http/Controllers/Auth/NewPasswordController.php',
     'App\\Http\\Controllers\\Auth\\PasswordResetLinkController' => $baseDir . '/app/Http/Controllers/Auth/PasswordResetLinkController.php',
     'App\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',
     'App\\Http\\Controllers\\Auth\\RegisteredUserController' => $baseDir . '/app/Http/Controllers/Auth/RegisteredUserController.php',
+<<<<<<< HEAD
+=======
+    'App\\Http\\Controllers\\Auth\\VerifyEmailController' => $baseDir . '/app/Http/Controllers/Auth/VerifyEmailController.php',
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
     'App\\Http\\Controllers\\BrandController' => $baseDir . '/app/Http/Controllers/BrandController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\OrderController' => $baseDir . '/app/Http/Controllers/OrderController.php',
     'App\\Http\\Controllers\\ProductController' => $baseDir . '/app/Http/Controllers/ProductController.php',
     'App\\Http\\Controllers\\ReviewController' => $baseDir . '/app/Http/Controllers/ReviewController.php',
+<<<<<<< HEAD
+=======
+    'App\\Http\\Controllers\\SellerController' => $baseDir . '/app/Http/Controllers/SellerController.php',
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
     'App\\Http\\Controllers\\ShowProductController' => $baseDir . '/app/Http/Controllers/ShowProductController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
@@ -41,6 +52,7 @@ return array(
     'App\\Models\\Buyer_addresses' => $baseDir . '/app/Models/Buyer_addresses.php',
     'App\\Models\\Buyer_payments' => $baseDir . '/app/Models/Buyer_payments.php',
     'App\\Models\\Buyers' => $baseDir . '/app/Models/Buyers.php',
+<<<<<<< HEAD
     'App\\Models\\Carts' => $baseDir . '/app/Models/Carts.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Country' => $baseDir . '/app/Models/Country.php',
@@ -53,6 +65,17 @@ return array(
     'App\\Models\\Review' => $baseDir . '/app/Models/Review.php',
     'App\\Models\\Seller' => $baseDir . '/app/Models/Seller.php',
     'App\\Models\\Shop' => $baseDir . '/app/Models/Shop.php',
+=======
+    'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
+    'App\\Models\\Country' => $baseDir . '/app/Models/Country.php',
+    'App\\Models\\Help' => $baseDir . '/app/Models/Help.php',
+    'App\\Models\\MultiImg' => $baseDir . '/app/Models/MultiImg.php',
+    'App\\Models\\Order' => $baseDir . '/app/Models/Order.php',
+    'App\\Models\\Prefecture' => $baseDir . '/app/Models/Prefecture.php',
+    'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
+    'App\\Models\\Review' => $baseDir . '/app/Models/Review.php',
+    'App\\Models\\Seller' => $baseDir . '/app/Models/Seller.php',
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
     'App\\Models\\SubCategory' => $baseDir . '/app/Models/SubCategory.php',
     'App\\Models\\SubCategoryTitle' => $baseDir . '/app/Models/SubCategoryTitle.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
@@ -5015,15 +5038,6 @@ return array(
     'Symfony\\Polyfill\\Php73\\Php73' => $vendorDir . '/symfony/polyfill-php73/Php73.php',
     'Symfony\\Polyfill\\Php80\\Php80' => $vendorDir . '/symfony/polyfill-php80/Php80.php',
     'Symfony\\Polyfill\\Php80\\PhpToken' => $vendorDir . '/symfony/polyfill-php80/PhpToken.php',
-    'Tests\\CreatesApplication' => $baseDir . '/tests/CreatesApplication.php',
-    'Tests\\Feature\\AuthenticationTest' => $baseDir . '/tests/Feature/AuthenticationTest.php',
-    'Tests\\Feature\\EmailVerificationTest' => $baseDir . '/tests/Feature/EmailVerificationTest.php',
-    'Tests\\Feature\\ExampleTest' => $baseDir . '/tests/Feature/ExampleTest.php',
-    'Tests\\Feature\\PasswordConfirmationTest' => $baseDir . '/tests/Feature/PasswordConfirmationTest.php',
-    'Tests\\Feature\\PasswordResetTest' => $baseDir . '/tests/Feature/PasswordResetTest.php',
-    'Tests\\Feature\\RegistrationTest' => $baseDir . '/tests/Feature/RegistrationTest.php',
-    'Tests\\TestCase' => $baseDir . '/tests/TestCase.php',
-    'Tests\\Unit\\ExampleTest' => $baseDir . '/tests/Unit/ExampleTest.php',
     'TheSeer\\Tokenizer\\Exception' => $vendorDir . '/theseer/tokenizer/src/Exception.php',
     'TheSeer\\Tokenizer\\NamespaceUri' => $vendorDir . '/theseer/tokenizer/src/NamespaceUri.php',
     'TheSeer\\Tokenizer\\NamespaceUriException' => $vendorDir . '/theseer/tokenizer/src/NamespaceUriException.php',

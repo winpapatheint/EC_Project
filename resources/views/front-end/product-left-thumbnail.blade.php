@@ -219,10 +219,20 @@
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
+<<<<<<< HEAD
                                     </div>        
                                     <a type="button "
                                         class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts')}}">Add To Cart</a>
                                    
+=======
+                                    </div>
+
+                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                        @csrf
+                                    <button type="submit"
+                                        class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                    </form>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                 </div>
 
                                 <div class="progress-sec">

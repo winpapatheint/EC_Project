@@ -105,7 +105,11 @@
                                             <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
+<<<<<<< HEAD
                                                     <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id) }}">
+=======
+                                                    <form method="POST" action="{{ route('update_qty') }}">
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                         @csrf
                                                         <div class="input-group">
                                                             <button type="submit" class="btn qty-left-minus"
@@ -215,6 +219,7 @@
                         <ul class="summery-total">
                             <li class="list-total border-top-0">
                                 <h4>Total (JPY)</h4>
+<<<<<<< HEAD
                                 @if($discountPrice)
                                     @php 
                                         $total  = $subTotal + $discountPrice + 500
@@ -237,6 +242,29 @@
                                 
                             </ul>
                         </div>
+=======
+                                @php 
+                                    $total  = $subTotal + 500
+                                @endphp
+                                <h4 class="price theme-color">¥ {{ $total }}</h4>
+                            </li>
+                        </ul>
+                       
+                        <form method="POST" action="{{ route('checkout') }}" >
+                                    @csrf                 
+                            <div class="button-group cart-button">
+                                <ul>
+
+                                    <li>
+                                        <button type="submit"
+                                            class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                                    </li>
+                                    </form>
+                                    
+                                </ul>
+                            </div>
+                        </form>
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                     </div>
                 </div>
             </div>
@@ -245,5 +273,8 @@
     <!-- Cart Section End -->
 
 </x-guest-layout>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3

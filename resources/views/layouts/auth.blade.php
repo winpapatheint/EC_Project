@@ -66,8 +66,10 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
 
 </head>
 <body>
@@ -168,8 +170,8 @@
                             <div class="media profile-media">
                                 <img class="user-profile rounded-circle" src="{{ asset('backend/assets/images/users/4.jpg') }}" alt="">
                                 <div class="user-name-hide media-body">
-                                    <span>Emay Walter</span>
-                                    <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>
+                                    <span>{{ auth()->user()->name }}</span>
+                                    <p class="mb-0 font-roboto">{{ auth()->user()->role }}<i class="middle ri-arrow-down-s-line"></i></p>
                                 </div>
                             </div>
 
@@ -183,15 +185,17 @@
                                         </a>
                                     </li>
                                 </div>
-
+                                <div>
                                 <li>
                                     <form method="POST" action="{{ route('adminlogout') }}">
                                         @csrf
-                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"> logout</a>
-                                        </form>
-
-
+                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            <i data-feather="log-out"></i>
+                                            <span>Log Out</span>
+                                        </a>
+                                    </form>
                                 </li>
+                            </div>
                             </ul>
                         </li>
                     </ul>
@@ -356,7 +360,9 @@
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script>
+    <script src="{{ asset('backend/assets/input-tags/js/tagsinput.js') }}"></script>
+    <script src="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/toastr/toastr.min.js') }}"></script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('backend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
@@ -377,7 +383,7 @@
 
     <!-- Plugins js -->
     <script src="{{ asset('backend/assets/js/sidebar-menu.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/notify/bootstrap-notify.min.js') }}"></script>
+    {{-- <script src="{{ asset('backend/assets/js/notify/bootstrap-notify.min.js') }}"></script> --}}
     <script src="{{ asset('backend/assets/js/notify/index.js') }}"></script>
 
     <!-- Apexchar js -->
@@ -386,10 +392,6 @@
     <script src="{{ asset('backend/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart/apex-chart/chart-custom.js') }}"></script>
-
-
-    <!-- customizer js -->
-    <script src="{{ asset('backend/assets/js/customizer.js') }}"></script>
 
     <!-- ratio js -->
     <script src="{{ asset('backend/assets/js/ratio.js') }}"></script>

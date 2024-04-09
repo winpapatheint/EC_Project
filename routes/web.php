@@ -4,11 +4,21 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+<<<<<<< HEAD
 use App\Http\Controllers\ReviewController;
+=======
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
+<<<<<<< HEAD
+=======
+use App\Http\Controllers\ShowProductController;
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +31,18 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('front-end.welcome');
-});
+//Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
+//route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
+<<<<<<< HEAD
 Route::get('/user-registration', [UserController::class,'index'])->name('user_register');
+=======
+//Route::get('/', function () {
+   //return view('front-end.welcome');
+//});
+
+Route::get('/user-registration', [UserController::class,'index'])->name('user-register');
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
@@ -60,20 +77,25 @@ Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->nam
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
 Route::get('/compare', function () {return view('front-end.compare');});
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
 
-Route::get('/seller-grid', function () {return view('front-end.seller-grid');});
+Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shoplist');
 
-Route::get('/shop-left-sidebar', function () {return view('front-end.shop-left-sidebar');});
 
-Route::get('/blog-detail', function () {return view('front-end.blog-detail');});
+Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
+Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
-Route::get('/news', function () {return view('front-end.blog-list');});
+
+Route::get('/news', [AdminController::class, 'news']);
+Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact-us', function () {return view('front-end.contact-us');});
 
@@ -84,7 +106,7 @@ Route::get('/cart', function () {return view('front-end.cart');});
 Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
-Route::get('/admin', function () {return view('admin.admin');})->name('admin.dashboard');
+Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 
@@ -100,12 +122,21 @@ Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middlew
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
-
+Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
+Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
-Route::get('/admin/review/product', function () {return view('admin.product.product_review');})->name('admin.product.review');
+Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
+Route::get('product/{productid}', [AdminController::class, 'productdetail']);
+
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
+
+Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
+
 //startuser
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
@@ -114,6 +145,7 @@ Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
 Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
 Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
 Route::post('edituser', [AdminController::class, 'updateuser'])->name('edituser');
+Route::post('edithost', [AdminController::class, 'updatehost'])->name('edithost');
 Route::get('/admin/all/subuserdetail', function () {return view('admin.subuserdetail');})->name('admin.subuserdetail');
 Route::get('/admin/all/addsubadmin', function () {return view('admin.addsubadmin');})->name('admin.addsubadmin');
 Route::get('/admin/all/edituser', function () {return view('admin.edituser');})->name('admin.edituser');
@@ -129,6 +161,7 @@ route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name
 Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
 Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
 Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
+
 
 //endblog
 
@@ -176,11 +209,18 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get('/seller/register','SellerRegister')->name('seller.register');
     Route::post('/seller/registered','SellerRegistered')->name('seller.registered');
 });
-Route::get('/seller', function () {return view('seller.index');})->name('seller.dashboard');
-Route::get('/seller/profile', function () {return view('seller.profile');})->name('seller.profile');
-Route::get('/seller/review/product', function () {return view('seller.product.product_review');})->name('seller.product.review');
-Route::get('/seller/help', function () {return view('seller.help.help');})->name('seller.help');
-Route::get('/seller/add/help', function () {return view('seller.help.help_add');})->name('seller.help.add');
+
+Route::controller(SellerController::class)->group(function(){
+    Route::get('/seller','Dashboard')->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
+    Route::get('/seller/profile','Profile')->name('seller.profile');
+    Route::post('/seller/profile/store','StoreProfile')->name('seller.store.profile');
+    Route::post('/seller/shop/update','UpdateShop')->name('seller.update.shop');
+    Route::get('/seller/help','Help')->name('seller.help');
+    Route::get('/seller/help/add','AddHelp')->name('seller.help.add');
+    Route::post('/seller/help/store','StoreHelp')->name('seller.help.store');
+    Route::get('/seller/help/detail/{id}','DetailHelp')->name('seller.help.detail');
+    Route::get('/seller/help/{id}','DeleteHelp')->name('seller.help.delete');
+});
 
 //Brand
 Route::controller(BrandController::class)->group(function(){
@@ -196,16 +236,22 @@ Route::controller(ProductController::class)->group(function(){
     Route::post('/seller/store/product','StoreProduct')->name('seller.store.product');
     Route::get('/seller/edit/product/{id}','EditProduct')->name('seller.edit.product');
     Route::post('/seller/update/product','UpdateProduct')->name('seller.update.product');
-    Route::get('/seller/delete/product/{id}','DeleteProduct')->name('seller.delete.product');
+    Route::post('/seller/delete/product','DeleteProduct')->name('seller.delete.product');
     Route::post('/seller/product/status', 'ChangeStatus')->name('changeStatus');
     Route::post('/seller/product/multiImg', 'UpdateMultiImg')->name('update.multiImg');
     Route::get('/seller/product/multiImg/delete/{id}', 'DeleteMultiImg')->name('delete.multiImg');
+    Route::get('/seller/product/review','Review')->name('seller.review');
+    Route::post('/seller/product/review/status', 'ChangeRtStatus')->name('rating.changeStatus');
+    Route::post('/seller/product/review/update', 'UpdateReview')->name('seller.review.update');
+    Route::post('/seller/delete/review','DeleteReview')->name('seller.review.delete');
 });
 
 //SellerOrder
-Route::get('/seller/all/order', function () {return view('seller.order.order_all');})->name('seller.all.order');
-Route::get('/seller/detail/order', function () {return view('seller.order.order_detail');})->name('seller.detail.order');
-Route::get('/seller/tracking/order', function () {return view('seller.order.order_tracking');})->name('seller.order-tracking');
+Route::controller(OrderController::class)->group(function(){
+    Route::get('/seller/all/order','SellerAllOrder')->name('seller.all.order');
+    Route::get('/seller/detail/order/{id}','SellerDetailOrder')->name('seller.detail.order');
+    // Route::get('/seller/tracking/order','SellerTrackingOrder')->name('seller.tracking.order');
+});
 
 //SellerSubSeller
 Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('seller.all.subseller');
@@ -229,7 +275,7 @@ Route::get('/subseller/edit/product', function () {return view('sub_seller.produ
 Route::get('/subseller/all/order', function () {return view('sub_seller.order.order_all');})->name('sub_seller.all.order');
 Route::get('/subseller/detail/order', function () {return view('sub_seller.order.order_detail');})->name('sub_seller.detail.order');
 Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
-Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
+//Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
 require __DIR__.'/auth.php';
 

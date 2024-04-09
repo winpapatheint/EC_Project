@@ -27,38 +27,22 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $validatedData = $request->validate([
-
-                'role' => 'required|string',
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:6',
                 'address' => 'required|string|max:255',
                 'phone' => 'required|string|max:255',
-
             ]);
 
-            if(empty($request->id))
-            {
+            $user = User::create([
+                'role' => 'buyer',
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+            ]);
 
-                $user = User::create([
-                    'role' => "buyer",
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-
-                ]);
-                event(new Registered($user));
-                $buyer = Buyers::create([
-
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-
-                ]);
 
 
                 // Commit the transaction if both inserts are successful
@@ -67,7 +51,7 @@ class UserController extends Controller
                 return back()->with('success','Data have been successfully inserted.');
 
             }
-        } catch (\Exception $e) {
+         catch (\Exception $e) {
 
             DB::rollback();
             return back()->with('fail','Something went wrong.');

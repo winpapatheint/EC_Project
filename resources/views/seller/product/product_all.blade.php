@@ -11,7 +11,7 @@
                             <div class="right-options">
                                 <ul>
                                     <li>
-                                        <a class="btn btn-solid" href="{{ route('seller.add.product') }}">Add Product</a>
+                                        <a class="btn btn-solid" href="{{ route('add.product') }}">Add Product</a>
                                     </li>
                                 </ul>
                             </div>
@@ -71,13 +71,13 @@
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('seller.detail.product',$item->id) }}">
+                                                        <a href="{{ route('detail.product',$item->id) }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ route('seller.edit.product',$item->id) }}">
+                                                        <a href="{{ route('edit.product',$item->id) }}">
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
                                                     </li>
@@ -124,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <form method="POST" action="{{ route('seller.delete.product') }}">
+                    <form method="POST" action="{{ route('delete.product') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>

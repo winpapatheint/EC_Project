@@ -18,20 +18,20 @@ use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    public function AllProduct()
+    public function allProduct()
     {
         $products = Product::latest()->paginate(4);
         return view('seller.product.product_all',compact('products'));
     }
 
-    public function DetailProduct($id)
+    public function detailProduct($id)
     {
         $data = Product::find($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
         return view('seller.product.product_detail',compact('data','multiImgs'));
     }
 
-    public function AddProduct()
+    public function addProduct()
     {
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
@@ -41,7 +41,7 @@ class ProductController extends Controller
         return view('seller.product.product_add',compact('brands','countries','categories','subcategories','subcatitle'));
     }
 
-    public function StoreProduct(Request $request)
+    public function storeProduct(Request $request)
     {
         $request->validate([
             'brand_id' => 'required|string|max:255',
@@ -102,11 +102,11 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
         }
-        return redirect('/seller/all/product')->with('flash_message', 'Data added successfully');
+        return redirect('/seller/productlist')->with('flash_message', 'Data added successfully');
     }
 
 
-    public function EditProduct($id)
+    public function editProduct($id)
     {
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
@@ -118,7 +118,7 @@ class ProductController extends Controller
         return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
     }
 
-    public function UpdateProduct(Request $request)
+    public function updateProduct(Request $request)
     {
         $product = Product::find($request->id);
         $old_img = $request->old_img;
@@ -166,10 +166,10 @@ class ProductController extends Controller
         $product->status= 1;
         $product->updated_at= Carbon::now();
         $product->update();
-        return redirect('/seller/all/product')->with('flash_message', 'Data updated successfully');
+        return redirect('/seller/productlist')->with('flash_message', 'Data updated successfully');
     }
 
-    public function DeleteProduct(Request $request)
+    public function deleteProduct(Request $request)
     {
         $id = $request->id;
         $product = Product::findOrFail($id);
@@ -184,7 +184,7 @@ class ProductController extends Controller
     }
 
 
-    public function ChangeStatus(Request $request)
+    public function changeStatus(Request $request)
     {
         $product = Product::find($request->product_id);
         $product->status = $request->status;
@@ -192,7 +192,7 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function UpdateMultiImg(Request $request)
+    public function updateMultiImg(Request $request)
     {
         $request->validate([
             'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -212,7 +212,7 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Image updated successfully');
     }
 
-    public function DeleteMultiImg($id)
+    public function deleteMultiImg($id)
     {
         $old_img = MultiImg::findOrFail($id);
         File::delete($old_img->photo_name);
@@ -220,14 +220,14 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Image deleted successfully');
     }
 
-    public function Review()
+    public function review()
     {
         $id = Auth::user()->id;
         $review = Review::where('user_id',$id)->latest()->paginate(10);
         return view('seller.product.product_review',compact('review'));
     }
 
-    public function ChangeRtStatus(Request $request)
+    public function changeRtStatus(Request $request)
     {
         $star = Review::find($request->review_id);
         $star->status = $request->status;
@@ -235,7 +235,7 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function UpdateReview(Request $request)
+    public function updateReview(Request $request)
     {
         $review = Review::find($request->review_id);
         $review->comment = $request->comment;
@@ -244,7 +244,7 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function DeleteReview(Request $request)
+    public function deleteReview(Request $request)
     {
         $id = $request->id;
         Review::findOrFail($id)->delete();

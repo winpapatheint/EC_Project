@@ -234,14 +234,14 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.all.product') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.product') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Product</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.all.order') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.order') }}">
                                         <i class="ri-archive-line"></i>
                                         <span>Orders</span>
                                     </a>
@@ -255,7 +255,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.all.subseller') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.subseller') }}">
                                         <i class="ri-user-3-line"></i>
                                         <span>Subseller</span>
                                     </a>

@@ -514,12 +514,6 @@
                                                 </a>
                                             </li>
 
-                                            {{-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
-                                                <a href="{{ url('/compare') }}">
-                                                    <i data-feather="refresh-cw"></i>
-                                                </a>
-                                            </li> --}}
-
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -555,28 +549,6 @@
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
                                         @endif
                                         </h5>
-                                        {{-- <div class="add-to-cart-box bg-white">
-                                            <button class="btn btn-add-cart addcart-button">Add
-                                                <span class="add-icon bg-light-gray">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </span>
-                                            </button>
-                                            <div class="cart_qty qty-box">
-                                                <div class="input-group bg-white">
-                                                    <button type="button" class="qty-left-minus bg-gray"
-                                                        data-type="minus" data-field="">
-                                                        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                    <input class="form-control input-number qty-input" type="text"
-                                                        name="quantity" value="0"
-                                                        data-max-quantity="{{ $product->product_qty }}">
-                                                    <button type="button" class="qty-right-plus bg-gray"
-                                                        data-type="plus" data-field="">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

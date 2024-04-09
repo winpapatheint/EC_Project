@@ -9,6 +9,7 @@ use App\Models\Orders;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class ShowProductController extends Controller
 {
@@ -220,5 +221,47 @@ class ShowProductController extends Controller
         ->limit(3)
         ->get();
         return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts'));
+    }
+
+    public function ShowDiscountProductList()
+    {
+        $validated = request()->validate([
+            'page' => 'integer|min:1',
+            'ids' => 'array',
+            'ids.*' => 'integer|distinct|min:1',
+            'topic' => 'string|nullable',
+        ]);
+
+        $page = $validated['page'] ?? 1;
+        $ids = $validated['ids'] ?? [];
+        $topic = $validated['topic'] ?? null;
+
+        $limit = 10; // set the number of products per page
+        if($ids)
+        {
+            $products = Product::whereIn('id', $ids)->get();
+        }
+
+        if($topic == 'value-of-the-day')
+        {
+            $products = Product::leftjoin('orders', 'products.id', '=', 'orders.product_id')
+                        ->whereDate('orders.created_at', Carbon::today())->get();
+        }
+
+        if($topic == 'top-50-offers')
+        {
+            $products = Product::orderBy('discount_percent', 'desc')->take(50)->get();
+        }
+
+        if($topic == 'new-arrivals')
+        {
+            $products = Product::whereDate('created_at', Carbon::today())->get();
+        }
+
+        $reviews = Review::all();
+        $allProduct = Product::count();
+        $totalPage = ceil($allProduct / $limit);
+
+        return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
     }
 }

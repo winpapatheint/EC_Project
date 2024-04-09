@@ -63,9 +63,29 @@ class AdminController extends Controller
         })
         ->orderBy('created_at', 'desc')->paginate(2);
 
-        $mostDiscountItems = Product::orderBy('discount_percent', 'desc')->get();
+        $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+        
+        $productsGroupedByDiscount = [];
 
-        return view('front-end.welcome',compact('blogs','categories', 'mostDiscountItems'));
+        foreach ($mostDiscountPercentages as $discountPercent) {
+            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)->pluck('id')
+            ->toArray();
+        }
+
+        $topSaveTodayProducts = Product::leftjoin('Cart', 'Cart.product_id', '=', 'products.id')
+        ->whereDate('Cart.created_at', Carbon::today())->get();
+
+        $reviews = Review::all();
+
+        $bestSellerProducts = DB::table('products')
+            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
+            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+            ->whereMonth('orders.created_at', '=', Carbon::now()->month)
+            ->groupBy('products.id')
+            ->orderByDesc('total_orders')
+            ->get();
+
+        return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews', 'bestSellerProducts'));
     }
 
     public function news()

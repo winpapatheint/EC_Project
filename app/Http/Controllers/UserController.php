@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('user_register');
+        return view('front-end.user-register');
     }
 
     //for new user registration for login
@@ -52,7 +52,7 @@ class UserController extends Controller
             ]);
 
             DB::commit();
-                return view('user_dashboard')->with('success','Data have been successfully inserted.');
+                return view('front-end.user-dashboard')->with('success','Data have been successfully inserted.');
 
 
     }

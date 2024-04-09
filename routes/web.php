@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ShowProductController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,12 @@ use App\Http\Controllers\ShowProductController;
 //Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
-Route::get('/', [AdminController::class,'welcome'])->name('welcome');
+
+Route::get('/', [Admincontroller::class,'welcome']);
+
 
 Route::get('/user-registration', [UserController::class,'index'])->name('user_register');
+
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 

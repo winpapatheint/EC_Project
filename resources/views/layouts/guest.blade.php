@@ -319,7 +319,7 @@
                                                 <h5>My Account</h5>
                                             </div>
                                         </div>
-
+                                        @if(empty(Auth::user()))
                                         <div class="onhover-div onhover-div-login">
                                             <ul class="user-box-name">
                                                 <li class="product-box-contain">
@@ -331,6 +331,19 @@
 
                                             </ul>
                                         </div>
+                                        @else
+                                        <div class="onhover-div onhover-div-login">
+                                            <ul class="user-box-name">
+                                                <li class="product-box-contain">
+                                                    <form method="POST" action="{{ route('adminlogout') }}">
+                                                    @csrf
+                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                                    </form>
+                                                </li>                                    
+                                            </ul>
+                                        </div>       
+                                        @endif
+
                                     </li>
                                 </ul>
                             </div>
@@ -411,23 +424,24 @@
                                         <button class="btn-close lead" type="button"
                                             data-bs-dismiss="offcanvas"></button>
                                     </div>
+                               
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/') }}">Home</a>
+                                                <a class="nav-link " href="{{ url('/') }}">Home</a>
                                             </li>
+                                            @endif
 
                                              <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/products') }}">Products</a>
+                                                <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
-
-                                            <a class="nav-link " href="{{ route('shoplist') }}"
-                                                   >Shop</a>
+                                                <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-
+                                            @endif
 
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
@@ -513,15 +527,17 @@
 
                                             </li>
 
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
                                                 <label class="new-dropdown">New</label>
                                                 <a class="nav-link"  href="{{ url('/news') }}">New</a>
-
                                             </li>
-
+                                            @endif
 
                                         </ul>
                                     </div>
+
+                                  
                                 </div>
                             </div>
                         </div>

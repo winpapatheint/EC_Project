@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Review;
-use App\Models\Order;
+use App\Models\Orders;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -206,15 +206,15 @@ class ShowProductController extends Controller
         }
 
         return view('front-end.products', compact('products', 'reviews', 'totalPage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
-    , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
     }
 
     public function ShowProductleftThumbnail($id)
     {
         $product = Product::find($id);
         $reviews = Review::all();
-        $productOrdered = Order::where('product_id', $id)->get();
-        $topProducts = Order::select('product_id', DB::raw('COUNT(*) as frequency'))
+        $productOrdered = Orders::where('product_id', $id)->get();
+        $topProducts = Orders::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')
         ->orderByDesc('frequency')
         ->limit(3)

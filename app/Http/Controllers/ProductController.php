@@ -220,6 +220,14 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Image deleted successfully');
     }
 
+<<<<<<< HEAD
+    public function productList()
+    {
+        $products = Product::all();
+
+        return view('products', compact('products'));
+    }
+=======
     public function Review()
     {
         $id = Auth::user()->id;
@@ -251,4 +259,5 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Data deleted successfully');
     }
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 }

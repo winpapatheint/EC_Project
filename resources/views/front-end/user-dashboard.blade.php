@@ -98,7 +98,11 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
+<<<<<<< HEAD
+                                
+=======
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                             </li>
                             <li class="nav-item" role="presentation">
                                 <form method="POST" action="{{ route('adminlogout') }}">
@@ -109,7 +113,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- User Dashboard Section End -->
+                <!-- User Dashboard Section End --> 
 
                 <!-- Dashboard view Start -->
                 <div class="col-xxl-9 col-lg-8">
@@ -134,7 +138,7 @@
                                             view a snapshot of your recent account activity and update your account
                                             information. Select a link below to view or edit information.</p>
                                     </div>
-
+                                  
                                     <div class="total-box">
                                         <div class="row g-sm-4 g-3">
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
@@ -143,12 +147,20 @@
                                                         class="img-1 blur-up lazyload" alt="">
                                                     <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
                                                         alt="">
+<<<<<<< HEAD
+                                                    
+=======
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
                                                         <h3>{{ $orderCount }}</h3>
                                                     </div>
+<<<<<<< HEAD
+                                                    
+=======
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 </div>
                                             </div>
 
@@ -187,41 +199,67 @@
 
                                         <div class="row g-4">
                                             <div class="col-xxl-6">
+<<<<<<< HEAD
+                                          
+                                                <div class="dashboard-detail">           
+=======
 
                                                 <div class="dashboard-detail">
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <h6 class="text-content">{{ $user->name }}</h6>
                                                     <h6 class="text-content">{{ $user->email }}</h6>
                                                     <h6 class="text-content">{{ $user->phone }}</h6>
                                                 </div>
                                             </div>
+<<<<<<< HEAD
+                                        
+                                    </div>
+                                        
+=======
 
                                     </div>
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
                                                 <h4>Address Book</h4>
                                             </div>
-
+                                           
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
+<<<<<<< HEAD
+                                                
+=======
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Home Address</h6>
                                                         @foreach ($userOrders as $address)
                                                         <h6 class="text-content">{{ $address->buyer_address }}</h6>
                                                          @endforeach
                                                     </div>
+<<<<<<< HEAD
+                                                    
+=======
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 </div>
-
+                                          
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
+<<<<<<< HEAD
+                                                        
+                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
+                                                        
+                                                        
+=======
 
                                                         <h6 class="text-content">{{ $firstAddress }}</h6>
 
 
+>>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     </div>
                                                 </div>
                                             </div>

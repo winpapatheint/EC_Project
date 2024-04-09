@@ -183,29 +183,6 @@
                                     </p>
                                 </div>
 
-                                {{-- <div class="product-package">
-                                    <div class="product-title">
-                                        <h4>Weight</h4>
-                                    </div>
-                                    <ul class="select-package">
-                                        <li>
-                                            <a href="javascript:void(0)" class="active">1/2 KG</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">1 KG</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">1.5 KG</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">Red Roses</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">With Pink Roses</a>
-                                        </li>
-                                    </ul>
-                                </div> --}}
-
                                 <div class="note-box product-package">
                                     <div class="cart_qty qty-box product-qty">
                                         <div class="input-group">
@@ -219,13 +196,10 @@
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                    </div>
-
-                                    <form method="POST" action="{{ route('show_carts') }}" >
-                                        @csrf
-                                    <button type="submit"
-                                        class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
-                                    </form>
+                                    </div>        
+                                    <a type="button "
+                                        class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts')}}">Add To Cart</a>
+                                   
                                 </div>
 
                                 <div class="progress-sec">

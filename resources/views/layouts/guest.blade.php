@@ -187,13 +187,23 @@
                                     </button>
                                 </div>
 
-                                <div class="search-box">
+                                {{--<div class="search-box">
                                     <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="I'm searching for...">
-                                        <button class="btn" type="button" id="button-addon2">
+                                        <input type="search" class="form-control" placeholder="I'm searching for..." id="mainSearch">
+                                        <a href="{{ route('show-product') }}?mainSearch={{ urlencode(request()->input('search')) }}" id="searchButton"><button class="btn" type="button" id="button-addon2">
                                             <i data-feather="search"></i>
-                                        </button>
+                                        </button></a>
                                     </div>
+                                </div>--}}
+                                <div class="search-box">
+                                    <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
+                                        <div class="input-group">
+                                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                                            <button class="btn" type="submit" id="button-addon2">
+                                                <i data-feather="search"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 

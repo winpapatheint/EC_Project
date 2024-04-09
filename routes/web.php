@@ -25,11 +25,9 @@ use App\Http\Controllers\ShowProductController;
 //Route::get('/verifyemail', function () {return view('auth.verify-email');})->name('auth.verify-email');
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
-//Route::get('/', function () {
-   //return view('front-end.welcome');
-//});
+Route::get('/', [AdminController::class,'welcome'])->name('welcome');
 
-Route::get('/user-registration', [UserController::class,'index'])->name('user-register');
+Route::get('/user-registration', [UserController::class,'index'])->name('user_register');
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 

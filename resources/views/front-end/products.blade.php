@@ -30,6 +30,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="slider-1 slider-animate product-wrapper no-arrow">
+                    @if ($productsGroupedByDiscount !== null)
+                    @foreach ($productsGroupedByDiscount as $discountPercent => $discountItem)
                         <div>
                             <div class="banner-contain-2 hover-effect">
                                 <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
@@ -37,37 +39,13 @@
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
                                         <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
+                                        <h3>Save up to {{ $discountPercent }}%</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    @endforeach
+                    @endif
                     </div>
                 </div>
             </div>
@@ -87,6 +65,22 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
+                            <div class="filter-category">
+                                <div class="filter-title">
+                                    <h2>Filters</h2>
+                                    <a href="/products">Clear All</a>
+                                </div>
+                                <ul>
+                                @if(!empty($searchHistory))
+                                @foreach($searchHistory as $searchHist)
+                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
+                                        <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
+                                    </li>
+                                @endforeach
+                                @endif
+                                </ul>
+                            </div>
+
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <div style="display: flex; align-items: center;">
@@ -96,11 +90,11 @@
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
-                                <div class="accordion-item">
+                                {{-- <div class="accordion-item">
                                     <div style="display: flex;justify-content: flex-end;">
                                         <a href="/products"">Clear All</a>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -393,6 +387,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -555,33 +550,12 @@
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
                                         @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
+                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
                                         @else
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
                                         @endif
                                         </h5>
-                                        {{-- <div class="add-to-cart-box bg-white">
-                                            <button class="btn btn-add-cart addcart-button">Add
-                                                <span class="add-icon bg-light-gray">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </span>
-                                            </button>
-                                            <div class="cart_qty qty-box">
-                                                <div class="input-group bg-white">
-                                                    <button type="button" class="qty-left-minus bg-gray"
-                                                        data-type="minus" data-field="">
-                                                        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                    <input class="form-control input-number qty-input" type="text"
-                                                        name="quantity" value="0"
-                                                        data-max-quantity="{{ $product->product_qty }}">
-                                                    <button type="button" class="qty-right-plus bg-gray"
-                                                        data-type="plus" data-field="">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -765,7 +739,7 @@
                 max: 1000000,
                 from: 0,
                 to: 1000000,
-                prefix: "$"
+                prefix: "¥"
             });console.log(rangeSlider);
 
             var price = "{{ $price }}";
@@ -809,6 +783,10 @@
         document.getElementById("searchBtn").addEventListener("click", function() {
             document.getElementById("searchForm").submit();
         });
+        function updateSearchHist(value) {
+            document.getElementById('searchHistValue').value = value;
+            document.getElementById("searchForm").submit();
+        }
 
     </script>
 

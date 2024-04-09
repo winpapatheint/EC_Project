@@ -63,7 +63,9 @@ class AdminController extends Controller
         })
         ->orderBy('created_at', 'desc')->paginate(2);
 
-        return view('front-end.welcome',compact('blogs','categories'));
+        $mostDiscountItems = Product::orderBy('discount_percent', 'desc')->get();
+
+        return view('front-end.welcome',compact('blogs','categories', 'mostDiscountItems'));
     }
 
     public function news()
@@ -676,15 +678,6 @@ class AdminController extends Controller
 
         $shoplist = $query->where('category_id',$id)
                           ->orderBy('created_at', 'desc')->paginate($limit);
-
-        // $shoplist = DB::table('Categories as C')
-        //                 ->select('P.*','C.*')
-        //                 ->Join('Products as P', function ($join) {
-        //                     $join->on('C.id', '=', 'P.category_id');
-        //                 })
-        //                 ->where('P.category_id',$id)
-        //                 ->orderBy('P.created_at', 'desc')
-        //                 ->paginate($limit);
 
         $ttl = $shoplist->total();
         $ttlpage = (ceil($ttl / $limit));

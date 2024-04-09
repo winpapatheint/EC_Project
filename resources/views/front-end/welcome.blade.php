@@ -7,130 +7,70 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-                            <img src="../assets/images/vegetable/banner/1.jpg" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('upload/product_thambnail/'.$mostDiscountItems[0]-> product_thambnail) }}" class="bg-img blur-up lazyload" alt="">
                         </div>
-                        <div class="home-detail p-center-left w-75">
-                            <div>
-                                <h6>Exclusive offer <span>30% Off</span></h6>
-                                <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily Needs</span></h1>
-                                <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that are
-                                    good for your health.</p>
-                                <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
-                                    class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now
-                                    <i class="fa-solid fa-right-long icon"></i></button>
+                        @if (count($mostDiscountItems) > 0)
+                            <div class="home-detail p-center-left w-75">
+                                <div>
+                                    <h6>Exclusive offer <span>{{ $mostDiscountItems[0]->discount_percent }}% OFF</span></h6>
+                                    <h1 class="text-uppercase">{{ $mostDiscountItems[0]->product_name }}
+                                    <span class="daily">{{ $mostDiscountItems[0]->short_desc }}</span></h1>
+                                    <p class="w-75 d-none d-sm-block">{{ $mostDiscountItems[0]->long_desc}}</p>
+                                    <button onclick="location.href = '{{ url('/shopsidebar/' . $mostDiscountItems[0]->product_id) }}';"
+                                        class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now
+                                        <i class="fa-solid fa-right-long icon"></i></button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
                 <div class="col-xl-4 ratio_65">
                     <div class="row g-4">
-                        <div class="col-xl-12 col-md-6">
-                            <div class="home-contain">
-                                <img src="../assets/images/vegetable/banner/2.jpg" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-center-left home-p-sm w-75">
-                                    <div>
-                                        <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
-                                        </h2>
-                                        <h3 class="theme-color">Nut Collection</h3>
-                                        <p class="w-75">We deliver organic vegetables & fruits</p>
-                                        <a href="{{ url('/shop-left-sidebar') }}" class="shop-button">Shop Now <i
-                                                class="fa-solid fa-right-long"></i></a>
+                        @if (count($mostDiscountItems) > 1)
+                            <div class="col-xl-12 col-md-6">
+                                <div class="home-contain">
+                                    <img src="{{ asset('upload/product_thambnail/'.$mostDiscountItems[1]-> product_thambnail) }}"
+                                        class="bg-img blur-up lazyload" alt="">
+                                    <div class="home-detail p-center-left home-p-sm w-75">
+                                        <div>
+                                            <h2 class="mt-0 text-danger">{{ $mostDiscountItems[1]->discount_percent }}% <span
+                                                    class="discount text-title">OFF</span></h2>
+                                            <h3 class="theme-color">{{ $mostDiscountItems[1]->product_name }}</h3>
+                                            <p class="w-75">{{ $mostDiscountItems[1]->short_desc }}</p>
+                                            <a href="{{ url('/shop-left-sidebar') }}"
+                                                class="shop-button">Shop Now <i
+                                                    class="fa-solid fa-right-long"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="col-xl-12 col-md-6">
-                            <div class="home-contain">
-                                <img src="../assets/images/vegetable/banner/3.jpg" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-center-left home-p-sm w-75">
-                                    <div>
-                                        <h3 class="mt-0 theme-color fw-bold">Healthy Food</h3>
-                                        <h4 class="text-danger">Organic Market</h4>
-                                        <p class="organic">Start your daily shopping with some Organic food</p>
-                                        <a href="{{ url('/shop-left-sidebar') }}" class="shop-button">Shop Now <i
-                                                class="fa-solid fa-right-long"></i></a>
+                        @if (count($mostDiscountItems) > 2)
+                            <div class="col-xl-12 col-md-6">
+                                <div class="home-contain">
+                                    <img src="{{ asset('upload/product_thambnail/'.$mostDiscountItems[2]-> product_thambnail) }}" class="bg-img blur-up lazyload"
+                                        alt="">
+                                    <div class="home-detail p-center-left home-p-sm w-75">
+                                        <div>
+                                            <h2 class="mt-0 text-danger">{{ $mostDiscountItems[2]->discount_percent }}% <span class="discount text-title">OFF</span>
+                                            </h2>
+                                            <h3 class="theme-color">{{ $mostDiscountItems[2]->product_name }}</h3>
+                                            <p class="w-75">{{ $mostDiscountItems[2]->short_desc }}</p>
+                                            <a href="{{ url('/shop-left-sidebar') }}" class="shop-button">Shop Now <i
+                                                    class="fa-solid fa-right-long"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Home Section End -->
-
-    <!-- Banner Section Start -->
-    <section class="banner-section ratio_60 wow fadeInUp">
-        <div class="container-fluid-lg">
-            <div class="banner-slider">
-                <div>
-                    <div class="banner-contain hover-effect">
-                        <img src="../assets/images/vegetable/banner/4.jpg" class="bg-img blur-up lazyload" alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Hot Deals on New Items</h5>
-                                <h6 class="text-content">Daily Essentials Eggs & Dairy</h6>
-                            </div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="banner-contain hover-effect">
-                        <img src="../assets/images/vegetable/banner/5.jpg" class="bg-img blur-up lazyload" alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Buy More & Save More</h5>
-                                <h6 class="text-content">Fresh Vegetables</h6>
-                            </div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="banner-contain hover-effect">
-                        <img src="../assets/images/vegetable/banner/6.jpg" class="bg-img blur-up lazyload" alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Organic Meat Prepared</h5>
-                                <h6 class="text-content">Delivered to Your Home</h6>
-                            </div>
-                            <a href="{{ url('/shop-left-sidebar') }}" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="banner-contain hover-effect">
-                        <img src="../assets/images/vegetable/banner/7.jpg" class="bg-img blur-up lazyload" alt="">
-                        <div class="banner-details">
-                            <div class="banner-box">
-                                <h6 class="text-danger">5% OFF</h6>
-                                <h5>Buy More & Save More</h5>
-                                <h6 class="text-content">Nuts & Snacks</h6>
-                            </div>
-                            <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Banner Section End -->
 
     <!-- Product Section Start -->
     <section class="product-section">

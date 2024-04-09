@@ -520,9 +520,11 @@
                                         </div>
                                             <h6 class="unit">{{ $list->product_size }}</h6>
 
-                                        <h5 class="price"><span class="theme-color"> {{ $list->selling_price  - ($list->selling_price * $list->discount_percent)/100 }}</span>
-                                             <del>{{ $list->selling_price }}</del>
+                                        <h5 class="price">
+                                            <span class="theme-color">¥{{ number_format($list->selling_price - ($list->selling_price * $list->discount_percent)/100, 0, '', ',') }}</span>
+                                            <del>¥{{ number_format($list->selling_price, 0, '', ',') }}</del>
                                         </h5>
+
                                     </div>
                                 </div>
                             </div>
@@ -555,7 +557,7 @@
                 max: 1000000,
                 from: 0,
                 to: 1000000,
-                prefix: "$"
+                prefix: "¥"
             });
 
             var price = "{{ $price }}";

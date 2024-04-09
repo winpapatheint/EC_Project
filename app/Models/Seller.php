@@ -9,10 +9,9 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'photo',
+        'id',
+        'user_id',
+        'prefecture_id',
         'bank_name',
         'bank_acc_type',
         'bank_branch',
@@ -23,7 +22,10 @@ class Seller extends Model
         'shop_establish',
         'phone',
         'zip_code',
-        'address',
+        'city',
+        'chome',
+        'building',
+        'room',
         'url',
     ];
 }

@@ -98,6 +98,12 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -359,15 +365,14 @@
     $('.edit-btn').on('click', function() {
         var cardData = JSON.parse($(this).data('card'));
         $('#id').val(cardData.id);
-        $('#acc_name').val(cardData.acc_name);
-        $('#acc_no').val(cardData.acc_no);
-        $('#expired_date').val(cardData.expired_date);
-        $('#card_type').val(cardData.card_type);
+        $('#email').val(cardData.email);
+        $('#address').val(cardData.address);
+        $('#phone').val(cardData.phone);
 
     });
 
     $('#saveChanges').on('click', function() {
-        var newcardId = $('#address_id').val();
+        var newcardId = $('#id').val();
         var newName = $('#edit_name').val();
         var newNumber = $('#acc_no').val();
         var newExpireddate = $('#expired_date').val();

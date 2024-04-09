@@ -61,8 +61,8 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>Vicki E. Pope</h3>
-                                    <h6 class="text-content">vicki.pope@gmail.com</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -97,10 +97,18 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
+
+                
                 <div class="col-xxl-9 col-lg-8">
                     <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
@@ -116,13 +124,14 @@
                                             </svg>
                                         </span>
                                     </div>
+
+                        
                         <div class="table-responsive dashboard-bg-box">
                             <table class="table product-table">
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Date</th>
-                                        <th scope="col">Order Image</th>
                                         <th scope="col">Order Code</th>
                                         <th scope="col">Payment Method</th>
                                         <th scope="col">Price</th>
@@ -130,31 +139,33 @@
                                     </tr>
                                  </thead>
                                  <tbody>
+                                 @foreach($orders as $item)
+                                 @csrf
                                     <tr>
                                         <td>
-                                            <h6>03</h6>
+                                            <h6>{{ $item->order_id }}</h6>
                                         </td>
                                         <td>
-                                            <h6>2024/01/28 16:30</h6>
+                                            <h6>{{ $item->order_date }}</h6>
                                         </td>
-                                        <td class="product-image">
+                                        <td>
+                                            <h6>{{ $item->order_code }}</h6>
+                                        </td>
+                                        <!-- <td class="product-image">
                                             <img src="../assets/images/vegetable/product/1.png"
                                                 class="img-fluid" alt="">
-                                        </td>
-                                        <td>
-                                            <h6>00003</h6>
-                                        </td>
+                                        </td> -->
 
                                         <td>
-                                            <h6>Paypal</h6>
+                                            <h6>{{ $item->payment_type }}</h6>
                                         </td>
                                         <td>
-                                            <h6 class="theme-color fw-bold">¥200</h6>
+                                            <h6 class="theme-color fw-bold">{{ $item->amount }}</h6>
                                         </td>
                                         <td>
                                             <ul>
                                                 <li>
-                                                    <a href="{{route ('front-end.user-order-details')}}">
+                                                    <a href="{{route ('user_order_details')}}">
                                                         <i class="ri-eye-line"></i>
                                                     </a>
                                                 </li>
@@ -166,76 +177,8 @@
                                                 </li>
                                             </ul>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <h6>02</h6>
-                                        </td>
-                                        <td>
-                                            <h6>2024/01/28 14:30</h6>
-                                        </td>
-                                        <td class="product-image">
-                                            <img src="../assets/images/vegetable/product/2.png"
-                                                            class="img-fluid" alt="">
-                                        </td>
-                                        <td>
-                                            <h6>00002</h6>
-                                        </td>
-                                        <td>
-                                            <h6>Paypal</h6>
-                                        </td>
-                                        <td>
-                                            <h6 class="theme-color fw-bold">¥320</h6>
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="order-detail.html">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                    </a>
-                                                </li>
-                                             </ul>
-                                        </td>
-                                     </tr>
-
-                                    <tr>
-                                        <td>
-                                            <h6>01</h6>
-                                        </td>
-                                        <td>
-                                            <h6>2024/02/24 13:30</h6>
-                                        </td>
-                                        <td class="product-image">
-                                            <img src="../assets/images/vegetable/product/2.png"
-                                                class="img-fluid" alt="">
-                                        </td>
-                                        <td>
-                                            <h6>00001</h6>
-                                        </td>
-                                        <td>
-                                            <h6>Paypal</h6>
-                                        </td>
-                                        <td>
-                                            <h6 class="theme-color fw-bold">¥320</h6>
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="{{route ('front-end.user-order-details')}}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a type="button"class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                    </tr> 
+                                    @endforeach 
                                 </tbody>
                                 </table>
                                     </div>
@@ -267,6 +210,7 @@
                                 </div>
                             </div>  
                         </div>
+                        
                     </div>
                     <!-- Order View End -->
                 </div>

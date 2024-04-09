@@ -172,8 +172,6 @@ class UserController extends Controller
     public function createNewcard(Request $request)
     {
      
-        //dd($request->card_type) ;
-    
         $validatedData = $request->validate([
     
                 'acc_name' => 'required|string|max:255',

@@ -2,92 +2,156 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Buyers;
 use App\Models\Buyer_addresses;
 use App\Models\Buyer_payments;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Order_details;
+use App\Models\Orders;
+use App\Models\Product;
+use App\Models\Carts;
+use App\Models\Coupon_details;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class UserController extends Controller
 {
 
     public function index()
     {
-        return view('user_register');
-    }
-    public function indexuser()
-    {
-        if (Auth::check()) {
-            $user = DB::table('users')->where('id',Auth::user()->id)->first();
-           
-            return view('front-end.user-dashboard',compact('user'));
-        } else {
-            return redirect()->route('login');
-        }
-        return view('front-end.user-dashboard');
+        return view('front-end.user-register');
     }
     //for new user registration for login
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        try {
-            $validatedData = $request->validate([
 
-                'role' => 'required|string',
+            $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:6',
                 'address' => 'required|string|max:255',
                 'phone' => 'required|string|max:255',
-                
             ]);
 
-            if(empty($request->id))
+            $user = User::create([
+                'role' => 'buyer',
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+            ]);
+
+            $buyer = Buyers::create([
+                'user_id' => $user->id,
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+            ]);
+
+            DB::commit();
+            return redirect()->route('user_dashboard')->with('success','Data have been successfully inserted.');
+        
+    }
+    //Show Dashboard
+    public function indexuser()
+    {
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        if ($user) 
             {
-
-                $user = User::create([
-                    'role' => "buyer",
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-
-                ]);
-                $buyer = Buyers::create([
-
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-
-                ]);
-    
-                // Commit the transaction if both inserts are successful
-                DB::commit();
-                return back()->with('success','Data have been successfully inserted.');
-
+                $addresses = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+                     ->get();
+                $firstAddress = $addresses->first()->address;
+                $profile = route('user_profile');
+                $userOrders = DB::table('orders')
+                    ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+                    ->where('buyers.user_id', Auth::user()->id)
+                    ->select('orders.*', 'orders.id as order_id','buyers.*','buyers.address as buyer_address')
+                    ->get();
+                $orderCount = $userOrders->count();
+                $wishlist = DB::table('wishlist')
+                    ->join('buyers', 'wishlist.buyer_id', '=', 'buyers.id')
+                    ->where('buyers.user_id', Auth::user()->id)
+                    ->select('wishlist.*','buyers.*')
+                    ->get();
+                $wishlistCount = $wishlist->count();
+                return view('front-end.user-dashboard', compact('user', 'firstAddress','userOrders', 'profile','orderCount','wishlistCount'));
+            } 
+            else 
+            {
+                return redirect()->route('login');
             }
-        } catch (\Exception $e) {
+    }
+    //Show Orders
+    public function showOrders(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $orders = DB::table('Orders')
+            ->join('Buyers', 'Orders.buyer_id', '=', 'Buyers.id')
+            ->where('Buyers.user_id', Auth::user()->id)
+            ->select('Orders.*', 'Orders.id as order_id','Buyers.*')
+            ->get();
 
-            DB::rollback();
-            return back()->with('fail','Something went wrong.');
+
+        if($user)
+        {
+            return view('front-end.user-order', compact('user', 'orders'));
         }
+        else
+        {
+            return redirect()->route('login');
+        }
+    }
+   //Show Order Details
+    public function showOrderDetails(Request $request)
+    {
+        $user = DB::table('Users')->where('id', Auth::user()->id)->first();
+        $productId = $request->id;
+        
+        $orderDetails = DB::table('Orders')
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->join('Buyers','Orders.buyer_id', '=', 'Buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->where('Orders.product_id', $productId)
+            ->select('Orders.*', 'Orders.id as order_id', 'products.*')
+            ->get();
+        
+        return view('front-end.user-order-details', compact('orderDetails', 'user'));
+    }
+    //Show Delivery Status
+    public function showDelistatus(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        
+        $order = DB::table('Orders')
+                    ->join('Buyers', 'Orders.buyer_id', 'Buyers.id')
+                    ->where('buyers.user_id', Auth::user()->id)
+                    ->select('Orders.*', 'Orders.id as order_id', 'Orders.created_at')
+                    ->orderBy('order_id', 'desc')
+                    ->get();
+    
+        return view('front-end.user-delivery-status', compact('user','order'));
+
         
     }
     //Show Addresses
     public function showAddresses(Request $request)
     {
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $data = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
                 
-        $user = Buyers::first();
+        //$user = Buyers::first();
             return view('front-end.user-address',compact('data','user'));
     }
     //Add New Address
@@ -152,11 +216,13 @@ class UserController extends Controller
     public function removeAddress($id)
     {
         $address = Buyer_addresses::find($id);
-        if ($address) {
-        $address->delete();
-        return back()->with('success', 'Address removed successfully.');
-        return redirect()->route('user_addresses');
-        } else {
+        if ($address) 
+        {
+            $address->delete();
+            return redirect()->route('user_addresses');
+        } 
+        else 
+        {
             return back()->with('error', 'Address not found.');
         }
     }
@@ -173,19 +239,18 @@ class UserController extends Controller
     //$lastFourDigits = substr($decryptedAccountNumber, -4);
 
     // Use $lastFourDigits as needed
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $data = Buyer_payments::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
         ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
+        ->where('Buyers.user_id', Auth::user()->id)
         ->get();
                         
-        $user = Buyers::first();
         return view('front-end.user-payment-method',compact('data','user'));
     }
     //Add New Card
     public function createNewcard(Request $request)
     {
-     
-        //dd($request->card_type) ;
-    
+        
         $validatedData = $request->validate([
     
                 'acc_name' => 'required|string|max:255',
@@ -214,7 +279,6 @@ class UserController extends Controller
 
         if ($buyerCard) {
 
-            //dd($request->card_type) ;
             $buyerCard->update([
                 'id'=> $request->id,
                 'acc_name' => $request->acc_name,
@@ -225,7 +289,6 @@ class UserController extends Controller
             ]);
             return redirect()->route('user_cards');
         } else {
-            // Return an error response
             return response()->json(['error' => 'Address not found'], 404);
         }
     }
@@ -244,14 +307,244 @@ class UserController extends Controller
    //Show Profile
    public function showProfile(Request $request)
    {
-        /*if(empty($request->id)) {
-            $id = $request->id;
-            $profile = Buyers::where('id', $id)->get();
-            return view('front-end.user-profile', compact('profile'));
-        } else { */
-            $profile = Buyers::all();
-            return view('front-end.user-profile', compact('profile'));
-        //}
-        
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $buyer = DB::table('Buyers')
+                    ->join('users', 'buyers.user_id', '=', 'users.id')
+                    ->where('buyers.user_id', Auth::user()->id)
+                    ->select('users.*', 'buyers.*')
+                    ->first();
+        $maskedPassword = str_repeat('*', strlen($user->password));
+        if($user && $buyer)
+        {
+            return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
+        } 
+        else 
+        {
+            return redirect()->route('login');
+        }
    }
+    //Edit Profile
+    public function editProfile(Request $request)
+    {
+ 
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $user = User::find(Auth::user()->id);
+        $password = User::find($request->oldpassword);
+        $buyer = Buyers::find($request->buyer_id);
+        
+        if ($user && $buyer) 
+        {
+            if ($request->has('password')) 
+                {
+                    $userData['password'] = bcrypt($request->input('password'));
+                    $user->update($userData);
+                    $buyer->update($userData);
+                    DB::commit();
+                    return redirect()->route('user_profile');
+                }
+                else
+                {
+                    $user->update([
+                        'name' => $request->input('name'),
+                        'email' => $request->input('email'),
+                        'address' => $request->input('address'),
+                        'phone' => $request->input('phone'),
+        
+                    ]);
+                    $buyer->update([
+                        'name' => $request->input('name'),
+                        'email' => $request->input('email'),
+                        'address' => $request->input('address'),
+                        'phone' => $request->input('phone'),
+                    ]);
+                    return redirect()->route('user_profile');
+                }
+        } 
+        else 
+        {
+            return response()->json(['error' => 'Profile not found'], 404);
+        }
+    }
+    //Edit Password
+    public function editPassword(Request $request)
+    {
+        $request->validate([
+            'oldpassword' => 'required',
+            'newpassword' => 'required|min:6',
+        ]);
+
+        $user = User::find(Auth::user()->id);
+
+        if (Hash::check($request->oldpassword, $user->password)) 
+        {
+            $newPasswordHash = Hash::make($request->newpassword);
+            $user->password = $newPasswordHash;
+            $user->save();
+
+            return redirect()->route('edit_password');
+        } 
+        else 
+        {
+            return back()->withErrors(['oldpassword' => 'Incorrect old password'])->withInput();
+        }
+    }
+    //Show Cart Product
+    public function showCarts(Request $request)
+    {
+        
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+      
+        $cartLists = DB::table('Carts')
+                    ->join('Buyers', 'Carts.buyer_id', '=', 'Buyers.id')
+                    ->join('products', 'Carts.product_id', '=', 'products.id')           
+                    ->where('Buyers.user_id', Auth::user()->id)
+                    ->select('Carts.*', 'Carts.id as cart_id','Buyers.*','Buyers.id as buyer_id', 'Carts.product_id as product_id', 'products.*')
+                    ->get();
+                   
+        foreach($cartLists as $cartItem){
+
+            $productID = $cartItem->id;
+            $sellerID = $cartItem->seller_id;
+    
+
+            $shopName = DB::table('sellers')
+                        ->where('sellers.id', $sellerID)
+                        ->select('sellers.shop_name as shopname')
+                        ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
+
+        $discountedPrices = [];
+            foreach ($cartLists as $product) 
+            {
+                
+                if ($product->discount_percent) 
+                {
+                    $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                    $discountedPrice = $product->selling_price - $discountAmount;
+                } 
+                else 
+                {
+                    $discountedPrice = $product->selling_price;
+                }
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+            }
+
+        $result = DB::table('Coupons')
+                ->join('Coupon_details', 'Coupon_details.coupon_code', '=', 'Coupons.coupon_code')
+                ->where('Coupon_details.user_id', Auth::user()->id)
+                ->select('Coupons.discount')
+                ->pluck('Coupons.discount');
+                $discount = $result[0];
+        return view('front-end.cart', compact('cartLists','discountedPrices', 'discount'));
+    }
+    //Update Cart Quantity
+    public function updateCartQty(Request $request, $id)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $quantity = $request->input('quantity');
+        $cartItem = Carts::find($id);
+       
+        if ($cartItem) {
+            $cartItem->quantity = $quantity;
+            $cartItem->save();
+            
+            return redirect()->route('show_carts');
+        } else {
+            return redirect()->back()->with('error', 'Cart item not found.');
+        }
+    }
+    //Remove Cart Product
+    public function removeCart($id)
+    {
+ 
+        $cartItem = DB::table('Carts')
+                    ->delete($id);
+            return redirect()->route('checkout')->with('success', 'Product removed successfully');
+
+    }  
+    //Product Cupon
+    public function addCouponCode(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+
+        $coupon = Coupon_details::create([
+            'user_id' => Auth::user()->id,
+            'coupon_code' => $request->input('coupon'),
+        ]);
+
+        return redirect()->route('show_carts');
+    }
+    //Product Checkout
+    public function showCheckout(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+
+        $buyerAddress = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+                     ->where('Buyers.user_id', Auth::user()->id)
+                     ->get();
+
+        $buyerPayment = Buyer_payments::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
+                    ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
+                    ->where('Buyers.user_id', Auth::user()->id)
+                    ->get();
+
+        $cartLists = DB::table('carts')
+        ->join('Buyers', 'carts.buyer_id', '=', 'Buyers.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')           
+        ->where('Buyers.user_id', Auth::user()->id)
+        ->select('carts.*', 'carts.id as cart_id','Buyers.*','Buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+        ->get();
+                   
+        foreach($cartLists as $cartItem){
+
+            $productID = $cartItem->id;
+            $sellerID = $cartItem->seller_id;
+    
+
+            $shopName = DB::table('sellers')
+                        ->where('sellers.id', $sellerID)
+                        ->select('sellers.shop_name as shopname')
+                        ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
+
+        $discountedPrices = [];
+            foreach ($cartLists as $product) 
+            {
+                
+                if ($product->discount_percent) 
+                {
+                    $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                    $discountedPrice = $product->selling_price - $discountAmount;
+                } 
+                else 
+                {
+                    $discountedPrice = $product->selling_price;
+                }
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+            }
+
+        $result = DB::table('Coupons')
+                ->join('Coupon_details', 'Coupon_details.coupon_code', '=', 'Coupons.coupon_code')
+                ->where('Coupon_details.user_id', Auth::user()->id)
+                ->select('Coupons.discount')
+                ->pluck('Coupons.discount');
+                $discount = $result[0];
+        
+
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','discountedPrices','discount'));
+        
+    }
 }

@@ -98,11 +98,18 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
+                                
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- User Dashboard Section End -->
+                <!-- User Dashboard Section End --> 
 
                 <!-- Dashboard view Start -->
                 <div class="col-xxl-9 col-lg-8">
@@ -122,12 +129,12 @@
                                     </div>
 
                                     <div class="dashboard-user-name">
-                                        <h6 class="text-content">Hello, <b class="text-title">Vicki E. Pope</b></h6>
+                                        <h6 class="text-content">Hello, <b class="text-title">{{ $user->name }}</b></h6>
                                         <p class="text-content">From your My Account Dashboard you have the ability to
                                             view a snapshot of your recent account activity and update your account
                                             information. Select a link below to view or edit information.</p>
                                     </div>
-
+                                  
                                     <div class="total-box">
                                         <div class="row g-sm-4 g-3">
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
@@ -136,10 +143,12 @@
                                                         class="img-1 blur-up lazyload" alt="">
                                                     <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
                                                         alt="">
+                                                    
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
-                                                        <h3>3658</h3>
+                                                        <h3>{{ $orderCount }}</h3>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
 
@@ -164,68 +173,55 @@
                                                         class="blur-up lazyload" alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Wishlist</h5>
-                                                        <h3>32158</h3>
+                                                        <h3>{{ $wishlistCount }}</h3>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="dashboard-title">
-                                        <h3>Account Information</h3>
+                                    <div class="col-12">
+                                        <div class="dashboard-content-title">
+                                                <h4>Account Information</h4>
+                                            </div>
+
+                                        <div class="row g-4">
+                                            <div class="col-xxl-6">
+                                          
+                                                <div class="dashboard-detail">           
+                                                    <h6 class="text-content">{{ $user->name }}</h6>
+                                                    <h6 class="text-content">{{ $user->email }}</h6>
+                                                    <h6 class="text-content">{{ $user->phone }}</h6>
+                                                </div>
+                                            </div>
+                                        
                                     </div>
-
-                                    <div class="row g-4">
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Contact Information <a href="javascript:void(0)"
-                                                        data-bs-toggle="modal" data-bs-target="#editProfile">Edit</a>
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">MARK JECNO</h6>
-                                                
-                                                <h6 class="text-content">vicki.pope@gmail.com</h6>
-                                                <a data-bs-toggle="modal" data-bs-target="#changePassword"
-                                                        href="javascript:void(0)">Change Password</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-6">
-                                            <div class="dashboard-content-title">
-                                                <h4>Newsletters <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
-                                            </div>
-                                            <div class="dashboard-detail">
-                                                <h6 class="text-content">You are currently not subscribed to any
-                                                    newsletter</h6>
-                                            </div>
-                                        </div>
+                                        
 
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
-                                                <h4>Address Book <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit</a></h4>
+                                                <h4>Address Book</h4>
                                             </div>
-
+                                           
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
+                                                
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Billing Address</h6>
-                                                        <h6 class="text-content">You have not set a default billing
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
+                                                        <h6 class="text-content">Default Home Address</h6>
+                                                        @foreach ($userOrders as $address)
+                                                        <h6 class="text-content">{{ $address->buyer_address }}</h6>
+                                                         @endforeach
                                                     </div>
+                                                    
                                                 </div>
-
+                                          
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
-                                                        <h6 class="text-content">You have not set a default shipping
-                                                            address.</h6>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#editProfile">Edit Address</a>
+                                                        
+                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -242,6 +238,47 @@
     <!-- User Dashboard Section End -->
 </x-guest-layout>
 
-    <!-- Bg overlay Start -->
-    <div class="bg-overlay"></div>
-    <!-- Bg overlay End -->
+<!-- Edit Password Script -->
+<script>
+    $(document).ready(function() {
+    $('.edit-btn').on('click', function() {
+        var passData = JSON.parse($(this).data('password'));
+        $('#id').val(passData.id);
+        $('#email').val(passData.email);
+        $('#password').val(passData.password);
+
+    });
+
+    $('#changePassword').on('click', function() {
+        var passId = $('#id').val();
+        var newEmail = $('#email').val();
+        var newPassword = $('#password').val();
+
+
+        // Perform AJAX request to update data in the controller
+        $.ajax({
+            url: '{{ route("edit_password") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: addressId,
+                email: newEmail,
+                password: newPassword,
+
+            },
+            success: function(response) {
+            alert("123");
+                // Handle success response
+                console.log(response);
+                // Close the modal
+                $('#changePassword').modal('hide');
+            },
+            error: function(xhr) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+

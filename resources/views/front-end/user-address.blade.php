@@ -97,10 +97,17 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <!-- User Dashboard Section End -->
+                <!-- Address View Start -->
                 <div class="col-xxl-9 col-lg-8">
                     <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
@@ -140,31 +147,29 @@
                                                 <label>{{ $item->place }}</label>
                                         </div>
                                     </div>
-                                        <div class="table-responsive address-table">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Name:</td>
-                                                        <td>
-                                                            <p>{{ $item->name }}</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Address:</td>
-                                                        <td>
-                                                            <p>{{ $item->address }}</p>
-                                                        </td>
-                                                    </tr>
+                                   <div class="table-responsive address-table">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td>
+                                                        <p>{{ $item->name }}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Address:</td>
+                                                    <td>
+                                                        <p>{{ $item->address }}</p>
+                                                    </td>
+                                                </tr>
 
-                                                    <tr>
-                                                        <td>Phone:</td>
-                                                        <td>{{ $item->phone }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-
+                                                <tr>
+                                                    <td>Phone:</td>
+                                                    <td>{{ $item->phone }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="button-group">
                                         <button class="btn btn-sm add-button w-100 edit-address-btn" 
                                                 data-bs-toggle="modal" 
@@ -179,7 +184,6 @@
                                         </button>
 
                                     </div>
-
                                 </div>
                             </div>
                             @endforeach
@@ -193,7 +197,6 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
-    </x-guest-layout>
 
     <!-- Add Address Modal Box Start -->
     <div class="modal fade theme-modal" id="add-address" tabindex="-1">
@@ -373,7 +376,7 @@
         </div>
     </div>
     <!-- Remove Address Modal End -->
-
+</x-guest-layout>
 <!-- Edit Address Script-->
 <script>
     $(document).ready(function() {

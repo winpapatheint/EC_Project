@@ -203,4 +203,11 @@ class ProductController extends Controller
         MultiImg::findOrFail($id)->delete();
         return redirect()->back()->with('flash_message', 'Image deleted successfully');
     }
+
+    public function productList()
+    {
+        $products = Product::all();
+
+        return view('products', compact('products'));
+    }
 }

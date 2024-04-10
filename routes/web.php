@@ -76,7 +76,7 @@ Route::get('/product-circle', function () {return view('front-end.product-circle
 Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shoplist');
 
 
-Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
+Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 

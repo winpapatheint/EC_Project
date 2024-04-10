@@ -24,6 +24,9 @@
     </section>
     <!-- Breadcrumb Section End -->
 
+    @if($products->count() < 1)
+        <h1 class="text-center">No Products Found</h1>
+    @else
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
@@ -148,6 +151,7 @@
         </div>
     </section>
     <!-- Shop Section End -->
+    @endif
 
     @foreach ($products as $product)
     @if ($product->status == 1)

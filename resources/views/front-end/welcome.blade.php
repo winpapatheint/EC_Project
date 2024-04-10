@@ -484,7 +484,7 @@
                                         <div>
                                             <h3 class="text-exo">50% offer</h3>
                                             <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => meatHalfDiscount]) }}';"
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $meatHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>

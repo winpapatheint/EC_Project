@@ -63,7 +63,6 @@ class AdminController extends Controller
                 })
                 ->orderBy('created_at', 'desc')->paginate(2);
 
-<<<<<<< HEAD
         $maxStarsRatedRow = DB::table('Reviews')
                 ->select('users.id', 'users.name','Reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
                 ->join('users', 'users.id', '=', 'Reviews.user_id')
@@ -71,8 +70,6 @@ class AdminController extends Controller
                 ->orderByDesc('max_stars_rated')
                 ->first();
 
-        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow'));
-=======
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
         
         $productsGroupedByDiscount = [];
@@ -105,8 +102,8 @@ class AdminController extends Controller
             ->get();
 
         return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts'));
->>>>>>> 249e66aadab296a2409f75d6c70d9afb8f93e591
+         'bestSellerProducts', 'trendingProducts','maxStarsRatedRow'));
+
     }
 
     public function news()
@@ -1047,6 +1044,14 @@ class AdminController extends Controller
         $product->save();
         return redirect()->back();
     }
+    public function indexcouponstatus(Request $request)
+    {
+        $coupon = DB::table('Coupons')->where('id',$request->coupon_id);
+        $coupon->status = $request->status;
+        $coupon->save();
+        
+        return redirect('/admin/profile')->back();
+    }
 
     public function  indexsubadminstatus(Request $request)
     {
@@ -1086,10 +1091,10 @@ class AdminController extends Controller
         $limit=10;
 
         $lists = DB::table('sellers as S')
-        ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
-        ->join('users as U', 'U.id', '=', 'S.user_id')
-        ->orderBy('S.created_at', 'desc')
-        ->paginate($limit);
+                    ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
+                    ->join('users as U', 'U.id', '=', 'S.user_id')
+                    ->orderBy('S.created_at', 'desc')
+                    ->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1162,6 +1167,19 @@ class AdminController extends Controller
         } 
         
         return view('front-end.faq',compact('lists'));
+       
+    }
+
+    public function indexcoupon()
+    {
+        $limit = 10;
+        $lists = DB::table('Coupons')
+                    ->select('Coupons.*')
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+ 
+        return view('admin.indexcoupon',compact('lists','ttlpage','ttl'));
        
     }
 
@@ -1320,6 +1338,15 @@ class AdminController extends Controller
 
     }
 
+    public function deletecoupon(Request $request)
+    {
+
+        $data = DB::table('Coupons')
+                    ->delete($request->id);
+        return redirect('admin/coupon')->with('success','削除されました。');
+
+    }
+
     public function deletefaq(Request $request)
     {
 
@@ -1391,6 +1418,17 @@ class AdminController extends Controller
         $editmode = true;
 
         return view('admin.blog.addblog',compact('data','editmode'));
+
+    }
+
+
+    public function editcoupon($id)
+    {
+        $data = DB::table('Coupons')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.addcoupon',compact('data','editmode'));
 
     }
 
@@ -1562,18 +1600,21 @@ class AdminController extends Controller
     }
 
     public function contact(Request $request)
-    {
-
+    { 
+ 
+        $inquiry_email = 'info-test@asia-hd.com';
         if ($request->from == 'faq') {
-            $inquiry_email = 'coop@risemore.or.jp';
+           if(empty($request->id))
+           {
             $valarr = array('name' => 'required|string|max:255',
-            'furiname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'subject' => 'required|not_in:0',
             'phone' => 'required|string|max:255',
             'message' => 'required',
-        );
 
+        );
+        $request->validate($valarr);
+           
         // print_r("$request->check");die;
         $validator = Validator::make($request->all(), $valarr,
                     [
@@ -1589,29 +1630,27 @@ class AdminController extends Controller
         return response()->json(['error'=>$validator->errors()]);
 
         }
-
+    }
+  
         $data = array('name'=>$request->name);
-              if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-                   $message->to($inquiry_email, 'RISE MORE SUPPORT ')->subject($request->subject);
-                   $message->from($request->email,$request->name);
-                   $message->setBody("RISE MORE SUPPORT 公式サイトから、以下の問い合わせがありました。
-                   \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                   \r\n名前：　".$request->name."
-                   \r\n名前(フリガナ)：　".$request->furiname."
-                   \r\n"."メールアドレス：　".$request->email."
-                   \r\n"."電話番号：　".$request->phone."
-                   \r\n
-                   \r\n"."お問い合わせ内容：　
-                   \r\n".$request->message."
-                   \r\n
-                   \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-              }
 
-              // print_r($mail);die;
-              // echo "Basic Email Sent. Check your inbox.";
-              return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+        if (!empty($request->email)) {
+          $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+             $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+             $message->from($request->email,$request->name);
+             $message->setBody("RISE MORE SUPPORT 公式サイトから、以下の問い合わせがありました。
+             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+             \r\n名前：　".$request->name."
+             \r\n"."メールアドレス：　".$request->email."
+             \r\n
+             \r\n"."お問い合わせ内容：　
+             \r\n".$request->message."
+             \r\n
+             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+          });
+        }
+
+            return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
         }
 
@@ -1670,6 +1709,61 @@ class AdminController extends Controller
            DB::table('Blog')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/all/blog')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+
+       }
+
+   }
+
+   public function storecoupon(Request $request)
+    {
+
+        $request->validate(['title' => 'required|string|max:255',
+        'code' => 'required|string|max:255',
+        'disamount' => 'required|numeric|max:9999999999.999999',
+        'miniamount' => 'required|numeric|max:9999999999.999999',
+        'validamount' => 'required|numeric|max:9999999999.999999',
+        'validdate' => 'required|date',
+        ],
+            [
+                'code.required' => 'コードを入力してください',
+                'disamount.required' => 'disamount is required',
+                'miniamount.required' => 'miniamount is required',
+                'validamount.required' => 'validamount is required',
+                'validdate.required' => 'validdate is required',
+                ]);
+
+       $time = new DateTime();
+
+       if (empty($request->id)) {
+
+           DB::table('Coupons')->insert([
+               'name' => $request->title,
+               'coupon_code' => $request->code,
+               'discount_amount' => $request->disamount,
+               'mini_amount' => $request->miniamount,
+               'valid_amount' => $request->validamount,
+               'valid_date' => $request->validdate,
+               'created_at' => $time->format('Y-m-d H:i:s'),
+               'updated_at' => $time->format('Y-m-d H:i:s')
+           ]);
+
+           $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+           return redirect('/admin/coupon')->with('success', $msg );
+       } else {
+
+           $updval = array('title' => $request->title,
+                            'coupon_code' => $request->code,
+                            'discount_amount' => $request->disamount,
+                            'mini_amount' => $request->miniamount,
+                            'valid_amount' => $request->validamount,
+                            'valid_date' => $request->validdate,
+                            'updated_at' => $time->format('Y-m-d H:i:s')
+                           );
+
+ 
+           DB::table('Coupons')->where('id',$request->id)->update($updval);
+
+           return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
        }
 

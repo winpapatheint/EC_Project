@@ -160,7 +160,7 @@
                                                 <p>¥{{ $data->delivery_price }}</p>
                                             </div>
                                         </div>
-                                        <a href="{{ route('seller.edit.product',$data->id) }}">
+                                        <a href="{{ route('edit.product',$data->id) }}">
                                             <button type="button" class="btn btn-animation">Edit</button>
                                         </a>
                                     </form>

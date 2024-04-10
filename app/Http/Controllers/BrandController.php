@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    public function AddBrand()
+    public function addBrand()
     {
         return view('seller.brand.brand_add');
     }
 
-    public function StoreBrand(Request $request)
+    public function storeBrand(Request $request)
     {
         $brands = new Brand();
         $request->validate([
@@ -26,6 +26,6 @@ class BrandController extends Controller
         }
         $brands->brand_name = $request->input('brand_name');
         $brands->save();
-        return redirect()->route('seller.add.product');
+        return redirect()->route('add.product');
     }
 }

@@ -30,6 +30,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="slider-1 slider-animate product-wrapper no-arrow">
+                    @if ($productsGroupedByDiscount !== null)
+                    @foreach ($productsGroupedByDiscount as $discountPercent => $discountItem)
                         <div>
                             <div class="banner-contain-2 hover-effect">
                                 <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
@@ -37,37 +39,13 @@
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
                                         <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
+                                        <h3>Save up to {{ $discountPercent }}%</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    @endforeach
+                    @endif
                     </div>
                 </div>
             </div>
@@ -87,33 +65,22 @@
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
 
-<<<<<<< HEAD
-                            {{-- <div class="filter-category">
+                            <div class="filter-category">
                                 <div class="filter-title">
                                     <h2>Filters</h2>
-                                    <a href="javascript:void(0)">Clear All</a>
+                                    <a href="/products">Clear All</a>
                                 </div>
                                 <ul>
-                                    <li>
-                                        <a href="javascript:void(0)">Vegetable</a>
+                                @if(!empty($searchHistory))
+                                @foreach($searchHistory as $searchHist)
+                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
+                                        <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
                                     </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Fruit</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Fresh</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Milk</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Meat</a>
-                                    </li>
+                                @endforeach
+                                @endif
                                 </ul>
-                            </div> --}}
+                            </div>
 
-=======
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <div style="display: flex; align-items: center;">
@@ -123,11 +90,11 @@
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
-                                <div class="accordion-item">
+                                {{-- <div class="accordion-item">
                                     <div style="display: flex;justify-content: flex-end;">
                                         <a href="/products"">Clear All</a>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -137,44 +104,6 @@
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
-<<<<<<< HEAD
-                                            <div class="form-floating theme-form-floating-2 search-box">
-                                                <input type="search" class="form-control" id="search"
-                                                    placeholder="Search ..">
-                                                <label for="search">Search</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingTwo">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                                            <span>Food Preference</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="veget">
-                                                        <label class="form-check-label" for="veget">
-                                                            <span class="name">Vegetarian</span>
-                                                            <span class="number">(08)</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="non">
-                                                        <label class="form-check-label" for="non">
-                                                            <span class="name">Non Vegetarian</span>
-                                                            <span class="number">(09)</span>
-=======
-
                                             <ul class="category-list custom-padding custom-height">
                                             @foreach ($categoryWithProductCount as $category)
                                                 <li>
@@ -185,7 +114,6 @@
                                                         <label class="form-check-label" for="{{ $category->category_name }}">
                                                             <span class="name">{{ $category->category_name }}</span>
                                                             <span class="number">({{ $category->product_count }})</span>
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                         </label>
                                                     </div>
                                                 </li>
@@ -458,6 +386,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -475,9 +404,6 @@
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown">
-<<<<<<< HEAD
-                                        <span>Choose Sorting</span> <i class="fa-solid fa-angle-down"></i>
-=======
                                         @if ($sort == 1)
                                             <span>Low - High Price</span>
                                         @elseif ($sort == 2)
@@ -494,35 +420,9 @@
                                             <span>Choose Sorting</span> 
                                         @endif
                                             <i class="fa-solid fa-angle-down"></i>
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                     </button>
 
                                     <ul class="dropdown-menu">
-<<<<<<< HEAD
-                                        {{-- <li>
-                                            <a class="dropdown-item" id="pop" href="javascript:void(0)">Popularity</a>
-                                        </li> --}}
-                                        <li>
-                                            <a class="dropdown-item" id="low" href="{{ route('show-product', ['sort' => '1']) }}">Low - High
-                                                Price</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="high" href="{{ route('show-product', ['sort' => '2']) }}">High - Low
-                                                Price</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="rating" href="{{ route('show-product', ['sort' => '3']) }}">Average
-                                                Rating</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="aToz" href="{{ route('show-product', ['sort' => '4']) }}">A - Z Order</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="zToa" href="{{ route('show-product', ['sort' => '5']) }}">Z - A Order</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="off" href="{{ route('show-product', ['sort' => '6']) }}">% Off - Hight To
-=======
                                         <li>
                                             <a class="dropdown-item" id="drop1" name="sort" value="1" href="#">Low - High Price</a>
                                         </li>
@@ -544,7 +444,6 @@
                                         </li>
                                         <li>
                                             <a class="dropdown-item" id="drop6" name="sort" value="6" href="#">% Off - Hight To
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 Low</a>
                                         </li>
                                     </ul>
@@ -615,12 +514,6 @@
                                                 </a>
                                             </li>
 
-                                            {{-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
-                                                <a href="{{ url('/compare') }}">
-                                                    <i data-feather="refresh-cw"></i>
-                                                </a>
-                                            </li> --}}
-
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -646,50 +539,16 @@
                                                     @endif
                                                 @endfor
                                             </ul>
-<<<<<<< HEAD
-                                            <span>(<?php echo $starRating; ?>)</span>
-                                        </div>
-=======
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                         @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
+                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
                                         @else
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
                                         @endif
                                         </h5>
-                                        {{-- <div class="add-to-cart-box bg-white">
-                                            <button class="btn btn-add-cart addcart-button">Add
-                                                <span class="add-icon bg-light-gray">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </span>
-                                            </button>
-                                            <div class="cart_qty qty-box">
-                                                <div class="input-group bg-white">
-                                                    <button type="button" class="qty-left-minus bg-gray"
-                                                        data-type="minus" data-field="">
-                                                        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                    <input class="form-control input-number qty-input" type="text"
-                                                        name="quantity" value="0"
-<<<<<<< HEAD
-                                                       data-max-quantity="{{ $product->product_qty }}">
-=======
-                                                        data-max-quantity="{{ $product->product_qty }}">
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
-                                                    <button type="button" class="qty-right-plus bg-gray"
-                                                        data-type="plus" data-field="">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-<<<<<<< HEAD
-                                        </div>
-=======
-                                        </div> --}}
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                     </div>
                                 </div>
                             </div>
@@ -854,40 +713,7 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
-<<<<<<< HEAD
-    <script>
-        // Get all checkboxes
-        const checkboxes = document.querySelectorAll('.checkbox_animated');
 
-        checkboxes.forEach(checkbox => {
-            // Add change event listener to each checkbox
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    // If checkbox is checked, make AJAX request
-                    const categoryId = this.getAttribute('data-category');
-                    // AJAX request
-                    fetch(`/products?category_id=${categoryId}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            // Add any additional headers if needed
-                        },
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        // Handle the response here, e.g., update UI with products
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
-                        // Handle errors here
-                    });
-                }
-            });
-        });
-    </script>
-=======
 
     <!-- latest jquery-->
     <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -907,7 +733,7 @@
                 max: 1000000,
                 from: 0,
                 to: 1000000,
-                prefix: "$"
+                prefix: "¥"
             });console.log(rangeSlider);
 
             var price = "{{ $price }}";
@@ -951,8 +777,10 @@
         document.getElementById("searchBtn").addEventListener("click", function() {
             document.getElementById("searchForm").submit();
         });
+        function updateSearchHist(value) {
+            document.getElementById('searchHistValue').value = value;
+            document.getElementById("searchForm").submit();
+        }
 
     </script>
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
 </x-guest-layout>

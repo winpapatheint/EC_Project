@@ -81,7 +81,7 @@
             <div class="row">
                 <div class="col-custom-3">
                     <div class="left-box wow fadeInUp">
-                    <form id="searchForm" action="{{ url('shopsidebar/' . $id) }}" method="GET">
+                    <form id="searchForm" action="{{ url('categorysidebar/' . $id) }}" method="GET">
                         <div class="shop-left-sidebar">
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="accordion-item">
                                     <div style="display: flex;justify-content: flex-end;">
-                                        <a href="{{ url('shopsidebar/' . $id) }}"">Clear All</a>
+                                        <a href="{{ url('categorysidebar/' . $id) }}"">Clear All</a>
                                     </div>
                                 </div>
                                 <div class="accordion-item">

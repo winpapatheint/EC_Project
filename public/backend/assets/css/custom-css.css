@@ -12,3 +12,13 @@
     margin-right: 5px;
     border-radius: 0%;
 }
+
+.status-list li {
+    margin-bottom: 10px;
+}
+
+
+.status-link:visited {
+    color: black;
+}
+

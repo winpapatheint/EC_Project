@@ -12,7 +12,7 @@
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                        <form method="POST" action="{{ route('seller.help.store') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
+                                        <form method="POST" action="{{ route('help.store') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
                                             @csrf
                                             <div class="card-header-1">
                                                 <h5>Contact Us</h5>

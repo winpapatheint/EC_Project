@@ -173,7 +173,8 @@
                                 <li>
 
                                     <div class="category-list">
-                                        <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
+                                        <img src="{{ asset('frontend/assets/svg/1/'.$list->category_icon)}}" class="blur-up lazyload" alt="">
+                                        
                                         <h5>
                                             <a href="{{ url("/categorysidebar/".$list->id ) }}">{{ $list->category_name }}</a>
                                         </h5>
@@ -219,7 +220,7 @@
                                                 class="theme-color fw-bold">Freshes</span> Products</h3>
                                         <h3 class="fw-light">every hour</h3>
 
-                                        <button onclick="location.href = ' {{ url('/shop-left-sidebar') }}';"
+                                        <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $seafood]) }}';"
                                             class="btn btn-animation btn-md mend-auto">Shop Now <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
                                     </div>
@@ -307,7 +308,7 @@
                 @if(count($topSaveTodayProducts) > 0)
                     <div class="title title-flex">
                         <div>
-                            <h2>Top Save Today</h2>
+                            <h2>Today Coupon Items</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
@@ -319,7 +320,7 @@
                             <div class="timing">
                                 <i data-feather="clock"></i>
                                 <h6 class="name">Expires in :</h6>
-                                <div class="time" id="clockdiv-1" data-hours="1" data-minutes="2" data-seconds="3">
+                                <div class="time" id="clockdiv-1" data-hours="30" data-minutes="30" data-seconds="0">
                                     <ul>
                                         <li>
                                             <div class="counter">
@@ -436,6 +437,19 @@
                     </div>
                     @endif
 
+                    <div class="section-t-space section-b-space">
+                        <div class="banner-contain">
+                            <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
+                            <div class="banner-details p-center p-4 text-white text-center">
+                                <div>
+                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                    <h4 class="lh-base fw-bold offer-text">Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of ¥{{ $coupon->mini_amount}}</h4>
+                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="title">
                         <h2>Bowse by Categories</h2>
                         <span class="title-leaf">
@@ -451,7 +465,7 @@
                         <div>
                             <a href="{{ url("/categorysidebar/".$list->id ) }}" class="category-box category-dark">
                                 <div>
-                                    <img src="{{ asset('frontend/assets/svg/1/meats.svg') }}" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/1/'.$list->category_icon) }}" class="blur-up lazyload" alt="">
                                     <h5>{{ $list->category_name }}</h5>
                                 </div>
                             </a>
@@ -461,7 +475,7 @@
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
-                        @if($productsGroupedByDiscount[50] != null)
+                        @if($meatHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/9.jpeg') }}" class="bg-img blur-up lazyload"
@@ -469,8 +483,8 @@
                                     <div class="banner-details p-center-left p-4">
                                         <div>
                                             <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Testy Mushrooms</h4>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}';"
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => meatHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
@@ -479,7 +493,7 @@
                             </div>
                         @endif
 
-                        @if($productsGroupedByDiscount[50] != null)
+                        @if($vegetableHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/10.jpeg') }}" class="bg-img blur-up lazyload"
@@ -487,8 +501,8 @@
                                     <div class="banner-details p-center-left p-4">
                                         <div>
                                             <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}';"
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh Vegetable</h4>
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
@@ -496,18 +510,6 @@
                                 </div>
                             </div>
                         @endif
-                        </div>
-                    </div>
-
-                    <div class="section-t-space">
-                        <div class="banner-contain">
-                            <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
-                            <div class="banner-details p-center p-4 text-white text-center">
-                                <div>
-                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
-                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -525,7 +527,7 @@
                                             <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
                                             <p class="text-content banner-text">In publishing and graphic design, Lorem
                                                 ipsum is a placeholder text commonly used to demonstrate.</p>
-                                            <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[25]]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
@@ -536,7 +538,7 @@
 
                         @if ($productsGroupedByDiscount[20] != null)
                             <div class="col-xxl-4 col-xl-12 col-md-5">
-                                <a href="{{ url('/shop-left-sidebar') }}" class="banner-contain hover-effect h-100">
+                                <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/13.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4 h-100">
@@ -613,7 +615,7 @@
                                     <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
                                     <h2 class="banner-title">VEGETABLE</h2>
                                     <h5 class="lh-sm mx-auto mt-1 text-content">Save up to 5% OFF</h5>
-                                    <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
+                                    <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetable]) }}';"
                                         class="btn btn-animation btn-sm mx-auto mt-sm-3 mt-2">Shop Now <i
                                             class="fa-solid fa-arrow-right icon"></i></button>
                                 </div>
@@ -738,5 +740,18 @@
         </div>
     </section>
     <!-- Newsletter Section End -->
+    @php
+        $targetDate = strtotime($coupon->valid_date);
+        $remainingTime = ($targetDate - time()) * 1000;
+    @endphp
+
+    <!-- Timer Js -->
+    <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
+    <script>
+        var remainingTime = {{ $remainingTime }};
+        var deadline = new Date(Date.parse(new Date()) + remainingTime);
+        initializeClock('clockdiv-1', deadline);
+    </script>
+
 
 </x-guest-layout>

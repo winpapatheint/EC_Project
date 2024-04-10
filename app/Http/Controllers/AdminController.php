@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
@@ -49,13 +50,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        $categories = DB::table('Categories')
-                        ->select(
-                        'Categories.id',
-                        'Categories.category_name as category_name',
-                    )
-                    ->groupby( 'Categories.id')
-                    ->get();
+        $categories = Category::all();
 
         $blogs = DB::table('Blog')
                     ->select( 'U.name as authorby', 'Blog.*')
@@ -79,8 +74,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('Cart', 'Cart.product_id', '=', 'products.id')
-        ->whereDate('Cart.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
 
         $reviews = Review::all();
 
@@ -111,8 +105,18 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')->pluck('products.id')
             ->toArray();
 
+        $meatHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('discount_percent', 50)
+            ->where('categories.category_name', 'Meat')
+            ->pluck('products.id')->toArray();
+
+        $vegetableHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('discount_percent', 50)
+            ->where('categories.category_name', 'Vegetable')
+            ->pluck('products.id')->toArray();
+
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable'));
+         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
     }
 
     public function news()

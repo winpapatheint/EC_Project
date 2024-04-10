@@ -90,11 +90,6 @@
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
-                                {{-- <div class="accordion-item">
-                                    <div style="display: flex;justify-content: flex-end;">
-                                        <a href="/products"">Clear All</a>
-                                    </div>
-                                </div> --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -513,7 +508,7 @@
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-
+                                            {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -678,19 +673,7 @@
                                         </div>
                                     </li>
                                 </ul>
-
-                                {{--<div class="select-size">
-                                    <h4>Cake Size :</h4>
-                                    <select class="form-select select-form-size">
-                                        <option selected>Select Size</option>
-                                        <option value="1.2">1/2 KG</option>
-                                        <option value="0">1 KG</option>
-                                        <option value="1.5">1/5 KG</option>
-                                        <option value="red">Red Roses</option>
-                                        <option value="pink">With Pink Roses</option>
-                                    </select>
-                                </div> --}}
-
+                                {{-- remain --}}
                                 <div class="modal-button">
                                     <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf

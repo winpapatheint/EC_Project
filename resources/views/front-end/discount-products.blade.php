@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Product List</h2>
+                        <h2>Discount Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Discount Product List</li>
                             </ol>
                         </nav>
                     </div>
@@ -100,7 +100,7 @@
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-
+                                            {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -244,7 +244,7 @@
                                         </div>
                                     </li>
                                 </ul>
-
+                                {{-- remain --}}
                                 <div class="modal-button">
                                     <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf

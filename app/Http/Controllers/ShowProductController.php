@@ -220,7 +220,7 @@ class ShowProductController extends Controller
         ->orderByDesc('frequency')
         ->limit(3)
         ->get();
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts'));
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id'));
     }
 
     public function ShowDiscountProductList()
@@ -264,8 +264,4 @@ class ShowProductController extends Controller
 
         return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 249e66aadab296a2409f75d6c70d9afb8f93e591

@@ -13,8 +13,10 @@ class Coupons extends Model
             'id',
             'name',
             'coupon_code',
-            'discount',
-            'validity',
+            'discount_amount',
+            'mini_amount',
+            'valid_amount',
+            'valid_date',
             'status',
 
     ];

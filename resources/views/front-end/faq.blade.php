@@ -80,7 +80,7 @@
                
                 @if(!empty(Auth::user()))
                 <div class="col-xl-5" id="ts-form">
-                    {{Session::get('success')}}
+                 
                 @if ($message = Session::get('success'))
               <div class="alert alert-success alert-block" id="alert-success">
                   <!-- <button type="button" class="close" data-dismiss="alert">×</button>     -->

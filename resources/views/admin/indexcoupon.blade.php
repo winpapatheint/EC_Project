@@ -63,7 +63,7 @@
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href='{{ url("/editblog/".$list->id ) }}'>
+                                                                <a href='{{ url("/editcoupon/".$list->id ) }}'>
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>

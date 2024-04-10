@@ -114,6 +114,7 @@ Route::get('/admin/review/product', [AdminController::class,'indexreview'])->nam
 Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
 Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
 Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->name('admin.registerfaq');
@@ -129,7 +130,7 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
-Route::post('/admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
+Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
 route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
 

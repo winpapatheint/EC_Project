@@ -1059,10 +1059,9 @@ class AdminController extends Controller
     }
     public function indexcouponstatus(Request $request)
     {
-        $coupon = DB::table('Coupons')->where('id',$request->coupon_id);
+        $coupon = Coupons::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
-        
         return redirect('/admin/profile')->back();
     }
 
@@ -1729,7 +1728,7 @@ class AdminController extends Controller
 
    public function storecoupon(Request $request)
     {
-
+        if (empty($request->id)) {
         $request->validate(['title' => 'required|string|max:255',
         'code' => 'required|string|max:255',
         'disamount' => 'required|numeric|max:9999999999.999999',
@@ -1744,6 +1743,7 @@ class AdminController extends Controller
                 'validamount.required' => 'validamount is required',
                 'validdate.required' => 'validdate is required',
                 ]);
+            }
 
        $time = new DateTime();
 
@@ -1764,7 +1764,7 @@ class AdminController extends Controller
            return redirect('/admin/coupon')->with('success', $msg );
        } else {
 
-           $updval = array('title' => $request->title,
+           $updval = array('name' => $request->title,
                             'coupon_code' => $request->code,
                             'discount_amount' => $request->disamount,
                             'mini_amount' => $request->miniamount,
@@ -1773,7 +1773,6 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 
- 
            DB::table('Coupons')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));

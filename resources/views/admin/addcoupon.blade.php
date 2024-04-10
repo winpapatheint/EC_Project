@@ -33,7 +33,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Name</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="text" placeholder="Coupon Name" name="title" id="title"
-                                                        value="{{ old('title') ?? $data->title ?? '' }}">
+                                                        value="{{ old('title') ?? $data->name ?? '' }}">
                                                     <p style="display:none" class="title error text-danger"></p>
                                                         @if (!empty($error['title']))
                                                             @foreach ($error['title'] as  $key => $value)
@@ -47,7 +47,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Coupon Code</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="text" placeholder="Coupon Code" name="code" id="code"
-                                                        value="{{ old('code') ?? $data->code ?? '' }}">
+                                                        value="{{ old('code') ?? $data->coupon_code ?? '' }}">
                                                     <p style="display:none" class="code error text-danger"></p>
                                                         @if (!empty($error['code']))
                                                             @foreach ($error['code'] as  $key => $value)
@@ -62,7 +62,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Discount Amount</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="number" placeholder="Discount Amount" name="disamount" id="disamount"
-                                                        value="{{ old('disamount') ?? $data->disamount ?? '' }}">
+                                                        value="{{ old('disamount') ?? $data->discount_amount ?? '' }}">
                                                     <p style="display:none" class="disamount error text-danger"></p>
                                                         @if (!empty($error['disamount']))
                                                             @foreach ($error['disamount'] as  $key => $value)
@@ -76,7 +76,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Minimum Amount</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="number" placeholder="Minimum Amount" name="miniamount" id="miniamount"
-                                                        value="{{ old('miniamount') ?? $data->miniamount ?? '' }}">
+                                                        value="{{ old('miniamount') ?? $data->mini_amount ?? '' }}">
                                                     <p style="display:none" class="miniamount error text-danger"></p>
                                                         @if (!empty($error['miniamount']))
                                                             @foreach ($error['miniamount'] as  $key => $value)
@@ -91,7 +91,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Valid Amount</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="number" placeholder="Valid Amount" name="validamount" id="validamount"
-                                                        value="{{ old('validamount') ?? $data->validamount ?? '' }}">
+                                                        value="{{ old('validamount') ?? $data->valid_amount ?? '' }}">
                                                     <p style="display:none" class="validamount error text-danger"></p>
                                                         @if (!empty($error['validamount']))
                                                             @foreach ($error['validamount'] as  $key => $value)
@@ -106,7 +106,7 @@
                                                 <label class="form-label-title col-sm-3 mb-0">Valid Date</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="date" placeholder="Valid Date" name="validdate" id="validdate"
-                                                        value="{{ old('validdate') ?? $data->validdate ?? '' }}">
+                                                        value="{{ old('validdate') ?? $data->valid_date ?? '' }}">
                                                     <p style="display:none" class="validdate error text-danger"></p>
                                                         @if (!empty($error['validdate']))
                                                             @foreach ($error['validdate'] as  $key => $value)

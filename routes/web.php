@@ -9,10 +9,7 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-<<<<<<< HEAD
 
-=======
->>>>>>> 9e6b3abb83a8024dc9132006b5b5a06ded5dba1d
 
 
 /*

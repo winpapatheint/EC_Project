@@ -65,10 +65,6 @@ class AdminController extends Controller
                 ->groupBy('users.id', 'users.name','Reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
-<<<<<<< HEAD
-
-=======
->>>>>>> 9e6b3abb83a8024dc9132006b5b5a06ded5dba1d
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
         
         $productsGroupedByDiscount = [];
@@ -99,11 +95,6 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-<<<<<<< HEAD
-        return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts','maxStarsRatedRow'));
-
-=======
         $coupon = Coupons::first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
@@ -126,7 +117,6 @@ class AdminController extends Controller
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
          'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
->>>>>>> 9e6b3abb83a8024dc9132006b5b5a06ded5dba1d
     }
 
     public function news()

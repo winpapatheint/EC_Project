@@ -57,6 +57,9 @@ class ShowProductController extends Controller
                 $query->where('product_name', 'like', '%' . $mainSearch . '%')
                       ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
                       ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('Category', function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%');
             });
         }
         else {
@@ -65,6 +68,9 @@ class ShowProductController extends Controller
                     $query->where('product_name', 'like', '%' . $sHistory . '%')
                           ->orWhere('product_code', 'like', '%' . $sHistory . '%')
                           ->orWhere('product_tags', 'like', '%' . $sHistory . '%');
+                })
+                ->orWhereHas('Category', function ($query) use ($sHistory) {
+                    $query->where('category_name', 'like', '%' . $sHistory . '%');
                 });
             }
 

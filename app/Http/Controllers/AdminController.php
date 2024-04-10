@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
+use App\Models\Coupons;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -94,8 +95,18 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
+        $coupon = Coupons::first();
+
+        $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('categories.category_name', 'Seafood')->pluck('products.id')
+            ->toArray();
+
+        $vegetable = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('categories.category_name', 'Vegetable')->pluck('products.id')
+            ->toArray();
+
         return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts'));
+         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable'));
     }
 
     public function news()

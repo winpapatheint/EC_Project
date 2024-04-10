@@ -196,9 +196,10 @@
                             </ul>
                         </div>
 
+                        @if($seafood != null)
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/images/vegetable/banner/8.jpg" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/vegetable/banner/8.jpeg')}}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
@@ -214,6 +215,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
 
                         <div class="ratio_medium section-t-space">
                             <div class="home-contain hover-effect">
@@ -490,11 +492,11 @@
 
                     <div class="section-t-space">
                         <div class="banner-contain">
-                            <img src="../assets/images/vegetable/banner/15.jpg" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center p-4 text-white text-center">
                                 <div>
-                                    <h3 class="lh-base fw-bold offer-text">Get $3 Cashback! Min Order of $30</h3>
-                                    <h6 class="coupon-code">Use Code : GROCERY1920</h6>
+                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                 </div>
                             </div>
                         </div>
@@ -502,12 +504,14 @@
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
+                        @if ($productsGroupedByDiscount[25] != null)
                             <div class="col-xxl-8 col-xl-12 col-md-7">
                                 <div class="banner-contain hover-effect">
-                                    <img src="../assets/images/vegetable/banner/12.jpg" class="bg-img blur-up lazyload"
+                                    <img src="{{ asset('frontend/assets/images/vegetable/banner/12.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
+                                            <h2 class="text-kaushan fw-normal text-danger">25% Off</h2>
                                             <h2 class="text-kaushan fw-normal theme-color">Get Ready To</h2>
                                             <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
                                             <p class="text-content banner-text">In publishing and graphic design, Lorem
@@ -519,10 +523,12 @@
                                     </div>
                                 </div>
                             </div>
+                        @endif
 
+                        @if ($productsGroupedByDiscount[20] != null)
                             <div class="col-xxl-4 col-xl-12 col-md-5">
                                 <a href="{{ url('/shop-left-sidebar') }}" class="banner-contain hover-effect h-100">
-                                    <img src="../assets/images/vegetable/banner/13.jpg" class="bg-img blur-up lazyload"
+                                    <img src="{{ asset('frontend/assets/images/vegetable/banner/13.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4 h-100">
                                         <div>
@@ -533,6 +539,7 @@
                                     </div>
                                 </a>
                             </div>
+                        @endif
                         </div>
                     </div>
 
@@ -588,9 +595,10 @@
                         @endfor
                         @endif
 
+                    @if($vegetable != null)
                     <div class="section-t-space">
                         <div class="banner-contain hover-effect">
-                            <img src="../assets/images/vegetable/banner/14.jpg" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('frontend/assets/images/vegetable/banner/14.jpeg') }}" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center banner-b-space w-100 text-center">
                                 <div>
                                     <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
@@ -603,6 +611,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
                     <div class="title section-t-space">
                         <h2>Featured Blog</h2>

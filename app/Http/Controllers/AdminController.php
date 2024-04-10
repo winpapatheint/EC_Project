@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
+use App\Models\Coupons;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -48,13 +50,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        $categories = DB::table('Categories')
-                        ->select(
-                        'Categories.id',
-                        'Categories.category_name as category_name',
-                    )
-                    ->groupby( 'Categories.id')
-                    ->get();
+        $categories = Category::all();
 
         $blogs = DB::table('Blog')
                     ->select( 'U.name as authorby', 'Blog.*')
@@ -69,7 +65,10 @@ class AdminController extends Controller
                 ->groupBy('users.id', 'users.name','Reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9e6b3abb83a8024dc9132006b5b5a06ded5dba1d
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
         
         $productsGroupedByDiscount = [];
@@ -79,8 +78,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('Cart', 'Cart.product_id', '=', 'products.id')
-        ->whereDate('Cart.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
 
         $reviews = Review::all();
 
@@ -101,9 +99,34 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
+<<<<<<< HEAD
         return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
          'bestSellerProducts', 'trendingProducts','maxStarsRatedRow'));
 
+=======
+        $coupon = Coupons::first();
+
+        $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('categories.category_name', 'Seafood')->pluck('products.id')
+            ->toArray();
+
+        $vegetable = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('categories.category_name', 'Vegetable')->pluck('products.id')
+            ->toArray();
+
+        $meatHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('discount_percent', 50)
+            ->where('categories.category_name', 'Meat')
+            ->pluck('products.id')->toArray();
+
+        $vegetableHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
+            ->where('discount_percent', 50)
+            ->where('categories.category_name', 'Vegetable')
+            ->pluck('products.id')->toArray();
+
+        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
+         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
+>>>>>>> 9e6b3abb83a8024dc9132006b5b5a06ded5dba1d
     }
 
     public function news()

@@ -9,10 +9,7 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-<<<<<<< HEAD
 
-=======
->>>>>>> 249e66aadab296a2409f75d6c70d9afb8f93e591
 
 
 /*
@@ -115,6 +112,10 @@ Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
 Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
+Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
+Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->name('admin.registerfaq');
 Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('registerfaq');
 Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
@@ -128,6 +129,8 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
+route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
 
 //startuser

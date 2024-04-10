@@ -256,14 +256,14 @@
                                 @foreach($trendingProducts as $trending)
                                     <li>
                                         <div class="offer-product">
-                                            <a href="" class="offer-image">
+                                            <a href="{{ route('show-product-left-thumbnail', ['id' => $trending->id]) }}" class="offer-image">
                                                 <img src="{{ asset('upload/product_thambnail/'.$trending->product_thambnail)}}"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
-                                                    <a href="" class="text-title">
+                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $trending->id]) }}" class="text-title">
                                                         <h6 class="name">{{ $trending->product_name }}</h6>
                                                     </a>
                                                     <span>{{ $trending->product_size}}</span>
@@ -383,25 +383,13 @@
                                             <div class="col-12 px-0">
                                                 <div class="product-box">
                                                     <div class="product-image">
-                                                        <a href="{{ url('/product-left-thumbnail') }}">
+                                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <img src="{{ asset('upload/product_thambnail/'.$topSaveProduct->product_thambnail)}}"
                                                                 class="img-fluid blur-up lazyload" alt="">
                                                         </a>
-                                                        <ul class="product-option d-flex justify-content-center">
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#view">
-                                                                    <i data-feather="eye"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                                <a href="wishlist.html" class="notifi-wishlist">
-                                                                    <i data-feather="heart"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
                                                     </div>
                                                     <div class="product-detail">
-                                                        <a href="{{ url('/product-left-thumbnail') }}">
+                                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <h6 class="name">{{ $topSaveProduct->product_name }}</h6>
                                                         </a>
                                                         <h5 class="sold text-content">
@@ -583,14 +571,14 @@
                                 @endphp
                                 <li>
                                     <div class="offer-product">
-                                        <a href="" class="offer-image">
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="offer-image">
                                             <img src="{{ asset('upload/product_thambnail/'.$product->product_thambnail)}}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
 
                                         <div class="offer-detail">
                                             <div>
-                                                <a href="" class="text-title">
+                                                <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="text-title">
                                                     <h6 class="name">{{ $product->product_name }}</h6>
                                                 </a>
                                                 <span>{{ $product->product_size }}</span>

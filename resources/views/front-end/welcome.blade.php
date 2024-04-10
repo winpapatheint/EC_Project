@@ -19,11 +19,7 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-<<<<<<< HEAD
-                            <img src="{{ url('assets/images/vegetable/banner/1.jpg') }}" class="bg-img blur-up lazyload" alt="">
-=======
                             <img src="{{ asset('frontend/assets/images/vegetable/banner/1.jpeg') }}" class="bg-img blur-up lazyload" alt="">
->>>>>>> 249e66aadab296a2409f75d6c70d9afb8f93e591
                         </div>
                             <div class="home-detail p-center-left w-75">
                                 <div>
@@ -617,6 +613,7 @@
                         </div>
                     </div>
 
+                    
                     <div class="title section-t-space">
                         <h2>Featured Blog</h2>
                         <span class="title-leaf">

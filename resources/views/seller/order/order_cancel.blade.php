@@ -10,13 +10,11 @@
                     <div class="card-body">
                         <div class="title-header title-header-block package-card">
                             <div>
-                                <h5>Order ID: {{ $order->id }}</h5>
+                                <h5>Order ID:{{ $order->id }}</h5>
                             </div>
                             {{-- <div class="card-order-section">
                                 <ul>
-                                    <li>{{ $order->created_at }}</li>
-                                    <li>{{ $order->qty }}</li>
-                                    <li>{{ $order->amount }}</li>
+                                    <li>Order ID:{{ $order->id }}</li>
                                 </ul>
                             </div> --}}
                         </div>
@@ -99,30 +97,16 @@
                                 <div class="col-xl-4">
                                     <div class="order-success">
                                         <div class="row g-4">
-                                            <h4>summery</h4>
-                                            <ul class="order-details">
-                                                <li>Order ID: {{ $order->id }}</li>
-                                                <li>Order Date: {{ $order->created_at }}</li>
-                                                <li>Order Total: ¥{{ $total }}</li>
-                                            </ul>
-
-                                            <h4>shipping address</h4>
-                                            <ul class="order-details">
-                                                <li>{{ $order['prefecture']['name'] }}</li>
-                                                <li>{{ $order->city }}{{ $order->chome }}</li>
-                                                <li>{{ $order->building }} {{ $order->room }}</li>
-                                            </ul>
-
-                                            <div class="payment-mode">
-                                                <h4>Payment method</h4>
-                                                <p>{{$order->payment_method}}</p>
-                                            </div>
-
-                                            <div class="delivery-sec">
-                                                <h3>Expected date of delivery: </h3>
-                                                <span>{{ $order->expected_date }}</span>
-                                                <a href="order-tracking.html">Track order</a>
-                                            </div>
+                                            <form action="{{ route('order.cancel.reason') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $order->id }}">
+                                                <div>
+                                                    <h3>Order Cancellation</h3>
+                                                </div>
+                                                <h4>Reason for order cancellation:</h4>
+                                                <textarea name="cancelled_reason" class="form-control mt-3" rows="10" placeholder="Type why cancellation of this order..."></textarea>
+                                                <button type="submit" class="btn btn-animation w-100 mt-3">Submit</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

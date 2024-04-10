@@ -161,7 +161,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-body">
             <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
             @if(isset($item->id))
-                <form action="{{ route('seller.review.update')}}" method="POST">
+                <form action="{{ route('review.update')}}" method="POST">
                     <input type="hidden" name="review_id" value="{{ $item->id }}">
                     @csrf
                     <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
@@ -196,7 +196,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <form method="POST" action="{{ route('seller.review.delete') }}">
+                    <form method="POST" action="{{ route('review.delete') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>

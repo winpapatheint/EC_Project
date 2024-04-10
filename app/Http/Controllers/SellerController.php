@@ -15,12 +15,12 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class SellerController extends Controller
 {
-    public function Dashboard()
+    public function dashboard()
     {
         return view('seller.index');
     }
 
-    public function Profile()
+    public function profile()
     {
         $id = Auth::user()->id;
         $data = User::find($id);
@@ -29,7 +29,7 @@ class SellerController extends Controller
         return view('seller.profile',compact('data','shop','prefecture'));
     }
 
-    public function StoreProfile(Request $request)
+    public function storeProfile(Request $request)
     {
         $id = Auth::user()->id;
         $data = User::find($id);
@@ -54,7 +54,7 @@ class SellerController extends Controller
         return redirect('/seller');
     }
 
-    public function UpdateShop(Request $request)
+    public function updateShop(Request $request)
     {
         $old_img = $request->old_img;
         $id = $request->seller_id;
@@ -108,24 +108,24 @@ class SellerController extends Controller
     }
 
 
-    public function Help()
+    public function help()
     {
         $helps = Help::latest()->paginate(4);
         return view('seller.help.help',compact('helps'));
     }
 
-    public function DetailHelp($id)
+    public function detailHelp($id)
     {
         $helps = Help::find($id);
         return view('seller.help.help_detail',compact('helps'));
     }
 
-    public function AddHelp()
+    public function addHelp()
     {
         return view('seller.help.help_add');
     }
 
-    public function StoreHelp(Request $request)
+    public function storeHelp(Request $request)
     {
         $help = new Help();
         $request->validate([
@@ -149,7 +149,7 @@ class SellerController extends Controller
         return redirect('/seller/help')->with('flash_message', 'Data added successfully');
     }
 
-    public function DeleteHelp($id)
+    public function deleteHelp($id)
     {
         $help = Help::findOrFail($id);
         $img = $help->img;

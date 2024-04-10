@@ -14,7 +14,7 @@
                                     <h5>Product Information</h5>
                                 </div>
 
-                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('seller.store.product') }}" enctype="multipart/form-data" id="tagsForm">
+                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="tagsForm">
                                     @csrf
                                     @if (session('flash_message'))
                                         <div class="flash_message bg-gradient-success text-center py-3 my-0">

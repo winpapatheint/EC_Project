@@ -11,7 +11,7 @@
                         <div class="title-header option-title">
                             <h5>Get in Touch</h5>
                             <form class="d-inline-flex">
-                                <a href="{{ route('seller.help.add') }}" class="align-items-center btn btn-theme d-flex">
+                                <a href="{{ route('help.add') }}" class="align-items-center btn btn-theme d-flex">
                                     <i data-feather="plus-square"></i>Contact
                                 </a>
                             </form>
@@ -44,12 +44,12 @@
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('seller.help.detail',$item->id) }}">
+                                                        <a href="{{ route('help.detail',$item->id) }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ route('seller.help.delete',$item->id) }}">
+                                                        <a href="{{ route('help.delete',$item->id) }}">
                                                             <i class="ri-delete-bin-line"></i>
                                                         </a>
                                                     </li>

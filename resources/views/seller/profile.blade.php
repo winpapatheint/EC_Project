@@ -14,7 +14,7 @@
                                 <div class="title-header option-title">
                                     <h5>Profile</h5>
                                 </div>
-                                <form method="POST" action="{{ route('seller.store.profile') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
+                                <form method="POST" action="{{ route('store.profile') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
                                     @csrf
                                     <input type="hidden" name="old_img" value="{{ $data->user_photo }}">
                                     @if (session('flash_message'))
@@ -75,7 +75,7 @@
                                 <div class="title-header option-title">
                                     <h5>Shop Information</h5>
                                 </div>
-                                <form method="POST" action="{{ route('seller.update.shop')}}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
+                                <form method="POST" action="{{ route('update.shop')}}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
                                     @csrf
                                     <input type="hidden" name="old_img" value="{{ $shop->shop_logo }}">
                                     <input type="hidden" name="seller_id" value="{{ $shop->id }}">

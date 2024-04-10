@@ -16,16 +16,16 @@
                                     <div class="col-12 overflow-hidden">
                                         <div class="order-left-image">
                                             <div class="tracking-product-image">
-                                                <img src="assets/images/profile/1.jpg"
-                                                    class="img-fluid w-100 blur-up lazyload" alt="">
+                                                <img src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}"
+                                                    class="img-fluid w-100 blur-up lazyload" >
                                             </div>
 
                                             <div class="order-image-contain">
-                                                <h4>Van Heusen Men's Solid Regular Fit Polo</h4>
+                                                <h4>{{ $order->product->product_name }}</h4>
                                                 <div class="tracker-number">
-                                                    <p>Order Number : <span>W765EWR8568871</span></p>
-                                                    <p>Brand : <span>Van Heusen</span></p>
-                                                    <p>Order Placed : <span>June 25, 2021</span></p>
+                                                <p>Order Number : <span>{{ $order->id }}</span></p>
+                                                    <p>Brand : <span>{{ $order->product->brand->brand_name }}</span></p>
+                                                    <p>Order Placed : <span>{{ $order->created_at }}</span></p>
                                                 </div>
                                                 <h5>Your items is on the way. Tracking information will be
                                                     available within 24 hours.</h5>
@@ -34,25 +34,20 @@
                                     </div>
 
                                     <ol class="progtrckr">
-                                        <li class="progtrckr-done">
-                                            <h5>Order Processing</h5>
-                                            <h6>05:43 AM</h6>
+                                        <li class="{{ !empty($order->confirmed_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                            <h5>Order Confirmed</h5>
                                         </li>
-                                        <li class="progtrckr-done">
-                                            <h5>Pre-Production</h5>
-                                            <h6>01:21 PM</h6>
+                                        <li class="{{ !empty($order->processing_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                            <h5>Processing</h5>
                                         </li>
-                                        <li class="progtrckr-done">
-                                            <h5>In Production</h5>
-                                            <h6>Processing</h6>
+                                        <li class="{{ !empty($order->picked_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                            <h5>Pick-up</h5>
                                         </li>
-                                        <li class="progtrckr-todo">
+                                        <li class="{{ !empty($order->shipped_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
                                             <h5>Shipped</h5>
-                                            <h6>Pending</h6>
                                         </li>
-                                        <li class="progtrckr-todo">
+                                        <li class="{{ !empty($order->delivered_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
                                             <h5>Delivered</h5>
-                                            <h6>Pending</h6>
                                         </li>
                                     </ol>
 
@@ -62,107 +57,46 @@
                                                 <table class="table">
                                                     <thead>
                                                         <tr class="table-head">
+                                                            <th scope="col">No</th>
                                                             <th scope="col">Date</th>
-                                                            <th scope="col">Time</th>
-                                                            <th scope="col">Discription</th>
-                                                            <th scope="col">Location</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Name</th>
                                                         </tr>
                                                     </thead>
 
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <h6>21/05/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>12:21 AM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Shipped Info</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>3 SW. Summit St. Lithonia, GA 30038</h6>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h6>15/04/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>01:00 PM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Shipped</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>70 Rockwell Lane Falls Church, VA 22041
-                                                                </h6>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h6>04/05/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>03:58 AM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Shipped Info Received</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>13 Durham St. The Villages, FL 32162
-                                                                </h6>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h6>30/04/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>06:26 PM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Origin Scan</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>38 Saxon Lane Mobile, AL 36605</h6>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h6>02/02/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>03:45 PM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Shipped Info Received</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>3 Willow Street Chillicothe, OH 45601
-                                                                </h6>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>
-                                                                <h6>14/01/2021</h6>
-                                                            </td>
-                                                            <td>
-                                                                <h6>12:21 AM</h6>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-bold">Shipped</p>
-                                                            </td>
-                                                            <td>
-                                                                <h6>35 Brickyard Rd. Marshalltown, IA 50158
-                                                                </h6>
-                                                            </td>
-                                                        </tr>
+                                                        @foreach ($process as $key => $item)
+                                                            @if($item->order->status == 'pending')
+                                                                <tr>
+                                                                    <td>Please wait from seller response.</td>
+                                                                </tr>
+                                                            @else
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $item->created_at }}</td>
+                                                                @if (!empty($item->confirmed_date))
+                                                                    <td><p class="fw-bold">Confirmed</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @elseif (!empty($item->processing_date))
+                                                                    <td><p class="fw-bold">Processing</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @elseif (!empty($item->picked_date))
+                                                                    <td><p class="fw-bold">Picked</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @elseif (!empty($item->shipped_date))
+                                                                    <td><p class="fw-bold">Shipped</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @elseif (!empty($item->delivered_date))
+                                                                    <td><p class="fw-bold">Delivered</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @else
+                                                                    <td><p class="fw-bold">Cancelled</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>
+                                                                @endif
+                                                                <!-- Display other columns as needed -->
+                                                            </tr>
+                                                            @endif
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -171,8 +105,8 @@
                                 </div>
                             </div>
                             <div class="card-footer text-end border-0 pb-0 d-flex justify-content-end">
-                                <button class="btn btn-primary me-3">Submit</button>
-                                <button class="btn btn-outline">Cancel</button>
+                                <button class="btn btn-primary me-3">Invoice</button>
+                                <button class="btn btn-outline">Back</button>
                             </div>
                         </div>
                     </div>

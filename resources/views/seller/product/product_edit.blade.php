@@ -13,7 +13,7 @@
                                     <h5>Product Information</h5>
                                 </div>
 
-                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('seller.update.product') }}" enctype="multipart/form-data" id="tagsForm">
+                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('update.product') }}" enctype="multipart/form-data" id="tagsForm">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $products->id }}">
                                     <input type="hidden" name="old_img" value="{{ $products->product_thambnail }}">
@@ -156,7 +156,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" value="{{  $products->selling_price }}">
+                                            <input class="form-control" name="original_price" type="number" placeholder="0" min="1" value="{{  $products->selling_price }}">
                                         </div>
                                     </div>
 

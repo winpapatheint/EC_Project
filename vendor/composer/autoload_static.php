@@ -546,19 +546,17 @@ class ComposerStaticInitd1f94f00ba129533439784ff69473316
         'App\\Http\\Controllers\\Auth\\PasswordResetLinkController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/PasswordResetLinkController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
-<<<<<<< HEAD
-=======
+
         'App\\Http\\Controllers\\Auth\\VerifyEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerifyEmailController.php',
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+
         'App\\Http\\Controllers\\BrandController' => __DIR__ . '/../..' . '/app/Http/Controllers/BrandController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
         'App\\Http\\Controllers\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProductController.php',
         'App\\Http\\Controllers\\ReviewController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReviewController.php',
-<<<<<<< HEAD
-=======
+
         'App\\Http\\Controllers\\SellerController' => __DIR__ . '/../..' . '/app/Http/Controllers/SellerController.php',
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+
         'App\\Http\\Controllers\\ShowProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShowProductController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -581,7 +579,7 @@ class ComposerStaticInitd1f94f00ba129533439784ff69473316
         'App\\Models\\Buyer_addresses' => __DIR__ . '/../..' . '/app/Models/Buyer_addresses.php',
         'App\\Models\\Buyer_payments' => __DIR__ . '/../..' . '/app/Models/Buyer_payments.php',
         'App\\Models\\Buyers' => __DIR__ . '/../..' . '/app/Models/Buyers.php',
-<<<<<<< HEAD
+
         'App\\Models\\Carts' => __DIR__ . '/../..' . '/app/Models/Carts.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
         'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
@@ -594,17 +592,7 @@ class ComposerStaticInitd1f94f00ba129533439784ff69473316
         'App\\Models\\Review' => __DIR__ . '/../..' . '/app/Models/Review.php',
         'App\\Models\\Seller' => __DIR__ . '/../..' . '/app/Models/Seller.php',
         'App\\Models\\Shop' => __DIR__ . '/../..' . '/app/Models/Shop.php',
-=======
-        'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
-        'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
-        'App\\Models\\Help' => __DIR__ . '/../..' . '/app/Models/Help.php',
-        'App\\Models\\MultiImg' => __DIR__ . '/../..' . '/app/Models/MultiImg.php',
-        'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
-        'App\\Models\\Prefecture' => __DIR__ . '/../..' . '/app/Models/Prefecture.php',
-        'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
-        'App\\Models\\Review' => __DIR__ . '/../..' . '/app/Models/Review.php',
-        'App\\Models\\Seller' => __DIR__ . '/../..' . '/app/Models/Seller.php',
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+
         'App\\Models\\SubCategory' => __DIR__ . '/../..' . '/app/Models/SubCategory.php',
         'App\\Models\\SubCategoryTitle' => __DIR__ . '/../..' . '/app/Models/SubCategoryTitle.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

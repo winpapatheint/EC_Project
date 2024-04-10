@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
@@ -11,7 +10,7 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\ShowProductController;
+
 
 
 /*
@@ -84,9 +83,9 @@ Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduc
 Route::get('/news', [AdminController::class, 'news']);
 Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
-Route::get('/contact-us', function () {return view('front-end.contact-us');});
-
-Route::get('/faq', function () {return view('front-end.faq');});
+Route::get('/contact', function () {return view('front-end.contact-us');});
+Route::post('contact', [AdminController::class, 'contact'])->name('contact');
+Route::get('/faq', [AdminController::class, 'indexfaq']);
 
 Route::get('/cart', function () {return view('front-end.cart');});
 
@@ -96,7 +95,6 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
-
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
@@ -113,6 +111,11 @@ Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
+Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
+Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->name('admin.registerfaq');
+Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('registerfaq');
+Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
+route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);

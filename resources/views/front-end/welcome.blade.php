@@ -1,5 +1,16 @@
 
 <x-guest-layout>
+<style>
+    .home-section pt-2
+    {
+    background-image: url(../assets/images/vegetable/banner/1.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: block;
+    }
+
+</style>
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -7,7 +18,7 @@
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
-                            <img src="../assets/images/vegetable/banner/1.jpg" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ url('assets/images/vegetable/banner/1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                         </div>
                         <div class="home-detail p-center-left w-75">
                             <div>
@@ -304,26 +315,24 @@
                         <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Customer Comment</h3>
-
-                                <div class="review-box">
-                                    <div class="review-contain">
-                                        <h5 class="w-75">We Care About Our Customer Experience</h5>
-                                        <p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly
-                                            used to demonstrate the visual form of a document or a typeface without
-                                            relying on meaningful content.</p>
-                                    </div>
-
-                                    <div class="review-profile">
-                                        <div class="review-image">
-                                            <img src="../assets/images/vegetable/review/1.jpg"
-                                                class="img-fluid blur-up lazyload" alt="">
+                             
+                                    <div class="review-box">
+                                        <div class="review-contain">
+                                            <h5 class="w-75">We Care About Our Customer Experience</h5>
+                                            <p>{{ $maxStarsRatedRow -> comment }}</p>
                                         </div>
-                                        <div class="review-detail">
-                                            <h5>Tina Mcdonnale</h5>
-                                            <h6>Sale Manager</h6>
+
+                                        <div class="review-profile">
+                                            <div class="review-image">
+                                                <img src="../assets/images/vegetable/review/1.jpg"
+                                                    class="img-fluid blur-up lazyload" alt="">
+                                            </div>
+                                            <div class="review-detail">
+                                                <h5>{{ $maxStarsRatedRow -> name }}</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -2421,32 +2430,36 @@
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
+
+                    @foreach($blogs as $list)
                         <div>
                             <div class="blog-box">
                                 <div class="blog-box-image">
-                                    <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                        <img src="../assets/images/vegetable/blog/1.jpg" class="bg-img blur-up lazyload"
+                                    <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-image">
+                                        <img src="{{ asset('images/'.($list->image)   ) }}" class="bg-img blur-up lazyload"
                                             alt="">
                                     </a>
                                 </div>
 
-                                <a href="{{ url('/blog-detail') }}" class="blog-detail">
-                                    <h6>20 March, 2022</h6>
-                                    <h5>Fresh Vegetable Online</h5>
+                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
+                                    <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} </h6>
+                                    <h5>{{ $list->title }}</h5>
                                 </a>
                             </div>
                         </div>
 
+                    @endforeach
+
                         <div>
                             <div class="blog-box">
                                 <div class="blog-box-image">
-                                    <a href="{{ url('/blog-detail') }}" class="blog-image">
+                                    <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-image">
                                         <img src="../assets/images/vegetable/blog/2.jpg" class="bg-img blur-up lazyload"
                                             alt="">
                                     </a>
                                 </div>
 
-                                <a href="{{ url('/blog-detail') }}" class="blog-detail">
+                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
                                     <h6>10 April, 2022</h6>
                                     <h5>Fresh Combo Fruit</h5>
                                 </a>

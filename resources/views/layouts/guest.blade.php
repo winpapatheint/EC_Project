@@ -746,7 +746,7 @@
                                     <a href="search.html" class="text-content">Search</a>
                                 </li>
                                 <li>
-                                    <a href="faq.html" class="text-content">FAQ</a>
+                                    <a href="{{ url('/faq') }}" class="text-content">FAQ</a>
                                 </li>
                             </ul>
                         </div>

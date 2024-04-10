@@ -50,20 +50,26 @@ class AdminController extends Controller
     public function welcome()
     {
         $categories = DB::table('Categories')
-            ->select(
-                'Categories.id',
-                'Categories.category_name as category_name',
-            )
-            ->groupby( 'Categories.id')
-            ->get();
+                        ->select(
+                        'Categories.id',
+                        'Categories.category_name as category_name',
+                    )
+                    ->groupby( 'Categories.id')
+                    ->get();
 
         $blogs = DB::table('Blog')
-        ->select( 'U.name as authorby', 'Blog.*')
-        ->join('users as U', function ($join) {
-            $join->on('Blog.created_by', '=', 'U.id');
-        })
-        ->orderBy('created_at', 'desc')->paginate(2);
+                    ->select( 'U.name as authorby', 'Blog.*')
+                    ->join('users as U', function ($join) {
+                    $join->on('Blog.created_by', '=', 'U.id');
+                })
+                ->orderBy('created_at', 'desc')->paginate(2);
 
+        $maxStarsRatedRow = DB::table('Reviews')
+                ->select('users.id', 'users.name','Reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
+                ->join('users', 'users.id', '=', 'Reviews.user_id')
+                ->groupBy('users.id', 'users.name','Reviews.comment')
+                ->orderByDesc('max_stars_rated')
+                ->first();
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
         
         $productsGroupedByDiscount = [];
@@ -105,7 +111,7 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')->pluck('products.id')
             ->toArray();
 
-        return view('front-end.welcome',compact('blogs','categories', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
+        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
          'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable'));
     }
 
@@ -1097,7 +1103,73 @@ class AdminController extends Controller
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl'));
     }
 
+    public function storefaq(Request $request)
+    {
 
+// print_r($request->all());die;
+
+
+        $request->validate(['title' => 'required|string|max:255',
+                            'que' => 'required|string|max:255',
+                            'ans' => 'required|string|max:600',
+                            ],
+            [
+                'que.required' => '質問を入力してください',
+                'ans.required' => '答えを入力してください',
+                'phone.regex' => '有効な電話番号を入力してください',
+            ]);
+
+        $time = new DateTime();
+
+        if (empty($request->id)) {
+
+            DB::table('faq')->insert([
+                'title' => $request->title,
+                'ans' => $request->ans,
+                'que' => $request->que,
+                'created_by' => Auth::user()->id,
+                'created_at' => $time->format('Y-m-d H:i:s'),
+                'updated_at' => $time->format('Y-m-d H:i:s')
+            ]);
+          
+            // print_r(json_decode($faqord, true));die;
+
+            return redirect('/admin/faq')->with('success','「'.$request->title.'」登録されました。');
+        } else {
+            
+            $updval = array('title' => $request->title,
+                            'ans' => $request->ans,
+                            'que' => $request->que,
+                            'updated_at' => $time->format('Y-m-d H:i:s')
+                            );
+
+            DB::table('faq')->where('id',$request->id)->update($updval);
+
+            return redirect('/admin/faq')->with('success','「'.$request->title.'」更新されました。');
+
+        }
+
+    }
+
+    public function indexfaq()
+    {
+        $limit = 10;
+        $lists = DB::table('faq')
+                    ->select('faq.*')
+                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        // print_r(Auth::user()->role);die;
+        if (Auth::check()){
+            if (Auth::user()->role == 'admin') {
+                return view('admin.indexfaq',compact('lists','ttlpage','ttl'));
+            } 
+        } 
+        
+        return view('front-end.faq',compact('lists'));
+       
+    }
 
     public function indexuser()
     {
@@ -1254,6 +1326,15 @@ class AdminController extends Controller
 
     }
 
+    public function deletefaq(Request $request)
+    {
+
+        $data = DB::table('faq')
+                    ->delete($request->id);
+        return redirect('/admin/faq')->with('success','削除されました。');
+
+    }
+
     public function deleteproduct(Request $request)
     {
 
@@ -1317,6 +1398,16 @@ class AdminController extends Controller
 
         return view('admin.blog.addblog',compact('data','editmode'));
 
+    }
+
+    public function editfaq($id)
+    {
+        $faq = DB::table('faq')
+                    ->find($id);
+        // print_r($faq);die;
+        $editmode = true;
+        // $hcompanies = array();
+        return view('admin.registerfaq',compact('faq','editmode'));
     }
 
     public function editproduct($id)
@@ -1472,6 +1563,62 @@ class AdminController extends Controller
             DB::table('Sub_categories')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+        }
+
+    }
+
+    public function contact(Request $request)
+    {
+
+        if ($request->from == 'faq') {
+            $inquiry_email = 'coop@risemore.or.jp';
+            $valarr = array('name' => 'required|string|max:255',
+            'furiname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'subject' => 'required|not_in:0',
+            'phone' => 'required|string|max:255',
+            'message' => 'required',
+        );
+
+        // print_r("$request->check");die;
+        $validator = Validator::make($request->all(), $valarr,
+                    [
+                        'phone.required' => '電話番号を入力してください',
+                        'phone.regex' => '有効な電話番号を入力してください',
+                    ]);
+
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+                return response()->json(['success'=>'allpasses']);
+            }         
+        return response()->json(['error'=>$validator->errors()]);
+
+        }
+
+        $data = array('name'=>$request->name);
+              if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+                   $message->to($inquiry_email, 'RISE MORE SUPPORT ')->subject($request->subject);
+                   $message->from($request->email,$request->name);
+                   $message->setBody("RISE MORE SUPPORT 公式サイトから、以下の問い合わせがありました。
+                   \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                   \r\n名前：　".$request->name."
+                   \r\n名前(フリガナ)：　".$request->furiname."
+                   \r\n"."メールアドレス：　".$request->email."
+                   \r\n"."電話番号：　".$request->phone."
+                   \r\n
+                   \r\n"."お問い合わせ内容：　
+                   \r\n".$request->message."
+                   \r\n
+                   \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+              }
+
+              // print_r($mail);die;
+              // echo "Basic Email Sent. Check your inbox.";
+              return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
         }
 
     }

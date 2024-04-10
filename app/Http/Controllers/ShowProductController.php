@@ -264,4 +264,8 @@ class ShowProductController extends Controller
 
         return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 249e66aadab296a2409f75d6c70d9afb8f93e591

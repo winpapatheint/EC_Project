@@ -77,35 +77,96 @@
                                 
                     </div>
                 </div>
-
-                <div class="col-xl-5">
-                @php $error = $errors->toArray(); @endphp
-                    <div class="faq-contain">
-                    <div class="col-lg-10">
-                    <div class="title d-xxl-none d-block">
-                        <h2>Contact Us</h2>
-                    </div>
-                    <form class="register-form" method="POST" action="{{ route('contact') }}">
-                    @csrf
-                    <input type="hidden" name="from" value="faq">
-                    <div class="right-sidebar-box">
+               
+                @if(!empty(Auth::user()))
+                <div class="col-xl-5" id="ts-form">
+                    {{Session::get('success')}}
+                @if ($message = Session::get('success'))
+              <div class="alert alert-success alert-block" id="alert-success">
+                  <!-- <button type="button" class="close" data-dismiss="alert">×</button>     -->
+                  <strong>{{ $message }}</strong>
+              </div>
+              @endif
+                    @php $error = $errors->toArray(); @endphp
+                <div class="right-sidebar-box">
+                <h3 class="title">お問い合わせ</h3>
+                         
+                             <form class="contact-form" method="POST" action="{{ route('contact') }}"  id="ts-form">
+                            @csrf
+                            <input type="hidden" name="from" value="faq">
                         <div class="row">
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                            <div class="single-input mb-30">
-                                   <label for="usernameOne">名前</label>
-                                   <input type="text" name="name" placeholder="名前" id="ts_contact_name">
-                                   @if (!empty($error['name']))
+                            <div class="col-xxl-12 col-lg-12 col-sm-6">
+                                <div class="mb-md-4 mb-3 custom-form">
+                                    <label for="exampleFormControlInput" class="form-label" >First Name</label>
+                                    <div class="custom-input">
+                                        <input type="text" class="form-control" id="exampleFormControlInput" name="name"  value="{{ old('name') }}"
+                                            placeholder="Enter First Name">
+                                        <i class="fa-solid fa-user"></i>
+                                        @if (!empty($error['name']))
                                          @foreach ($error['name'] as  $key => $value)
                                              <p class="error text-danger">{{ $value }}</p>
                                          @endforeach
                                    @endif
-                               </div>
-                                
+                                    </div>
+                                </div>
                             </div>
 
+                            <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                <div class="mb-md-4 mb-3 custom-form">
+                                    <label for="exampleFormControlInput2" class="form-label">Email Address</label>
+                                    <div class="custom-input">
+                                        <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="exampleFormControlInput2"
+                                            placeholder="Enter Email Address">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        @if (!empty($error['email']))
+                                         @foreach ($error['email'] as  $key => $value)
+                                             <p class="error text-danger">{{ $value }}</p>
+                                         @endforeach
+                                   @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                <div class="mb-md-4 mb-3 custom-form">
+                                    <label for="exampleFormControlInput3" class="form-label">Phone Number</label>
+                                    <div class="custom-input">
+                                        <input type="tel" class="form-control" id="exampleFormControlInput3" name="phone" value="{{ old('phone') }}"
+                                            placeholder="Enter Your Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            this.value.slice(0, this.maxLength);">
+                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                        @if (!empty($error['phone']))
+                                         @foreach ($error['phone'] as  $key => $value)
+                                             <p class="error text-danger">{{ $value }}</p>
+                                         @endforeach
+                                   @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="mb-md-4 mb-3 custom-form">
+                                    <label for="exampleFormControlTextarea" class="form-label">Message</label>
+                                    <div class="custom-textarea">
+                                        <textarea class="form-control" id="exampleFormControlTextarea" name="message" value="{{ old('message') }}"
+                                            placeholder="Enter Your Message" rows="6"></textarea>
+                                        <i class="fa-solid fa-message"></i>
+                                        @if (!empty($error['message']))
+                                         @foreach ($error['message'] as  $key => $value)
+                                             <p class="error text-danger">{{ $value }}</p>
+                                         @endforeach
+                                   @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
-                        <button class="btn btn-animation btn-md fw-bold ms-auto"  type="submit">Send Message</button>
+                        <button class="btn btn-animation btn-md fw-bold ms-auto" type="submit">Send Message</button>
+</form>
                     </div>
+                    </div>
+                    @endif
+
 </form>
                 </div>
                     </div>

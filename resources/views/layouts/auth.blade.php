@@ -313,6 +313,13 @@
                                 </li>
 
                                 <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
+                                        <i class="ri-phone-line"></i>
+                                        <span>Coupon</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                         <i class="ri-profile-line"></i>
                                         <span>Profile</span>

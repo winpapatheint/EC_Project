@@ -4,7 +4,8 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 class GuestLayout extends Component
 {
     /**
@@ -14,7 +15,6 @@ class GuestLayout extends Component
      */
     public function render()
     {
-
         // $categories = DB::table('Categorys')
         // ->select('Categorys.id', 'Categorys.category_name as category_name',
         // 'Sub_category_titles.category_id as subcategory_id', 'Sub_category_titles.sub_category_titlename as subcategory_name')
@@ -27,10 +27,10 @@ class GuestLayout extends Component
             ->select(
                 'Categories.id',
                 'Categories.category_name as category_name',
-        'Sub_category_titles.category_id as subcategory_id',
-        'Sub_categories.sub_category_title_id as subcategorytitle_id',
-        'Sub_category_titles.sub_category_titlename as subcategory_name',
-        'Sub_categories.sub_category_name as sub_name'
+                'Sub_category_titles.category_id as subcategory_id',
+                'Sub_categories.sub_category_title_id as subcategorytitle_id',
+                'Sub_category_titles.sub_category_titlename as subcategory_name',
+                'Sub_categories.sub_category_name as sub_name'
     )
     ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
     ->Join('Sub_categories', function($join) {
@@ -66,7 +66,16 @@ class GuestLayout extends Component
                         ];
                     }
             }
-        return view('layouts.guest', ['categories' => $organizedCategories]);
+
+            $todayDate = Carbon::now()->toDateString();
+
+            $deal = DB::table('products')
+                            ->select('products.*')
+                            ->whereNotNull('discount_percent')
+                            ->whereDate('created_at', $todayDate)
+                            ->get();
+                            
+        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal'));
 
     }
 }

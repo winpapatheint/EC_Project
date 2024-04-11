@@ -187,13 +187,23 @@
                                     </button>
                                 </div>
 
-                                <div class="search-box">
+                                {{--<div class="search-box">
                                     <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="I'm searching for...">
-                                        <button class="btn" type="button" id="button-addon2">
+                                        <input type="search" class="form-control" placeholder="I'm searching for..." id="mainSearch">
+                                        <a href="{{ route('show-product') }}?mainSearch={{ urlencode(request()->input('search')) }}" id="searchButton"><button class="btn" type="button" id="button-addon2">
                                             <i data-feather="search"></i>
-                                        </button>
+                                        </button></a>
                                     </div>
+                                </div>--}}
+                                <div class="search-box">
+                                    <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
+                                        <div class="input-group">
+                                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                                            <button class="btn" type="submit" id="button-addon2">
+                                                <i data-feather="search"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
@@ -309,7 +319,7 @@
                                                 <h5>My Account</h5>
                                             </div>
                                         </div>
-
+                                        @if(empty(Auth::user()))
                                         <div class="onhover-div onhover-div-login">
                                             <ul class="user-box-name">
                                                 <li class="product-box-contain">
@@ -321,6 +331,19 @@
 
                                             </ul>
                                         </div>
+                                        @else
+                                        <div class="onhover-div onhover-div-login">
+                                            <ul class="user-box-name">
+                                                <li class="product-box-contain">
+                                                    <form method="POST" action="{{ route('adminlogout') }}">
+                                                    @csrf
+                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                                    </form>
+                                                </li>                                    
+                                            </ul>
+                                        </div>       
+                                        @endif
+
                                     </li>
                                 </ul>
                             </div>
@@ -401,23 +424,24 @@
                                         <button class="btn-close lead" type="button"
                                             data-bs-dismiss="offcanvas"></button>
                                     </div>
+                               
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/') }}">Home</a>
+                                                <a class="nav-link " href="{{ url('/') }}">Home</a>
                                             </li>
+                                            @endif
 
                                              <li class="nav-item dropdown">
-                                            <a class="nav-link " href="{{ url('/products') }}">Products</a>
+                                                <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
-
-                                            <a class="nav-link " href="{{ route('shoplist') }}"
-                                                   >Shop</a>
+                                                <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-
+                                            @endif
 
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
@@ -503,15 +527,17 @@
 
                                             </li>
 
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
                                                 <label class="new-dropdown">New</label>
                                                 <a class="nav-link"  href="{{ url('/news') }}">New</a>
-
                                             </li>
-
+                                            @endif
 
                                         </ul>
                                     </div>
+
+                                  
                                 </div>
                             </div>
                         </div>
@@ -1065,61 +1091,21 @@
                 <div class="modal-body">
                     <div class="deal-offer-box">
                         <ul class="deal-offer-list">
+                            @foreach($deal as $list)
                             <li class="list-1">
                                 <div class="deal-offer-contain">
                                     <a href="shop-left-sidebar.html" class="deal-image">
-                                        <img src="../assets/images/vegetable/product/10.png" class="blur-up lazyload"
+                                        <img src="{{ asset('upload/product_thambnail/'.$list-> product_thambnail) }}" class="blur-up lazyload"
                                             alt="">
                                     </a>
 
                                     <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                        <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
+                                        <h5>{{$list->product_name}}</h5>
+                                        <h6>{{  $list->original_price - ($list->original_price * 10)/100 }} <del>{{ $list->original_price }}</del> <span>500 G</span></h6>
                                     </a>
                                 </div>
                             </li>
-
-                            <li class="list-2">
-                                <div class="deal-offer-contain">
-                                    <a href="shop-left-sidebar.html" class="deal-image">
-                                        <img src="../assets/images/vegetable/product/11.png" class="blur-up lazyload"
-                                            alt="">
-                                    </a>
-
-                                    <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                        <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                    </a>
-                                </div>
-                            </li>
-
-                            <li class="list-3">
-                                <div class="deal-offer-contain">
-                                    <a href="shop-left-sidebar.html" class="deal-image">
-                                        <img src="../assets/images/vegetable/product/12.png" class="blur-up lazyload"
-                                            alt="">
-                                    </a>
-
-                                    <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                        <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                    </a>
-                                </div>
-                            </li>
-
-                            <li class="list-1">
-                                <div class="deal-offer-contain">
-                                    <a href="shop-left-sidebar.html" class="deal-image">
-                                        <img src="../assets/images/vegetable/product/13.png" class="blur-up lazyload"
-                                            alt="">
-                                    </a>
-
-                                    <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>Blended Instant Coffee 50 g Buy 1 Get 1 Free</h5>
-                                        <h6>$52.57 <del>57.62</del> <span>500 G</span></h6>
-                                    </a>
-                                </div>
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

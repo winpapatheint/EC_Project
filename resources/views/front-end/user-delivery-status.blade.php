@@ -99,6 +99,12 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <form method="POST" action="{{ route('adminlogout') }}">
+                                    @csrf
+                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -125,36 +131,18 @@
                                                     <th scope="col">No</th>
                                                     <th scope="col">Date</th>
                                                     <th scope="col">Order Code</th>
-                                                    <th scope="col">Order Image</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Location</th>
+                                                    <th scope="col">Status</th>  
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            @foreach($order as $orders)
                                                 <tr>
-                                                    <td><h6>03</h6></td>
-                                                    <td><h6>2024/01/28 16:30</h6></td> 
-                                                    <td><h6>0001</h6></td>
-                                                    <td><h6>Shirt</h6></td>
+                                                    <td><h6>{{ $orders->order_id }}</h6></td>
+                                                    <td><h6>{{ $orders->created_at }}</h6></td> 
+                                                    <td><h6>{{ $orders->order_code }}</h6></td>
                                                     <td class="status-close"><h6>Shipped</h6></td>
-                                                    <td><h6>Home</h6></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><h6>02</h6></td>
-                                                    <td><h6>2024/01/28 14:30</h6></td> 
-                                                    <td><h6>0002</h6></td>
-                                                    <td><h6>Shoes</h6></td>
-                                                    <td class="status-success"><h6>Success</h6></td>
-                                                    <td><h6>Office</h6></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><h6>01</h6></td> 
-                                                    <td><h6>2024/02/24 13:30</h6></td> 
-                                                    <td><h6>0003</h6></td>
-                                                    <td><h6>Oven</h6></td>
-                                                    <td class="status-danger"><h6>Pending</h6></td>
-                                                    <td><h6>Home</h6></td>
-                                                </tr>
+                                            @endforeach
                                         </table>
                                     </div>
                                     <div>

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Help;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Seller;
 use App\Models\Prefecture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +19,16 @@ class SellerController extends Controller
 {
     public function dashboard()
     {
-        return view('seller.index');
+        $id = Auth::user()->id;
+        $transfer = Order::where('seller_id',$id)->latest()->paginate(5);
+        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+        ->whereYear('created_at', date('Y'))
+        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+        ->pluck('count', 'month_name');
+
+        $labels = $orders->keys();
+        $data = $orders->values();
+        return view('seller.index',compact('labels', 'data','transfer'));
     }
 
     public function profile()

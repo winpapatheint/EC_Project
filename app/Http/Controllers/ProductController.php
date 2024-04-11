@@ -12,6 +12,7 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -22,6 +23,18 @@ class ProductController extends Controller
     {
         $products = Product::latest()->paginate(4);
         return view('seller.product.product_all',compact('products'));
+    }
+
+    public function getSubTitle($categoryId)
+    {
+        $subcategories = SubcategoryTitle::where('category_id', $categoryId)->get();
+        return response()->json($subcategories);
+    }
+
+    public function getSubcategory($subtileId)
+    {
+        $subcategories = Subcategory::where('sub_category_title_id', $subtileId)->get();
+        return response()->json($subcategories);
     }
 
     public function detailProduct($id)
@@ -71,9 +84,9 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
             'country_id' => $request->country_id,
             'seller_id' => Auth::user()->id,
-            'category_id' => $request->category_id,
-            'sub_category_id' => $request->sub_category_id,
-            'sub_category_title_id' => $request->sub_category_title_id,
+            'category_id' => $request->category,
+            'sub_category_id' => $request->subcategory,
+            'sub_category_title_id' => $request->subname,
             'product_name' => $request->product_name,
             'product_code' => $request->product_code,
             'product_qty' => $request->product_qty,
@@ -220,6 +233,13 @@ class ProductController extends Controller
         return back()->with('flash_message', 'Image deleted successfully');
     }
 
+    public function productList()
+    {
+        $products = Product::all();
+
+        return view('products', compact('products'));
+    }
+
     public function review()
     {
         $id = Auth::user()->id;
@@ -250,5 +270,4 @@ class ProductController extends Controller
         Review::findOrFail($id)->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }
-
 }

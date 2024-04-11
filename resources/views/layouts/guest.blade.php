@@ -373,6 +373,7 @@
 
                                 <ul class="category-list">
                                 @foreach ($categories as $category)
+                                @if ($category['name'] != 'Asia Menu')
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="{{ asset('frontend/assets/svg/1/'.$category['icon']) }}" alt="">
@@ -410,6 +411,7 @@
                                             @endif
                                         </div>
                                     </li>
+                                @endif
                                 @endforeach
 
                                 </ul>

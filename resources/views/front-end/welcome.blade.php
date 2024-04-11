@@ -382,6 +382,11 @@
                                             @endif
                                             <div class="col-12 px-0">
                                                 <div class="product-box">
+                                                @if ($topSaveProduct->created_at->diffInDays(\Carbon\Carbon::now()) < 1)
+                                                    <div class="label-tag">
+                                                        <span>NEW</span>
+                                                    </div>
+                                                @endif
                                                     <div class="product-image">
                                                         <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <img src="{{ asset('upload/product_thambnail/'.$topSaveProduct->product_thambnail)}}"
@@ -410,7 +415,7 @@
                                                                 @endfor
                                                             </ul>
                                                             @if ($topSaveProduct->product_qty > 0)
-                                                                <h6 class="theme-color">In Stock</h6>
+                                                                <h6 class="theme-color">{{ $topSaveProduct->product_qty }}In Stock</h6>
                                                             @endif
                                                         </div>
                                                     </div>

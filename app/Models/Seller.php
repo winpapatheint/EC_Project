@@ -9,10 +9,7 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-<<<<<<< HEAD
         'id',
-=======
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
         'user_id',
         'prefecture_id',
         'bank_name',

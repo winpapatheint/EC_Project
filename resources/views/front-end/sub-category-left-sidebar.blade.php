@@ -6,15 +6,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Product List</h2>
+                        <h2>Shop Left Sidebar</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ url('/') }}">
+                                    <a href="index.html">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Shop Left Sidebar</li>
                             </ol>
                         </nav>
                     </div>
@@ -30,22 +30,44 @@
             <div class="row">
                 <div class="col-12">
                     <div class="slider-1 slider-animate product-wrapper no-arrow">
-                    @if ($productsGroupedByDiscount !== null)
-                    @foreach ($productsGroupedByDiscount as $discountPercent => $discountItem)
                         <div>
                             <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
                                 <div
                                     class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                                     <div>
                                         <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save up to {{ $discountPercent }}%</h3>
+                                        <h3>Save upto 50%</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                    @endif
+
+                        <div>
+                            <div class="banner-contain-2 hover-effect">
+                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <div
+                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
+                                    <div>
+                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
+                                        <h3>Save upto 50%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="banner-contain-2 hover-effect">
+                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
+                                <div
+                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
+                                    <div>
+                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
+                                        <h3>Save upto 50%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,65 +81,25 @@
             <div class="row">
                 <div class="col-custom-3">
                     <div class="left-box wow fadeInUp">
-                    <form id="searchForm" action="{{ route('show-product') }}" method="GET">
+                    <form id="subCatSearchForm" action="{{ url('subcategorysidebar/' . $id) }}" method="GET">
                         <div class="shop-left-sidebar">
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
-
-                            <div class="filter-category">
-                                <div class="filter-title">
-                                    <h2>Filters</h2>
-                                    <a href="/products">Clear All</a>
-                                </div>
-                                <ul>
-                                @if(!empty($searchHistory))
-                                @foreach($searchHistory as $searchHist)
-                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
-                                        <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
-                                    </li>
-                                @endforeach
-                                @endif
-                                </ul>
-                            </div>
-
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <div style="display: flex; align-items: center;">
-                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
-                                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
+                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" 
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem;" id="search" name="search" value="{{ $search }}">
                                         <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne">
-                                            <span>Categories</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding custom-height">
-                                            @foreach ($categoryWithProductCount as $category)
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}" 
-                                                        name="categories[]" value= "{{ $category->id }}" data-category="{{ $category->id }}"
-                                                        {{ in_array($category->id, $categories) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="{{ $category->category_name }}">
-                                                            <span class="name">{{ $category->category_name }}</span>
-                                                            <span class="number">({{ $category->product_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                            </ul>
-                                        </div>
+                                    <div style="display: flex;justify-content: flex-end;">
+                                        <a href="{{ url('subcategorysidebar/' . $id) }}"">Clear All</a>
                                     </div>
                                 </div>
-
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed" type="button"
@@ -377,11 +359,11 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -471,44 +453,44 @@
                     </div>
 
                     <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section list-style">
-                        @foreach ($products as $product)
-                            @if ($product->status == 1)
-                            @php
-                                $starRating = 0;
-                                $count = 0;
-                            @endphp
-                            @foreach ($reviews as $review)
-                                @if ($product->id == $review->product_id)
-                                    @php
-                                        $count += 1;
-                                        $starRating += $review->stars_rated;
-                                    @endphp
-                                @endif
-                            @endforeach
-                            @if ($count != 0)
+                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                        @foreach($shoplist as $list)
+                        @if($list->status == 1)
+                        @php
+                            $starRating = 0;
+                            $count = 0;
+                        @endphp
+                        @foreach ($reviews as $review)
+                            @if ($list->id == $review->product_id)
                                 @php
-                                    $starRating = $starRating / $count;
+                                    $count += 1;
+                                    $starRating += $review->stars_rated;
                                 @endphp
                             @endif
+                        @endforeach
+                        @if ($count != 0)
+                            @php
+                                $starRating = $starRating / $count;
+                            @endphp
+                        @endif
                         <div>
-                            <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.05 }}s">
+                            <div class="product-box-3 h-100 wow fadeInUp">
                                 <div class="product-header">
                                     <div class="product-image">
                                    
-                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
-                                        <img width="100" src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}">
+                                        <img width="100" src="{{ asset('upload/product_thambnail/'.$list-> product_thambnail) }}"
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </a>
 
                                         <ul class="product-option d-flex justify-content-center">
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#view-product{{ $product->id }}" data-product="{{ $product->id }}">
+                                                    data-bs-target="#view-product{{ $list->id }}" data-product="{{ $list->id }}">
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-                                            {{-- remain --}}
+
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -519,11 +501,11 @@
                                 </div>
                                 <div class="product-footer">
                                     <div class="product-detail">
-                                        <span class="span-name">Vegetable</span>
-                                        <a href="{{ url('/product-left-thumbnail') }}">
-                                            <h5 class="name">{{ $product->product_name }}</h5>
+                                        <span class="span-name">{{ $list->category_name }}</span>
+                                        <a href=" {{ url('/product-left-thumbnail') }}">
+                                            <h5 class="name">{{ $list->product_name }}</h5>
                                         </a>
-                                        <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc }}</p>
+                                        <p class="text-content mt-1 mb-2 product-content">{{ $list->short_desc }}</p>
                                         <div class="product-rating mt-2">
                                             <ul class="rating">
                                                 @for ($i = 1; $i <= 5; $i++)
@@ -536,28 +518,30 @@
                                             </ul>
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
-                                            <h6 class="unit">{{ $product->product_size }}</h6>
-                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                            @if ($product->discount_percent != null)
-                                            <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
+                                            <h6 class="unit">{{ $list->product_size }}</h6>
+
+                                        <h5 class="price">
+                                            <span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
+                                            @if ($list->discount_percent != null)
+                                            <del>¥{{ number_format($list->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-                            @endif
+                        @endif
                         @endforeach
-                    </div>
 
-                    
-                @include('components.pagination')
                 </div>
+                @include('components.pagination')
             </div>
         </div>
     </section>
     <!-- Shop Section End -->
 
-    @foreach ($products as $product)
+    @foreach ($shoplist as $product)
     @if ($product->status == 1)
     @php
         $starRating = 0;
@@ -676,7 +660,6 @@
     @endif
     @endforeach
 
-
     <!-- latest jquery-->
     <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
@@ -696,7 +679,7 @@
                 from: 0,
                 to: 1000000,
                 prefix: "¥"
-            });console.log(rangeSlider);
+            });
 
             var price = "{{ $price }}";
 
@@ -710,39 +693,34 @@
             }
         });
     </script>
-
     <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("drop2").addEventListener("click", function() {
             document.getElementById("sortValue").value = "2";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("drop3").addEventListener("click", function() {
             document.getElementById("sortValue").value = "3";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("drop4").addEventListener("click", function() {
             document.getElementById("sortValue").value = "4";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("drop5").addEventListener("click", function() {
             document.getElementById("sortValue").value = "5";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("drop6").addEventListener("click", function() {
             document.getElementById("sortValue").value = "6";
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
         document.getElementById("searchBtn").addEventListener("click", function() {
-            document.getElementById("searchForm").submit();
+            document.getElementById("subCatSearchForm").submit();
         });
-        function updateSearchHist(value) {
-            document.getElementById('searchHistValue').value = value;
-            document.getElementById("searchForm").submit();
-        }
-
     </script>
+
 </x-guest-layout>

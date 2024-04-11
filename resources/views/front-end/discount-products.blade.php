@@ -132,12 +132,9 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
-                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
-                                        @else
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
-                                        @endif
+                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            @if ($product->discount_percent != null)
+                                            <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
                                         </h5>
                                     </div>
                                 </div>

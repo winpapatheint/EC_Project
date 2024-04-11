@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\RegisterController;
 
 
@@ -77,6 +78,7 @@ Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shopli
 
 
 Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
+Route::get('subcategorysidebar/{subcategoryid}', [AdminController::class, 'indexsubcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 

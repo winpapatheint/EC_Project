@@ -375,7 +375,7 @@
                                 @foreach ($categories as $category)
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
-                                            <img src="../assets/svg/1/vegetable.svg" alt="">
+                                            <img src="{{ asset('frontend/assets/svg/1/'.$category['icon']) }}" alt="">
                                             <h6>{{ $category['name'] }}</h6>
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
@@ -395,7 +395,7 @@
                                                     @foreach ($category['sub'] as $sub)
                                                     @if($sub['id']==$subcategory['subid'])
                                                     <li>
-                                                        <a href="javascript:void(0)">{{ $sub['name'] }}</a>
+                                                        <a href="{{ url('/subcategorysidebar/'.$sub['id'])}}">{{ $sub['name'] }}</a>
                                                     </li>
                                                     @endif
                                                     @endforeach
@@ -446,75 +446,41 @@
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
                                                     href="javascript:void(0)" data-bs-toggle="dropdown">
-                                                    <span class="menu">Mega Menu</span>
+                                                    <span class="menu">Asia Menu</span>
                                                 </a>
 
                                                 <div class="dropdown-menu dropdown-menu-2">
                                                     <div class="row">
                                                         <div class="dropdown-column col-xl-3">
-                                                            <h5 class="dropdown-header">Daily Vegetables</h5>
-                                                            <a class="dropdown-item" href="{{ url('/shop-left-sidebar') }}">Beans
-                                                                & Brinjals</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Broccoli & Cauliflower</a>
-
-                                                            <a href="{{ url('/shop-left-sidebar') }}"
-                                                                class="dropdown-item">Chilies, Garlic</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Vegetables & Salads</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Gourd, Cucumber</a>
-
-                                                            <a class="dropdown-item" href="{{ url('/shop-left-sidebar') }}">Herbs
-                                                                & Sprouts</a>
-
-                                                            <a href="demo-personal-portfolio.html"
-                                                                class="dropdown-item">Lettuce & Leafy</a>
+                                                        @if(!empty($myanmarProducts))
+                                                            <h5 class="dropdown-header">Myanmar Products</h5>
+                                                            @foreach($myanmarProducts as $myanmarProduct)
+                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $myanmarProduct->id]) }}">
+                                                                {{ $myanmarProduct->product_name }}</a>
+                                                            @endforeach
+                                                        @endif
                                                         </div>
 
                                                         <div class="dropdown-column col-xl-3">
-                                                            <h5 class="dropdown-header">Baby Tender</h5>
-                                                            <a class="dropdown-item" href="{{ url('/shop-left-sidebar') }}">Beans
-                                                                & Brinjals</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Broccoli & Cauliflower</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}l">Chilies, Garlic</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Vegetables & Salads</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Gourd, Cucumber</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Potatoes & Tomatoes</a>
-
-                                                            <a href="{{ url('/shop-left-sidebar') }}" class="dropdown-item">Peas
-                                                                & Corn</a>
+                                                            
+                                                        @if(!empty($koreaProducts))
+                                                            <h5 class="dropdown-header">Korea Products</h5>
+                                                            @foreach($koreaProducts as $koreaProduct)
+                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $koreaProduct->id]) }}">
+                                                                {{ $koreaProduct->product_name }}</a>
+                                                            @endforeach
+                                                        @endif
                                                         </div>
 
                                                         <div class="dropdown-column col-xl-3">
-                                                            <h5 class="dropdown-header">Exotic Vegetables</h5>
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Asparagus & Artichokes</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Avocados & Peppers</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Broccoli & Zucchini</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Celery, Fennel & Leeks</a>
-
-                                                            <a class="dropdown-item"
-                                                                href="{{ url('/shop-left-sidebar') }}">Chilies & Lime</a>
+                                                            
+                                                        @if(!empty($chinaProducts))
+                                                            <h5 class="dropdown-header">China Products</h5>
+                                                            @foreach($chinaProducts as $chinaProduct)
+                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $chinaProduct->id]) }}">
+                                                                {{ $chinaProduct->product_name }}</a>
+                                                            @endforeach
+                                                        @endif
                                                         </div>
 
                                                         <div class="dropdown-column dropdown-column-img col-3"></div>

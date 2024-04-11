@@ -521,7 +521,8 @@
                                             <h6 class="unit">{{ $list->product_size }}</h6>
 
                                         <h5 class="price">
-                                            <span class="theme-color">¥{{ number_format($list->selling_price - ($list->selling_price * $list->discount_percent)/100, 0, '', ',') }}</span>
+                                            <span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
+                                            @if ($list->discount_percent != null)
                                             <del>¥{{ number_format($list->selling_price, 0, '', ',') }}</del>
                                         </h5>
 

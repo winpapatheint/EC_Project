@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
             } else if (Auth::user()->role == 'seller') {
             return redirect()->intended(RouteServiceProvider::SELLER);
             } else if (Auth::user()->role == 'buyer') {
-                return redirect('/user');
+                return redirect('/buyer');
             } else {
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
@@ -60,7 +60,7 @@ class AuthenticatedSessionController extends Controller
 
             return redirect()->intended(RouteServiceProvider::SELLER);
         } else if (Auth::user()->role == 'buyer') {
-            return redirect()->intended(RouteServiceProvider::USER);
+            return redirect('/buyer');
         } else {
             return redirect()->intended(RouteServiceProvider::HOME);
         }

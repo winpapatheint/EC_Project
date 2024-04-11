@@ -270,7 +270,7 @@
 
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.order') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
                                         <i class="ri-archive-line"></i>
                                         <span>Orders</span>
                                     </a>

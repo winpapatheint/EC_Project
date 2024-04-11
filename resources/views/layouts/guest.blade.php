@@ -230,7 +230,7 @@
                                         </div>
                                     </li>
                                     <li class="right-side">
-                                        <a href="contact-us.html" class="delivery-login-box">
+                                        <a href="{{ url('/contact') }}" class="delivery-login-box">
                                             <div class="delivery-icon">
                                                 <i data-feather="phone-call"></i>
                                             </div>
@@ -727,6 +727,7 @@
                                     <a href="blog-list.html" class="text-content">Blog</a>
                                 </li>
                                 <li>
+                      
                                     <a href="contact-us.html" class="text-content">Contact Us</a>
                                 </li>
                             </ul>

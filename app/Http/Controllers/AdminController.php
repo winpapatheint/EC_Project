@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\Process;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Seller;
@@ -50,7 +52,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        $categories = Category::all();
+        $categories = Cat::all();
 
         $blogs = DB::table('Blog')
                     ->select( 'U.name as authorby', 'Blog.*')
@@ -612,13 +614,26 @@ class AdminController extends Controller
     public function blogdetail($id)
     {
         $blog = DB::table('blog')
-        ->select( 'blog.*')
-        ->where('blog.id',$id)->get();
-
+                ->select( 'blog.*')
+                ->where('blog.id',$id)->get();
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
     }
+
+    public function orderdetail($id)
+    {
+        $order = Order::find($id);
+        return view('admin.order.orderdetail',compact('order'));
+    }
+
+    public function orderTracking($id)
+    {
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        return view('admin.order.ordertracking',compact('order','process'));
+    }
+
 
     public function indexshop($id)
     {
@@ -1350,6 +1365,15 @@ class AdminController extends Controller
 
     }
 
+    public function deleteorderlist(Request $request)
+    {
+
+        $data = DB::table('Orders')
+                    ->delete($request->id);
+        return redirect('/admin/orderlist')->with('success','削除されました。');
+
+    }
+
     public function deletecoupon(Request $request)
     {
 
@@ -1613,12 +1637,9 @@ class AdminController extends Controller
 
     public function contact(Request $request)
     { 
- 
-        $inquiry_email = 'info-test@asia-hd.com';
-        if ($request->from == 'faq') {
-           if(empty($request->id))
-           {
-            $valarr = array('name' => 'required|string|max:255',
+       if ($request->from == 'faq') {
+
+         $valarr = array('name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'subject' => 'required|not_in:0',
             'phone' => 'required|string|max:255',
@@ -1626,31 +1647,14 @@ class AdminController extends Controller
 
         );
         $request->validate($valarr);
-           
-        // print_r("$request->check");die;
-        $validator = Validator::make($request->all(), $valarr,
-                    [
-                        'phone.required' => '電話番号を入力してください',
-                        'phone.regex' => '有効な電話番号を入力してください',
-                    ]);
-
-        if($request->ajax()){
-
-            if ($validator->passes()) {
-                return response()->json(['success'=>'allpasses']);
-            }         
-        return response()->json(['error'=>$validator->errors()]);
-
-        }
-    }
-  
+        $inquiry_email = 'info-test@asia-hd.com';
         $data = array('name'=>$request->name);
 
         if (!empty($request->email)) {
           $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
              $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
              $message->from($request->email,$request->name);
-             $message->setBody("RISE MORE SUPPORT 公式サイトから、以下の問い合わせがありました。
+             $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
              \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
              \r\n名前：　".$request->name."
              \r\n"."メールアドレス：　".$request->email."
@@ -1664,8 +1668,50 @@ class AdminController extends Controller
 
             return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
-        }
+    
+    }
 
+        else if( $request->from == 'contact')
+        {
+            if(empty($request->name) && empty($request->email) && empty($request->subject) && empty($request->message))
+            {
+                $valarr = array(
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255',
+                    'subject' => 'required|not_in:0',
+                    'phone' => 'required|string|max:255',
+                    'message' => 'required',
+                );
+            
+                $request->validate($valarr);
+            }
+            
+      
+            $inquiry_email = 'info-test@asia-hd.com';
+
+  
+     $data = array('name'=>$request->name);
+
+     if (!empty($request->email)) {
+       $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+          $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+          $message->from($request->email,$request->name);
+          $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+          \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+          \r\n名前：　".$request->name."
+          \r\n"."メールアドレス：　".$request->email."
+          \r\n
+          \r\n"."お問い合わせ内容：　
+          \r\n".$request->message."
+          \r\n
+          \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+       });
+     }
+
+         return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
+     }
+  
     }
 
     public function storeblog(Request $request)
@@ -1904,6 +1950,11 @@ class AdminController extends Controller
 
     }
 
+    public function indexorderlist()
+    {
+        $order = Order::latest()->paginate(10);
+        return view('admin.order.indexorderlist',compact('order'));
 
+    }
 
 }

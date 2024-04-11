@@ -539,6 +539,125 @@
     </section>
     <!-- Shop Section End -->
 
+    @foreach ($shoplist as $product)
+    @if ($product->status == 1)
+    @php
+        $starRating = 0;
+        $count = 0;
+    @endphp
+    @foreach ($reviews as $review)
+        @if ($product->id == $review->product_id)
+            @php
+                $count += 1;
+                $starRating += $review->stars_rated;
+            @endphp
+        @endif
+    @endforeach
+    @if ($count != 0)
+        @php
+            $starRating = $starRating / $count;
+        @endphp
+    @endif
+    <!-- Quick View Modal Box Start -->
+     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                    class="img-fluid blur-up lazyload" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name">{{ $product->product_name }}</h4>
+                                @if ($product->discount_percent != null)
+                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                @else
+                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                @endif
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $starRating)
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span class="ms-2">{{ $count}} Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Product Details :</h4>
+                                    <p>{{ $product->long_desc }}</p>
+                                </div>
+
+                                <ul class="brand-list">
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Brand Name:</h5>
+                                            <h6>
+                                                @php
+                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                @endphp
+                                                {{ $brand->brand_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Product Code:</h5>
+                                            <h6>{{ $product->product_code }}</h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Category:</h5>
+                                            <h6>
+                                                @php
+                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                @endphp
+                                                {{ $category->category_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                                {{-- remain --}}
+                                <div class="modal-button">
+                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                        @csrf
+                                        <button onclick="location.href = 'cart.html';"
+                                            class="btn btn-md add-cart-button icon">Add
+                                            To Cart</button>
+                                    </form>
+                                    
+                                    <button onclick="location.href = 'product-left.html';"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        View More Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quick View Modal Box End -->
+    @endif
+    @endforeach
+
     <!-- latest jquery-->
     <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
 

@@ -552,26 +552,8 @@
                         @endforeach
                     </div>
 
-                    <nav class="custom-pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                    <i class="fa-solid fa-angles-left"></i>
-                                </a>
-                            </li>
-                            @for ($i = 1; $i <= $totalPage; $i++)
-                                <li class="page-item @if($i == $page) active @endif">
-                                    <a class="page-link" href="{{ route('show-product', ['page' => $i]) }}">{{ $i }}</a>
-                                </li>
-                            @endfor
-                            
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">
-                                    <i class="fa-solid fa-angles-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    
+                @include('components.pagination')
                 </div>
             </div>
         </div>

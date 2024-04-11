@@ -157,6 +157,8 @@ class ShowProductController extends Controller
 
         // Fetch paginated results
         $products = $query->paginate($limit, ['*'], 'page', $page);
+        $ttl = $products->total();
+        $ttlpage = (ceil($ttl / $limit));
 
         // Retrieve reviews
         $reviews = Review::all();
@@ -165,7 +167,7 @@ class ShowProductController extends Controller
         $allProduct = Product::count();
 
         // Total number of pages
-        $totalPage = ceil($allProduct / $limit);
+        // $totalPage = ceil($allProduct / $limit);
 
         // $productTags = Product::select('product_tags')->distinct()->get();
         // $tags = [];
@@ -212,7 +214,7 @@ class ShowProductController extends Controller
             ->toArray();
         }
 
-        return view('front-end.products', compact('products', 'reviews', 'totalPage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
+        return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
         , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
     }
 

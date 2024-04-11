@@ -68,7 +68,7 @@ class AdminController extends Controller
                 ->orderByDesc('max_stars_rated')
                 ->first();
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
-        
+
         $productsGroupedByDiscount = [];
 
         foreach ($mostDiscountPercentages as $discountPercent) {
@@ -76,7 +76,8 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
+        $topSaveTodayProducts = Product::leftjoin('Carts', 'Carts.product_id', '=', 'products.id')
+        ->whereDate('Carts.created_at', Carbon::today())->get();
 
         $reviews = Review::all();
 
@@ -1434,8 +1435,6 @@ class AdminController extends Controller
                     ->orderBy('Categories.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
-
-
 
     public function editcategory($id)
     {

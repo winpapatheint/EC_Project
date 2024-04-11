@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Brands;
+use App\Models\Brand;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Product;
@@ -12,6 +12,7 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -24,6 +25,18 @@ class ProductController extends Controller
         return view('seller.product.product_all',compact('products'));
     }
 
+    public function getSubTitle($categoryId)
+    {
+        $subcategories = SubcategoryTitle::where('category_id', $categoryId)->get();
+        return response()->json($subcategories);
+    }
+
+    public function getSubcategory($subtileId)
+    {
+        $subcategories = Subcategory::where('sub_category_title_id', $subtileId)->get();
+        return response()->json($subcategories);
+    }
+
     public function detailProduct($id)
     {
         $data = Product::find($id);
@@ -33,7 +46,7 @@ class ProductController extends Controller
 
     public function addProduct()
     {
-        $brands = Brands::latest()->get();
+        $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
         $categories = Category::latest()->get();
         $subcategories = SubCategory::latest()->get();
@@ -71,9 +84,9 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
             'country_id' => $request->country_id,
             'seller_id' => Auth::user()->id,
-            'category_id' => $request->category_id,
-            'sub_category_id' => $request->sub_category_id,
-            'sub_category_title_id' => $request->sub_category_title_id,
+            'category_id' => $request->category,
+            'sub_category_id' => $request->subcategory,
+            'sub_category_title_id' => $request->subname,
             'product_name' => $request->product_name,
             'product_code' => $request->product_code,
             'product_qty' => $request->product_qty,

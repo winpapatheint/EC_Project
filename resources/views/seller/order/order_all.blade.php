@@ -65,14 +65,7 @@
                                                         </li>
 
                                                         <li>
-                                                            <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModalToggle{{ $item->id }}">
-                                                                <i class="ri-delete-bin-line"></i>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="javascript:void(0)" >
+                                                            <a href="{{ route('invoice',$item->id) }}" >
                                                                 <i class="icon-cloud-down"></i>
                                                             </a>
                                                         </li>
@@ -100,36 +93,6 @@
     </div>
     <!-- Table End -->
 <!-- Order section End -->
-
-<!-- Delete Modal Box Start -->
-@foreach( $order as $key => $item )
-    <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="remove-box">
-                        <p>The data will be deleted permanently.</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                    <form method="POST" action="{{ route('delete.product') }}">
-                        @csrf
-                            <input type="hidden" name="id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endforeach
-<!-- Delete Modal Box End -->
 
 <!-- Offcanvas Box Start -->
 @foreach( $order as $key => $item )

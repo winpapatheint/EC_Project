@@ -11,7 +11,6 @@ class Seller extends Model
     protected $fillable = [
 
         'id',
-
         'user_id',
         'prefecture_id',
         'bank_name',

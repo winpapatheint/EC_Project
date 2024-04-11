@@ -1,15 +1,17 @@
 <?php
 
+use App\Models\PDF;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-
+use App\Models\Product;
 
 
 /*
@@ -218,6 +220,7 @@ Route::post('/seller/helpstore', [SellerController::class, 'storeHelp'])->middle
 Route::get('/seller/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
 Route::get('/seller/help/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
 
+
 //Brand
 Route::get('/seller/brandadd', [BrandController::class, 'addBrand'])->middleware(['auth','role:seller'])->name('add.brand');
 Route::post('/seller/brandstore', [BrandController::class, 'storeBrand'])->middleware(['auth','role:seller'])->name('store.brand');
@@ -237,6 +240,8 @@ Route::get('/seller/review', [ProductController::class, 'review'])->middleware([
 Route::post('/seller/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
 Route::post('/seller/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
 Route::post('/seller/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
+Route::get('/get-subtitle/{categoryId}', [ProductController::class, 'getSubTitle']);
+Route::get('/get-subcategories-by-title/{subcategoryTitleId}', [ProductController::class, 'getSubcategory']);
 
 //SellerOrder
 Route::get('/seller/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');
@@ -245,7 +250,7 @@ Route::post('/seller/orderstatus', [OrderController::class, 'updateOrderStatus']
 Route::get('/seller/ordertracking/{id}', [OrderController::class, 'orderTracking'])->middleware(['auth','role:seller'])->name('order.tracking');
 Route::get('/seller/ordercancel', [OrderController::class, 'cancelOrder'])->middleware(['auth','role:seller'])->name('order.cancel');
 Route::post('/seller/cancelreason', [OrderController::class, 'cancelOrderReason'])->middleware(['auth','role:seller'])->name('order.cancel.reason');
-
+Route::get('/invoice/{id}', [OrderController::class, 'generatePDF'])->middleware(['auth','role:seller'])->name('invoice');
 
 // Route::get('', [OrderController::class, ''])->middleware(['auth','role:seller'])->name('');
 
@@ -253,7 +258,6 @@ Route::post('/seller/cancelreason', [OrderController::class, 'cancelOrderReason'
 Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('all.subseller');
 // Route::get('/seller/add/subseller', function () {return view('seller.subseller.subseller_add');})->name('add.subseller');
 // Route::get('/seller/edit/subseller', function () {return view('seller.subseller.subseller_edit');})->name('edit.subseller');
-
 
 //Subseller
 Route::get('/subseller', function () {return view('sub_seller.index');})->name('sub_seller.dashboard');

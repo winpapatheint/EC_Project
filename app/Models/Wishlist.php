@@ -16,7 +16,7 @@ class Wishlist extends Model
 
     public function buyer()
     {
-        return $this->belongsTo(Buyers::class);
+        return $this->belongsTo(Buyer::class);
     }
 
     public function product()

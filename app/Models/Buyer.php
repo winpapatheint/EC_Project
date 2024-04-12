@@ -18,4 +18,9 @@ class Buyer extends Model
         'photo',
         'phone',
     ];
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

@@ -628,7 +628,7 @@
                                             <h5>Brand Name:</h5>
                                             <h6>
                                                 @php
-                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
                                                 @endphp
                                                 {{ $brand->brand_name }}
                                             </h6>
@@ -647,7 +647,7 @@
                                             <h5>Category:</h5>
                                             <h6>
                                                 @php
-                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
                                                 @endphp
                                                 {{ $category->category_name }}
                                             </h6>

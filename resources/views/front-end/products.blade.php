@@ -510,7 +510,7 @@
                                             </li>
                                             {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
                                                 </a>
                                             </li>
@@ -537,7 +537,8 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        <h5 class="price">
+                                            <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             @if ($product->discount_percent != null)
                                             <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
                                             @endif

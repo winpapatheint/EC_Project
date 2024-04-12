@@ -320,7 +320,7 @@
                             <div class="timing">
                                 <i data-feather="clock"></i>
                                 <h6 class="name">Expires in :</h6>
-                                <div class="time" id="clockdiv-1" data-hours="30" data-minutes="30" data-seconds="0">
+                                <div class="time" id="clockdiv-1">
                                     <ul>
                                         <li>
                                             <div class="counter">

@@ -10,7 +10,6 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Product;
 

@@ -337,13 +337,12 @@
                                                 <li class="product-box-contain">
                                                     <form method="POST" action="{{ route('adminlogout') }}">
                                                     @csrf
-                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
                                                     </form>
                                                 </li>                                    
                                             </ul>
                                         </div>       
                                         @endif
-
                                     </li>
                                 </ul>
                             </div>

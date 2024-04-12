@@ -135,6 +135,7 @@
                                         <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             @if ($product->discount_percent != null)
                                             <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
                                     </div>
                                 </div>
@@ -247,14 +248,14 @@
                                 </ul>
                                 {{-- remain --}}
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add
                                             To Cart</button>
                                     </form>
                                     
-                                    <button onclick="location.href = 'product-left.html';"
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         View More Details</button>
                                 </div>

@@ -29,17 +29,15 @@ class GuestLayout extends Component
             ->select(
                 'categories.id',
                 'categories.category_name as category_name',
+                'categories.category_icon as category_icon',
                 'sub_category_titles.category_id as subcategory_id',
                 'sub_categories.sub_category_title_id as subcategorytitle_id',
                 'sub_category_titles.sub_category_titlename as subcategory_name',
                 'sub_categories.sub_category_name as sub_name'
-    )
-    ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
-    ->Join('sub_category_titles', function($join) {
-        $join
-            ->on('sub_category_titles.id', '=', 'sub_categories.sub_category_title_id');
-    })
-    ->get();
+                )
+            ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
+            ->leftjoin('sub_categories', 'sub_categories.id', '=', 'sub_category_titles.sub_category_id')
+            ->get();
 
        // Organize categories and their subcategories
         $organizedCategories = [];

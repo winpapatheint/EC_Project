@@ -17,34 +17,26 @@ class GuestLayout extends Component
      */
     public function render()
     {
-        // $categories = DB::table('Categorys')
-        // ->select('Categorys.id', 'Categorys.category_name as category_name',
-        // 'Sub_category_titles.category_id as subcategory_id', 'Sub_category_titles.sub_category_titlename as subcategory_name')
-        // ->leftJoin('Sub_category_titles', 'Categorys.id', '=', 'Sub_category_titles.category_id')
-        // ->leftJoin('Sub_categories', 'Categorys.id', '=', 'Sub_categories.category_id' and 'Sub_category_titles.id','=',
-        // 'sub_category_title_id')
-        // ->get();
-
         $categories = DB::table('categories')
-            ->select(
-                'categories.id',
-                'categories.category_name as category_name',
-                'categories.category_icon as category_icon',
-                'sub_category_titles.category_id as subcategory_id',
-                'sub_categories.sub_category_title_id as subcategorytitle_id',
-                'sub_category_titles.sub_category_titlename as subcategory_name',
-                'sub_categories.sub_category_name as sub_name'
-                )
-            ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
-            ->leftjoin('sub_categories', 'sub_categories.id', '=', 'sub_category_titles.sub_category_id')
-            ->get();
-
+                            ->select(
+                                'categories.id',
+                                'categories.category_name as category_name',
+                                'sub_category_titles.category_id as subcategory_id',
+                                'sub_categories.sub_category_title_id as subcategorytitle_id',
+                                'sub_category_titles.sub_category_titlename as subcategory_name',
+                                'sub_categories.sub_category_name as sub_name',
+                                'categories.category_icon',
+                                )
+                            ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
+                            ->leftjoin('sub_categories', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
+                        
+                            ->get();
        // Organize categories and their subcategories
-        $organizedCategories = [];
+        $organizedcategories = [];
             foreach ($categories as $category) {
                 $categoryId = $category->id;
-                    if (!isset($organizedCategories[$categoryId])) {
-                        $organizedCategories[$categoryId] = [
+                    if (!isset($organizedcategories[$categoryId])) {
+                        $organizedcategories[$categoryId] = [
                             'id' => $categoryId,
                             'name' => $category->category_name,
                             'icon' => $category->category_icon,
@@ -53,7 +45,7 @@ class GuestLayout extends Component
                         ];
                     }
                     if (!is_null($category->subcategory_id)) {
-                        $organizedCategories[$categoryId]['subcategories'][] = [
+                        $organizedcategories[$categoryId]['subcategories'][] = [
                             'id' => $category->subcategory_id,
                             'subid' => $category->subcategorytitle_id,
                             'name' => $category->subcategory_name
@@ -61,7 +53,7 @@ class GuestLayout extends Component
                     }
 
                     if (!is_null($category->subcategorytitle_id)) {
-                        $organizedCategories[$categoryId]['sub'][] = [
+                        $organizedcategories[$categoryId]['sub'][] = [
                             'id' => $category->subcategorytitle_id,
                             'name' => $category->sub_name
                         ];
@@ -76,29 +68,29 @@ class GuestLayout extends Component
                             ->whereDate('created_at', $todayDate)
                             ->get();
 
-        $myanmarProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'Myanmar')
+        $myanmarProducts = Product::leftjoin('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+                            ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
+                            ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
+                            ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
+                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('sub_category_titles.sub_category_titlename', 'Myanmar')
                             ->get();
-        $koreaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'Korea')
+        $koreaProducts = Product::leftjoin('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+                            ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
+                            ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
+                            ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
+                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('sub_category_titles.sub_category_titlename', 'Korea')
                             ->get();
-        $chinaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'China')
+        $chinaProducts = Product::leftjoin('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+                            ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
+                            ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
+                            ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
+                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('sub_category_titles.sub_category_titlename', 'China')
                             ->get();
 
-        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts'));
+        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts'));
 
     }
 }

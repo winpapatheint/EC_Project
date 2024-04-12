@@ -52,7 +52,6 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-       
         $categories = Category::all();
 
         $blogs = DB::table('Blog')
@@ -77,8 +76,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('Carts', 'Carts.product_id', '=', 'products.id')
-        ->whereDate('Carts.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
 
         $reviews = Review::all();
 

@@ -105,7 +105,7 @@
                                             </li>
                                             {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
                                                 </a>
                                             </li>
@@ -132,12 +132,10 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
-                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
-                                        @else
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
-                                        @endif
+                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            @if ($product->discount_percent != null)
+                                            <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
                                     </div>
                                 </div>
@@ -250,14 +248,14 @@
                                 </ul>
                                 {{-- remain --}}
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add
                                             To Cart</button>
                                     </form>
                                     
-                                    <button onclick="location.href = 'product-left.html';"
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         View More Details</button>
                                 </div>

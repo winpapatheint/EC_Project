@@ -2,6 +2,8 @@
 
 namespace App\View\Components;
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -47,6 +49,7 @@ class GuestLayout extends Component
                         $organizedCategories[$categoryId] = [
                             'id' => $categoryId,
                             'name' => $category->category_name,
+                            'icon' => $category->category_icon,
                             'subcategories' => [],
                             'sub' => []
                         ];
@@ -74,8 +77,30 @@ class GuestLayout extends Component
                             ->whereNotNull('discount_percent')
                             ->whereDate('created_at', $todayDate)
                             ->get();
-                            
-        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal'));
+
+        $myanmarProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
+                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
+                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
+                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
+                            ->where('Categories.category_name', 'Asia Menu')
+                            ->where('Sub_category_titles.sub_category_titlename', 'Myanmar')
+                            ->get();
+        $koreaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
+                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
+                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
+                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
+                            ->where('Categories.category_name', 'Asia Menu')
+                            ->where('Sub_category_titles.sub_category_titlename', 'Korea')
+                            ->get();
+        $chinaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
+                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
+                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
+                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
+                            ->where('Categories.category_name', 'Asia Menu')
+                            ->where('Sub_category_titles.sub_category_titlename', 'China')
+                            ->get();
+
+        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts'));
 
     }
 }

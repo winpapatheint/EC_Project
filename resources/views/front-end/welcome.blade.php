@@ -15,7 +15,6 @@
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
             <div class="row g-4">
-                        @if ($productsGroupedByDiscount[30] != null)
                 <div class="col-xl-8 ratio_65">
                     <div class="home-contain h-100">
                         <div class="h-100">
@@ -23,60 +22,67 @@
                         </div>
                             <div class="home-detail p-center-left w-75">
                                 <div>
+                                @if ($productsGroupedByDiscount[30] != null)
                                     <h6>Exclusive offer <span>30% OFF</span></h6>
+                                @endif
                                     <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily
                                         Needs</span></h1>
                                     <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that are
                                         good for your health.</p>
+                                @if ($productsGroupedByDiscount[30] != null)
                                     <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[30]]) }}';"
                                         class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now
                                         <i class="fa-solid fa-right-long icon"></i></button>
+                                @endif
                                 </div>
                             </div>
                     </div>
                 </div>
-                        @endif
 
                 <div class="col-xl-4 ratio_65">
                     <div class="row g-4">
-                        @if ($productsGroupedByDiscount[45] != null)
                             <div class="col-xl-12 col-md-6">
                                 <div class="home-contain">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/2.jpeg') }}"
                                         class="bg-img blur-up lazyload" alt="">
                                     <div class="home-detail p-center-left home-p-sm w-75">
                                         <div>
+                                        @if ($productsGroupedByDiscount[45] != null)
                                             <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
                                             </h2>
+                                        @endif
                                             <h3 class="theme-color">Nut Collection</h3>
                                             <p class="w-75">We deliver organic vegetables & fruits</p>
+                                        @if ($productsGroupedByDiscount[45] != null)
                                             <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[45]]) }}"
-                                                class="shop-button">Shop Now <i
-                                                    class="fa-solid fa-right-long"></i></a>
+                                                class="shop-button">Shop Now 
+                                                <i class="fa-solid fa-right-long"></i></a>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
 
-                        @if ($productsGroupedByDiscount[50] != null)
                             <div class="col-xl-12 col-md-6">
                                 <div class="home-contain">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/3.jpeg') }}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="home-detail p-center-left home-p-sm w-75">
                                         <div>
+                                        @if ($productsGroupedByDiscount[50] != null)
                                             <h2 class="mt-0 text-danger">50% <span class="discount text-title">OFF</span>
                                             </h2>
+                                        @endif
                                             <h3 class="theme-color">Nut Collection</h3>
                                             <p class="w-75">We deliver organic vegetables & fruits</p>
+                                        @if ($productsGroupedByDiscount[50] != null)
                                             <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}" class="shop-button">Shop Now <i
                                                     class="fa-solid fa-right-long"></i></a>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -88,73 +94,81 @@
     <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
             <div class="banner-slider">
-            @if ($productsGroupedByDiscount[5] != null)
                 <div>
                     <div class="banner-contain hover-effect">
                         <img src={{ asset('frontend/assets/images/vegetable/banner/4.jpeg') }} class="bg-img blur-up lazyload" alt="">
                         <div class="banner-details">
                             <div class="banner-box">
+                            @if ($productsGroupedByDiscount[5] != null)
                                 <h6 class="text-danger">5% OFF</h6>
+                            @endif
                                 <h5>Hot Deals on New Items</h5>
                                 <h6 class="text-content">Daily Essentials Eggs & Dairy</h6>
                             </div>
+                            @if ($productsGroupedByDiscount[5] != null)
                             <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[5]]) }}" class="banner-button text-white">Shop Now <i
                                     class="fa-solid fa-right-long ms-2"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
-            @endif
 
-            @if ($productsGroupedByDiscount[10] != null)
                 <div>
                     <div class="banner-contain hover-effect">
                         <img src={{ asset('frontend/assets/images/vegetable/banner/5.jpeg') }} class="bg-img blur-up lazyload" alt="">
                         <div class="banner-details">
                             <div class="banner-box">
+                            @if ($productsGroupedByDiscount[10] != null)
                                 <h6 class="text-danger">10% OFF</h6>
+                            @endif
                                 <h5>Buy More & Save More</h5>
                                 <h6 class="text-content">Fresh Vegetables</h6>
                             </div>
-                            <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[10]]) }}" class="banner-button text-white">Shop Now <i
-                                    class="fa-solid fa-right-long ms-2"></i></a>
+                            @if ($productsGroupedByDiscount[10] != null)
+                            <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[10]]) }}" class="banner-button text-white">Shop Now
+                                    <i class="fa-solid fa-right-long ms-2"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
-            @endif
 
-            @if ($productsGroupedByDiscount[15] != null)
                 <div>
                     <div class="banner-contain hover-effect">
                         <img src={{ asset('frontend/assets/images/vegetable/banner/6.jpeg') }} class="bg-img blur-up lazyload" alt="">
                         <div class="banner-details">
                             <div class="banner-box">
+                            @if ($productsGroupedByDiscount[15] != null)
                                 <h6 class="text-danger">15% OFF</h6>
+                            @endif
                                 <h5>Organic Meat Prepared</h5>
                                 <h6 class="text-content">Delivered to Your Home</h6>
                             </div>
+                            @if ($productsGroupedByDiscount[15] != null)
                             <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[15]]) }}" class="banner-button text-white">Shop Now <i
                                     class="fa-solid fa-right-long ms-2"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
-            @endif
 
-            @if ($productsGroupedByDiscount[20] != null)
                 <div>
                     <div class="banner-contain hover-effect">
                         <img src={{ asset('frontend/assets/images/vegetable/banner/7.jpeg') }} class="bg-img blur-up lazyload" alt="">
                         <div class="banner-details">
                             <div class="banner-box">
+                            @if ($productsGroupedByDiscount[20] != null)
                                 <h6 class="text-danger">20% OFF</h6>
+                            @endif
                                 <h5>Buy More & Save More</h5>
                                 <h6 class="text-content">Nuts & Snacks</h6>
                             </div>
+                            @if ($productsGroupedByDiscount[20] != null)
                             <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-button text-white">Shop Now <i
                                     class="fa-solid fa-right-long ms-2"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
-            @endif
             </div>
         </div>
     </section>
@@ -208,40 +222,23 @@
                             </ul>
                         </div>
 
-                        @if($seafood != null)
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
                                 <img src="{{ asset('frontend/assets/images/vegetable/banner/8.jpeg')}}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
+                                    @if($seafood != null)
                                         <h6 class="text-yellow home-banner">Seafood</h6>
+                                    @endif
                                         <h3 class="text-uppercase fw-normal"><span
                                                 class="theme-color fw-bold">Freshes</span> Products</h3>
                                         <h3 class="fw-light">every hour</h3>
-
+                                    @if($seafood != null)
                                         <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $seafood]) }}';"
                                             class="btn btn-animation btn-md mend-auto">Shop Now <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        <div class="ratio_medium section-t-space">
-                            <div class="home-contain hover-effect">
-                                <img src="../assets/images/vegetable/banner/11.jpg" class="img-fluid blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-top-left home-p-medium">
-                                    <div>
-                                        <h4 class="text-yellow text-exo home-banner">Organic</h4>
-                                        <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">fresh</h2>
-                                        <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
-                                        <p class="mb-3">Super Offer to 50% Off</p>
-                                        <button onclick="location.href = ' {{ url('/shop-left-sidebar') }}l';"
-                                            class="btn btn-animation btn-md mend-auto">Shop Now <i
-                                                class="fa-solid fa-arrow-right icon"></i></button>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -320,7 +317,7 @@
                             <div class="timing">
                                 <i data-feather="clock"></i>
                                 <h6 class="name">Expires in :</h6>
-                                <div class="time" id="clockdiv-1" data-hours="30" data-minutes="30" data-seconds="0">
+                                <div class="time" id="clockdiv-1">
                                     <ul>
                                         <li>
                                             <div class="counter">
@@ -382,6 +379,11 @@
                                             @endif
                                             <div class="col-12 px-0">
                                                 <div class="product-box">
+                                                @if ($topSaveProduct->created_at->diffInDays(\Carbon\Carbon::now()) < 1)
+                                                    <div class="label-tag">
+                                                        <span>NEW</span>
+                                                    </div>
+                                                @endif
                                                     <div class="product-image">
                                                         <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <img src="{{ asset('upload/product_thambnail/'.$topSaveProduct->product_thambnail)}}"
@@ -410,7 +412,7 @@
                                                                 @endfor
                                                             </ul>
                                                             @if ($topSaveProduct->product_qty > 0)
-                                                                <h6 class="theme-color">In Stock</h6>
+                                                                <h6 class="theme-color">{{ $topSaveProduct->product_qty }}In Stock</h6>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -463,69 +465,75 @@
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
-                        @if($meatHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/9.jpeg') }}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
+                                        @if($meatHalfDiscount != null)
                                             <h3 class="text-exo">50% offer</h3>
+                                        @endif
                                             <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
+                                        @if($meatHalfDiscount != null)
                                             <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $meatHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
 
-                        @if($vegetableHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/10.jpeg') }}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
+                                        @if($vegetableHalfDiscount != null)
                                             <h3 class="text-exo">50% offer</h3>
+                                        @endif
                                             <h4 class="text-russo fw-normal theme-color mb-2">Fresh Vegetable</h4>
+                                        @if($vegetableHalfDiscount != null)
                                             <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
                         </div>
                     </div>
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
-                        @if ($productsGroupedByDiscount[25] != null)
                             <div class="col-xxl-8 col-xl-12 col-md-7">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/12.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
+                                        @if ($productsGroupedByDiscount[25] != null)
                                             <h2 class="text-kaushan fw-normal text-danger">25% Off</h2>
+                                        @endif
                                             <h2 class="text-kaushan fw-normal theme-color">Get Ready To</h2>
                                             <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
                                             <p class="text-content banner-text">In publishing and graphic design, Lorem
                                                 ipsum is a placeholder text commonly used to demonstrate.</p>
+                                        @if ($productsGroupedByDiscount[25] != null)
                                             <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[25]]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
 
-                        @if ($productsGroupedByDiscount[20] != null)
                             <div class="col-xxl-4 col-xl-12 col-md-5">
+                            @if ($productsGroupedByDiscount[20] != null)
                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/13.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
@@ -537,8 +545,8 @@
                                         </div>
                                     </div>
                                 </a>
+                            @endif
                             </div>
-                        @endif
                         </div>
                     </div>
 
@@ -594,7 +602,6 @@
                         @endfor
                         @endif
 
-                    @if($vegetable != null)
                     <div class="section-t-space">
                         <div class="banner-contain hover-effect">
                             <img src="{{ asset('frontend/assets/images/vegetable/banner/14.jpeg') }}" class="bg-img blur-up lazyload" alt="">
@@ -602,15 +609,15 @@
                                 <div>
                                     <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
                                     <h2 class="banner-title">VEGETABLE</h2>
-                                    <h5 class="lh-sm mx-auto mt-1 text-content">Save up to 5% OFF</h5>
+                                @if($vegetable != null)
                                     <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetable]) }}';"
                                         class="btn btn-animation btn-sm mx-auto mt-sm-3 mt-2">Shop Now <i
                                             class="fa-solid fa-arrow-right icon"></i></button>
+                                @endif
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endif
 
                     
                     <div class="title section-t-space">

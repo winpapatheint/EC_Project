@@ -61,6 +61,8 @@ Route::post('user/profile/edit-password', [UserController::class, 'editPassword'
 Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
+Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->name('show-wishlist');
+Route::post('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 Route::get('/show-carts', [UserController::class, 'showCarts'])->name('show_carts');
@@ -68,8 +70,6 @@ Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('updat
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
-
-Route::get('/wishlist', function () {return view('front-end.wishlist');});
 
 Route::get('/compare', function () {return view('front-end.compare');});
 
@@ -79,6 +79,7 @@ Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shopli
 
 
 Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
+Route::get('subcategorysidebar/{subcategoryid}', [AdminController::class, 'indexsubcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 

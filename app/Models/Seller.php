@@ -9,7 +9,6 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-
         'id',
         'user_id',
         'prefecture_id',

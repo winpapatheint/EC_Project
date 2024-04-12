@@ -373,7 +373,7 @@
 
                                 <ul class="category-list">
                                 @foreach ($categories as $category)
-                                @if ($category['name'] != 'Asia Menu')
+                                @if ($category['name'] != 'Special Corner')
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="{{ asset('frontend/assets/svg/1/'.$category['icon']) }}" alt="">
@@ -448,7 +448,7 @@
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
                                                     href="javascript:void(0)" data-bs-toggle="dropdown">
-                                                    <span class="menu">Asia Menu</span>
+                                                    <span class="menu">Special Corner</span>
                                                 </a>
 
                                                 <div class="dropdown-menu dropdown-menu-2">

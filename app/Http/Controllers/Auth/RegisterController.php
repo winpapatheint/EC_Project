@@ -12,13 +12,13 @@ use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
-    public function sellerRegister()
+    public function SellerRegister()
     {
         $prefecture = Prefecture::get();
         return view('auth.seller_register',compact('prefecture'));
     }
 
-    public function sellerRegistered(Request $request)
+    public function SellerRegistered(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -49,6 +49,7 @@ class RegisterController extends Controller
             'email' => $request->input('email'),
             'role' => 'seller',
             'password' => Hash::make($request->input('password')),
+            'status' => 1,
         ]);
         event(new Registered($user));
         $seller = Seller::create([

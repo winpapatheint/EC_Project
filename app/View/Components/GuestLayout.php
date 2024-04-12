@@ -23,19 +23,19 @@ class GuestLayout extends Component
         // 'sub_category_title_id')
         // ->get();
 
-        $categories = DB::table('Categories')
+        $categories = DB::table('categories')
             ->select(
-                'Categories.id',
-                'Categories.category_name as category_name',
-                'Sub_category_titles.category_id as subcategory_id',
-                'Sub_categories.sub_category_title_id as subcategorytitle_id',
-                'Sub_category_titles.sub_category_titlename as subcategory_name',
-                'Sub_categories.sub_category_name as sub_name'
+                'categories.id',
+                'categories.category_name as category_name',
+                'sub_category_titles.category_id as subcategory_id',
+                'sub_categories.sub_category_title_id as subcategorytitle_id',
+                'sub_category_titles.sub_category_titlename as subcategory_name',
+                'sub_categories.sub_category_name as sub_name'
     )
-    ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
-    ->Join('Sub_categories', function($join) {
+    ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
+    ->Join('sub_category_titles', function($join) {
         $join
-            ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
+            ->on('sub_category_titles.id', '=', 'sub_categories.sub_category_title_id');
     })
     ->get();
 

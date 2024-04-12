@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Buyers;
-use App\Models\Buyer_addresses;
-use App\Models\Buyer_payments;
-use App\Models\Order_details;
-use App\Models\Orders;
+use App\Models\Buyer;
+use App\Models\Buyer_address;
+use App\Models\Buyer_payment;
+use App\Models\Order_detail;
+use App\Models\Order;
 use App\Models\Product;
-use App\Models\Carts;
-use App\Models\Coupon_details;
-use App\Models\seller;
+use App\Models\Cart;
+use App\Models\Coupon_detail;
+use App\Models\Seller;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 use Illuminate\Auth\Events\Registered;
@@ -70,7 +70,7 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         if ($user)
             {
-                $addresses = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+                $addresses = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
                 $firstAddress = $addresses->first()->address;
@@ -162,7 +162,7 @@ class UserController extends Controller
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+        $data = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
                 
@@ -187,7 +187,7 @@ class UserController extends Controller
         if(empty($request->id))
         {
     
-                $Buyer_addresses = Buyer_addresses::create([
+                $Buyer_addresses = Buyer_address::create([
 
                     'buyer_id' => "1",
                     'name' => $request->name,
@@ -207,7 +207,7 @@ class UserController extends Controller
     //Edit Address
     public function editAddress(Request $request)
     {
-        $buyerAddress = Buyer_addresses::find($request->id);
+        $buyerAddress = Buyer_address::find($request->id);
     
         if ($buyerAddress) {
 
@@ -230,7 +230,7 @@ class UserController extends Controller
     //Remove Address
     public function removeAddress($id)
     {
-        $address = Buyer_addresses::find($id);
+        $address = Buyer_address::find($id);
         if ($address)
         {
             $address->delete();
@@ -255,7 +255,7 @@ class UserController extends Controller
 
     // Use $lastFourDigits as needed
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = Buyer_payments::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
+        $data = Buyer_payment::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
         ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
         ->where('Buyers.user_id', Auth::user()->id)
         ->get();
@@ -275,7 +275,7 @@ class UserController extends Controller
 
         ]);
        
-        $Buyer_cards = Buyer_payments::create([
+        $Buyer_cards = Buyer_payment::create([
     
             'buyer_id' => "1",
             'acc_name' => $request->acc_name,
@@ -290,7 +290,7 @@ class UserController extends Controller
     //Edit Card
     public function editCard(Request $request)
     {
-        $buyerCard = Buyer_payments::find($request->id);
+        $buyerCard = Buyer_payment::find($request->id);
 
         if ($buyerCard) {
 
@@ -310,7 +310,7 @@ class UserController extends Controller
    //Remove Card
    public function removeCard($id)
    {
-       $card = Buyer_payments::find($id);
+       $card = Buyer_payment::find($id);
        if ($card) {
        $card->delete();
        return back()->with('success', 'Address removed successfully.');
@@ -415,7 +415,7 @@ class UserController extends Controller
             $buyer = Buyers::where('user_id', Auth::user()->id)->first();
             $buyerid = $buyer->id;
 
-            $cart = Carts::create([
+            $cart = Cart::create([
                 'product_id' => $productid,
                 'seller_id' => $sellerid,
                 'buyer_id' => $buyerid,
@@ -478,7 +478,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $quantity = $request->input('quantity');
-        $cartItem = Carts::find($id);
+        $cartItem = Cart::find($id);
 
         if ($cartItem) {
             $cartItem->quantity = $quantity;
@@ -549,7 +549,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $coupon = Coupon_details::create([
+        $coupon = Coupon_detail::create([
             'user_id' => Auth::user()->id,
             'coupon_code' => $request->input('coupon'),
         ]);
@@ -561,12 +561,12 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $buyerAddress = Buyer_addresses::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+        $buyerAddress = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->where('Buyers.user_id', Auth::user()->id)
                      ->get();
 
-        $buyerPayment = Buyer_payments::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
+        $buyerPayment = Buyer_payment::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
                     ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
                     ->where('Buyers.user_id', Auth::user()->id)
                     ->get();

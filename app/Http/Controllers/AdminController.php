@@ -52,7 +52,8 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        $categories = Cat::all();
+       
+        $categories = Category::all();
 
         $blogs = DB::table('Blog')
                     ->select( 'U.name as authorby', 'Blog.*')
@@ -82,22 +83,22 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereMonth('orders.created_at', '=', Carbon::now()->month)
+            ->select('products.*', DB::raw('COUNT(Orders.id) as total_orders'))
+            ->leftJoin('Orders', 'products.id', '=', 'Orders.product_id')
+            ->whereMonth('Orders.created_at', '=', Carbon::now()->month)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
 
         $trendingProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereDate('orders.created_at', '=', Carbon::today())
+            ->select('products.*', DB::raw('COUNT(Orders.id) as total_orders'))
+            ->leftJoin('Orders', 'products.id', '=', 'Orders.product_id')
+            ->whereDate('Orders.created_at', '=', Carbon::today())
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
             ->get();
-
+        
         $coupon = Coupons::first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
@@ -479,7 +480,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Category')
+        $lists = DB::table('categories')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -555,17 +556,148 @@ class AdminController extends Controller
     {
         $limit = 10;
 
-        $shoplist = DB::table('products as P')
-                    ->select( 'P.*','C.*')
-                    ->Join('Categories as C', function ($join) {
-                        $join->on('C.id', '=', 'P.category_id');
-                    })
-                    ->where('P.seller_id',$id)->orderBy('P.created_at', 'desc')->paginate($limit);
+        // $shoplist = DB::table('products as P')
+        //             ->select( 'P.*','C.*')
+        //             ->Join('Categories as C', function ($join) {
+        //                 $join->on('C.id', '=', 'P.category_id');
+        //             })
+        //             ->where('P.seller_id',$id)->orderBy('P.created_at', 'desc')->paginate($limit);
+
+        $validated = request()->validate([
+            'page' => 'integer|min:1',
+            'sort' => 'integer|min:1',
+            'search' => 'string|nullable',
+            'categories' => 'array',
+            'categories.*' => 'integer|distinct|min:1',
+            'price' => 'string|nullable',
+            'rating' => 'array',
+            'rating.*' => 'integer|distinct|min:1',
+            'discount' => 'array',
+            'discount.*' => 'integer|distinct|min:1',
+        ]);
+
+        $page = $validated['page'] ?? 1;
+        $sort = $validated['sort'] ?? 0;
+        $search = $validated['search'] ?? null;
+        $price = $validated['price'] ?? null;
+        $rating = $validated['rating'] ?? [];
+        $discount = $validated['discount'] ?? [];
+
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($price)) {
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
+        }
+
+        if (!empty($rating)) {
+            $averageRated = Review::select('product_id',
+                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+            )
+            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
+            ->where('Products.seller_id', $id)
+            ->groupBy('product_id')
+            ->get();
+            $matchedProductIds = [];
+            foreach ($averageRated as $rated) {
+                if (in_array($rated->average_rating, $rating)) {
+                    $matchedProductIds[] = $rated->product_id;
+                }
+            }
+            if (!empty($matchedProductIds)) {
+                $query->whereIn('id', $matchedProductIds);
+            }
+            else {
+                $query->where('id', null);
+            }
+        }
+
+        if (!empty($discount)) {
+            if (in_array("1", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
+            }
+            if (in_array("2", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
+            }
+            if (in_array("3", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
+            }
+            if (in_array("4", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
+            }
+            if (in_array("5", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
+            }
+        }
+
+        switch ($sort) {
+            case 1:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) ASC');
+                break;
+            case 2:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) DESC');
+                break;
+            case 3:
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                    ->select('products.*', DB::raw('COUNT(reviews.product_id) as review_count'))
+                    ->groupBy('products.id')
+                    ->orderBy('review_count', 'desc');
+                break;
+            case 4:
+                $query->orderBy('product_name', 'ASC');
+                break;
+            case 5:
+                $query->orderBy('product_name', 'DESC');
+                break;
+            case 6:
+                $query->orderByRaw('CAST(discount_percent AS DECIMAL(10,2)) DESC');
+                break;
+            default:
+                // No sorting applied
+                break;
+        }
+
+        $shoplist = $query->where('seller_id',$id)
+                          ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.shop-left-sidebar',compact('shoplist','ttlpage','ttl'));
+        $reviews = Review::all();
+
+        $ratingWithProductCount = Review::select(
+                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                    )
+                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
+                                    ->where('Products.seller_id', $id)
+                                    ->groupBy('product_id')
+                                    ->get()
+                                    ->groupBy('average_rating')
+                                    ->map(function ($grouped) {
+                                        return $grouped->count();
+                                    });
+
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
+                                    ->where('seller_id', $id)
+                                    ->where('status', '=', '1')
+                                    ->first();
+
+        return view('front-end.shop-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
+        'discount','discountWithProductCount', 'sort', 'reviews'));
     }
 
     public function indexsubcategory()
@@ -577,33 +709,33 @@ class AdminController extends Controller
             $kword = '';
         }
 
-     $lists = DB::table('Categories')
-        ->select('Sb.id', 'Categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
-        ->leftJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Categories.id', '=', 'S.category_id');
+     $lists = DB::table('categories')
+        ->select('Sb.id', 'categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
+        ->leftJoin('sub_category_titles as S', function ($join) {
+            $join->on('categories.id', '=', 'S.category_id');
         })
-        ->leftJoin('Sub_categories as Sb', function ($join) {
+        ->leftJoin('sub_categories as Sb', function ($join) {
             $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'Categories.id');
+            $join->on('Sb.category_id', '=', 'categories.id');
         })
 
         ->orderBy('Sb.created_at', 'desc')
         ->paginate($limit);
 
-        $listss = DB::table('Sub_categories')
-        ->select('Sub_categories.*','Categories.category_name as category','S.*')
+        $listss = DB::table('sub_categories')
+        ->select('sub_categories.*','categories.category_name as category','S.*')
 
 
-        ->rightJoin('Categories', function ($join) {
-            $join->on('Categories.id', '=', 'Sub_categories.category_id');
+        ->rightJoin('categories', function ($join) {
+            $join->on('categories.id', '=', 'sub_categories.category_id');
 
         })
 
-        ->rightJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Sub_categories.sub_category_title_id', '=', 'S.id');
+        ->rightJoin('sub_category_titles as S', function ($join) {
+            $join->on('sub_categories.sub_category_title_id', '=', 'S.id');
         })
 
-        ->orderBy('Sub_categories.created_at', 'desc')
+        ->orderBy('sub_categories.created_at', 'desc')
         ->paginate($limit);
 
         $ttl = $lists->total();
@@ -703,13 +835,13 @@ class AdminController extends Controller
                 $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
             }
             if (in_array("2", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
             }
             if (in_array("3", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
             }
             if (in_array("4", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
             }
             if (in_array("5", $discount)) {
                 $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
@@ -763,10 +895,10 @@ class AdminController extends Controller
                                         return $grouped->count();
                                     });
 
-        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) < 5 THEN 1 END) as group_1_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10 THEN 1 END) as group_2_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15 THEN 1 END) as group_3_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25 THEN 1 END) as group_4_count')
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
                                     ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
                                     ->where('category_id', $id)
                                     ->where('status', '=', '1')
@@ -843,13 +975,13 @@ class AdminController extends Controller
                 $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
             }
             if (in_array("2", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
             }
             if (in_array("3", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
             }
             if (in_array("4", $discount)) {
-                $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25');
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
             }
             if (in_array("5", $discount)) {
                 $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
@@ -903,16 +1035,156 @@ class AdminController extends Controller
                                         return $grouped->count();
                                     });
 
-        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) < 5 THEN 1 END) as group_1_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10 THEN 1 END) as group_2_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15 THEN 1 END) as group_3_count')
-                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25 THEN 1 END) as group_4_count')
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
                                     ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
                                     ->where('category_id', $id)
                                     ->where('status', '=', '1')
                                     ->first();
 
         return view('front-end.category-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
+        'discount','discountWithProductCount', 'sort', 'reviews'));
+    }
+
+    public function indexsubcategoryproduct($id)
+    {
+        $limit =14;
+        $validated = request()->validate([
+            'page' => 'integer|min:1',
+            'sort' => 'integer|min:1',
+            'search' => 'string|nullable',
+            'categories' => 'array',
+            'categories.*' => 'integer|distinct|min:1',
+            'price' => 'string|nullable',
+            'rating' => 'array',
+            'rating.*' => 'integer|distinct|min:1',
+            'discount' => 'array',
+            'discount.*' => 'integer|distinct|min:1',
+        ]);
+
+        $page = $validated['page'] ?? 1;
+        $sort = $validated['sort'] ?? 0;
+        $search = $validated['search'] ?? null;
+        $price = $validated['price'] ?? null;
+        $rating = $validated['rating'] ?? [];
+        $discount = $validated['discount'] ?? [];
+
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($price)) {
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
+        }
+
+        if (!empty($rating)) {
+            $averageRated = Review::select('product_id',
+                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+            )
+            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
+            ->where('Products.sub_category_id', $id)
+            ->groupBy('product_id')
+            ->get();
+            $matchedProductIds = [];
+            foreach ($averageRated as $rated) {
+                if (in_array($rated->average_rating, $rating)) {
+                    $matchedProductIds[] = $rated->product_id;
+                }
+            }
+            if (!empty($matchedProductIds)) {
+                $query->whereIn('id', $matchedProductIds);
+            }
+            else {
+                $query->where('id', null);
+            }
+        }
+
+        if (!empty($discount)) {
+            if (in_array("1", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
+            }
+            if (in_array("2", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
+            }
+            if (in_array("3", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
+            }
+            if (in_array("4", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
+            }
+            if (in_array("5", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
+            }
+        }
+
+        switch ($sort) {
+            case 1:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) ASC');
+                break;
+            case 2:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) DESC');
+                break;
+            case 3:
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                    ->select('products.*', DB::raw('COUNT(reviews.product_id) as review_count'))
+                    ->groupBy('products.id')
+                    ->orderBy('review_count', 'desc');
+                break;
+            case 4:
+                $query->orderBy('product_name', 'ASC');
+                break;
+            case 5:
+                $query->orderBy('product_name', 'DESC');
+                break;
+            case 6:
+                $query->orderByRaw('CAST(discount_percent AS DECIMAL(10,2)) DESC');
+                break;
+            default:
+                // No sorting applied
+                break;
+        }
+
+        $shoplist = $query->where('sub_category_id',$id)
+                          ->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $shoplist->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        $reviews = Review::all();
+
+        $ratingWithProductCount = Review::select(
+                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                    )
+                                    ->join('products', 'products.id', '=', 'Reviews.product_id')
+                                    ->where('products.sub_category_id', $id)
+                                    ->groupBy('product_id')
+                                    ->get()
+                                    ->groupBy('average_rating')
+                                    ->map(function ($grouped) {
+                                        return $grouped->count();
+                                    });
+
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
+                                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
+                                    ->where('sub_category_id', $id)
+                                    ->where('status', '=', '1')
+                                    ->first();
+
+        return view('front-end.sub-category-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
         'discount','discountWithProductCount', 'sort', 'reviews'));
     }
 
@@ -1321,10 +1593,10 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Sub_category_titles')
-                    ->select('C.category_name as category','Sub_category_titles.*')
+        $lists = DB::table('sub_category_titles')
+                    ->select('C.category_name as category','sub_category_titles.*')
                     ->join('Categories as C', function ($join) {
-                    $join->on('Sub_category_titles.category_id', '=', 'C.id');
+                    $join->on('sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
 
@@ -1341,16 +1613,16 @@ class AdminController extends Controller
     public function deletecategory(Request $request)
     {
 
-        $catlist =  DB::table('Categories')
+        $catlist =  DB::table('categories')
                         ->whereIn('id', function ($query) use ($request) {
                         $query->select('category_id')
-                        ->from('Sub_category_titles')
+                        ->from('sub_category_titles')
                         ->where('id',$request->id);
                         })
 
                         ->delete();
 
-        $subtitlelist = DB::table('Sub_category_titles')
+        $subtitlelist = DB::table('sub_category_titles')
         ->delete($request->id);
 
         return redirect('/admin/all/subcategory')->with('success','削除されました。');
@@ -1422,23 +1694,23 @@ class AdminController extends Controller
     }
     public function addsubtitle()
     {
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
         return view('admin.addsubtitle',compact('categories'));
     }
 
     public function addsubcategory()
     {
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
 
     public function editcategory($id)
     {
-        $data = DB::table('Categories')
+        $data = DB::table('categories')
                     ->find($id);
         $editmode = true;
 
@@ -1481,9 +1753,9 @@ class AdminController extends Controller
     {
         $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
         $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
-        $categorylist = DB::table('Categories')->orderBy('created_at', 'desc')->get();
-        $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
-        $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
+        $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
+        $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
         $multiImgs = MultiImg::where('product_id',$id)->get();
         $data = DB::table('Products as P')
                 ->where('P.id',$id)
@@ -1497,15 +1769,15 @@ class AdminController extends Controller
 
     public function editsubtitle($id)
     {
-        $subtitle = DB::table('Sub_category_titles')
+        $subtitle = DB::table('sub_category_titles')
                     ->find($id);
 
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
 
-        $category = DB::table('Categories')
-                    ->select('Categories.*')
+        $category = DB::table('categories')
+                    ->select('categories.*')
                     ->where('id', $subtitle->sub_category_id)
                     ->pluck('id')->toArray();
 
@@ -1517,29 +1789,29 @@ class AdminController extends Controller
     public function editsubcategory($id)
     {
 
-        $subtitle = DB::table('Sub_categories')
+        $subtitle = DB::table('sub_categories')
                     ->find($id);
 
-        $subcat_id = DB::table('Sub_categories')
-                    ->select('Sub_categories.sub_category_title_id')
+        $subcat_id = DB::table('sub_categories')
+                    ->select('sub_categories.sub_category_title_id')
                     ->where('id',$id)->first();
 
-        $subcategory_titlename = DB::table('Sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
+        $subcategory_titlename = DB::table('sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
 
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
 
 
-        $category = DB::table('Sub_category_titles')
+        $category = DB::table('sub_category_titles')
                     ->select('S.sub_category_name as subcategory_name')
-                    ->join('Sub_categories as S', function ($join) {
-                    $join->on('Sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
+                    ->join('sub_categories as S', function ($join) {
+                    $join->on('sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
                 })
-                ->orderBy('Sub_category_titles.created_at', 'desc')->get();
+                ->orderBy('sub_category_titles.created_at', 'desc')->get();
 
-        $subcategory_name = DB::table('Sub_categories')
-                            ->select('Sub_categories.sub_category_name')
+        $subcategory_name = DB::table('sub_categories')
+                            ->select('sub_categories.sub_category_name')
                             ->where('id', $id)
                             ->first();
 
@@ -1564,7 +1836,7 @@ class AdminController extends Controller
         if (empty($request->id)) {
 
             foreach ($subtitle_arr as $subtitle) {
-                DB::table('Sub_category_titles')->insertOrIgnore([
+                DB::table('sub_category_titles')->insertOrIgnore([
                     'category_id' => $request->category,
                     'sub_category_id' => $request->category,
                     'sub_category_titlename' => $subtitle,
@@ -1585,7 +1857,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_category_titles')->where('id',$request->id)->update($updval);
+            DB::table('sub_category_titles')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
@@ -1609,7 +1881,7 @@ class AdminController extends Controller
         $time = new DateTime();
         if (empty($request->id)) {
 
-                DB::table('Sub_categories')->insert([
+                DB::table('sub_categories')->insert([
                     'category_id' => $request->category,
                     'sub_category_name' => $request->subname,
                     'sub_category_title_id' => $request->subcategory,
@@ -1627,7 +1899,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_categories')->where('id',$request->id)->update($updval);
+            DB::table('sub_categories')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
@@ -1912,7 +2184,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('Categories')->insert([
+            DB::table('categories')->insert([
                 'category_name' => $request->title,
                 'category_icon' => $imageName,
                 'created_at' => $time->format('Y-m-d H:i:s'),
@@ -1931,7 +2203,7 @@ class AdminController extends Controller
                 $updval['category_icon'] = $imageName;
             }
 
-            DB::table('Categories')->where('id',$request->id)->update($updval);
+            DB::table('categories')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -1941,7 +2213,7 @@ class AdminController extends Controller
 
     public function getSubcategories(Request $request) {
 
-        $subcategories =   DB::table('Sub_category_titles')->where('sub_category_id','=',$request->category)->get();
+        $subcategories =   DB::table('sub_category_titles')->where('sub_category_id','=',$request->category)->get();
         return response()->json([
             'status' => 'success',
             'subcategories' => $subcategories,

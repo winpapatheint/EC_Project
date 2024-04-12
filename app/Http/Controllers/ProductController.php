@@ -56,6 +56,7 @@ class ProductController extends Controller
 
     public function storeProduct(Request $request)
     {
+        dd($request->id);
         $request->validate([
             'brand_id' => 'required|string|max:255',
             'country_id' => 'required|string|max:255',

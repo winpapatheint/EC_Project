@@ -57,7 +57,7 @@ class AdminController extends Controller
 
         $blogs = DB::table('blogs')
                     ->select( 'U.name as authorby', 'blogs.*')
-                    ->join('users as U', function ($join) {∂
+                    ->join('users as U', function ($join) {
                     $join->on('blogs.created_by', '=', 'U.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate(2);

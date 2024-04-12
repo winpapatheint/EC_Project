@@ -315,59 +315,6 @@
                                             <div class="nav-desh">
                                                 <p>{{ $product->long_desc}}</p>
                                             </div>
-
-                                            {{-- <div class="nav-desh">
-                                                <div class="desh-title">
-                                                    <h5>Organic:</h5>
-                                                </div>
-                                                <p>vitae et leo duis ut diam quam nulla porttitor massa id neque aliquam
-                                                    vestibulum morbi blandit cursus risus at ultrices mi tempus
-                                                    imperdiet nulla malesuada pellentesque elit eget gravida cum sociis
-                                                    natoque penatibus et magnis dis parturient montes nascetur ridiculus
-                                                    mus mauris vitae ultricies leo integer malesuada nunc vel risus
-                                                    commodo viverra maecenas accumsan lacus vel facilisis volutpat est
-                                                    velit egestas dui id ornare arcu odio ut sem nulla pharetra diam sit
-                                                    amet nisl suscipit adipiscing bibendum est ultricies integer quis
-                                                    auctor elit sed vulputate mi sit amet mauris commodo quis imperdiet
-                                                    massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada
-                                                    proin libero nunc consequat interdum varius sit amet mattis
-                                                    vulputate enim nulla aliquet porttitor lacus luctus accumsan.</p>
-                                            </div>
-
-                                            <div class="banner-contain nav-desh">
-                                                <img src="../assets/images/vegetable/banner/14.jpg"
-                                                    class="bg-img blur-up lazyload" alt="">
-                                                <div class="banner-details p-center banner-b-space w-100 text-center">
-                                                    <div>
-                                                        <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
-                                                        <h2>VEGETABLE</h2>
-                                                        <p class="mx-auto mt-1">Save up to 5% OFF</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="nav-desh">
-                                                <div class="desh-title">
-                                                    <h5>From The Manufacturer:</h5>
-                                                </div>
-                                                <p>Jelly beans shortbread chupa chups carrot cake jelly-o halvah apple
-                                                    pie pudding gingerbread. Apple pie halvah cake tiramisu shortbread
-                                                    cotton candy croissant chocolate cake. Tart cupcake caramels gummi
-                                                    bears macaroon gingerbread fruitcake marzipan wafer. Marzipan
-                                                    dessert cupcake ice cream tootsie roll. Brownie chocolate cake
-                                                    pudding cake powder candy ice cream ice cream cake. Jujubes soufflé
-                                                    chupa chups cake candy halvah donut. Tart tart icing lemon drops
-                                                    fruitcake apple pie.</p>
-
-                                                <p>Dessert liquorice tart soufflé chocolate bar apple pie pastry danish
-                                                    soufflé. Gummi bears halvah gingerbread jelly icing. Chocolate cake
-                                                    chocolate bar pudding chupa chups bear claw pie dragée donut halvah.
-                                                    Gummi bears cookie ice cream jelly-o jujubes sweet croissant.
-                                                    Marzipan cotton candy gummi bears lemon drops lollipop lollipop
-                                                    chocolate. Ice cream cookie dragée cake sweet roll sweet roll.Lemon
-                                                    drops cookie muffin carrot cake chocolate marzipan gingerbread
-                                                    topping chocolate bar. Soufflé tiramisu pastry sweet dessert.</p>
-                                            </div> --}}
                                         </div>
                                     </div>
 
@@ -379,7 +326,7 @@
                                                         <td>Brand</td>
                                                         <td>
                                                             @php
-                                                                $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                                $brand = DB::table('brands')->where('id',$product->brand_id)->first();
                                                             @endphp
                                                             {{ $brand->brand_name }}
                                                         </td>
@@ -388,7 +335,7 @@
                                                         <td>Form</td>
                                                         <td>
                                                             @php
-                                                                $country = DB::table('Countries')->where('id',$product->country_id)->first();
+                                                                $country = DB::table('countries')->where('id',$product->country_id)->first();
                                                             @endphp
                                                             {{ $country->name }}
                                                         </td>
@@ -397,7 +344,7 @@
                                                         <td>Category</td>
                                                         <td>
                                                             @php
-                                                                $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                                $category = DB::table('categories')->where('id',$product->category_id)->first();
                                                             @endphp
                                                             {{ $category->category_name }}
                                                         </td>
@@ -461,7 +408,7 @@
                                                                     $rate3 = 0;
                                                                     $rate4 = 0;
                                                                     $rate5 = 0;
-                                                                    $reviews = DB::table('Reviews')->where('product_id',$product->id)->get();
+                                                                    $reviews = DB::table('reviews')->where('product_id',$product->id)->get();
                                                                 @endphp
                                                                 @foreach ($reviews as $review)
                                                                     @php

@@ -21,8 +21,10 @@ class BrandController extends Controller
         ]);
 
         if ($request->hasFile('brand_icon')) {
-            $filename = $request->file('brand_icon')->store('upload/brand');
-            $brands->brand_icon = $filename;
+            $imageName = time().'.'.$request->brand_icon->extension();
+            $request->brand_icon->move(public_path('upload/brand'), $imageName);
+            // $filename = $request->file('brand_icon')->store('upload/brand');
+            $brands->brand_icon = $imageName;
         }
         $brands->brand_name = $request->input('brand_name');
         $brands->save();

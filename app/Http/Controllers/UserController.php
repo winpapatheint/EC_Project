@@ -2,27 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Buyer;
-use App\Models\Buyer_address;
-use App\Models\Buyer_payment;
-use App\Models\Order_detail;
-use App\Models\Order;
-use App\Models\Product;
+use App\Models\BuyerAddress;
+use App\Models\BuyerPayment;
 use App\Models\Cart;
-use App\Models\Coupon_detail;
-use App\Models\Seller;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
-
-use Illuminate\Auth\Events\Registered;
-
+use App\Models\CouponDetail;
 
 class UserController extends Controller
 {
@@ -52,7 +41,7 @@ class UserController extends Controller
                 'phone' => $request->input('phone'),
             ]);
 
-            $buyer = Buyers::create([
+            $buyer = Buyer::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -70,8 +59,8 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         if ($user)
             {
-                $addresses = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
-                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+                $addresses = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.division','buyer_addresses.district','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
                 $firstAddress = $addresses->first()->address;
                 $profile = route('user_profile');
@@ -85,10 +74,10 @@ class UserController extends Controller
                 {
                     $useraddress = $address->buyer_address;
                 }
-                $wishlist = DB::table('wishlist')
-                    ->join('buyers', 'wishlist.buyer_id', '=', 'buyers.id')
+                $wishlist = DB::table('wishlists')
+                    ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
                     ->where('buyers.user_id', Auth::user()->id)
-                    ->select('wishlist.*','buyers.*')
+                    ->select('wishlists.*','buyers.*')
                     ->get();
                 $wishlistCount = $wishlist->count();
                 return view('front-end.user-dashboard', compact('user', 'firstAddress','userOrders', 'profile','orderCount','wishlistCount','useraddress'));
@@ -102,10 +91,10 @@ class UserController extends Controller
     public function showOrders(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orders = DB::table('Orders')
-            ->join('Buyers', 'Orders.buyer_id', '=', 'Buyers.id')
-            ->where('Buyers.user_id', Auth::user()->id)
-            ->select('Orders.*', 'Orders.id as order_id','Buyers.*')
+        $orders = DB::table('orders')
+            ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->select('orders.*', 'orders.id as order_id','buyers.*')
             ->get();
 
 
@@ -124,13 +113,13 @@ class UserController extends Controller
         $user = DB::table('Users')->where('id', Auth::user()->id)->first();
         $orderItem = $request->id;
 
-        $orderDetails = DB::table('Orders')
-            ->join('Order_details', 'Order_details.order_id', '=', 'Orders.id')
-            ->join('Buyers', 'Orders.buyer_id', '=', 'Buyers.id')
-            ->join('products', 'Order_details.product_id', '=', 'products.id')
-            ->where('Buyers.user_id', Auth::user()->id)
-            ->where('Orders.id', $orderItem)
-            ->select('Orders.*', 'Orders.id as order_id', 'products.*', 'Order_details.*')
+        $orderDetails = DB::table('orders')
+            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+            ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->where('orders.id', $orderItem)
+            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*')
             ->get();
             // $orders = [];
             //     foreach ($orderDetails as $order)
@@ -148,10 +137,10 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $order = DB::table('Orders')
-                    ->join('Buyers', 'Orders.buyer_id', 'Buyers.id')
+        $order = DB::table('orders')
+                    ->join('buyers', 'orders.buyer_id', 'buyers.id')
                     ->where('buyers.user_id', Auth::user()->id)
-                    ->select('Orders.*', 'Orders.id as order_id', 'Orders.created_at')
+                    ->select('orders.*', 'orders.id as order_id', 'orders.created_at')
                     ->orderBy('order_id', 'desc')
                     ->get();
 
@@ -162,8 +151,8 @@ class UserController extends Controller
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
-                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.division','buyer_addresses.district','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
                 
         //$user = Buyers::first();
@@ -187,7 +176,7 @@ class UserController extends Controller
         if(empty($request->id))
         {
     
-                $Buyer_addresses = Buyer_address::create([
+                $Buyer_addresses = BuyerAddress::create([
 
                     'buyer_id' => "1",
                     'name' => $request->name,
@@ -207,7 +196,7 @@ class UserController extends Controller
     //Edit Address
     public function editAddress(Request $request)
     {
-        $buyerAddress = Buyer_address::find($request->id);
+        $buyerAddress = BuyerAddress::find($request->id);
     
         if ($buyerAddress) {
 
@@ -230,7 +219,7 @@ class UserController extends Controller
     //Remove Address
     public function removeAddress($id)
     {
-        $address = Buyer_address::find($id);
+        $address = BuyerAddress::find($id);
         if ($address)
         {
             $address->delete();
@@ -255,9 +244,9 @@ class UserController extends Controller
 
     // Use $lastFourDigits as needed
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = Buyer_payment::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
-        ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
-        ->where('Buyers.user_id', Auth::user()->id)
+        $data = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
+        ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
+        ->where('buyers.user_id', Auth::user()->id)
         ->get();
                         
         return view('front-end.user-payment-method',compact('data','user'));
@@ -275,7 +264,7 @@ class UserController extends Controller
 
         ]);
        
-        $Buyer_cards = Buyer_payment::create([
+        $Buyer_cards = BuyerPayment::create([
     
             'buyer_id' => "1",
             'acc_name' => $request->acc_name,
@@ -290,7 +279,7 @@ class UserController extends Controller
     //Edit Card
     public function editCard(Request $request)
     {
-        $buyerCard = Buyer_payment::find($request->id);
+        $buyerCard = BuyerPayment::find($request->id);
 
         if ($buyerCard) {
 
@@ -310,7 +299,7 @@ class UserController extends Controller
    //Remove Card
    public function removeCard($id)
    {
-       $card = Buyer_payment::find($id);
+       $card = BuyerPayment::find($id);
        if ($card) {
        $card->delete();
        return back()->with('success', 'Address removed successfully.');
@@ -323,7 +312,7 @@ class UserController extends Controller
    public function showProfile(Request $request)
    {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $buyer = DB::table('Buyers')
+        $buyer = DB::table('buyers')
                     ->join('users', 'buyers.user_id', '=', 'users.id')
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('users.*', 'buyers.*')
@@ -345,7 +334,7 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $user = User::find(Auth::user()->id);
         $password = User::find($request->oldpassword);
-        $buyer = Buyers::find($request->buyer_id);
+        $buyer = Buyer::find($request->buyer_id);
         
         if ($user && $buyer) 
         {
@@ -412,7 +401,7 @@ class UserController extends Controller
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
 
-            $buyer = Buyers::where('user_id', Auth::user()->id)->first();
+            $buyer = Buyer::where('user_id', Auth::user()->id)->first();
             $buyerid = $buyer->id;
 
             $cart = Cart::create([
@@ -423,11 +412,11 @@ class UserController extends Controller
             ]);
 
 
-            $cartLists = DB::table('Carts')
-                        ->leftjoin('Buyers', 'Carts.buyer_id', '=', 'Buyers.id')
-                        ->leftjoin('products', 'Carts.product_id', '=', 'products.id')
-                        ->where('Buyers.user_id', Auth::user()->id)
-                        ->select('Carts.*', 'Carts.id as cart_id','Buyers.*','Buyers.id as buyer_id', 'Carts.product_id as product_id', 'products.*')
+            $cartLists = DB::table('carts')
+                        ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                        ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->where('buyers.user_id', Auth::user()->id)
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                         ->get();
 
             foreach($cartLists as $cartItem){
@@ -464,11 +453,11 @@ class UserController extends Controller
                     ];
                 }
 
-            $result = DB::table('Coupons')
-                    ->join('Coupon_details', 'Coupon_details.coupon_code', '=', 'Coupons.coupon_code')
-                    ->where('Coupon_details.user_id', Auth::user()->id)
-                    ->select('Coupons.discount')
-                    ->pluck('Coupons.discount');
+            $result = DB::table('coupons')
+                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                    ->where('coupon_details.user_id', Auth::user()->id)
+                    ->select('coupons.discount')
+                    ->pluck('coupons.discount');
                     $discount = $result[0];
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount'));
 
@@ -484,11 +473,11 @@ class UserController extends Controller
             $cartItem->quantity = $quantity;
             $cartItem->save();
 
-            $cartLists = DB::table('Carts')
-                        ->leftjoin('Buyers', 'Carts.buyer_id', '=', 'Buyers.id')
-                        ->leftjoin('products', 'Carts.product_id', '=', 'products.id')
-                        ->where('Buyers.user_id', Auth::user()->id)
-                        ->select('Carts.*', 'Carts.id as cart_id','Buyers.*','Buyers.id as buyer_id', 'Carts.product_id as product_id', 'products.*')
+            $cartLists = DB::table('carts')
+                        ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                        ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->where('buyers.user_id', Auth::user()->id)
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                         ->get();
 
             foreach($cartLists as $cartItem){
@@ -525,11 +514,11 @@ class UserController extends Controller
                     ];
                 }
 
-            $result = DB::table('Coupons')
-                    ->join('Coupon_details', 'Coupon_details.coupon_code', '=', 'Coupons.coupon_code')
-                    ->where('Coupon_details.user_id', Auth::user()->id)
-                    ->select('Coupons.discount')
-                    ->pluck('Coupons.discount');
+            $result = DB::table('coupons')
+                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                    ->where('coupon_details.user_id', Auth::user()->id)
+                    ->select('coupons.discount')
+                    ->pluck('coupons.discount');
                     $discount = $result[0];
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount'));
 
@@ -540,7 +529,7 @@ class UserController extends Controller
     //Remove Cart Product
     public function removeCart($id)
     {
-        $cartItem = DB::table('Carts')
+        $cartItem = DB::table('carts')
                     ->delete($id);
             return redirect()->route('checkout');
     }
@@ -549,7 +538,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $coupon = Coupon_detail::create([
+        $coupon = CouponDetail::create([
             'user_id' => Auth::user()->id,
             'coupon_code' => $request->input('coupon'),
         ]);
@@ -561,21 +550,21 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $buyerAddress = Buyer_address::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
-                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
-                     ->where('Buyers.user_id', Auth::user()->id)
+        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.division','buyer_addresses.district','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+                     ->where('buyers.user_id', Auth::user()->id)
                      ->get();
 
-        $buyerPayment = Buyer_payment::select('Buyer_payments.id', 'Buyer_payments.acc_name', 'Buyer_payments.acc_no', 'Buyer_payments.card_type', 'Buyer_payments.expired_date', 'Buyer_payments.security_code', 'Buyer_payments.img', 'Buyers.id as userid', 'Buyers.name as username', 'Buyers.email as useremail')
-                    ->join('Buyers', 'Buyer_payments.buyer_id', '=', 'Buyers.id')
-                    ->where('Buyers.user_id', Auth::user()->id)
+        $buyerPayment = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
+                    ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
+                    ->where('buyers.user_id', Auth::user()->id)
                     ->get();
 
-        $cartLists = DB::table('Carts')
-        ->join('Buyers', 'carts.buyer_id', '=', 'Buyers.id')
+        $cartLists = DB::table('carts')
+        ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
-        ->where('Buyers.user_id', Auth::user()->id)
-        ->select('carts.*', 'carts.id as cart_id','Buyers.*','Buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+        ->where('buyers.user_id', Auth::user()->id)
+        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
         ->get();
 
         foreach($cartLists as $cartItem){
@@ -612,11 +601,11 @@ class UserController extends Controller
                 ];
             }
 
-        $result = DB::table('Coupons')
-                ->join('Coupon_details', 'Coupon_details.coupon_code', '=', 'Coupons.coupon_code')
-                ->where('Coupon_details.user_id', Auth::user()->id)
-                ->select('Coupons.discount')
-                ->pluck('Coupons.discount');
+        $result = DB::table('coupons')
+                ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                ->where('coupon_details.user_id', Auth::user()->id)
+                ->select('coupons.discount')
+                ->pluck('coupons.discount');
                 $discount = $result[0];
 
 

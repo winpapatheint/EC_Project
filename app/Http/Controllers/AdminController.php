@@ -11,35 +11,18 @@ use App\Models\Category;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\MultiImg;
-use App\Models\Coupons;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-
 use Mail;
-
 use App\Providers\RouteServiceProvider;
-// use App\User;
 use DateTime;
-
-use App;
-
-use Response;
-
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\MsgNotiAdminUser;
-use App\Notifications\MsgNotiAdminHcompany;
-use App\Notifications\MsgNotiHcompanyHost;
-use App\Notifications\MsgNotiHostHcompany;
 use App\Http\Controllers\Auth\RegisteredUserController;
     /**
      * Store a newly created resource in storage.
@@ -57,7 +40,7 @@ class AdminController extends Controller
 
         $blogs = DB::table('blogs')
                     ->select( 'U.name as authorby', 'blogs.*')
-                    ->join('users as U', function ($join) {∂
+                    ->join('users as U', function ($join) {
                     $join->on('blogs.created_by', '=', 'U.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate(2);
@@ -77,29 +60,29 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('Carts', 'Carts.product_id', '=', 'products.id')
-        ->whereDate('Carts.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::leftjoin('carts', 'carts.product_id', '=', 'products.id')
+        ->whereDate('carts.created_at', Carbon::today())->get();
 
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
             ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('Orders', 'products.id', '=', 'Orders.product_id')
-            ->whereMonth('Orders.created_at', '=', Carbon::now()->month)
+            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+            ->whereMonth('orders.created_at', '=', Carbon::now()->month)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
 
         $trendingProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(Orders.id) as total_orders'))
-            ->leftJoin('Orders', 'products.id', '=', 'Orders.product_id')
-            ->whereDate('Orders.created_at', '=', Carbon::today())
+            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
+            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+            ->whereDate('orders.created_at', '=', Carbon::today())
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
             ->get();
         
-        $coupon = Coupons::first();
+        $coupon = Coupon::first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -127,15 +110,15 @@ class AdminController extends Controller
     {
         $limit = 10;
 
-        $blogs = DB::table('Blog')
-                    ->select( 'U.name as authorby', 'Blog.*')
+        $blogs = DB::table('blogs')
+                    ->select( 'U.name as authorby', 'blogs.*')
                     ->join('users as U', function ($join) {
-                        $join->on('Blog.created_by', '=', 'U.id');
+                        $join->on('blogs.created_by', '=', 'U.id');
                     })
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $limit = 4;
-        $latestblog = DB::table('Blog')
+        $latestblog = DB::table('blogs')
                         ->orderBy('created_at', 'desc')
                         ->paginate($limit);
 
@@ -498,7 +481,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Blog')
+        $lists = DB::table('blogs')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -514,10 +497,10 @@ class AdminController extends Controller
     {
         $limit = 10;
 
-        $lists = DB::table('Reviews')
-                    ->select( 'U.name as authorby', 'Reviews.*','U.*','Reviews.id','Reviews.status')
+        $lists = DB::table('reviews')
+                    ->select( 'U.name as authorby', 'reviews.*','U.*','reviews.id','reviews.status')
                     ->join('users as U', function ($join) {
-                        $join->on('Reviews.user_id', '=', 'U.id');
+                        $join->on('reviews.user_id', '=', 'U.id');
                     })
 
                     ->whereIn('role',['seller','buyer'])
@@ -540,7 +523,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Products')
+        $lists = DB::table('products')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -604,8 +587,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.seller_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.seller_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -678,8 +661,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.seller_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.seller_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -746,9 +729,9 @@ class AdminController extends Controller
 
     public function blogdetail($id)
     {
-        $blog = DB::table('blog')
-                ->select( 'blog.*')
-                ->where('blog.id',$id)->get();
+        $blog = DB::table('blogs')
+                ->select( 'blogs.*')
+                ->where('blogs.id',$id)->get();
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
@@ -812,8 +795,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -886,8 +869,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.category_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -952,8 +935,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -1026,8 +1009,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.category_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1092,8 +1075,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.sub_category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.sub_category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -1166,7 +1149,7 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('products', 'products.id', '=', 'Reviews.product_id')
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
@@ -1190,17 +1173,17 @@ class AdminController extends Controller
 
     public function bloglistdetail($id)
     {
-        $blog = DB::table('blog')
-                    ->select( 'U.name as authorby', 'blog.*')
+        $blog = DB::table('blogs')
+                    ->select( 'U.name as authorby', 'blogs.*')
                     ->join('users as U', function ($join) {
-                        $join->on('blog.created_by', '=', 'U.id');
+                        $join->on('blogs.created_by', '=', 'U.id');
                     })
-                    ->where('blog.id',$id)->get();
+                    ->where('blogs.id',$id)->get();
 
         $blog = $blog[0];
 
         $limit = 4;
-        $latestblog = DB::table('Blog')
+        $latestblog = DB::table('blogs')
                     ->where('id','<>',$id)
                     ->orderBy('created_at', 'desc')
                     ->paginate($limit);
@@ -1210,12 +1193,12 @@ class AdminController extends Controller
 
     public function productdetail($id)
     {
-        $products = DB::table('Products')
-                    ->select( 'Products.*','Brands.*')
-                    ->join('Brands', function ($join) {
-                        $join->on('Brands.id', '=', 'Products.brand_id');
+        $products = DB::table('products')
+                    ->select( 'products.*','brands.*')
+                    ->join('brands', function ($join) {
+                        $join->on('brands.id', '=', 'products.brand_id');
                     })
-                    ->where('Products.id',$id)->get();
+                    ->where('products.id',$id)->get();
 
         // print_r($blog[0]->created_at);die;
         $product = $products[0];
@@ -1347,7 +1330,7 @@ class AdminController extends Controller
     }
     public function indexcouponstatus(Request $request)
     {
-        $coupon = Coupons::find($request->coupon_id);
+        $coupon = Coupon::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
         return redirect('/admin/profile')->back();
@@ -1422,7 +1405,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('faq')->insert([
+            DB::table('faqs')->insert([
                 'title' => $request->title,
                 'ans' => $request->ans,
                 'que' => $request->que,
@@ -1442,7 +1425,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('faq')->where('id',$request->id)->update($updval);
+            DB::table('faqs')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/faq')->with('success','「'.$request->title.'」更新されました。');
 
@@ -1453,8 +1436,8 @@ class AdminController extends Controller
     public function indexfaq()
     {
         $limit = 10;
-        $lists = DB::table('faq')
-                    ->select('faq.*')
+        $lists = DB::table('faqs')
+                    ->select('faqs.*')
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1473,8 +1456,8 @@ class AdminController extends Controller
     public function indexcoupon()
     {
         $limit = 10;
-        $lists = DB::table('Coupons')
-                    ->select('Coupons.*')
+        $lists = DB::table('coupons')
+                    ->select('coupons.*')
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1595,7 +1578,7 @@ class AdminController extends Controller
 
         $lists = DB::table('sub_category_titles')
                     ->select('C.category_name as category','sub_category_titles.*')
-                    ->join('Categories as C', function ($join) {
+                    ->join('categories as C', function ($join) {
                     $join->on('sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
@@ -1632,7 +1615,7 @@ class AdminController extends Controller
     public function deleteblog(Request $request)
     {
 
-        $data = DB::table('Blog')
+        $data = DB::table('blogs')
                     ->delete($request->id);
         return redirect('/admin/all/blog')->with('success','削除されました。');
 
@@ -1641,7 +1624,7 @@ class AdminController extends Controller
     public function deleteorderlist(Request $request)
     {
 
-        $data = DB::table('Orders')
+        $data = DB::table('orders')
                     ->delete($request->id);
         return redirect('/admin/orderlist')->with('success','削除されました。');
 
@@ -1650,7 +1633,7 @@ class AdminController extends Controller
     public function deletecoupon(Request $request)
     {
 
-        $data = DB::table('Coupons')
+        $data = DB::table('coupons')
                     ->delete($request->id);
         return redirect('admin/coupon')->with('success','削除されました。');
 
@@ -1659,7 +1642,7 @@ class AdminController extends Controller
     public function deletefaq(Request $request)
     {
 
-        $data = DB::table('faq')
+        $data = DB::table('faqs')
                     ->delete($request->id);
         return redirect('/admin/faq')->with('success','削除されました。');
 
@@ -1668,7 +1651,7 @@ class AdminController extends Controller
     public function deleteproduct(Request $request)
     {
 
-        $data = DB::table('Products')
+        $data = DB::table('products')
                     ->delete($request->id);
         return redirect('/admin/all/product')->with('success','削除されました。');
 
@@ -1720,7 +1703,7 @@ class AdminController extends Controller
 
     public function editblog($id)
     {
-        $data = DB::table('Blog')
+        $data = DB::table('blogs')
                     ->find($id);
         $editmode = true;
 
@@ -1731,7 +1714,7 @@ class AdminController extends Controller
 
     public function editcoupon($id)
     {
-        $data = DB::table('Coupons')
+        $data = DB::table('coupons')
                     ->find($id);
         $editmode = true;
 
@@ -1741,7 +1724,7 @@ class AdminController extends Controller
 
     public function editfaq($id)
     {
-        $faq = DB::table('faq')
+        $faq = DB::table('faqs')
                     ->find($id);
         // print_r($faq);die;
         $editmode = true;
@@ -1751,13 +1734,13 @@ class AdminController extends Controller
 
     public function editproduct($id)
     {
-        $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
-        $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
+        $brands = DB::table('brands')->orderBy('created_at', 'desc')->get();
+        $countries = DB::table('countries')->orderBy('created_at', 'desc')->get();
         $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
         $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
         $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
         $multiImgs = MultiImg::where('product_id',$id)->get();
-        $data = DB::table('Products as P')
+        $data = DB::table('products as P')
                 ->where('P.id',$id)
                 ->orderBy('P.created_at', 'desc')->first();
 
@@ -2010,7 +1993,7 @@ class AdminController extends Controller
 
        if (empty($request->id)) {
 
-           DB::table('Blog')->insert([
+           DB::table('blogs')->insert([
                'title' => $request->title,
                'content' => $request->content,
                'image' => $imageName,
@@ -2035,7 +2018,7 @@ class AdminController extends Controller
                $updval['image'] = $imageName;
            }
 
-           DB::table('Blog')->where('id',$request->id)->update($updval);
+           DB::table('blogs')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/all/blog')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -2066,7 +2049,7 @@ class AdminController extends Controller
 
        if (empty($request->id)) {
 
-           DB::table('Coupons')->insert([
+           DB::table('coupons')->insert([
                'name' => $request->title,
                'coupon_code' => $request->code,
                'discount_amount' => $request->disamount,
@@ -2090,7 +2073,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 
-           DB::table('Coupons')->where('id',$request->id)->update($updval);
+           DB::table('coupons')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -2148,7 +2131,7 @@ class AdminController extends Controller
                 $updval['product_thambnail'] = $imageName;
             }
 
-            DB::table('Products')->where('id',$request->id)->update($updval);
+            DB::table('products')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/all/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
     }

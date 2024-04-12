@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class SellerController extends Controller
 {

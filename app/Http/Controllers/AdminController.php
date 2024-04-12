@@ -52,19 +52,20 @@ class AdminController extends Controller
 {
     public function welcome()
     {
+       
         $categories = Category::all();
 
-        $blogs = DB::table('Blog')
-                    ->select( 'U.name as authorby', 'Blog.*')
-                    ->join('users as U', function ($join) {
-                    $join->on('Blog.created_by', '=', 'U.id');
+        $blogs = DB::table('blogs')
+                    ->select( 'U.name as authorby', 'blogs.*')
+                    ->join('users as U', function ($join) {∂
+                    $join->on('blogs.created_by', '=', 'U.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate(2);
 
-        $maxStarsRatedRow = DB::table('Reviews')
-                ->select('users.id', 'users.name','Reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
-                ->join('users', 'users.id', '=', 'Reviews.user_id')
-                ->groupBy('users.id', 'users.name','Reviews.comment')
+        $maxStarsRatedRow = DB::table('reviews')
+                ->select('users.id', 'users.name','reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
+                ->join('users', 'users.id', '=', 'reviews.user_id')
+                ->groupBy('users.id', 'users.name','reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
@@ -76,12 +77,13 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
+        $topSaveTodayProducts = Product::leftjoin('Carts', 'Carts.product_id', '=', 'products.id')
+        ->whereDate('Carts.created_at', Carbon::today())->get();
 
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(Orders.id) as total_orders'))
+            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
             ->leftJoin('Orders', 'products.id', '=', 'Orders.product_id')
             ->whereMonth('Orders.created_at', '=', Carbon::now()->month)
             ->groupBy('products.id')

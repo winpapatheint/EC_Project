@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Buyers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Order;
 use App\Models\Category;
-use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class ShowProductController extends Controller
 {
@@ -274,30 +271,5 @@ class ShowProductController extends Controller
         $totalPage = ceil($allProduct / $limit);
 
         return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
-    }
-
-    public function ShowWishList()
-    {
-        $buyer = Buyers::where('user_id', Auth::user()->id)->first();
-        Wishlist::firstOrCreate([
-            'buyer_id' => $buyer->id,
-            'product_id' => request()->id,
-        ]);
-        $wishlist = Wishlist::where('buyer_id', $buyer->id)->get();
-        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();
-
-        return view('front-end.wishlist',compact('wishlistProducts'));
-    }
-
-    public function DeleteWishList($id)
-    {
-        $buyer = Buyers::where('user_id', Auth::user()->id)->first();
-        $wishlistItem = Wishlist::where('buyer_id', $buyer->id)->where('product_id', $id)->first();
-        if ($wishlistItem) {
-            $wishlistItem->delete();
-            return response()->json(['message' => 'Wishlist item deleted successfully']);
-        } else {
-            return response()->json(['message' => 'Wishlist item not found'], 404);
-        }
     }
 }

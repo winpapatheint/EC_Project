@@ -17,6 +17,7 @@ class Process extends Model
         'delivered_date',
         'cancel_date',
     ];
+
     function order() {
         return $this->belongsTo(Order::class,'order_id');
     }

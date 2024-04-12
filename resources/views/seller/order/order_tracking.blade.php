@@ -65,12 +65,12 @@
                                                     </thead>
 
                                                     <tbody>
+                                                        @if ($process->isEmpty())
+                                                            <tr>
+                                                                <td colspan="4" style="text-align: center">No data available</td>
+                                                            </tr>
+                                                        @else
                                                         @foreach ($process as $key => $item)
-                                                            @if($item->order->status == 'pending')
-                                                                <tr>
-                                                                    <td>Please wait from seller response.</td>
-                                                                </tr>
-                                                            @else
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
                                                                 <td>{{ $item->created_at }}</td>
@@ -95,8 +95,8 @@
                                                                 @endif
                                                                 <!-- Display other columns as needed -->
                                                             </tr>
-                                                            @endif
-                                                        @endforeach
+                                                            @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -105,8 +105,12 @@
                                 </div>
                             </div>
                             <div class="card-footer text-end border-0 pb-0 d-flex justify-content-end">
-                                <button class="btn btn-primary me-3">Invoice</button>
-                                <button class="btn btn-outline">Back</button>
+                                <a href="{{ route('invoice',$order->id) }}">
+                                    <button class="btn btn-primary me-3">Invoice</button>
+                                </a>
+                                <a href="{{ route('all.order') }}">
+                                    <button class="btn btn-outline">Back</button>
+                                </a>
                             </div>
                         </div>
                     </div>

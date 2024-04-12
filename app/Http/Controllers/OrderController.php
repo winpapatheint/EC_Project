@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Process;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
 
 class OrderController extends Controller
 {
@@ -103,11 +105,20 @@ class OrderController extends Controller
         return redirect('/seller/orderlist');
     }
 
-
     public function orderTracking($id)
     {
         $order = Order::find($id);
         $process = Process::where('order_id',$id)->latest()->get();
         return view('seller.order.order_tracking',compact('order','process'));
+    }
+
+    public function generatePDF($id)
+    {
+        $data = Order::find($id);
+        $pdf = PDF::loadView('seller.order.invoice',compact('data'))->setPaper('a4')->setOption([
+            'tempDir' => public_path(),
+            'chroot' => public_path(),
+        ]);
+        return $pdf->download('invoice.pdf');
     }
 }

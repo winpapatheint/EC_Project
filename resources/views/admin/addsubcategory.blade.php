@@ -426,7 +426,7 @@
         $(document).ready(function(){
             $(document).on('change','#category', function() {
                 let category = $(this).val();
-                $('#subcategory_info').show();
+                // $('#subcategory_info').show();
                 $.ajax({
                     method: 'post',
                     url: "{{ route('getSubcategories') }}",

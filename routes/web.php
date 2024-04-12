@@ -1,16 +1,18 @@
 <?php
 
+use App\Models\PDF;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\RegisterController;
-
+use App\Models\Product;
 
 
 /*
@@ -36,7 +38,7 @@ Route::get('/user-registration', [UserController::class,'index'])->name('user_re
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
+Route::get('/buyer', [UserController::class, 'indexuser'])->name('user_dashboard');
 Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
 Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
@@ -86,7 +88,7 @@ Route::get('/news', [AdminController::class, 'news']);
 Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact', function () {return view('front-end.contact-us');});
-Route::post('contact', [AdminController::class, 'contact'])->name('contact');
+Route::post('contact', [AdminController::class, 'contact'])->middleware(['auth', 'role:buyer'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
 
 Route::get('/cart', function () {return view('front-end.cart');});
@@ -198,14 +200,18 @@ Route::get('/admin/detail/product', function () {return view('admin.product.prod
 Route::get('/admin/edit/product', function () {return view('admin.product.product_edit');})->name('admin.edit.product');
 
 //AdminOrder
-Route::get('/admin/all/order', function () {return view('admin.order.order_all');})->name('admin.all.order');
+Route::get('/admin/orderlist', [AdminController::class, 'indexorderlist'])->name('orderlist');
+Route::get('/admin/orderdetail/{id}', [AdminController::class, 'orderdetail'])->name('orderdetail');
+Route::get('/admin/ordertracking/{id}', [AdminController::class, 'ordertracking'])->name('ordertracking');
+route::post('/admin/deleteorderlist',[AdminController::class,'deleteorderlist'])->name('deleteorderlist');
+
 Route::get('/admin/detail/order', function () {return view('admin.order.order_detail');})->name('admin.detail.order');
 Route::get('/admin/tracking/order', function () {return view('admin.order.order_tracking');})->name('admin.order-tracking');
 
 
 //Seller
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
-Route::get('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
+Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
 Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
 Route::post('/seller/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');
@@ -215,6 +221,7 @@ Route::get('/seller/helpadd', [SellerController::class, 'addHelp'])->middleware(
 Route::post('/seller/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');
 Route::get('/seller/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
 Route::get('/seller/help/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
+
 
 //Brand
 Route::get('/seller/brandadd', [BrandController::class, 'addBrand'])->middleware(['auth','role:seller'])->name('add.brand');
@@ -235,6 +242,8 @@ Route::get('/seller/review', [ProductController::class, 'review'])->middleware([
 Route::post('/seller/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
 Route::post('/seller/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
 Route::post('/seller/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
+Route::get('/get-subtitle/{categoryId}', [ProductController::class, 'getSubTitle']);
+Route::get('/get-subcategories-by-title/{subcategoryTitleId}', [ProductController::class, 'getSubcategory']);
 
 //SellerOrder
 Route::get('/seller/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');
@@ -243,7 +252,7 @@ Route::post('/seller/orderstatus', [OrderController::class, 'updateOrderStatus']
 Route::get('/seller/ordertracking/{id}', [OrderController::class, 'orderTracking'])->middleware(['auth','role:seller'])->name('order.tracking');
 Route::get('/seller/ordercancel', [OrderController::class, 'cancelOrder'])->middleware(['auth','role:seller'])->name('order.cancel');
 Route::post('/seller/cancelreason', [OrderController::class, 'cancelOrderReason'])->middleware(['auth','role:seller'])->name('order.cancel.reason');
-
+Route::get('/invoice/{id}', [OrderController::class, 'generatePDF'])->middleware(['auth','role:seller'])->name('invoice');
 
 // Route::get('', [OrderController::class, ''])->middleware(['auth','role:seller'])->name('');
 
@@ -251,7 +260,6 @@ Route::post('/seller/cancelreason', [OrderController::class, 'cancelOrderReason'
 Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('all.subseller');
 // Route::get('/seller/add/subseller', function () {return view('seller.subseller.subseller_add');})->name('add.subseller');
 // Route::get('/seller/edit/subseller', function () {return view('seller.subseller.subseller_edit');})->name('edit.subseller');
-
 
 //Subseller
 Route::get('/subseller', function () {return view('sub_seller.index');})->name('sub_seller.dashboard');

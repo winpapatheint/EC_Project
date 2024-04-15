@@ -432,6 +432,12 @@
                                             </li>
                                             @endif
 
+                                            @if(!empty(Auth::user()))
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link" href="{{ url('/user') }}">Profile</a>
+
+                                            </li>
+                                            @endif
                                              <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
@@ -448,6 +454,8 @@
                                                     $specialCornerFlag = 1;
                                                 }
                                             @endphp
+
+
 
                                             @if ($specialCornerFlag == 1)
                                             <li class="nav-item dropdown dropdown-mega">

@@ -137,15 +137,18 @@
 
                         <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="right-box-contain">
+                                @if($product->discount_percent != null)
                                 <h6 class="offer-top">{{ $product-> discount_percent }}% Off</h6>
+                                @endif
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
                                     @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> 
+                                            <del>${{ $product->selling_price }}</del>
+                                            <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
                                     @else
                                             <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
                                     @endif
-                                     <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
                                     @php
                                         $starRating = 0;
                                         $count = 0;

@@ -5,6 +5,7 @@ use App\Models\Buyer;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Category;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
@@ -223,8 +224,8 @@ class ShowProductController extends Controller
     {
         $product = Product::find($id);
         $reviews = Review::all();
-        $productOrdered = Order::where('product_id', $id)->get();
-        $topProducts = Order::select('product_id', DB::raw('COUNT(*) as frequency'))
+        $productOrdered = OrderDetail::where('product_id', $id)->get();
+        $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')
         ->orderByDesc('frequency')
         ->limit(3)

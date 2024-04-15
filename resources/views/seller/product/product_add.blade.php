@@ -78,7 +78,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">Category</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="category" id="category">
+                                            <select class="js-example-basic-single w-100" name="category_id" id="category">
                                                 <option>Choose Category</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -91,7 +91,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">SubCategory Title</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100 get_sub" name="subcategory" id="subcategory">
+                                            <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory">
 
                                             </select>
                                         </div>
@@ -101,7 +101,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">SubCategory</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="subname" id="subname">
+                                            <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
 
                                             </select>
                                         </div>
@@ -184,7 +184,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Original Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('selling_price') }}">
+                                            <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('original_price') }}">
                                             @error('original_price')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -226,6 +226,9 @@
                                         <label class="col-sm-3 form-label-title">Delivery Price</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="delivery_price" type="number" placeholder="400" min="1" value="{{ old('delivery_price') }}">
+                                            @error('delivery_price')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -286,55 +289,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to the SubCategory Title select element
-        document.getElementById('subcategory').addEventListener('change', function() {
-            var subcategoryTitleId = this.value;
-            console.log('SubCategory Title selected:', subcategoryTitleId);
+    document.getElementById('subcategory').addEventListener('change', function() {
+        var subcategoryTitleId = this.value;
+        console.log('SubCategory Title selected:', subcategoryTitleId);
 
-            // Clear previous options in the SubCategory select
-            var subcategorySelect = document.getElementById('subname');
-            subcategorySelect.innerHTML = '<option value="">Choose SubCategory</option>';
+        var subcategorySelect = document.getElementById('subname');
+        subcategorySelect.innerHTML = '<option value="">Choose SubCategory</option>';
 
-            // If no subcategory title selected, return
-            if (!subcategoryTitleId) {
-                return;
-            }
+        if (!subcategoryTitleId) {
+            return;
+        }
 
-            // Send AJAX request to fetch corresponding subcategories
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var subcategories = JSON.parse(xhr.responseText);
-                        // Update options of SubCategory select
-                        subcategories.forEach(function(subcategory) {
-                            var option = document.createElement('option');
-                            option.value = subcategory.id;
-                            option.textContent = subcategory.sub_category_name;
-                            subcategorySelect.appendChild(option);
-                        });
-                    } else {
-                        console.error('Failed to fetch subcategories');
-                    }
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var subcategories = JSON.parse(xhr.responseText);
+                    subcategories.forEach(function(subcategory) {
+                        var option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.sub_category_name;
+                        subcategorySelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to fetch subcategories');
                 }
-            };
-            xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
-            xhr.send();
-        });
-
-        // Add event listener to the SubCategory select element
-        document.getElementById('subname').addEventListener('change', function() {
-            var subcategoryId = this.value;
-            console.log('SubCategory selected:', subcategoryId);
-
-            // You can add further logic here if needed
-        });
+            }
+        };
+        xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
+        xhr.send();
     });
+
+    document.getElementById('subname').addEventListener('change', function() {
+        var subcategoryId = this.value;
+        console.log('SubCategory selected:', subcategoryId);
+    });
+});
+
 </script>
 
 

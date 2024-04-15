@@ -33,7 +33,10 @@ class UserController extends Controller
         $prefecture = Prefecture::get();
         return view('front-end.user-register',compact('prefecture'));
     }
+<<<<<<<<< Temporary merge branch 1
+=========
 
+>>>>>>>>> Temporary merge branch 2
     //for new user registration for login
     public function store(Request $request)
     {
@@ -205,10 +208,8 @@ class UserController extends Controller
                     ->orderBy('order_id', 'desc')
                     ->paginate($limit);
 
-        $ttl = $order->total();
-        $ttlpage = (ceil($ttl / $limit));
-    
-        return view('front-end.user-delivery-status', compact('user','order','ttl', 'ttlpage'));
+        return view('front-end.user-delivery-status', compact('user','order'));
+
 
     }
     //Show Addresses
@@ -382,14 +383,11 @@ class UserController extends Controller
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('users.*', 'buyers.*')
                     ->first();
-
         $maskedPassword = str_repeat('*', strlen($user->password));
         if($user && $buyer)
         {
             return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
-
-        } 
-
+        }
         else
         {
             return redirect()->route('login');
@@ -420,7 +418,7 @@ class UserController extends Controller
                         'email' => $request->input('email'),
                         'address' => $request->input('address'),
                         'phone' => $request->input('phone'),
-        
+
                     ]);
                     $buyer->update([
                         'name' => $request->input('name'),
@@ -446,16 +444,15 @@ class UserController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        if (Hash::check($request->oldpassword, $user->password)) {
-
+        if (Hash::check($request->oldpassword, $user->password))
+        {
             $newPasswordHash = Hash::make($request->newpassword);
             $user->password = $newPasswordHash;
             $user->save();
 
             return redirect()->route('edit_password');
-
-        } 
-        else 
+        }
+        else
         {
             return back()->withErrors(['oldpassword' => 'Incorrect old password'])->withInput();
         }
@@ -557,33 +554,33 @@ class UserController extends Controller
                 $sellerID = $cartItem->seller_id;
         
 
-                $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
-                $cartItem->shop_name = $shopName->shopname;
-            }
+            $shopName = DB::table('sellers')
+                        ->where('sellers.id', $sellerID)
+                        ->select('sellers.shop_name as shopname')
+                        ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
 
-            $discountedPrices = [];
-                foreach ($cartLists as $product) 
+        $discountedPrices = [];
+            foreach ($cartLists as $product)
+            {
+
+                if ($product->discount_percent)
                 {
-                    
-                    if ($product->discount_percent) 
-                    {
-                        $discountAmount = $product->selling_price * ($product->discount_percent / 100);
-                        $discountedPrice = $product->selling_price - $discountAmount;
-                    } 
-                    else 
-                    {
-                        $discountedPrice = $product->selling_price;
-                    }
-                    $saveAmount = $product->selling_price - $discountedPrice;
-
-                    $discountedPrices[$product->id] = [
-                        'discounted_price' => $discountedPrice,
-                        'save_amount' => $saveAmount
-                    ];
+                    $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                    $discountedPrice = $product->selling_price - $discountAmount;
                 }
+                else
+                {
+                    $discountedPrice = $product->selling_price;
+                }
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+            }
 
             $result = DB::table('coupons')
                 ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')

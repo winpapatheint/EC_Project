@@ -60,8 +60,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('carts', 'carts.product_id', '=', 'products.id')
-        ->whereDate('carts.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
 
         $reviews = Review::all();
 
@@ -1429,12 +1428,12 @@ class AdminController extends Controller
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
             ]);
-          
+
             // print_r(json_decode($faqord, true));die;
 
             return redirect('/admin/faq')->with('success','「'.$request->title.'」登録されました。');
         } else {
-            
+
             $updval = array('title' => $request->title,
                             'ans' => $request->ans,
                             'que' => $request->que,
@@ -1462,11 +1461,11 @@ class AdminController extends Controller
         if (Auth::check()){
             if (Auth::user()->role == 'admin') {
                 return view('admin.indexfaq',compact('lists','ttlpage','ttl'));
-            } 
-        } 
-        
+            }
+        }
+
         return view('front-end.faq',compact('lists'));
-       
+
     }
 
     public function indexcoupon()
@@ -1477,9 +1476,9 @@ class AdminController extends Controller
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
- 
+
         return view('admin.indexcoupon',compact('lists','ttlpage','ttl'));
-       
+
     }
 
     public function indexuser()
@@ -1907,9 +1906,12 @@ class AdminController extends Controller
 
     public function contact(Request $request)
     { 
-       if ($request->from == 'faq') {
-
-         $valarr = array('name' => 'required|string|max:255',
+ 
+        $inquiry_email = 'info-test@asia-hd.com';
+        if ($request->from == 'faq') {
+           if(empty($request->id))
+           {
+            $valarr = array('name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'subject' => 'required|not_in:0',
             'phone' => 'required|string|max:255',
@@ -1917,50 +1919,25 @@ class AdminController extends Controller
 
         );
         $request->validate($valarr);
-        $inquiry_email = 'info-test@asia-hd.com';
-        $data = array('name'=>$request->name);
+           
+        // print_r("$request->check");die;
+        $validator = Validator::make($request->all(), $valarr,
+                    [
+                        'phone.required' => '電話番号を入力してください',
+                        'phone.regex' => '有効な電話番号を入力してください',
+                    ]);
 
-        if (!empty($request->email)) {
-          $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-             $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
-             $message->from($request->email,$request->name);
-             $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
-             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-             \r\n名前：　".$request->name."
-             \r\n"."メールアドレス：　".$request->email."
-             \r\n
-             \r\n"."お問い合わせ内容：　
-             \r\n".$request->message."
-             \r\n
-             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-          });
+        if($request->ajax()){
+
+            if ($validator->passes()) {
+                return response()->json(['success'=>'allpasses']);
+            }         
+        return response()->json(['error'=>$validator->errors()]);
+
         }
-
-            return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
-
-    
     }
-
-        else if( $request->from == 'contact')
-        {
-            if(empty($request->name) && empty($request->email) && empty($request->subject) && empty($request->message))
-            {
-                $valarr = array(
-                    'name' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255',
-                    'subject' => 'required|not_in:0',
-                    'phone' => 'required|string|max:255',
-                    'message' => 'required',
-                );
-            
-                $request->validate($valarr);
-            }
-            
-      
-            $inquiry_email = 'info-test@asia-hd.com';
-
   
-     $data = array('name'=>$request->name);
+        $data = array('name'=>$request->name);
 
      if (!empty($request->email)) {
        $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {

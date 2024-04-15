@@ -196,9 +196,10 @@
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                    </div>        
-                                    <a type="button "
-                                        class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts')}}">Add To Cart</a>
+                                    </div>
+                                     <a type="button "                              
+                                        class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts', ['id' => $id]) }}">
+                                        Add To Cart</a>
                                    
                                 </div>
 
@@ -215,7 +216,6 @@
                                         <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            // Calculate the percentage of ordered items
                                             $percentage = ($orderedCount / $product->product_qty) * 100;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
@@ -513,30 +513,27 @@
                                                                         <div class="rating-product">
                                                                             <h5>5<i data-feather="star"></i></h5>
                                                                             <div class="progress">
-                                                                                <div class="progress-bar"
-                                                                                    style="width: {{ ($rate1 * 100 / $count)}}%;">
+                                                                                <div class="progress-bar" style="width: {{ ($count != 0) ? ($rate5 * 100 / $count) . '%' : '0%'}};">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">{{ $rate1 }}</h5>
+                                                                            <h5 class="total">{{ $rate5 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
                                                                         <div class="rating-product">
                                                                             <h5>4<i data-feather="star"></i></h5>
                                                                             <div class="progress">
-                                                                                <div class="progress-bar"
-                                                                                    style="width: {{ ($rate2 * 100 / $count)}}%;">
+                                                                                <div class="progress-bar" style="width: {{ ($count != 0) ? ($rate4 * 100 / $count) . '%' : '0%'}};">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">{{ $rate2 }}</h5>
+                                                                            <h5 class="total">{{ $rate4 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
                                                                         <div class="rating-product">
                                                                             <h5>3<i data-feather="star"></i></h5>
                                                                             <div class="progress">
-                                                                                <div class="progress-bar"
-                                                                                    style="width: {{ ($rate3 * 100 / $count)}}%;">
+                                                                                <div class="progress-bar" style="width: {{ ($count != 0) ? ($rate3 * 100 / $count) . '%' : '0%'}};">
                                                                                 </div>
                                                                             </div>
                                                                             <h5 class="total">{{ $rate3 }}</h5>
@@ -546,22 +543,20 @@
                                                                         <div class="rating-product">
                                                                             <h5>2<i data-feather="star"></i></h5>
                                                                             <div class="progress">
-                                                                                <div class="progress-bar"
-                                                                                    style="width: {{ ($rate4 * 100 / $count)}}%;">
+                                                                                <div class="progress-bar" style="width: {{ ($count != 0) ? ($rate2 * 100 / $count) . '%' : '0%'}};">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">{{ $rate4 }}</h5>
+                                                                            <h5 class="total">{{ $rate2 }}</h5>
                                                                         </div>
                                                                     </li>
                                                                     <li>
                                                                         <div class="rating-product">
                                                                             <h5>1<i data-feather="star"></i></h5>
                                                                             <div class="progress">
-                                                                                <div class="progress-bar"
-                                                                                    style="width: {{ ($rate5 * 100 / $count)}}%;">
+                                                                                <div class="progress-bar" style="width: {{ ($count != 0) ? ($rate1 * 100 / $count) . '%' : '0%'}};">
                                                                                 </div>
                                                                             </div>
-                                                                            <h5 class="total">{{ $rate5 }}</h5>
+                                                                            <h5 class="total">{{ $rate1 }}</h5>
                                                                         </div>
                                                                     </li>
 

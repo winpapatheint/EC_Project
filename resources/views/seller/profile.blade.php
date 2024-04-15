@@ -41,7 +41,10 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="password" value="{{ $data->password }}" id="password">
+                                                <input class="form-control" type="password" name="password">
+                                                @error('password')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
 
@@ -49,8 +52,7 @@
                                             <label class="form-label-title col-sm-2 mb-0">Confirm
                                                 Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" id="confirm_password">
-                                                <span id="confirm-password-error" style="color: red;"></span>
+                                                <input class="form-control" type="password" name="confirmed">
                                             </div>
                                         </div>
 
@@ -225,30 +227,5 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-</script>
-<script>
-    let password = document.getElementById("password");
-        let confirm_password = document.getElementById("confirm_password");
-        let passwordError = document.getElementById("password-error");
-        let confirmPasswordError = document.getElementById("confirm-password-error");
-        function validatePassword() {
-            if (password.value !== confirm_password.value) {
-                confirmPasswordError.textContent = "Passwords Don't Match";
-            } else {
-                confirmPasswordError.textContent = "";
-            }
-        }
-        password.onchange = validatePassword;
-        confirm_password.onkeyup = validatePassword;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#image').change(function(e){
-                let reader = new FileReader();
-                reader.onload = function(e){
-                    $('#showImage').attr('src',e.target.result);
-                }
-                reader.readAsDataURL(e.target.files['0']);
-            })
-        });
 </script>
 @endsection

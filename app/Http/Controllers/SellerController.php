@@ -7,13 +7,14 @@ use App\Models\Help;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Seller;
+use App\Models\Subseller;
 use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller
 {
@@ -31,6 +32,7 @@ class SellerController extends Controller
         return view('seller.index',compact('labels', 'data','transfer'));
     }
 
+
     public function profile()
     {
         $id = Auth::user()->id;
@@ -39,6 +41,7 @@ class SellerController extends Controller
         $prefecture = Prefecture::get();
         return view('seller.profile',compact('data','shop','prefecture'));
     }
+
 
     public function storeProfile(Request $request)
     {
@@ -64,6 +67,7 @@ class SellerController extends Controller
         $data->save();
         return redirect('/seller');
     }
+
 
     public function updateShop(Request $request)
     {
@@ -119,11 +123,13 @@ class SellerController extends Controller
     }
 
 
+
     public function help()
     {
         $helps = Help::latest()->paginate(4);
         return view('seller.help.help',compact('helps'));
     }
+
 
     public function detailHelp($id)
     {
@@ -131,10 +137,12 @@ class SellerController extends Controller
         return view('seller.help.help_detail',compact('helps'));
     }
 
+
     public function addHelp()
     {
         return view('seller.help.help_add');
     }
+
 
     public function storeHelp(Request $request)
     {
@@ -160,6 +168,7 @@ class SellerController extends Controller
         return redirect('/seller/help')->with('flash_message', 'Data added successfully');
     }
 
+
     public function deleteHelp($id)
     {
         $help = Help::findOrFail($id);
@@ -170,5 +179,59 @@ class SellerController extends Controller
         $help->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }
+
+
+    public function allSubseller()
+    {
+        $id = Auth::user()->id;
+        $subseller =  Subseller::where('seller_id',$id)->latest()->get();
+        return view('seller.subseller.subseller_all',compact('subseller'));
+    }
+
+
+    public function addSubseller()
+    {
+        return view('seller.subseller.subseller_add');
+    }
+
+
+    public function storeSubseller(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::insertGetId([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => 'seller',
+            'password' => Hash::make($request->input('password')),
+            'phone' => $request->input('phone'),
+        ]);
+        event(new Registered($user));
+
+        $subseller = Subseller::create([
+            'user_id' => $user,
+            'seller_id' => Auth::user()->id,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+        event(new Registered($subseller));
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
+    }
+
+
+    public function deleteSubseller(Request $request)
+    {
+        $id = $request->id;
+        Subseller::findOrFail($id)->delete();
+        User::where('user_id',$id)->delete();
+        return back()->with('flash_message', 'Data deleted successfully');
+    }
+
 
 }

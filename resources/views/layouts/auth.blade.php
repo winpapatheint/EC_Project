@@ -296,10 +296,26 @@
                                         <span>SubAdmin</span>
                                     </a>
                                 </li>
+
+                                <li class="sidebar-list">
+
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/faq') }}">
+                                        <i class="ri-admin-line"></i>
+                                        <span>FAQ</span>
+                                    </a>
+                                </li>
+
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
+                                        <i class="ri-phone-line"></i>
+                                        <span>Coupon</span>
                                     </a>
                                 </li>
 

@@ -1,5 +1,16 @@
 
 <x-guest-layout>
+<style>
+    .home-section pt-2
+    {
+    background-image: url(../assets/images/vegetable/banner/1.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: block;
+    }
+
+</style>
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -162,9 +173,10 @@
                                 <li>
 
                                     <div class="category-list">
-                                        <img src="../assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="">
+                                        <img src="{{ asset('frontend/assets/svg/1/'.$list->category_icon)}}" class="blur-up lazyload" alt="">
+                                        
                                         <h5>
-                                            <a href="{{ url("/shopsidebar/".$list->id ) }}">{{ $list->category_name }}</a>
+                                            <a href="{{ url("/categorysidebar/".$list->id ) }}">{{ $list->category_name }}</a>
                                         </h5>
                                     </div>
                                 </li>
@@ -196,9 +208,10 @@
                             </ul>
                         </div>
 
+                        @if($seafood != null)
                         <div class="ratio_156 section-t-space">
                             <div class="home-contain hover-effect">
-                                <img src="../assets/images/vegetable/banner/8.jpg" class="bg-img blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/vegetable/banner/8.jpeg')}}" class="bg-img blur-up lazyload"
                                     alt="">
                                 <div class="home-detail p-top-left home-p-medium">
                                     <div>
@@ -207,13 +220,14 @@
                                                 class="theme-color fw-bold">Freshes</span> Products</h3>
                                         <h3 class="fw-light">every hour</h3>
 
-                                        <button onclick="location.href = ' {{ url('/shop-left-sidebar') }}';"
+                                        <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $seafood]) }}';"
                                             class="btn btn-animation btn-md mend-auto">Shop Now <i
                                                 class="fa-solid fa-arrow-right icon"></i></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @endif
 
                         <div class="ratio_medium section-t-space">
                             <div class="home-contain hover-effect">
@@ -233,123 +247,68 @@
                             </div>
                         </div>
 
+                        @if(count($trendingProducts) > 0)
                         <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Trending Products</h3>
 
                                 <ul class="product-list border-0 p-0 d-block">
+                                @foreach($trendingProducts as $trending)
                                     <li>
                                         <div class="offer-product">
-
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/23.png"
+                                            <a href="{{ route('show-product-left-thumbnail', ['id' => $trending->id]) }}" class="offer-image">
+                                                <img src="{{ asset('upload/product_thambnail/'.$trending->product_thambnail)}}"
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
                                             <div class="offer-detail">
                                                 <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}" class="text-title">
-                                                        <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $trending->id]) }}" class="text-title">
+                                                        <h6 class="name">{{ $trending->product_name }}</h6>
                                                     </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 70.00</h6>
+                                                    <span>{{ $trending->product_size}}</span>
+                                                    <h6 class="price theme-color">¥{{ number_format($trending->selling_price, 0, '.', ',') }}</h6>
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
-
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/24.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}" class="text-title">
-                                                        <h6 class="name">Dates Medjoul Premium Imported</h6>
-                                                    </a>
-                                                    <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 40.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/25.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}" class="text-title">
-                                                        <h6 class="name">Good Life Walnut Kernels</h6>
-                                                    </a>
-                                                    <span>200 G</span>
-                                                    <h6 class="price theme-color">$ 52.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="mb-0">
-                                        <div class="offer-product">
-                                            <a href="{{ url('/product-left-thumbnail') }}" class="offer-image">
-                                                <img src="../assets/images/vegetable/product/26.png"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-
-                                            <div class="offer-detail">
-                                                <div>
-                                                    <a href="{{ url('/product-left-thumbnail') }}" class="text-title">
-                                                        <h6 class="name">Apple Red Premium Imported</h6>
-                                                    </a>
-                                                    <span>1 KG</span>
-                                                    <h6 class="price theme-color">$ 80.00</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                @endforeach
                                 </ul>
                             </div>
                         </div>
+                        @endif
 
                         <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Customer Comment</h3>
-
-                                <div class="review-box">
-                                    <div class="review-contain">
-                                        <h5 class="w-75">We Care About Our Customer Experience</h5>
-                                        <p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly
-                                            used to demonstrate the visual form of a document or a typeface without
-                                            relying on meaningful content.</p>
-                                    </div>
-
-                                    <div class="review-profile">
-                                        <div class="review-image">
-                                            <img src="../assets/images/vegetable/review/1.jpg"
-                                                class="img-fluid blur-up lazyload" alt="">
+                             
+                                    <div class="review-box">
+                                        <div class="review-contain">
+                                            <h5 class="w-75">We Care About Our Customer Experience</h5>
+                                            <p>{{ $maxStarsRatedRow -> comment }}</p>
                                         </div>
-                                        <div class="review-detail">
-                                            <h5>Tina Mcdonnale</h5>
-                                            <h6>Sale Manager</h6>
+
+                                        <div class="review-profile">
+                                            <div class="review-image">
+                                                <img src="../assets/images/vegetable/review/1.jpg"
+                                                    class="img-fluid blur-up lazyload" alt="">
+                                            </div>
+                                            <div class="review-detail">
+                                                <h5>{{ $maxStarsRatedRow -> name }}</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xxl-9 col-xl-8">
+                @if(count($topSaveTodayProducts) > 0)
                     <div class="title title-flex">
                         <div>
-                            <h2>Top Save Today</h2>
+                            <h2>Today Coupon Items</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
@@ -361,7 +320,7 @@
                             <div class="timing">
                                 <i data-feather="clock"></i>
                                 <h6 class="name">Expires in :</h6>
-                                <div class="time" id="clockdiv-1" data-hours="1" data-minutes="2" data-seconds="3">
+                                <div class="time" id="clockdiv-1" data-hours="30" data-minutes="30" data-seconds="0">
                                     <ul>
                                         <li>
                                             <div class="counter">
@@ -423,26 +382,19 @@
                                             @endif
                                             <div class="col-12 px-0">
                                                 <div class="product-box">
+                                                @if ($topSaveProduct->created_at->diffInDays(\Carbon\Carbon::now()) < 1)
+                                                    <div class="label-tag">
+                                                        <span>NEW</span>
+                                                    </div>
+                                                @endif
                                                     <div class="product-image">
-                                                        <a href="{{ url('/product-left-thumbnail') }}">
+                                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <img src="{{ asset('upload/product_thambnail/'.$topSaveProduct->product_thambnail)}}"
                                                                 class="img-fluid blur-up lazyload" alt="">
                                                         </a>
-                                                        <ul class="product-option d-flex justify-content-center">
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#view">
-                                                                    <i data-feather="eye"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                                <a href="wishlist.html" class="notifi-wishlist">
-                                                                    <i data-feather="heart"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
                                                     </div>
                                                     <div class="product-detail">
-                                                        <a href="{{ url('/product-left-thumbnail') }}">
+                                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $topSaveProduct->id]) }}">
                                                             <h6 class="name">{{ $topSaveProduct->product_name }}</h6>
                                                         </a>
                                                         <h5 class="sold text-content">
@@ -463,7 +415,7 @@
                                                                 @endfor
                                                             </ul>
                                                             @if ($topSaveProduct->product_qty > 0)
-                                                                <h6 class="theme-color">In Stock</h6>
+                                                                <h6 class="theme-color">{{ $topSaveProduct->product_qty }}In Stock</h6>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -473,6 +425,20 @@
                                 </div>
                                         @endif
                                     @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="section-t-space section-b-space">
+                        <div class="banner-contain">
+                            <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
+                            <div class="banner-details p-center p-4 text-white text-center">
+                                <div>
+                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                    <h4 class="lh-base fw-bold offer-text">Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of ¥{{ $coupon->mini_amount}}</h4>
+                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -490,9 +456,9 @@
                     <div class="category-slider-2 product-wrapper no-arrow">
                         @foreach($categories as $list)
                         <div>
-                            <a href="{{ url("/shopsidebar/".$list->id ) }}" class="category-box category-dark">
+                            <a href="{{ url("/categorysidebar/".$list->id ) }}" class="category-box category-dark">
                                 <div>
-                                    <img src="{{ asset('frontend/assets/svg/1/meats.svg') }}" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/svg/1/'.$list->category_icon) }}" class="blur-up lazyload" alt="">
                                     <h5>{{ $list->category_name }}</h5>
                                 </div>
                             </a>
@@ -502,7 +468,7 @@
 
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
-                        @if($productsGroupedByDiscount[50] != null)
+                        @if($meatHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/9.jpeg') }}" class="bg-img blur-up lazyload"
@@ -510,8 +476,8 @@
                                     <div class="banner-details p-center-left p-4">
                                         <div>
                                             <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Testy Mushrooms</h4>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}';"
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $meatHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
@@ -520,7 +486,7 @@
                             </div>
                         @endif
 
-                        @if($productsGroupedByDiscount[50] != null)
+                        @if($vegetableHalfDiscount != null)
                             <div class="col-md-6">
                                 <div class="banner-contain hover-effect">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/10.jpeg') }}" class="bg-img blur-up lazyload"
@@ -528,8 +494,8 @@
                                     <div class="banner-details p-center-left p-4">
                                         <div>
                                             <h3 class="text-exo">50% offer</h3>
-                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}';"
+                                            <h4 class="text-russo fw-normal theme-color mb-2">Fresh Vegetable</h4>
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
@@ -540,601 +506,33 @@
                         </div>
                     </div>
 
-                    <div class="title d-block">
-                        <h2>Food Cupboard</h2>
-                        <span class="title-leaf">
-                            <svg class="icon-width">
-                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
-                            </svg>
-                        </span>
-                        <p>A virtual assistant collects the products from your list</p>
-                    </div>
-
-                    <div class="product-border overflow-hidden wow fadeInUp">
-                        <div class="product-box-slider no-arrow">
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/1.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <h6 class="name h-100">Chocolate Powder</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/2.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <h6 class="name h-100">Sandwich Cookies</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/3.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <h6 class="name h-100">Butter Croissant</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/4.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <h6 class="name h-100">Dark Chocolate</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/5.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <h6 class="name h-100">Mix-sweet-food</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="row m-0">
-                                    <div class="col-12 px-0">
-                                        <div class="product-box">
-                                            <div class="product-image">
-                                                <a href="{{ url('/product-left-thumbnail') }}">
-                                                    <img src="../assets/images/vegetable/product/4.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-                                                <ul class="product-option">
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#view">
-                                                            <i data-feather="eye"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Compare">
-                                                        <a href="compare.html">
-                                                            <i data-feather="refresh-cw"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <li data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Wishlist">
-                                                        <a href="wishlist.html" class="notifi-wishlist">
-                                                            <i data-feather="heart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="product-detail">
-                                                <a href="product-left-thumbnail.html">
-                                                    <h6 class="name h-100">Dark Chocolate</h6>
-                                                </a>
-
-                                                <h5 class="sold text-content">
-                                                    <span class="theme-color price">$26.69</span>
-                                                    <del>28.56</del>
-                                                </h5>
-
-                                                <div class="product-rating mt-sm-2 mt-1">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-
-                                                    <h6 class="theme-color">In Stock</h6>
-                                                </div>
-
-                                                <div class="add-to-cart-box">
-                                                    <button class="btn btn-add-cart addcart-button">Add
-                                                        <span class="add-icon">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </span>
-                                                    </button>
-                                                    <div class="cart_qty qty-box">
-                                                        <div class="input-group">
-                                                            <button type="button" class="qty-left-minus"
-                                                                data-type="minus" data-field="">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                            <input class="form-control input-number qty-input"
-                                                                type="text" name="quantity" value="0">
-                                                            <button type="button" class="qty-right-plus"
-                                                                data-type="plus" data-field="">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section-t-space">
-                        <div class="banner-contain">
-                            <img src="../assets/images/vegetable/banner/15.jpg" class="bg-img blur-up lazyload" alt="">
-                            <div class="banner-details p-center p-4 text-white text-center">
-                                <div>
-                                    <h3 class="lh-base fw-bold offer-text">Get $3 Cashback! Min Order of $30</h3>
-                                    <h6 class="coupon-code">Use Code : GROCERY1920</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="section-t-space section-b-space">
                         <div class="row g-md-4 g-3">
+                        @if ($productsGroupedByDiscount[25] != null)
                             <div class="col-xxl-8 col-xl-12 col-md-7">
                                 <div class="banner-contain hover-effect">
-                                    <img src="../assets/images/vegetable/banner/12.jpg" class="bg-img blur-up lazyload"
+                                    <img src="{{ asset('frontend/assets/images/vegetable/banner/12.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4">
                                         <div>
+                                            <h2 class="text-kaushan fw-normal text-danger">25% Off</h2>
                                             <h2 class="text-kaushan fw-normal theme-color">Get Ready To</h2>
                                             <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
                                             <p class="text-content banner-text">In publishing and graphic design, Lorem
                                                 ipsum is a placeholder text commonly used to demonstrate.</p>
-                                            <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
+                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[25]]) }}';"
                                                 class="btn btn-animation btn-sm mend-auto">Shop Now <i
                                                     class="fa-solid fa-arrow-right icon"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        @endif
 
+                        @if ($productsGroupedByDiscount[20] != null)
                             <div class="col-xxl-4 col-xl-12 col-md-5">
-                                <a href="{{ url('/shop-left-sidebar') }}" class="banner-contain hover-effect h-100">
-                                    <img src="../assets/images/vegetable/banner/13.jpg" class="bg-img blur-up lazyload"
+                                <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
+                                    <img src="{{ asset('frontend/assets/images/vegetable/banner/13.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="banner-details p-center-left p-4 h-100">
                                         <div>
@@ -1145,9 +543,14 @@
                                     </div>
                                 </a>
                             </div>
+                        @endif
                         </div>
                     </div>
 
+                    @php
+                        $productCount = $bestSellerProducts->count();
+                    @endphp
+                    @if($productCount > 0)
                     <div class="title d-block">
                         <div>
                             <h2>Our best Seller</h2>
@@ -1161,10 +564,6 @@
                     </div>
 
                     <div class="best-selling-slider product-wrapper wow fadeInUp">
-                    @php
-                        $productCount = $bestSellerProducts->count();
-                    @endphp
-                    @if($productCount > 0)
                     @for ($i = 0; $i < ceil($productCount / 4); $i++)
                         @php
                             $index = $i * 4;
@@ -1177,17 +576,17 @@
                                 @endphp
                                 <li>
                                     <div class="offer-product">
-                                        <a href="" class="offer-image">
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="offer-image">
                                             <img src="{{ asset('upload/product_thambnail/'.$product->product_thambnail)}}"
                                                 class="blur-up lazyload" alt="">
                                         </a>
 
                                         <div class="offer-detail">
                                             <div>
-                                                <a href="" class="text-title">
-                                                    <h6 class="name">$product->product_name</h6>
+                                                <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="text-title">
+                                                    <h6 class="name">{{ $product->product_name }}</h6>
                                                 </a>
-                                                <span>$product->product_size</span>
+                                                <span>{{ $product->product_size }}</span>
                                                 <h6 class="price theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</h6>
                                             </div>
                                         </div>
@@ -1196,26 +595,29 @@
                             @endfor
                             </ul>
                         </div>
+                    </div>
                         @endfor
                         @endif
-                    </div>
 
+                    @if($vegetable != null)
                     <div class="section-t-space">
                         <div class="banner-contain hover-effect">
-                            <img src="../assets/images/vegetable/banner/14.jpg" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('frontend/assets/images/vegetable/banner/14.jpeg') }}" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center banner-b-space w-100 text-center">
                                 <div>
                                     <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
                                     <h2 class="banner-title">VEGETABLE</h2>
                                     <h5 class="lh-sm mx-auto mt-1 text-content">Save up to 5% OFF</h5>
-                                    <button onclick="location.href = '{{ url('/shop-left-sidebar') }}';"
+                                    <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetable]) }}';"
                                         class="btn btn-animation btn-sm mx-auto mt-sm-3 mt-2">Shop Now <i
                                             class="fa-solid fa-arrow-right icon"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @endif
 
+                    
                     <div class="title section-t-space">
                         <h2>Featured Blog</h2>
                         <span class="title-leaf">
@@ -1227,32 +629,36 @@
                     </div>
 
                     <div class="slider-3-blog ratio_65 no-arrow product-wrapper">
+
+                    @foreach($blogs as $list)
                         <div>
                             <div class="blog-box">
                                 <div class="blog-box-image">
-                                    <a href="{{ url('/blog-detail') }}" class="blog-image">
-                                        <img src="../assets/images/vegetable/blog/1.jpg" class="bg-img blur-up lazyload"
+                                    <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-image">
+                                        <img src="{{ asset('images/'.($list->image)   ) }}" class="bg-img blur-up lazyload"
                                             alt="">
                                     </a>
                                 </div>
 
-                                <a href="{{ url('/blog-detail') }}" class="blog-detail">
-                                    <h6>20 March, 2022</h6>
-                                    <h5>Fresh Vegetable Online</h5>
+                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
+                                    <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} </h6>
+                                    <h5>{{ $list->title }}</h5>
                                 </a>
                             </div>
                         </div>
 
+                    @endforeach
+
                         <div>
                             <div class="blog-box">
                                 <div class="blog-box-image">
-                                    <a href="{{ url('/blog-detail') }}" class="blog-image">
+                                    <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-image">
                                         <img src="../assets/images/vegetable/blog/2.jpg" class="bg-img blur-up lazyload"
                                             alt="">
                                     </a>
                                 </div>
 
-                                <a href="{{ url('/blog-detail') }}" class="blog-detail">
+                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
                                     <h6>10 April, 2022</h6>
                                     <h5>Fresh Combo Fruit</h5>
                                 </a>
@@ -1327,5 +733,18 @@
         </div>
     </section>
     <!-- Newsletter Section End -->
+    @php
+        $targetDate = strtotime($coupon->valid_date);
+        $remainingTime = ($targetDate - time()) * 1000;
+    @endphp
+
+    <!-- Timer Js -->
+    <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
+    <script>
+        var remainingTime = {{ $remainingTime }};
+        var deadline = new Date(Date.parse(new Date()) + remainingTime);
+        initializeClock('clockdiv-1', deadline);
+    </script>
+
 
 </x-guest-layout>

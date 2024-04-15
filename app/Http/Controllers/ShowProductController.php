@@ -57,6 +57,9 @@ class ShowProductController extends Controller
                 $query->where('product_name', 'like', '%' . $mainSearch . '%')
                       ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
                       ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('Category', function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%');
             });
         }
         else {
@@ -65,6 +68,9 @@ class ShowProductController extends Controller
                     $query->where('product_name', 'like', '%' . $sHistory . '%')
                           ->orWhere('product_code', 'like', '%' . $sHistory . '%')
                           ->orWhere('product_tags', 'like', '%' . $sHistory . '%');
+                })
+                ->orWhereHas('Category', function ($query) use ($sHistory) {
+                    $query->where('category_name', 'like', '%' . $sHistory . '%');
                 });
             }
 
@@ -151,6 +157,8 @@ class ShowProductController extends Controller
 
         // Fetch paginated results
         $products = $query->paginate($limit, ['*'], 'page', $page);
+        $ttl = $products->total();
+        $ttlpage = (ceil($ttl / $limit));
 
         // Retrieve reviews
         $reviews = Review::all();
@@ -159,7 +167,7 @@ class ShowProductController extends Controller
         $allProduct = Product::count();
 
         // Total number of pages
-        $totalPage = ceil($allProduct / $limit);
+        // $totalPage = ceil($allProduct / $limit);
 
         // $productTags = Product::select('product_tags')->distinct()->get();
         // $tags = [];
@@ -206,7 +214,7 @@ class ShowProductController extends Controller
             ->toArray();
         }
 
-        return view('front-end.products', compact('products', 'reviews', 'totalPage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
+        return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
         , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
     }
 
@@ -220,7 +228,7 @@ class ShowProductController extends Controller
         ->orderByDesc('frequency')
         ->limit(3)
         ->get();
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts'));
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id'));
     }
 
     public function ShowDiscountProductList()

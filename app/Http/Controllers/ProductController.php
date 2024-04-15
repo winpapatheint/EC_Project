@@ -60,8 +60,8 @@ class ProductController extends Controller
             'brand_id' => 'required|string|max:255',
             'country_id' => 'required|string|max:255',
             'category_id' => 'required|string|max:255',
-            'sub_category_id' => 'required|string|max:255',
             'sub_category_title_id' => 'required|string|max:255',
+            'sub_category_id' => 'required|string|max:255',
             'product_name' => 'required|string|max:255',
             'product_code' => 'required|string|max:255',
             'product_qty' => 'required|numeric',
@@ -71,9 +71,10 @@ class ProductController extends Controller
             'original_price' => 'required|numeric',
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
-            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif',
             'multi_img' => 'required',
             'estimate_date' => 'required|string|max:255',
+            'delivery_price' => 'required|string|max:255',
         ]);
 
         $img = $request->file('product_thambnail');
@@ -83,10 +84,10 @@ class ProductController extends Controller
         $product_id = Product::insertGetId([
             'brand_id' => $request->brand_id,
             'country_id' => $request->country_id,
+            'category_id' => $request->category_id,
+            'sub_category_title_id' => $request->sub_category_title_id, //$request->sub_category_title_id
+            'sub_category_id' => $request->sub_category_id,//$request->sub_category_id
             'seller_id' => Auth::user()->id,
-            'category_id' => $request->category,
-            'sub_category_id' => $request->subcategory,
-            'sub_category_title_id' => $request->subname,
             'product_name' => $request->product_name,
             'product_code' => $request->product_code,
             'product_qty' => $request->product_qty,
@@ -94,8 +95,8 @@ class ProductController extends Controller
             'product_size' => $request->product_size,
             'product_color' => $request->product_color,
             'original_price' => $request->original_price,
-            'discount_percent' => $request->discount_percent,
             'selling_price' => $request->calculated_selling_price,
+            'discount_percent' => $request->discount_percent,
             'short_desc' => $request->short_desc,
             'long_desc' => $request->long_desc,
             'product_thambnail' => $filename,

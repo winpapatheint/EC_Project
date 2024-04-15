@@ -36,7 +36,7 @@
                                 @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="shop_name" class="form-control" placeholder="Type your shop name">
+                                        <input type="text" name="shop_name" class="form-control" placeholder="Type your shop name" value=" {{ old('shop_name') }}">
                                         <label>Shop Name</label>
                                         @error('shop_name')
                                             <div class="text-danger">{{ $message }}</div>
@@ -46,7 +46,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" name="shop_establish" class="form-control">
+                                        <input type="date" name="shop_establish" class="form-control" value="{{ old('shop_establish') }}">
                                         <label>Established Year</label>
                                         @error('shop_establish')
                                             <div class="text-danger">{{ $message }}</div>
@@ -56,7 +56,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="file" name="shop_logo" class="form-control">
+                                        <input type="file" name="shop_logo" class="form-control" value="{{ old('shop_logo') }}">
                                         <label>Shop Logo</label>
                                         @error('shop_logo')
                                             <div class="text-danger">{{ $message }}</div>
@@ -66,7 +66,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="phone" class="form-control" placeholder="Phone">
+                                        <input type="text" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
                                         <label>Phone</label>
                                         @error('phone')
                                             <div class="text-danger">{{ $message }}</div>
@@ -76,7 +76,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
+                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7" value="{{ old('zip_code') }}">
                                         <label>Zip Code</label>
                                         @error('zip_code')
                                             <div class="text-danger">{{ $message }}</div>
@@ -86,14 +86,14 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="url" class="form-control" placeholder="Shop Link">
+                                        <input type="text" name="url" class="form-control" placeholder="Shop Link" value="{{ old('url') }}">
                                         <label>Shop Link</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="prefecture">
+                                        <select class="form-control" name="prefecture" value="{{ old('prefecture') }}">
                                             <option>Choose Prefecture</option>
                                             @foreach ($prefecture as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -104,7 +104,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
+                                        <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" value="{{ old('city') }}">
                                         <label>City, Ward, Town</label>
                                         @error('city')
                                             <div class="text-danger">{{ $message }}</div>
@@ -114,7 +114,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="chome" class="form-control" placeholder="1-2-3" >
+                                        <input type="text" name="chome" class="form-control" placeholder="1-2-3" value="{{ old('chome') }}">
                                         <label>Chome, Banchi, Go</label>
                                         @error('chome')
                                             <div class="text-danger">{{ $message }}</div>
@@ -124,7 +124,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="building" class="form-control" placeholder="Example Building" >
+                                        <input type="text" name="building" class="form-control" placeholder="Example Building" value="{{ old('building') }}">
                                         <label>Building / Apt / Company name</label>
                                         @error('building')
                                             <div class="text-danger">{{ $message }}</div>
@@ -134,7 +134,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="room" class="form-control" placeholder="101" >
+                                        <input type="text" name="room" class="form-control" placeholder="101" value="{{ old('room') }}">
                                         <label>Unit / Room no.</label>
                                         @error('room')
                                             <div class="text-danger">{{ $message }}</div>
@@ -146,7 +146,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_name" class="form-control" placeholder="Bank Name" >
+                                        <input type="text" name="bank_name" class="form-control" placeholder="Bank Name" value="{{ old('bank_name') }}">
                                         <label>Bank Name</label>
                                         @error('bank_name')
                                             <div class="text-danger">{{ $message }}</div>
@@ -156,7 +156,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="bank_acc_type">
+                                        <select class="form-control" name="bank_acc_type" value="{{ old('bank_acc_type') }}">
                                             <option>Choose Bank Account Type</option>
                                             <option>普通</option>
                                             <option>当座</option>
@@ -167,7 +167,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" >
+                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" value="{{ old('bank_branch') }}">
                                         <label>Branch Name</label>
                                         @error('bank_branch')
                                             <div class="text-danger">{{ $message }}</div>
@@ -177,7 +177,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_acc_name" class="form-control" placeholder="Bank Account Name">
+                                        <input type="text" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
                                         <label>Bank Account Name</label>
                                         @error('bank_acc_name')
                                             <div class="text-danger">{{ $message }}</div>
@@ -187,7 +187,7 @@
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" name="bank_acc_no" class="form-control" placeholder="Bank Account Number">
+                                        <input type="number" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
                                         <label>Bank Account Number</label>
                                         @error('bank_acc_no')
                                             <div class="text-danger">{{ $message }}</div>
@@ -199,7 +199,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="name" class="form-control" placeholder="Name">
+                                        <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') }}">
                                         <label>Username</label>
                                         @error('name')
                                             <div class="text-danger">{{ $message }}</div>
@@ -209,7 +209,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" name="email" class="form-control" placeholder="Email Address">
+                                        <input type="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
                                         <label>Email Address</label>
                                         @error('email')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -219,7 +219,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" name="password" class="form-control" placeholder="Password">
+                                        <input type="password" name="password" class="form-control" placeholder="Password" value="{{ old('password') }}">
                                         <label>Password</label>
                                         @error('password')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -229,7 +229,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" name="password_confirmation" class="form-control" placeholder="Password">
+                                        <input type="password" name="confirmed" class="form-control" placeholder="Password" value="{{ old('confirmed') }}">
                                         <label>Confirm Password</label>
                                     </div>
                                 </div>
@@ -258,7 +258,5 @@
             </div>
         </div>
     </section>
-
-
 
 </x-guest-layout>

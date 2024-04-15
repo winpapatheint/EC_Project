@@ -43,7 +43,7 @@
                                         <span class="time"><i data-feather="clock"></i> <span> {{ date('Y\年m\月d\日', strtotime($blog->created_at)) }} </span></span>
                                         <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
                                     </div>
-                                    <a href="{{ url('/blog/'.$blog->id ) }}">
+                                    <a href="{{ url('/blogdetail/'.$blog->id ) }}">
                                         <h3>{{ $blog->title }}</h3>
                                     </a>
                                     <p>{!! $blog->content !!}</p>

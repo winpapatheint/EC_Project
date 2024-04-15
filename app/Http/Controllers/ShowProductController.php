@@ -185,7 +185,7 @@ class ShowProductController extends Controller
                                             ->get();
 
         $ratingWithProductCount = Review::select(
-                                                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                                DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                             )
                                             ->groupBy('product_id')
                                             ->get()

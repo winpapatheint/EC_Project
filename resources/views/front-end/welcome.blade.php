@@ -244,6 +244,26 @@
                             </div>
                         </div>
 
+                        <div class="ratio_medium section-t-space">
+                            <div class="home-contain hover-effect">
+                                <img src="{{ asset('frontend/assets/images/vegetable/banner/11.jpeg')}}" class="img-fluid blur-up lazyload"
+                                    alt="">
+                                <div class="home-detail p-top-left home-p-medium">
+                                    <div>
+                                        <h4 class="text-yellow text-exo home-banner">Organic</h4>
+                                        <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">fresh</h2>
+                                        <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
+                                    @if($vegetableHalfDiscount != null)
+                                        <p class="mb-3">Super Offer to 50% Off</p>
+                                        <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
+                                            class="btn btn-animation btn-md mend-auto">Shop Now <i
+                                                class="fa-solid fa-arrow-right icon"></i></button>
+                                    @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         @if(count($trendingProducts) > 0)
                         <div class="section-t-space">
                             <div class="category-menu">
@@ -425,7 +445,6 @@
                             </div>
                         </div>
                     </div>
-                    @endif
 
                     <div class="section-t-space section-b-space">
                         <div class="banner-contain">
@@ -439,6 +458,7 @@
                             </div>
                         </div>
                     </div>
+                @endif
 
                     <div class="title">
                         <h2>Bowse by Categories</h2>
@@ -533,10 +553,10 @@
                             </div>
 
                             <div class="col-xxl-4 col-xl-12 col-md-5">
-                            @if ($productsGroupedByDiscount[20] != null)
-                                <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
                                     <img src="{{ asset('frontend/assets/images/vegetable/banner/13.jpeg')}}" class="bg-img blur-up lazyload"
                                         alt="">
+                            @if ($productsGroupedByDiscount[20] != null)
+                                <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
                                     <div class="banner-details p-center-left p-4 h-100">
                                         <div>
                                             <h2 class="text-kaushan fw-normal text-danger">20% Off</h2>

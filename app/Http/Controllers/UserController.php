@@ -96,16 +96,16 @@ class UserController extends Controller
 
                 if (Auth::check()) {
                     $addresses = BuyerAddress::select(
-                        'BuyerAddress.id',
-                        'BuyerAddress.name',
-                        'BuyerAddress.city',
-                        'BuyerAddress.chome',
-                        'BuyerAddress.building',
-                        'BuyerAddress.room_no',
-                        'BuyerAddress.post_code',
-                        'BuyerAddress.address',
-                        'BuyerAddress.phone',
-                        'BuyerAddress.place',
+                        'buyer_addresses.id',
+                        'buyer_addresses.name',
+                        'buyer_addresses.city',
+                        'buyer_addresses.chome',
+                        'buyer_addresses.building',
+                        'buyer_addresses.room_no',
+                        'buyer_addresses.post_code',
+                        'buyer_addresses.address',
+                        'buyer_addresses.phone',
+                        'buyer_addresses.place',
                         'buyers.id as userid',
                         'buyers.name as username',
                         'buyers.email as useremail'
@@ -129,10 +129,10 @@ class UserController extends Controller
                     
                     $userAddresses = $userOrders->pluck('buyer_address')->unique()->toArray();
                     
-                    $wishlist = DB::table('wishlist')
-                        ->join('buyers', 'wishlist.buyer_id', '=', 'buyers.id')
+                    $wishlist = DB::table('wishlists')
+                        ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
                         ->where('buyers.user_id', Auth::user()->id)
-                        ->select('wishlist.*', 'buyers.*')
+                        ->select('wishlists.*', 'buyers.*')
 
                         ->get();
                     

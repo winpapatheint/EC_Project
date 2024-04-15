@@ -66,17 +66,17 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereMonth('orders.created_at', '=', Carbon::now()->month)
+            ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+            ->whereMonth('order_details.created_at', '=', Carbon::now()->month)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
 
         $trendingProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereDate('orders.created_at', '=', Carbon::today())
+            ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+            ->whereDate('order_details.created_at', '=', Carbon::today())
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)

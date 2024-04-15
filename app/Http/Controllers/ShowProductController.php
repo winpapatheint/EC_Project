@@ -253,8 +253,8 @@ class ShowProductController extends Controller
 
         if($topic == 'value-of-the-day')
         {
-            $products = Product::leftjoin('orders', 'products.id', '=', 'orders.product_id')
-                        ->whereDate('orders.created_at', Carbon::today())->get();
+            $products = Product::leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
+                        ->whereDate('order_details.created_at', Carbon::today())->get();
         }
 
         if($topic == 'top-50-offers')

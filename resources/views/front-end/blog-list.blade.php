@@ -61,12 +61,17 @@
 
                 <div class="col-xxl-3 col-xl-4 col-lg-5 order-lg-1">
                     <div class="left-sidebar-box wow fadeInUp">
-                        <div class="left-search-box">
-                            <div class="search-box">
-                                <input type="search" class="form-control" id="exampleFormControlInput1"
-                                    placeholder="Search....">
+                    <form id="searchForm" action="/news" method="GET">
+                        <div class="accordion-item">
+                            <div style="display: flex; align-items: center;">
+                                <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
+                                style="font-size: 15px; padding: 0.25rem 0.5rem;">
+                                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
+                                style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                             </div>
                         </div>
+                    </form>
+
 
                         <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
                             <div class="accordion-item">

@@ -108,14 +108,30 @@ class AdminController extends Controller
 
     public function news()
     {
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
         $limit = 10;
 
-        $blogs = DB::table('blogs')
-                    ->select( 'U.name as authorby', 'blogs.*')
-                    ->join('users as U', function ($join) {
-                        $join->on('blogs.created_by', '=', 'U.id');
-                    })
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        if ($search) {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.title', 'like', '%' . $search . '%')
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
+        else {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
 
         $limit = 4;
         $latestblog = DB::table('blogs')
@@ -125,7 +141,7 @@ class AdminController extends Controller
         $ttl = $blogs->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog'));
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog', 'search'));
 
     }
 

@@ -79,7 +79,7 @@
                     <div class="col-xxl-3 d-xxl-block d-none">
                         <div class="top-left-header">
                             <i class="iconly-Location icli text-white"></i>
-                            <span class="text-white">1418 Riverwood Drive, CA 96052, US</span>
+                            <span class="text-white">Wada Building 502, 4-27-5 Ikebukuro, Toshima-ku, Tokyo</span>
                         </div>
                     </div>
 
@@ -88,10 +88,7 @@
                             <div class="notification-slider">
                                 <div>
                                     <div class="timer-notification">
-                                        <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                            every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
-                                            </strong>
-
+                                        <h6><strong class="me-1">Welcome to the アジア食彩館 EC site!</strong>
                                         </h6>
                                     </div>
                                 </div>
@@ -172,7 +169,7 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </span>
                             </button>
-                            <a href="index.html" class="web-logo nav-logo">
+                            <a href="/" class="web-logo nav-logo">
                                 <img src="{{ asset('images/logos/logo_foods.png') }}" class="img-fluid blur-up lazyload" alt="">
                             </a>
 
@@ -644,11 +641,11 @@
                                 <ul class="address">
                                     <li>
                                         <i data-feather="home"></i>
-                                        <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, US</a>
+                                        <a href="javascript:void(0)">Wada Building 502, 4-27-5 Ikebukuro, Toshima-ku, Tokyo</a>
                                     </li>
                                     <li>
                                         <i data-feather="mail"></i>
-                                        <a href="javascript:void(0)">support@fastkart.com</a>
+                                        <a href="javascript:void(0)">support@asia-hd.com</a>
                                     </li>
                                 </ul>
                             </div>
@@ -662,24 +659,11 @@
 
                         <div class="footer-contain">
                             <ul>
+                            @foreach ($allCategories as $category)
                                 <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Vegetables & Fruit</a>
+                                    <a href="{{ url('/categorysidebar/'.$category->id)}}" class="text-content">{{ $category->category_name }}</a>
                                 </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Beverages</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Meats & Seafood</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Frozen Foods</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Biscuits & Snacks</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Grocery & Staples</a>
-                                </li>
+                            @endforeach
                             </ul>
                         </div>
                     </div>
@@ -751,8 +735,8 @@
                                     <div class="footer-number">
                                         <i data-feather="phone"></i>
                                         <div class="contact-number">
-                                            <h6 class="text-content">Hotline 24/7 :</h6>
-                                            <h5>+91 888 104 2340</h5>
+                                            <h6 class="text-content">Hotline</h6>
+                                            <h5>(+81) 03-3981-5090</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -762,7 +746,7 @@
                                         <i data-feather="mail"></i>
                                         <div class="contact-number">
                                             <h6 class="text-content">Email Address :</h6>
-                                            <h5>fastkart@hotmail.com</h5>
+                                            <h5>info@asia-hd.com</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -792,7 +776,7 @@
 
             <div class="sub-footer section-small-space">
                 <div class="reserve">
-                    <h6 class="text-content">©2022 Fastkart All rights reserved</h6>
+                    <h6 class="text-content">Asia Human Development, Inc.</h6>
                 </div>
 
                 <div class="payment">

@@ -89,8 +89,9 @@ class GuestLayout extends Component
                             ->where('categories.category_name', 'Asia Menu')
                             ->where('sub_category_titles.sub_category_titlename', 'China')
                             ->get();
+        $allCategories = Category::all();
 
-        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts'));
+        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts', 'allCategories'));
 
     }
 }

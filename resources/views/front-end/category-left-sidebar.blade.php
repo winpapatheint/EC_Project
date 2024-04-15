@@ -524,6 +524,7 @@
                                             <span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
                                             @if ($list->discount_percent != null)
                                             <del>¥{{ number_format($list->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
 
                                     </div>

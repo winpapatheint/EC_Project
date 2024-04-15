@@ -97,12 +97,6 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-                                </form>
-                            </li>
                         </ul>
                     </div>
                 </div>

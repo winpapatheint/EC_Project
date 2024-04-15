@@ -47,7 +47,7 @@
 
                                 <form method="POST" action="{{ route('adduser') }}" class="row g-4" >
                                     @csrf
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="fullname">Name</label>
                                             <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}" required>
@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="email">Email Address</label>
                                             <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}" required>
@@ -63,8 +63,10 @@
 
                                         </div>
                                     </div>
+                                    
 
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="password">Password</label>
                                             <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}" required>
@@ -72,7 +74,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Confirm Password</label>
+                                            <input type="password" name="password_confirmation" class="form-control" placeholder="Password">
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="birthday">Birthday</label>
+                                            <input type="date" class="form-control" name="birthday" id="birthday" placeholder="Email Address" required>
+                                            <span style="color:red">@error('birthday'){{ $message }} @enderror</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="address">Address</label>
                                             <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
@@ -80,13 +99,82 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
                                             <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
                                             <span style="color:red">@error('phone'){{$message}} @enderror</span>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="photo">Photo</label>
+                                            <input type="file" class="form-control" name="photo" id="photo" placeholder="Phone" required>
+                                            <span style="color:red">@error('photo'){{$message}} @enderror</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <select class="form-control" name="prefecture">
+                                                <option>Choose Prefecture</option>
+                                                @foreach ($prefecture as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Zip Code</label>
+                                            <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
+                                            <span style="color:red">@error('zip_code'){{ $message }}@enderror</span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
+                                            <label>City, Ward, Town</label>
+                                            <span style="color:red">@error('city'){{ $message }}@enderror</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <input type="text" name="chome" class="form-control" placeholder="1-2-3" >
+                                            <label>Chome, Banchi, Go</label>
+                                            @error('chome')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <input type="text" name="building" class="form-control" placeholder="Example Building" >
+                                            <label>Building / Apt / Company name</label>
+                                            @error('building')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <input type="text" name="room" class="form-control" placeholder="101" >
+                                            <label>Unit / Room no.</label>
+                                            @error('room')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+
+            
 
                                     <input type="hidden" name="role" value="buyer">
 

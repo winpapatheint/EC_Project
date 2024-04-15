@@ -99,12 +99,6 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-                                </form>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -138,7 +132,7 @@
                                             @foreach($order as $orders)
                                                 <tr>
                                                     <td><h6>{{ $orders->order_id }}</h6></td>
-                                                    <td><h6>{{ $orders->created_at }}</h6></td> 
+                                                    <td><h6>{{ \Carbon\Carbon::parse($orders->shipped_date)->format('F d, Y') }}</h6></td> 
                                                     <td><h6>{{ $orders->order_code }}</h6></td>
                                                     <td class="status-close"><h6>Shipped</h6></td>
                                                 </tr>
@@ -146,29 +140,7 @@
                                         </table>
                                     </div>
                                     <div>
-                                        <nav class="custom-pagination">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                                        <i class="fa-solid fa-angles-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">
-                                                        <i class="fa-solid fa-angles-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                        @include('components.pagination')
                                     </div>
                                 </div>
                             <!-- Delivery Status View End -->

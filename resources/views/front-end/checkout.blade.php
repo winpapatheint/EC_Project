@@ -1,6 +1,8 @@
 <x-guest-layout>
-
+<script src="https://www.paypal.com/sdk/js?client-id=AWssbr_5JCWSdK6IogXTxXSw8cVBeb_7gdVCtEue95EqSGYXuATz1fYcAduzXdf8e0k3713fP3tmuW7o&currency=JPY"> // Replace YOUR_CLIENT_ID with your sandbox client ID
+      </script>
     <!-- Breadcrumb Section Start -->
+    
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
             <div class="row">
@@ -54,7 +56,10 @@
                                                                 <input class="form-check-input" type="radio" name="jack"
                                                                     id="flexRadioDefault2" checked="checked">
                                                             </div>
-
+                                                            <input type="hidden" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
+                                                            <input type="hidden" name="buyer_id" value="{{ $buyeraddress->userid }}">
+                                                            <input type="hidden" name="buyer_id" value="{{ $buyeraddress->shop_name }}">
+                                                            
                                                             <div class="label">
                                                                 <label>{{ $buyeraddress->place }}</label>
                                                             </div>
@@ -67,8 +72,13 @@
                                                                 <li>
                                                                     <p class="text-content"><span
                                                                             class="text-title">Address
-                                                                            :</span>{{ $buyeraddress->address }}
+                                                                            :</span>{{ $buyeraddress->post_code }}
                                                                     </p>
+                                                                    <p class="text-content">{{ $buyeraddress->city }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->chome }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->building }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->room_no }}</p>
+
                                                                 </li>
 
                                                                 <li>
@@ -86,7 +96,6 @@
                                     </div>
                                 </li>
 
-
                                 <li>
                                     <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
@@ -98,111 +107,24 @@
                                         <div class="checkout-title">
                                             <h4>Payment Option</h4>
                                         </div>
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseFour">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="paypal"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="paypal" checked> PayPal</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        
+                                        <div class="row" style="margin-bottom: 50px;" id="paypaldiv">
+                                            <div class="col-lg-8 mx-auto">
+                                                <div class="text-center">
+                                                    <div id="paypal-button-container"></div>
                                                 </div>
-                                            </div>  
-                                        </div>  
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="credit"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="credit">
-                                                                    Credit or Debit Card</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <div class="row g-2">
-                                                                <div class="col-12">
-                                                                    <div class="payment-method">
-                                                                        <div
-                                                                            class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                            <input type="text" class="form-control"
-                                                                                id="credit2"
-                                                                                placeholder="Enter Credit & Debit Card Number">
-                                                                            <label for="credit2">Enter Credit & Debit
-                                                                                Card Number</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control"
-                                                                            id="expiry" placeholder="Enter Expiry Date">
-                                                                        <label for="expiry">Expiry Date</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control" id="cvv"
-                                                                            placeholder="Enter CVV Number">
-                                                                        <label for="cvv">CVV Number</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="password" class="form-control"
-                                                                            id="password" placeholder="Enter Password">
-                                                                        <label for="password">Password</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="button-group mt-0">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <button
-                                                                                class="btn btn-light shopping-button">Cancel</button>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <button class="btn btn-animation">Use This
-                                                                                Card</button>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>  
-                                        </div>                                   
+                                            </div>
+                                        </div>
                                     </div>
-                                </li>
+                                </li> 
                             </ul>
                         </div>
                     </div>
                 </div>
-
+                @php
+                    $totalAmount = 0;
+                    $totalAmount1 = 0;
+                @endphp
                 <div class="col-lg-4">
                     <div class="right-side-summery-box">
                         <div class="summery-box-2">
@@ -211,6 +133,10 @@
                             </div>
                             @foreach($cartLists as $cartlist)
                             <ul class="summery-contain">
+                                <input type="hidden" name="product_id" value="{{ $cartlist->product_id }}">
+                                <input type="hidden" name="product_id" value="{{ $cartlist->seller_id }}">
+                                <input type="hidden" name="product_id" value="{{ $cartlist->product_color }}">
+                                <input type="hidden" name="product_id" value="{{ $cartlist->product_size }}">
                                 <li>
                                     <img src="../assets/images/vegetable/product/1.png"
                                         class="img-fluid blur-up lazyloaded checkout-image" alt="">
@@ -264,12 +190,85 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</button>
+                        
+
+                        <!-- Place Order button (initially hidden) -->
+                        <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold" id="placeOrderButton" style="display: none;">Place Order</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Checkout section End -->
+
+
+    <script type="text/javascript">
+        paypal.Buttons({
+            style: {
+            layout: 'vertical', // Set the button layout (horizontal or vertical)
+            color: 'blue', // Set the button color (blue, gold, silver, black, white)
+            shape: 'rect', // Set the button shape (rect, pill)
+            label: 'pay', // Set the button label (checkout, pay, buy, donate)
+            height: 50 // Set the button height (in pixels)
+            },
+
+            createOrder: function(data, actions) {
+            // Set up the transaction details
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '{{ $total }}' // Sample amount
+                    }
+                }]
+            });
+            },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              // alert(details.status);
+              if (details.status == 'COMPLETED') {
+                $.ajax({
+                        url: '/payment/complete',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            addressId: '{{ $buyeraddress->id }}',
+                            productid: '{{ $cartlist->product_id }}',
+                            buyerid: '{{ $buyeraddress->userid }}',
+                            sellerid: '{{ $cartlist->seller_id }}',
+                            totalamount: '{{ $total }}',
+                            color: '{{ $cartlist->product_color }}',
+                            size: '{{ $cartlist->product_size }}',
+                            qty: '{{ $cartlist->quantity }}',
+                            postcode: '{{ $buyeraddress->post_code }}',
+                            city: '{{ $buyeraddress->city }}',
+                            chome: '{{ $buyeraddress->chome }}',
+                            building: '{{ $buyeraddress->building }}',
+                            room: '{{ $buyeraddress->room_no }}'
+                        },
+                        success: function(response) {
+                            // Handle success response
+                            console.log('Payment data inserted successfully:', response);
+                            $('#paymentsuccessModal').modal('show');
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error
+                            console.error('Error inserting payment data:', error);
+                            $('#paymentfailModal').modal('show');
+                        }
+                    });
+              } else {
+                  $('#paymentfailModal').modal('show');
+              }
+              // alert('Transaction co/mpleted by ' + details.payer.name.given_name);
+            });
+          },
+          style: {
+            layout:  'vertical',
+            color:   'blue',
+            shape:   'rect',
+            label:   'paypal'
+          }
+        }).render('#paypal-button-container'); 
+    </script>
 
 </x-guest-layout>

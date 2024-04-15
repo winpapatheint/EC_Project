@@ -37,7 +37,7 @@ Route::get('/user-registration', [UserController::class,'index'])->name('user_re
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/buyer', [UserController::class, 'indexuser'])->name('user_dashboard');
+Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
 Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
 Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
@@ -65,11 +65,12 @@ Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->name('s
 Route::post('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
-Route::get('/show-carts', [UserController::class, 'showCarts'])->name('show_carts');
+Route::get('/carts', [UserController::class, 'showCarts'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
+Route::post('/payment/complete', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/compare', function () {return view('front-end.compare');});
 

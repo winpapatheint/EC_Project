@@ -278,12 +278,15 @@ class ShowProductController extends Controller
     public function ShowWishList()
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
-        Wishlist::firstOrCreate([
-            'buyer_id' => $buyer->id,
-            'product_id' => request()->id,
-        ]);
+        if(request()->id != null)
+        {
+            Wishlist::firstOrCreate([
+                'buyer_id' => $buyer->id,
+                'product_id' => request()->id,
+            ]);
+        }
         $wishlist = Wishlist::where('buyer_id', $buyer->id)->get();
-        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();
+        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();dd($wishlistProducts);
 
         return view('front-end.wishlist',compact('wishlistProducts'));
     }

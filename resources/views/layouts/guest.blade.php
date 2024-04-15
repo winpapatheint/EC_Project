@@ -445,6 +445,14 @@
                                             </li>
                                             @endif
 
+                                            @php
+                                                $specialCornerFlag = 0;
+                                                if ($myanmarProducts->count() > 0 && $koreaProducts->count() > 0 && $chinaProducts->count() > 0) {
+                                                    $specialCornerFlag = 1;
+                                                }
+                                            @endphp
+
+                                            @if ($specialCornerFlag == 1)
                                             <li class="nav-item dropdown dropdown-mega">
                                                 <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
                                                     href="javascript:void(0)" data-bs-toggle="dropdown">
@@ -454,7 +462,7 @@
                                                 <div class="dropdown-menu dropdown-menu-2">
                                                     <div class="row">
                                                         <div class="dropdown-column col-xl-3">
-                                                        @if(!empty($myanmarProducts))
+                                                        @if($myanmarProducts->count() > 0)
                                                             <h5 class="dropdown-header">Myanmar Products</h5>
                                                             @foreach($myanmarProducts as $myanmarProduct)
                                                                 <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $myanmarProduct->id]) }}">
@@ -465,7 +473,7 @@
 
                                                         <div class="dropdown-column col-xl-3">
                                                             
-                                                        @if(!empty($koreaProducts))
+                                                        @if($koreaProducts->count() > 0)
                                                             <h5 class="dropdown-header">Korea Products</h5>
                                                             @foreach($koreaProducts as $koreaProduct)
                                                                 <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $koreaProduct->id]) }}">
@@ -476,7 +484,7 @@
 
                                                         <div class="dropdown-column col-xl-3">
                                                             
-                                                        @if(!empty($chinaProducts))
+                                                        @if($chinaProducts->count() > 0)
                                                             <h5 class="dropdown-header">China Products</h5>
                                                             @foreach($chinaProducts as $chinaProduct)
                                                                 <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $chinaProduct->id]) }}">
@@ -489,6 +497,7 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            @endif
 
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>

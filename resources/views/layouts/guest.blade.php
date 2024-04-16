@@ -378,7 +378,7 @@
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
 
-                                        <div class="onhover-category-box">
+                                        <div class="onhover-category-box" style="height: fit-content;">
                                             @if (!empty($category['subcategories']))
                                             @php
                                             $displayedCategories = [];
@@ -398,7 +398,6 @@
                                                     @endif
                                                     @endforeach
                                                 </ul>
-
                                             </div>
                                             @php
                                             $displayedCategories[] = $subcategory['subid'];

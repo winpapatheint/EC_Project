@@ -63,7 +63,7 @@
 
                                         </div>
                                     </div>
-                                    
+
 
 
                                     <div class="col-md-6">
@@ -78,7 +78,7 @@
                                         <div class="form-group">
                                             <label>Confirm Password</label>
                                             <input type="password" name="password_confirmation" class="form-control" placeholder="Password">
-                                            
+
                                         </div>
                                     </div>
 
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
                                             <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
@@ -107,13 +107,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="photo">Photo</label>
-                                            <input type="file" class="form-control" name="photo" id="photo" placeholder="Phone" required>
-                                            <span style="color:red">@error('photo'){{$message}} @enderror</span>
-                                        </div>
-                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
@@ -174,7 +167,7 @@
                                     </div>
 
 
-            
+
 
                                     <input type="hidden" name="role" value="buyer">
 

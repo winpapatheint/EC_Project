@@ -36,7 +36,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-       
+
         $categories = Category::all();
 
         $blogs = DB::table('blogs')
@@ -1429,12 +1429,12 @@ class AdminController extends Controller
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
             ]);
-          
+
             // print_r(json_decode($faqord, true));die;
 
             return redirect('/admin/faq')->with('success','「'.$request->title.'」登録されました。');
         } else {
-            
+
             $updval = array('title' => $request->title,
                             'ans' => $request->ans,
                             'que' => $request->que,
@@ -1462,11 +1462,11 @@ class AdminController extends Controller
         if (Auth::check()){
             if (Auth::user()->role == 'admin') {
                 return view('admin.indexfaq',compact('lists','ttlpage','ttl'));
-            } 
-        } 
-        
+            }
+        }
+
         return view('front-end.faq',compact('lists'));
-       
+
     }
 
     public function indexcoupon()
@@ -1477,9 +1477,9 @@ class AdminController extends Controller
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
- 
+
         return view('admin.indexcoupon',compact('lists','ttlpage','ttl'));
-       
+
     }
 
     public function indexuser()
@@ -1756,6 +1756,7 @@ class AdminController extends Controller
         $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
         $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
         $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+
         $product_coupon = DB::table('products as P')
                     ->select('P.coupon_id','P.coupon_status')
                     ->where('P.id',$id)
@@ -1764,8 +1765,8 @@ class AdminController extends Controller
         $couponlist = DB::table('coupons')
                         ->select('coupons.id')
                         ->where('id',$product_coupon->coupon_id)
-                        ->orderBy('created_at', 'desc')->first();  
-                        
+                        ->orderBy('created_at', 'desc')->first();
+
 
         $multiImgs = MultiImg::where('product_id',$id)->get();
         $data = DB::table('products as P')
@@ -1918,7 +1919,7 @@ class AdminController extends Controller
     }
 
     public function contact(Request $request)
-    { 
+    {
        if ($request->from == 'faq') {
 
          $valarr = array('name' => 'required|string|max:255',
@@ -1950,7 +1951,7 @@ class AdminController extends Controller
 
             return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
-    
+
     }
 
         else if( $request->from == 'contact')
@@ -1964,14 +1965,14 @@ class AdminController extends Controller
                     'phone' => 'required|string|max:255',
                     'message' => 'required',
                 );
-            
+
                 $request->validate($valarr);
             }
-            
-      
+
+
             $inquiry_email = 'info-test@asia-hd.com';
 
-  
+
      $data = array('name'=>$request->name);
 
      if (!empty($request->email)) {
@@ -1993,7 +1994,7 @@ class AdminController extends Controller
          return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
      }
-  
+
     }
 
     public function storeblog(Request $request)
@@ -2137,7 +2138,7 @@ class AdminController extends Controller
                         'product_color' => $request->product_color,
                         'short_desc' => $request->short_desc,
                         'long_desc' => $request->long_desc,
-                        
+
                         'selling_price' => $request->selling_price,
                         'discount_percent' => $request->discount_percent,
                         'product_qty' => $request->product_qty,

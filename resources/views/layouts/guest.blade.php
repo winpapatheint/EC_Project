@@ -79,7 +79,7 @@
                     <div class="col-xxl-3 d-xxl-block d-none">
                         <div class="top-left-header">
                             <i class="iconly-Location icli text-white"></i>
-                            <span class="text-white">Wada Building 502, 4-27-5 Ikebukuro, Toshima-ku, Tokyo</span>
+                            <span class="text-white">4-27-5 Ikebukuro, Toshima-ku, Tokyo</span>
                         </div>
                     </div>
 
@@ -328,9 +328,9 @@
                                                     @csrf
                                                         <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
                                                     </form>
-                                                </li>                                    
+                                                </li>
                                             </ul>
-                                        </div>       
+                                        </div>
                                         @endif
                                     </li>
                                 </ul>
@@ -382,7 +382,7 @@
                                                 </div>
                                                 <ul>
                                                     @foreach ($category['sub'] as $sub)
-                                                    @if($sub['id']==$subcategory['subid'])
+                                                    @if($sub['subid']==$subcategory['subid'])
                                                     <li>
                                                         <a href="{{ url('/subcategorysidebar/'.$sub['id'])}}">{{ $sub['name'] }}</a>
                                                     </li>
@@ -413,7 +413,7 @@
                                         <button class="btn-close lead" type="button"
                                             data-bs-dismiss="offcanvas"></button>
                                     </div>
-                               
+
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
                                             @if(empty(Auth::user()))
@@ -467,7 +467,7 @@
                                                         </div>
 
                                                         <div class="dropdown-column col-xl-3">
-                                                            
+
                                                         @if($koreaProducts->count() > 0)
                                                             <h5 class="dropdown-header">Korea Products</h5>
                                                             @foreach($koreaProducts as $koreaProduct)
@@ -478,7 +478,7 @@
                                                         </div>
 
                                                         <div class="dropdown-column col-xl-3">
-                                                            
+
                                                         @if($chinaProducts->count() > 0)
                                                             <h5 class="dropdown-header">China Products</h5>
                                                             @foreach($chinaProducts as $chinaProduct)
@@ -501,15 +501,15 @@
 
                                             @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
-                                                <label class="new-dropdown">New</label>
-                                                <a class="nav-link"  href="{{ url('/news') }}">New</a>
+                                                <label class="new-dropdown">Blog</label>
+                                                <a class="nav-link"  href="{{ url('/news') }}">Blog</a>
                                             </li>
                                             @endif
 
                                         </ul>
                                     </div>
 
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -639,7 +639,7 @@
                                 <ul class="address">
                                     <li>
                                         <i data-feather="home"></i>
-                                        <a href="javascript:void(0)">Wada Building 502, 4-27-5 Ikebukuro, Toshima-ku, Tokyo</a>
+                                        <a href="javascript:void(0)">4-27-5 Ikebukuro, Toshima-ku, Tokyo</a>
                                     </li>
                                     <li>
                                         <i data-feather="mail"></i>
@@ -686,7 +686,7 @@
                                     <a href="blog-list.html" class="text-content">Blog</a>
                                 </li>
                                 <li>
-                      
+
                                     <a href="contact-us.html" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
@@ -774,7 +774,7 @@
 
             <div class="sub-footer section-small-space">
                 <div class="reserve">
-                    <h6 class="text-content">Asia Human Development, Inc.</h6>
+                    <h6 class="text-content">©2024 Asia Human Development, Inc. All rights reserved</h6>
                 </div>
 
                 <div class="payment">

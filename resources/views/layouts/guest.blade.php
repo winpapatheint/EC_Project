@@ -92,15 +92,6 @@
                                         </h6>
                                     </div>
                                 </div>
-
-                                <div>
-                                    <div class="timer-notification">
-                                        <h6>Something you love is now on sale!
-                                            <a href="shop-left-sidebar.html" class="text-white">Buy Now
-                                                !</a>
-                                        </h6>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

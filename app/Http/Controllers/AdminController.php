@@ -61,8 +61,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::leftjoin('carts', 'carts.product_id', '=', 'products.id')
-        ->whereDate('carts.created_at', Carbon::today())->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
 
         $reviews = Review::all();
 
@@ -83,7 +82,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
         
-        $coupon = Coupon::first();
+        $coupon = Coupon::where('status', 1)->first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')

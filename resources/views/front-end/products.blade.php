@@ -24,7 +24,7 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Poster Section Start -->
+    {{-- <!-- Poster Section Start -->
     <section>
         <div class="container-fluid-lg">
             <div class="row">
@@ -51,7 +51,7 @@
             </div>
         </div>
     </section>
-    <!-- Poster Section End -->
+    <!-- Poster Section End --> --}}
 
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">

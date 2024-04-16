@@ -207,24 +207,30 @@
                                                 <div class="col-sm-9">
                                                     <select class="js-example-basic-single w-100" name="coupon" id="coupon">
                                                         <option value="0">select Coupon</option>
-                                                    
-                                                            @foreach($coupons as $coupon)
-                                                                <option value="{{ $coupon -> id }}" @if($coupon -> id == $couponlist->id ) selected @endif>
-                                                                    {{ $coupon -> coupon_code }}  
+
+                                                        @if($couponlist == null)
+                                                            @foreach($coupons as $key => $value)
+                                                                <option value="{{ $value -> id }}">
+                                                                    {{ $value -> coupon_code }}
                                                                 </option>
                                                             @endforeach
-                                                    </select>
-                                                    <p style="display:none" class="coupon error text-danger"></p>
-                                                        @if (!empty($error['coupon']))
-                                                            @foreach ($error['coupon'] as  $key => $value)
-                                                                <p class="coupon error text-danger">{{ $value }}</p>
+                                                        @else
+
+                                                            @foreach($coupons as $coupon)
+
+                                                                <option value="{{ $coupon -> id }}" @if($coupon->id == $couponlist->id) selected @endif>
+                                                                    {{ $coupon -> coupon_code }}
+                                                                </option>
                                                             @endforeach
                                                         @endif
+
+                                                    </select>
+
                                                 </div>
                                             </div>
 
                                             <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label form-label-title">Coupon status</label>                                            
+                                                <label class="col-sm-3 col-form-label form-label-title">Coupon status</label>
                                                     <div class="col-sm-9">
                                                         <select class="js-example-basic-single w-100" name="status" id="status">
                                                             <option value="0">Select Coupon Status</option>
@@ -233,7 +239,7 @@
                                                         </select>
                                                     </div>
                                             </div>
-        
+
                                             <button type="submit" class="btn btn-animation ms-auto fw-bold">
                                                 @if (!$editmode)
                                                     <i class="fa fa-user-plus" aria-hidden="true"></i>

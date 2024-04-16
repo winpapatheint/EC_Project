@@ -203,6 +203,7 @@
 
 
     <script type="text/javascript">
+
         paypal.Buttons({
             style: {
             layout: 'vertical', // Set the button layout (horizontal or vertical)
@@ -224,38 +225,102 @@
             },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-              // alert(details.status);
+          
               if (details.status == 'COMPLETED') {
+
+                var Newproductid = <?php echo json_encode($cartlist->product_id ); ?>; 
+                var Newbuyerid = <?php echo json_encode($buyeraddress->userid); ?>; 
+                var Newsellerid = <?php echo json_encode($cartlist->seller_id); ?>; 
+                var Newtotalamount = <?php echo json_encode($total ); ?>; 
+                var Newcolor = <?php echo json_encode($cartlist->product_color ); ?>; 
+                var Newsize = <?php echo json_encode($cartlist->product_size); ?>; 
+                var Newqty = <?php echo json_encode($cartlist->quantity); ?>;
+                var Newpostcode = <?php echo json_encode($buyeraddress->post_code); ?>;
+                var Newcity = <?php echo json_encode($buyeraddress->city); ?>;
+                var Newchome = <?php echo json_encode($buyeraddress->chome); ?>;
+                var Newbuilding = <?php echo json_encode($buyeraddress->building); ?>;
+                var Newroom = <?php echo json_encode($buyeraddress->room_no); ?>;
+  
                 $.ajax({
-                        url: '/payment/complete',
-                        method: 'POST',
+                    
+                        url: "/payment/complete",
+                        type:'POST',
+                        
                         data: {
                             _token: '{{ csrf_token() }}',
-                            addressId: '{{ $buyeraddress->id }}',
-                            productid: '{{ $cartlist->product_id }}',
-                            buyerid: '{{ $buyeraddress->userid }}',
-                            sellerid: '{{ $cartlist->seller_id }}',
-                            totalamount: '{{ $total }}',
-                            color: '{{ $cartlist->product_color }}',
-                            size: '{{ $cartlist->product_size }}',
-                            qty: '{{ $cartlist->quantity }}',
-                            postcode: '{{ $buyeraddress->post_code }}',
-                            city: '{{ $buyeraddress->city }}',
-                            chome: '{{ $buyeraddress->chome }}',
-                            building: '{{ $buyeraddress->building }}',
-                            room: '{{ $buyeraddress->room_no }}'
+                            productid: Newproductid,
+                            buyerid: Newbuyerid,
+                            sellerid: Newsellerid,
+                            totalamount: Newbuyerid,
+                            Newcolor: Newcolor,
+                            Newsize: Newsize,
+                            Newpostcode: Newpostcode,
+                            Newcity: Newcity,
+                            Newchome: Newchome,
+                            Newbuilding: Newbuilding,
+                            Newroom: Newroom,
+                          
+                    },
+
+                    success: function(response) {
+                     alert(JSON.stringify(response.success));
+                        if ($.isEmptyObject(response.error)) {
+                            console.log(response.success);
+                            if (response.success) {
+                             alert(JSON.stringify(response.success));
+                                // If the payment is successful, you can pass a success message to the callback
+                                //callback("支払いが正常に完了されました。");
+                                callback("1");
+                            }
+                            } else {
+                                    alert(JSON.stringify(response.error));
+                                    callback("0");
+                                    console.log(response.error);
+                                
+                                    callback("支払いが失敗しました。");
+                            }
                         },
-                        success: function(response) {
-                            // Handle success response
-                            console.log('Payment data inserted successfully:', response);
-                            $('#paymentsuccessModal').modal('show');
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error
-                            console.error('Error inserting payment data:', error);
-                            $('#paymentfailModal').modal('show');
+
+                        fail: function(data) {
+
+                            alert(JSON.stringify(response.error));
+                            alert("支払いが失敗しました。");
                         }
                     });
+
+       
+                // $.ajax({
+                //         url: '/payment/complete',
+                //         method: 'POST',
+                //         data: {
+                //             _token: '{{ csrf_token() }}',
+                //             addressId: '{{ $buyeraddress->id }}',
+                //             productid: '{{ $cartlist->product_id }}',
+                //             buyerid: '{{ $buyeraddress->userid }}',
+                //             sellerid: '{{ $cartlist->seller_id }}',
+                //             totalamount: '{{ $total }}',
+                //             color: '{{ $cartlist->product_color }}',
+                //             size: '{{ $cartlist->product_size }}',
+                //             qty: '{{ $cartlist->quantity }}',
+                //             postcode: '{{ $buyeraddress->post_code }}',
+                //             city: '{{ $buyeraddress->city }}',
+                //             chome: '{{ $buyeraddress->chome }}',
+                //             building: '{{ $buyeraddress->building }}',
+                //             room: '{{ $buyeraddress->room_no }}'
+                //         },
+                //         success: function(response) {
+                        
+                //             // Handle success response
+                //             console.log('Payment data inserted successfully:', response);
+                //             $('#paymentsuccessModal').modal('show');
+                //         },
+                //         error: function(xhr, status, error) {
+                           
+                //             // Handle error
+                //             console.error('Error inserting payment data:', error);
+                //             $('#paymentfailModal').modal('show');
+                //         }
+                //     });
               } else {
                   $('#paymentfailModal').modal('show');
               }

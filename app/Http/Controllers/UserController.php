@@ -472,7 +472,7 @@ class UserController extends Controller
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
             $buyerid = $buyer->id;
         
-            $cart = Carts::create([
+            $cart = Cart::create([
                 'product_id' => $productid,
                 'seller_id' => $sellerid,
                 'buyer_id' => $buyerid,
@@ -841,42 +841,49 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $id = IdGenerator::generate(['table' => 'orders','length' => 10, 'prefix' => date('yd')]);
-        
-        $order = Order::create([
+        $address = $request->addressId;
+        if($address)
+       {
+        $test = 1;
+       }
 
-            'id'=>$id,
-            'seller_id' => $request->sellerid,
-            'color' => $request->color,
-            'size' => $request->size,
-            'qty' => $request->qty,
-            'price' => $request->totalamount,
-        ]);
+        // $order = Order::create([
 
-        $payment = Payment::create([
-            'seller_id' => $request->sellerid,
-            'buyer_id' => $request->buyerid,
-            'amt' => $request->totalamount,
-        ]);
+        //     'id'=>$id,
+        //     'seller_id' => $request->sellerid,
+        //     'color' => $request->color,
+        //     'size' => $request->size,
+        //     'qty' => $request->qty,
+        //     'price' => $request->totalamount,
+        // ]);
 
-        $orderdetails = OrderDetail::create([
+        // $payment = Payment::create([
+        //     'seller_id' => $request->sellerid,
+        //     'buyer_id' => $request->buyerid,
+        //     'amt' => $request->totalamount,
+        // ]);
+
+        // $orderdetails = OrderDetail::create([
 
             
-            'seller_id' => $request->sellerid,
-            'buyer_id' => $request->buyerid,
-            'product_id' => $request->productid,
-            'color' => $request->color,
-            'size' => $request->size,
-            'qty' => $request->qty,
-            'amount' => $request->totalamount,
-            'post_code' => $request->totalamount,
-            'city' => $request->city,
-            'chome' => $request->chome,
-            'building' => $request->building,
-            'room_no' => $request->room,
+        //     'seller_id' => $request->sellerid,
+        //     'buyer_id' => $request->buyerid,
+        //     'product_id' => $request->productid,
+        //     'color' => $request->color,
+        //     'size' => $request->size,
+        //     'qty' => $request->qty,
+        //     'amount' => $request->totalamount,
+        //     'post_code' => $request->totalamount,
+        //     'city' => $request->city,
+        //     'chome' => $request->chome,
+        //     'building' => $request->building,
+        //     'room_no' => $request->room,
 
-        ]);
+        // ]);
+        return response()->json(['success'=>  $test]);
+
         // return redirect()->route('user_dashboard');
-        return response()->json(['message' => 'Successfully Pay']);
+        //return response()->json(['message' => 'Successfully Pay']);
     }
         
 }

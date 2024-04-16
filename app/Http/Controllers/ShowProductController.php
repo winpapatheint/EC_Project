@@ -286,7 +286,7 @@ class ShowProductController extends Controller
             ]);
         }
         $wishlist = Wishlist::where('buyer_id', $buyer->id)->get();
-        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();dd($wishlistProducts);
+        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();
 
         return view('front-end.wishlist',compact('wishlistProducts'));
     }

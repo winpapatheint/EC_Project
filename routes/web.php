@@ -9,9 +9,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Models\Product;
+use App\Http\Controllers\ShowProductController;
+
 
 
 /*
@@ -257,8 +257,14 @@ Route::get('/invoice/{id}', [OrderController::class, 'generatePDF'])->middleware
 // Route::get('', [OrderController::class, ''])->middleware(['auth','role:seller'])->name('');
 
 //SellerSubSeller
-Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('all.subseller');
-// Route::get('/seller/add/subseller', function () {return view('seller.subseller.subseller_add');})->name('add.subseller');
+Route::get('/subsellerlist', [SellerController::class, 'allSubseller'])->middleware(['auth','role:seller'])->name('all.subseller');
+Route::get('/subselleradd', [SellerController::class, 'addSubseller'])->middleware(['auth','role:seller'])->name('add.subseller');
+Route::post('/subsellerstore', [SellerController::class, 'storeSubseller'])->middleware(['auth','role:seller'])->name('store.subseller');
+Route::get('/subselleredit/{id}', [SellerController::class, 'editSubseller'])->middleware(['auth','role:seller'])->name('edit.subseller');
+Route::post('/subsellerupdate', [SellerController::class, 'updateSubseller'])->middleware(['auth','role:seller'])->name('update.subseller');
+Route::post('/subsellerdelete', [SellerController::class, 'deleteSubseller'])->middleware(['auth','role:seller'])->name('delete.subseller');
+
+
 // Route::get('/seller/edit/subseller', function () {return view('seller.subseller.subseller_edit');})->name('edit.subseller');
 
 //Subseller

@@ -399,7 +399,7 @@
                                             @endif
                                             <div class="col-12 px-0">
                                                 <div class="product-box">
-                                                @if ($topSaveProduct->created_at->diffInDays(\Carbon\Carbon::now()) < 1)
+                                                @if ($topSaveProduct->created_at->diffInDays(\Carbon\Carbon::now()) < 7)
                                                     <div class="label-tag">
                                                         <span>NEW</span>
                                                     </div>
@@ -758,6 +758,9 @@
     @php
         $targetDate = strtotime($coupon->valid_date);
         $remainingTime = ($targetDate - time()) * 1000;
+        if ($remainingTime < 0) {
+            $remainingTime = 0;
+        }
     @endphp
 
     <!-- Timer Js -->
@@ -765,6 +768,7 @@
     <script>
         var remainingTime = {{ $remainingTime }};
         var deadline = new Date(Date.parse(new Date()) + remainingTime);
+        console.log(deadline);
         initializeClock('clockdiv-1', deadline);
     </script>
 

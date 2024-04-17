@@ -38,9 +38,9 @@ Route::post('/products/reviews', [ReviewController::class, 'store'])->name('revi
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
 Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
-Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
-Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
-Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
+Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
 
 Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 

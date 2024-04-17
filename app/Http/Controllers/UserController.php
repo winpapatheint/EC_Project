@@ -16,6 +16,7 @@ use App\Models\BuyerPayment;
 use App\Models\Payment;
 use App\Models\OrderDetail;
 use App\Models\Order;
+use App\Models\Process;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CouponDetail;
@@ -186,6 +187,29 @@ class UserController extends Controller
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
+
+    }
+    //Show Order Tracking
+    public function orderTracking(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $id = $request->id;
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        $orderDetails = DB::table('orders')
+            ->join('sellers', 'orders.seller_id', '=', 'sellers.id')
+            ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->where('orders.id', $id)
+            ->select('orders.*', 'orders.id as order_id','sellers.*','orders.post_code as code','orders.city as buyercity','orders.chome as buyerchome','orders.building as buyerbuilding','orders.room_no as buyerroom' )
+            ->get();
+       
+            foreach ($orderDetails as $location)
+            {
+                $locationcity = $location->buyercity;
+                $locationchome = $location->buyerchome;
+            }
+        return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails','locationcity','locationcity'));
 
     }
     //Show Delivery Status
@@ -843,6 +867,7 @@ class UserController extends Controller
             $colors = $request->color;
             $sizes = $request->size;
             $quantities = $request->quantity;
+            $totalQty = $request->totalqty;
             $amount = $request->amount;
             $amount1 = $request->amount1;
             $totalAmount = $request->totalamount;
@@ -860,6 +885,7 @@ class UserController extends Controller
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
+                'total_qty'=> $totalQty,
                 'post_code' => $postcode,
                 'city' => $city,
                 'chome' => $chome,
@@ -867,7 +893,6 @@ class UserController extends Controller
                 'room_no' => $room,
             ]);
 
-<<<<<<< HEAD
             $payment = Payment::create([
                 'order_id' => $id,
                 'seller_id' => (int)$sellerId,
@@ -909,35 +934,4 @@ class UserController extends Controller
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }  
-=======
-        // $payment = Payment::create([
-        //     'seller_id' => $request->sellerid,
-        //     'buyer_id' => $request->buyerid,
-        //     'amt' => $request->totalamount,
-        // ]);
-
-        // $orderdetails = OrderDetail::create([
-
-
-        //     'seller_id' => $request->sellerid,
-        //     'buyer_id' => $request->buyerid,
-        //     'product_id' => $request->productid,
-        //     'color' => $request->color,
-        //     'size' => $request->size,
-        //     'qty' => $request->qty,
-        //     'amount' => $request->totalamount,
-        //     'post_code' => $request->totalamount,
-        //     'city' => $request->city,
-        //     'chome' => $request->chome,
-        //     'building' => $request->building,
-        //     'room_no' => $request->room,
-
-        // ]);
-        return response()->json(['success'=>  $test]);
-
-        // return redirect()->route('user_dashboard');
-        //return response()->json(['message' => 'Successfully Pay']);
-    }
-
->>>>>>> e07593dcf75d417c4481352ad55d0d1b0143b12e
 }

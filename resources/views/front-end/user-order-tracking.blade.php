@@ -56,20 +56,20 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>nn</h3>
-                                    <h6 class="text-content">ee</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
                         </div>
 
                         <ul class="nav nav-pills user-nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pills-dashboard-tab" data-bs-toggle="pill"
+                            <a class="nav-link" id="pills-dashboard-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-dashboard" type="button" style="font-size: 12px; text-align: center;" ><i data-feather="home"></i>
                                     DashBoard</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-order-tab" 
+                                <a class="nav-link active" id="pills-order-tab" 
                                     style="font-size: 12px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
@@ -103,186 +103,136 @@
                     <button class="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
                         <div class="dashboard-right-sidebar">
-                            <!-- <div class="tab-content" id="pills-tabContent"> -->
-                                <!-- <div class="tab-pane fade show active" id="pills-order" role="tabpanel"> -->
-
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-order" role="tabpanel">
                                         <!-- Order Tracking Section Start -->
+                                        @foreach($orderDetails as $orderdata)
                                         <section class="order-detail">
                                             <div class="container-fluid-lg">
                                                 <div class="row g-sm-4 g-3">
-                                                    <div class="col-xxl-3 col-xl-4 col-lg-6">
-                                                        <div class="order-image">
-                                                            <img src="../assets/images/vegetable/product/6.png" class="img-fluid blur-up lazyload" alt="">
+                                                    <div class="col-xl-4 col-sm-6">
+                                                        <div class="order-details-contain">
+                                                            <div class="order-tracking-icon">
+                                                                <i class="text-content" data-feather="crosshair"></i>
+                                                            </div>
+
+                                                            <div class="order-details-name">
+                                                                <h5 class="text-content">From</h5>
+                                                                <h4>{{ $orderdata->zip_code}},{{ $orderdata->city}},{{ $orderdata->chome}},{{ $orderdata->building}},{{ $orderdata->room}}</h4>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xxl-9 col-xl-8 col-lg-6">
-                                                        <div class="row g-sm-4 g-3">
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i data-feather="package" class="text-content"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">Tracking Code</h5>
-                                                                        <h2 class="theme-color">MH4285UY</h2>
-                                                                    </div>
-                                                                </div>
+                                                    <div class="col-xl-4 col-sm-6">
+                                                        <div class="order-details-contain">
+                                                            <div class="order-tracking-icon">
+                                                                <i class="text-content" data-feather="map-pin"></i>
                                                             </div>
 
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i data-feather="truck" class="text-content"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">Service</h5>
-                                                                        <img src="../assets/images/inner-page/brand-name.svg"
-                                                                            class="img-fluid blur-up lazyload" alt="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i class="text-content" data-feather="info"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">Package Info</h5>
-                                                                        <h4>Letter</h4>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i class="text-content" data-feather="crosshair"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">From</h5>
-                                                                        <h4>STR. Smardan 9, Bucuresti, romania.</h4>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i class="text-content" data-feather="map-pin"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">Destination</h5>
-                                                                        <h4>Flokagata 24, 105 Reykjavik, Iceland</h4>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-xl-4 col-sm-6">
-                                                                <div class="order-details-contain">
-                                                                    <div class="order-tracking-icon">
-                                                                        <i class="text-content" data-feather="calendar"></i>
-                                                                    </div>
-
-                                                                    <div class="order-details-name">
-                                                                        <h5 class="text-content">Estimated Time</h5>
-                                                                        <h4>7 Frb, 05:05pm</h4>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-12 overflow-hidden">
-                                                                <ol class="progtrckr">
-                                                                    <li class="progtrckr-done">
-                                                                        <h5>Order Processing</h5>
-                                                                        <h6>05:43 AM</h6>
-                                                                    </li>
-                                                                    <li class="progtrckr-done">
-                                                                        <h5>Pre-Production</h5>
-                                                                        <h6>01:21 PM</h6>
-                                                                    </li>
-                                                                    <li class="progtrckr-done">
-                                                                        <h5>In Production</h5>
-                                                                        <h6>Processing</h6>
-                                                                    </li>
-                                                                    <li class="progtrckr-todo">
-                                                                        <h5>Shipped</h5>
-                                                                        <h6>Pending</h6>
-                                                                    </li>
-                                                                    <li class="progtrckr-todo">
-                                                                        <h5>Delivered</h5>
-                                                                        <h6>Pending</h6>
-                                                                    </li>
-                                                                </ol>
+                                                            <div class="order-details-name">
+                                                                <h5 class="text-content">Destination</h5>
+                                                                <h4>{{ $orderdata->code}},{{ $orderdata->buyercity}},{{ $orderdata->buyerchome}},{{ $orderdata->buyerbuilding}},{{ $orderdata->buyerroom}}</h4>
                                                             </div>
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-xl-4 col-sm-6">
+                                                        <div class="order-details-contain">
+                                                            <div class="order-tracking-icon">
+                                                                <i class="text-content" data-feather="calendar"></i>
+                                                            </div>
+
+                                                            <div class="order-details-name">
+                                                                <h5 class="text-content">Estimated Time</h5>
+                                                                <h4>{{ $orderdata->expected_from}}~{{ $orderdata->expected_to}}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12 overflow-hidden">
+                                                    <ol class="progtrckr">
+                                                        <li class="{{ !empty($order->confirmed_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                                            <h5>Order Confirmed</h5>
+                                                        </li>
+                                                        <li class="{{ !empty($order->processing_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                                            <h5>Processing</h5>
+                                                        </li>
+                                                        <li class="{{ !empty($order->picked_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                                            <h5>Pick-up</h5>
+                                                        </li>
+                                                        <li class="{{ !empty($order->shipped_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                                            <h5>Shipped</h5>
+                                                        </li>
+                                                        <li class="{{ !empty($order->delivered_date) ? 'progtrckr-done' : 'progtrckr-todo' }}">
+                                                            <h5>Delivered</h5>
+                                                        </li>
+                                                    </ol>
                                                     </div>
                                                 </div>
                                             </div>
                                         </section>
+                                        @endforeach
                                          <!-- Order Detail Section End -->
 
                                         <!-- Order Table Section Start -->
                                         <section class="order-table-section section-b-space">
-                                            <div class="container-fluid-lg">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="table-responsive">
-                                                            <table class="table order-tab-table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Description</th>
-                                                                        <th>Date</th>
-                                                                        <th>Time</th>
-                                                                        <th>Location</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Order Placed</td>
-                                                                        <td>26 Sep 2021</td>
-                                                                        <td>12:00 AM</td>
-                                                                        <td>California</td>
-                                                                    </tr>
+                                        <div class="table-responsive dashboard-bg-box">
+                            <table class="table product-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Location</th>
 
-                                                                    <tr>
-                                                                        <td>Preparing to Ship</td>
-                                                                        <td>03 Oct 2021</td>
-                                                                        <td>12:00 AM</td>
-                                                                        <td>Canada</td>
-                                                                    </tr>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                 @php $counter = 1; @endphp
+                                @if ($process->isEmpty())
+                                    <tr>
+                                        <td colspan="4" style="text-align: center">No data available</td>
+                                    </tr>
+                                @else
+                                    @foreach ($process as $key => $item)
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            @if (!empty($item->confirmed_date))
+                                                <td><p class="fw-bold">Confirmed</p></td>
+                                                <td><p class="fw-bold">{{ $item->confirmed_date }}</p></td>
+                                            @elseif (!empty($item->processing_date))
+                                                <td><p class="fw-bold">Processing</p></td>
+                                                <td><p class="fw-bold">{{ $item->processing_date }}</p></td>
+                                            @elseif (!empty($item->picked_date))
+                                                <td><p class="fw-bold">Picked</p></td>
+                                                <td><p class="fw-bold">{{ $item->picked_date }}</p></td>
+                                            @elseif (!empty($item->shipped_date))
+                                                <td><p class="fw-bold">Shipped</p></td>
+                                                <td><p class="fw-bold">{{ $item->shipped_date }}</p></td>
+                                            @else
+                                                <td><p class="fw-bold">Delivered</p></td>
+                                                <td><p class="fw-bold">{{ $item->delivered_date }}</p></td>
+                                            @endif
+                                            <td>
+                                                <h6>{{ $locationcity }}, {{ $locationchome }}</h6>
+                                            </td>
+                                        </tr> 
+                                    @endforeach
+                                @endif
 
-                                                                    <tr>
-                                                                        <td>Shipped</td>
-                                                                        <td>04 Oct 2021</td>
-                                                                        <td>12:00 AM</td>
-                                                                        <td>America</td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <td>Delivered</td>
-                                                                        <td>10 Nav 2021</td>
-                                                                        <td>12:00 AM</td>
-                                                                        <td>Germany</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                   
+                                </tbody>
+                                </table>
+                                    </div>
+              
+                                </div>
+                            </div>  
+                        </div>
                                         </section>
                                         <!-- Order Table Section End -->
                                         <!-- Order Tracking Section End -->
-                                   
-                            <!--  </div> -->
-                        <!-- </div> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -167,8 +167,8 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                        </a>
+                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('user_order_tracking',['id' => $item->order_id]) }}">Tracking</a>
+                                                                                                                                                                                         
                                                     </li>
                                                 </ul>
                                             </td>

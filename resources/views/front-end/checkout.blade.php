@@ -125,6 +125,8 @@
                     $amount = 0;
                     $amount1 = 0;
                     $total = 0;
+                    $subTotal = 0;
+                    $totalqty = 0;
                     $productIds = [];
                     $sellerIds = [];
                     $productColors = [];
@@ -163,6 +165,8 @@
                                                 $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
                                                 $quantity = $cartlist->quantity;
                                                 $amount = $discountedPrice * $quantity;
+                                                $subTotal += $amount; 
+                                                $totalqty += $quantity
                                             @endphp
                                             <h4 class="price">¥ {{ number_format($amount , 0, '.', ',') }}</h4>
                                         @else
@@ -170,17 +174,19 @@
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
                                                 $amount1 = $sellingPrice * $quantity;
+                                                $subTotal += $amount1;
+                                                $totalqty += $quantity
                                             @endphp
                                             <h4 class="price">¥ {{ number_format($amount1 , 0, '.', ',') }}</h4>
                                         @endif
                                 </li>
                             </ul>
+                            <input type="hidden" name="totalqty" value="{{ $totalqty }}">
+                                  
                             @endforeach
                             <ul class="summery-total">
                                 <li>
-                                    @php
-                                        $subTotal = $amount + $amount1
-                                    @endphp
+
                                     <h4>Subtotal</h4>
                                     <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
                                 
@@ -264,6 +270,7 @@ function purchasepaymentdone(total, callback) {
     var Newcolor = <?php echo json_encode($productColors ); ?>; 
     var Newsize = <?php echo json_encode($productSizes ); ?>; 
     var Newquantity = <?php echo json_encode($productQuantities ); ?>;
+    var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
     var Newamount = <?php echo json_encode($amount ); ?>;
     var Newamount1 = <?php echo json_encode($amount1 ); ?>;
     var Newtotalamount = <?php echo json_encode($total ); ?>;
@@ -271,7 +278,7 @@ function purchasepaymentdone(total, callback) {
     var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
     var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>; 
     var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>; 
-    var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>; 
+    var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>;
 
     $.ajax({
     url: '{{ route("payment_completed") }}',
@@ -284,6 +291,7 @@ function purchasepaymentdone(total, callback) {
         color: Newcolor,
         size: Newsize,
         quantity: Newquantity,
+        totalqty: Newtotalqty,
         amount: Newamount,
         amount1: Newamount1,
         totalamount: Newtotalamount,

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class SubCategory extends Model
 {
     use HasFactory;
+
+    function subCategoryTitle() {
+        return $this->belongsTo(SubCategoryTitle::class,'sub_category_title_id');
+    }
 }

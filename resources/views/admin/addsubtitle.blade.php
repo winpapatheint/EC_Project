@@ -40,8 +40,8 @@
                                                                 <option value="{{ $category -> id }}" >
                                                                     {{ $category -> category_name }}  </option>
                                                             @endforeach
-
                                                         </select>
+
                                                         <p style="display:none" class="category error text-danger"></p>
                                                         @if (!empty($error['category']))
                                                             @foreach ($error['category'] as  $key => $value)

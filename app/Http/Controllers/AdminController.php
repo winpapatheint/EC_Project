@@ -81,7 +81,7 @@ class AdminController extends Controller
             ->orderByDesc('total_orders')
             ->take(4)
             ->get();
-        
+
         $coupon = Coupon::where('status', 1)->first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
@@ -708,18 +708,19 @@ class AdminController extends Controller
             $kword = '';
         }
 
-     $lists = DB::table('categories')
-        ->select('Sb.id', 'categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
-        ->leftJoin('sub_category_titles as S', function ($join) {
-            $join->on('categories.id', '=', 'S.category_id');
-        })
-        ->leftJoin('sub_categories as Sb', function ($join) {
-            $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'categories.id');
-        })
 
-        ->orderBy('Sb.created_at', 'desc')
-        ->paginate($limit);
+        $lists = DB::table('categories')
+                    ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
+                    ->leftJoin('sub_category_titles as S', function ($join) {
+                        $join->on('categories.id', '=', 'S.category_id');
+                    })
+                    ->leftJoin('sub_categories as Sb', function ($join) {
+                        $join->on('Sb.sub_category_title_id', '=', 'S.id');
+                        $join->on('Sb.category_id', '=', 'categories.id');
+                    })
+
+                    ->orderBy('Sb.created_at', 'desc')
+                    ->paginate($limit);
 
         $listss = DB::table('sub_categories')
         ->select('sub_categories.*','categories.category_name as category','S.*')
@@ -1611,21 +1612,9 @@ class AdminController extends Controller
 
     public function deletecategory(Request $request)
     {
-
-        $catlist =  DB::table('categories')
-                        ->whereIn('id', function ($query) use ($request) {
-                        $query->select('category_id')
-                        ->from('sub_category_titles')
-                        ->where('id',$request->id);
-                        })
-
-                        ->delete();
-
-        $subtitlelist = DB::table('sub_category_titles')
-        ->delete($request->id);
-
-        return redirect('/admin/all/subcategory')->with('success','削除されました。');
-
+        DB::table('sub_category_titles')->where('id', $request->id)->delete();
+        DB::table('categories')->where('id', $request->id)->delete();
+        return redirect('/admin/category')->with('success','削除されました。');
     }
 
     public function deleteblog(Request $request)
@@ -1709,6 +1698,7 @@ class AdminController extends Controller
 
     public function editcategory($id)
     {
+
         $data = DB::table('categories')
                     ->find($id);
         $editmode = true;
@@ -1798,38 +1788,68 @@ class AdminController extends Controller
 
     }
 
-    public function editsubcategory($id)
+    public function editsubcategory($type,$id)
     {
+        if($type==3)
+        {
+            $subtitle = DB::table('sub_categories')
+                        ->find($id);
 
-        $subtitle = DB::table('sub_categories')
-                    ->find($id);
+            $subcat_id = DB::table('sub_categories')
+                        ->select('sub_categories.sub_category_title_id')
+                        ->where('id',$id)->first();
 
-        $subcat_id = DB::table('sub_categories')
-                    ->select('sub_categories.sub_category_title_id')
-                    ->where('id',$id)->first();
+            $subcategory_titlename = DB::table('sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
 
-        $subcategory_titlename = DB::table('sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
-
-        $categories = DB::table('categories')
-                    ->select('categories.*')
-                    ->orderBy('categories.created_at', 'asc')->get();
+            $categories = DB::table('categories')
+                        ->select('categories.*')
+                        ->orderBy('categories.created_at', 'asc')->get();
 
 
-        $category = DB::table('sub_category_titles')
-                    ->select('S.sub_category_name as subcategory_name')
-                    ->join('sub_categories as S', function ($join) {
-                    $join->on('sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
-                })
-                ->orderBy('sub_category_titles.created_at', 'desc')->get();
+            $category = DB::table('sub_category_titles')
+                        ->select('S.sub_category_name as subcategory_name')
+                        ->join('sub_categories as S', function ($join) {
+                        $join->on('sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
+                    })
+                    ->orderBy('sub_category_titles.created_at', 'desc')->get();
 
-        $subcategory_name = DB::table('sub_categories')
-                            ->select('sub_categories.sub_category_name')
-                            ->where('id', $id)
-                            ->first();
+            $subcategory_name = DB::table('sub_categories')
+                                ->select('sub_categories.sub_category_name')
+                                ->where('id', $id)
+                                ->first();
 
-        $editmode = true;
 
-        return view('admin.editcategory',compact('subcat_id','subtitle','categories','subcategory_titlename','subcategory_name','editmode'));
+            $editmode = true;
+
+            return view('admin.editcategory',compact('subcat_id','subtitle','categories','subcategory_titlename','subcategory_name','editmode'));
+        }
+        else if($type == 1)
+        {
+            $data = DB::table('categories')
+                        ->find($id);
+            $editmode = true;
+
+            return view('admin.addcategory',compact('data','editmode'));
+        }
+        else
+        {
+            $subtitle = DB::table('sub_category_titles')
+                            ->find($id);
+
+            $categories = DB::table('categories')
+                        ->select('categories.*')
+                        ->orderBy('categories.created_at', 'asc')->get();
+
+            $category = DB::table('categories')
+                        ->select('categories.*')
+                        ->where('id', $subtitle->sub_category_id)
+                        ->pluck('id')->toArray();
+
+            $editmode = true;
+
+            return view('admin.editsubcattitle',compact('subtitle','categories','category','editmode'));
+        }
+
 
     }
 
@@ -1859,7 +1879,7 @@ class AdminController extends Controller
             }
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
 
@@ -1871,7 +1891,7 @@ class AdminController extends Controller
 
             DB::table('sub_category_titles')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
 
     }
@@ -1902,7 +1922,7 @@ class AdminController extends Controller
                     ]);
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
             $updval = array( 'category_id' => $request->category,
@@ -1913,7 +1933,7 @@ class AdminController extends Controller
 
             DB::table('sub_categories')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
 
     }
@@ -2187,13 +2207,6 @@ class AdminController extends Controller
             $imageName = '';
         }
 
-       // if (!empty($request->image)) {
-          // $imageName = time().'.'.$request->image->extension();
-           // $request->image->move(public_path('images'), $imageName);
-        //} else {
-          //  $imageName = '';
-      //  }
-
         $time = new DateTime();
 
         if (empty($request->id)) {
@@ -2206,7 +2219,7 @@ class AdminController extends Controller
             ]);
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
             $updval = array('category_name' => $request->title,
@@ -2219,10 +2232,9 @@ class AdminController extends Controller
 
             DB::table('categories')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
         }
-
     }
 
     public function getSubcategories(Request $request) {

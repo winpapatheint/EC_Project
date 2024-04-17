@@ -12,4 +12,9 @@ class SubCategoryTitle extends Model
     function category() {
         return $this->belongsTo(Category::class,'category_id');
     }
+
+    public function subCategory()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
 }

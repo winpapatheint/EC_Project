@@ -438,61 +438,32 @@
                                             </li>
                                             @endif
 
-                                            @php
-                                                $specialCornerFlag = 0;
-                                                if ($myanmarProducts->count() > 0 || $koreaProducts->count() > 0 || $chinaProducts->count() > 0) {
-                                                    $specialCornerFlag = 1;
-                                                }
-                                            @endphp
+                                            @if ($specialCorner->isNotEmpty())
+                                                <li class="nav-item dropdown dropdown-mega">
+                                                    <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0" href="javascript:void(0)" data-bs-toggle="dropdown">
+                                                        <span class="menu">Special Corner</span>
+                                                    </a>
 
-
-
-                                            @if ($specialCornerFlag == 1)
-                                            <li class="nav-item dropdown dropdown-mega">
-                                                <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
-                                                    href="javascript:void(0)" data-bs-toggle="dropdown">
-                                                    <span class="menu">Special Corner</span>
-                                                </a>
-
-                                                <div class="dropdown-menu dropdown-menu-2">
-                                                    <div class="row">
-                                                        <div class="dropdown-column col-xl-3">
-                                                        @if($myanmarProducts->count() > 0)
-                                                            <h5 class="dropdown-header">Myanmar Products</h5>
-                                                            @foreach($myanmarProducts as $myanmarProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $myanmarProduct->id]) }}">
-                                                                {{ $myanmarProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column col-xl-3">
-
-                                                        @if($koreaProducts->count() > 0)
-                                                            <h5 class="dropdown-header">Korea Products</h5>
-                                                            @foreach($koreaProducts as $koreaProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $koreaProduct->id]) }}">
-                                                                {{ $koreaProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column col-xl-3">
-
-                                                        @if($chinaProducts->count() > 0)
-                                                            <h5 class="dropdown-header">China Products</h5>
-                                                            @foreach($chinaProducts as $chinaProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $chinaProduct->id]) }}">
-                                                                {{ $chinaProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column dropdown-column-img col-3"></div>
+                                                    <div class="dropdown-menu dropdown-menu-2">
+                                                        @foreach ($specialCorner as $category)
+                                                            <div class="row">
+                                                                @foreach ($category->subCategoryTitle as $subCategoryTitle)
+                                                                    <div class="dropdown-column col-xl-3">
+                                                                        <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
+                                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                                            <a class="dropdown-item" href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">
+                                                                                {{ $subCategory->sub_category_name }}
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                </div>
-                                            </li>
+                                                </li>
                                             @endif
+
+
 
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>

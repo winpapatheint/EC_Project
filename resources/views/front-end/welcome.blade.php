@@ -333,44 +333,46 @@
                             </span>
                             <p>Don't miss this opportunity at a special discount just for this week.</p>
                         </div>
-                        <div class="timing-box">
-                            <div class="timing">
-                                <i data-feather="clock"></i>
-                                <h6 class="name">Expires in :</h6>
-                                <div class="time" id="clockdiv-1">
-                                    <ul>
-                                        <li>
-                                            <div class="counter">
-                                                <div class="days">
-                                                    <h6></h6>
+                        @if ($coupon)
+                            <div class="timing-box">
+                                <div class="timing">
+                                    <i data-feather="clock"></i>
+                                    <h6 class="name">Expires in :</h6>
+                                    <div class="time" id="clockdiv-1">
+                                        <ul>
+                                            <li>
+                                                <div class="counter">
+                                                    <div class="days">
+                                                        <h6></h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter">
-                                                <div class="hours">
-                                                    <h6></h6>
+                                            </li>
+                                            <li>
+                                                <div class="counter">
+                                                    <div class="hours">
+                                                        <h6></h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter">
-                                                <div class="minutes">
-                                                    <h6></h6>
+                                            </li>
+                                            <li>
+                                                <div class="counter">
+                                                    <div class="minutes">
+                                                        <h6></h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="counter">
-                                                <div class="seconds">
-                                                    <h6></h6>
+                                            </li>
+                                            <li>
+                                                <div class="counter">
+                                                    <div class="seconds">
+                                                        <h6></h6>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
 
                     <div class="section-b-space">
@@ -446,18 +448,20 @@
                         </div>
                     </div>
 
-                    <div class="section-t-space section-b-space">
-                        <div class="banner-contain">
-                            <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
-                            <div class="banner-details p-center p-4 text-white text-center">
-                                <div>
-                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
-                                    <h4 class="lh-base fw-bold offer-text">Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of ¥{{ $coupon->mini_amount}}</h4>
-                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                    @if ($coupon)
+                        <div class="section-t-space section-b-space">
+                            <div class="banner-contain">
+                                <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
+                                <div class="banner-details p-center p-4 text-white text-center">
+                                    <div>
+                                        <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                        <h4 class="lh-base fw-bold offer-text">Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of ¥{{ $coupon->mini_amount}}</h4>
+                                        <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 @endif
 
                     <div class="title">
@@ -756,8 +760,12 @@
     </section>
     <!-- Newsletter Section End -->
     @php
-        $targetDate = strtotime($coupon->valid_date);
-        $remainingTime = ($targetDate - time()) * 1000;
+        $remainingTime = 0;
+        if ($coupon)
+        {
+            $targetDate = strtotime($coupon->valid_date);
+            $remainingTime = ($targetDate - time()) * 1000;
+        }
         if ($remainingTime < 0) {
             $remainingTime = 0;
         }

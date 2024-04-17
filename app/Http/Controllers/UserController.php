@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Buyer;
 use App\Models\BuyerAddress;
 use App\Models\BuyerPayment;
+use App\Models\Payment;
 use App\Models\OrderDetail;
 use App\Models\Order;
 use App\Models\Product;
@@ -840,50 +841,77 @@ class UserController extends Controller
     public function paymentCompleted(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $id = IdGenerator::generate(['table' => 'orders','length' => 10, 'prefix' => date('yd')]);
-        $address = $request->addressId;
-        if($address)
-       {
-        $test = 1;
-       }
 
-        // $order = Order::create([
+        try {
+            $productIds = $request->productid;
+            $buyerId = $request->buyerid;
+            $sellerId = $request->sellerid;
+            $colors = $request->color;
+            $sizes = $request->size;
+            $quantities = $request->quantity;
+            $amount = $request->amount;
+            $amount1 = $request->amount1;
+            $totalAmount = $request->totalamount;
+            $postcode = $request->postcode;
+            $city = $request->city;
+            $chome = $request->chome;
+            $building = $request->building;
+            $room = $request->room;
+    
+            // Generate a unique order ID
+            $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
 
-        //     'id'=>$id,
-        //     'seller_id' => $request->sellerid,
-        //     'color' => $request->color,
-        //     'size' => $request->size,
-        //     'qty' => $request->qty,
-        //     'price' => $request->totalamount,
-        // ]);
+            $order = Order::create([
+                'id' => $id,
+                'seller_id' => (int)$sellerId,
+                'buyer_id' => (int)$buyerId,
+                'total_amount' => $totalAmount,
+                'post_code' => $postcode,
+                'city' => $city,
+                'chome' => $chome,
+                'building' => $building,
+                'room_no' => $room,
+            ]);
 
-        // $payment = Payment::create([
-        //     'seller_id' => $request->sellerid,
-        //     'buyer_id' => $request->buyerid,
-        //     'amt' => $request->totalamount,
-        // ]);
-
-        // $orderdetails = OrderDetail::create([
-
-            
-        //     'seller_id' => $request->sellerid,
-        //     'buyer_id' => $request->buyerid,
-        //     'product_id' => $request->productid,
-        //     'color' => $request->color,
-        //     'size' => $request->size,
-        //     'qty' => $request->qty,
-        //     'amount' => $request->totalamount,
-        //     'post_code' => $request->totalamount,
-        //     'city' => $request->city,
-        //     'chome' => $request->chome,
-        //     'building' => $request->building,
-        //     'room_no' => $request->room,
-
-        // ]);
-        return response()->json(['success'=>  $test]);
-
-        // return redirect()->route('user_dashboard');
-        //return response()->json(['message' => 'Successfully Pay']);
-    }
+            $payment = Payment::create([
+                'order_id' => $id,
+                'seller_id' => (int)$sellerId,
+                'buyer_id' => (int)$buyerId,
+                'total_amount' => $totalAmount,
+                ]);
         
+            foreach ($productIds as $key => $product_id) {
+                if (isset($amount[$key]) && $amount[$key]) {
+                    $orderdetailsData = [
+                        'order_id' => $id,
+                        'buyer_id' => (int)$buyerId,
+                        'product_id' => (int)$product_id,
+                        'color' => $colors[$key],
+                        'size' => $sizes[$key],
+                        'qty' => $quantities[$key],
+                        'amount' => $amount,
+                    ];
+                } else {
+                    $orderdetailsData = [
+                        'order_id' => $id,
+                        'buyer_id' => (int)$buyerId,
+                        'product_id' => (int)$product_id,
+                        'color' => $colors[$key],
+                        'size' => $sizes[$key],
+                        'qty' => $quantities[$key],
+                        'amount' => $amount1,
+                    ];
+                }
+                
+                OrderDetail::create($orderdetailsData);
+            }
+            return response()->json(['message' => 'Your order created successfully.']);
+            
+            
+        } catch (\Exception $e) {
+            // Log any exceptions for debugging
+            \Log::error($e->getMessage());
+            return response()->json(['message' => 'An error occurred'], 500);
+        }
+    }  
 }

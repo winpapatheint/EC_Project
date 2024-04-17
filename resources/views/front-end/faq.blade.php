@@ -2,17 +2,27 @@
  <x-guest-layout>
 
     <!-- Breadcrumb Section Start -->
-    <section class="faq-breadcrumb pt-0">
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="breadcrumb-contain">
-                        <h2>FAQ</h2>
+        <section class="breadcrumb-section pt-0">
+            <div class="container-fluid-lg">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-contain">
+                            <h2>FAQ</h2>
+                            <nav>
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ url('/') }}">
+                                            <i class="fa-solid fa-house"></i>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">FAQ</li>
+                                </ol>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
     <!-- Breadcrumb Section End -->
 
     <!-- Faq Section Start -->
@@ -22,17 +32,17 @@
 
                 <div class="col-xl-7">
                     <div class="faq-accordion">
-            
+
                         <div class="accordion" id="accordionExample">
-                                               
+
                             @foreach( $lists as $key => $list )
                                 @if ($loop->first)
 
                                     <div class="accordion-item">
 
                                         <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" 
-                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" 
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
                                                 aria-expanded="true" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
                                                 {!! $list->que !!}
                                                 <i class="fa-solid fa-angle-down"></i>
@@ -43,18 +53,18 @@
                                             aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <p>{!! $list->ans !!}</p>
-                        
+
                                             </div>
                                         </div>
                                     </div>
 
                                 @else
-    
+
                                     <div class="accordion-item">
-                          
+
                                         <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" 
-                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" 
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
                                                 aria-expanded="false" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
                                                 {!! $list->que !!}
                                                 <i class="fa-solid fa-angle-up"></i>
@@ -65,7 +75,7 @@
                                             aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <p>{!! $list->ans !!}</p>
-                    
+
                                             </div>
                                         </div>
                                     </div>
@@ -74,13 +84,13 @@
                                 @endif
                             @endforeach
                         </div>
-                                
+
                     </div>
                 </div>
-               
+
 
                 <div class="col-xl-5 right-sidebar-box" id="ts-form">
-                 
+
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="alert-success">
                             <strong>{{ $message }}</strong>
@@ -162,9 +172,9 @@
                                 <button class="btn btn-animation btn-md fw-bold ms-auto" type="submit">Send Message</button>
 
                             </form>
-                                 
+
                         </div>
-                      
+
                 </div>
             </div>
         </div>

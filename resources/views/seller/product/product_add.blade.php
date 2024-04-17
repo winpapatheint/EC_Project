@@ -194,7 +194,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Discount Percentage</label>
                                         <div class="col-sm-6">
-                                            <input class="form-control" name="discount_percent" id="discount_percent" type="number" placeholder="0-100%" min="1" max="100" value="{{ old('discount_percent') }}">
+                                            <input class="form-control" name="discount_percent" id="discount_percent" type="number" placeholder="0-100%" min="0" max="100" value="{{ old('discount_percent') }}">
                                         </div>
                                         <div class="col-sm-3">
                                             <input class="form-control" name="selling_price" id="selling_price" type="number" disabled>

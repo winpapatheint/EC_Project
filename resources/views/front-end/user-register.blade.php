@@ -62,6 +62,11 @@
                                             <span style="color:red">@error('email'){{ $message }} @enderror</span>
                                         </div>
                                     </div>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e07593dcf75d417c4481352ad55d0d1b0143b12e
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
@@ -74,8 +79,12 @@
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
                                             <input type="password" name="password_confirmation" class="form-control" placeholder="Password">
+<<<<<<< HEAD
                                             <label>Confirm Password</label>
                                             
+=======
+
+>>>>>>> e07593dcf75d417c4481352ad55d0d1b0143b12e
                                         </div>
                                     </div>
 
@@ -88,7 +97,20 @@
                                     </div>
 
                                     <div class="col-md-6">
+<<<<<<< HEAD
                                         <div class="form-floating theme-form-floating">
+=======
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
+                                            <span style="color:red">@error('address'){{$message}} @enderror</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+>>>>>>> e07593dcf75d417c4481352ad55d0d1b0143b12e
                                             <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
                                             <label for="phone">Phone</label>
                                             <span style="color:red">@error('phone'){{$message}} @enderror</span>
@@ -154,6 +176,7 @@
                                         </div>
                                     </div>
 
+<<<<<<< HEAD
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
                                             <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
@@ -161,6 +184,10 @@
                                             <span style="color:red">@error('address'){{$message}} @enderror</span>
                                         </div>
                                     </div>
+=======
+
+
+>>>>>>> e07593dcf75d417c4481352ad55d0d1b0143b12e
 
                                     <input type="hidden" name="role" value="buyer">
 

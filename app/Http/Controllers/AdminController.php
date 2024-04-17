@@ -10,6 +10,7 @@ use App\Models\Process;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Seller;
+use App\Models\Help;
 use App\Models\MultiImg;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-       
+
         $categories = Category::all();
 
         $blogs = DB::table('blogs')
@@ -81,7 +82,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
         
-        $coupon = Coupon::first();
+        $coupon = Coupon::where('status', 1)->first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -1754,6 +1755,19 @@ class AdminController extends Controller
         $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
         $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
         $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
+        $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+
+        $product_coupon = DB::table('products as P')
+                    ->select('P.coupon_id','P.coupon_status')
+                    ->where('P.id',$id)
+                    ->orderBy('P.created_at', 'desc')->first();
+
+        $couponlist = DB::table('coupons')
+                        ->select('coupons.id')
+                        ->where('id',$product_coupon->coupon_id)
+                        ->orderBy('created_at', 'desc')->first();
+
+
         $multiImgs = MultiImg::where('product_id',$id)->get();
         $data = DB::table('products as P')
                 ->where('P.id',$id)
@@ -1761,7 +1775,7 @@ class AdminController extends Controller
 
         $editmode = true;
 
-        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs'));
+        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs','coupons','couponlist','product_coupon'));
 
     }
 
@@ -1905,60 +1919,75 @@ class AdminController extends Controller
     }
 
     public function contact(Request $request)
-    { 
- 
-        $inquiry_email = 'info-test@asia-hd.com';
+    {
         if ($request->from == 'faq') {
-           if(empty($request->id))
-           {
-            $valarr = array('name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'subject' => 'required|not_in:0',
-            'phone' => 'required|string|max:255',
-            'message' => 'required',
+            $inquiry_email = 'info-test@asia-hd.com';
 
-        );
-        $request->validate($valarr);
-           
-        // print_r("$request->check");die;
-        $validator = Validator::make($request->all(), $valarr,
-                    [
-                        'phone.required' => '電話番号を入力してください',
-                        'phone.regex' => '有効な電話番号を入力してください',
-                    ]);
+            $valarr = array(
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
 
-        if($request->ajax()){
+            );
+            $request->validate($valarr);
 
-            if ($validator->passes()) {
-                return response()->json(['success'=>'allpasses']);
-            }         
-        return response()->json(['error'=>$validator->errors()]);
+            $data = array('name'=>$request->name);
+
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+            }
+
+            return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
 
         }
-    }
-  
-        $data = array('name'=>$request->name);
 
-     if (!empty($request->email)) {
-       $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-          $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
-          $message->from($request->email,$request->name);
-          $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
-          \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-          \r\n名前：　".$request->name."
-          \r\n"."メールアドレス：　".$request->email."
-          \r\n
-          \r\n"."お問い合わせ内容：　
-          \r\n".$request->message."
-          \r\n
-          \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-       });
-     }
+        else if( $request->from == 'contact')
+        {
+            $inquiry_email = 'info-test@asia-hd.com';
 
-         return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
+            ]);
 
-     }
-  
+            $data = array('name'=>$request->name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+
+                });
+            }
+
+            return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
+        }
     }
 
     public function storeblog(Request $request)
@@ -2089,11 +2118,11 @@ class AdminController extends Controller
         $sellerAmount = $discountedPrice - $commisonAmount;
 
         $adminAmount = $discountedPrice -  $sellerAmount;
-
         $updval = array('product_code' => $request->productcode,
                         'product_name' => $request->productname,
                         'country_id' => $request->country,
                         'brand_id' => $request->brand,
+                        'coupon_id' => $request->coupon,
                         'category_id' => $request->category,
                         'sub_category_title_id' => $request->subcattitle,
                         'sub_category_id' => $request->subcategory,
@@ -2123,10 +2152,19 @@ class AdminController extends Controller
             if (!empty($request->product_thambnail)) {
                 $updval['product_thambnail'] = $imageName;
             }
+            if (!empty($request->status)) {
+                if($request->status === 'yes')
+                {
+                    $updval['coupon_status'] = 1;
+                }
+                else{
+                    $updval['coupon_status'] = 0;
+                }
+            }
 
             DB::table('products')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
     }
 
     public function storecategory(Request $request)
@@ -2202,6 +2240,32 @@ class AdminController extends Controller
         $order = Order::latest()->paginate(10);
         return view('admin.order.indexorderlist',compact('order'));
 
+    }
+
+    public function admindashboard()
+    {
+        $limit=5;
+        $transfer = Order::latest()->paginate($limit);
+        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                        ->whereYear('created_at', date('Y'))
+                        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                        ->pluck('count', 'month_name');
+        $ttl = $transfer->total();
+        $ttlpage = (ceil($ttl / $limit));
+        $labels = $orders->keys();
+        $data = $orders->values();
+        return view('admin.index',compact('labels', 'data','transfer','ttl','ttlpage'));
+    }
+
+    public function indexhelp()
+    {
+        $helps = Help::latest()->paginate(4);
+        return view('admin.indexhelp',compact('helps'));
+    }
+
+    public function addHelp()
+    {
+        return view('admin.addhelp');
     }
 
 }

@@ -61,11 +61,11 @@ Route::post('user/profile/edit-password', [UserController::class, 'editPassword'
 Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
-Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->name('show-wishlist');
+Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->middleware(['auth', 'role:buyer'])->name('show-wishlist');
 Route::post('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
-Route::get('/carts', [UserController::class, 'showCarts'])->name('show_carts');
+Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');

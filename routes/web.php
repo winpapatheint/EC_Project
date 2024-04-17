@@ -180,13 +180,14 @@ route::post('/admin/all/deletecategory',[AdminController::class,'deletecategory'
 Route::get('/admin/all/subtitle', [AdminController::class,'indexsubtitle'])->name('admin.all.subtitle');
 Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
 Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);
-Route::get('/editsubcategory/{categoryid}', [AdminController::class, 'editsubcategory']);
+Route::get('/editsubcategory/{categorytype}/{categoryid}', [AdminController::class, 'editsubcategory']);
+route::post('/admin/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
 
-Route::get('/admin/all/subcategory', [AdminController::class,'indexsubcategory'])->name('admin.all.subcategory');
+Route::get('/admin/category', [AdminController::class,'indexsubcategory'])->name('admin.category');
 
-Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
-Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
-Route::get('/admin/all/addsubcategory', [AdminController::class,'addsubcategory'])->name('admin.all.addsubcategory');
+Route::get('/admin/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
+Route::get('/admin/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
+Route::get('/admin/addsubcategory', [AdminController::class,'addsubcategory'])->name('admin.all.addsubcategory');
 Route::post('get-subcategories', [AdminController::class,'getSubcategories'])->name('getSubcategories');
 
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');

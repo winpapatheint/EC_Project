@@ -253,7 +253,7 @@
 
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.subcategory') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Category</span>
                                     </a>

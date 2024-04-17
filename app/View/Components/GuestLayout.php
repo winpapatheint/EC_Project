@@ -75,21 +75,21 @@ class GuestLayout extends Component
                             ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
                             ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
                             ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
-                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('categories.category_name', 'Special Corner')
                             ->where('sub_category_titles.sub_category_titlename', 'Myanmar')
                             ->get();
         $koreaProducts = Product::leftjoin('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
                             ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
                             ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
                             ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
-                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('categories.category_name', 'Special Corner')
                             ->where('sub_category_titles.sub_category_titlename', 'Korea')
                             ->get();
         $chinaProducts = Product::leftjoin('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
                             ->leftjoin('sub_category_titles', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
                             ->leftjoin('categories', 'sub_category_titles.category_id', '=', 'categories.id')
                             ->select('products.*', 'categories.category_name', 'sub_category_titles.sub_category_titlename', 'sub_categories.sub_category_name')
-                            ->where('categories.category_name', 'Asia Menu')
+                            ->where('categories.category_name', 'Special Corner')
                             ->where('sub_category_titles.sub_category_titlename', 'China')
                             ->get();
         $allCategories = Category::all();

@@ -70,7 +70,7 @@ Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('updat
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
-Route::post('/payment/complete', [UserController::class, 'paymentCompleted'])->name('payment_completed');
+Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/compare', function () {return view('front-end.compare');});
 

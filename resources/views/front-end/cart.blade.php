@@ -193,7 +193,7 @@
                                 <h4>Total (JPY)</h4>
                                 @if($discount)
                                     @php 
-                                        $total  = $subTotal + $discount + 500
+                                        $total  = $subTotal + 500 - $discount
                                     @endphp
                                 @else
                                     @php

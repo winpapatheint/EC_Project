@@ -12,10 +12,12 @@ class Payment extends Model
 
     // Define the fillable fields for mass assignment
     protected $fillable = [
-        'ID',
+        'id',
         'seller_id',
         'buyer_id',
         'order_id',
-        'amt',
+        'total_amount',
+        'created_at',
+        'updated_at',
     ];
 }

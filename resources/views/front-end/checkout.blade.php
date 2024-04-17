@@ -58,7 +58,7 @@
                                                             </div>
                                                             <input type="hidden" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
                                                             <input type="hidden" name="buyer_id" value="{{ $buyeraddress->userid }}">
-                                                            <input type="hidden" name="buyer_id" value="{{ $buyeraddress->shop_name }}">
+                                                            
                                                             
                                                             <div class="label">
                                                                 <label>{{ $buyeraddress->place }}</label>
@@ -122,8 +122,20 @@
                     </div>
                 </div>
                 @php
-                    $totalAmount = 0;
-                    $totalAmount1 = 0;
+                    $amount = 0;
+                    $amount1 = 0;
+                    $total = 0;
+                    $productIds = [];
+                    $sellerIds = [];
+                    $productColors = [];
+                    $productSizes = [];
+                    $productQuantities = [];
+                    $buyerId = $buyerAddress[0]->userid;
+                    $buyerPostCode = $buyerAddress[0]->post_code;
+                    $buyerCity = $buyerAddress[0]->city;
+                    $buyerChome = $buyerAddress[0]->chome;
+                    $buyerBuilding = $buyerAddress[0]->building;
+                    $buyerRoomCode = $buyerAddress[0]->room_no;
                 @endphp
                 <div class="col-lg-4">
                     <div class="right-side-summery-box">
@@ -132,11 +144,16 @@
                                 <h3>Order Summery</h3>
                             </div>
                             @foreach($cartLists as $cartlist)
+                            
                             <ul class="summery-contain">
-                                <input type="hidden" name="product_id" value="{{ $cartlist->product_id }}">
-                                <input type="hidden" name="product_id" value="{{ $cartlist->seller_id }}">
-                                <input type="hidden" name="product_id" value="{{ $cartlist->product_color }}">
-                                <input type="hidden" name="product_id" value="{{ $cartlist->product_size }}">
+                                @php
+                                    $productIds[] = $cartlist->product_id;
+                                    $sellerIds[] = $cartlist->seller_id;
+                                    $productColors[] = $cartlist->product_color;
+                                    $productSizes[] = $cartlist->product_size;
+                                    $productQuantities[] = $cartlist->quantity;
+                                @endphp
+
                                 <li>
                                     <img src="../assets/images/vegetable/product/1.png"
                                         class="img-fluid blur-up lazyloaded checkout-image" alt="">
@@ -145,16 +162,16 @@
                                             @php
                                                 $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
                                                 $quantity = $cartlist->quantity;
-                                                $totalAmount = $discountedPrice * $quantity;
+                                                $amount = $discountedPrice * $quantity;
                                             @endphp
-                                            <h4 class="price">¥ {{ $totalAmount }} </h4>
+                                            <h4 class="price">¥ {{ number_format($amount , 0, '.', ',') }}</h4>
                                         @else
                                             @php
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
-                                                $totalAmount1 = $sellingPrice * $quantity;
+                                                $amount1 = $sellingPrice * $quantity;
                                             @endphp
-                                            <h4 class="price">¥ {{ $totalAmount1 }} </h4>
+                                            <h4 class="price">¥ {{ number_format($amount1 , 0, '.', ',') }}</h4>
                                         @endif
                                 </li>
                             </ul>
@@ -162,10 +179,11 @@
                             <ul class="summery-total">
                                 <li>
                                     @php
-                                        $subTotal = $totalAmount + $totalAmount1
+                                        $subTotal = $amount + $amount1
                                     @endphp
                                     <h4>Subtotal</h4>
-                                    <h4 class="price">¥ {{ $subTotal }} </h4>
+                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
+                                
                                 </li>
 
                                 <li>
@@ -174,21 +192,20 @@
                                 </li>
 
                                 <li>
-                                @php 
-                                    $discountPrice  =  $subTotal * ($discount / 100);
-                                @endphp
+
                                     <h4>Coupon/Code</h4>
-                                    <h4 class="price">¥ - {{ $discountPrice }}</h4>
+                                    <h4 class="price">¥ - {{ number_format($discount , 0, '.', ',') }}</h4>
                                 </li>
                                 @php 
-                                    $total  =  $subTotal + 500 + $discountPrice
+                                    $total  =  $subTotal + 500 - $discount
                                 @endphp
 
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
-                                    <h4 class="price">¥ {{ $total }}</h4>
+                                    <h4 class="price">¥ {{ number_format($total , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
+                            
                         </div>
                         
 
@@ -201,139 +218,95 @@
     </section>
     <!-- Checkout section End -->
 
-
     <script type="text/javascript">
 
-        paypal.Buttons({
-            style: {
-            layout: 'vertical', // Set the button layout (horizontal or vertical)
-            color: 'blue', // Set the button color (blue, gold, silver, black, white)
-            shape: 'rect', // Set the button shape (rect, pill)
-            label: 'pay', // Set the button label (checkout, pay, buy, donate)
-            height: 50 // Set the button height (in pixels)
-            },
+paypal.Buttons({
+    style: {
+        layout: 'vertical',
+        color: 'blue',
+        shape: 'rect',
+        label: 'paypal',
+        height: 50
+    },
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: '{{ $total }}'
+                }
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            if (details.status == 'COMPLETED') {
 
-            createOrder: function(data, actions) {
-            // Set up the transaction details
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '{{ $total }}' // Sample amount
+                purchasepaymentdone('{{ $total }}', function(result) {
+                    if(result==1){ 
+                      $('#paymentsuccessModal').modal('show');
                     }
-                }]
-            });
-            },
-          onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-          
-              if (details.status == 'COMPLETED') {
+                    else{
+                      $('#paymentfailModal').modal('show');
+                    }
+                  });
+               
+        } else {
+                $('#paymentfailModal').modal('show');
+            }
+        });
+    }
+}).render('#paypal-button-container'); 
 
-                var Newproductid = <?php echo json_encode($cartlist->product_id ); ?>; 
-                var Newbuyerid = <?php echo json_encode($buyeraddress->userid); ?>; 
-                var Newsellerid = <?php echo json_encode($cartlist->seller_id); ?>; 
-                var Newtotalamount = <?php echo json_encode($total ); ?>; 
-                var Newcolor = <?php echo json_encode($cartlist->product_color ); ?>; 
-                var Newsize = <?php echo json_encode($cartlist->product_size); ?>; 
-                var Newqty = <?php echo json_encode($cartlist->quantity); ?>;
-                var Newpostcode = <?php echo json_encode($buyeraddress->post_code); ?>;
-                var Newcity = <?php echo json_encode($buyeraddress->city); ?>;
-                var Newchome = <?php echo json_encode($buyeraddress->chome); ?>;
-                var Newbuilding = <?php echo json_encode($buyeraddress->building); ?>;
-                var Newroom = <?php echo json_encode($buyeraddress->room_no); ?>;
-  
-                $.ajax({
-                    
-                        url: "/payment/complete",
-                        type:'POST',
-                        
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            productid: Newproductid,
-                            buyerid: Newbuyerid,
-                            sellerid: Newsellerid,
-                            totalamount: Newbuyerid,
-                            color: Newcolor,
-                            size: Newsize,
-                            postcode: Newpostcode,
-                            city: Newcity,
-                            chome: Newchome,
-                            building: Newbuilding,
-                            room: Newroom,
-                          
-                    },
+function purchasepaymentdone(total, callback) {
+    var Newproductid = <?php echo json_encode($productIds ); ?>; 
+    var Newbuyerid = <?php echo json_encode($buyerId ); ?>; 
+    var Newsellerid = <?php echo json_encode($sellerIds ); ?>; 
+    var Newcolor = <?php echo json_encode($productColors ); ?>; 
+    var Newsize = <?php echo json_encode($productSizes ); ?>; 
+    var Newquantity = <?php echo json_encode($productQuantities ); ?>;
+    var Newamount = <?php echo json_encode($amount ); ?>;
+    var Newamount1 = <?php echo json_encode($amount1 ); ?>;
+    var Newtotalamount = <?php echo json_encode($total ); ?>;
+    var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
+    var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
+    var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>; 
+    var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>; 
+    var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>; 
 
-                    success: function(response) {
-                     alert(JSON.stringify(response.success));
-                        if ($.isEmptyObject(response.error)) {
-                            console.log(response.success);
-                            if (response.success) {
-                             alert(JSON.stringify(response.success));
-                                // If the payment is successful, you can pass a success message to the callback
-                                //callback("支払いが正常に完了されました。");
-                                callback("1");
-                            }
-                            } else {
-                                    alert(JSON.stringify(response.error));
-                                    callback("0");
-                                    console.log(response.error);
-                                
-                                    callback("支払いが失敗しました。");
-                            }
-                        },
+    $.ajax({
+    url: '{{ route("payment_completed") }}',
+    type: 'POST',
+    data: {
+        _token: '{{ csrf_token() }}',
+        productid: Newproductid,
+        buyerid: Newbuyerid,
+        sellerid: Newsellerid,
+        color: Newcolor,
+        size: Newsize,
+        quantity: Newquantity,
+        amount: Newamount,
+        amount1: Newamount1,
+        totalamount: Newtotalamount,
+        postcode: Newbuyerpostcode,
+        city: Newbuyercity,
+        chome: Newbuyerchome,
+        building: Newbuyerbuilding,
+        room: Newbuyerroomcode,
+    },
+    async : false,
+    success: function(response) {
+        alert(response.message);
+    },
+    error: function(xhr, status, error) {
+        var errorMessage = xhr.status + ': ' + xhr.statusText;
+        alert('Error - ' + errorMessage);
+        // You can log the error to console for debugging purposes
+        console.error('Error: ' + errorMessage + 'error:' + response);
+    }
+});
 
-                        fail: function(data) {
+}
+</script>
 
-                            alert(JSON.stringify(response.error));
-                            alert("支払いが失敗しました。");
-                        }
-                    });
-
-       
-                // $.ajax({
-                //         url: '/payment/complete',
-                //         method: 'POST',
-                //         data: {
-                //             _token: '{{ csrf_token() }}',
-                //             addressId: '{{ $buyeraddress->id }}',
-                //             productid: '{{ $cartlist->product_id }}',
-                //             buyerid: '{{ $buyeraddress->userid }}',
-                //             sellerid: '{{ $cartlist->seller_id }}',
-                //             totalamount: '{{ $total }}',
-                //             color: '{{ $cartlist->product_color }}',
-                //             size: '{{ $cartlist->product_size }}',
-                //             qty: '{{ $cartlist->quantity }}',
-                //             postcode: '{{ $buyeraddress->post_code }}',
-                //             city: '{{ $buyeraddress->city }}',
-                //             chome: '{{ $buyeraddress->chome }}',
-                //             building: '{{ $buyeraddress->building }}',
-                //             room: '{{ $buyeraddress->room_no }}'
-                //         },
-                //         success: function(response) {
-                        
-                //             // Handle success response
-                //             console.log('Payment data inserted successfully:', response);
-                //             $('#paymentsuccessModal').modal('show');
-                //         },
-                //         error: function(xhr, status, error) {
-                           
-                //             // Handle error
-                //             console.error('Error inserting payment data:', error);
-                //             $('#paymentfailModal').modal('show');
-                //         }
-                //     });
-              } else {
-                  $('#paymentfailModal').modal('show');
-              }
-              // alert('Transaction co/mpleted by ' + details.payer.name.given_name);
-            });
-          },
-          style: {
-            layout:  'vertical',
-            color:   'blue',
-            shape:   'rect',
-            label:   'paypal'
-          }
-        }).render('#paypal-button-container'); 
-    </script>
 
 </x-guest-layout>

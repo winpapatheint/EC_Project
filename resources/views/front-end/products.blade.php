@@ -685,20 +685,9 @@
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
 
-    <!-- Price Range Js -->
-    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
-
     <script>
         jQuery(document).ready(function($) {
-            var rangeSlider = $(".js-range-slider").ionRangeSlider({
-                type: "double",
-                grid: true,
-                min: 0,
-                max: 1000000,
-                from: 0,
-                to: 1000000,
-                prefix: "¥"
-            });console.log(rangeSlider);
+            var rangeSlider = $(".js-range-slider");
 
             var price = "{{ $price }}";
 

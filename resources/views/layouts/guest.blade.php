@@ -1177,6 +1177,9 @@
 
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
+
+    <!-- Price Range Js -->
+    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 </body>
 
 </html>

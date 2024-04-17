@@ -662,9 +662,6 @@
 
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-    
-    <!-- Price Range Js -->
-    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 
     <script>
         jQuery(document).ready(function($) {

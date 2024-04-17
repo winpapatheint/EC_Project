@@ -21,15 +21,16 @@ class GuestLayout extends Component
                             ->select(
                                 'categories.id',
                                 'categories.category_name as category_name',
-                                'sub_category_titles.category_id as subcategory_id',
-                                'sub_categories.sub_category_title_id as subcategorytitle_id',
-                                'sub_category_titles.sub_category_titlename as subcategory_name',
-                                'sub_categories.sub_category_name as sub_name',
                                 'categories.category_icon',
+                                'sub_category_titles.id as subcategorytitle_id',
+                                'sub_category_titles.sub_category_titlename as subcategorytitle_name',
+                                'sub_categories.id as subcategory_id',
+                                'sub_categories.sub_category_name as subcategory_name',
+                                'sub_categories.sub_category_title_id as subcategory_titleid',
                                 )
                             ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
                             ->leftjoin('sub_categories', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
-                        
+
                             ->get();
        // Organize categories and their subcategories
         $organizedcategories = [];
@@ -46,16 +47,18 @@ class GuestLayout extends Component
                     }
                     if (!is_null($category->subcategory_id)) {
                         $organizedcategories[$categoryId]['subcategories'][] = [
-                            'id' => $category->subcategory_id,
+                            'id' => $category->id,
                             'subid' => $category->subcategorytitle_id,
-                            'name' => $category->subcategory_name
+                            'name' => $category->subcategorytitle_name
                         ];
                     }
 
                     if (!is_null($category->subcategorytitle_id)) {
                         $organizedcategories[$categoryId]['sub'][] = [
-                            'id' => $category->subcategorytitle_id,
-                            'name' => $category->sub_name
+                            'id' => $category->subcategory_id,
+                            'subid' => $category->subcategory_titleid,
+                            'name' => $category->subcategory_name,
+
                         ];
                     }
             }

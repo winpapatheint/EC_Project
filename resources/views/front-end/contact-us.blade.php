@@ -183,7 +183,7 @@
                                 <div class="mb-md-4 mb-3 custom-form">
                                     <label for="exampleFormControlTextarea" class="form-label">Message</label>
                                     <div class="custom-textarea">
-                                        <textarea class="form-control" id="message" 
+                                        <textarea class="form-control" id="message"
                                             placeholder="Enter Your Message" rows="6" name="message"  value="{{ old('message') }}">{{ old('message') }}</textarea>
                                         <i class="fa-solid fa-message"></i>
 
@@ -196,12 +196,12 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-animation btn-md fw-bold ms-auto"  type="submit">Send Message</button>
+                        <button class="btn btn-animation ms-auto fw-bold"  type="submit">Send Message</button>
                         </form>
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     </section>

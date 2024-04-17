@@ -86,7 +86,7 @@
                                     <div style="display: flex; align-items: center;">
                                         <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
+                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                                             @foreach ($categoryWithProductCount as $category)
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}" 
+                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}"
                                                         name="categories[]" value= "{{ $category->id }}" data-category="{{ $category->id }}"
                                                         {{ in_array($category->id, $categories) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="{{ $category->category_name }}">
@@ -412,7 +412,7 @@
                                         @elseif ($sort == 6)
                                             <span>% Off - Hight To Low</span>
                                         @else
-                                            <span>Choose Sorting</span> 
+                                            <span>Choose Sorting</span>
                                         @endif
                                             <i class="fa-solid fa-angle-down"></i>
                                     </button>
@@ -430,11 +430,11 @@
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z 
+                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z
                                                 Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A 
+                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A
                                                 Order</a>
                                         </li>
                                         <li>
@@ -495,7 +495,7 @@
                             <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.05 }}s">
                                 <div class="product-header">
                                     <div class="product-image">
-                                   
+
                                         <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
                                         <img width="100" src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                 class="img-fluid blur-up lazyload" alt="">
@@ -551,7 +551,7 @@
                         @endforeach
                     </div>
 
-                    
+
                 @include('components.pagination')
                 </div>
             </div>
@@ -662,7 +662,7 @@
                                             class="btn btn-md add-cart-button icon">Add
                                             To Cart</button>
                                     </form>
-                                    
+
                                     <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         View More Details</button>
@@ -684,7 +684,7 @@
 
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-    
+
     <!-- Price Range Js -->
     <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 

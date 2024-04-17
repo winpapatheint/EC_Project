@@ -364,7 +364,7 @@
                                 @if ($category['name'] != 'Special Corner')
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
-                                            <img src="{{ asset('frontend/assets/svg/1/'.$category['icon']) }}" alt="">
+                                            <img src="{{ asset('images/'.$category['icon']) }}" alt="">
                                             <h6>{{ $category['name'] }}</h6>
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
@@ -440,7 +440,7 @@
 
                                             @php
                                                 $specialCornerFlag = 0;
-                                                if ($myanmarProducts->count() > 0 && $koreaProducts->count() > 0 && $chinaProducts->count() > 0) {
+                                                if ($myanmarProducts->count() > 0 || $koreaProducts->count() > 0 || $chinaProducts->count() > 0) {
                                                     $specialCornerFlag = 1;
                                                 }
                                             @endphp

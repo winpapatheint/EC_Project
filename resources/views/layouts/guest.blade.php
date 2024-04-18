@@ -472,7 +472,9 @@
 
                                             @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
-                                                <label class="new-dropdown">Blog</label>
+                                                @if ($newBlogsExist)
+                                                    <label class="new-dropdown">New</label>
+                                                @endif
                                                 <a class="nav-link"  href="{{ url('/news') }}">Blog</a>
                                             </li>
                                             @endif

@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Blog;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -75,7 +76,8 @@ class GuestLayout extends Component
                             ->where('category_name', 'Special Corner')
                             ->get();
         $allCategories = Category::all();
+        $newBlogsExist = Blog::where('created_at', '>=', Carbon::now()->subDays(7))->exists();
 
-        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'allCategories', 'specialCorner'));
+        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist'));
     }
 }

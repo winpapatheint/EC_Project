@@ -96,7 +96,7 @@ Route::get('/cart', function () {return view('front-end.cart');});
 Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
-Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
+Route::get('/admin', [AdminController::class, 'admindashboard'])->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});

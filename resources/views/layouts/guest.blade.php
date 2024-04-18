@@ -645,10 +645,13 @@
                         <div class="footer-contain">
                             <ul>
                                 <li>
-                                    <a href="index.html" class="text-content">Home</a>
+                                    <a href="{{ url('/') }}" class="text-content">Home</a>
                                 </li>
                                 <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Shop</a>
+                                    <a class="text-content " href="{{ url('/products') }}">Products</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
                                     <a href="about-us.html" class="text-content">About Us</a>

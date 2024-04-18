@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Process;
 use App\Models\Category;
+use App\Models\SubCategoryTitle;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Help;
@@ -1612,8 +1613,13 @@ class AdminController extends Controller
 
     public function deletecategory(Request $request)
     {
+        $cat = SubCategoryTitle::find($request->id);
+        $categoryId = $cat->category_id;
         DB::table('sub_category_titles')->where('id', $request->id)->delete();
-        DB::table('categories')->where('id', $request->id)->delete();
+        $categoryIdExist = SubCategoryTitle::where('category_id', $categoryId)->exists();
+        if (!$categoryIdExist){
+            Category::where('id', $categoryId)->delete();
+        }
         return redirect('/admin/category')->with('success','削除されました。');
     }
 

@@ -247,7 +247,7 @@
                                                 @php
                                                     $userCarts = DB::table('carts')
                                                                     ->join('products', 'carts.product_id', '=', 'products.id')
-                                                                    ->where('buyer_id', Auth::user()->id);
+                                                                    ->where('buyer_id', Auth::user()->id)->get();
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif

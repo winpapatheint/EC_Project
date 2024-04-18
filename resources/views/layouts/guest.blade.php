@@ -255,7 +255,7 @@
                                                             <div class="drop-cart">
                                                                 <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
                                                                     <img src="{{ asset('upload/product_thambnail/'.$cart-> product_thambnail) }}"
-                                                                        class="blur-up lazyload" alt="">
+                                                                        class="blur-up lazyload" alt="" width="87" height="73">
                                                                 </a>
 
                                                                 <div class="drop-contain">
@@ -703,8 +703,8 @@
                                 </li>
 
                                 <li class="social-app mb-0">
-                                    <h5 class="mb-2 text-content">Download App :</h5>
-                                    <ul>
+                                    <h5 class="mb-2 text-content">Privacy policy</h5>
+                                    {{-- <ul>
                                         <li class="mb-0">
                                             <a href="https://play.google.com/store/apps" target="_blank">
                                                 <img src="../assets/images/playstore.svg" class="blur-up lazyload"
@@ -717,7 +717,7 @@
                                                     alt="">
                                             </a>
                                         </li>
-                                    </ul>
+                                    </ul> --}}
                                 </li>
                             </ul>
                         </div>

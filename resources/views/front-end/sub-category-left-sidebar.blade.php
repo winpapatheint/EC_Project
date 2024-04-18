@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Shop Left Sidebar</h2>
+                        <h2>Sub Category Left Sidebar</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Shop Left Sidebar</li>
+                                <li class="breadcrumb-item active">Sub Category Left Sidebar</li>
                             </ol>
                         </nav>
                     </div>
@@ -24,56 +24,6 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Poster Section Start -->
-    <section>
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-1 slider-animate product-wrapper no-arrow">
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Poster Section End -->
 
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
@@ -429,7 +379,7 @@
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
-                                    <li class="three-grid">
+                                    <li class="three-grid active">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -442,7 +392,7 @@
                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
                                         </a>
                                     </li>
-                                    <li class="list-btn active">
+                                    <li class="list-btn">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/list.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -453,7 +403,7 @@
                     </div>
 
                     <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                        class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach($shoplist as $list)
                         @if($list->status == 1)
                         @php

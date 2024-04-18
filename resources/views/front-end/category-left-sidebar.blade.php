@@ -24,57 +24,6 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Poster Section Start -->
-    <section>
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-1 slider-animate product-wrapper no-arrow">
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="../assets/images/shop/1.jpg" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save upto 50%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Poster Section End -->
-
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
@@ -453,7 +402,7 @@
                     </div>
 
                     <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                        class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach($shoplist as $list)
                         @if($list->status == 1)
                         @php

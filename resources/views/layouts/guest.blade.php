@@ -104,21 +104,21 @@
                                         data-bs-toggle="dropdown">
                                         <img src="../assets/images/country/united-states.png"
                                             class="img-fluid blur-up lazyload" alt="">
-                                        <span>English</span>
+                                        <span>Japanese</span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="english">
                                                 <img src="../assets/images/country/united-kingdom.png"
                                                     class="img-fluid blur-up lazyload" alt="">
-                                                <span>English</span>
+                                                <span>Japanese</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="france">
                                                 <img src="../assets/images/country/germany.png"
                                                     class="img-fluid blur-up lazyload" alt="">
-                                                <span>Japanese</span>
+                                                <span>English</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -126,21 +126,7 @@
                             </li>
                             <li class="right-nav-list">
                                 <div class="dropdown theme-form-select">
-                                    <button class="btn dropdown-toggle" type="button" id="select-dollar"
-                                        data-bs-toggle="dropdown">
-                                        <span>USD</span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end sm-dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" id="aud" href="javascript:void(0)">AUD</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="eur" href="javascript:void(0)">EUR</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="cny" href="javascript:void(0)">CNY</a>
-                                        </li>
-                                    </ul>
+                                        <span>JPY</span>
                                 </div>
                             </li>
                         </ul>
@@ -366,44 +352,30 @@
 
                                 <ul class="category-list">
                                 @foreach ($categories as $category)
-                                @if ($category['name'] != 'Special Corner')
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
-                                            <img src="{{ asset('images/'.$category['icon']) }}" alt="">
-                                            <h6>{{ $category['name'] }}</h6>
+                                            <img src="{{ asset('images/'.$category->category_icon) }}" alt="">
+                                            <h6>{{ $category->category_name }}</h6>
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
 
                                         <div class="onhover-category-box" style="height: fit-content;">
-                                            @if (!empty($category['subcategories']))
-                                            @php
-                                            $displayedCategories = [];
-                                            @endphp
-                                            @foreach ($category['subcategories'] as $subcategory)
-                                            @if (!in_array($subcategory['subid'], $displayedCategories))
-                                            <div class="list-1">
-                                                <div class="category-title-box">
-                                                    <h5>{{ $subcategory['name'] }}</h5>
+                                            @foreach ($category->subCategoryTitle as $subCategoryTitle)
+                                                <div class="list-1" style="margin-bottom: 15px;">
+                                                    <div class="category-title-box">
+                                                        <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
+                                                    </div>
+                                                    <ul>
+                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                        <li>
+                                                            <a href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">{{ $subCategory->sub_category_name }}</a>
+                                                        </li>
+                                                        @endforeach
+                                                    </ul>
                                                 </div>
-                                                <ul>
-                                                    @foreach ($category['sub'] as $sub)
-                                                    @if($sub['subid']==$subcategory['subid'])
-                                                    <li>
-                                                        <a href="{{ url('/subcategorysidebar/'.$sub['id'])}}">{{ $sub['name'] }}</a>
-                                                    </li>
-                                                    @endif
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                            @php
-                                            $displayedCategories[] = $subcategory['subid'];
-                                            @endphp
-                                            @endif
                                             @endforeach
-                                            @endif
                                         </div>
                                     </li>
-                                @endif
                                 @endforeach
 
                                 </ul>
@@ -606,7 +578,7 @@
                         <div class="footer-logo">
                             <div class="theme-logo">
                                 <a href="index.html">
-                                    <img src="../assets/images/logo/1.png" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('frontend/assets/images/logo/1.png') }}" class="blur-up lazyload" alt="">
                                 </a>
                             </div>
 

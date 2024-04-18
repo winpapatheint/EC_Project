@@ -18,66 +18,24 @@ class GuestLayout extends Component
      */
     public function render()
     {
-        $categories = DB::table('categories')
-                            ->select(
-                                'categories.id',
-                                'categories.category_name as category_name',
-                                'categories.category_icon',
-                                'sub_category_titles.id as subcategorytitle_id',
-                                'sub_category_titles.sub_category_titlename as subcategorytitle_name',
-                                'sub_categories.id as subcategory_id',
-                                'sub_categories.sub_category_name as subcategory_name',
-                                'sub_categories.sub_category_title_id as subcategory_titleid',
-                                )
-                            ->leftjoin('sub_category_titles', 'categories.id', '=', 'sub_category_titles.category_id')
-                            ->leftjoin('sub_categories', 'sub_categories.sub_category_title_id', '=', 'sub_category_titles.id')
+        $categories = Category::with(['subCategoryTitle', 'subCategoryTitle.subCategory'])
+            ->where('category_name', '!=', 'Special Corner')
+            ->get();
 
-                            ->get();
-       // Organize categories and their subcategories
-        $organizedcategories = [];
-            foreach ($categories as $category) {
-                $categoryId = $category->id;
-                    if (!isset($organizedcategories[$categoryId])) {
-                        $organizedcategories[$categoryId] = [
-                            'id' => $categoryId,
-                            'name' => $category->category_name,
-                            'icon' => $category->category_icon,
-                            'subcategories' => [],
-                            'sub' => []
-                        ];
-                    }
-                    if (!is_null($category->subcategory_id)) {
-                        $organizedcategories[$categoryId]['subcategories'][] = [
-                            'id' => $category->id,
-                            'subid' => $category->subcategorytitle_id,
-                            'name' => $category->subcategorytitle_name
-                        ];
-                    }
+        $todayDate = Carbon::now()->toDateString();
 
-                    if (!is_null($category->subcategorytitle_id)) {
-                        $organizedcategories[$categoryId]['sub'][] = [
-                            'id' => $category->subcategory_id,
-                            'subid' => $category->subcategory_titleid,
-                            'name' => $category->subcategory_name,
-
-                        ];
-                    }
-            }
-
-            $todayDate = Carbon::now()->toDateString();
-
-            $deal = DB::table('products')
-                            ->select('products.*')
-                            ->whereNotNull('discount_percent')
-                            ->whereDate('created_at', $todayDate)
-                            ->get();
+        $deal = DB::table('products')
+                ->select('products.*')
+                ->whereNotNull('discount_percent')
+                ->whereDate('created_at', $todayDate)
+                ->get();
 
         $specialCorner = Category::with(['subCategoryTitle', 'subCategoryTitle.subCategory'])
-                            ->where('category_name', 'Special Corner')
-                            ->get();
+                                    ->where('category_name', 'Special Corner')
+                                    ->get();
         $allCategories = Category::all();
         $newBlogsExist = Blog::where('created_at', '>=', Carbon::now()->subDays(7))->exists();
 
-        return view('layouts.guest', ['categories' => $organizedcategories],compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist'));
+        return view('layouts.guest',compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist', 'categories'));
     }
 }

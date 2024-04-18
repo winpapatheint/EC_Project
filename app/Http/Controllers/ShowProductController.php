@@ -208,16 +208,9 @@ class ShowProductController extends Controller
                                             ->orderBy('discount_percent', 'desc')
                                             ->take(3)
                                             ->pluck('discount_percent');
-        
-        $productsGroupedByDiscount = [];
-
-        foreach ($mostDiscountPercentages as $discountPercent) {
-            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)->pluck('id')
-            ->toArray();
-        }
 
         return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
-        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory'));
     }
 
     public function ShowProductleftThumbnail($id)

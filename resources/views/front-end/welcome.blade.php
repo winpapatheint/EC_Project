@@ -184,6 +184,7 @@
                             <h3>Category</h3>
                             <ul>
                                 @foreach($categories as $list)
+                                @if ($list->category_name != "Special Corner")
                                 <li>
 
                                     <div class="category-list">
@@ -194,6 +195,7 @@
                                         </h5>
                                     </div>
                                 </li>
+                                @endif
                                 @endforeach
                             </ul>
 

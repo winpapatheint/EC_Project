@@ -92,8 +92,9 @@
                                 </div>
 
                             <div class="text-center">
-                                <button class="btn btn-animation w-100 justify-content-center" type="submit">Log
-                                In</button>
+                                <button class="btn btn-animation theme-bg-color w-100 justify-content-center" type="submit">
+                                    Log In
+                                </button>
                             </div>
                         </div>
                     </div>

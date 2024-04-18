@@ -1520,8 +1520,6 @@ class AdminController extends Controller
 
     public function registersubadmin(Request $request)
     {
-
-
         $validator = $this->validatesubadmin($request);
 
         if($request->ajax()){
@@ -1542,7 +1540,6 @@ class AdminController extends Controller
             $role = $request->role;
         }
 
-
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
@@ -1561,8 +1558,6 @@ class AdminController extends Controller
             'address' => $request->address,
             'user_photo' => $imageName,
         ]);
-
-        $user->markEmailAsVerified();
 
         event(new Registered($user));
 
@@ -1997,6 +1992,39 @@ class AdminController extends Controller
             }
 
             return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
+        }
+        else if( $request->from == 'privacy')
+        {
+            $inquiry_email = 'info-test@asia-hd.com';
+
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
+            ]);
+
+            $data = array('name'=>$request->name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+
+                });
+            }
+
+            return redirect('/contact#privacy-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
         }
     }

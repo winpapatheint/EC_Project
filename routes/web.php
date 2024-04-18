@@ -88,7 +88,7 @@ Route::get('/news', [AdminController::class, 'news']);
 Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
 Route::get('/contact', function () {return view('front-end.contact-us');});
-Route::post('contact', [AdminController::class, 'contact'])->middleware(['auth', 'role:buyer'])->name('contact');
+Route::post('contact', [AdminController::class, 'contact'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
 Route::get('/privacy-policy', function () {return view('front-end.privacy-policy');});
 

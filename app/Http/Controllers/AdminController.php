@@ -2024,7 +2024,7 @@ class AdminController extends Controller
                 });
             }
 
-            return redirect('/contact#privacy-form')->with('success','お問い合わせ内容が正常に送信されました。');
+            return redirect('/privacy-policy#privacy-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
         }
     }

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Shop Left Sidebar</h2>
+                        <h2>Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Shop Left Sidebar</li>
+                                <li class="breadcrumb-item active">Product List</li>
                             </ol>
                         </nav>
                     </div>
@@ -557,7 +557,7 @@
                                             <h5>Brand Name:</h5>
                                             <h6>
                                                 @php
-                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
                                                 @endphp
                                                 {{ $brand->brand_name }}
                                             </h6>
@@ -576,7 +576,7 @@
                                             <h5>Category:</h5>
                                             <h6>
                                                 @php
-                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
                                                 @endphp
                                                 {{ $category->category_name }}
                                             </h6>

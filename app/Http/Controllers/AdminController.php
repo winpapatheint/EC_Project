@@ -720,24 +720,9 @@ class AdminController extends Controller
                         $join->on('Sb.category_id', '=', 'categories.id');
                     })
 
-                    ->orderBy('Sb.created_at', 'desc')
+
                     ->paginate($limit);
 
-        $listss = DB::table('sub_categories')
-        ->select('sub_categories.*','categories.category_name as category','S.*')
-
-
-        ->rightJoin('categories', function ($join) {
-            $join->on('categories.id', '=', 'sub_categories.category_id');
-
-        })
-
-        ->rightJoin('sub_category_titles as S', function ($join) {
-            $join->on('sub_categories.sub_category_title_id', '=', 'S.id');
-        })
-
-        ->orderBy('sub_categories.created_at', 'desc')
-        ->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));

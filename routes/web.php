@@ -176,7 +176,6 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 
 //startcategory
 route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
-route::post('/admin/all/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
 Route::get('/admin/all/subtitle', [AdminController::class,'indexsubtitle'])->name('admin.all.subtitle');
 Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
 Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);

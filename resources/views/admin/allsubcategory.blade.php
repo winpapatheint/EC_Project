@@ -56,7 +56,7 @@
                                             <tr>
                                               <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->category }}</td>
-                                              <td data-label="タイトル" style="font-size:14px;">{{ $list->sub_category_titlename }}</td>
+                                              <td data-label="タイトル" style="font-size:14px;">{!! $list->sub_category_titlename  !!} </td>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->sub_category_name }}</td>
 
                                               <td>
@@ -106,9 +106,7 @@
                         </div>
                     </div>
 
-
-
-
+                    @include('components.pagination')
                 </div>
 
             </div>

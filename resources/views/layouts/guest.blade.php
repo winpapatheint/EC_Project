@@ -976,7 +976,9 @@
         </div>
 
         <div class="button-group">
-            <button class="btn privacy-button">Privacy Policy</button>
+            <a href="{{ url('/privacy-policy') }}" class="text-content">
+                <button class="btn privacy-button">Privacy Policy</button>
+            </a>
             <button class="btn ok-button">OK</button>
         </div>
     </div>

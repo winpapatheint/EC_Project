@@ -361,7 +361,7 @@
 
                                         <div class="onhover-category-box" style="height: fit-content;">
                                             @foreach ($category->subCategoryTitle as $subCategoryTitle)
-                                                <div class="list-1" style="margin-bottom: 15px;">
+                                                <div class="list-1" style="margin-bottom: 15px;margin-right: 50px;">
                                                     <div class="category-title-box">
                                                         <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                     </div>

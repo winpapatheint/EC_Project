@@ -236,66 +236,71 @@
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
+                                            <a href="{{ route('show_carts') }}">
                                             <button type="button" class="btn p-0 position-relative header-wishlist">
                                                 <i data-feather="shopping-cart"></i>
-                                                <span class="position-absolute top-0 start-100 translate-middle badge">2
+                                                @php
+                                                    $userCarts = collect([]);
+                                                    $count = 0;
+                                                @endphp
+                                                @if(!empty(Auth::user()))
+                                                @php
+                                                    $userCarts = DB::table('carts')
+                                                                    ->join('products', 'carts.product_id', '=', 'products.id')
+                                                                    ->where('buyer_id', Auth::user()->id);
+                                                    $count = $userCarts->count();
+                                                @endphp
+                                                @endif
+                                                <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                    {{ $count }}
                                                     <span class="visually-hidden">unread messages</span>
                                                 </span>
                                             </button>
+                                            </a>
 
-                                            <div class="onhover-div">
-                                                <ul class="cart-list">
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="../assets/images/vegetable/product/1.png"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
-
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Fantasy Crunchy Choco Chip Cookies</h5>
+                                            @if (!empty(Auth::user()))
+                                                <div class="onhover-div">
+                                                    <ul class="cart-list">
+                                                    @php
+                                                        $total = 0;
+                                                    @endphp
+                                                    @foreach ($userCarts as $cart)
+                                                        <li class="product-box-contain">
+                                                            <div class="drop-cart">
+                                                                <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
+                                                                    <img src="{{ asset('upload/product_thambnail/'.$cart-> product_thambnail) }}"
+                                                                        class="blur-up lazyload" alt="">
                                                                 </a>
-                                                                <h6><span>1 x</span> $80.58</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
+
+                                                                <div class="drop-contain">
+                                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
+                                                                        <h5>{{ $cart->product_name }}</h5>
+                                                                    </a>
+                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <button class="close-button close_button">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                        @php
+                                                            $total += $cart->selling_price * $cart->quantity;
+                                                        @endphp
+                                                    @endforeach
+                                                    </ul>
 
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="../assets/images/vegetable/product/2.png"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
+                                                    <div class="price-box">
+                                                        <h5>Total :</h5>
+                                                        <h4 class="theme-color fw-bold">¥{{ $total }}</h4>
+                                                    </div>
 
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Peanut Butter Bite Premium Butter Cookies 600 g
-                                                                    </h5>
-                                                                </a>
-                                                                <h6><span>1 x</span> $25.68</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-                                                <div class="price-box">
-                                                    <h5>Total :</h5>
-                                                    <h4 class="theme-color fw-bold">$106.58</h4>
+                                                    <div class="button-group">
+                                                        <a href="{{ route('show_carts') }}" class="btn btn-sm cart-button">View Cart</a>
+                                                        {{--<a href="{{ url('/checkout') }}" class="btn btn-sm cart-button theme-bg-color
+                                                        text-white">Checkout</a> --}}
+                                                    </div>
                                                 </div>
-
-                                                <div class="button-group">
-                                                    <a href="{{ url('/cart') }}" class="btn btn-sm cart-button">View Cart</a>
-                                                    <a href="{{ url('/checkout') }}" class="btn btn-sm cart-button theme-bg-color
-                                                    text-white">Checkout</a>
-                                                </div>
-                                            </div>
+                                            @endif
                                         </div>
                                     </li>
                                     <li class="right-side onhover-dropdown">
@@ -472,7 +477,9 @@
 
                                             @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
-                                                <label class="new-dropdown">Blog</label>
+                                                @if ($newBlogsExist)
+                                                    <label class="new-dropdown">New</label>
+                                                @endif
                                                 <a class="nav-link"  href="{{ url('/news') }}">Blog</a>
                                             </li>
                                             @endif

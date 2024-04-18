@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Sub Category Left Sidebar</h2>
+                        <h2>Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Sub Category Left Sidebar</li>
+                                <li class="breadcrumb-item active">Product List</li>
                             </ol>
                         </nav>
                     </div>

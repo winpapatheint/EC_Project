@@ -577,8 +577,8 @@
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="footer-logo">
                             <div class="theme-logo">
-                                <a href="index.html">
-                                    <img src="{{ asset('frontend/assets/images/logo/1.png') }}" class="blur-up lazyload" alt="">
+                                <a href="/">
+                                    <img src="{{ asset('images/logos/logo_foods.png') }}" class="blur-up lazyload" alt="">
                                 </a>
                             </div>
 
@@ -703,21 +703,15 @@
                                 </li>
 
                                 <li class="social-app mb-0">
-                                    <h5 class="mb-2 text-content">Privacy policy</h5>
-                                    {{-- <ul>
-                                        <li class="mb-0">
-                                            <a href="https://play.google.com/store/apps" target="_blank">
-                                                <img src="../assets/images/playstore.svg" class="blur-up lazyload"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li class="mb-0">
-                                            <a href="https://www.apple.com/in/app-store/" target="_blank">
-                                                <img src="../assets/images/appstore.svg" class="blur-up lazyload"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                    </ul> --}}
+                                    <div class="footer-contain">
+                                        <ul>
+                                            <li>
+                                                <a href="{{ url('/privacy-policy') }}" class="text-content">
+                                                    <h5 class="mb-2 text-content">Privacy policy</h5>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
                         </div>

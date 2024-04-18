@@ -62,6 +62,12 @@ class ShowProductController extends Controller
             })
             ->orWhereHas('Category', function ($query) use ($mainSearch) {
                 $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
             });
         }
         else {
@@ -73,6 +79,12 @@ class ShowProductController extends Controller
                 })
                 ->orWhereHas('Category', function ($query) use ($sHistory) {
                     $query->where('category_name', 'like', '%' . $sHistory . '%');
+                })
+                ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                })
+                ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                    $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
                 });
             }
 
@@ -158,27 +170,14 @@ class ShowProductController extends Controller
         }
 
         // Fetch paginated results
-        $products = $query->paginate($limit, ['*'], 'page', $page);
+        $products = $query->where('status', '=', '1')->paginate($limit, ['*'], 'page', $page);
         $ttl = $products->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        // Retrieve reviews
         $reviews = Review::all();
 
-        // Total count of products
         $allProduct = Product::count();
 
-        // Total number of pages
-        // $totalPage = ceil($allProduct / $limit);
-
-        // $productTags = Product::select('product_tags')->distinct()->get();
-        // $tags = [];
-
-        // foreach ($productTags as $productTag) {
-        //     $tags = array_merge($tags, explode(',', $productTag->product_tags));
-        // }
-
-        // Fetch product count
         $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
                                             ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
                                             ->where('products.status', '=', '1')
@@ -242,23 +241,23 @@ class ShowProductController extends Controller
         $limit = 10; // set the number of products per page
         if($ids)
         {
-            $products = Product::whereIn('id', $ids)->get();
+            $products = Product::whereIn('id', $ids)->where('status', '=', '1')->get();
         }
 
         if($topic == 'value-of-the-day')
         {
             $products = Product::leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
-                        ->whereDate('order_details.created_at', Carbon::today())->get();
+                        ->whereDate('order_details.created_at', Carbon::today())->where('products.status', '=', '1')->get();
         }
 
         if($topic == 'top-50-offers')
         {
-            $products = Product::orderBy('discount_percent', 'desc')->take(50)->get();
+            $products = Product::where('status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
         }
 
         if($topic == 'new-arrivals')
         {
-            $products = Product::whereDate('created_at', Carbon::today())->get();
+            $products = Product::whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
         }
 
         $reviews = Review::all();

@@ -966,7 +966,7 @@
     <div class="cookie-bar-box">
         <div class="cookie-box">
             <div class="cookie-image">
-                <img src="../assets/images/cookie-bar.png" class="blur-up lazyload" alt="">
+                <img src="{{ asset('frontend/assets/images/cookie-bar.png') }}" class="blur-up lazyload" alt="">
                 <h2>Cookies!</h2>
             </div>
 

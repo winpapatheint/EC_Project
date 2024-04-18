@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Product</li>
                             </ol>
                         </nav>
                     </div>
@@ -441,6 +441,9 @@
                         </div>
                     </div>
 
+                        @if($products->count() < 1)
+                            <h1 class="text-center">No Products Found</h1>
+                        @endif
                     <div
                         class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach ($products as $product)
@@ -520,8 +523,6 @@
                             @endif
                         @endforeach
                     </div>
-
-
                 @include('components.pagination')
                 </div>
             </div>

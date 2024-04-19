@@ -10,13 +10,23 @@ class Buyer extends Model
     use HasFactory;
     protected $fillable = [
        
+        'id',
         'user_id',
+        'prefecture_id',
         'name',
-        'email' ,
+        'email',
         'password',
+        'birthday',
+        'zip_code',
+        'city',
+        'building',
+        'room_no',
         'address',
-        'photo',
+        'chome',
         'phone',
+        'photo',
+        'created_at',
+        'updated_at',
     ];
 
     public function wishlists()

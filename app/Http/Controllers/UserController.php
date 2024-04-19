@@ -50,41 +50,38 @@ class UserController extends Controller
             'chome' => 'required|string|max:255',
             'building' => 'required|string|max:255',
             'room' => 'required|string|max:255',
-
+            'address' => 'required|string|max:255', // Add this line for address validation
         ]);
-
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'role' => 'buyer',
-                'password' => Hash::make($request->input('password')),
-            ]);
-            event(new Registered($user));
-            $buyer = Buyer::create([
-                'user_id' => $user->id,
-                'prefecture_id' => $request->prefecture,
-                'name' => $request->name,
-                'email' => $user->email,
-                'birthday' => $request->birthday,
-                'address'=> $user->address,
-
-                'phone' => $request->phone,
-                'zip_code' => $request->zip_code,
-                'city' => $request->city,
-                'chome' => $request->chome,
-                'building' => $request->building,
-                'room_no' => $request->room
-
-
-            ]);
-
-            event(new Registered($buyer));
-            $email = $request->email;
-            return view('auth.verify-email',compact('email'));
-
-            // DB::commit();
-            // return redirect()->route('user_dashboard')->with('success','Data have been successfully inserted.');
-
+        
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => 'buyer',
+            'password' => Hash::make($request->input('password')),
+        ]);
+        
+        event(new Registered($user));
+        
+        $buyer = Buyer::create([
+            'user_id' => $user->id,
+            'prefecture_id' => $request->prefecture,
+            'name' => $request->name,
+            'email' => $user->email,
+            'birthday' => $request->birthday,
+            'address' => $request->address, // Use the address provided in the request
+            'phone' => $request->phone,
+            'zip_code' => $request->zip_code,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room_no' => $request->room,
+        ]);
+        
+        event(new Registered($buyer));
+        
+        $email = $request->email;
+        return view('auth.verify-email', compact('email'));
+        
     }
     public function indexuser()
     {

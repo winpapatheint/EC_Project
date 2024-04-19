@@ -26,6 +26,7 @@ use Mail;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use Illuminate\Support\Facades\File;
     /**
      * Store a newly created resource in storage.
      *
@@ -1176,14 +1177,32 @@ class AdminController extends Controller
 
     public function bloglistdetail($id)
     {
-        $blog = DB::table('blogs')
-                    ->select( 'U.name as authorby', 'blogs.*')
-                    ->join('users as U', function ($join) {
-                        $join->on('blogs.created_by', '=', 'U.id');
-                    })
-                    ->where('blogs.id',$id)->get();
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
 
-        $blog = $blog[0];
+        $search = $validated['search'] ?? null;
+        $limit = 10;
+
+        if ($search) {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.title', 'like', '%' . $search . '%')
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
+        else {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.id',$id)
+                        ->orderBy('created_at', 'desc')->get();
+                        $blog = $blogs[0];
+        }
 
         $limit = 4;
         $latestblog = DB::table('blogs')
@@ -1191,7 +1210,7 @@ class AdminController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->paginate($limit);
 
-        return view('front-end.blog-detail',compact('blog','latestblog'));
+        return view('front-end.blog-detail',compact('blog','latestblog','search'));
     }
 
     public function productdetail($id)
@@ -1471,12 +1490,10 @@ class AdminController extends Controller
 
     public function indexuser()
     {
-
         $limit = 10;
 
         // print_r($type);die;
 
-      //  $updval = array('status' => '1');
         $users = DB::table('users')
                     ->select('users.id','users.*')
                     ->whereIn('role',['seller','buyer'])
@@ -1486,10 +1503,6 @@ class AdminController extends Controller
                     ->orWhereNull('email_verified_at');
                     })
                     ->orderBy('created_at', 'desc')->paginate($limit);
-
-     //foreach ($users as $user) {
-            //DB::table('users')->where('id', $user->id)->update($updval);
-       // }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1722,6 +1735,34 @@ class AdminController extends Controller
         $editmode = true;
         // $hcompanies = array();
         return view('admin.registerfaq',compact('faq','editmode'));
+    }
+
+    public function updateMultiImg(Request $request)
+    {
+        $request->validate([
+            'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $imgs = $request->multi_img;
+        foreach($imgs as $id => $img)
+        {
+            $imgDel = MultiImg::findOrFail($id);
+            File::delete($imgDel->photo_name);
+        }
+        $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+        $img->move('upload/multiImg', $filename);
+        MultiImg::where('id',$id)->update([
+            'photo_name' => $filename,
+            'updated_at' => Carbon::now(),
+        ]);
+        return back()->with('flash_message', 'Image updated successfully');
+    }
+
+    public function deleteMultiImg($id)
+    {
+        $old_img = MultiImg::findOrFail($id);
+        File::delete($old_img->photo_name);
+        MultiImg::findOrFail($id)->delete();
+        return back()->with('flash_message', 'Image deleted successfully');
     }
 
     public function editproduct($id)

@@ -66,7 +66,7 @@
                             <div style="display: flex; align-items: center;">
                                 <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
                                 style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
+                                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                                 style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                         <div class="recent-post-box">
                                             @foreach($latestblog as $list)
                                             <div class="recent-box">
-                                                <a href="{{ url('/blog-detail') }}" class="recent-image">
+                                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="recent-image">
                                                     <img src="{{ asset('images/'.$list->image ) }}"
                                                         class="img-fluid blur-up lazyload" alt="">
                                                 </a>
@@ -102,10 +102,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                   
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

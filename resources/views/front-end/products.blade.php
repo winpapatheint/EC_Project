@@ -23,7 +23,7 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-    
+
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
@@ -148,9 +148,11 @@
                                                 </li>
 
                                                 <li>
+
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox" name="rating[]" value="4"
                                                         {{ in_array("4", $rating) ? 'checked' : '' }}>
+
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>

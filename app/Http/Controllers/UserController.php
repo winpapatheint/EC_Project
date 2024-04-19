@@ -58,8 +58,9 @@ class UserController extends Controller
                 'email' => $request->input('email'),
                 'role' => 'buyer',
                 'password' => Hash::make($request->input('password')),
+                'status' => 1,
             ]);
-            event(new Registered($user));
+
             $buyer = Buyer::create([
                 'user_id' => $user->id,
                 'prefecture_id' => $request->prefecture,
@@ -77,7 +78,7 @@ class UserController extends Controller
 
 
             ]);
-
+            event(new Registered($user));
             event(new Registered($buyer));
             $email = $request->email;
             return view('auth.verify-email',compact('email'));
@@ -203,7 +204,7 @@ class UserController extends Controller
             ->where('orders.id', $id)
             ->select('orders.*', 'orders.id as order_id','sellers.*','orders.post_code as code','orders.city as buyercity','orders.chome as buyerchome','orders.building as buyerbuilding','orders.room_no as buyerroom' )
             ->get();
-       
+
             foreach ($orderDetails as $location)
             {
                 $locationcity = $location->buyercity;
@@ -234,12 +235,14 @@ class UserController extends Controller
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerAddress::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
-                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.division',
+                    'buyer_addresses.district','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone',
+                    'buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
         //$user = Buyers::first();
-            return view('front-end.user-address',compact('data','user'));
+        return view('front-end.user-address',compact('data','user'));
     }
     //Add New Address
     public function createNewaddress(Request $request)
@@ -876,7 +879,7 @@ class UserController extends Controller
             $chome = $request->chome;
             $building = $request->building;
             $room = $request->room;
-    
+
             // Generate a unique order ID
             $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
 
@@ -899,7 +902,7 @@ class UserController extends Controller
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 ]);
-        
+
             foreach ($productIds as $key => $product_id) {
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
@@ -922,16 +925,16 @@ class UserController extends Controller
                         'amount' => $amount1,
                     ];
                 }
-                
+
                 OrderDetail::create($orderdetailsData);
             }
             return response()->json(['message' => 'Your order created successfully.']);
-            
-            
+
+
         } catch (\Exception $e) {
             // Log any exceptions for debugging
             \Log::error($e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
-    }  
+    }
 }

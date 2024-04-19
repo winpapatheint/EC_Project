@@ -217,24 +217,30 @@ class UserController extends Controller
     {
         $limit = 10;
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $order = DB::table('orders')
+
+        $orders = DB::table('orders')
                     ->join('buyers', 'orders.buyer_id', 'buyers.id')
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('orders.*', 'orders.id as order_id', 'orders.created_at')
                     ->orderBy('order_id', 'desc')
                     ->paginate($limit);
+        $processes = [];
+        foreach ($orders as $order) {
+            $checkid = $order->order_id;
+            $processes[$checkid] = Process::where('order_id', $checkid)->latest()->first();
+        }
 
-        $ttl = $order->total();
+        $ttl = $orders->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.user-delivery-status', compact('user','order','ttl', 'ttlpage'));
+        return view('front-end.user-delivery-status', compact('user','orders','processes','ttl', 'ttlpage'));
 
     }
     //Show Addresses
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerAddress::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.division','Buyer_addresses.district','Buyer_addresses.post_code','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+        $data = BuyerAddress::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.post_code','Buyer_addresses.city','Buyer_addresses.chome','Buyer_addresses.building','Buyer_addresses.room_no','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
                      ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
 
@@ -247,9 +253,11 @@ class UserController extends Controller
         $validatedData = $request->validate([
 
             'name' => 'required|string|max:255',
-            'division' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
             'post_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room_no' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'place' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
@@ -263,9 +271,11 @@ class UserController extends Controller
 
                     'buyer_id' => "1",
                     'name' => $request->name,
-                    'division' => $request->division,
-                    'district' => $request->district,
-                    'post_code'=> $request->post_code,
+                    'post_code' => $request->post_code,
+                    'city' => $request->city,
+                    'chome' => $request->chome,
+                    'building' => $request->building,
+                    'room_no' => $request->roomno,
                     'address' => $request->address,
                     'place' => $request->place,
                     'phone' => $request->phone,
@@ -286,9 +296,11 @@ class UserController extends Controller
             $buyerAddress->update([
                 'id'=> $request->id,
                 'name' => $request->name,
-                'division' => $request->division,
-                'district' => $request->district,
                 'post_code' => $request->post_code,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->roomno,
                 'address' => $request->address,
                 'place' => $request->place,
                 'phone' => $request->phone,
@@ -876,6 +888,7 @@ class UserController extends Controller
             $chome = $request->chome;
             $building = $request->building;
             $room = $request->room;
+            $payment = $request->payment;
     
             // Generate a unique order ID
             $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
@@ -898,6 +911,7 @@ class UserController extends Controller
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
+                'payment_method' => $payment
                 ]);
         
             foreach ($productIds as $key => $product_id) {
@@ -925,7 +939,10 @@ class UserController extends Controller
                 
                 OrderDetail::create($orderdetailsData);
             }
-            return response()->json(['message' => 'Your order created successfully.']);
+            return response()->json(['message' => 'Your order has been successfully placed.']);
+
+            $cartItem = DB::table('carts')
+                    ->delete($productIds);
             
             
         } catch (\Exception $e) {

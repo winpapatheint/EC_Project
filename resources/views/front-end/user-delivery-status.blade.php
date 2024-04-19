@@ -118,9 +118,11 @@
                                             </svg>
                                         </span>
                                     </div>
+                                   
                                     <div class="table-responsive dashboard-bg-box">
                                         <table class="table product-table">
                                             <thead>
+                                            
                                                 <tr>
                                                     <th scope="col">No</th>
                                                     <th scope="col">Date</th>
@@ -129,14 +131,42 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($order as $orders)
-                                                <tr>
-                                                    <td><h6>{{ $orders->order_id }}</h6></td>
-                                                    <td><h6>{{ \Carbon\Carbon::parse($orders->shipped_date)->format('F d, Y') }}</h6></td> 
-                                                    <td><h6>{{ $orders->order_code }}</h6></td>
-                                                    <td class="status-close"><h6>Shipped</h6></td>
-                                                </tr>
-                                            @endforeach
+                                                @php $counter = 1; @endphp
+                                                @if (empty($processes))
+                                                    <tr>
+                                                        <td colspan="4" style="text-align: center">No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($orders as $order)
+                                                        <tr>
+                                                            <td><h6>{{ $counter++ }}</h6></td>
+                                                            <td><h6>{{ \Carbon\Carbon::parse($order->shipped_date)->format('F d, Y') }}</h6></td> 
+                                                            <td><h6>{{ $order->order_id }}</h6></td>
+                                                            @if (isset($processes[$order->order_id]))
+                                                                @php $item = $processes[$order->order_id]; @endphp
+                                                                @if (!empty($item->confirmed_date))
+                                                                    <td><p class="fw-bold">Confirmed</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->confirmed_date }}</p></td>
+                                                                @elseif (!empty($item->processing_date))
+                                                                    <td><p class="fw-bold">Processing</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->processing_date }}</p></td>
+                                                                @elseif (!empty($item->picked_date))
+                                                                    <td><p class="fw-bold">Picked</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->picked_date }}</p></td>
+                                                                @elseif (!empty($item->shipped_date))
+                                                                    <td><p class="fw-bold">Shipped</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->shipped_date }}</p></td>
+                                                                @else
+                                                                    <td><p class="fw-bold">Delivered</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->delivered_date }}</p></td>
+                                                                @endif
+                                                            @else
+                                                                <td colspan="2"><p class="fw-bold">No process data available</p></td>
+                                                            @endif
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
                                         </table>
                                     </div>
                                     <div>

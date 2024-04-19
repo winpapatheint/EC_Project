@@ -17,6 +17,7 @@ class Payment extends Model
         'buyer_id',
         'order_id',
         'total_amount',
+        'payment_method',
         'created_at',
         'updated_at',
     ];

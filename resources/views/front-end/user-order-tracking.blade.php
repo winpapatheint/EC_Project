@@ -188,7 +188,7 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                 @php $counter = 1; @endphp
+                                @php $counter = 1; @endphp
                                 @if ($process->isEmpty())
                                     <tr>
                                         <td colspan="4" style="text-align: center">No data available</td>

@@ -270,7 +270,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <form class="theme-form theme-form-2 mega-form" method="post" action="{{ route('update.multiImg') }}"
+                                            <form class="theme-form theme-form-2 mega-form" method="post" action="{{ route('updatemultiImg') }}"
                                               enctype="multipart/form-data">
                                                 @csrf
                                                 @foreach ($multiImgs as $key => $img)
@@ -281,7 +281,7 @@
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="submit" class="btn btn-primary px-4" value="Update">
-                                                                <a href="{{ route('delete.multiImg',$img->id) }}" class="btn btn-secondary px-4">Delete</a>
+                                                                <a href="{{ route('deletemultiImg',$img->id) }}" class="btn btn-secondary px-4">Delete</a>
                                                             </div>
                                                         </td>
                                                     </tr>

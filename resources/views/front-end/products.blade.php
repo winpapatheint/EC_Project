@@ -90,11 +90,6 @@
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
-                                {{-- <div class="accordion-item">
-                                    <div style="display: flex;justify-content: flex-end;">
-                                        <a href="/products"">Clear All</a>
-                                    </div>
-                                </div> --}}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -513,7 +508,7 @@
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-
+                                            {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -542,12 +537,10 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
-                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
-                                        @else
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
-                                        @endif
+                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            @if ($product->discount_percent != null)
+                                            <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
                                     </div>
                                 </div>
@@ -557,26 +550,8 @@
                         @endforeach
                     </div>
 
-                    <nav class="custom-pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                    <i class="fa-solid fa-angles-left"></i>
-                                </a>
-                            </li>
-                            @for ($i = 1; $i <= $totalPage; $i++)
-                                <li class="page-item @if($i == $page) active @endif">
-                                    <a class="page-link" href="{{ route('show-product', ['page' => $i]) }}">{{ $i }}</a>
-                                </li>
-                            @endfor
-                            
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)">
-                                    <i class="fa-solid fa-angles-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    
+                @include('components.pagination')
                 </div>
             </div>
         </div>
@@ -678,19 +653,7 @@
                                         </div>
                                     </li>
                                 </ul>
-
-                                {{--<div class="select-size">
-                                    <h4>Cake Size :</h4>
-                                    <select class="form-select select-form-size">
-                                        <option selected>Select Size</option>
-                                        <option value="1.2">1/2 KG</option>
-                                        <option value="0">1 KG</option>
-                                        <option value="1.5">1/5 KG</option>
-                                        <option value="red">Red Roses</option>
-                                        <option value="pink">With Pink Roses</option>
-                                    </select>
-                                </div> --}}
-
+                                {{-- remain --}}
                                 <div class="modal-button">
                                     <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf

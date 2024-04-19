@@ -10,10 +10,10 @@
     <meta name="keywords"
         content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('backend/assets/images/logo-food.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('backend/assets/images/logos_foods.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Seller</title>
+    <title>アジア食彩館</title>
 
     <!-- Google font-->
     <link
@@ -78,14 +78,14 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="index.html">
-                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
+                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                             <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="index.html">
-                            <img src="{{ asset('backend/assets/images/logo/1.png') }}" class="img-fluid" alt="">
+                            <img src="{{ asset('backend/assets/images/logo-food.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
                 </div>
@@ -159,11 +159,7 @@
                         </li>
                         <li class="profile-nav onhover-dropdown pe-0 me-0">
                             <div class="media profile-media">
-                                @if(Auth::user()->user_photo)
-                                    <img src="{{ asset('upload/profile/' . Auth::user()->user_photo) }}" class="user-profile rounded-circle">
-                                @else
-                                    <img src="{{ asset('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
-                                @endif
+                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
                                 <div class="user-name-hide media-body">
                                     <span>{{ Auth::user()->name }}</span>
                                     {{-- <p class="mb-0 font-roboto">{{ Auth::user()->name }}<i class="middle ri-arrow-down-s-line"></i></p> --}}
@@ -201,7 +197,7 @@
                 <div>
                     <div class="logo-wrapper logo-wrapper-center">
                         <a href="index.html" data-bs-original-title="" title="">
-                            <img class="img-fluid for-white" src="{{ asset('backend/assets/images/logo/full-white.png') }}" alt="logo">
+                            <img class="img-fluid for-white" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                         </a>
                         <div class="back-btn">
                             <i class="fa fa-angle-left"></i>
@@ -212,7 +208,7 @@
                     </div>
                     <div class="logo-icon-wrapper">
                         <a href="index.html">
-                            <img class="img-fluid main-logo main-white" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
+                            <img class="img-fluid main-logo main-white" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                             <img class="img-fluid main-logo main-dark" src="{{ asset('backend/assets/images/logo/logo-white.png') }}"
                                 alt="logo">
                         </a>
@@ -254,12 +250,14 @@
                                     </a>
                                 </li>
 
+                                @if(Auth::user()->can('subseller.list'))
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.subseller') }}">
                                         <i class="ri-user-3-line"></i>
                                         <span>Subseller</span>
                                     </a>
                                 </li>
+                                @endif
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.profile') }}">
@@ -313,7 +311,7 @@
                     <p>Are you sure you want to log out?</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal" style="margin-bottom: 11px;">No</button>
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
                         <form action="{{ route('adminlogout')}}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn--yes btn-primary">Yes</button>

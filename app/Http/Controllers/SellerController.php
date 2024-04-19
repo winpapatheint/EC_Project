@@ -7,38 +7,56 @@ use App\Models\Help;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Seller;
+use App\Models\Product;
+use App\Models\Subseller;
 use App\Models\Prefecture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller
 {
     public function dashboard()
     {
         $id = Auth::user()->id;
+        $user = User::find($id);
+        if ($user->created_by !== null) {
+            $id = $user->created_by;
+        }
+        else {
+            $id = Auth::user()->id;
+        }
+        $revenue =Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
+        $order = Order::where('seller_id',$id)->get();
+        $pending = Order::where('seller_id',$id)->where('status', 'Pending')->get();
+        $product = Product::where('seller_id', $id)->get();
         $transfer = Order::where('seller_id',$id)->latest()->paginate(5);
-        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-        ->whereYear('created_at', date('Y'))
-        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-        ->pluck('count', 'month_name');
+        $orders = Order::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                ->pluck('count', 'month_name');
 
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('seller.index',compact('labels', 'data','transfer'));
+        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product'));
     }
+
 
     public function profile()
     {
         $id = Auth::user()->id;
+        $seller = Seller::where('user_id', $id)->first();
+        $subseller = Seller::where('subseller_id', $id)->first();
+        $shop = $seller ? $seller : $subseller;
         $data = User::find($id);
-        $shop = Seller::where('user_id', $id)->first();
         $prefecture = Prefecture::get();
-        return view('seller.profile',compact('data','shop','prefecture'));
+
+        return view('seller.profile', compact('data', 'shop', 'prefecture'));
     }
+
 
     public function storeProfile(Request $request)
     {
@@ -62,8 +80,9 @@ class SellerController extends Controller
         $data->email = $request->email;
         $data->password = Hash::make($request->password);
         $data->save();
-        return redirect('/seller');
+        return redirect('/dashboard');
     }
+
 
     public function updateShop(Request $request)
     {
@@ -115,7 +134,7 @@ class SellerController extends Controller
         $seller->bank_acc_no = $request->bank_acc_no;
         $seller->updated_at = Carbon::now();
         $seller->update();
-        return redirect('/seller');
+        return redirect('/dashboard');
     }
 
 
@@ -125,16 +144,19 @@ class SellerController extends Controller
         return view('seller.help.help',compact('helps'));
     }
 
+
     public function detailHelp($id)
     {
         $helps = Help::find($id);
         return view('seller.help.help_detail',compact('helps'));
     }
 
+
     public function addHelp()
     {
         return view('seller.help.help_add');
     }
+
 
     public function storeHelp(Request $request)
     {
@@ -157,8 +179,9 @@ class SellerController extends Controller
         $help->reason = $request->reason;
         $help->created_at = Carbon::now();
         $help->save();
-        return redirect('/seller/help')->with('flash_message', 'Data added successfully');
+        return redirect('/help')->with('flash_message', 'Data added successfully');
     }
+
 
     public function deleteHelp($id)
     {
@@ -170,5 +193,85 @@ class SellerController extends Controller
         $help->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }
+
+
+    public function allSubseller()
+    {
+        $id = Auth::user()->id;
+        $subseller =  Subseller::where('seller_id',$id)->latest()->get();
+        return view('seller.subseller.subseller_all',compact('subseller'));
+    }
+
+
+    public function addSubseller()
+    {
+        $id = Auth::user()->id;
+        $seller =  Seller::where('user_id',$id)->latest()->first();;
+        return view('seller.subseller.subseller_add',compact('seller'));
+    }
+
+
+    public function storeSubseller(Request $request)
+    {
+        $seller_id = $request->seller_id;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => 'seller',
+            'password' => Hash::make($request->input('password')),
+            'phone' => $request->input('phone'),
+        ]);
+        event(new Registered($user));
+
+        $user->assignRole('subseller');
+        $user->givePermissionTo(['product.list', 'product.add','product.edit','product.delete',
+        'order.list', 'order.add','order.edit','order.delete',
+        'review.list', 'review.add','review.edit','review.delete',
+        'help.list', 'help.add','help.edit','brand.add','profile', 'dashboard']);
+
+        $subseller = Subseller::create([
+            'user_id' => $user->id,
+            'seller_id' => Auth::user()->id,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+        event(new Registered($subseller));
+
+        $seller = Seller::find($seller_id);
+        $seller->subseller_id = $user->id;
+        $seller->save();
+
+        $order = Order::find($seller_id);
+        if ($order) {
+            $order->subseller_id = $user->id;
+            $order->save();
+        }
+
+        $product = Product::find($seller_id);
+        if($product) {
+            $product->subseller_id = $user->id;
+            $product->save();
+        }
+
+        $email = $request->email;
+        return view('auth.verify-email',compact('email'));
+    }
+
+
+    public function deleteSubseller(Request $request)
+    {
+        $id = $request->id;
+        Subseller::findOrFail($id)->delete();
+        User::where('user_id',$id)->delete();
+        return back()->with('flash_message', 'Data deleted successfully');
+    }
+
 
 }

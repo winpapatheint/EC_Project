@@ -23,16 +23,6 @@
                                     @endif
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Product Code</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" name="product_code" type="text" placeholder="Product Code" value="{{ old('product_code') }}">
-                                            @error('product_code')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" placeholder="Product Name" value="{{ old('product_name') }}">
@@ -78,7 +68,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">Category</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="category" id="category">
+                                            <select class="js-example-basic-single w-100" name="category_id" id="category">
                                                 <option>Choose Category</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -91,7 +81,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">SubCategory Title</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100 get_sub" name="subcategory" id="subcategory">
+                                            <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory">
 
                                             </select>
                                         </div>
@@ -101,7 +91,7 @@
                                         <label
                                             class="col-sm-3 col-form-label form-label-title">SubCategory</label>
                                         <div class="col-sm-9">
-                                            <select class="js-example-basic-single w-100" name="subname" id="subname">
+                                            <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
 
                                             </select>
                                         </div>
@@ -173,18 +163,18 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" multiple="" name="multi_img[]" id="multiImg" value="{{ old('multi_img') }}">
-                                            @error('multi_img')
+                                            <input type="file" class="form-control" multiple name="multi_img[]" id="multiImg">
+                                            <div id="preview_img"></div>
+                                            {{-- @error('multi_img')
                                                 <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                            <div class="row" id="preview_img"></div>
+                                            @enderror --}}
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Original Price</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('selling_price') }}">
+                                            <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('original_price') }}">
                                             @error('original_price')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -194,7 +184,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Discount Percentage</label>
                                         <div class="col-sm-6">
-                                            <input class="form-control" name="discount_percent" id="discount_percent" type="number" placeholder="0-100%" min="1" max="100" value="{{ old('discount_percent') }}">
+                                            <input class="form-control" name="discount_percent" id="discount_percent" type="number" placeholder="0-100%" min="0" max="100" value="{{ old('discount_percent') }}">
                                         </div>
                                         <div class="col-sm-3">
                                             <input class="form-control" name="selling_price" id="selling_price" type="number" disabled>
@@ -226,6 +216,9 @@
                                         <label class="col-sm-3 form-label-title">Delivery Price</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="delivery_price" type="number" placeholder="400" min="1" value="{{ old('delivery_price') }}">
+                                            @error('delivery_price')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -286,58 +279,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to the SubCategory Title select element
-        document.getElementById('subcategory').addEventListener('change', function() {
-            var subcategoryTitleId = this.value;
-            console.log('SubCategory Title selected:', subcategoryTitleId);
+    document.getElementById('subcategory').addEventListener('change', function() {
+        var subcategoryTitleId = this.value;
+        console.log('SubCategory Title selected:', subcategoryTitleId);
 
-            // Clear previous options in the SubCategory select
-            var subcategorySelect = document.getElementById('subname');
-            subcategorySelect.innerHTML = '<option value="">Choose SubCategory</option>';
+        var subcategorySelect = document.getElementById('subname');
+        subcategorySelect.innerHTML = '<option value="">Choose SubCategory</option>';
 
-            // If no subcategory title selected, return
-            if (!subcategoryTitleId) {
-                return;
-            }
+        if (!subcategoryTitleId) {
+            return;
+        }
 
-            // Send AJAX request to fetch corresponding subcategories
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var subcategories = JSON.parse(xhr.responseText);
-                        // Update options of SubCategory select
-                        subcategories.forEach(function(subcategory) {
-                            var option = document.createElement('option');
-                            option.value = subcategory.id;
-                            option.textContent = subcategory.sub_category_name;
-                            subcategorySelect.appendChild(option);
-                        });
-                    } else {
-                        console.error('Failed to fetch subcategories');
-                    }
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var subcategories = JSON.parse(xhr.responseText);
+                    subcategories.forEach(function(subcategory) {
+                        var option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.sub_category_name;
+                        subcategorySelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to fetch subcategories');
                 }
-            };
-            xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
-            xhr.send();
-        });
-
-        // Add event listener to the SubCategory select element
-        document.getElementById('subname').addEventListener('change', function() {
-            var subcategoryId = this.value;
-            console.log('SubCategory selected:', subcategoryId);
-
-            // You can add further logic here if needed
-        });
+            }
+        };
+        xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
+        xhr.send();
     });
+
+    document.getElementById('subname').addEventListener('change', function() {
+        var subcategoryId = this.value;
+        console.log('SubCategory selected:', subcategoryId);
+    });
+});
+
 </script>
-
-
 
 <script>
     const originalPriceInput = document.getElementById('original_price');
@@ -383,18 +366,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 </script>
+
 <script>
     document.getElementById('multiImg').addEventListener('change', function(event) {
+        const files = event.target.files;
         const preview = document.getElementById('preview_img');
         preview.innerHTML = '';
 
-        Array.from(event.target.files).forEach(file => {
+        if (files.length > 5) {
+            alert('Please select a maximum of 5 images.');
+            this.value = '';
+            return;
+        }
+
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.style.maxWidth = '100px';
-                img.style.maxHeight = '100px';
+                img.style.maxWidth = '80px';
+                img.style.maxHeight = '80px';
                 preview.appendChild(img);
             };
             reader.readAsDataURL(file);

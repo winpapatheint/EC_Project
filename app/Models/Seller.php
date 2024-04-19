@@ -10,6 +10,7 @@ class Seller extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
+        'subseller_id',
         'prefecture_id',
         'bank_name',
         'bank_acc_type',

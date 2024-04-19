@@ -1,14 +1,6 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-@php
-    $id = Auth::user()->id;
-    $revenue = App\Models\Order::where('seller_id', $id)->sum('amount');
-    $order = App\Models\Order::where('seller_id', $id)->get();
-    $product = App\Models\Product::where('seller_id', $id)->get();
-    $pending = App\Models\Order::where('seller_id', $id)
-                           ->where('status', 'Pending')
-                           ->get();
-@endphp
+
 <!-- index body start -->
  <div class="page-body">
     <div class="container-fluid">
@@ -20,7 +12,7 @@
                         <div class="media align-items-center static-top-widget">
                             <div class="media-body p-0">
                                 <span class="m-0">Total Revenue</span>
-                                <h4 class="mb-0 counter">¥{{ $revenue }}</h4>
+                                <h4 class="mb-0 counter">{{number_format($revenue) }}</h4>
                             </div>
                             <div class="align-self-center text-center">
                                 <i class="ri-database-2-line"></i>

@@ -23,7 +23,7 @@ class RegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
             'bank_name' => 'required|string|max:255',
             'bank_branch' => 'required|string|max:255',
             'bank_acc_no' => 'required|string|max:255',
@@ -51,6 +51,14 @@ class RegisterController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
         event(new Registered($user));
+
+        $user->assignRole('seller');
+        $user->givePermissionTo(['product.list', 'product.add','product.edit','product.delete',
+        'order.list', 'order.add','order.edit','order.delete',
+        'subseller.list', 'subseller.add','subseller.edit','subseller.delete',
+        'review.list', 'review.add','review.edit','review.delete',
+        'help.list', 'help.add','help.edit','brand.add','profile', 'dashboard']);
+
         $seller = Seller::create([
             'user_id' => $user->id,
             'prefecture_id' => $request->prefecture,

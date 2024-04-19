@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Product List</h2>
+                        <h2>Discount Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Discount Product List</li>
                             </ol>
                         </nav>
                     </div>
@@ -24,6 +24,9 @@
     </section>
     <!-- Breadcrumb Section End -->
 
+    @if($products->count() < 1)
+        <h1 class="text-center">No Products Found</h1>
+    @else
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
@@ -100,7 +103,7 @@
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-
+                                            {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
@@ -129,12 +132,9 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price - ($product->selling_price * $product->discount_percent)/100, 0, '.', ',') }}</span> 
-                                            <del>¥{{ number_format($product->selling_price, 0, '.', ',') }}</del>
-                                        @else
-                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</span>
-                                        @endif
+                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            @if ($product->discount_percent != null)
+                                            <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
                                         </h5>
                                     </div>
                                 </div>
@@ -148,6 +148,7 @@
         </div>
     </section>
     <!-- Shop Section End -->
+    @endif
 
     @foreach ($products as $product)
     @if ($product->status == 1)
@@ -244,7 +245,7 @@
                                         </div>
                                     </li>
                                 </ul>
-
+                                {{-- remain --}}
                                 <div class="modal-button">
                                     <form method="POST" action="{{ route('show_carts') }}" >
                                         @csrf

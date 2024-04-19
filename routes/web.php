@@ -9,9 +9,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ShowProductController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Models\Product;
+use App\Http\Controllers\ShowProductController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,16 +78,17 @@ Route::get('/product-circle', function () {return view('front-end.product-circle
 Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shoplist');
 
 
-Route::get('shopsidebar/{categoryid}', [AdminController::class, 'indexshop']);
+Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
+Route::get('subcategorysidebar/{subcategoryid}', [AdminController::class, 'indexsubcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 
 Route::get('/news', [AdminController::class, 'news']);
 Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 
-Route::get('/contact-us', function () {return view('front-end.contact-us');});
-
-Route::get('/faq', function () {return view('front-end.faq');});
+Route::get('/contact', function () {return view('front-end.contact-us');});
+Route::post('contact', [AdminController::class, 'contact'])->name('contact');
+Route::get('/faq', [AdminController::class, 'indexfaq']);
 
 Route::get('/cart', function () {return view('front-end.cart');});
 
@@ -96,7 +98,6 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
-
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
@@ -113,6 +114,16 @@ Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
+Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
+Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
+Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
+Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
+Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->name('admin.registerfaq');
+Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('registerfaq');
+Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
+route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
 Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
@@ -122,6 +133,8 @@ Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
+route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
 
 //startuser
@@ -193,73 +206,59 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 //Seller
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
-Route::get('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
-Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
-Route::get('/seller/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
-Route::post('/seller/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');
-Route::post('/seller/shopupdate', [SellerController::class, 'updateShop'])->middleware(['auth','role:seller'])->name('update.shop');
-Route::get('/seller/help', [SellerController::class, 'help'])->middleware(['auth','role:seller'])->name('seller.help');
-Route::get('/seller/helpadd', [SellerController::class, 'addHelp'])->middleware(['auth','role:seller'])->name('help.add');
-Route::post('/seller/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');
-Route::get('/seller/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
-Route::get('/seller/help/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
+Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
+Route::get('/dashboard', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
+Route::get('/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
+Route::post('/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');
+Route::post('/shopupdate', [SellerController::class, 'updateShop'])->middleware(['auth','role:seller'])->name('update.shop');
+Route::get('/help', [SellerController::class, 'help'])->middleware(['auth','role:seller'])->name('seller.help');
+Route::get('/helpadd', [SellerController::class, 'addHelp'])->middleware(['auth','role:seller'])->name('help.add');
+Route::post('/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');
+Route::get('/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
+Route::get('/helpdelete/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
 
 
 //Brand
-Route::get('/seller/brandadd', [BrandController::class, 'addBrand'])->middleware(['auth','role:seller'])->name('add.brand');
-Route::post('/seller/brandstore', [BrandController::class, 'storeBrand'])->middleware(['auth','role:seller'])->name('store.brand');
+Route::get('/brandadd', [BrandController::class, 'addBrand'])->middleware(['auth','role:seller'])->name('add.brand');
+Route::post('/brandstore', [BrandController::class, 'storeBrand'])->middleware(['auth','role:seller'])->name('store.brand');
 
 //SellerProduct
-Route::get('/seller/productlist', [ProductController::class, 'allProduct'])->middleware(['auth','role:seller'])->name('all.product');
-Route::get('/seller/productdetail/{id}', [ProductController::class, 'detailProduct'])->middleware(['auth','role:seller'])->name('detail.product');
-Route::get('/seller/productadd', [ProductController::class, 'addProduct'])->middleware(['auth','role:seller'])->name('add.product');
-Route::post('/seller/productstore', [ProductController::class, 'storeProduct'])->middleware(['auth','role:seller'])->name('store.product');
-Route::get('/seller/productedit/{id}', [ProductController::class, 'editProduct'])->middleware(['auth','role:seller'])->name('edit.product');
-Route::post('/seller/productupdate', [ProductController::class, 'updateProduct'])->middleware(['auth','role:seller'])->name('update.product');
-Route::post('/seller/productdelete', [ProductController::class, 'deleteProduct'])->middleware(['auth','role:seller'])->name('delete.product');
-Route::post('/seller/productstatus', [ProductController::class, 'changeStatus'])->middleware(['auth','role:seller'])->name('change.status');
-Route::post('/seller/product/multiImg', [ProductController::class, 'updateMultiImg'])->middleware(['auth','role:seller'])->name('update.multiImg');
-Route::get('/seller/product/multiImg/delete/{id}', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
-Route::get('/seller/review', [ProductController::class, 'review'])->middleware(['auth','role:seller'])->name('seller.review');
-Route::post('/seller/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
-Route::post('/seller/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
-Route::post('/seller/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
+Route::get('/productlist', [ProductController::class, 'allProduct'])->middleware(['auth','role:seller'])->name('all.product');
+Route::get('/productdetail/{id}', [ProductController::class, 'detailProduct'])->middleware(['auth','role:seller'])->name('detail.product');
+Route::get('/productadd', [ProductController::class, 'addProduct'])->middleware(['auth','role:seller'])->name('add.product');
+Route::post('/productstore', [ProductController::class, 'storeProduct'])->middleware(['auth','role:seller'])->name('store.product');
+Route::get('/productedit/{id}', [ProductController::class, 'editProduct'])->middleware(['auth','role:seller'])->name('edit.product');
+Route::post('/productupdate', [ProductController::class, 'updateProduct'])->middleware(['auth','role:seller'])->name('update.product');
+Route::post('/productdelete', [ProductController::class, 'deleteProduct'])->middleware(['auth','role:seller'])->name('delete.product');
+Route::post('/productstatus', [ProductController::class, 'changeStatus'])->middleware(['auth','role:seller'])->name('change.status');
+Route::post('/product/multiImg', [ProductController::class, 'updateMultiImg'])->middleware(['auth','role:seller'])->name('update.multiImg');
+Route::get('/product/multiImg/delete/{id}', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
+Route::get('/review', [ProductController::class, 'review'])->middleware(['auth','role:seller'])->name('seller.review');
+Route::post('/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
+Route::post('/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
+Route::post('/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
 Route::get('/get-subtitle/{categoryId}', [ProductController::class, 'getSubTitle']);
 Route::get('/get-subcategories-by-title/{subcategoryTitleId}', [ProductController::class, 'getSubcategory']);
 
 //SellerOrder
-Route::get('/seller/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');
-Route::get('/seller/orderdetail/{id}', [OrderController::class, 'sellerDetailOrder'])->middleware(['auth','role:seller'])->name('detail.order');
-Route::post('/seller/orderstatus', [OrderController::class, 'updateOrderStatus'])->middleware(['auth','role:seller'])->name('order.status');
-Route::get('/seller/ordertracking/{id}', [OrderController::class, 'orderTracking'])->middleware(['auth','role:seller'])->name('order.tracking');
-Route::get('/seller/ordercancel', [OrderController::class, 'cancelOrder'])->middleware(['auth','role:seller'])->name('order.cancel');
-Route::post('/seller/cancelreason', [OrderController::class, 'cancelOrderReason'])->middleware(['auth','role:seller'])->name('order.cancel.reason');
+Route::get('/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');
+Route::get('/orderdetail/{id}', [OrderController::class, 'sellerDetailOrder'])->middleware(['auth','role:seller'])->name('detail.order');
+Route::post('/orderstatus', [OrderController::class, 'updateOrderStatus'])->middleware(['auth','role:seller'])->name('order.status');
+Route::get('/ordertracking/{id}', [OrderController::class, 'orderTracking'])->middleware(['auth','role:seller'])->name('order.tracking');
+Route::get('/ordercancel', [OrderController::class, 'cancelOrder'])->middleware(['auth','role:seller'])->name('order.cancel');
+Route::post('/cancelreason', [OrderController::class, 'cancelOrderReason'])->middleware(['auth','role:seller'])->name('order.cancel.reason');
 Route::get('/invoice/{id}', [OrderController::class, 'generatePDF'])->middleware(['auth','role:seller'])->name('invoice');
 
 // Route::get('', [OrderController::class, ''])->middleware(['auth','role:seller'])->name('');
 
 //SellerSubSeller
-Route::get('/seller/all/subseller', function () {return view('seller.subseller.subseller_all');})->name('all.subseller');
-// Route::get('/seller/add/subseller', function () {return view('seller.subseller.subseller_add');})->name('add.subseller');
-// Route::get('/seller/edit/subseller', function () {return view('seller.subseller.subseller_edit');})->name('edit.subseller');
+Route::get('/subsellerlist', [SellerController::class, 'allSubseller'])->middleware(['auth','role:seller'])->name('all.subseller');
+Route::get('/subselleradd', [SellerController::class, 'addSubseller'])->middleware(['auth','role:seller'])->name('add.subseller');
+Route::post('/subsellerstore', [SellerController::class, 'storeSubseller'])->middleware(['auth','role:seller'])->name('store.subseller');
+Route::get('/subselleredit/{id}', [SellerController::class, 'editSubseller'])->middleware(['auth','role:seller'])->name('edit.subseller');
+Route::post('/subsellerupdate', [SellerController::class, 'updateSubseller'])->middleware(['auth','role:seller'])->name('update.subseller');
+Route::post('/subsellerdelete', [SellerController::class, 'deleteSubseller'])->middleware(['auth','role:seller'])->name('delete.subseller');
 
-//Subseller
-Route::get('/subseller', function () {return view('sub_seller.index');})->name('sub_seller.dashboard');
-Route::get('/subseller/profile', function () {return view('sub_seller.profile');})->name('sub_seller.profile');
-Route::get('/subseller/help', function () {return view('sub_seller.help.help');})->name('sub_seller.help');
-Route::get('/subseller/add/help', function () {return view('sub_seller.help.help_add');})->name('sub_seller.help.add');
-
-//SubsellerProduct
-Route::get('/subseller/all/product', function () {return view('sub_seller.product.product_all');})->name('sub_seller.all.product');
-Route::get('/subseller/add/product', function () {return view('sub_seller.product.product_add');})->name('sub_seller.add.product');
-Route::get('/subseller/detail/product', function () {return view('sub_seller.product.product_detail');})->name('sub_seller.detail.product');
-Route::get('/subseller/edit/product', function () {return view('sub_seller.product.product_edit');})->name('sub_seller.edit.product');
-
-//SubsellerOrder
-Route::get('/subseller/all/order', function () {return view('sub_seller.order.order_all');})->name('sub_seller.all.order');
-Route::get('/subseller/detail/order', function () {return view('sub_seller.order.order_detail');})->name('sub_seller.detail.order');
-Route::get('/subseller/tracking/order', function () {return view('sub_seller.order.order_tracking');})->name('sub_seller.order-tracking');
-//Route::get('/subseller/review/product', function () {return view('sub_seller.product.product_review');})->name('sub_seller.product.review');
 
 require __DIR__.'/auth.php';
 

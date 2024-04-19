@@ -41,7 +41,10 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="password" value="{{ $data->password }}" id="password">
+                                                <input class="form-control" type="password" name="password">
+                                                @error('password')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
 
@@ -49,8 +52,7 @@
                                             <label class="form-label-title col-sm-2 mb-0">Confirm
                                                 Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" id="confirm_password">
-                                                <span id="confirm-password-error" style="color: red;"></span>
+                                                <input class="form-control" type="password" name="confirmed">
                                             </div>
                                         </div>
 
@@ -83,22 +85,24 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Shop Name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="shop_name" value="{{ $shop->shop_name }}">
+                                                <input class="form-control" type="text" name="shop_name" value="{{ $shop->shop_name }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Shop Logo</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="file" name="shop_logo">
+                                                @if(empty(Auth::user()->created_by))
+                                                    <input class="form-control" type="file" name="shop_logo">
+                                                @endif
                                                 <img src="{{ asset('upload/shop/'.$shop->shop_logo) }}" width="100">
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Establilshed</label>
-                                             <div class="col-sm-10">
-                                                <input class="form-control" type="date" name="shop_establish" value="{{ $shop->shop_establish }}">
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="date" name="shop_establish" value="{{ $shop->shop_establish }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
@@ -106,21 +110,21 @@
                                             <label class="form-label-title col-sm-2 mb-0">Phone
                                                 Number</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="phone" value="{{ $shop->phone }}">
+                                                <input class="form-control" type="text" name="phone" value="{{ $shop->phone }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Zip Code</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="zip_code" value="{{ $shop->zip_code }}">
+                                                <input class="form-control" type="text" name="zip_code" value="{{ $shop->zip_code }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Prefecture</label>
                                             <div class="col-sm-10">
-                                                <select class="js-example-basic-single w-100" name="category_id">
+                                                <select class="js-example-basic-single w-100" name="category_id" @if(!empty(Auth::user()->created_by)) disabled @endif>
                                                     @foreach ($prefecture as $item)
                                                     <option value="{{ $item->id }}" {{ $item->id == $shop->prefecture_id  ? 'selected' : '' }}>{{ $item->name }}</option>
                                                     @endforeach
@@ -131,77 +135,78 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">City, Ward, Town</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="city" value="{{ $shop->city }}">
+                                                <input class="form-control" type="text" name="city" value="{{ $shop->city }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Chome, Banchi, Go</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="chome" value="{{ $shop->chome }}">
+                                                <input class="form-control" type="text" name="chome" value="{{ $shop->chome }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Building / Apt / Company name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="building" value="{{ $shop->building }}">
+                                                <input class="form-control" type="text" name="building" value="{{ $shop->building }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Unit / Room no.</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="room" value="{{ $shop->room }}">
+                                                <input class="form-control" type="text" name="room" value="{{ $shop->room }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">URL</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="url" value="{{ $shop->url }}">
+                                                <input class="form-control" type="text" name="url" value="{{ $shop->url }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Bank Name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="bank_name" value="{{ $shop->bank_name }}">
+                                                <input class="form-control" type="text" name="bank_name" value="{{ $shop->bank_name }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Bank Account Type</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="bank_acc_type" value="{{ $shop->bank_acc_type }}">
+                                                <input class="form-control" type="text" name="bank_acc_type" value="{{ $shop->bank_acc_type }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Bank Branch</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="bank_branch" value="{{ $shop->bank_branch }}">
+                                                <input class="form-control" type="text" name="bank_branch" value="{{ $shop->bank_branch }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Bank Account Name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="bank_acc_name" value="{{ $shop->bank_acc_name }}">
+                                                <input class="form-control" type="text" name="bank_acc_name" value="{{ $shop->bank_acc_name }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Bank Account No</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="bank_acc_no" value="{{ $shop->bank_acc_no }}">
+                                                <input class="form-control" type="text" name="bank_acc_no" value="{{ $shop->bank_acc_no }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
                                             </div>
                                         </div>
 
-                                        <div class="d-grid gap-2 d-md-block">
-                                            <button class="btn btn-animation" type="submit">Update</button>
-                                        </div>
-
+                                        @if(empty(Auth::user()->created_by))
+                                            <div class="d-grid gap-2 d-md-block">
+                                                <button class="btn btn-animation" type="submit">Update</button>
+                                            </div>
+                                        @endif
                                     </div>
                                 </form>
                             </div>
@@ -225,30 +230,5 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-</script>
-<script>
-    let password = document.getElementById("password");
-        let confirm_password = document.getElementById("confirm_password");
-        let passwordError = document.getElementById("password-error");
-        let confirmPasswordError = document.getElementById("confirm-password-error");
-        function validatePassword() {
-            if (password.value !== confirm_password.value) {
-                confirmPasswordError.textContent = "Passwords Don't Match";
-            } else {
-                confirmPasswordError.textContent = "";
-            }
-        }
-        password.onchange = validatePassword;
-        confirm_password.onkeyup = validatePassword;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#image').change(function(e){
-                let reader = new FileReader();
-                reader.onload = function(e){
-                    $('#showImage').attr('src',e.target.result);
-                }
-                reader.readAsDataURL(e.target.files['0']);
-            })
-        });
 </script>
 @endsection

@@ -12,18 +12,27 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class ProductController extends Controller
 {
     public function allProduct()
-    {
-        $products = Product::latest()->paginate(4);
-        return view('seller.product.product_all',compact('products'));
-    }
+{
+    $id = Auth::user()->id;
+    $products = Product::where(function ($query) use ($id) {
+            $query->where('seller_id', $id)
+                  ->orWhereNull('seller_id');
+        })
+        ->orWhere(function ($query) use ($id) {
+            $query->where('subseller_id', $id)
+                  ->orWhereNull('subseller_id');
+        })->latest()->paginate(5);
+
+    return view('seller.product.product_all', compact('products'));
+}
+
 
     public function getSubTitle($categoryId)
     {
@@ -56,14 +65,14 @@ class ProductController extends Controller
 
     public function storeProduct(Request $request)
     {
+        $id = IdGenerator::generate(['table' => 'products','length' =>9, 'prefix' => date('yd')]);
         $request->validate([
             'brand_id' => 'required|string|max:255',
             'country_id' => 'required|string|max:255',
             'category_id' => 'required|string|max:255',
-            'sub_category_id' => 'required|string|max:255',
             'sub_category_title_id' => 'required|string|max:255',
+            'sub_category_id' => 'required|string|max:255',
             'product_name' => 'required|string|max:255',
-            'product_code' => 'required|string|max:255',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
@@ -71,51 +80,58 @@ class ProductController extends Controller
             'original_price' => 'required|numeric',
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
-            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'multi_img' => 'required',
+            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif',
+            // 'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif',
             'estimate_date' => 'required|string|max:255',
+            'delivery_price' => 'required|string|max:255',
         ]);
 
         $img = $request->file('product_thambnail');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move('upload/product_thambnail', $filename);
 
-        $product_id = Product::insertGetId([
-            'brand_id' => $request->brand_id,
-            'country_id' => $request->country_id,
-            'seller_id' => Auth::user()->id,
-            'category_id' => $request->category,
-            'sub_category_id' => $request->subcategory,
-            'sub_category_title_id' => $request->subname,
-            'product_name' => $request->product_name,
-            'product_code' => $request->product_code,
-            'product_qty' => $request->product_qty,
-            'product_tags' => $request->product_tags,
-            'product_size' => $request->product_size,
-            'product_color' => $request->product_color,
-            'original_price' => $request->original_price,
-            'discount_percent' => $request->discount_percent,
-            'selling_price' => $request->calculated_selling_price,
+        $images = $request->file('multi_img');
+        $filenames = [];
+
+        foreach ($images as $img) {
+            $filename1 = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+            $img->move('upload/multiImg', $filename1);
+            $filenames[] = $filename1;
+        }
+
+        if (!empty(Auth::user()->created_by)) {
+            $subseller = Auth::user()->id;
+        } else {
+            $seller = Auth::user()->id;
+        }
+
+        $product = Product::insertGetId([
+            'id' => $id,
+            'brand_id' => $request->input('brand_id'),
+            'country_id' => $request->input('country_id'),
+            'category_id' => $request->input('category_id'),
+            'sub_category_title_id' => $request->input('sub_category_title_id'),
+            'sub_category_id' => $request->input('sub_category_id'),
+            'seller_id' => $seller ?? null,
+            'subseller_id' => $subseller ?? null,
+            'product_name' => $request->input('product_name'),
+            'product_qty' => $request->input('product_qty'),
+            'product_tags' => $request->input('product_tags'),
+            'product_size' => $request->input('product_size'),
+            'product_color' => $request->input('product_color'),
+            'original_price' => $request->input('original_price'),
+            'selling_price' => $request->input('calculated_selling_price'),
+            'discount_percent' => $request->input('discount_percent'),
             'short_desc' => $request->short_desc,
             'long_desc' => $request->long_desc,
             'product_thambnail' => $filename,
+            'multi_img' => json_encode($filenames),
             'status' => 1,
-            'estimate_date' => $request->estimate_date,
-            'delivery_price' => $request->delivery_price,
+            'estimate_date' => $request->input('estimate_date'),
+            'delivery_price' => $request->input('delivery_price'),
             'created_at' => Carbon::now(),
         ]);
-
-        $images = $request->file('multi_img');
-        foreach ($images as $img) {
-            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/multiImg', $filename);
-            MultiImg::create([
-                'product_id' => $product_id,
-                'photo_name' => $filename,
-                'created_at' => Carbon::now(),
-            ]);
-        }
-        return redirect('/seller/productlist')->with('flash_message', 'Data added successfully');
+        return redirect('/productlist')->with('flash_message', 'Data added successfully');
     }
 
 
@@ -137,7 +153,6 @@ class ProductController extends Controller
         $old_img = $request->old_img;
         $request->validate([
             'product_name' => 'required|string|max:255',
-            'product_code' => 'required|string|max:255',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
@@ -165,21 +180,23 @@ class ProductController extends Controller
         $product->sub_category_id= $request->sub_category_id;
         $product->sub_category_title_id= $request->sub_category_title_id;
         $product->product_name= $request->product_name;
-        $product->product_code= $request->product_code;
         $product->product_qty= $request->product_qty;
         $product->product_tags= $request->product_tags;
         $product->product_size= $request->product_size;
         $product->product_color= $request->product_color;
         $product->original_price= $request->original_price;
         $product->discount_percent= $request->discount_percent;
+        $product->calculated_selling_price = $request->calculated_selling_price;
         $product->short_desc= $request->short_desc;
         $product->long_desc= $request->long_desc;
         $product->product_thambnail= $filename;
         $product->estimate_date= $request->estimate_date;
         $product->status= 1;
+        $product->delivery_price= $request->delivery_price;
+        $product->updated_by = Auth::user()->id;
         $product->updated_at= Carbon::now();
         $product->update();
-        return redirect('/seller/productlist')->with('flash_message', 'Data updated successfully');
+        return redirect('/productlist')->with('flash_message', 'Data updated successfully');
     }
 
     public function deleteProduct(Request $request)
@@ -235,8 +252,8 @@ class ProductController extends Controller
 
     public function productList()
     {
-        $products = Product::all();
-
+        $id = Auth::user()->id;
+        $products = Product::where('seller_id',$id)->orWhere('subseller_id', $id)->latest()->paginate(5);
         return view('products', compact('products'));
     }
 

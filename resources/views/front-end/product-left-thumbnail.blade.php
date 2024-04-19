@@ -156,9 +156,13 @@
                                 </div>
 
                                 <div class="buy-box">
-                                    <a href="{{ url('/wishlist') }}">
+                                    <a href="{{ route('show-wishlist', ['id' => $id]) }}">
                                         <i data-feather="heart"></i>
                                         <span>Add To Wishlist</span>
+                                    </a>
+                                    <a href="{{ route('show-comparelist', ['id' => $id]) }}">
+                                        <i data-feather="shuffle"></i>
+                                        <span>Add To Compare</span>
                                     </a>
                                 </div>
                             </div>

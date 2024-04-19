@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Sub Category</li>
                             </ol>
                         </nav>
                     </div>
@@ -401,7 +401,9 @@
                             </div>
                         </div>
                     </div>
-
+                        @if($shoplist->count() < 1)
+                            <h1 class="text-center">No Products Found</h1>
+                        @endif
                     <div
                         class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach($shoplist as $list)

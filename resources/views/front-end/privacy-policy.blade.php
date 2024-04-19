@@ -47,7 +47,7 @@
                             </div>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <p style="color: var(--theme-color);">1. Collection, Use And Provision Of Personal Information</p>
+                                    <p style="color: var(--theme-color);margin-left: 15px;">1. Collection, Use And Provision Of Personal Information</p>
                                 </h2>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body">
@@ -62,7 +62,7 @@
                             </div>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <p style="color: var(--theme-color);">2. Compliance With Laws And Norms</p>
+                                    <p style="color: var(--theme-color);margin-left: 15px;">2. Compliance With Laws And Norms</p>
                                 </h2>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body">
@@ -73,7 +73,7 @@
                             </div>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <p style="color: var(--theme-color);">3. Implementation Of Safety Measures</p>
+                                    <p style="color: var(--theme-color);margin-left: 15px;">3. Implementation Of Safety Measures</p>
                                 </h2>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body">
@@ -88,7 +88,7 @@
                             </div>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <p style="color: var(--theme-color);">4. Observance Of Personal Rights Regarding Personal Information</p>
+                                    <p style="color: var(--theme-color);margin-left: 15px;">4. Observance Of Personal Rights Regarding Personal Information</p>
                                 </h2>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body">
@@ -101,7 +101,7 @@
                             </div>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <p style="color: var(--theme-color);">5. Formulation And Continuous Improvement Of Compliance Programs</p>
+                                    <p style="color: var(--theme-color);margin-left: 15px;">5. Formulation And Continuous Improvement Of Compliance Programs</p>
                                 </h2>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body">

@@ -40,51 +40,48 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'birthday' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'birthday' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'zip_code' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'chome' => 'required|string|max:255',
+        'building' => 'required|string|max:255',
+        'room' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
         ]);
 
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'role' => 'buyer',
-                'password' => Hash::make($request->input('password')),
-                'status' => 1,
-            ]);
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => 'buyer',
+            'password' => Hash::make($request->input('password')),
+            'status' => '1',
+        ]);
 
-            $buyer = Buyer::create([
-                'user_id' => $user->id,
-                'prefecture_id' => $request->prefecture,
-                'name' => $request->name,
-                'email' => $user->email,
-                'birthday' => $request->birthday,
-                'address'=> $user->address,
+        event(new Registered($user));
 
-                'phone' => $request->phone,
-                'zip_code' => $request->zip_code,
-                'city' => $request->city,
-                'chome' => $request->chome,
-                'building' => $request->building,
-                'room_no' => $request->room
+        $buyer = Buyer::create([
+            'user_id' => $user->id,
+            'prefecture_id' => $request->prefecture,
+            'name' => $request->name,
+            'email' => $user->email,
+            'birthday' => $request->birthday,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'zip_code' => $request->zip_code,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room_no' => $request->room,
+        ]);
 
+        event(new Registered($buyer));
 
-            ]);
-            event(new Registered($user));
-            event(new Registered($buyer));
-            $email = $request->email;
-            return view('auth.verify-email',compact('email'));
-
-            // DB::commit();
-            // return redirect()->route('user_dashboard')->with('success','Data have been successfully inserted.');
+        $email = $request->email;
+        return view('auth.verify-email', compact('email'));
 
     }
     public function indexuser()
@@ -218,31 +215,35 @@ class UserController extends Controller
     {
         $limit = 10;
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $order = DB::table('orders')
+
+        $orders = DB::table('orders')
                     ->join('buyers', 'orders.buyer_id', 'buyers.id')
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('orders.*', 'orders.id as order_id', 'orders.created_at')
                     ->orderBy('order_id', 'desc')
                     ->paginate($limit);
+        $processes = [];
+        foreach ($orders as $order) {
+            $checkid = $order->order_id;
+            $processes[$checkid] = Process::where('order_id', $checkid)->latest()->first();
+        }
 
-        $ttl = $order->total();
+        $ttl = $orders->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.user-delivery-status', compact('user','order','ttl', 'ttlpage'));
+        return view('front-end.user-delivery-status', compact('user','orders','processes','ttl', 'ttlpage'));
 
     }
     //Show Addresses
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.division',
-                    'buyer_addresses.district','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone',
-                    'buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+        $data = BuyerAddress::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.post_code','Buyer_addresses.city','Buyer_addresses.chome','Buyer_addresses.building','Buyer_addresses.room_no','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
+                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
                      ->get();
 
         //$user = Buyers::first();
-        return view('front-end.user-address',compact('data','user'));
+            return view('front-end.user-address',compact('data','user'));
     }
     //Add New Address
     public function createNewaddress(Request $request)
@@ -250,9 +251,11 @@ class UserController extends Controller
         $validatedData = $request->validate([
 
             'name' => 'required|string|max:255',
-            'division' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
             'post_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room_no' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'place' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
@@ -266,9 +269,11 @@ class UserController extends Controller
 
                     'buyer_id' => "1",
                     'name' => $request->name,
-                    'division' => $request->division,
-                    'district' => $request->district,
-                    'post_code'=> $request->post_code,
+                    'post_code' => $request->post_code,
+                    'city' => $request->city,
+                    'chome' => $request->chome,
+                    'building' => $request->building,
+                    'room_no' => $request->roomno,
                     'address' => $request->address,
                     'place' => $request->place,
                     'phone' => $request->phone,
@@ -289,9 +294,11 @@ class UserController extends Controller
             $buyerAddress->update([
                 'id'=> $request->id,
                 'name' => $request->name,
-                'division' => $request->division,
-                'district' => $request->district,
                 'post_code' => $request->post_code,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->roomno,
                 'address' => $request->address,
                 'place' => $request->place,
                 'phone' => $request->phone,
@@ -487,19 +494,19 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
-
+        if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
-
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
             $buyerid = $buyer->id;
 
-            $cart = Cart::create([
-                'product_id' => $productid,
-                'seller_id' => $sellerid,
-                'buyer_id' => $buyerid,
-                'quantity' => '1',
-            ]);
+            if(isset($productid))
+                $cart = Cart::create([
+                    'product_id' => $productid,
+                    'seller_id' => $sellerid,
+                    'buyer_id' => $buyerid,
+                    'quantity' => '1',
+                ]);
 
 
             $cartLists = DB::table('carts')
@@ -552,6 +559,59 @@ class UserController extends Controller
 
             $couponapplycheck = 0;
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
+        }
+        else{
+            $cartLists = DB::table('carts')
+                        ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                        ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->where('buyers.user_id', Auth::user()->id)
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+                        ->get();
+
+            foreach($cartLists as $cartItem){
+
+                $productID = $cartItem->id;
+                $sellerID = $cartItem->seller_id;
+
+
+                $shopName = DB::table('sellers')
+                            ->where('sellers.id', $sellerID)
+                            ->select('sellers.shop_name as shopname')
+                            ->first();
+                $cartItem->shop_name = $shopName->shopname;
+            }
+
+            $discountedPrices = [];
+                foreach ($cartLists as $product)
+                {
+
+                    if ($product->discount_percent)
+                    {
+                        $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                        $discountedPrice = $product->selling_price - $discountAmount;
+                    }
+                    else
+                    {
+                        $discountedPrice = $product->selling_price;
+                    }
+                    $saveAmount = $product->selling_price - $discountedPrice;
+
+                    $discountedPrices[$product->id] = [
+                        'discounted_price' => $discountedPrice,
+                        'save_amount' => $saveAmount
+                    ];
+                }
+
+            $result = DB::table('coupons')
+                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                    ->join('buyers', 'coupon_details.buyer_id', '=', 'coupon_details.buyer_id')
+                    ->select('coupons.discount_amount')
+                    ->pluck('coupons.discount_amount');
+                    $discount = $result[0];
+
+            $couponapplycheck = 0;
+            return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
+        }
 
     }
     //Update Cart Quantity
@@ -835,6 +895,7 @@ class UserController extends Controller
                     $discountAmount = $product->selling_price * ($product->discount_percent / 100);
                     $discountedPrice = $product->selling_price - $discountAmount;
                 }
+
                 else
                 {
                     $discountedPrice = $product->selling_price;
@@ -879,6 +940,7 @@ class UserController extends Controller
             $chome = $request->chome;
             $building = $request->building;
             $room = $request->room;
+            $payment = $request->payment;
 
             // Generate a unique order ID
             $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
@@ -901,6 +963,7 @@ class UserController extends Controller
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
+                'payment_method' => $payment
                 ]);
 
             foreach ($productIds as $key => $product_id) {
@@ -928,7 +991,10 @@ class UserController extends Controller
 
                 OrderDetail::create($orderdetailsData);
             }
-            return response()->json(['message' => 'Your order created successfully.']);
+            return response()->json(['message' => 'Your order has been successfully placed.']);
+
+            $cartItem = DB::table('carts')
+                    ->delete($productIds);
 
 
         } catch (\Exception $e) {

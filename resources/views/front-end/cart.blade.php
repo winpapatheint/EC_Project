@@ -175,12 +175,14 @@
                                     <h4>Subtotal</h4> 
                                     <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
                                 </li>
-
+                                
                                 <li>
-                                    <h4>Coupon Discount</h4>     
-                                    <h4 class="price">(-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    <h4>Coupon Discount</h4>   
+                                    @if ($couponapplycheck != 1)  
+                                    <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    @endif
                                 </li>
-
+                                
                                 <li class="align-items-start">
                                     <h4>Shipping</h4>
                                     <h4 class="price text-end">¥ 500</h4>

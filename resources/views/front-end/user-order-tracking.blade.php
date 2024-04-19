@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Orders</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Orders</li>
                             </ol>
                         </nav>
                     </div>
@@ -81,7 +81,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"

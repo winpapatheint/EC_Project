@@ -178,9 +178,10 @@ class UserController extends Controller
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->join('payments', 'orders.payment_id', '=', 'payments.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
-            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
+            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*','buyers.*','payments.payment_method')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));

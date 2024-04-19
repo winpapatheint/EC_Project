@@ -402,10 +402,11 @@
 
                                             @if(!empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{ url('/user') }}">Profile</a>
+                                                <a class="nav-link" href="{{ url('/user') }}">Dashboard</a>
 
                                             </li>
                                             @endif
+                                            
                                              <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
@@ -442,11 +443,12 @@
                                             @endif
 
 
-
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>
 
                                             </li>
+                                            @endif
 
                                             @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Buyer;
 use App\Models\Product;
 use App\Models\Review;
-use App\Models\Order;
+use App\Models\Seller;
 use App\Models\OrderDetail;
 use App\Models\Category;
 use App\Models\Wishlist;
@@ -214,7 +214,8 @@ class ShowProductController extends Controller
 
     public function ShowProductleftThumbnail($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('seller')->find($id);
+        $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
         $reviews = Review::all();
         $productOrdered = OrderDetail::where('product_id', $id)->get();
         $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
@@ -222,7 +223,23 @@ class ShowProductController extends Controller
         ->orderByDesc('frequency')
         ->limit(3)
         ->get();
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id'));
+        $ratingWithProductCount = [];
+        $ratingWith = 0;
+        $productCount = 0;
+        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller->id)->get();
+        if ($ratingProject->count() > 0) {
+            foreach ($ratingProject as $rating) {
+                if($rating->reviews->isNotEmpty()) {
+                    foreach ($rating->reviews as $review) {
+                        $ratingWith += $review->stars_rated;
+                        $productCount++;
+                    }
+                }
+            }
+            $ratingWithProductCount[0] = floor($ratingWith / $ratingProject->count());
+            $ratingWithProductCount[1] = $productCount;
+        }
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'multiImages', 'ratingWithProductCount'));
     }
 
     public function ShowDiscountProductList()

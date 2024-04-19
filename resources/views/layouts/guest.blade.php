@@ -162,14 +162,6 @@
                                     </button>
                                 </div>
 
-                                {{--<div class="search-box">
-                                    <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="I'm searching for..." id="mainSearch">
-                                        <a href="{{ route('show-product') }}?mainSearch={{ urlencode(request()->input('search')) }}" id="searchButton"><button class="btn" type="button" id="button-addon2">
-                                            <i data-feather="search"></i>
-                                        </button></a>
-                                    </div>
-                                </div>--}}
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
@@ -344,15 +336,8 @@
                             </button>
 
                             <div class="category-dropdown">
-                                <div class="category-title">
-                                    <h5>Categories</h5>
-                                    <button type="button" class="btn p-0 close-button text-content">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-
+                            @foreach ($categories as $category)
                                 <ul class="category-list">
-                                @foreach ($categories as $category)
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="{{ asset('images/'.$category->category_icon) }}" alt="">
@@ -361,25 +346,24 @@
                                         </a>
 
                                         <div class="onhover-category-box" style="height: fit-content;">
-                                            @foreach ($category->subCategoryTitle as $subCategoryTitle)
-                                                <div class="list-1" style="margin-bottom: 15px;margin-right: 50px;">
-                                                    <div class="category-title-box">
-                                                        <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
-                                                    </div>
-                                                    <ul>
-                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                        <li>
-                                                            <a href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">{{ $subCategory->sub_category_name }}</a>
-                                                        </li>
-                                                        @endforeach
-                                                    </ul>
+                                        @foreach ($category->subCategoryTitle as $subCategoryTitle)
+                                            <div class="list-1">
+                                                <div class="category-title-box">
+                                                    <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                 </div>
-                                            @endforeach
+                                                @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">{{ $subCategory->sub_category_name }}</a>
+                                                    </li>
+                                                </ul>
+                                                @endforeach
+                                            </div>
+                                        @endforeach
                                         </div>
                                     </li>
-                                @endforeach
-
                                 </ul>
+                            @endforeach
                             </div>
                         </div>
 
@@ -579,7 +563,7 @@
                         <div class="footer-logo">
                             <div class="theme-logo">
                                 <a href="/">
-                                    <img src="{{ asset('images/logos/logo_foods.png') }}" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="blur-up lazyload" alt="">
                                 </a>
                             </div>
 

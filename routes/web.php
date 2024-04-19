@@ -37,7 +37,7 @@ Route::get('/user-registration', [UserController::class,'index'])->name('user_re
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
+Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
 Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
 Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
@@ -127,8 +127,10 @@ Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('re
 Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
 route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
-Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
+Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 

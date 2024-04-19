@@ -9,9 +9,8 @@
 <meta name="keywords"
     content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
 <meta name="author" content="pixelstrap">
-<link rel="icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
-<title>Fastkart - Reports</title>
+<link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+<title>Asian food museum</title>
     <title>Dynamic Dependent Dropdown - WebJourney</title>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Google font -->

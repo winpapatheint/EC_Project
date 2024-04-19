@@ -180,7 +180,10 @@
                                     <h4>Coupon Discount</h4>   
                                     @if ($couponapplycheck != 1)  
                                     <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    @else
+                                    <h4 class="price"> (-) ¥ 0</h4>
                                     @endif
+
                                 </li>
                                 
                                 <li class="align-items-start">
@@ -221,5 +224,19 @@
         </div>
     </section>
     <!-- Cart Section End -->
+<script>
+    $(document).ready(function() {
+    $('.qty-right-plus').click(function(e){
+        e.preventDefault();
+        var fieldName = $(this).data('field');
+        var currentVal = parseInt($('input[name='+fieldName+']').val(), 10);
+        if (!isNaN(currentVal) && currentVal < 100) {
+            $('input[name='+fieldName+']').val(currentVal + 1);
+        } else {
+            $('input[name='+fieldName+']').val(100); // Set value to 100 if current value is NaN or already 100
+        }
+    });
+});
+</script>
 
 </x-guest-layout>

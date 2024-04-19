@@ -52,7 +52,7 @@ class ShowProductController extends Controller
             Session::put('searchHistory', $searchHistory);
         }
         // Session::forget('searchHistory');
-        
+
         $query = Product::query();
 
         if ($mainSearch != null) {
@@ -92,22 +92,22 @@ class ShowProductController extends Controller
             if (!empty($search)) {
                 $query->where('product_name', 'like', '%' . $search . '%');
             }
-    
+
             if (!empty($categories)) {
                 $query->whereIn('category_id', $categories);
             }
-    
+
             if (!empty($price)) {
                 $priceRange = explode(';', $price);
-    
+
                 if (count($priceRange) == 2) {
                     $minPrice = (float)$priceRange[0];
                     $maxPrice = (float)$priceRange[1];
-    
+
                     $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
                 }
             }
-    
+
             if (!empty($rating)) {
                 $averageRated = Review::select('product_id',
                     DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
@@ -122,7 +122,7 @@ class ShowProductController extends Controller
                 }
                 $query->whereIn('id', $matchedProductIds);
             }
-    
+
             if (!empty($discount)) {
                 if (in_array("1", $discount)) {
                     $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
@@ -140,7 +140,7 @@ class ShowProductController extends Controller
                     $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
                 }
             }
-            
+
             // Apply sorting
             switch ($sort) {
                 case 1:
@@ -342,7 +342,6 @@ class ShowProductController extends Controller
             return response()->json(['message' => 'Wishlist item not found'], 404);
         }
     }
-
 
     public function DeleteCompareList($id)
     {

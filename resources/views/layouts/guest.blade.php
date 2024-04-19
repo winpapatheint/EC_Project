@@ -222,7 +222,7 @@
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
-                                            <a href="{{ route('show_carts') }}">
+                                            <a href="">
                                             <button type="button" class="btn p-0 position-relative header-wishlist">
                                                 <i data-feather="shopping-cart"></i>
                                                 @php

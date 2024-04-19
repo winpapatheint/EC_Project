@@ -40,35 +40,35 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'birthday' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-            'address' => 'required|string|max:255', // Add this line for address validation
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'birthday' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'zip_code' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'chome' => 'required|string|max:255',
+        'building' => 'required|string|max:255',
+        'room' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
         ]);
-        
+
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'role' => 'buyer',
             'password' => Hash::make($request->input('password')),
         ]);
-        
+
         event(new Registered($user));
-        
+
         $buyer = Buyer::create([
             'user_id' => $user->id,
             'prefecture_id' => $request->prefecture,
             'name' => $request->name,
             'email' => $user->email,
             'birthday' => $request->birthday,
-            'address' => $request->address, // Use the address provided in the request
+            'address' => $request->address,
             'phone' => $request->phone,
             'zip_code' => $request->zip_code,
             'city' => $request->city,
@@ -76,12 +76,12 @@ class UserController extends Controller
             'building' => $request->building,
             'room_no' => $request->room,
         ]);
-        
+
         event(new Registered($buyer));
-        
+
         $email = $request->email;
         return view('auth.verify-email', compact('email'));
-        
+
     }
     public function indexuser()
     {
@@ -493,45 +493,45 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
-
+        if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
-
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
             $buyerid = $buyer->id;
-
-            $cart = Cart::create([
-                'product_id' => $productid,
-                'seller_id' => $sellerid,
-                'buyer_id' => $buyerid,
-                'quantity' => '1',
-            ]);
-
-
+    
+            if(isset($productid))
+                $cart = Cart::create([
+                    'product_id' => $productid,
+                    'seller_id' => $sellerid,
+                    'buyer_id' => $buyerid,
+                    'quantity' => '1',
+                ]);
+    
+    
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
                         ->leftjoin('products', 'carts.product_id', '=', 'products.id')
                         ->where('buyers.user_id', Auth::user()->id)
                         ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                         ->get();
-
+    
             foreach($cartLists as $cartItem){
-
+    
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
-
-
+    
+    
                 $shopName = DB::table('sellers')
                             ->where('sellers.id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
             }
-
+    
             $discountedPrices = [];
                 foreach ($cartLists as $product)
                 {
-
+    
                     if ($product->discount_percent)
                     {
                         $discountAmount = $product->selling_price * ($product->discount_percent / 100);
@@ -542,22 +542,75 @@ class UserController extends Controller
                         $discountedPrice = $product->selling_price;
                     }
                     $saveAmount = $product->selling_price - $discountedPrice;
-
+    
                     $discountedPrices[$product->id] = [
                         'discounted_price' => $discountedPrice,
                         'save_amount' => $saveAmount
                     ];
                 }
-
+    
             $result = DB::table('coupons')
                     ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
                     ->join('buyers', 'coupon_details.buyer_id', '=', 'coupon_details.buyer_id')
                     ->select('coupons.discount_amount')
                     ->pluck('coupons.discount_amount');
                     $discount = $result[0];
-
+    
             $couponapplycheck = 0;
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
+        }
+        else{
+            $cartLists = DB::table('carts')
+                        ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                        ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->where('buyers.user_id', Auth::user()->id)
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+                        ->get();
+    
+            foreach($cartLists as $cartItem){
+    
+                $productID = $cartItem->id;
+                $sellerID = $cartItem->seller_id;
+    
+    
+                $shopName = DB::table('sellers')
+                            ->where('sellers.id', $sellerID)
+                            ->select('sellers.shop_name as shopname')
+                            ->first();
+                $cartItem->shop_name = $shopName->shopname;
+            }
+    
+            $discountedPrices = [];
+                foreach ($cartLists as $product)
+                {
+    
+                    if ($product->discount_percent)
+                    {
+                        $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                        $discountedPrice = $product->selling_price - $discountAmount;
+                    }
+                    else
+                    {
+                        $discountedPrice = $product->selling_price;
+                    }
+                    $saveAmount = $product->selling_price - $discountedPrice;
+    
+                    $discountedPrices[$product->id] = [
+                        'discounted_price' => $discountedPrice,
+                        'save_amount' => $saveAmount
+                    ];
+                }
+    
+            $result = DB::table('coupons')
+                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                    ->join('buyers', 'coupon_details.buyer_id', '=', 'coupon_details.buyer_id')
+                    ->select('coupons.discount_amount')
+                    ->pluck('coupons.discount_amount');
+                    $discount = $result[0];
+    
+            $couponapplycheck = 0;
+            return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
+        }
 
     }
     //Update Cart Quantity

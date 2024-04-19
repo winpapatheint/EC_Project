@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Orders</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Orders</li>
                             </ol>
                         </nav>
                     </div>
@@ -81,7 +81,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -111,24 +111,24 @@
                             $price = 0;
                             $subTotal  = 0;
                             $totalAmount = 0;
-                            $order = 0;
+                            $orders = 0;
                         @endphp
                             <div class="card">
                                 <div class="card-body">
                                     <div class="title-header title-header-block package-card">
                                     @if($orderDetails->isNotEmpty())
                                         @php
-                                            $order = $orderDetails->first();
+                                            $orders = $orderDetails->first();
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $order->order_id }}</h5>
+                                            <h5>Order ID {{ $orders->order_id }}</h5>
                                         </div>
                                         <div class="card-order-section">   
                                             <ul>
-                                                <li>{{ \Carbon\Carbon::parse($order->created_at)->format('F d, Y') }}</li>
-                                                <li>{{ $order->order_number }} items</li>
-                                                <li>Total ¥ {{ number_format($order->total_amount , 0, '.', ',') }}</li>
+                                                <li>{{ \Carbon\Carbon::parse($orders->created_at)->format('F d, Y') }}</li>
+                                                <li>{{ $orders->total_qty }} items</li>
+                                                <li>Total ¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</li>
                                             </ul>    
                                         </div>
                                     

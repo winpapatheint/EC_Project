@@ -300,6 +300,7 @@ function purchasepaymentdone(total, callback) {
         chome: Newbuyerchome,
         building: Newbuyerbuilding,
         room: Newbuyerroomcode,
+        payment: "PayPal"
     },
     async : false,
     success: function(response) {

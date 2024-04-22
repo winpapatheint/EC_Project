@@ -44,12 +44,13 @@
                                         {{ Session::get('fail')}}
                                     </div>
                                 @endif
-
+                                
                                 <form method="POST" action="{{ route('adduser') }}" class="row g-4" >
                                     @csrf
+                                  
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}" required>
+                                            <input type="text" class="form-control" name="name" id="fullname" placeholder="Type your name" value="{{ old('name') }}">
                                             <label for="fullname">Name</label>
                                             <span style="color:red">@error('name'){{$message}} @enderror</span>
                                         </div>
@@ -57,7 +58,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}" required>
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}">
                                             <label for="email">Email Address</label>
                                             <span style="color:red">@error('email'){{ $message }} @enderror</span>
                                         </div>
@@ -67,7 +68,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}" required>
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password') }}">
                                             <label for="password">Password</label>
                                             <span style="color:red">@error('password'){{$message}} @enderror</span>
                                         </div>
@@ -77,12 +78,13 @@
                                         <div class="form-floating theme-form-floating">
                                             <input type="password" name="password_confirmation" class="form-control" placeholder="Password">
                                             <label for="password">Confirmed Password</label>
+                                            <span style="color:red">@error('password'){{$message}} @enderror</span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="date" class="form-control" name="birthday" id="birthday" placeholder="Email Address" required>
+                                            <input type="date" class="form-control" name="birthday" id="birthday" placeholder="Email Address">
                                             <span style="color:red">@error('birthday'){{ $message }} @enderror</span>
 
                                         </div>
@@ -90,12 +92,19 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}" required>
+                                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="{{ old('phone') }}">
                                             <label for="phone">Phone</label>
                                             <span style="color:red">@error('phone'){{$message}} @enderror</span>
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="form-floating theme-form-floating">
+                                            <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
+                                            <label>Zip Code</label>
+                                            <span style="color:red">@error('zip_code'){{ $message }}@enderror</span>
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
@@ -110,15 +119,6 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
-                                            <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
-                                            <label>Zip Code</label>
-                                            <span style="color:red">@error('zip_code'){{ $message }}@enderror</span>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
                                             <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
                                             <label>City, Ward, Town</label>
                                             <span style="color:red">@error('city'){{ $message }}@enderror</span>
@@ -129,9 +129,7 @@
                                         <div class="form-floating theme-form-floating">
                                             <input type="text" name="chome" class="form-control" placeholder="1-2-3" >
                                             <label>Chome, Banchi, Go</label>
-                                            @error('chome')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                                            <span style="color:red">@error('chome'){{ $message }}@enderror</span>
                                         </div>
                                     </div>
 
@@ -155,25 +153,18 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-floating theme-form-floating">
-                                            <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ old('address') }}" required>
-                                            <label for="address">Address</label>
-                                            <span style="color:red">@error('address'){{$message}} @enderror</span>
-                                        </div>
-                                    </div>
-
                                     <input type="hidden" name="role" value="buyer">
 
                                     <div class="col-md-12">
                                         <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>
                                     </div>
                                 </form>
+                              
 
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>
-                                <a href="">Log In</a>
+                                <a href="#">Log In</a>
                             </div>
                         </div>
                     </div>

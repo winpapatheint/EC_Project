@@ -189,7 +189,7 @@
 
                                     <div class="category-list">
                                         <img src="{{ asset('frontend/assets/svg/1/'.$list->category_icon)}}" class="blur-up lazyload" alt="">
-                                        
+
                                         <h5>
                                             <a href="{{ url("/categorysidebar/".$list->id ) }}">{{ $list->category_name }}</a>
                                         </h5>
@@ -300,8 +300,8 @@
                         <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Customer Comment</h3>
-                             
-                                    <div class="review-box">
+
+                                    {{-- <div class="review-box">
                                         <div class="review-contain">
                                             <h5 class="w-75">We Care About Our Customer Experience</h5>
                                             <p>{{ $maxStarsRatedRow -> comment }}</p>
@@ -316,8 +316,8 @@
                                                 <h5>{{ $maxStarsRatedRow -> name }}</h5>
                                             </div>
                                         </div>
-                                    </div>
-                               
+                                    </div> --}}
+
                             </div>
                         </div>
                     </div>
@@ -645,7 +645,7 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="title section-t-space">
                         <h2>Featured Blog</h2>
                         <span class="title-leaf">

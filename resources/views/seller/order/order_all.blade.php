@@ -46,7 +46,7 @@
                                                 </td>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->payment_type }}</td>
-                                                <td class="@if($item->status == 'pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
+                                                <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
                                                 <td>{{ $item->amount }}</td>
@@ -128,7 +128,7 @@
                             <form action="{{ route('order.status') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                @if($item->status === 'pending')
+                                @if($item->status === 'Pending')
                                     <h6>Choose which date will be delivered this order</h6>
                                     <p>Between :</p>
                                     <input type="date" name="expected_from" class="form-control">
@@ -140,17 +140,17 @@
                                     @error('expected_to')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="confirmed">Confirmed</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Confirmed">Confirmed</button>
                                 @elseif ($item->status === 'Confirmed')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="processing">Processing</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Processing">Processing</button>
                                 @elseif ($item->status === 'Processing')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="picked">Pick up</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Picked">Pick up</button>
                                 @elseif ($item->status === 'Picked')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="shipped">Shipping</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Shipped">Shipping</button>
                                 @elseif ($item->status === 'Shipped')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="delivered">Delivered</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Delivered">Delivered</button>
                                 @endif
-                                <button type="submit" class="btn btn-outline-primary w-100" name="status" value="cancel">Order Cancel</button>
+                                <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Cancel">Order Cancel</button>
                             </form>
                         </div>
                     </div>

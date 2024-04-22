@@ -10,6 +10,7 @@ class Subseller extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'seller_id',
         'name',
         'email',
@@ -17,4 +18,9 @@ class Subseller extends Model
         'photo',
         'phone',
     ];
+
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class, 'seller_id');
+    }
 }

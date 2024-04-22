@@ -23,16 +23,6 @@
                                     @endif
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Product Code</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control" name="product_code" type="text" placeholder="Product Code" value="{{ old('product_code') }}">
-                                            @error('product_code')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" placeholder="Product Name" value="{{ old('product_name') }}">
@@ -173,11 +163,11 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" multiple="" name="multi_img[]" id="multiImg" value="{{ old('multi_img') }}">
-                                            @error('multi_img')
+                                            <input type="file" class="form-control" multiple name="multi_img[]" id="multiImg">
+                                            <div id="preview_img"></div>
+                                            {{-- @error('multi_img')
                                                 <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                            <div class="row" id="preview_img"></div>
+                                            @enderror --}}
                                         </div>
                                     </div>
 
@@ -332,8 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-
-
 <script>
     const originalPriceInput = document.getElementById('original_price');
     const discountPercentInput = document.getElementById('discount_percent');
@@ -378,18 +366,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 </script>
+
 <script>
     document.getElementById('multiImg').addEventListener('change', function(event) {
+        const files = event.target.files;
         const preview = document.getElementById('preview_img');
         preview.innerHTML = '';
 
-        Array.from(event.target.files).forEach(file => {
+        if (files.length > 5) {
+            alert('Please select a maximum of 5 images.');
+            this.value = '';
+            return;
+        }
+
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.style.maxWidth = '100px';
-                img.style.maxHeight = '100px';
+                img.style.maxWidth = '80px';
+                img.style.maxHeight = '80px';
                 preview.appendChild(img);
             };
             reader.readAsDataURL(file);

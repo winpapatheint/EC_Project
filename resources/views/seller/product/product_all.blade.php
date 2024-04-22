@@ -147,7 +147,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: '/seller/product/status',
+                url: '/productstatus',
                 data: {
                     'status': status,
                     'product_id': product_id,

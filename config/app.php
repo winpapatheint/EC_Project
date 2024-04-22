@@ -171,6 +171,7 @@ return [
         Haruncpi\LaravelIdGenerator\IdGeneratorServiceProvider::class,
         // Barryvdh\DomPDF\ServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
 
 

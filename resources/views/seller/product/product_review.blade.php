@@ -216,7 +216,7 @@ $(function() {
 
         $.ajax({
             type: "POST",
-            url: '/seller/product/review/status',
+            url: '/reviewstatus',
             data: {
                 'status': status,
                 'review_id': review_id,

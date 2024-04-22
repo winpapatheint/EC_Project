@@ -418,7 +418,6 @@ class UserController extends Controller
             return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
 
         }
-
         else
         {
             return redirect()->route('login');
@@ -550,7 +549,7 @@ class UserController extends Controller
                     ];
                 }
             $discount = 0;
-    
+
             $couponapplycheck = 0;
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
         }
@@ -568,33 +567,33 @@ class UserController extends Controller
                 $sellerID = $cartItem->seller_id;
 
 
-                $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
-                $cartItem->shop_name = $shopName->shopname;
-            }
+            $shopName = DB::table('sellers')
+                        ->where('sellers.id', $sellerID)
+                        ->select('sellers.shop_name as shopname')
+                        ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
 
-            $discountedPrices = [];
-                foreach ($cartLists as $product)
+        $discountedPrices = [];
+            foreach ($cartLists as $product)
+            {
+
+                if ($product->discount_percent)
                 {
-
-                    if ($product->discount_percent)
-                    {
-                        $discountAmount = $product->selling_price * ($product->discount_percent / 100);
-                        $discountedPrice = $product->selling_price - $discountAmount;
-                    }
-                    else
-                    {
-                        $discountedPrice = $product->selling_price;
-                    }
-                    $saveAmount = $product->selling_price - $discountedPrice;
-
-                    $discountedPrices[$product->id] = [
-                        'discounted_price' => $discountedPrice,
-                        'save_amount' => $saveAmount
-                    ];
+                    $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                    $discountedPrice = $product->selling_price - $discountAmount;
                 }
+                else
+                {
+                    $discountedPrice = $product->selling_price;
+                }
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+            }
 
             $result = DB::table('coupons')
                     ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
@@ -847,22 +846,22 @@ class UserController extends Controller
                     ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                     ->get();
 
-        foreach($cartLists as $cartItem){
+            foreach($cartLists as $cartItem){
 
-            $productID = $cartItem->id;
-            $sellerID = $cartItem->seller_id;
+                $productID = $cartItem->id;
+                $sellerID = $cartItem->seller_id;
 
 
-            $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
-                        ->select('sellers.shop_name as shopname')
-                        ->first();
-            $cartItem->shop_name = $shopName->shopname;
-        }
+                $shopName = DB::table('sellers')
+                            ->where('sellers.id', $sellerID)
+                            ->select('sellers.shop_name as shopname')
+                            ->first();
+                $cartItem->shop_name = $shopName->shopname;
+            }
 
-        $discountedPrices = [];
-            foreach ($cartLists as $product)
-            {
+            $discountedPrices = [];
+                foreach ($cartLists as $product)
+                {
 
                 if ($product->discount_percent)
                 {
@@ -876,11 +875,11 @@ class UserController extends Controller
                 }
                 $saveAmount = $product->selling_price - $discountedPrice;
 
-                $discountedPrices[$product->id] = [
-                    'discounted_price' => $discountedPrice,
-                    'save_amount' => $saveAmount
-                ];
-            }
+                    $discountedPrices[$product->id] = [
+                        'discounted_price' => $discountedPrice,
+                        'save_amount' => $saveAmount
+                    ];
+                }
 
         $result = DB::table('coupons')
                     ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')

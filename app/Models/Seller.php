@@ -9,8 +9,8 @@ class Seller extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
         'user_id',
+        'subseller_id',
         'prefecture_id',
         'bank_name',
         'bank_acc_type',

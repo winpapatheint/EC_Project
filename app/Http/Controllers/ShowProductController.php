@@ -360,25 +360,35 @@ class ShowProductController extends Controller
     }
 
     //Show footer search
-    public function FooterSearch()
+    public function footerSearch()
     {
+        $validated = request()->validate([
+            'footerSearch' => 'string|nullable',
+        ]);
+        $footerSearch = $validated['footerSearch'] ?? null;
+
+        // $limit = 10; // set the number of products per page
         $query = Product::query();
 
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->where('product_name', 'like', '%' . $mainSearch . '%')
-                    ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
-                    ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+        if ($footerSearch != null) {
+            $query->where(function ($query) use ($footerSearch) {
+                $query->where('product_name', 'like', '%' . $footerSearch . '%')
+                    ->orWhere('product_tags', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('Category', function ($query) use ($mainSearch) {
-                $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('Category', function ($query) use ($footerSearch) {
+                $query->where('category_name', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
-                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($footerSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
-                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('SubCategory', function ($query) use ($footerSearch) {
+                $query->where('sub_category_name', 'like', '%' . $footerSearch . '%');
             });
         }
+
+        $products = $query->get();
+        $reviews = Review::all();
+        return view('front-end.search',compact('products', 'reviews'));
+       
     }
 }

@@ -569,7 +569,6 @@
                     <form action="{{ route('reviews') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="hidden" name="user_id" value="{{ $user->id }}">
                         <input type="hidden" name="seller_id" value="{{ $product->seller_id }}">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>

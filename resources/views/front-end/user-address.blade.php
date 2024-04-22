@@ -114,7 +114,7 @@
                                             <h2>My Address Book</h2>
                                             <span class="title-leaf">
                                                 <svg class="icon-width bg-gray">
-                                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                                    <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                                 </svg>
                                             </span>
                                         </div>

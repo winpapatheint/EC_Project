@@ -653,7 +653,7 @@
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>
                                 </li>
                                 <li>
-                                    <a href="search.html" class="text-content">Search</a>
+                                    <a href="{{ route('footer_search') }}" class="text-content">Search</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/faq') }}" class="text-content">FAQ</a>

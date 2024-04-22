@@ -63,7 +63,7 @@
                                 </tr>
 
                                 <tr>
-                                    <th>Color/th>
+                                    <th>Color</th>
                                     @foreach($comparelistProducts as $product)
                                         <td class="text-content">{{ $product->product_color }}</td>
                                     @endforeach
@@ -130,6 +130,9 @@
 
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+
+    <!-- table column remove -->
+    <script src="{{ asset('frontend/assets/js/table-column-remove.js') }}"></script>
 
     <script>
     $(document).ready(function() {

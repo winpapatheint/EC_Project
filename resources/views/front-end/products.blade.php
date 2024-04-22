@@ -44,7 +44,7 @@
                                 <ul>
                                 @if(!empty($searchHistory))
                                 @foreach($searchHistory as $searchHist)
-                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
+                                    <li class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
                                         <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
                                     </li>
                                 @endforeach
@@ -355,6 +355,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
+                <input type="hidden" id="searchRemoveValue" name="sRemove" value="{{ $sHistory }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -664,23 +665,6 @@
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
 
     <script>
-        jQuery(document).ready(function($) {
-            var rangeSlider = $(".js-range-slider");
-
-            var price = "{{ $price }}";
-
-            if (price !== null) {
-                var priceRange = price.split(';');
-
-                rangeSlider.data("ionRangeSlider").update({
-                    from: parseFloat(priceRange[0]),
-                    to: parseFloat(priceRange[1])
-                });
-            }
-        });
-    </script>
-
-    <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
             document.getElementById("searchForm").submit();
@@ -712,6 +696,12 @@
             document.getElementById('searchHistValue').value = value;
             document.getElementById("searchForm").submit();
         }
+        function removeSearchItem(element) {
+            var searchHist = element.getAttribute('data-search');
+            document.getElementById('searchRemoveValue').value = searchHist;
+            document.getElementById("searchForm").submit();
+        }
 
     </script>
+
 </x-guest-layout>

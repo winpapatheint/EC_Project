@@ -976,4 +976,27 @@ class UserController extends Controller
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }
+    //Show Footer Tracking
+    public function footertracking(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $id = $request->id;
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        $orderDetails = DB::table('orders')
+            ->join('sellers', 'orders.seller_id', '=', 'sellers.id')
+            ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->where('orders.id', $id)
+            ->select('orders.*', 'orders.id as order_id','sellers.*','orders.post_code as code','orders.city as buyercity','orders.chome as buyerchome','orders.building as buyerbuilding','orders.room_no as buyerroom' )
+            ->get();
+
+            foreach ($orderDetails as $location)
+            {
+                $locationcity = $location->buyercity;
+                $locationchome = $location->buyerchome;
+            }
+        return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails'));
+
+    }
 }

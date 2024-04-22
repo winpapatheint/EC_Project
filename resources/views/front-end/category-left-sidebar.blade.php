@@ -443,6 +443,12 @@
                                                 </a>
                                             </li>
 
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                <a href="{{ route('show-comparelist', ['id' => $list->id ]) }}">
+                                                    <i data-feather="refresh-cw"></i>
+                                                </a>
+                                            </li>
+
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
                                                 <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>

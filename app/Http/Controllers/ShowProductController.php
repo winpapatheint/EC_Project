@@ -313,20 +313,24 @@ class ShowProductController extends Controller
         }
         $comparelist = Comparelist::where('buyer_id', $buyer->id)->get();
         $ratingWithProductCount = [];
-        $ratingWith = 0;
-        $reviewCount = 0;
         $comparelistProducts = Product::with('reviews')->whereIn('id', $comparelist->pluck('product_id'))->get();
         if ($comparelistProducts->count() > 0) {
-            foreach ($comparelistProducts as $rating) {
-                if($rating->reviews->isNotEmpty()) {
-                    foreach ($rating->reviews as $review) {
+            foreach ($comparelistProducts as $key => $product) {
+                $ratingWith = 0;
+                $reviewCount = 0;
+                if($product->reviews->isNotEmpty()) {
+                    foreach ($product->reviews as $review) {
                         $ratingWith += $review->stars_rated;
                         $reviewCount++;
                     }
+                    $ratingWithProductCount[$key][0] = floor($ratingWith / $reviewCount);
+                    $ratingWithProductCount[$key][1] = $reviewCount;
+                }
+                else {
+                    $ratingWithProductCount[$key][0] = 0;
+                    $ratingWithProductCount[$key][1] = 0;
                 }
             }
-            $ratingWithProductCount[0] = floor($ratingWith / $reviewCount);
-            $ratingWithProductCount[1] = $reviewCount;
         }
         return view('front-end.compare',compact('comparelistProducts', 'ratingWithProductCount'));
     }

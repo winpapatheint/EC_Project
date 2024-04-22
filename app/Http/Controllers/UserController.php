@@ -238,8 +238,8 @@ class UserController extends Controller
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerAddress::select('Buyer_addresses.id','Buyer_addresses.name','Buyer_addresses.post_code','Buyer_addresses.city','Buyer_addresses.chome','Buyer_addresses.building','Buyer_addresses.room_no','Buyer_addresses.address','Buyer_addresses.phone','Buyer_addresses.place','Buyers.id as userid', 'Buyers.name as username','Buyers.email as useremail',)
-                     ->join('Buyers', 'Buyer_addresses.buyer_id', '=', 'Buyers.id')
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
         //$user = Buyers::first();
@@ -418,7 +418,6 @@ class UserController extends Controller
             return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
 
         }
-
         else
         {
             return redirect()->route('login');
@@ -549,13 +548,7 @@ class UserController extends Controller
                         'save_amount' => $saveAmount
                     ];
                 }
-
-            $result = DB::table('coupons')
-                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                    ->join('buyers', 'coupon_details.buyer_id', '=', 'coupon_details.buyer_id')
-                    ->select('coupons.discount_amount')
-                    ->pluck('coupons.discount_amount');
-                    $discount = $result[0];
+            $discount = 0;
 
             $couponapplycheck = 0;
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
@@ -574,33 +567,33 @@ class UserController extends Controller
                 $sellerID = $cartItem->seller_id;
 
 
-                $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
-                $cartItem->shop_name = $shopName->shopname;
-            }
+            $shopName = DB::table('sellers')
+                        ->where('sellers.id', $sellerID)
+                        ->select('sellers.shop_name as shopname')
+                        ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
 
-            $discountedPrices = [];
-                foreach ($cartLists as $product)
+        $discountedPrices = [];
+            foreach ($cartLists as $product)
+            {
+
+                if ($product->discount_percent)
                 {
-
-                    if ($product->discount_percent)
-                    {
-                        $discountAmount = $product->selling_price * ($product->discount_percent / 100);
-                        $discountedPrice = $product->selling_price - $discountAmount;
-                    }
-                    else
-                    {
-                        $discountedPrice = $product->selling_price;
-                    }
-                    $saveAmount = $product->selling_price - $discountedPrice;
-
-                    $discountedPrices[$product->id] = [
-                        'discounted_price' => $discountedPrice,
-                        'save_amount' => $saveAmount
-                    ];
+                    $discountAmount = $product->selling_price * ($product->discount_percent / 100);
+                    $discountedPrice = $product->selling_price - $discountAmount;
                 }
+                else
+                {
+                    $discountedPrice = $product->selling_price;
+                }
+                $saveAmount = $product->selling_price - $discountedPrice;
+
+                $discountedPrices[$product->id] = [
+                    'discounted_price' => $discountedPrice,
+                    'save_amount' => $saveAmount
+                ];
+            }
 
             $result = DB::table('coupons')
                     ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
@@ -732,7 +725,7 @@ class UserController extends Controller
                 ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
                 ->select('coupons.discount_amount')
                 ->pluck('coupons.discount_amount');
-                $discount = $result[0];
+                $discount = 0;
         $couponapplycheck = 0;
         return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
 
@@ -784,12 +777,15 @@ class UserController extends Controller
                     ];
                 }
 
-            $result = DB::table('coupons')
-                ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
+                $discount = 0;
+                $discountAmt = DB::table('coupons')
                 ->select('coupons.discount_amount')
-                ->pluck('coupons.discount_amount');
-                $discount = $result[0];
+                ->where('coupons.coupon_code', $couponcode)
+                ->where('status', 1)
+                ->first();
+                if ($discountAmt) {
+                    $discount = $discountAmt->discount_amount;
+                }
 
             $couponapplycheck = null;
             $couponcheck = DB::table('coupons')->where('coupon_code', $couponcode)
@@ -826,29 +822,6 @@ class UserController extends Controller
                 }
             }
 
-            $couponid = DB::table('coupons')
-                        ->where('coupon_code', $couponcode)
-                        ->where('status', 1)
-                        ->select('Coupons.id')
-                        ->first();
-                        if ($couponid) {
-
-                            DB::table('coupon_details')->insert([
-                                'coupon_id' => $couponid->id,
-                                'buyer_id' => $buyerid,
-                                'coupon_code' => $couponcode,
-                                'updated_at' => now(),
-                                'created_at' => now(),
-                            ]);
-                            $result = DB::table('coupons')
-                                ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                                ->join('buyers', 'Coupon_details.buyer_id', '=', 'buyers.id')
-                                ->select('coupons.discount_amount')
-                                ->pluck('coupons.discount_amount');
-                                $discount = $result[0];
-                        } else {
-
-                        }
             return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
     }
     //Product Checkout
@@ -873,22 +846,22 @@ class UserController extends Controller
                     ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                     ->get();
 
-        foreach($cartLists as $cartItem){
+            foreach($cartLists as $cartItem){
 
-            $productID = $cartItem->id;
-            $sellerID = $cartItem->seller_id;
+                $productID = $cartItem->id;
+                $sellerID = $cartItem->seller_id;
 
 
-            $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
-                        ->select('sellers.shop_name as shopname')
-                        ->first();
-            $cartItem->shop_name = $shopName->shopname;
-        }
+                $shopName = DB::table('sellers')
+                            ->where('sellers.id', $sellerID)
+                            ->select('sellers.shop_name as shopname')
+                            ->first();
+                $cartItem->shop_name = $shopName->shopname;
+            }
 
-        $discountedPrices = [];
-            foreach ($cartLists as $product)
-            {
+            $discountedPrices = [];
+                foreach ($cartLists as $product)
+                {
 
                 if ($product->discount_percent)
                 {
@@ -902,11 +875,11 @@ class UserController extends Controller
                 }
                 $saveAmount = $product->selling_price - $discountedPrice;
 
-                $discountedPrices[$product->id] = [
-                    'discounted_price' => $discountedPrice,
-                    'save_amount' => $saveAmount
-                ];
-            }
+                    $discountedPrices[$product->id] = [
+                        'discounted_price' => $discountedPrice,
+                        'save_amount' => $saveAmount
+                    ];
+                }
 
         $result = DB::table('coupons')
                     ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')

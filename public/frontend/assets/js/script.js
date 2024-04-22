@@ -164,18 +164,21 @@ $(document).ready(function () {
 /*=====================
   06. quantity js
    ==========================*/
-$('.qty-box .quantity-right-plus').on('click', function () {
-    var $qty = $(this).parents(".qty-box").find(".input-number");
+   $('.qty-box .qty-right-plus').on('click', function () {
+    var $qty = $(this).parents(".qty-box").find(".qty-input");
     var currentVal = parseInt($qty.val(), 10);
     if (!isNaN(currentVal)) {
-        $qty.val(currentVal + 0);
+        if (currentVal < 1000) {
+            $qty.val(currentVal + 1);
+        }
     }
 });
-$('.qty-box .quantity-left-minus').on('click', function () {
-    var $qty = $(this).parents(".qty-box").find(".input-number");
+
+$('.qty-box .qty-left-minus').on('click', function () {
+    var $qty = $(this).parents(".qty-box").find(".qty-input");
     var currentVal = parseInt($qty.val(), 10);
     if (!isNaN(currentVal) && currentVal > 0) {
-        $qty.val(currentVal - 0);
+        $qty.val(currentVal - 1);
     }
 });
 

@@ -17,7 +17,7 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Product Code</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $data->product_code }}</p>
+                                                <p>{{ $data->id }}</p>
                                             </div>
                                         </div>
 
@@ -108,15 +108,18 @@
                                                 class="col-sm-3 col-form-label form-label-title">Thumbnail
                                                 Image</label>
                                             <div class="col-sm-9">
-                                                <img width="100" src="{{ asset('upload/product_thambnail/'.$data-> product_thambnail) }}">
+                                                <img width="80" src="{{ asset('upload/product_thambnail/'.$data-> product_thambnail) }}">
                                             </div>
                                         </div>
 
+                                        @php
+                                            $multiImg = json_decode($data->multi_img);
+                                        @endphp
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                             <div class="col-sm-9">
-                                                @foreach ($multiImgs as $key => $img)
-                                                    <img width="100" src="{{ asset('upload/multiImg/'.$img->photo_name) }}">
+                                                @foreach ($multiImg as $img)
+                                                    <img width="100" src="{{ asset('upload/multiImg/'.$img) }}" alt="Image">
                                                 @endforeach
                                             </div>
                                         </div>

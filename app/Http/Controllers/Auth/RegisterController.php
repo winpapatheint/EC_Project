@@ -52,6 +52,14 @@ class RegisterController extends Controller
             'status' => 1,
         ]);
         event(new Registered($user));
+
+        $user->assignRole('seller');
+        $user->givePermissionTo(['product.list', 'product.add','product.edit','product.delete',
+        'order.list', 'order.add','order.edit','order.delete',
+        'subseller.list', 'subseller.add','subseller.edit','subseller.delete',
+        'review.list', 'review.add','review.edit','review.delete',
+        'help.list', 'help.add','help.edit','brand.add','profile', 'dashboard']);
+
         $seller = Seller::create([
             'user_id' => $user->id,
             'prefecture_id' => $request->prefecture,

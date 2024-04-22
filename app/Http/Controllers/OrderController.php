@@ -46,19 +46,19 @@ class OrderController extends Controller
         else
         {
             switch ($status) {
-                case 'processing':
+                case 'Processing':
                     $order->processing_date = now();
                     $order->status = 'Processing';
                     break;
-                case 'picked':
+                case 'Picked':
                     $order->picked_date = now();
                     $order->status = 'Picked';
                     break;
-                case 'shipped':
+                case 'Shipped':
                     $order->shipped_date = now();
                     $order->status = 'Shipped';
                     break;
-                case 'delivered':
+                case 'Delivered':
                     $order->delivered_date = now();
                     $order->status = 'Delivered';
                     break;
@@ -101,7 +101,7 @@ class OrderController extends Controller
         $order->updated_at = now();
         $order->save();
 
-        return redirect('/seller/orderlist');
+        return redirect('/orderlist');
     }
 
     public function orderTracking($id)

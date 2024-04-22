@@ -35,221 +35,86 @@
                             <tbody>
                                 <tr>
                                     <th>Product</th>
-                                    <td>
-                                        <a class="text-title" href="{{ url('/product-left-thumbnail') }}">Daily Shine Shampoo</a>
-                                    </td>
-                                    <td>
-                                        <a class="text-title" href="{{ url('/product-left-thumbnail') }}">Intence Repair
-                                            Shampoo</a>
-                                    </td>
-                                    <td>
-                                        <a class="text-title" href="{{ url('/product-left-thumbnail') }}">Anti Dandruff
-                                            Solution</a>
-                                    </td>
-                                    <td>
-                                        <a class="text-title" href="{{ url('/product-left-thumbnail') }}">Repair & Shine
-                                            Shampoo</a>
-                                    </td>
+                                    @foreach($comparelistProducts as $product)
+                                        <td>
+                                            <a class="text-title" href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
+                                            {{ $product->product_name }}</a>
+                                        </td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
                                     <th>Images</th>
+                                    @foreach($comparelistProducts as $product)
                                     <td>
-                                        <a href="{{ url('/product-left-thumbnail') }}" class="compare-image">
-                                            <img src="../assets/images/inner-page/compare/1.png"
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="compare-image">
+                                            <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                 class="img-fluid blur-up lazyload" alt="">
                                         </a>
                                     </td>
-                                    <td>
-                                        <a href="{{ url('/product-left-thumbnail') }}" class="compare-image">
-                                            <img src="../assets/images/inner-page/compare/2.png"
-                                                class="img-fluid blur-up lazyload" alt="">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('/product-left-thumbnail') }}" class="compare-image">
-                                            <img src="../assets/images/inner-page/compare/3.png"
-                                                class="img-fluid blur-up lazyload" alt="">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('/product-left-thumbnail') }}" class="compare-image">
-                                            <img src="../assets/images/inner-page/compare/4.png"
-                                                class="img-fluid blur-up lazyload" alt="">
-                                        </a>
-                                    </td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
-                                    <th>Hair Type</th>
-                                    <td class="text-content">Normal</td>
-                                    <td class="text-content">Oily</td>
-                                    <td class="text-content">Dry</td>
-                                    <td class="text-content">Normal</td>
+                                    <th>Size</th>
+                                    @foreach($comparelistProducts as $product)
+                                        <td class="text-content">{{ $product->product_size }}</td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
-                                    <th>Item Form</th>
-                                    <td class="text-content">Gel</td>
-                                    <td class="text-content">Liquid</td>
-                                    <td class="text-content">Gel</td>
-                                    <td class="text-content">Gel</td>
+                                    <th>Color/th>
+                                    @foreach($comparelistProducts as $product)
+                                        <td class="text-content">{{ $product->product_color }}</td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
                                     <th>Price</th>
-                                    <td class="price text-content">$20.23</td>
-                                    <td class="price text-content">$26.90</td>
-                                    <td class="price text-content">$12.23</td>
-                                    <td class="price text-content">$15.85</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Availability</th>
-                                    <td class="text-content">In Stock</td>
-                                    <td class="text-content">In Stock</td>
-                                    <td class="text-content">In Stock</td>
-                                    <td class="text-content">In Stock</td>
+                                    @foreach($comparelistProducts as $product)
+                                        <td class="text-content">{{ $product->selling_price }}</td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
                                     <th>Rating</th>
+                                    @foreach($comparelistProducts as $key => $product)
                                     <td>
                                         <div class="compare-rating">
                                             <ul class="rating">
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star"></i>
-                                                </li>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $ratingWithProductCount[$key][0])
+                                                        <li><i data-feather="star" class="fill"></i></li>
+                                                    @else
+                                                        <li><i data-feather="star"></i></li>
+                                                    @endif
+                                                @endfor
                                             </ul>
-                                            <span class="text-content">(20 Raring)</span>
+                                            <span class="text-content">({{ $ratingWithProductCount[$key][1] }} Reviews)</span>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="compare-rating">
-                                            <ul class="rating">
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star"></i>
-                                                </li>
-                                            </ul>
-                                            <span class="text-content">(25 Raring)</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="compare-rating">
-                                            <ul class="rating">
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                            </ul>
-                                            <span class="text-content">(50 Raring)</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="compare-rating">
-                                            <ul class="rating">
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star"></i>
-                                                </li>
-                                                <li>
-                                                    <i data-feather="star"></i>
-                                                </li>
-                                            </ul>
-                                            <span class="text-content">(30 Raring)</span>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Weight</th>
-                                    <td class="text-content">5.00kg</td>
-                                    <td class="text-content">1.00kg</td>
-                                    <td class="text-content">0.75kg</td>
-                                    <td class="text-content">0.50kg</td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
                                     <th>Purchase</th>
+                                    @foreach($comparelistProducts as $product)
                                     <td>
-                                        <button onclick="location.href = 'cart.html';"
+                                        <button onclick="location.href = '{{route ('show_carts', ['id' => $product->id]) }}';"
                                             class="btn btn-animation btn-sm w-100">Add To Cart</button>
                                     </td>
-                                    <td>
-                                        <button onclick="location.href = 'cart.html';"
-                                            class="btn btn-animation btn-sm w-100">Add To Cart</button>
-                                    </td>
-                                    <td>
-                                        <button onclick="location.href = 'cart.html';"
-                                            class="btn btn-animation btn-sm w-100">Add To Cart</button>
-                                    </td>
-                                    <td>
-                                        <button onclick="location.href = 'cart.html';"
-                                            class="btn btn-animation btn-sm w-100">Add To Cart</button>
-                                    </td>
+                                    @endforeach
                                 </tr>
 
                                 <tr>
                                     <th></th>
+                                    @foreach($comparelistProducts as $product)
                                     <td>
-                                        <a href="javascript:void(00" class="text-content remove_column"><i
-                                                class="fa-solid fa-trash-can me-2"></i> Remove</a>
+                                        <a href="javascript:void(0)" class="text-content remove_column" data-comparelist-id="{{ $product->id }}">
+                                            <i class="fa-solid fa-trash-can me-2"></i> Remove
+                                        </a>
                                     </td>
-                                    <td>
-                                        <a href="javascript:void(00" class="text-content remove_column"><i
-                                                class="fa-solid fa-trash-can me-2"></i> Remove</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(00" class="text-content remove_column"><i
-                                                class="fa-solid fa-trash-can me-2"></i> Remove</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(00" class="text-content remove_column"><i
-                                                class="fa-solid fa-trash-can me-2"></i> Remove</a>
-                                    </td>
+                                    @endforeach
                                 </tr>
                             </tbody>
                         </table>
@@ -259,5 +124,32 @@
         </div>
     </section>
     <!-- Compare Section End -->
+
+    <!-- latest jquery-->
+    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- jquery ui-->
+    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('.remove_column').click(function(e) {
+            e.preventDefault();
+            var comparelistId = $(this).data('comparelist-id');
+
+            $.ajax({
+                url: '/delete-comparelist/' + comparelistId,
+                method: 'POST',
+                success: function(response) {
+                    console.log('Compare item deleted successfully.');
+                    // For example: $(this).closest('tr').remove();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting comparelist item:', error);
+                }
+            });
+        });
+    });
+    </script>
 
 </x-guest-layout>

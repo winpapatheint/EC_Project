@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Seller;
 use App\Models\OrderDetail;
 use App\Models\Category;
+use App\Models\Comparelist;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -300,6 +301,40 @@ class ShowProductController extends Controller
         return view('front-end.wishlist',compact('wishlistProducts'));
     }
 
+    public function ShowCompareList()
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        if(request()->id != null)
+        {
+            Comparelist::firstOrCreate([
+                'buyer_id' => $buyer->id,
+                'product_id' => request()->id,
+            ]);
+        }
+        $comparelist = Comparelist::where('buyer_id', $buyer->id)->get();
+        $ratingWithProductCount = [];
+        $comparelistProducts = Product::with('reviews')->whereIn('id', $comparelist->pluck('product_id'))->get();
+        if ($comparelistProducts->count() > 0) {
+            foreach ($comparelistProducts as $key => $product) {
+                $ratingWith = 0;
+                $reviewCount = 0;
+                if($product->reviews->isNotEmpty()) {
+                    foreach ($product->reviews as $review) {
+                        $ratingWith += $review->stars_rated;
+                        $reviewCount++;
+                    }
+                    $ratingWithProductCount[$key][0] = floor($ratingWith / $reviewCount);
+                    $ratingWithProductCount[$key][1] = $reviewCount;
+                }
+                else {
+                    $ratingWithProductCount[$key][0] = 0;
+                    $ratingWithProductCount[$key][1] = 0;
+                }
+            }
+        }
+        return view('front-end.compare',compact('comparelistProducts', 'ratingWithProductCount'));
+    }
+
     public function DeleteWishList($id)
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
@@ -309,6 +344,41 @@ class ShowProductController extends Controller
             return response()->json(['message' => 'Wishlist item deleted successfully']);
         } else {
             return response()->json(['message' => 'Wishlist item not found'], 404);
+        }
+    }
+
+    public function DeleteCompareList($id)
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $comparelistItem = Comparelist::where('buyer_id', $buyer->id)->where('product_id', $id)->first();
+        if ($comparelistItem) {
+            $comparelistItem->delete();
+            return response()->json(['message' => 'Compare item deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Compare item not found'], 404);
+        }
+    }
+
+    //Show footer search
+    public function FooterSearch()
+    {
+        $query = Product::query();
+
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('product_name', 'like', '%' . $mainSearch . '%')
+                    ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
+                    ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('Category', function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+            });
         }
     }
 }

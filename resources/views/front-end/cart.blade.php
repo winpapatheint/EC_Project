@@ -96,15 +96,12 @@
                                                 <div class="cart_qty">
                                                     <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id, $cartlist->product_id) }}">
                                                         @csrf
-                                                        <div class="input-group">
-                                                            <button type="submit" class="btn qty-left-minus"
-                                                                data-type="minus" data-field="">
+                                                        <div class="input-group qty-box">
+                                                            <button type="submit" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
                                                             </button>
-                                                            <input class="form-control input-number qty-input" type="text"
-                                                                name="quantity" value="{{ $cartlist->quantity }}">
-                                                            <button type="submit" class="btn qty-right-plus"
-                                                                data-type="plus" data-field="">
+                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}">
+                                                            <button type="submit" class="btn qty-right-plus" data-type="" data-field="">
                                                                 <i class="fa fa-plus ms-0"></i>
                                                             </button>
                                                         </div>
@@ -180,7 +177,10 @@
                                     <h4>Coupon Discount</h4>   
                                     @if ($couponapplycheck != 1)  
                                     <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    @else
+                                    <h4 class="price"> (-) ¥ 0</h4>
                                     @endif
+
                                 </li>
                                 
                                 <li class="align-items-start">
@@ -221,5 +221,4 @@
         </div>
     </section>
     <!-- Cart Section End -->
-
 </x-guest-layout>

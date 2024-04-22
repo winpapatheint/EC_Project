@@ -16,6 +16,7 @@ class Product extends Model
         'sub_category_title_id',
         'sub_category_id',
         'seller_id',
+        'subseller_id',
         'product_name',
         'product_code',
         'product_qty',

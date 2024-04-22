@@ -364,4 +364,27 @@ class ShowProductController extends Controller
             return response()->json(['message' => 'Compare item not found'], 404);
         }
     }
+
+    //Show footer search
+    public function FooterSearch()
+    {
+        $query = Product::query();
+
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('product_name', 'like', '%' . $mainSearch . '%')
+                    ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
+                    ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('Category', function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+            });
+        }
+    }
 }

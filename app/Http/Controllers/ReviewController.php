@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\Review;
+use App\Models\User;
 
 
 class ReviewController extends Controller
@@ -12,18 +18,29 @@ class ReviewController extends Controller
 
     public function store(Request $request)
     {
-        //$user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $id = $request->product_id;
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:255',
-            //'product_id' => 'required|integer',
+            'product_id' => 'required|integer',
         ]);
     
-        $review = review::create([
-            'stars_rated' => $request->rating,
-            'comment' => $request->comment,
-        ]);
+        $review = new Review();
+        $review->user_id = $request->user_id;
+        $review->product_id = $request->product_id;
+        $review->seller_id = $request->seller_id;
+        $review->stars_rated = $request->rating;
+        $review->comment = $request->input('comment');
+        
+    
+        // Save the review to the database
         $saved = $review->save();
-        return redirect()->route('reviews');
+    
+        if ($saved) {
+            return redirect()->route('show-product-left-thumbnail',compact ('id') )->with('success', 'Review submitted successfully.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Failed to submit review.');
+        }
     }
 }

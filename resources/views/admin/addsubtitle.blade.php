@@ -137,7 +137,7 @@
                 inputGroup.classList.add('mb-4', 'row', 'align-items-center');
                 inputGroup.innerHTML = `
 
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                         <div class="input-group">
                             <input class="form-control" type="text" placeholder="Sub Title" name="subtitle[]">
                             <div class="input-group-append align-self-center mx-auto justify-content-center">

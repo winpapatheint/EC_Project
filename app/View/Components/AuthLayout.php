@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Models\User;
 
 class AuthLayout extends Component
 {
@@ -13,6 +14,7 @@ class AuthLayout extends Component
      */
     public function render()
     {
+        User::where('role','=','seller')
         return view('layouts.auth');
     }
 }

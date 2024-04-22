@@ -98,7 +98,18 @@
                     </div>
                 </div>
 
-                <div class="accordion-item">
+                <div class="search-box">
+                    <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
+                        <div class="input-group">
+                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                            <button class="btn" type="submit" id="button-addon2">
+                                <i data-feather="search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {{-- <div class="accordion-item">
                     <div style="display: flex; align-items: center;">
                         <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                         id="search" name="search" value=""
@@ -106,7 +117,7 @@
                         <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
                     <div class="form-group w-100">

@@ -390,7 +390,7 @@
 
                                             </li>
                                             @endif
-                                            
+
                                              <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
@@ -450,13 +450,21 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="header-nav-right">
-                            <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
-                                <i data-feather="zap"></i>
-                                <span>Deal Today</span>
-                            </button>
-                        </div>
+                        @if(!empty(Auth::user()))
+                            <div class="header-nav-right">
+                                <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
+                                    <i data-feather="zap"></i>
+                                    <span>Deal Today</span>
+                                </button>
+                            </div>
+                        @else
+                            <div class="header-nav-right">
+                                <button class="btn deal-button" data-bs-toggle="modal">
+                                    <i data-feather="zap"></i>
+                                  <a href="{{ route('login') }}" style="color:#0da487"><span> Deal Today</span></a>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -620,14 +628,10 @@
                                     <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
-                                    <a href="about-us.html" class="text-content">About Us</a>
+                                    <a href="{{ url('/news') }}" class="text-content">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="blog-list.html" class="text-content">Blog</a>
-                                </li>
-                                <li>
-
-                                    <a href="contact-us.html" class="text-content">Contact Us</a>
+                                    <a href="{{ url('/contact') }}" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
                         </div>
@@ -644,10 +648,10 @@
                                     <a href="{{ route('seller.register') }}" class="text-content">Seller Register</a>
                                 </li>
                                 <li>
-                                    <a href="user-dashboard.html" class="text-content">Your Account</a>
+                                    <a href="{{ route('login') }}" class="text-content">Your Account</a>
                                 </li>
                                 <li>
-                                    <a href="order-tracking.html" class="text-content">Track Order</a>
+                                    <a href="{{ route('user_order') }}" class="text-content">Track Order</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>

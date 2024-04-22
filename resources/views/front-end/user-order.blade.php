@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Orders</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -20,7 +20,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Orders</li>
                             </ol>
                         </nav>
                     </div>
@@ -85,7 +85,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -96,19 +96,6 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
-                            </li>
-<<<<<<< HEAD
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-=======
-                            <li>
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                    <a class="nav-link btn" id="pills-profile-tab" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"></i>logout</a>
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
-                                </form>
                             </li>
                         </ul>
                     </div>
@@ -140,79 +127,58 @@
                                         <th scope="col">No</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Order Code</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Amount</th>
                                         <th scope="col">Payment Method</th>
-                                        <th scope="col">Price</th>
                                         <th scope="col">Option</th>
                                     </tr>
                                  </thead>
                                  <tbody>
+                                 @php $counter = 1; @endphp
                                  @foreach($orders as $item)
                                  @csrf
-                                    <tr>
-                                        <td>
-                                            <h6>{{ $item->order_id }}</h6>
-                                        </td>
-                                        <td>
-                                            <h6>{{ $item->order_date }}</h6>
-                                        </td>
-                                        <td>
-                                            <h6>{{ $item->order_code }}</h6>
-                                        </td>
-                                        <!-- <td class="product-image">
-                                            <img src="../assets/images/vegetable/product/1.png"
-                                                class="img-fluid" alt="">
-                                        </td> -->
+                                        <tr>
+                                            
+                                            <td>{{ $counter++ }}</td>
+                                            
+                                            <td>
+                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</h6>
+                                            </td>
 
-                                        <td>
-                                            <h6>{{ $item->payment_type }}</h6>
-                                        </td>
-                                        <td>
-                                            <h6 class="theme-color fw-bold">{{ $item->amount }}</h6>
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="{{route ('user_order_details')}}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('front-end.user-order-tracking')}}">Tracking</a>
-                                                    <!-- <a class="btn btn-sm btn-solid text-white" href="admin.order.order_tracking"> </a> -->
-                                                    <!-- <h6>Tracking</h6> -->
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
+                                            <td>
+                                                <h6>{{ $item->order_id  }}</h6>
+                                            </td>
+
+                                            <td>
+                                                <h6>{{ $item->total_qty  }}</h6>
+                                            </td>
+                                            <td>
+                                                <h6 class="theme-color fw-bold">¥ {{ number_format($item->total_amount , 0, '.', ',') }}</h6>
+                                            </td>
+                                            <td>
+                                                <h6>{{ $item->payment_type }}</h6>
+                                            </td>
+
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{route ('user_order_details',['id' => $item->order_id]) }}">
+                                                            <i class="ri-eye-line"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('user_order_tracking',['id' => $item->order_id]) }}">Tracking</a>
+                                                                                                                                                                                         
+                                                    </li>
+                                                </ul>
+                                            </td>
                                     </tr> 
                                     @endforeach 
                                 </tbody>
                                 </table>
                                     </div>
                                     <div>
-                                        <nav class="custom-pagination">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                                        <i class="fa-solid fa-angles-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">
-                                                        <i class="fa-solid fa-angles-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                        @include('components.pagination')
                                     </div>
                                 </div>
                             </div>  

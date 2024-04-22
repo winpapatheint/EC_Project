@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product List</li>
+                                <li class="breadcrumb-item active">Product</li>
                             </ol>
                         </nav>
                     </div>
@@ -23,35 +23,6 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-
-    <!-- Poster Section Start -->
-    <section>
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-1 slider-animate product-wrapper no-arrow">
-                    @if ($productsGroupedByDiscount !== null)
-                    @foreach ($productsGroupedByDiscount as $discountPercent => $discountItem)
-                        <div>
-                            <div class="banner-contain-2 hover-effect">
-                                <img src="{{ asset('frontend/assets/images/shop/1.jpg') }}" class="bg-img rounded-3 blur-up lazyload" alt="">
-                                <div
-                                    class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                                    <div>
-                                        <h2>Healthy, nutritious & Tasty Fruits & Veggies</h2>
-                                        <h3>Save up to {{ $discountPercent }}%</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                    @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Poster Section End -->
 
     <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
@@ -86,7 +57,7 @@
                                     <div style="display: flex; align-items: center;">
                                         <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn" 
+                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                                     </div>
                                 </div>
@@ -103,7 +74,7 @@
                                             @foreach ($categoryWithProductCount as $category)
                                                 <li>
                                                     <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}" 
+                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}"
                                                         name="categories[]" value= "{{ $category->id }}" data-category="{{ $category->id }}"
                                                         {{ in_array($category->id, $categories) ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="{{ $category->category_name }}">
@@ -177,9 +148,11 @@
                                                 </li>
 
                                                 <li>
+
                                                     <div class="form-check ps-0 m-0 category-list-box">
                                                         <input class="checkbox_animated" type="checkbox" name="rating[]" value="4"
                                                         {{ in_array("4", $rating) ? 'checked' : '' }}>
+
                                                         <div class="form-check-label">
                                                             <ul class="rating">
                                                                 <li>
@@ -412,7 +385,7 @@
                                         @elseif ($sort == 6)
                                             <span>% Off - Hight To Low</span>
                                         @else
-                                            <span>Choose Sorting</span> 
+                                            <span>Choose Sorting</span>
                                         @endif
                                             <i class="fa-solid fa-angle-down"></i>
                                     </button>
@@ -430,11 +403,11 @@
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z 
+                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z
                                                 Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A 
+                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A
                                                 Order</a>
                                         </li>
                                         <li>
@@ -447,7 +420,7 @@
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
-                                    <li class="three-grid">
+                                    <li class="three-grid active">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -460,7 +433,7 @@
                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
                                         </a>
                                     </li>
-                                    <li class="list-btn active">
+                                    <li class="list-btn">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/list.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -470,8 +443,11 @@
                         </div>
                     </div>
 
+                        @if($products->count() < 1)
+                            <h1 class="text-center">No Products Found</h1>
+                        @endif
                     <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section list-style">
+                        class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach ($products as $product)
                             @if ($product->status == 1)
                             @php
@@ -495,7 +471,7 @@
                             <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.05 }}s">
                                 <div class="product-header">
                                     <div class="product-image">
-                                   
+
                                         <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
                                         <img width="100" src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
                                                 class="img-fluid blur-up lazyload" alt="">
@@ -508,9 +484,8 @@
                                                     <i data-feather="eye"></i>
                                                 </a>
                                             </li>
-                                            {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
                                                 </a>
                                             </li>
@@ -537,7 +512,8 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
-                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        <h5 class="price">
+                                            <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             @if ($product->discount_percent != null)
                                             <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
                                             @endif
@@ -549,8 +525,6 @@
                             @endif
                         @endforeach
                     </div>
-
-                    
                 @include('components.pagination')
                 </div>
             </div>
@@ -627,7 +601,7 @@
                                             <h5>Brand Name:</h5>
                                             <h6>
                                                 @php
-                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
                                                 @endphp
                                                 {{ $brand->brand_name }}
                                             </h6>
@@ -646,7 +620,7 @@
                                             <h5>Category:</h5>
                                             <h6>
                                                 @php
-                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
                                                 @endphp
                                                 {{ $category->category_name }}
                                             </h6>
@@ -655,14 +629,14 @@
                                 </ul>
                                 {{-- remain --}}
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add
                                             To Cart</button>
                                     </form>
-                                    
-                                    <button onclick="location.href = 'product-left.html';"
+
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         View More Details</button>
                                 </div>
@@ -683,21 +657,10 @@
 
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-    
-    <!-- Price Range Js -->
-    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 
     <script>
         jQuery(document).ready(function($) {
-            var rangeSlider = $(".js-range-slider").ionRangeSlider({
-                type: "double",
-                grid: true,
-                min: 0,
-                max: 1000000,
-                from: 0,
-                to: 1000000,
-                prefix: "¥"
-            });console.log(rangeSlider);
+            var rangeSlider = $(".js-range-slider");
 
             var price = "{{ $price }}";
 

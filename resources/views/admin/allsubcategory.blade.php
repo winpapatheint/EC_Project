@@ -56,20 +56,38 @@
                                             <tr>
                                               <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->category }}</td>
-                                              <td data-label="タイトル" style="font-size:14px;">{{ $list->sub_category_titlename }}</td>
+                                              <td data-label="タイトル" style="font-size:14px;">{!! $list->sub_category_titlename  !!} </td>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->sub_category_name }}</td>
 
                                               <td>
                                                 <ul>
+                                                    @php
+                                                    $id = "0";
+                                                    $type = 0;
+                                                        if($list->subCatId != null)
+                                                        {
+                                                            $id = $list->subCatId;
+                                                            $type = 3;
+                                                        }elseif ($list->subCatTitleId != null) {
+                                                            $id = $list->subCatTitleId;
+                                                            $type = 2;
+                                                        }else {
+                                                            $id = $list->categoryId;
+                                                            $type = 1;
+                                                        }
+                                                    @endphp
                                                     <li>
-                                                        <a href='{{ url("/editsubcategory/".$list->id ) }}'>
+                                                        <a href='{{ url("/editsubcategory/".$type.'/'.$id ) }}'>
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         @if(empty($list->sub_category_name))
+                                                        {{-- <a href='{{ url("/deletecategory/".$type.'/'.$id ) }}'>
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a> --}}
                                                             <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                data-bs-target="#deleteConfirmModal{{ $id  }}">
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </a>
 
@@ -88,16 +106,31 @@
                         </div>
                     </div>
 
-
-
-
+                    @include('components.pagination')
                 </div>
 
             </div>
 
            <!-- Delete Modal Box Start -->
  @foreach( $lists as $key => $list )
- <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
+    @php
+        $id = "0";
+        $type = 0;
+            if($list->subCatId != null)
+            {
+                $id = $list->subCatId;
+                $type = 3;
+            }elseif ($list->subCatTitleId != null) {
+                $id = $list->subCatTitleId;
+                $type = 2;
+            }else {
+                $id = $list->categoryId;
+                $type = 1;
+            }
+    @endphp
+
+ <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $id }}" aria-hidden="true" tabindex="-1">
+
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header d-block text-center">
@@ -116,7 +149,7 @@
             <div class="modal-footer">
                 <form method="POST" action="{{ route('deletecategory') }}" style="display:flex;">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $list->id }}">
+                    <input type="hidden" name="id" value="{{ $id }}">
                     <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>

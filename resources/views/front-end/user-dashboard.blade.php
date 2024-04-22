@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Dashboard</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -20,7 +20,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </nav>
                     </div>
@@ -87,7 +87,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -98,18 +98,8 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
-<<<<<<< HEAD
-                                
-=======
+                            </li>
 
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-                                </form>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -147,20 +137,10 @@
                                                         class="img-1 blur-up lazyload" alt="">
                                                     <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
                                                         alt="">
-<<<<<<< HEAD
-                                                    
-=======
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
                                                         <h3>{{ $orderCount }}</h3>
                                                     </div>
-<<<<<<< HEAD
-                                                    
-=======
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                 </div>
                                             </div>
 
@@ -172,7 +152,7 @@
                                                         alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Pending Order</h5>
-                                                        <h3>254</h3>
+                                                        <h3>{{ $pendingCount }}</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,29 +178,18 @@
                                             </div>
 
                                         <div class="row g-4">
-                                            <div class="col-xxl-6">
-<<<<<<< HEAD
-                                          
+                                            <div class="col-xxl-6">      
                                                 <div class="dashboard-detail">           
-=======
 
                                                 <div class="dashboard-detail">
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+
                                                     <h6 class="text-content">{{ $user->name }}</h6>
                                                     <h6 class="text-content">{{ $user->email }}</h6>
                                                     <h6 class="text-content">{{ $user->phone }}</h6>
                                                 </div>
                                             </div>
-<<<<<<< HEAD
                                         
                                     </div>
-                                        
-=======
-
-                                    </div>
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
-
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
                                                 <h4>Address Book</h4>
@@ -228,38 +197,20 @@
                                            
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
-<<<<<<< HEAD
-                                                
-=======
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Home Address</h6>
-                                                        @foreach ($userOrders as $address)
-                                                        <h6 class="text-content">{{ $address->buyer_address }}</h6>
-                                                         @endforeach
-                                                    </div>
-<<<<<<< HEAD
-                                                    
-=======
 
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
+                                                         
+                                                    </div>
                                                 </div>
                                           
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
-<<<<<<< HEAD
-                                                        
-                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
-                                                        
-                                                        
-=======
-
-                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
-
-
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+                                                        @foreach($userAddresses as $address)
+                                                        <h6 class="text-content">{{ $address }}</h6>   
+                                                        @endforeach                                          
                                                     </div>
                                                 </div>
                                             </div>

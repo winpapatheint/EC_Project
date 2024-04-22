@@ -16,6 +16,7 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "haruncpi/laravel-id-generator": "^1.1",
         "laravel/framework": "^8.12",
+        "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.5",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-permission": "^6.4"

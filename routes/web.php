@@ -9,9 +9,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ShowProductController;
-
+use App\Http\Controllers\Auth\RegisterController;
 
 
 /*
@@ -29,7 +28,7 @@ use App\Http\Controllers\ShowProductController;
 //route::get('/verifyemail',[UserController::class,'verify-email'])->name('auth.verify-email');
 
 
-Route::get('/', [Admincontroller::class,'welcome']);
+Route::get('/', [AdminController::class,'welcome']);
 
 
 Route::get('/user-registration', [UserController::class,'index'])->name('user_register');
@@ -37,10 +36,10 @@ Route::get('/user-registration', [UserController::class,'index'])->name('user_re
 Route::post('/products/reviews', [ReviewController::class, 'store'])->name('reviews');
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
-Route::get('/user', [UserController::class, 'indexuser'])->name('user_dashboard');
-Route::get('/user-orders', [UserController::class, 'showOrders'])->name('user_order');
-Route::get('/user-order-details', [UserController::class, 'showOrderDetails'])->name('user_order_details');
-Route::get('/user-order-tracking', function () {return view('front-end.user-order-tracking');})->name('front-end.user-order-tracking');
+Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
+Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
 
 Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 
@@ -61,15 +60,16 @@ Route::post('user/profile/edit-password', [UserController::class, 'editPassword'
 Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
+Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->middleware(['auth', 'role:buyer'])->name('show-wishlist');
+Route::post('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
-Route::get('/show-carts', [UserController::class, 'showCarts'])->name('show_carts');
+Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
-Route::post('/cupon', [UserController::class, 'addCouponCode'])->name('add_coupon_code');
-
-Route::get('/wishlist', function () {return view('front-end.wishlist');});
+Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
+Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/compare', function () {return view('front-end.compare');});
 
@@ -89,13 +89,14 @@ Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 Route::get('/contact', function () {return view('front-end.contact-us');});
 Route::post('contact', [AdminController::class, 'contact'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
+Route::get('/privacy-policy', function () {return view('front-end.privacy-policy');});
 
 Route::get('/cart', function () {return view('front-end.cart');});
 
 Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
-Route::get('/admin', function () {return view('admin.admin');})->middleware(['auth','role:admin'])->name('admin.dashboard');
+Route::get('/admin', [AdminController::class, 'admindashboard'])->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
@@ -125,8 +126,10 @@ Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('re
 Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
 route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
-Route::get('/admin/all/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
+Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 
@@ -175,17 +178,17 @@ Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name(
 
 //startcategory
 route::get('/admin/all/category',[AdminController::class,'indexcategory'])->name('admin.all.category');
-route::post('/admin/all/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
 Route::get('/admin/all/subtitle', [AdminController::class,'indexsubtitle'])->name('admin.all.subtitle');
 Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory']);
 Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);
-Route::get('/editsubcategory/{categoryid}', [AdminController::class, 'editsubcategory']);
+Route::get('/editsubcategory/{categorytype}/{categoryid}', [AdminController::class, 'editsubcategory']);
+route::post('/admin/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
 
-Route::get('/admin/all/subcategory', [AdminController::class,'indexsubcategory'])->name('admin.all.subcategory');
+Route::get('/admin/category', [AdminController::class,'indexsubcategory'])->name('admin.category');
 
-Route::get('/admin/all/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
-Route::get('/admin/all/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
-Route::get('/admin/all/addsubcategory', [AdminController::class,'addsubcategory'])->name('admin.all.addsubcategory');
+Route::get('/admin/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
+Route::get('/admin/addcategory', function () {return view('admin.addcategory');})->name('admin.all.addcategory');
+Route::get('/admin/addsubcategory', [AdminController::class,'addsubcategory'])->name('admin.all.addsubcategory');
 Route::post('get-subcategories', [AdminController::class,'getSubcategories'])->name('getSubcategories');
 
 Route::get('/admin/edit/editsubtitle', function () {return view('admin.editsubtitle');})->name('admin.edit.editsubtitle');
@@ -199,7 +202,11 @@ Route::get('/admin/detail/product', function () {return view('admin.product.prod
 Route::get('/admin/edit/product', function () {return view('admin.product.product_edit');})->name('admin.edit.product');
 
 //AdminOrder
-Route::get('/admin/all/order', function () {return view('admin.order.order_all');})->name('admin.all.order');
+Route::get('/admin/orderlist', [AdminController::class, 'indexorderlist'])->name('orderlist');
+Route::get('/admin/orderdetail/{id}', [AdminController::class, 'orderdetail'])->name('orderdetail');
+Route::get('/admin/ordertracking/{id}', [AdminController::class, 'ordertracking'])->name('ordertracking');
+route::post('/admin/deleteorderlist',[AdminController::class,'deleteorderlist'])->name('deleteorderlist');
+
 Route::get('/admin/detail/order', function () {return view('admin.order.order_detail');})->name('admin.detail.order');
 Route::get('/admin/tracking/order', function () {return view('admin.order.order_tracking');})->name('admin.order-tracking');
 

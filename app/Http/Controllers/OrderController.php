@@ -7,7 +7,6 @@ use App\Models\Process;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Dompdf\Dompdf;
 
 class OrderController extends Controller
 {

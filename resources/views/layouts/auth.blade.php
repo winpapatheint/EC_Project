@@ -12,9 +12,8 @@
     <meta name="keywords"
         content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
-    <title>Fastkart - Reports</title>
+    <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <title>Asian food museum</title>
 
     <!-- Google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -99,21 +98,30 @@
                     </div>
                 </div>
 
-                <form class="form-inline search-full" action="javascript:void(0)" method="get">
+                <div class="accordion-item">
+                    <div style="display: flex; align-items: center;">
+                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                        id="search" name="search" value=""
+                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
+                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
+                        style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
+                    </div>
+                </div>
+
+                {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
                     <div class="form-group w-100">
-                        <div class="Typeahead Typeahead--twitterUsers">
+                        <div class="">
                             <div class="u-posRelative">
-                                <input class="demo-input Typeahead-input form-control-plaintext w-100" type="text"
-                                    placeholder="Search Fastkart .." name="q" title="" autofocus>
+                                <input class="form-control form-control-sm mr-sm-2 demo-input Typeahead-input form-control-plaintext w-100" type="search" placeholder="Search" aria-label="Search" id="search"
+                                name="search" value=""
+                               style="font-size: 15px; padding: 0.25rem 0.5rem;">
                                 <i class="close-search" data-feather="x"></i>
-                                <div class="spinner-border Typeahead-spinner" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
+
                             </div>
                             <div class="Typeahead-menu"></div>
                         </div>
                     </div>
-                </form>
+                </form> --}}
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li>
@@ -253,7 +261,7 @@
 
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.subcategory') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Category</span>
                                     </a>
@@ -270,7 +278,7 @@
 
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.order') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
                                         <i class="ri-archive-line"></i>
                                         <span>Orders</span>
                                     </a>

@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Carbon\Carbon;
-use App\Models\Order;
-use App\Models\Review;
+use App\Models\Buyer;
 use App\Models\Product;
+use App\Models\Review;
+use App\Models\Seller;
+use App\Models\OrderDetail;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ShowProductController extends Controller
 {
@@ -60,6 +62,12 @@ class ShowProductController extends Controller
             })
             ->orWhereHas('Category', function ($query) use ($mainSearch) {
                 $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
             });
         }
         else {
@@ -71,6 +79,12 @@ class ShowProductController extends Controller
                 })
                 ->orWhereHas('Category', function ($query) use ($sHistory) {
                     $query->where('category_name', 'like', '%' . $sHistory . '%');
+                })
+                ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
+                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                })
+                ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
+                    $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
                 });
             }
 
@@ -156,27 +170,14 @@ class ShowProductController extends Controller
         }
 
         // Fetch paginated results
-        $products = $query->paginate($limit, ['*'], 'page', $page);
+        $products = $query->where('status', '=', '1')->paginate($limit, ['*'], 'page', $page);
         $ttl = $products->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        // Retrieve reviews
         $reviews = Review::all();
 
-        // Total count of products
         $allProduct = Product::count();
 
-        // Total number of pages
-        // $totalPage = ceil($allProduct / $limit);
-
-        // $productTags = Product::select('product_tags')->distinct()->get();
-        // $tags = [];
-
-        // foreach ($productTags as $productTag) {
-        //     $tags = array_merge($tags, explode(',', $productTag->product_tags));
-        // }
-
-        // Fetch product count
         $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
                                             ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
                                             ->where('products.status', '=', '1')
@@ -184,7 +185,7 @@ class ShowProductController extends Controller
                                             ->get();
 
         $ratingWithProductCount = Review::select(
-                                                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                                DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                             )
                                             ->groupBy('product_id')
                                             ->get()
@@ -207,28 +208,38 @@ class ShowProductController extends Controller
                                             ->take(3)
                                             ->pluck('discount_percent');
 
-        $productsGroupedByDiscount = [];
-
-        foreach ($mostDiscountPercentages as $discountPercent) {
-            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)->pluck('id')
-            ->toArray();
-        }
-
         return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
-        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'productsGroupedByDiscount'));
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory'));
     }
 
     public function ShowProductleftThumbnail($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('seller')->find($id);
+        $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
         $reviews = Review::all();
-        $productOrdered = Order::where('product_id', $id)->get();
-        $topProducts = Order::select('product_id', DB::raw('COUNT(*) as frequency'))
+        $productOrdered = OrderDetail::where('product_id', $id)->get();
+        $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')
         ->orderByDesc('frequency')
         ->limit(3)
         ->get();
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id'));
+        $ratingWithProductCount = [];
+        $ratingWith = 0;
+        $productCount = 0;
+        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller->id)->get();
+        if ($ratingProject->count() > 0) {
+            foreach ($ratingProject as $rating) {
+                if($rating->reviews->isNotEmpty()) {
+                    foreach ($rating->reviews as $review) {
+                        $ratingWith += $review->stars_rated;
+                        $productCount++;
+                    }
+                }
+            }
+            $ratingWithProductCount[0] = floor($ratingWith / $ratingProject->count());
+            $ratingWithProductCount[1] = $productCount;
+        }
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'multiImages', 'ratingWithProductCount'));
     }
 
     public function ShowDiscountProductList()
@@ -247,23 +258,23 @@ class ShowProductController extends Controller
         $limit = 10; // set the number of products per page
         if($ids)
         {
-            $products = Product::whereIn('id', $ids)->get();
+            $products = Product::whereIn('id', $ids)->where('status', '=', '1')->get();
         }
 
         if($topic == 'value-of-the-day')
         {
-            $products = Product::leftjoin('orders', 'products.id', '=', 'orders.product_id')
-                        ->whereDate('orders.created_at', Carbon::today())->get();
+            $products = Product::leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
+                        ->whereDate('order_details.created_at', Carbon::today())->where('products.status', '=', '1')->get();
         }
 
         if($topic == 'top-50-offers')
         {
-            $products = Product::orderBy('discount_percent', 'desc')->take(50)->get();
+            $products = Product::where('status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
         }
 
         if($topic == 'new-arrivals')
         {
-            $products = Product::whereDate('created_at', Carbon::today())->get();
+            $products = Product::whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
         }
 
         $reviews = Review::all();
@@ -271,5 +282,33 @@ class ShowProductController extends Controller
         $totalPage = ceil($allProduct / $limit);
 
         return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
+    }
+
+    public function ShowWishList()
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        if(request()->id != null)
+        {
+            Wishlist::firstOrCreate([
+                'buyer_id' => $buyer->id,
+                'product_id' => request()->id,
+            ]);
+        }
+        $wishlist = Wishlist::where('buyer_id', $buyer->id)->get();
+        $wishlistProducts = Product::whereIn('id', $wishlist->pluck('product_id'))->get();
+
+        return view('front-end.wishlist',compact('wishlistProducts'));
+    }
+
+    public function DeleteWishList($id)
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $wishlistItem = Wishlist::where('buyer_id', $buyer->id)->where('product_id', $id)->first();
+        if ($wishlistItem) {
+            $wishlistItem->delete();
+            return response()->json(['message' => 'Wishlist item deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Wishlist item not found'], 404);
+        }
     }
 }

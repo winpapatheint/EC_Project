@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Orders</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Orders</li>
                             </ol>
                         </nav>
                     </div>
@@ -56,8 +56,8 @@
                                 </div>
 
                                 <div class="profile-name">
-                                    <h3>nn</h3>
-                                    <h6 class="text-content">ee</h6>
+                                    <h3>{{ $user->name }}</h3>
+                                    <h6 class="text-content">{{ $user->email }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -93,12 +93,6 @@
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
-                            <li>
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                    <a class="nav-link btn" id="pills-profile-tab" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"></i>logout</a>
-                                </form>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -109,22 +103,35 @@
                     <!-- Orders Details Start -->
                         <div class="page-body">
                 <!-- tracking table start -->
+                
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-12">
+                        @php
+                            $price = 0;
+                            $subTotal  = 0;
+                            $totalAmount = 0;
+                            $orders = 0;
+                        @endphp
                             <div class="card">
                                 <div class="card-body">
                                     <div class="title-header title-header-block package-card">
+                                    @if($orderDetails->isNotEmpty())
+                                        @php
+                                            $orders = $orderDetails->first();
+                                        @endphp
+                                    @endif
                                         <div>
-                                            <h5>Order #36648</h5>
+                                            <h5>Order ID {{ $orders->order_id }}</h5>
                                         </div>
-                                        <div class="card-order-section">
+                                        <div class="card-order-section">   
                                             <ul>
-                                                <li>October 21, 2021 at 9:08 pm</li>
-                                                <li>6 items</li>
-                                                <li>Total $5,882.00</li>
-                                            </ul>
+                                                <li>{{ \Carbon\Carbon::parse($orders->created_at)->format('F d, Y') }}</li>
+                                                <li>{{ $orders->total_qty }} items</li>
+                                                <li>Total ¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</li>
+                                            </ul>    
                                         </div>
+                                    
                                     </div>
                                     <div class="bg-inner cart-section order-details-table">
                                         <div class="row g-4">
@@ -134,14 +141,10 @@
                                                         <thead>
                                                             <tr>
                                                                 <th colspan="2">Items</th>
-                                                                <th class="text-end" colspan="2">
-                                                                    <a href="javascript:void(0)"
-                                                                        class="theme-color">Edit
-                                                                        Items</a>
-                                                                </th>
                                                             </tr>
                                                         </thead>
-
+                                                        
+                                                        @foreach($orderDetails as $order)
                                                         <tbody>
                                                             <tr class="table-order">
                                                                 <td>
@@ -152,68 +155,30 @@
                                                                 </td>
                                                                 <td>
                                                                     <p>Product Name</p>
-                                                                    <h5>Outwear & Coats</h5>
+                                                                    <h5>{{ $order->product_name }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <p>Quantity</p>
-                                                                    <h5>1</h5>
+                                                                    <h5>{{ $order->qty }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <p>Price</p>
-                                                                    <h5>$63.54</h5>
+                                                                    <h5>¥ {{ number_format($order->price , 0, '.', ',') }}</h5>
                                                                 </td>
                                                             </tr>
 
-                                                            <tr class="table-order">
-                                                                <td>
-                                                                    <a href="javascript:void(0)">
-                                                                        <img src="assets/images/profile/2.jpg"
-                                                                            class="img-fluid blur-up lazyload" alt="">
-                                                                    </a>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Product Name</p>
-                                                                    <h5>Slim Fit Plastic Coat</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Quantity</p>
-                                                                    <h5>5</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Price</p>
-                                                                    <h5>$63.54</h5>
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr class="table-order">
-                                                                <td>
-                                                                    <a href="javascript:void(0)">
-                                                                        <img src="assets/images/profile/3.jpg"
-                                                                            class="img-fluid blur-up lazyload" alt="">
-                                                                    </a>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Product Name</p>
-                                                                    <h5>Men's Sweatshirt</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Quantity</p>
-                                                                    <h5>1</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <p>Price</p>
-                                                                    <h5>$63.54</h5>
-                                                                </td>
-                                                            </tr>
                                                         </tbody>
-
+                                                        @php
+                                                            $subTotal += $order->price;
+                                                        @endphp
+                                                        @endforeach
                                                         <tfoot>
                                                             <tr class="table-order">
                                                                 <td colspan="3">
                                                                     <h5>Subtotal :</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <h4>$55.00</h4>
+                                                                    <h4>¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
                                                                 </td>
                                                             </tr>
 
@@ -222,28 +187,22 @@
                                                                     <h5>Shipping :</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <h4>$12.00</h4>
+                                                                    <h4>¥ 500</h4>
                                                                 </td>
                                                             </tr>
-
-                                                            <tr class="table-order">
-                                                                <td colspan="3">
-                                                                    <h5>Tax(GST) :</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <h4>$10.00</h4>
-                                                                </td>
-                                                            </tr>
-
+                                                            @php       
+                                                                $totalAmount = $subTotal + 500
+                                                            @endphp
                                                             <tr class="table-order">
                                                                 <td colspan="3">
                                                                     <h4 class="theme-color fw-bold">Total Price :</h4>
                                                                 </td>
                                                                 <td>
-                                                                    <h4 class="theme-color fw-bold">$6935.00</h4>
+                                                                    <h4 class="theme-color fw-bold">¥ {{ number_format($totalAmount , 0, '.', ',') }}</h4>
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
+                                                        
                                                     </table>
                                                 </div>
                                             </div>
@@ -253,27 +212,25 @@
                                                     <div class="row g-4">
                                                         <h4>summery</h4>
                                                         <ul class="order-details">
-                                                            <li>Order ID: 5563853658932</li>
-                                                            <li>Order Date: October 22, 2018</li>
-                                                            <li>Order Total: $907.28</li>
+                                                            <li>Order ID: {{ $order->order_id }}</li>
+                                                            <li>Order Date: {{ $order->created_at }}</li>
+                                                            <li>Order Total: ¥ {{ number_format($totalAmount , 0, '.', ',') }}</li>
                                                         </ul>
 
                                                         <h4>shipping address</h4>
                                                         <ul class="order-details">
-                                                            <li>Gerg Harvell</li>
+                                                            <li>{{ $order->address }}</li>
                                                             <li>568, Suite Ave.</li>
                                                             <li>Austrlia, 235153 Contact No. 48465465465</li>
                                                         </ul>
 
                                                         <div class="payment-mode">
                                                             <h4>payment method</h4>
-                                                            <p>Pay on Delivery (Cash/Card). Cash on delivery (COD)
-                                                                available. Card/Net banking acceptance subject to device
-                                                                availability.</p>
+                                                            <p>{{ $order->payment_method }}</p>
                                                         </div>
 
                                                         <div class="delivery-sec">
-                                                            <h3>expected date of delivery: <span>october 22, 2018</span>
+                                                            <h3>expected date of delivery: <span>{{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('F d, Y') }}</span>
                                                             </h3>
                                                             <a href="order-tracking.html">track order</a>
                                                         </div>

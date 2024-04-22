@@ -1,6 +1,8 @@
 <x-guest-layout>
-
+<script src="https://www.paypal.com/sdk/js?client-id=AWssbr_5JCWSdK6IogXTxXSw8cVBeb_7gdVCtEue95EqSGYXuATz1fYcAduzXdf8e0k3713fP3tmuW7o&currency=JPY"> // Replace YOUR_CLIENT_ID with your sandbox client ID
+      </script>
     <!-- Breadcrumb Section Start -->
+    
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
             <div class="row">
@@ -54,7 +56,10 @@
                                                                 <input class="form-check-input" type="radio" name="jack"
                                                                     id="flexRadioDefault2" checked="checked">
                                                             </div>
-
+                                                            <input type="hidden" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
+                                                            <input type="hidden" name="buyer_id" value="{{ $buyeraddress->userid }}">
+                                                            
+                                                            
                                                             <div class="label">
                                                                 <label>{{ $buyeraddress->place }}</label>
                                                             </div>
@@ -67,8 +72,13 @@
                                                                 <li>
                                                                     <p class="text-content"><span
                                                                             class="text-title">Address
-                                                                            :</span>{{ $buyeraddress->address }}
+                                                                            :</span>{{ $buyeraddress->post_code }}
                                                                     </p>
+                                                                    <p class="text-content">{{ $buyeraddress->city }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->chome }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->building }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->room_no }}</p>
+
                                                                 </li>
 
                                                                 <li>
@@ -86,7 +96,6 @@
                                     </div>
                                 </li>
 
-
                                 <li>
                                     <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
@@ -98,111 +107,38 @@
                                         <div class="checkout-title">
                                             <h4>Payment Option</h4>
                                         </div>
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseFour">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="paypal"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="paypal" checked> PayPal</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        
+                                        <div class="row" style="margin-bottom: 50px;" id="paypaldiv">
+                                            <div class="col-lg-8 mx-auto">
+                                                <div class="text-center">
+                                                    <div id="paypal-button-container"></div>
                                                 </div>
-                                            </div>  
-                                        </div>  
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-
-                                                <div class="accordion-item">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="credit"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        name="flexRadioDefault" id="credit">
-                                                                    Credit or Debit Card</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                        data-bs-parent="#accordionFlushExample">
-                                                        <div class="accordion-body">
-                                                            <div class="row g-2">
-                                                                <div class="col-12">
-                                                                    <div class="payment-method">
-                                                                        <div
-                                                                            class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                            <input type="text" class="form-control"
-                                                                                id="credit2"
-                                                                                placeholder="Enter Credit & Debit Card Number">
-                                                                            <label for="credit2">Enter Credit & Debit
-                                                                                Card Number</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control"
-                                                                            id="expiry" placeholder="Enter Expiry Date">
-                                                                        <label for="expiry">Expiry Date</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="text" class="form-control" id="cvv"
-                                                                            placeholder="Enter CVV Number">
-                                                                        <label for="cvv">CVV Number</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xxl-4">
-                                                                    <div
-                                                                        class="form-floating mb-lg-3 mb-2 theme-form-floating">
-                                                                        <input type="password" class="form-control"
-                                                                            id="password" placeholder="Enter Password">
-                                                                        <label for="password">Password</label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="button-group mt-0">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <button
-                                                                                class="btn btn-light shopping-button">Cancel</button>
-                                                                        </li>
-
-                                                                        <li>
-                                                                            <button class="btn btn-animation">Use This
-                                                                                Card</button>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>  
-                                        </div>                                   
+                                            </div>
+                                        </div>
                                     </div>
-                                </li>
+                                </li> 
                             </ul>
                         </div>
                     </div>
                 </div>
-
+                @php
+                    $amount = 0;
+                    $amount1 = 0;
+                    $total = 0;
+                    $subTotal = 0;
+                    $totalqty = 0;
+                    $productIds = [];
+                    $sellerIds = [];
+                    $productColors = [];
+                    $productSizes = [];
+                    $productQuantities = [];
+                    $buyerId = $buyerAddress[0]->userid;
+                    $buyerPostCode = $buyerAddress[0]->post_code;
+                    $buyerCity = $buyerAddress[0]->city;
+                    $buyerChome = $buyerAddress[0]->chome;
+                    $buyerBuilding = $buyerAddress[0]->building;
+                    $buyerRoomCode = $buyerAddress[0]->room_no;
+                @endphp
                 <div class="col-lg-4">
                     <div class="right-side-summery-box">
                         <div class="summery-box-2">
@@ -210,7 +146,16 @@
                                 <h3>Order Summery</h3>
                             </div>
                             @foreach($cartLists as $cartlist)
+                            
                             <ul class="summery-contain">
+                                @php
+                                    $productIds[] = $cartlist->product_id;
+                                    $sellerIds[] = $cartlist->seller_id;
+                                    $productColors[] = $cartlist->product_color;
+                                    $productSizes[] = $cartlist->product_size;
+                                    $productQuantities[] = $cartlist->quantity;
+                                @endphp
+
                                 <li>
                                     <img src="../assets/images/vegetable/product/1.png"
                                         class="img-fluid blur-up lazyloaded checkout-image" alt="">
@@ -219,27 +164,32 @@
                                             @php
                                                 $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
                                                 $quantity = $cartlist->quantity;
-                                                $totalAmount = $discountedPrice * $quantity;
+                                                $amount = $discountedPrice * $quantity;
+                                                $subTotal += $amount; 
+                                                $totalqty += $quantity
                                             @endphp
-                                            <h4 class="price">¥ {{ $totalAmount }} </h4>
+                                            <h4 class="price">¥ {{ number_format($amount , 0, '.', ',') }}</h4>
                                         @else
                                             @php
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
-                                                $totalAmount1 = $sellingPrice * $quantity;
+                                                $amount1 = $sellingPrice * $quantity;
+                                                $subTotal += $amount1;
+                                                $totalqty += $quantity
                                             @endphp
-                                            <h4 class="price">¥ {{ $totalAmount1 }} </h4>
+                                            <h4 class="price">¥ {{ number_format($amount1 , 0, '.', ',') }}</h4>
                                         @endif
                                 </li>
                             </ul>
+                            <input type="hidden" name="totalqty" value="{{ $totalqty }}">
+                                  
                             @endforeach
                             <ul class="summery-total">
                                 <li>
-                                    @php
-                                        $subTotal = $totalAmount + $totalAmount1
-                                    @endphp
+
                                     <h4>Subtotal</h4>
-                                    <h4 class="price">¥ {{ $subTotal }} </h4>
+                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
+                                
                                 </li>
 
                                 <li>
@@ -248,28 +198,124 @@
                                 </li>
 
                                 <li>
-                                @php 
-                                    $discountPrice  =  $subTotal * ($discount / 100);
-                                @endphp
+
                                     <h4>Coupon/Code</h4>
-                                    <h4 class="price">¥ - {{ $discountPrice }}</h4>
+                                    <h4 class="price">¥ - {{ number_format($discount , 0, '.', ',') }}</h4>
                                 </li>
                                 @php 
-                                    $total  =  $subTotal + 500 + $discountPrice
+                                    $total  =  $subTotal + 500 - $discount
                                 @endphp
 
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
-                                    <h4 class="price">¥ {{ $total }}</h4>
+                                    <h4 class="price">¥ {{ number_format($total , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
+                            
                         </div>
-                        <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</button>
+                        
+
+                        <!-- Place Order button (initially hidden) -->
+                        <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold" id="placeOrderButton" style="display: none;">Place Order</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Checkout section End -->
+
+    <script type="text/javascript">
+
+paypal.Buttons({
+    style: {
+        layout: 'vertical',
+        color: 'blue',
+        shape: 'rect',
+        label: 'paypal',
+        height: 50
+    },
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: '{{ $total }}'
+                }
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            if (details.status == 'COMPLETED') {
+
+                purchasepaymentdone('{{ $total }}', function(result) {
+                    if(result==1){ 
+                      $('#paymentsuccessModal').modal('show');
+                    }
+                    else{
+                      $('#paymentfailModal').modal('show');
+                    }
+                  });
+               
+        } else {
+                $('#paymentfailModal').modal('show');
+            }
+        });
+    }
+}).render('#paypal-button-container'); 
+
+function purchasepaymentdone(total, callback) {
+    var Newproductid = <?php echo json_encode($productIds ); ?>; 
+    var Newbuyerid = <?php echo json_encode($buyerId ); ?>; 
+    var Newsellerid = <?php echo json_encode($sellerIds ); ?>; 
+    var Newcolor = <?php echo json_encode($productColors ); ?>; 
+    var Newsize = <?php echo json_encode($productSizes ); ?>; 
+    var Newquantity = <?php echo json_encode($productQuantities ); ?>;
+    var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
+    var Newamount = <?php echo json_encode($amount ); ?>;
+    var Newamount1 = <?php echo json_encode($amount1 ); ?>;
+    var Newtotalamount = <?php echo json_encode($total ); ?>;
+    var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
+    var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
+    var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>; 
+    var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>; 
+    var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>;
+
+    $.ajax({
+    url: '{{ route("payment_completed") }}',
+    type: 'POST',
+    data: {
+        _token: '{{ csrf_token() }}',
+        productid: Newproductid,
+        buyerid: Newbuyerid,
+        sellerid: Newsellerid,
+        color: Newcolor,
+        size: Newsize,
+        quantity: Newquantity,
+        totalqty: Newtotalqty,
+        amount: Newamount,
+        amount1: Newamount1,
+        totalamount: Newtotalamount,
+        postcode: Newbuyerpostcode,
+        city: Newbuyercity,
+        chome: Newbuyerchome,
+        building: Newbuyerbuilding,
+        room: Newbuyerroomcode,
+        payment: "PayPal"
+    },
+    async : false,
+    success: function(response) {
+        alert(response.message);
+    },
+    error: function(xhr, status, error) {
+        var errorMessage = xhr.status + ': ' + xhr.statusText;
+        alert('Error - ' + errorMessage);
+        // You can log the error to console for debugging purposes
+        console.error('Error: ' + errorMessage + 'error:' + response);
+    }
+});
+
+}
+</script>
+
 
 </x-guest-layout>

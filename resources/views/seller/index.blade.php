@@ -13,6 +13,7 @@
                             <div class="media-body p-0">
                                 <span class="m-0">Total Revenue</span>
                                 <h4 class="mb-0 counter">{{number_format($revenue) }}</h4>
+                                <h4 class="mb-0 counter">{{number_format($revenue) }}</h4>
                             </div>
                             <div class="align-self-center text-center">
                                 <i class="ri-database-2-line"></i>
@@ -130,7 +131,7 @@
                                                 <td>{{ $item->product->product_name }}</td>
                                                 <td>{{ $item->qty }}</td>
                                                 <td>￥{{ $item->price }}</td>
-                                                <td>￥{{ $item->amount }}</td>
+                                                <td>￥{{ $item->total_amount }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

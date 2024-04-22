@@ -23,12 +23,20 @@
                                             @error('name')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
+                                            <input class="form-control" type="text" name="name" value="{{ old('name') }}">
+                                            @error('name')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-2 mb-0">Email</label>
                                         <div class="col-sm-10">
+                                            <input class="form-control" type="email" name="email" value="{{ old('email') }}">
+                                            @error('email')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                             <input class="form-control" type="email" name="email" value="{{ old('email') }}">
                                             @error('email')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -43,6 +51,10 @@
                                             @error('password')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
+                                            <input type="password" name="password" class="form-control" value="{{ old('password') }}">
+                                            @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -51,6 +63,7 @@
                                             Password</label>
                                         <div class="col-sm-10">
                                             <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}">
+                                            <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}">
                                         </div>
                                     </div>
 
@@ -58,6 +71,10 @@
                                         <label class="form-label-title col-sm-2 mb-0">Phone
                                             Number</label>
                                         <div class="col-sm-10">
+                                            <input class="form-control" type="text" name="phone" value="{{ old('phone') }}">
+                                            @error('phone')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                             <input class="form-control" type="text" name="phone" value="{{ old('phone') }}">
                                             @error('phone')
                                                 <div class="text-danger">{{ $message }}</div>

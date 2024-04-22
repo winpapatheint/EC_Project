@@ -23,12 +23,14 @@ class SellerController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::find($id);
-        if ($user->created_by !== null) {
-            $id = $user->created_by;
-        }
-        else {
+
+        if ($user->created_by !== NULL) {
             $id = Auth::user()->id;
         }
+        else {
+            $id = $user->created_by;
+        }
+
         $revenue =Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
         $order = Order::where('seller_id',$id)->get();
         $pending = Order::where('seller_id',$id)->where('status', 'Pending')->get();
@@ -45,6 +47,7 @@ class SellerController extends Controller
     }
 
 
+
     public function profile()
     {
         $id = Auth::user()->id;
@@ -56,6 +59,7 @@ class SellerController extends Controller
 
         return view('seller.profile', compact('data', 'shop', 'prefecture'));
     }
+
 
 
     public function storeProfile(Request $request)
@@ -82,6 +86,7 @@ class SellerController extends Controller
         $data->save();
         return redirect('/dashboard');
     }
+
 
 
     public function updateShop(Request $request)
@@ -138,11 +143,13 @@ class SellerController extends Controller
     }
 
 
+
     public function help()
     {
         $helps = Help::latest()->paginate(4);
         return view('seller.help.help',compact('helps'));
     }
+
 
 
     public function detailHelp($id)
@@ -152,10 +159,12 @@ class SellerController extends Controller
     }
 
 
+
     public function addHelp()
     {
         return view('seller.help.help_add');
     }
+
 
 
     public function storeHelp(Request $request)
@@ -181,6 +190,7 @@ class SellerController extends Controller
         $help->save();
         return redirect('/help')->with('flash_message', 'Data added successfully');
     }
+
 
 
     public function deleteHelp($id)

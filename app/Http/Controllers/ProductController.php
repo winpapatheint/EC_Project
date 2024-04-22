@@ -72,6 +72,7 @@ class ProductController extends Controller
             'category_id' => 'required|string|max:255',
             'sub_category_title_id' => 'required|string|max:255',
             'sub_category_id' => 'required|string|max:255',
+            'sub_category_id' => 'required|string|max:255',
             'product_name' => 'required|string|max:255',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',
@@ -83,6 +84,7 @@ class ProductController extends Controller
             'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif',
             // 'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif',
             'estimate_date' => 'required|string|max:255',
+            'delivery_price' => 'required|string|max:255',
             'delivery_price' => 'required|string|max:255',
         ]);
 
@@ -249,6 +251,7 @@ class ProductController extends Controller
         MultiImg::findOrFail($id)->delete();
         return back()->with('flash_message', 'Image deleted successfully');
     }
+
 
     public function productList()
     {

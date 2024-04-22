@@ -28,6 +28,12 @@
         <div class="container-fluid-lg">
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-9">
+                    @php
+                        $totalAmount = 0;
+                        $totalAmount1 = 0;
+                        $subTotal = 0;
+                        $total = 0;
+                    @endphp
                     @foreach($cartLists as $cartlist)
                     <div class="cart-table">
                         <div class="table-responsive-xl">
@@ -47,42 +53,25 @@
                                                         </li>
 
                                                         <li class="text-content"><span class="text-title">Sold
-                                                                By:</span>{{ $cartlist->shop_name }}</li>
+                                                                By:</span>{{ $cartlist->shop_name }}
+                                                        </li>
 
                                                         <li class="text-content"><span
-                                                                class="text-title">Quantity</span>{{ $cartlist->product_name }}</li>
+                                                                class="text-title">Quantity</span>{{ $cartlist->product_name }}
+                                                        </li>
 
+                                                        <li class="text-content"><span
+                                                                class="text-title">Color</span>{{ $cartlist->product_color }}
+                                                        </li>
+                                                        <li class="text-content"><span
+                                                                class="text-title">Color</span>{{ $cartlist->product_size }}
+                                                        </li>
+                                                    
                                                         <li>
+
                                                             <h5 class="text-content d-inline-block">Price :</h5>
                                                             <span>{{ $cartlist->selling_price }}</span>
                                                             <span class="text-content"></span>
-                                                        </li>
-                                                        
-                                                        <li>
-                                                        
-                                                            <h5 class="saving theme-color">Saving : 20</h5>
-                                                        
-                                                        </li>
-
-                                                        <li class="quantity-price-box">
-                                                            <div class="cart_qty">
-                                                                <div class="input-group">
-                                                                    <button type="button" class="btn qty-left-minus"
-                                                                        data-type="minus" data-field="">
-                                                                        <i class="fa fa-minus ms-0"></i>
-                                                                    </button>
-                                                                    <input class="form-control input-number qty-input"
-                                                                        type="text" name="quantity" value="0">
-                                                                    <button type="button" class="btn qty-right-plus"
-                                                                        data-type="plus" data-field="">
-                                                                        <i class="fa fa-plus ms-0"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <h5>Total: $35.10</h5>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -93,10 +82,10 @@
                                         <td class="price">
                                             <h4 class="table-title text-content">Price</h4>
                                         @if($cartlist->discount_percent)
-                                            <h5>¥ {{ $discountedPrices[$cartlist->id]['discounted_price'] }}<del class="text-content">¥{{ $cartlist->selling_price }}</del></h5>
-                                            <h6 class="theme-color">You Save : ¥ {{ $discountedPrices[$cartlist->id]['save_amount'] }}</h6>  
+                                            <h5>¥ {{ number_format($discountedPrices[$cartlist->id]['discounted_price'], 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</del></h5>
+                                            <h6 class="theme-color">You Save : ¥ {{ number_format($discountedPrices[$cartlist->id]['save_amount'], 0, '.', ',') }}</h6>  
                                         @else
-                                            <h5>¥ {{ $cartlist->selling_price }}</h5>
+                                            <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</h5>
                                         @endif
                                         </td>
                       
@@ -105,11 +94,7 @@
                                             <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
-<<<<<<< HEAD
-                                                    <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id) }}">
-=======
-                                                    <form method="POST" action="{{ route('update_qty') }}">
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
+                                                    <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id, $cartlist->product_id) }}">
                                                         @csrf
                                                         <div class="input-group">
                                                             <button type="submit" class="btn qty-left-minus"
@@ -127,31 +112,31 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        
                                         <td class="subtotal">
                                             <h4 class="table-title text-content">Total</h4>
-                                        @if($cartlist->discount_percent)
+                                        @if($cartlist->discount_percent != 0)
                                             @php
                                                 $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
                                                 $quantity = $cartlist->quantity;
                                                 $totalAmount = $discountedPrice * $quantity;
+                                                $subTotal += $totalAmount;
                                             @endphp
-                                            <h5>¥ {{ $totalAmount }} </h5>
+                                            <h5>¥ {{ number_format($totalAmount , 0, '.', ',') }}</h5>
                                         @else
                                             @php
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
                                                 $totalAmount1 = $sellingPrice * $quantity;
+                                                $subTotal += $totalAmount1;
                                             @endphp
-                                            <h5>¥ {{ $totalAmount1 }} </h5>
+                                            <h5>¥ {{ number_format($totalAmount1 , 0, '.', ',') }} </h5>
                                         @endif
                                         </td>
                                            
                                         <td class="save-remove">
                                             <form method="POST" action="{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}">
                                                 @csrf
-                                                
-                                                <button type="submit" class=<a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">Remove</button>
+                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">Remove</button>
                                             </form>
                                         </td> 
                                     </tr>
@@ -167,9 +152,13 @@
                         <div class="summery-header">
                             <h3>Cart Total</h3>
                         </div>
-
-                        <div class="summery-contain">
-                            <form method="POST" action="{{ route('add_coupon_code') }}" >
+                        @if ($couponapplycheck == 1)
+                        <div class="alert alert-success alert-block" id="alert-success">
+                            <strong>Invalid Coupon Code</strong>
+                        </div>
+                        @endif
+                        <div class="summery-contain" id="ts-form">
+                            <form method="POST" action="{{ route('apply_coupon_code') }}" >
                                     @csrf                 
                                 <div class="coupon-cart">
                                     <input type="hidden" name="buyer_id" value="{{ $cartlist->buyer_id }}">
@@ -183,32 +172,20 @@
                             </form>
                             <ul>
                                 <li>
-                                    <h4>Subtotal</h4>
-                                    
-                                    @if($totalAmount1)
-                                        @php 
-                                        $subTotal  =  $totalAmount1
-                                        @endphp
-                                    @else
-                                        @php
-                                        $subTotal  = $totalAmount + $totalAmount1
-                                        
-                                        @endphp
-                                    @endif
-                                   
-                                    <h4 class="price">¥ {{ $subTotal }}</h4>
+                                    <h4>Subtotal</h4> 
+                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
                                 </li>
-
+                                
                                 <li>
-                                    <h4>Coupon Discount</h4>
-                                    
-                                        @php 
-                                        $discountPrice  =  $subTotal * ($discount / 100);
-                                        @endphp
-                                   
-                                    <h4 class="price">(-) ¥ {{ $discountPrice }}</h4>
-                                </li>
+                                    <h4>Coupon Discount</h4>   
+                                    @if ($couponapplycheck != 1)  
+                                    <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    @else
+                                    <h4 class="price"> (-) ¥ 0</h4>
+                                    @endif
 
+                                </li>
+                                
                                 <li class="align-items-start">
                                     <h4>Shipping</h4>
                                     <h4 class="price text-end">¥ 500</h4>
@@ -219,17 +196,16 @@
                         <ul class="summery-total">
                             <li class="list-total border-top-0">
                                 <h4>Total (JPY)</h4>
-<<<<<<< HEAD
-                                @if($discountPrice)
+                                @if($discount)
                                     @php 
-                                        $total  = $subTotal + $discountPrice + 500
+                                        $total  = $subTotal + 500 - $discount
                                     @endphp
                                 @else
                                     @php
                                         $total  = $subTotal + 500
                                     @endphp
                                 @endif
-                                <h4 class="price theme-color">¥ {{ $total }}</h4>
+                                <h4 class="price theme-color">¥ {{ number_format($total , 0, '.', ',') }}</h4>
                             </li>
                         </ul>              
                         <div class="button-group cart-button">
@@ -242,39 +218,25 @@
                                 
                             </ul>
                         </div>
-=======
-                                @php 
-                                    $total  = $subTotal + 500
-                                @endphp
-                                <h4 class="price theme-color">¥ {{ $total }}</h4>
-                            </li>
-                        </ul>
-                       
-                        <form method="POST" action="{{ route('checkout') }}" >
-                                    @csrf                 
-                            <div class="button-group cart-button">
-                                <ul>
-
-                                    <li>
-                                        <button type="submit"
-                                            class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
-                                    </li>
-                                    </form>
-                                    
-                                </ul>
-                            </div>
-                        </form>
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Cart Section End -->
+<script>
+    $(document).ready(function() {
+    $('.qty-right-plus').click(function(e){
+        e.preventDefault();
+        var fieldName = $(this).data('field');
+        var currentVal = parseInt($('input[name='+fieldName+']').val(), 10);
+        if (!isNaN(currentVal) && currentVal < 100) {
+            $('input[name='+fieldName+']').val(currentVal + 1);
+        } else {
+            $('input[name='+fieldName+']').val(100); // Set value to 100 if current value is NaN or already 100
+        }
+    });
+});
+</script>
 
 </x-guest-layout>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 58d557ca61aa15e1b8716fdda5c16ff463ed10b3

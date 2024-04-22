@@ -56,4 +56,13 @@ class Product extends Model
         return $this->belongsTo(SubCategoryTitle::class,'sub_category_title_id');
     }
 
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

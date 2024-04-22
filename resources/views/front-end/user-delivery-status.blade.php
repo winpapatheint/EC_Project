@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Delivery Status</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -20,7 +20,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Delivery Status</li>
                             </ol>
                         </nav>
                     </div>
@@ -87,7 +87,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -98,12 +98,6 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-                                </form>
                             </li>
                         </ul>
                     </div>
@@ -124,9 +118,11 @@
                                             </svg>
                                         </span>
                                     </div>
+                                   
                                     <div class="table-responsive dashboard-bg-box">
                                         <table class="table product-table">
                                             <thead>
+                                            
                                                 <tr>
                                                     <th scope="col">No</th>
                                                     <th scope="col">Date</th>
@@ -135,40 +131,46 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($order as $orders)
-                                                <tr>
-                                                    <td><h6>{{ $orders->order_id }}</h6></td>
-                                                    <td><h6>{{ $orders->created_at }}</h6></td> 
-                                                    <td><h6>{{ $orders->order_code }}</h6></td>
-                                                    <td class="status-close"><h6>Shipped</h6></td>
-                                                </tr>
-                                            @endforeach
+                                                @php $counter = 1; @endphp
+                                                @if (empty($processes))
+                                                    <tr>
+                                                        <td colspan="4" style="text-align: center">No data available</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach($orders as $order)
+                                                        <tr>
+                                                            <td><h6>{{ $counter++ }}</h6></td>
+                                                            <td><h6>{{ \Carbon\Carbon::parse($order->shipped_date)->format('F d, Y') }}</h6></td> 
+                                                            <td><h6>{{ $order->order_id }}</h6></td>
+                                                            @if (isset($processes[$order->order_id]))
+                                                                @php $item = $processes[$order->order_id]; @endphp
+                                                                @if (!empty($item->confirmed_date))
+                                                                    <td><p class="fw-bold">Confirmed</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->confirmed_date }}</p></td>
+                                                                @elseif (!empty($item->processing_date))
+                                                                    <td><p class="fw-bold">Processing</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->processing_date }}</p></td>
+                                                                @elseif (!empty($item->picked_date))
+                                                                    <td><p class="fw-bold">Picked</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->picked_date }}</p></td>
+                                                                @elseif (!empty($item->shipped_date))
+                                                                    <td><p class="fw-bold">Shipped</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->shipped_date }}</p></td>
+                                                                @else
+                                                                    <td><p class="fw-bold">Delivered</p></td>
+                                                                    <td><p class="fw-bold">{{ $item->delivered_date }}</p></td>
+                                                                @endif
+                                                            @else
+                                                                <td colspan="2"><p class="fw-bold">No process data available</p></td>
+                                                            @endif
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
                                         </table>
                                     </div>
                                     <div>
-                                        <nav class="custom-pagination">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                                                        <i class="fa-solid fa-angles-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript:void(0)">
-                                                        <i class="fa-solid fa-angles-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                        @include('components.pagination')
                                     </div>
                                 </div>
                             <!-- Delivery Status View End -->

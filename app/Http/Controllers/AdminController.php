@@ -5,40 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\Process;
 use App\Models\Category;
+use App\Models\SubCategoryTitle;
 use App\Models\Review;
 use App\Models\Seller;
+use App\Models\Help;
 use App\Models\MultiImg;
-use App\Models\Coupons;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-
 use Mail;
-
 use App\Providers\RouteServiceProvider;
-// use App\User;
 use DateTime;
-
-use App;
-
-use Response;
-
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\MsgNotiAdminUser;
-use App\Notifications\MsgNotiAdminHcompany;
-use App\Notifications\MsgNotiHcompanyHost;
-use App\Notifications\MsgNotiHostHcompany;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use Illuminate\Support\Facades\File;
     /**
      * Store a newly created resource in storage.
      *
@@ -50,19 +38,20 @@ class AdminController extends Controller
 {
     public function welcome()
     {
+
         $categories = Category::all();
 
-        $blogs = DB::table('Blog')
-                    ->select( 'U.name as authorby', 'Blog.*')
+        $blogs = DB::table('blogs')
+                    ->select( 'U.name as authorby', 'blogs.*')
                     ->join('users as U', function ($join) {
-                    $join->on('Blog.created_by', '=', 'U.id');
+                    $join->on('blogs.created_by', '=', 'U.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate(2);
 
-        $maxStarsRatedRow = DB::table('Reviews')
-                ->select('users.id', 'users.name','Reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
-                ->join('users', 'users.id', '=', 'Reviews.user_id')
-                ->groupBy('users.id', 'users.name','Reviews.comment')
+        $maxStarsRatedRow = DB::table('reviews')
+                ->select('users.id', 'users.name','reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
+                ->join('users', 'users.id', '=', 'reviews.user_id')
+                ->groupBy('users.id', 'users.name','reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
@@ -79,23 +68,23 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereMonth('orders.created_at', '=', Carbon::now()->month)
+            ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+            ->whereMonth('order_details.created_at', '=', Carbon::now()->month)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
 
         $trendingProducts = DB::table('products')
-            ->select('products.*', DB::raw('COUNT(orders.id) as total_orders'))
-            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
-            ->whereDate('orders.created_at', '=', Carbon::today())
+            ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+            ->whereDate('order_details.created_at', '=', Carbon::today())
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
             ->get();
 
-        $coupon = Coupons::first();
+        $coupon = Coupon::where('status', 1)->first();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -121,24 +110,40 @@ class AdminController extends Controller
 
     public function news()
     {
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
         $limit = 10;
 
-        $blogs = DB::table('Blog')
-                    ->select( 'U.name as authorby', 'Blog.*')
-                    ->join('users as U', function ($join) {
-                        $join->on('Blog.created_by', '=', 'U.id');
-                    })
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        if ($search) {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.title', 'like', '%' . $search . '%')
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
+        else {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
 
         $limit = 4;
-        $latestblog = DB::table('Blog')
+        $latestblog = DB::table('blogs')
                         ->orderBy('created_at', 'desc')
                         ->paginate($limit);
 
         $ttl = $blogs->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog'));
+        return view('front-end.blog-list',compact('blogs','ttlpage','ttl','latestblog', 'search'));
 
     }
 
@@ -476,7 +481,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Category')
+        $lists = DB::table('categories')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -494,7 +499,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Blog')
+        $lists = DB::table('blogs')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -510,10 +515,10 @@ class AdminController extends Controller
     {
         $limit = 10;
 
-        $lists = DB::table('Reviews')
-                    ->select( 'U.name as authorby', 'Reviews.*','U.*','Reviews.id','Reviews.status')
+        $lists = DB::table('reviews')
+                    ->select( 'U.name as authorby', 'reviews.*','U.*','reviews.id','reviews.status')
                     ->join('users as U', function ($join) {
-                        $join->on('Reviews.user_id', '=', 'U.id');
+                        $join->on('reviews.user_id', '=', 'U.id');
                     })
 
                     ->whereIn('role',['seller','buyer'])
@@ -536,7 +541,7 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Products')
+        $lists = DB::table('products')
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -600,8 +605,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.seller_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.seller_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -674,8 +679,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.seller_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.seller_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -705,34 +710,20 @@ class AdminController extends Controller
             $kword = '';
         }
 
-     $lists = DB::table('Categories')
-        ->select('Sb.id', 'Categories.category_name as category',  'Sb.sub_category_name','S.sub_category_titlename')
-        ->leftJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Categories.id', '=', 'S.category_id');
-        })
-        ->leftJoin('Sub_categories as Sb', function ($join) {
-            $join->on('Sb.sub_category_title_id', '=', 'S.id');
-            $join->on('Sb.category_id', '=', 'Categories.id');
-        })
 
-        ->orderBy('Sb.created_at', 'desc')
-        ->paginate($limit);
-
-        $listss = DB::table('Sub_categories')
-        ->select('Sub_categories.*','Categories.category_name as category','S.*')
+        $lists = DB::table('categories')
+                    ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
+                    ->leftJoin('sub_category_titles as S', function ($join) {
+                        $join->on('categories.id', '=', 'S.category_id');
+                    })
+                    ->leftJoin('sub_categories as Sb', function ($join) {
+                        $join->on('Sb.sub_category_title_id', '=', 'S.id');
+                        $join->on('Sb.category_id', '=', 'categories.id');
+                    })
 
 
-        ->rightJoin('Categories', function ($join) {
-            $join->on('Categories.id', '=', 'Sub_categories.category_id');
+                    ->paginate($limit);
 
-        })
-
-        ->rightJoin('Sub_category_titles as S', function ($join) {
-            $join->on('Sub_categories.sub_category_title_id', '=', 'S.id');
-        })
-
-        ->orderBy('Sub_categories.created_at', 'desc')
-        ->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -742,14 +733,27 @@ class AdminController extends Controller
 
     public function blogdetail($id)
     {
-        $blog = DB::table('blog')
-        ->select( 'blog.*')
-        ->where('blog.id',$id)->get();
-
+        $blog = DB::table('blogs')
+                ->select( 'blogs.*')
+                ->where('blogs.id',$id)->get();
         $blog = $blog[0];
 
         return view('admin.blog.blog_detail',compact('blog'));
     }
+
+    public function orderdetail($id)
+    {
+        $order = Order::find($id);
+        return view('admin.order.orderdetail',compact('order'));
+    }
+
+    public function orderTracking($id)
+    {
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        return view('admin.order.ordertracking',compact('order','process'));
+    }
+
 
     public function indexshop($id)
     {
@@ -795,8 +799,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -869,8 +873,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.category_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -935,8 +939,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -1009,8 +1013,8 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-                                    ->where('Products.category_id', $id)
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
+                                    ->where('products.category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1075,8 +1079,8 @@ class AdminController extends Controller
             $averageRated = Review::select('product_id',
                 DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
             )
-            ->join('Products', 'Products.id', '=', 'Reviews.product_id')
-            ->where('Products.sub_category_id', $id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->where('products.sub_category_id', $id)
             ->groupBy('product_id')
             ->get();
             $matchedProductIds = [];
@@ -1149,7 +1153,7 @@ class AdminController extends Controller
         $ratingWithProductCount = Review::select(
                                         DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
                                     )
-                                    ->join('products', 'products.id', '=', 'Reviews.product_id')
+                                    ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
                                     ->groupBy('product_id')
                                     ->get()
@@ -1173,32 +1177,50 @@ class AdminController extends Controller
 
     public function bloglistdetail($id)
     {
-        $blog = DB::table('blog')
-                    ->select( 'U.name as authorby', 'blog.*')
-                    ->join('users as U', function ($join) {
-                        $join->on('blog.created_by', '=', 'U.id');
-                    })
-                    ->where('blog.id',$id)->get();
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
 
-        $blog = $blog[0];
+        $search = $validated['search'] ?? null;
+        $limit = 10;
+
+        if ($search) {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.title', 'like', '%' . $search . '%')
+                        ->orderBy('created_at', 'desc')->paginate($limit);
+        }
+        else {
+            $blogs = DB::table('blogs')
+                        ->select( 'U.name as authorby', 'blogs.*')
+                        ->join('users as U', function ($join) {
+                            $join->on('blogs.created_by', '=', 'U.id');
+                        })
+                        ->where('blogs.id',$id)
+                        ->orderBy('created_at', 'desc')->get();
+                        $blog = $blogs[0];
+        }
 
         $limit = 4;
-        $latestblog = DB::table('Blog')
+        $latestblog = DB::table('blogs')
                     ->where('id','<>',$id)
                     ->orderBy('created_at', 'desc')
                     ->paginate($limit);
 
-        return view('front-end.blog-detail',compact('blog','latestblog'));
+        return view('front-end.blog-detail',compact('blog','latestblog','search'));
     }
 
     public function productdetail($id)
     {
-        $products = DB::table('Products')
-                    ->select( 'Products.*','Brands.*')
-                    ->join('Brands', function ($join) {
-                        $join->on('Brands.id', '=', 'Products.brand_id');
+        $products = DB::table('products')
+                    ->select( 'products.*','brands.*')
+                    ->join('brands', function ($join) {
+                        $join->on('brands.id', '=', 'products.brand_id');
                     })
-                    ->where('Products.id',$id)->get();
+                    ->where('products.id',$id)->get();
 
         // print_r($blog[0]->created_at);die;
         $product = $products[0];
@@ -1330,7 +1352,7 @@ class AdminController extends Controller
     }
     public function indexcouponstatus(Request $request)
     {
-        $coupon = Coupons::find($request->coupon_id);
+        $coupon = Coupon::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
         return redirect('/admin/profile')->back();
@@ -1405,7 +1427,7 @@ class AdminController extends Controller
 
         if (empty($request->id)) {
 
-            DB::table('faq')->insert([
+            DB::table('faqs')->insert([
                 'title' => $request->title,
                 'ans' => $request->ans,
                 'que' => $request->que,
@@ -1425,7 +1447,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('faq')->where('id',$request->id)->update($updval);
+            DB::table('faqs')->where('id',$request->id)->update($updval);
 
             return redirect('/admin/faq')->with('success','「'.$request->title.'」更新されました。');
 
@@ -1436,8 +1458,8 @@ class AdminController extends Controller
     public function indexfaq()
     {
         $limit = 10;
-        $lists = DB::table('faq')
-                    ->select('faq.*')
+        $lists = DB::table('faqs')
+                    ->select('faqs.*')
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1456,8 +1478,8 @@ class AdminController extends Controller
     public function indexcoupon()
     {
         $limit = 10;
-        $lists = DB::table('Coupons')
-                    ->select('Coupons.*')
+        $lists = DB::table('coupons')
+                    ->select('coupons.*')
                     ->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1468,12 +1490,10 @@ class AdminController extends Controller
 
     public function indexuser()
     {
-
         $limit = 10;
 
         // print_r($type);die;
 
-      //  $updval = array('status' => '1');
         $users = DB::table('users')
                     ->select('users.id','users.*')
                     ->whereIn('role',['seller','buyer'])
@@ -1483,10 +1503,6 @@ class AdminController extends Controller
                     ->orWhereNull('email_verified_at');
                     })
                     ->orderBy('created_at', 'desc')->paginate($limit);
-
-     //foreach ($users as $user) {
-            //DB::table('users')->where('id', $user->id)->update($updval);
-       // }
 
         $ttl = $users->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1517,8 +1533,6 @@ class AdminController extends Controller
 
     public function registersubadmin(Request $request)
     {
-
-
         $validator = $this->validatesubadmin($request);
 
         if($request->ajax()){
@@ -1539,7 +1553,6 @@ class AdminController extends Controller
             $role = $request->role;
         }
 
-
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
@@ -1559,8 +1572,6 @@ class AdminController extends Controller
             'user_photo' => $imageName,
         ]);
 
-        $user->markEmailAsVerified();
-
         event(new Registered($user));
 
         return redirect('admin/subadmin')->with('success','「'.$request->name.'」登録されました。');
@@ -1576,10 +1587,10 @@ class AdminController extends Controller
             $kword = '';
         }
 
-        $lists = DB::table('Sub_category_titles')
-                    ->select('C.category_name as category','Sub_category_titles.*')
-                    ->join('Categories as C', function ($join) {
-                    $join->on('Sub_category_titles.category_id', '=', 'C.id');
+        $lists = DB::table('sub_category_titles')
+                    ->select('C.category_name as category','sub_category_titles.*')
+                    ->join('categories as C', function ($join) {
+                    $join->on('sub_category_titles.category_id', '=', 'C.id');
                 })
                 ->orderBy('created_at', 'desc')->paginate($limit);
 
@@ -1595,36 +1606,38 @@ class AdminController extends Controller
 
     public function deletecategory(Request $request)
     {
-
-        $catlist =  DB::table('Categories')
-                        ->whereIn('id', function ($query) use ($request) {
-                        $query->select('category_id')
-                        ->from('Sub_category_titles')
-                        ->where('id',$request->id);
-                        })
-
-                        ->delete();
-
-        $subtitlelist = DB::table('Sub_category_titles')
-        ->delete($request->id);
-
-        return redirect('/admin/all/subcategory')->with('success','削除されました。');
-
+        $cat = SubCategoryTitle::find($request->id);
+        $categoryId = $cat->category_id;
+        DB::table('sub_category_titles')->where('id', $request->id)->delete();
+        $categoryIdExist = SubCategoryTitle::where('category_id', $categoryId)->exists();
+        if (!$categoryIdExist){
+            Category::where('id', $categoryId)->delete();
+        }
+        return redirect('/admin/category')->with('success','削除されました。');
     }
 
     public function deleteblog(Request $request)
     {
 
-        $data = DB::table('Blog')
+        $data = DB::table('blogs')
                     ->delete($request->id);
         return redirect('/admin/all/blog')->with('success','削除されました。');
+
+    }
+
+    public function deleteorderlist(Request $request)
+    {
+
+        $data = DB::table('orders')
+                    ->delete($request->id);
+        return redirect('/admin/orderlist')->with('success','削除されました。');
 
     }
 
     public function deletecoupon(Request $request)
     {
 
-        $data = DB::table('Coupons')
+        $data = DB::table('coupons')
                     ->delete($request->id);
         return redirect('admin/coupon')->with('success','削除されました。');
 
@@ -1633,7 +1646,7 @@ class AdminController extends Controller
     public function deletefaq(Request $request)
     {
 
-        $data = DB::table('faq')
+        $data = DB::table('faqs')
                     ->delete($request->id);
         return redirect('/admin/faq')->with('success','削除されました。');
 
@@ -1642,7 +1655,7 @@ class AdminController extends Controller
     public function deleteproduct(Request $request)
     {
 
-        $data = DB::table('Products')
+        $data = DB::table('products')
                     ->delete($request->id);
         return redirect('/admin/all/product')->with('success','削除されました。');
 
@@ -1668,23 +1681,24 @@ class AdminController extends Controller
     }
     public function addsubtitle()
     {
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
         return view('admin.addsubtitle',compact('categories'));
     }
 
     public function addsubcategory()
     {
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
         return view('admin.addsubcategory',compact('categories'));
     }
 
     public function editcategory($id)
     {
-        $data = DB::table('Categories')
+
+        $data = DB::table('categories')
                     ->find($id);
         $editmode = true;
 
@@ -1694,7 +1708,7 @@ class AdminController extends Controller
 
     public function editblog($id)
     {
-        $data = DB::table('Blog')
+        $data = DB::table('blogs')
                     ->find($id);
         $editmode = true;
 
@@ -1705,7 +1719,7 @@ class AdminController extends Controller
 
     public function editcoupon($id)
     {
-        $data = DB::table('Coupons')
+        $data = DB::table('coupons')
                     ->find($id);
         $editmode = true;
 
@@ -1715,7 +1729,7 @@ class AdminController extends Controller
 
     public function editfaq($id)
     {
-        $faq = DB::table('faq')
+        $faq = DB::table('faqs')
                     ->find($id);
         // print_r($faq);die;
         $editmode = true;
@@ -1723,35 +1737,76 @@ class AdminController extends Controller
         return view('admin.registerfaq',compact('faq','editmode'));
     }
 
+    public function updateMultiImg(Request $request)
+    {
+        $request->validate([
+            'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $imgs = $request->multi_img;
+        foreach($imgs as $id => $img)
+        {
+            $imgDel = MultiImg::findOrFail($id);
+            File::delete($imgDel->photo_name);
+        }
+        $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+        $img->move('upload/multiImg', $filename);
+        MultiImg::where('id',$id)->update([
+            'photo_name' => $filename,
+            'updated_at' => Carbon::now(),
+        ]);
+        return back()->with('flash_message', 'Image updated successfully');
+    }
+
+    public function deleteMultiImg($id)
+    {
+        $old_img = MultiImg::findOrFail($id);
+        File::delete($old_img->photo_name);
+        MultiImg::findOrFail($id)->delete();
+        return back()->with('flash_message', 'Image deleted successfully');
+    }
+
     public function editproduct($id)
     {
-        $brands = DB::table('Brands')->orderBy('created_at', 'desc')->get();
-        $countries = DB::table('Countries')->orderBy('created_at', 'desc')->get();
-        $categorylist = DB::table('Categories')->orderBy('created_at', 'desc')->get();
-        $subtitlelist = DB::table('Sub_category_titles')->orderBy('created_at', 'desc')->get();
-        $subcategorylist = DB::table('Sub_categories')->orderBy('created_at', 'desc')->get();
+        $brands = DB::table('brands')->orderBy('created_at', 'desc')->get();
+        $countries = DB::table('countries')->orderBy('created_at', 'desc')->get();
+        $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
+        $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
+        $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
+        $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+
+        $product_coupon = DB::table('products as P')
+                    ->select('P.coupon_id','P.coupon_status')
+                    ->where('P.id',$id)
+                    ->orderBy('P.created_at', 'desc')->first();
+
+        $couponlist = DB::table('coupons')
+                        ->select('coupons.id')
+                        ->where('id',$product_coupon->coupon_id)
+                        ->orderBy('created_at', 'desc')->first();
+
+
         $multiImgs = MultiImg::where('product_id',$id)->get();
-        $data = DB::table('Products as P')
+        $data = DB::table('products as P')
                 ->where('P.id',$id)
                 ->orderBy('P.created_at', 'desc')->first();
 
         $editmode = true;
 
-        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs'));
+        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs','coupons','couponlist','product_coupon'));
 
     }
 
     public function editsubtitle($id)
     {
-        $subtitle = DB::table('Sub_category_titles')
+        $subtitle = DB::table('sub_category_titles')
                     ->find($id);
 
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+        $categories = DB::table('categories')
+                    ->select('categories.*')
+                    ->orderBy('categories.created_at', 'asc')->get();
 
-        $category = DB::table('Categories')
-                    ->select('Categories.*')
+        $category = DB::table('categories')
+                    ->select('categories.*')
                     ->where('id', $subtitle->sub_category_id)
                     ->pluck('id')->toArray();
 
@@ -1760,38 +1815,68 @@ class AdminController extends Controller
 
     }
 
-    public function editsubcategory($id)
+    public function editsubcategory($type,$id)
     {
+        if($type==3)
+        {
+            $subtitle = DB::table('sub_categories')
+                        ->find($id);
 
-        $subtitle = DB::table('Sub_categories')
-                    ->find($id);
+            $subcat_id = DB::table('sub_categories')
+                        ->select('sub_categories.sub_category_title_id')
+                        ->where('id',$id)->first();
 
-        $subcat_id = DB::table('Sub_categories')
-                    ->select('Sub_categories.sub_category_title_id')
-                    ->where('id',$id)->first();
+            $subcategory_titlename = DB::table('sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
 
-        $subcategory_titlename = DB::table('Sub_category_titles')->where('id',$subcat_id->sub_category_title_id)->first();
-
-        $categories = DB::table('Categories')
-                    ->select('Categories.*')
-                    ->orderBy('Categories.created_at', 'asc')->get();
+            $categories = DB::table('categories')
+                        ->select('categories.*')
+                        ->orderBy('categories.created_at', 'asc')->get();
 
 
-        $category = DB::table('Sub_category_titles')
-                    ->select('S.sub_category_name as subcategory_name')
-                    ->join('Sub_categories as S', function ($join) {
-                    $join->on('Sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
-                })
-                ->orderBy('Sub_category_titles.created_at', 'desc')->get();
+            $category = DB::table('sub_category_titles')
+                        ->select('S.sub_category_name as subcategory_name')
+                        ->join('sub_categories as S', function ($join) {
+                        $join->on('sub_category_titles.sub_category_id', '=', 'S.sub_category_title_id');
+                    })
+                    ->orderBy('sub_category_titles.created_at', 'desc')->get();
 
-        $subcategory_name = DB::table('Sub_categories')
-                            ->select('Sub_categories.sub_category_name')
-                            ->where('id', $id)
-                            ->first();
+            $subcategory_name = DB::table('sub_categories')
+                                ->select('sub_categories.sub_category_name')
+                                ->where('id', $id)
+                                ->first();
 
-        $editmode = true;
 
-        return view('admin.editcategory',compact('subcat_id','subtitle','categories','subcategory_titlename','subcategory_name','editmode'));
+            $editmode = true;
+
+            return view('admin.editcategory',compact('subcat_id','subtitle','categories','subcategory_titlename','subcategory_name','editmode'));
+        }
+        else if($type == 1)
+        {
+            $data = DB::table('categories')
+                        ->find($id);
+            $editmode = true;
+
+            return view('admin.addcategory',compact('data','editmode'));
+        }
+        else
+        {
+            $subtitle = DB::table('sub_category_titles')
+                            ->find($id);
+
+            $categories = DB::table('categories')
+                        ->select('categories.*')
+                        ->orderBy('categories.created_at', 'asc')->get();
+
+            $category = DB::table('categories')
+                        ->select('categories.*')
+                        ->where('id', $subtitle->sub_category_id)
+                        ->pluck('id')->toArray();
+
+            $editmode = true;
+
+            return view('admin.editsubcattitle',compact('subtitle','categories','category','editmode'));
+        }
+
 
     }
 
@@ -1810,7 +1895,7 @@ class AdminController extends Controller
         if (empty($request->id)) {
 
             foreach ($subtitle_arr as $subtitle) {
-                DB::table('Sub_category_titles')->insertOrIgnore([
+                DB::table('sub_category_titles')->insertOrIgnore([
                     'category_id' => $request->category,
                     'sub_category_id' => $request->category,
                     'sub_category_titlename' => $subtitle,
@@ -1821,7 +1906,7 @@ class AdminController extends Controller
             }
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
 
@@ -1831,9 +1916,9 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_category_titles')->where('id',$request->id)->update($updval);
+            DB::table('sub_category_titles')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
 
     }
@@ -1855,7 +1940,7 @@ class AdminController extends Controller
         $time = new DateTime();
         if (empty($request->id)) {
 
-                DB::table('Sub_categories')->insert([
+                DB::table('sub_categories')->insert([
                     'category_id' => $request->category,
                     'sub_category_name' => $request->subname,
                     'sub_category_title_id' => $request->subcategory,
@@ -1864,7 +1949,7 @@ class AdminController extends Controller
                     ]);
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
             $updval = array( 'category_id' => $request->category,
@@ -1873,68 +1958,116 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
-            DB::table('Sub_categories')->where('id',$request->id)->update($updval);
+            DB::table('sub_categories')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
         }
 
     }
 
     public function contact(Request $request)
     {
-
-        $inquiry_email = 'info-test@asia-hd.com';
         if ($request->from == 'faq') {
-           if(empty($request->id))
-           {
-            $valarr = array('name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'subject' => 'required|not_in:0',
-            'phone' => 'required|string|max:255',
-            'message' => 'required',
+            $inquiry_email = 'info-test@asia-hd.com';
 
-        );
-        $request->validate($valarr);
+            $valarr = array(
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
 
-        // print_r("$request->check");die;
-        $validator = Validator::make($request->all(), $valarr,
-                    [
-                        'phone.required' => '電話番号を入力してください',
-                        'phone.regex' => '有効な電話番号を入力してください',
-                    ]);
+            );
+            $request->validate($valarr);
 
-        if($request->ajax()){
+            $data = array('name'=>$request->name);
 
-            if ($validator->passes()) {
-                return response()->json(['success'=>'allpasses']);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
             }
-        return response()->json(['error'=>$validator->errors()]);
-
-        }
-    }
-
-        $data = array('name'=>$request->name);
-
-        if (!empty($request->email)) {
-          $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-             $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
-             $message->from($request->email,$request->name);
-             $message->setBody("RISE MORE SUPPORT 公式サイトから、以下の問い合わせがありました。
-             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-             \r\n名前：　".$request->name."
-             \r\n"."メールアドレス：　".$request->email."
-             \r\n
-             \r\n"."お問い合わせ内容：　
-             \r\n".$request->message."
-             \r\n
-             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-          });
-        }
 
             return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
 
+
         }
 
+        else if( $request->from == 'contact')
+        {
+            $inquiry_email = 'info-test@asia-hd.com';
+
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
+            ]);
+
+            $data = array('name'=>$request->name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+
+                });
+            }
+
+            return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
+        }
+        else if( $request->from == 'privacy')
+        {
+            $inquiry_email = 'info-test@asia-hd.com';
+
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'phone' => 'required|string|max:255',
+                'message' => 'required',
+            ]);
+
+            $data = array('name'=>$request->name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->from($request->email,$request->name);
+                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$request->name."
+                    \r\n"."メールアドレス：　".$request->email."
+                    \r\n
+                    \r\n"."お問い合わせ内容：　
+                    \r\n".$request->message."
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+
+                });
+            }
+
+            return redirect('/privacy-policy#privacy-form')->with('success','お問い合わせ内容が正常に送信されました。');
+
+        }
     }
 
     public function storeblog(Request $request)
@@ -1962,7 +2095,7 @@ class AdminController extends Controller
 
        if (empty($request->id)) {
 
-           DB::table('Blog')->insert([
+           DB::table('blogs')->insert([
                'title' => $request->title,
                'content' => $request->content,
                'image' => $imageName,
@@ -1987,7 +2120,7 @@ class AdminController extends Controller
                $updval['image'] = $imageName;
            }
 
-           DB::table('Blog')->where('id',$request->id)->update($updval);
+           DB::table('blogs')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/all/blog')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -2018,7 +2151,7 @@ class AdminController extends Controller
 
        if (empty($request->id)) {
 
-           DB::table('Coupons')->insert([
+           DB::table('coupons')->insert([
                'name' => $request->title,
                'coupon_code' => $request->code,
                'discount_amount' => $request->disamount,
@@ -2042,7 +2175,7 @@ class AdminController extends Controller
                             'updated_at' => $time->format('Y-m-d H:i:s')
                            );
 
-           DB::table('Coupons')->where('id',$request->id)->update($updval);
+           DB::table('coupons')->where('id',$request->id)->update($updval);
 
            return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
@@ -2065,11 +2198,11 @@ class AdminController extends Controller
         $sellerAmount = $discountedPrice - $commisonAmount;
 
         $adminAmount = $discountedPrice -  $sellerAmount;
-
         $updval = array('product_code' => $request->productcode,
                         'product_name' => $request->productname,
                         'country_id' => $request->country,
                         'brand_id' => $request->brand,
+                        'coupon_id' => $request->coupon,
                         'category_id' => $request->category,
                         'sub_category_title_id' => $request->subcattitle,
                         'sub_category_id' => $request->subcategory,
@@ -2099,10 +2232,19 @@ class AdminController extends Controller
             if (!empty($request->product_thambnail)) {
                 $updval['product_thambnail'] = $imageName;
             }
+            if (!empty($request->status)) {
+                if($request->status === 'yes')
+                {
+                    $updval['coupon_status'] = 1;
+                }
+                else{
+                    $updval['coupon_status'] = 0;
+                }
+            }
 
-            DB::table('Products')->where('id',$request->id)->update($updval);
+            DB::table('products')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
     }
 
     public function storecategory(Request $request)
@@ -2125,18 +2267,11 @@ class AdminController extends Controller
             $imageName = '';
         }
 
-       // if (!empty($request->image)) {
-          // $imageName = time().'.'.$request->image->extension();
-           // $request->image->move(public_path('images'), $imageName);
-        //} else {
-          //  $imageName = '';
-      //  }
-
         $time = new DateTime();
 
         if (empty($request->id)) {
 
-            DB::table('Categories')->insert([
+            DB::table('categories')->insert([
                 'category_name' => $request->title,
                 'category_icon' => $imageName,
                 'created_at' => $time->format('Y-m-d H:i:s'),
@@ -2144,7 +2279,7 @@ class AdminController extends Controller
             ]);
 
             $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-            return redirect('/admin/all/subcategory')->with('success', $msg );
+            return redirect('/admin/category')->with('success', $msg );
         } else {
 
             $updval = array('category_name' => $request->title,
@@ -2155,17 +2290,16 @@ class AdminController extends Controller
                 $updval['category_icon'] = $imageName;
             }
 
-            DB::table('Categories')->where('id',$request->id)->update($updval);
+            DB::table('categories')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/all/subcategory')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
         }
-
     }
 
     public function getSubcategories(Request $request) {
 
-        $subcategories =   DB::table('Sub_category_titles')->where('sub_category_id','=',$request->category)->get();
+        $subcategories =   DB::table('sub_category_titles')->where('sub_category_id','=',$request->category)->get();
         return response()->json([
             'status' => 'success',
             'subcategories' => $subcategories,
@@ -2173,6 +2307,37 @@ class AdminController extends Controller
 
     }
 
+    public function indexorderlist()
+    {
+        $order = Order::latest()->paginate(10);
+        return view('admin.order.indexorderlist',compact('order'));
 
+    }
+
+    public function admindashboard()
+    {
+        $limit=5;
+        $transfer = Order::latest()->paginate($limit);
+        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                        ->whereYear('created_at', date('Y'))
+                        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                        ->pluck('count', 'month_name');
+        $ttl = $transfer->total();
+        $ttlpage = (ceil($ttl / $limit));
+        $labels = $orders->keys();
+        $data = $orders->values();
+        return view('admin.index',compact('labels', 'data','transfer','ttl','ttlpage'));
+    }
+
+    public function indexhelp()
+    {
+        $helps = Help::latest()->paginate(4);
+        return view('admin.indexhelp',compact('helps'));
+    }
+
+    public function addHelp()
+    {
+        return view('admin.addhelp');
+    }
 
 }

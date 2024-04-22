@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Discount Product List</h2>
+                        <h2>Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Discount Product List</li>
+                                <li class="breadcrumb-item active">Discounted Product</li>
                             </ol>
                         </nav>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="top-filter-menu">
                             <div class="grid-option d-none d-md-block">
                                 <ul>
-                                    <li class="three-grid">
+                                    <li class="three-grid active">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -55,7 +55,7 @@
                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
                                         </a>
                                     </li>
-                                    <li class="list-btn active">
+                                    <li class="list-btn">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/list.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
@@ -66,7 +66,7 @@
                     </div>
 
                     <div
-                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section list-style">
+                        class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                         @foreach ($products as $product)
                             @if ($product->status == 1)
                             @php
@@ -105,7 +105,7 @@
                                             </li>
                                             {{-- remain --}}
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                <a href="{{ url('/wishlist') }}" class="notifi-wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
                                                     <i data-feather="heart"></i>
                                                 </a>
                                             </li>
@@ -135,6 +135,7 @@
                                         <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             @if ($product->discount_percent != null)
                                             <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
+                                            @endif
                                         </h5>
                                     </div>
                                 </div>
@@ -219,7 +220,7 @@
                                             <h5>Brand Name:</h5>
                                             <h6>
                                                 @php
-                                                    $brand = DB::table('Brands')->where('id',$product->brand_id)->first();
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
                                                 @endphp
                                                 {{ $brand->brand_name }}
                                             </h6>
@@ -238,7 +239,7 @@
                                             <h5>Category:</h5>
                                             <h6>
                                                 @php
-                                                    $category = DB::table('Categories')->where('id',$product->category_id)->first();
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
                                                 @endphp
                                                 {{ $category->category_name }}
                                             </h6>
@@ -247,14 +248,14 @@
                                 </ul>
                                 {{-- remain --}}
                                 <div class="modal-button">
-                                    <form method="POST" action="{{ route('show_carts') }}" >
+                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
                                             class="btn btn-md add-cart-button icon">Add
                                             To Cart</button>
                                     </form>
                                     
-                                    <button onclick="location.href = 'product-left.html';"
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
                                         View More Details</button>
                                 </div>

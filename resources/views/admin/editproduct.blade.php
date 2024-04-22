@@ -164,7 +164,7 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="col-sm-3 form-label-title">Price</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" value="{{  $data->selling_price }}">
+                                                    <input class="form-control" name="selling_price" type="number" placeholder="0" min="1" value="{{  $data->original_price }}">
 
                                                 </div>
                                             </div>
@@ -202,6 +202,44 @@
                                                 </div>
                                             </div>
 
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Coupon</label>
+                                                <div class="col-sm-9">
+                                                    <select class="js-example-basic-single w-100" name="coupon" id="coupon">
+                                                        <option value="0">select Coupon</option>
+
+                                                        @if($couponlist == null)
+                                                            @foreach($coupons as $key => $value)
+                                                                <option value="{{ $value -> id }}">
+                                                                    {{ $value -> coupon_code }}
+                                                                </option>
+                                                            @endforeach
+                                                        @else
+
+                                                            @foreach($coupons as $coupon)
+
+                                                                <option value="{{ $coupon -> id }}" @if($coupon->id == $couponlist->id) selected @endif>
+                                                                    {{ $coupon -> coupon_code }}
+                                                                </option>
+                                                            @endforeach
+                                                        @endif
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Coupon status</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="js-example-basic-single w-100" name="status" id="status">
+                                                            <option value="0">Select Coupon Status</option>
+                                                            <option value="yes" @if($product_coupon->coupon_status == 1 ) selected @endif>Yes</option>
+                                                            <option value="no"  @if($product_coupon->coupon_status == 0 ) selected @endif>No</option>
+                                                        </select>
+                                                    </div>
+                                            </div>
+
                                             <button type="submit" class="btn btn-animation ms-auto fw-bold">
                                                 @if (!$editmode)
                                                     <i class="fa fa-user-plus" aria-hidden="true"></i>
@@ -232,7 +270,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <form class="theme-form theme-form-2 mega-form" method="post" action="{{ route('update.multiImg') }}"
+                                            <form class="theme-form theme-form-2 mega-form" method="post" action="{{ route('updatemultiImg') }}"
                                               enctype="multipart/form-data">
                                                 @csrf
                                                 @foreach ($multiImgs as $key => $img)
@@ -243,7 +281,7 @@
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="submit" class="btn btn-primary px-4" value="Update">
-                                                                <a href="{{ route('delete.multiImg',$img->id) }}" class="btn btn-secondary px-4">Delete</a>
+                                                                <a href="{{ route('deletemultiImg',$img->id) }}" class="btn btn-secondary px-4">Delete</a>
                                                             </div>
                                                         </td>
                                                     </tr>

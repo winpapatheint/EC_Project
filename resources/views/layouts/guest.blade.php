@@ -2,14 +2,15 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Fastkart">
     <meta name="keywords" content="Fastkart">
     <meta name="author" content="Fastkart">
-    <link rel="icon" href="../assets/images/favicon/1.png" type="image/x-icon">
-    <title>On-demand last-mile delivery</title>
+    <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <title>Asian food museum</title>
 
     <!-- Google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -78,7 +79,7 @@
                     <div class="col-xxl-3 d-xxl-block d-none">
                         <div class="top-left-header">
                             <i class="iconly-Location icli text-white"></i>
-                            <span class="text-white">1418 Riverwood Drive, CA 96052, US</span>
+                            <span class="text-white">4-27-5 Ikebukuro, Toshima-ku, Tokyo</span>
                         </div>
                     </div>
 
@@ -87,19 +88,7 @@
                             <div class="notification-slider">
                                 <div>
                                     <div class="timer-notification">
-                                        <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                            every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
-                                            </strong>
-
-                                        </h6>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="timer-notification">
-                                        <h6>Something you love is now on sale!
-                                            <a href="shop-left-sidebar.html" class="text-white">Buy Now
-                                                !</a>
+                                        <h6><strong class="me-1">Welcome to the アジア食彩館 EC site!</strong>
                                         </h6>
                                     </div>
                                 </div>
@@ -115,21 +104,21 @@
                                         data-bs-toggle="dropdown">
                                         <img src="../assets/images/country/united-states.png"
                                             class="img-fluid blur-up lazyload" alt="">
-                                        <span>English</span>
+                                        <span>Japanese</span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="english">
                                                 <img src="../assets/images/country/united-kingdom.png"
                                                     class="img-fluid blur-up lazyload" alt="">
-                                                <span>English</span>
+                                                <span>Japanese</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="france">
                                                 <img src="../assets/images/country/germany.png"
                                                     class="img-fluid blur-up lazyload" alt="">
-                                                <span>Japanese</span>
+                                                <span>English</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -137,21 +126,7 @@
                             </li>
                             <li class="right-nav-list">
                                 <div class="dropdown theme-form-select">
-                                    <button class="btn dropdown-toggle" type="button" id="select-dollar"
-                                        data-bs-toggle="dropdown">
-                                        <span>USD</span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end sm-dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" id="aud" href="javascript:void(0)">AUD</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="eur" href="javascript:void(0)">EUR</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="cny" href="javascript:void(0)">CNY</a>
-                                        </li>
-                                    </ul>
+                                        <span>JPY</span>
                                 </div>
                             </li>
                         </ul>
@@ -171,7 +146,7 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </span>
                             </button>
-                            <a href="index.html" class="web-logo nav-logo">
+                            <a href="/" class="web-logo nav-logo">
                                 <img src="{{ asset('images/logos/logo_foods.png') }}" class="img-fluid blur-up lazyload" alt="">
                             </a>
 
@@ -187,14 +162,6 @@
                                     </button>
                                 </div>
 
-                                {{--<div class="search-box">
-                                    <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="I'm searching for..." id="mainSearch">
-                                        <a href="{{ route('show-product') }}?mainSearch={{ urlencode(request()->input('search')) }}" id="searchButton"><button class="btn" type="button" id="button-addon2">
-                                            <i data-feather="search"></i>
-                                        </button></a>
-                                    </div>
-                                </div>--}}
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
@@ -230,7 +197,7 @@
                                         </div>
                                     </li>
                                     <li class="right-side">
-                                        <a href="contact-us.html" class="delivery-login-box">
+                                        <a href="{{ url('/contact') }}" class="delivery-login-box">
                                             <div class="delivery-icon">
                                                 <i data-feather="phone-call"></i>
                                             </div>
@@ -247,66 +214,72 @@
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
+                                            <a href="">
                                             <button type="button" class="btn p-0 position-relative header-wishlist">
                                                 <i data-feather="shopping-cart"></i>
-                                                <span class="position-absolute top-0 start-100 translate-middle badge">2
+                                                @php
+                                                    $userCarts = collect([]);
+                                                    $count = 0;
+                                                @endphp
+                                                @if(!empty(Auth::user()))
+                                                @php
+                                                    $userCarts = DB::table('carts')
+                                                                    ->join('products', 'carts.product_id', '=', 'products.id')
+                                                                    ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                                                                    ->where('buyers.user_id', Auth::user()->id)->get();
+                                                    $count = $userCarts->count();
+                                                @endphp
+                                                @endif
+                                                <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                    {{ $count }}
                                                     <span class="visually-hidden">unread messages</span>
                                                 </span>
                                             </button>
+                                            </a>
 
-                                            <div class="onhover-div">
-                                                <ul class="cart-list">
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="../assets/images/vegetable/product/1.png"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
-
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Fantasy Crunchy Choco Chip Cookies</h5>
+                                            @if (!empty(Auth::user()))
+                                                <div class="onhover-div">
+                                                    <ul class="cart-list">
+                                                    @php
+                                                        $total = 0;
+                                                    @endphp
+                                                    @foreach ($userCarts as $cart)
+                                                        <li class="product-box-contain">
+                                                            <div class="drop-cart">
+                                                                <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
+                                                                    <img src="{{ asset('upload/product_thambnail/'.$cart-> product_thambnail) }}"
+                                                                        class="blur-up lazyload" alt="" width="87" height="73">
                                                                 </a>
-                                                                <h6><span>1 x</span> $80.58</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
+
+                                                                <div class="drop-contain">
+                                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
+                                                                        <h5>{{ $cart->product_name }}</h5>
+                                                                    </a>
+                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <button class="close-button close_button">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                        @php
+                                                            $total += $cart->selling_price * $cart->quantity;
+                                                        @endphp
+                                                    @endforeach
+                                                    </ul>
 
-                                                    <li class="product-box-contain">
-                                                        <div class="drop-cart">
-                                                            <a href="product-left-thumbnail.html" class="drop-image">
-                                                                <img src="../assets/images/vegetable/product/2.png"
-                                                                    class="blur-up lazyload" alt="">
-                                                            </a>
+                                                    <div class="price-box">
+                                                        <h5>Total :</h5>
+                                                        <h4 class="theme-color fw-bold">¥{{ $total }}</h4>
+                                                    </div>
 
-                                                            <div class="drop-contain">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5>Peanut Butter Bite Premium Butter Cookies 600 g
-                                                                    </h5>
-                                                                </a>
-                                                                <h6><span>1 x</span> $25.68</h6>
-                                                                <button class="close-button close_button">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-                                                <div class="price-box">
-                                                    <h5>Total :</h5>
-                                                    <h4 class="theme-color fw-bold">$106.58</h4>
+                                                    <div class="button-group">
+                                                        <a href="{{ route('show_carts') }}" class="btn btn-sm cart-button">View Cart</a>
+                                                        {{--<a href="{{ url('/checkout') }}" class="btn btn-sm cart-button theme-bg-color
+                                                        text-white">Checkout</a> --}}
+                                                    </div>
                                                 </div>
-
-                                                <div class="button-group">
-                                                    <a href="{{ url('/cart') }}" class="btn btn-sm cart-button">View Cart</a>
-                                                    <a href="{{ url('/checkout') }}" class="btn btn-sm cart-button theme-bg-color
-                                                    text-white">Checkout</a>
-                                                </div>
-                                            </div>
+                                            @endif
                                         </div>
                                     </li>
                                     <li class="right-side onhover-dropdown">
@@ -337,13 +310,12 @@
                                                 <li class="product-box-contain">
                                                     <form method="POST" action="{{ route('adminlogout') }}">
                                                     @csrf
-                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
+                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
                                                     </form>
-                                                </li>                                    
+                                                </li>
                                             </ul>
-                                        </div>       
+                                        </div>
                                         @endif
-
                                     </li>
                                 </ul>
                             </div>
@@ -364,57 +336,34 @@
                             </button>
 
                             <div class="category-dropdown">
-                                <div class="category-title">
-                                    <h5>Categories</h5>
-                                    <button type="button" class="btn p-0 close-button text-content">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-
+                            @foreach ($categories as $category)
                                 <ul class="category-list">
-                                @foreach ($categories as $category)
-                                @if ($category['name'] != 'Asia Menu')
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
-                                            <img src="{{ asset('frontend/assets/svg/1/'.$category['icon']) }}" alt="">
-                                            <h6>{{ $category['name'] }}</h6>
+                                            <img src="{{ asset('images/'.$category->category_icon) }}" alt="">
+                                            <h6>{{ $category->category_name }}</h6>
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
 
-                                        <div class="onhover-category-box">
-                                            @if (!empty($category['subcategories']))
-                                            @php
-                                            $displayedCategories = [];
-                                            @endphp
-                                            @foreach ($category['subcategories'] as $subcategory)
-                                            @if (!in_array($subcategory['subid'], $displayedCategories))
+                                        <div class="onhover-category-box" style="height: fit-content;">
+                                        @foreach ($category->subCategoryTitle as $subCategoryTitle)
                                             <div class="list-1">
                                                 <div class="category-title-box">
-                                                    <h5>{{ $subcategory['name'] }}</h5>
+                                                    <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                 </div>
+                                                @foreach ($subCategoryTitle->subCategory as $subCategory)
                                                 <ul>
-                                                    @foreach ($category['sub'] as $sub)
-                                                    @if($sub['id']==$subcategory['subid'])
                                                     <li>
-                                                        <a href="{{ url('/subcategorysidebar/'.$sub['id'])}}">{{ $sub['name'] }}</a>
+                                                        <a href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">{{ $subCategory->sub_category_name }}</a>
                                                     </li>
-                                                    @endif
-                                                    @endforeach
                                                 </ul>
-
+                                                @endforeach
                                             </div>
-                                            @php
-                                            $displayedCategories[] = $subcategory['subid'];
-                                            @endphp
-                                            @endif
-                                            @endforeach
-                                            @endif
+                                        @endforeach
                                         </div>
                                     </li>
-                                @endif
-                                @endforeach
-
                                 </ul>
+                            @endforeach
                             </div>
                         </div>
 
@@ -426,7 +375,7 @@
                                         <button class="btn-close lead" type="button"
                                             data-bs-dismiss="offcanvas"></button>
                                     </div>
-                               
+
                                     <div class="offcanvas-body">
                                         <ul class="navbar-nav">
                                             @if(empty(Auth::user()))
@@ -435,6 +384,13 @@
                                             </li>
                                             @endif
 
+                                            @if(!empty(Auth::user()))
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link" href="{{ url('/user') }}">Dashboard</a>
+
+                                            </li>
+                                            @endif
+                                            
                                              <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
@@ -445,67 +401,52 @@
                                             </li>
                                             @endif
 
-                                            <li class="nav-item dropdown dropdown-mega">
-                                                <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0"
-                                                    href="javascript:void(0)" data-bs-toggle="dropdown">
-                                                    <span class="menu">Asia Menu</span>
-                                                </a>
+                                            @if ($specialCorner->isNotEmpty())
+                                                <li class="nav-item dropdown dropdown-mega">
+                                                    <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0" href="javascript:void(0)" data-bs-toggle="dropdown">
+                                                        <span class="menu">Special Corner</span>
+                                                    </a>
 
-                                                <div class="dropdown-menu dropdown-menu-2">
-                                                    <div class="row">
-                                                        <div class="dropdown-column col-xl-3">
-                                                        @if(!empty($myanmarProducts))
-                                                            <h5 class="dropdown-header">Myanmar Products</h5>
-                                                            @foreach($myanmarProducts as $myanmarProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $myanmarProduct->id]) }}">
-                                                                {{ $myanmarProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column col-xl-3">
-                                                            
-                                                        @if(!empty($koreaProducts))
-                                                            <h5 class="dropdown-header">Korea Products</h5>
-                                                            @foreach($koreaProducts as $koreaProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $koreaProduct->id]) }}">
-                                                                {{ $koreaProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column col-xl-3">
-                                                            
-                                                        @if(!empty($chinaProducts))
-                                                            <h5 class="dropdown-header">China Products</h5>
-                                                            @foreach($chinaProducts as $chinaProduct)
-                                                                <a class="dropdown-item" href="{{ route('show-product-left-thumbnail', ['id' => $chinaProduct->id]) }}">
-                                                                {{ $chinaProduct->product_name }}</a>
-                                                            @endforeach
-                                                        @endif
-                                                        </div>
-
-                                                        <div class="dropdown-column dropdown-column-img col-3"></div>
+                                                    <div class="dropdown-menu dropdown-menu-2">
+                                                        @foreach ($specialCorner as $category)
+                                                            <div class="row">
+                                                                @foreach ($category->subCategoryTitle as $subCategoryTitle)
+                                                                    <div class="dropdown-column col-xl-3">
+                                                                        <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
+                                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                                            <a class="dropdown-item" href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">
+                                                                                {{ $subCategory->sub_category_name }}
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                </div>
-                                            </li>
+                                                </li>
+                                            @endif
 
+
+                                            @if(empty(Auth::user()))
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>
 
                                             </li>
+                                            @endif
 
                                             @if(empty(Auth::user()))
                                             <li class="nav-item dropdown new-nav-item">
-                                                <label class="new-dropdown">New</label>
-                                                <a class="nav-link"  href="{{ url('/news') }}">New</a>
+                                                @if ($newBlogsExist)
+                                                    <label class="new-dropdown">New</label>
+                                                @endif
+                                                <a class="nav-link"  href="{{ url('/news') }}">Blog</a>
                                             </li>
                                             @endif
 
                                         </ul>
                                     </div>
 
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -623,8 +564,8 @@
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="footer-logo">
                             <div class="theme-logo">
-                                <a href="index.html">
-                                    <img src="../assets/images/logo/1.png" class="blur-up lazyload" alt="">
+                                <a href="/">
+                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="blur-up lazyload" alt="">
                                 </a>
                             </div>
 
@@ -635,11 +576,11 @@
                                 <ul class="address">
                                     <li>
                                         <i data-feather="home"></i>
-                                        <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, US</a>
+                                        <a href="javascript:void(0)">4-27-5 Ikebukuro, Toshima-ku, Tokyo</a>
                                     </li>
                                     <li>
                                         <i data-feather="mail"></i>
-                                        <a href="javascript:void(0)">support@fastkart.com</a>
+                                        <a href="javascript:void(0)">support@asia-hd.com</a>
                                     </li>
                                 </ul>
                             </div>
@@ -653,24 +594,11 @@
 
                         <div class="footer-contain">
                             <ul>
+                            @foreach ($allCategories as $category)
                                 <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Vegetables & Fruit</a>
+                                    <a href="{{ url('/categorysidebar/'.$category->id)}}" class="text-content">{{ $category->category_name }}</a>
                                 </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Beverages</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Meats & Seafood</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Frozen Foods</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Biscuits & Snacks</a>
-                                </li>
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Grocery & Staples</a>
-                                </li>
+                            @endforeach
                             </ul>
                         </div>
                     </div>
@@ -683,10 +611,13 @@
                         <div class="footer-contain">
                             <ul>
                                 <li>
-                                    <a href="index.html" class="text-content">Home</a>
+                                    <a href="{{ url('/') }}" class="text-content">Home</a>
                                 </li>
                                 <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">Shop</a>
+                                    <a class="text-content " href="{{ url('/products') }}">Products</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
                                     <a href="about-us.html" class="text-content">About Us</a>
@@ -695,6 +626,7 @@
                                     <a href="blog-list.html" class="text-content">Blog</a>
                                 </li>
                                 <li>
+
                                     <a href="contact-us.html" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
@@ -741,8 +673,8 @@
                                     <div class="footer-number">
                                         <i data-feather="phone"></i>
                                         <div class="contact-number">
-                                            <h6 class="text-content">Hotline 24/7 :</h6>
-                                            <h5>+91 888 104 2340</h5>
+                                            <h6 class="text-content">Hotline</h6>
+                                            <h5>(+81) 03-3981-5090</h5>
                                         </div>
                                     </div>
                                 </li>
@@ -752,27 +684,21 @@
                                         <i data-feather="mail"></i>
                                         <div class="contact-number">
                                             <h6 class="text-content">Email Address :</h6>
-                                            <h5>fastkart@hotmail.com</h5>
+                                            <h5>info@asia-hd.com</h5>
                                         </div>
                                     </div>
                                 </li>
 
                                 <li class="social-app mb-0">
-                                    <h5 class="mb-2 text-content">Download App :</h5>
-                                    <ul>
-                                        <li class="mb-0">
-                                            <a href="https://play.google.com/store/apps" target="_blank">
-                                                <img src="../assets/images/playstore.svg" class="blur-up lazyload"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li class="mb-0">
-                                            <a href="https://www.apple.com/in/app-store/" target="_blank">
-                                                <img src="../assets/images/appstore.svg" class="blur-up lazyload"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <div class="footer-contain">
+                                        <ul>
+                                            <li>
+                                                <a href="{{ url('/privacy-policy') }}" class="text-content">
+                                                    <h5 class="mb-2 text-content">Privacy policy</h5>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -782,7 +708,7 @@
 
             <div class="sub-footer section-small-space">
                 <div class="reserve">
-                    <h6 class="text-content">©2022 Fastkart All rights reserved</h6>
+                    <h6 class="text-content">©2024 Asia Human Development, Inc. All rights reserved</h6>
                 </div>
 
                 <div class="payment">
@@ -1027,7 +953,7 @@
     <div class="cookie-bar-box">
         <div class="cookie-box">
             <div class="cookie-image">
-                <img src="../assets/images/cookie-bar.png" class="blur-up lazyload" alt="">
+                <img src="{{ asset('frontend/assets/images/cookie-bar.png') }}" class="blur-up lazyload" alt="">
                 <h2>Cookies!</h2>
             </div>
 
@@ -1037,7 +963,9 @@
         </div>
 
         <div class="button-group">
-            <button class="btn privacy-button">Privacy Policy</button>
+            <a href="{{ url('/privacy-policy') }}" class="text-content">
+                <button class="btn privacy-button">Privacy Policy</button>
+            </a>
             <button class="btn ok-button">OK</button>
         </div>
     </div>
@@ -1185,6 +1113,9 @@
 
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
+
+    <!-- Price Range Js -->
+    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 </body>
 
 </html>

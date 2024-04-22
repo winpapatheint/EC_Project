@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Blog;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -17,91 +18,24 @@ class GuestLayout extends Component
      */
     public function render()
     {
-        // $categories = DB::table('Categorys')
-        // ->select('Categorys.id', 'Categorys.category_name as category_name',
-        // 'Sub_category_titles.category_id as subcategory_id', 'Sub_category_titles.sub_category_titlename as subcategory_name')
-        // ->leftJoin('Sub_category_titles', 'Categorys.id', '=', 'Sub_category_titles.category_id')
-        // ->leftJoin('Sub_categories', 'Categorys.id', '=', 'Sub_categories.category_id' and 'Sub_category_titles.id','=',
-        // 'sub_category_title_id')
-        // ->get();
+        $categories = Category::with(['subCategoryTitle', 'subCategoryTitle.subCategory'])
+            ->where('category_name', '!=', 'Special Corner')
+            ->get();
 
-        $categories = DB::table('Categories')
-            ->select(
-                'Categories.id',
-                'Categories.category_name as category_name',
-                'Categories.category_icon as category_icon',
-                'Sub_category_titles.category_id as subcategory_id',
-                'Sub_categories.sub_category_title_id as subcategorytitle_id',
-                'Sub_category_titles.sub_category_titlename as subcategory_name',
-                'Sub_categories.sub_category_name as sub_name'
-    )
-    ->leftjoin('Sub_category_titles', 'Categories.id', '=', 'Sub_category_titles.category_id')
-    ->Join('Sub_categories', function($join) {
-        $join
-            ->on('Sub_category_titles.id', '=', 'Sub_categories.sub_category_title_id');
-    })
-    ->get();
+        $todayDate = Carbon::now()->toDateString();
 
-       // Organize categories and their subcategories
-        $organizedCategories = [];
-            foreach ($categories as $category) {
-                $categoryId = $category->id;
-                    if (!isset($organizedCategories[$categoryId])) {
-                        $organizedCategories[$categoryId] = [
-                            'id' => $categoryId,
-                            'name' => $category->category_name,
-                            'icon' => $category->category_icon,
-                            'subcategories' => [],
-                            'sub' => []
-                        ];
-                    }
-                    if (!is_null($category->subcategory_id)) {
-                        $organizedCategories[$categoryId]['subcategories'][] = [
-                            'id' => $category->subcategory_id,
-                            'subid' => $category->subcategorytitle_id,
-                            'name' => $category->subcategory_name
-                        ];
-                    }
+        $deal = DB::table('products')
+                ->select('products.*')
+                ->whereNotNull('discount_percent')
+                ->whereDate('created_at', $todayDate)
+                ->get();
 
-                    if (!is_null($category->subcategorytitle_id)) {
-                        $organizedCategories[$categoryId]['sub'][] = [
-                            'id' => $category->subcategorytitle_id,
-                            'name' => $category->sub_name
-                        ];
-                    }
-            }
+        $specialCorner = Category::with(['subCategoryTitle', 'subCategoryTitle.subCategory'])
+                                    ->where('category_name', 'Special Corner')
+                                    ->get();
+        $allCategories = Category::all();
+        $newBlogsExist = Blog::where('created_at', '>=', Carbon::now()->subDays(7))->exists();
 
-            $todayDate = Carbon::now()->toDateString();
-
-            $deal = DB::table('products')
-                            ->select('products.*')
-                            ->whereNotNull('discount_percent')
-                            ->whereDate('created_at', $todayDate)
-                            ->get();
-
-        $myanmarProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'Myanmar')
-                            ->get();
-        $koreaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'Korea')
-                            ->get();
-        $chinaProducts = Product::leftjoin('Sub_categories', 'products.sub_category_id', '=', 'Sub_categories.id')
-                            ->leftjoin('Sub_category_titles', 'Sub_categories.sub_category_title_id', '=', 'Sub_category_titles.id')
-                            ->leftjoin('Categories', 'Sub_category_titles.category_id', '=', 'Categories.id')
-                            ->select('products.*', 'Categories.category_name', 'Sub_category_titles.sub_category_titlename', 'Sub_categories.sub_category_name')
-                            ->where('Categories.category_name', 'Asia Menu')
-                            ->where('Sub_category_titles.sub_category_titlename', 'China')
-                            ->get();
-
-        return view('layouts.guest', ['categories' => $organizedCategories],compact('deal', 'myanmarProducts', 'koreaProducts', 'chinaProducts'));
-
+        return view('layouts.guest',compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist', 'categories'));
     }
 }

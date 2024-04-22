@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>User Dashboard</h2>
+                        <h2>Addresses</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -20,7 +20,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Addresses</li>
                             </ol>
                         </nav>
                     </div>
@@ -85,7 +85,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_addresses')}}"><i
-                                        data-feather="map-pin"></i>Address</a>
+                                        data-feather="map-pin"></i>Addresses</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
@@ -96,12 +96,6 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 12px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <form method="POST" action="{{ route('adminlogout') }}">
-                                    @csrf
-                                <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();"><i data-feather="">Logout</i></a>
-                                </form>
                             </li>
                         </ul>
                     </div>
@@ -159,7 +153,7 @@
                                                 <tr>
                                                     <td>Address:</td>
                                                     <td>
-                                                        <p>{{ $item->address }}</p>
+                                                        <p>{{ $item->post_code }},{{ $item->city }},{{ $item->chome }},{{ $item->building }},{{ $item->room_no }}</p>
                                                     </td>
                                                 </tr>
 
@@ -218,18 +212,28 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="division" name="division" placeholder="Division">
-                                <label for="division">Division</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="district" name="district" placeholder="District">
-                                <label for="district">District</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
                                 <label for="post_code">Post Code</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
+                                <label for="city">City</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
+                                <label for="chome">Chome</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
+                                <label for="building">Building</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
+                                <label for="roomno">Room No</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
@@ -277,38 +281,49 @@
                         <input type="hidden" name="id" value="{{ $item->id }}">
                         
                         <div class="modal-body">
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $item->name }}">
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                                 <label for="name">Name</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="division" name="division" placeholder="Division" value="{{ $item->division }}">
-                                <label for="division">Division</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="district" name="district" placeholder="District" value="{{ $item->district }}">
-                                <label for="district">District</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
+                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
                                 <label for="post_code">Post Code</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ $item->address }}">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
+                                <label for="city">City</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
+                                <label for="chome">Chome</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
+                                <label for="building">Building</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
+                                <label for="roomno">Room No</label>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="address" name="address"
+                                    style="height: 100px"></textarea>
                                 <label for="address">Enter Address</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others" value="{{ $item->place }}">
+                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others">
                                 <label for="place">Place</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
                             <input type="hidden" name="buyer_id" value="1">

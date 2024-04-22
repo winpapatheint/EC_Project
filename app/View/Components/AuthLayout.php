@@ -14,7 +14,7 @@ class AuthLayout extends Component
      */
     public function render()
     {
-        User::where('role','=','seller')
+
         return view('layouts.auth');
     }
 }

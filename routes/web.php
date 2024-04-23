@@ -58,6 +58,7 @@ Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile']
 Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
 Route::get('search', [ShowProductController::class, 'footerSearch'])->name('footer_search');
+Route::get('ordertracking', [UserController::class, 'footertracking'])->name('footer_tracking');
 
 Route::get('/register', function () {return view('front-end.register');});
 

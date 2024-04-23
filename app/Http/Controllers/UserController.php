@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -39,49 +40,79 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
-        $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-        'birthday' => 'required|string|max:255',
-        'phone' => 'required|string|max:255',
-        'zip_code' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'chome' => 'required|string|max:255',
-        'building' => 'required|string|max:255',
-        'room' => 'required|string|max:255',
-        'address' => 'required|string|max:255',
-        ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'role' => 'buyer',
-            'password' => Hash::make($request->input('password')),
-            'status' => '1',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'birthday' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:255',
+            'prefecture_id' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room' => 'required|string|max:255',
+        ];
 
-        event(new Registered($user));
+        $customMessages = [
+            'name.required' => 'The name is required.',
+            'email.required' => 'The email is required.',
+            'email.required' => 'Invalid email format.',
+            'email.unique' => 'The email has already been taken.',
+            'password.required' => 'The password is required.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'birthday.required' => 'The birthday is required.',
+            'phone.required' => 'The phone number is required.',
+            'zip_code.required' => 'The zip_code is required.',
+            'prefecture_id.required' => 'Please choose the prefecture.',
+            'city.required' => 'The city is required.',
+            'chome.required' => 'The chome is required.',
+            'building.required' => 'The building number is required.',
+            'room.required' => 'The room number is required.',
 
-        $buyer = Buyer::create([
-            'user_id' => $user->id,
-            'prefecture_id' => $request->prefecture,
-            'name' => $request->name,
-            'email' => $user->email,
-            'birthday' => $request->birthday,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'zip_code' => $request->zip_code,
-            'city' => $request->city,
-            'chome' => $request->chome,
-            'building' => $request->building,
-            'room_no' => $request->room,
-        ]);
+        ];
 
-        event(new Registered($buyer));
+        
+        $validator = Validator::make($request->all(), $rules, $customMessages);
 
-        $email = $request->email;
-        return view('auth.verify-email', compact('email'));
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        else{
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'role' => 'buyer',
+                'password' => Hash::make($request->input('password')),
+                'status' => '1',
+            ]);
+    
+            event(new Registered($user));
+    
+            $buyer = Buyer::create([
+                'user_id' => $user->id,
+                'prefecture_id' => $request->prefecture,
+                'name' => $request->name,
+                'email' => $user->email,
+                'birthday' => $request->birthday,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'zip_code' => $request->zip_code,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->room,
+            ]);
+    
+            event(new Registered($buyer));
+    
+            $email = $request->email;
+            return view('auth.verify-email', compact('email'));
+        }
 
     }
     public function indexuser()
@@ -975,5 +1006,28 @@ class UserController extends Controller
             \Log::error($e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
+    }
+    //Show Footer Tracking
+    public function footertracking(Request $request)
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $id = $request->id;
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        $orderDetails = DB::table('orders')
+            ->join('sellers', 'orders.seller_id', '=', 'sellers.id')
+            ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->where('orders.id', $id)
+            ->select('orders.*', 'orders.id as order_id','sellers.*','orders.post_code as code','orders.city as buyercity','orders.chome as buyerchome','orders.building as buyerbuilding','orders.room_no as buyerroom' )
+            ->get();
+
+            foreach ($orderDetails as $location)
+            {
+                $locationcity = $location->buyercity;
+                $locationchome = $location->buyerchome;
+            }
+        return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails',));
+
     }
 }

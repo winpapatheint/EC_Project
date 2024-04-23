@@ -640,15 +640,19 @@
 
                         <div class="footer-contain">
                             <ul>
+                                @if(empty(Auth::user()))
                                 <li>
                                     <a href="{{ route('seller.register') }}" class="text-content">Seller Register</a>
                                 </li>
+                                @endif
+                                @if(!empty(Auth::user()))
                                 <li>
-                                    <a href="user-dashboard.html" class="text-content">Your Account</a>
+                                    <a href="{{route ('user_profile')}}" class="text-content">Your Account</a>
                                 </li>
                                 <li>
-                                    <a href="order-tracking.html" class="text-content">Track Order</a>
+                                    <a href="{{route ('footer_tracking') }}" class="text-content">Track Order</a>
                                 </li>
+                                @endif
                                 <li>
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>
                                 </li>

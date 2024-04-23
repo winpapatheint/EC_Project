@@ -478,10 +478,12 @@
                                         </div>
                                             <h6 class="unit">{{ $list->product_size }}</h6>
                                         <h5 class="price">
-                                            <span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
-                                            @if ($list->discount_percent != null)
-                                            <del>¥{{ number_format($list->selling_price, 0, '', ',') }}</del>
-                                            @endif
+                                        @if ($list->discount_percent != null)
+                                            <h4 class="price"><span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
+                                            <del>¥{{ number_format($list->original_price, 0, '', ',') }}</del>
+                                        @else
+                                            <h4 class="price"><span class="theme-color">¥{{ number_format($list->selling_price, 0, '', ',') }}</span>
+                                        @endif
                                         </h5>
                                     </div>
                                 </div>
@@ -538,9 +540,10 @@
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
                                 @if ($product->discount_percent != null)
-                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>¥{{ $product->selling_price }}</del>
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                    <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                 @else
-                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price }}</span>
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                 @endif
                                 <div class="product-rating">
                                     <ul class="rating">

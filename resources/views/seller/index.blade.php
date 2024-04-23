@@ -12,7 +12,7 @@
             $id = $user->created_by;
         }
 
-    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
+    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('total_amount');
 
     $order = App\Models\Order::where('seller_id',$id)->get();
     $pending = App\Models\Order::where('seller_id',$id)->where('status', 'Pending')->get();
@@ -136,20 +136,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($transfer as $key => $item )
+                                        @if ($transfer->isEmpty())
                                             <tr>
-                                                <td>{{ $key+1 }}</td>
-                                                <td>{{ $item->created_at }}</td>
-                                                <td>{{ $item->transaction_id }}</td>
-                                                <td>Asia 食材</td>
-                                                <td>{{ $item->id }}</td>
-                                                <td>{{ $item->product->product_code }}</td>
-                                                <td>{{ $item->product->product_name }}</td>
-                                                <td>{{ $item->qty }}</td>
-                                                <td>￥{{ $item->price }}</td>
-                                                <td>￥{{ $item->amount }}</td>
+                                                <td colspan="9">No data available</td>
                                             </tr>
-                                        @endforeach
+                                        @else
+                                            @foreach ($transfer as $key => $item )
+                                                <tr>
+                                                    <td>{{ $key+1 }}</td>
+                                                    <td>{{ $item->created_at }}</td>
+                                                    <td>{{ $item->transaction_id }}</td>
+                                                    <td>Asia 食材</td>
+                                                    <td>{{ $item->id }}</td>
+                                                    {{-- <td>{{ $item->product->product_code }}</td>
+                                                    <td>{{ $item->product->product_name }}</td> --}}
+                                                    <td>{{ $item->qty }}</td>
+                                                    <td>￥{{ $item->price }}</td>
+                                                    <td>￥{{ $item->total_amount }}</td>
+                                                </tr>
+                                            @endforeach
                                     </tbody>
                                 </table>
                             </div>

@@ -1,11 +1,6 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-<style>
-    .error{
-        margin:0 auto;
-        display:flex;
-    }
-</style>
+
 <div class="page-body">
 <!-- New Product Add Start -->
     <div class="container-fluid">
@@ -182,6 +177,7 @@
                                         <label class="col-sm-3 form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" multiple name="multi_img[]" id="multiImg">
+                                            <div>Attach images with using shift key.</div>
                                             <div id="preview_img"></div>
                                             @error('multi_img')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -353,18 +349,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
             const discountAmount = originalPrice * (discountPercent / 100);
             const sellingPrice = originalPrice - discountAmount;
-            sellingPriceInput.value = sellingPrice.toFixed(2);
-            calculatedSellingPriceInput.value = sellingPrice.toFixed(2);
+            sellingPriceInput.value = Math.round(sellingPrice); // Round to nearest integer
+            calculatedSellingPriceInput.value = Math.round(sellingPrice); // Round to nearest integer
         } else {
             sellingPriceInput.value = '';
             calculatedSellingPriceInput.value = '';
         }
     }
+
     originalPriceInput.addEventListener('input', calculateSellingPrice);
     discountPercentInput.addEventListener('input', calculateSellingPrice);
     calculateSellingPrice();
 </script>
-
 
 <script>
     ClassicEditor

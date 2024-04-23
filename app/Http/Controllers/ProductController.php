@@ -12,6 +12,7 @@ use App\Models\MultiImg;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -97,7 +98,7 @@ class ProductController extends Controller
 
         $img = $request->file('product_thambnail');
         $filename = time() . '.' . $img->getClientOriginalExtension();
-        $img->move('upload/product_thambnail', $filename);
+        $img->move(public_path('upload/product_thambnail'), $filename);
 
         if (!empty(Auth::user()->created_by)) {
             $subseller = Auth::user()->id;
@@ -134,7 +135,7 @@ class ProductController extends Controller
         $images = $request->file('multi_img');
         foreach ($images as $img) {
             $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/multiImg', $filename);
+            $img->move(public_path('upload/multiImg'), $filename);
             MultiImg::create([
                 'product_id' => $product_id,
                 'photo_name' => $filename,
@@ -147,6 +148,7 @@ class ProductController extends Controller
 
     public function editProduct($id)
     {
+
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
         $categories = Category::latest()->get();
@@ -154,7 +156,16 @@ class ProductController extends Controller
         $subcatitle = SubCategoryTitle::latest()->get();
         $products = Product::findOrFail($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
-        return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
+
+        // $data = Product::with('category')->with('SubCategoryTitle')->with('SubCategoryTitle.SubCategory')->find($id);
+
+        $subcategoryId = $products->sub_category_id;
+        $subcategory_name = DB::table('sub_categories')
+                                ->select('sub_categories.sub_category_name')
+                                ->where('id', $subcategoryId)
+                                ->get();
+
+        return view('seller.product.product_edit',compact('subcategory_name','brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
     }
 
     public function updateProduct(Request $request)
@@ -179,7 +190,7 @@ class ProductController extends Controller
             }
             $img = $request->file('product_thambnail');
             $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/product_thambnail', $filename);
+            $img->move(public_path('upload/product_thambnail'), $filename);
         } else {
             $filename = $old_img;
         }
@@ -196,7 +207,7 @@ class ProductController extends Controller
         $product->product_color= $request->product_color;
         $product->original_price= $request->original_price;
         $product->discount_percent= $request->discount_percent;
-        $product->calculated_selling_price = $request->calculated_selling_price;
+        $product->selling_price = $request->calculated_selling_price;
         $product->short_desc= $request->short_desc;
         $product->long_desc= $request->long_desc;
         $product->product_thambnail= $filename;
@@ -235,27 +246,31 @@ class ProductController extends Controller
     public function updateMultiImg(Request $request)
     {
         $request->validate([
-            'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'multi_img.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         foreach($request->multi_img as $id => $img) {
-            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/multiImg', $filename);
+            if ($img->isValid()) {
+                $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+                $img->move(public_path('upload/multiImg'), $filename);
 
-            MultiImg::where('id', $id)->update([
-                'photo_name' => $filename,
-                'updated_at' => Carbon::now(),
-            ]);
+                MultiImg::where('id', $id)->update([
+                    'photo_name' => $filename,
+                    'updated_at' => now(),
+                ]);
+            }
         }
-        return back()->with('flash_message', 'Image updated successfully');
+
+        return redirect('/productlist')->with('flash_message', 'Image updated successfully');
     }
+
 
     public function deleteMultiImg($id)
     {
         $old_img = MultiImg::findOrFail($id);
         File::delete($old_img->photo_name);
         MultiImg::findOrFail($id)->delete();
-        return back()->with('flash_message', 'Image deleted successfully');
+        return redirect('/productlist')->with('flash_message', 'Image deleted successfully');
     }
 
 

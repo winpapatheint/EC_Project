@@ -12,7 +12,7 @@
             $id = $user->created_by;
         }
 
-    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
+    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('total_amount');
 
     $order = App\Models\Order::where('seller_id',$id)->get();
     $pending = App\Models\Order::where('seller_id',$id)->where('status', 'Pending')->get();

@@ -50,7 +50,7 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
-                                        <img src="../assets/images/inner-page/user/1.jpg"
+                                        <img src=""
                                             class="blur-up lazyload update_img" alt="">
                                         <div class="cover-icon">
                                             <i class="fa-solid fa-pen">
@@ -117,7 +117,7 @@
                                         <h2>DashBoard</h2>
                                         <span class="title-leaf">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                                <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                             </svg>
                                         </span>
                                     </div>

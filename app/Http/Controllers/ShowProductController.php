@@ -23,6 +23,7 @@ class ShowProductController extends Controller
             'sort' => 'integer|min:1',
             'mainSearch' => 'string|nullable',
             'sHistory' => 'string|nullable',
+            'sRemove' => 'string|nullable',
             'search' => 'string|nullable',
             'categories' => 'array',
             'categories.*' => 'integer|distinct|min:1',
@@ -37,6 +38,7 @@ class ShowProductController extends Controller
         $sort = $validated['sort'] ?? 0;
         $mainSearch = $validated['mainSearch'] ?? null;
         $sHistory = $validated['sHistory'] ?? null;
+        $sRemove = $validated['sRemove'] ?? null;
         $search = $validated['search'] ?? null;
         $categories = $validated['categories'] ?? [];
         $price = $validated['price'] ?? null;
@@ -51,6 +53,13 @@ class ShowProductController extends Controller
             $searchHistory = array_slice($searchHistory, 0, 10);
             Session::put('searchHistory', $searchHistory);
         }
+        if ($sRemove != null) {
+            $index = array_search($sRemove, $searchHistory);
+            if ($index !== false) {
+                unset($searchHistory[$index]);
+                Session::put('searchHistory', $searchHistory);
+            }
+        }
         // Session::forget('searchHistory');
 
         $query = Product::query();
@@ -58,7 +67,6 @@ class ShowProductController extends Controller
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
                 $query->where('product_name', 'like', '%' . $mainSearch . '%')
-                      ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
                       ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
             })
             ->orWhereHas('Category', function ($query) use ($mainSearch) {
@@ -75,7 +83,6 @@ class ShowProductController extends Controller
             if (!empty($sHistory)) {
                 $query->where(function ($query) use ($sHistory) {
                     $query->where('product_name', 'like', '%' . $sHistory . '%')
-                          ->orWhere('product_code', 'like', '%' . $sHistory . '%')
                           ->orWhere('product_tags', 'like', '%' . $sHistory . '%');
                 })
                 ->orWhereHas('Category', function ($query) use ($sHistory) {
@@ -212,7 +219,6 @@ class ShowProductController extends Controller
         return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
         , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory'));
     }
-
     public function ShowProductleftThumbnail($id)
     {
         $product = Product::with('seller')->find($id);
@@ -360,25 +366,35 @@ class ShowProductController extends Controller
     }
 
     //Show footer search
-    public function FooterSearch()
+    public function footerSearch()
     {
+        $validated = request()->validate([
+            'footerSearch' => 'string|nullable',
+        ]);
+        $footerSearch = $validated['footerSearch'] ?? null;
+
+        // $limit = 10; // set the number of products per page
         $query = Product::query();
 
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->where('product_name', 'like', '%' . $mainSearch . '%')
-                    ->orWhere('product_code', 'like', '%' . $mainSearch . '%')
-                    ->orWhere('product_tags', 'like', '%' . $mainSearch . '%');
+        if ($footerSearch != null) {
+            $query->where(function ($query) use ($footerSearch) {
+                $query->where('product_name', 'like', '%' . $footerSearch . '%')
+                    ->orWhere('product_tags', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('Category', function ($query) use ($mainSearch) {
-                $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('Category', function ($query) use ($footerSearch) {
+                $query->where('category_name', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
-                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('SubCategoryTitle', function ($query) use ($footerSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $footerSearch . '%');
             })
-            ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
-                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+            ->orWhereHas('SubCategory', function ($query) use ($footerSearch) {
+                $query->where('sub_category_name', 'like', '%' . $footerSearch . '%');
             });
         }
+
+        $products = $query->get();
+        $reviews = Review::all();
+        return view('front-end.search',compact('products', 'reviews'));
+       
     }
 }

@@ -450,21 +450,13 @@
                                 </div>
                             </div>
                         </div>
-                        @if(!empty(Auth::user()))
-                            <div class="header-nav-right">
-                                <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
-                                    <i data-feather="zap"></i>
-                                    <span>Deal Today</span>
-                                </button>
-                            </div>
-                        @else
-                            <div class="header-nav-right">
-                                <button class="btn deal-button" data-bs-toggle="modal">
-                                    <i data-feather="zap"></i>
-                                  <a href="{{ route('login') }}" style="color:#0da487"><span> Deal Today</span></a>
-                                </button>
-                            </div>
-                        @endif
+
+                        <div class="header-nav-right">
+                            <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
+                                <i data-feather="zap"></i>
+                                <span>Deal Today</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -628,10 +620,14 @@
                                     <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/news') }}" class="text-content">Blog</a>
+                                    <a href="about-us.html" class="text-content">About Us</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/contact') }}" class="text-content">Contact Us</a>
+                                    <a href="blog-list.html" class="text-content">Blog</a>
+                                </li>
+                                <li>
+
+                                    <a href="contact-us.html" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
                         </div>
@@ -644,20 +640,24 @@
 
                         <div class="footer-contain">
                             <ul>
+                                @if(empty(Auth::user()))
                                 <li>
                                     <a href="{{ route('seller.register') }}" class="text-content">Seller Register</a>
                                 </li>
+                                @endif
+                                @if(!empty(Auth::user()))
                                 <li>
-                                    <a href="{{ route('login') }}" class="text-content">Your Account</a>
+                                    <a href="{{route ('user_profile')}}" class="text-content">Your Account</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('user_order') }}" class="text-content">Track Order</a>
+                                    <a href="{{route ('footer_tracking') }}" class="text-content">Track Order</a>
                                 </li>
+                                @endif
                                 <li>
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>
                                 </li>
                                 <li>
-                                    <a href="search.html" class="text-content">Search</a>
+                                    <a href="{{ route('footer_search') }}" class="text-content">Search</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/faq') }}" class="text-content">FAQ</a>

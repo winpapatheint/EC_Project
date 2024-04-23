@@ -118,8 +118,8 @@
                                 </div>
                                 <div class="product-footer">
                                     <div class="product-detail">
-                                        <span class="span-name">Vegetable</span>
-                                        <a href="{{ url('/product-left-thumbnail') }}">
+                                        <span class="span-name">{{ $product->Category->category_name }}</span>
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
                                             <h5 class="name">{{ $product->product_name }}</h5>
                                         </a>
                                         <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc }}</p>
@@ -196,9 +196,9 @@
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
                                 @if ($product->discount_percent != null)
-                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>¥{{ $product->selling_price }}</del>
                                 @else
-                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price }}</span>
                                 @endif
                                 <div class="product-rating">
                                     <ul class="rating">
@@ -215,7 +215,7 @@
 
                                 <div class="product-detail">
                                     <h4>Product Details :</h4>
-                                    <p>{{ $product->long_desc }}</p>
+                                    <p>{!! ($product->long_desc) !!}</p>
                                 </div>
 
                                 <ul class="brand-list">

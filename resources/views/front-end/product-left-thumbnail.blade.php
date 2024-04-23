@@ -507,6 +507,7 @@
                                     @php
                                         $prod = DB::table('products')->where('id',$topProduct->product_id)->first();
                                     @endphp
+                                    @if ($prod)
                                     <li>
                                         <div class="offer-product">
                                             <a href="{{ route('show-product-left-thumbnail', ['id' => $prod->id]) }}" class="offer-image">
@@ -519,17 +520,16 @@
                                                     <a href="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}">
                                                         <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
-                                                    {{-- <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 70.00</h6> --}}
                                                     @if ($prod->discount_percent != null)
-                                                        <h6 class="price"><span class="theme-color">${{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>${{ $prod->selling_price }}</del>
+                                                        <h6 class="price"><span class="theme-color">¥{{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>¥{{ $prod->selling_price }}</del>
                                                     @else
-                                                        <h5 class="price"><span class="theme-color">${{ $prod->selling_price }}</span>
+                                                        <h5 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
+                                    @endif
                                 @endforeach
                                 </ul>
                             </div>

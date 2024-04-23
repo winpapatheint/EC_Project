@@ -540,9 +540,9 @@
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
                                 @if ($product->discount_percent != null)
-                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>${{ $product->selling_price }}</del>
+                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> <del>¥{{ $product->selling_price }}</del>
                                 @else
-                                    <h4 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                    <h4 class="price"><span class="theme-color">¥{{ $product->selling_price }}</span>
                                 @endif
                                 <div class="product-rating">
                                     <ul class="rating">
@@ -559,7 +559,7 @@
 
                                 <div class="product-detail">
                                     <h4>Product Details :</h4>
-                                    <p>{{ $product->long_desc }}</p>
+                                    <p>{!! ($product->long_desc) !!}</p>
                                 </div>
 
                                 <ul class="brand-list">

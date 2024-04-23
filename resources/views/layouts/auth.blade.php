@@ -98,7 +98,18 @@
                     </div>
                 </div>
 
-                <div class="accordion-item">
+                <div class="search-box">
+                    <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
+                        <div class="input-group">
+                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                            <button class="btn" type="submit" id="button-addon2">
+                                <i data-feather="search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {{-- <div class="accordion-item">
                     <div style="display: flex; align-items: center;">
                         <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                         id="search" name="search" value=""
@@ -106,7 +117,7 @@
                         <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
                     <div class="form-group w-100">
@@ -134,35 +145,85 @@
                                 <i class="ri-notification-line"></i>
                                 <span class="badge rounded-pill badge-theme">4</span>
                             </div>
-                            <ul class="notification-dropdown onhover-show-div">
+                            <ul class="notification-dropdown onhover-show-div" style="max-height: 200px; overflow-y: auto;">
                                 <li>
                                     <i class="ri-notification-line"></i>
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
+                                @if(!empty($seller->id))
                                 <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-primary"></i>Delivery processing <span
+                                    <p id="store">
+                                        <i class="fa fa-circle me-2 font-primary delete-icon"></i>A new store has been registered.{{ $seller->id }}<span
                                             class="pull-right">10 min.</span>
                                     </p>
                                 </li>
+                                @endif
+                                @if(!empty($buyer->id))
                                 <li>
                                     <p>
-                                        <i class="fa fa-circle me-2 font-success"></i>Order Complete<span
+                                        <i class="fa fa-circle me-2 font-success"></i>{{ $buyer->email }}A new user has been registered.<span
                                             class="pull-right">1 hr</span>
                                     </p>
                                 </li>
+                                @endif
+                                @if(!empty($product->id))
                                 <li>
                                     <p>
-                                        <i class="fa fa-circle me-2 font-info"></i>Tickets Generated<span
+                                        <i class="fa fa-circle me-2 font-info"></i>{{ $product->id }}A new product has been registered.<span
                                             class="pull-right">3 hr</span>
                                     </p>
                                 </li>
+                                @endif
+                                @if(!empty($order->id))
                                 <li>
                                     <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>Delivery Complete<span
+                                        <i class="fa fa-circle me-2 font-danger"></i>A new order has been registered.<span
                                             class="pull-right">6 hr</span>
                                     </p>
                                 </li>
+                                @endif
+                                @foreach($sellerlist as $list)
+                                @if(!empty($list->id))
+                                <li>
+                                    <p>
+                                        <i class="fa fa-circle me-2 font-danger"></i>A new store has been registered.<span
+                                            class="pull-right">6 hr</span>
+                                    </p>
+                                </li>
+                                @endif
+                                @endforeach
+                                @foreach($buyerlist as $list)
+                                @if(!empty($list->id))
+                                <li>
+                                    <p>
+                                        <i class="fa fa-circle me-2 font-danger"></i>A new user has been registered.<span
+                                            class="pull-right">6 hr</span>
+                                    </p>
+                                </li>
+                                @endif
+                                @endforeach
+
+                                @foreach($productlist as $list)
+                                @if(!empty($list->id))
+                                <li>
+                                    <p>
+                                        <i class="fa fa-circle me-2 font-danger"></i>A new product has been registered.<span
+                                            class="pull-right">6 hr</span>
+                                    </p>
+                                </li>
+                                @endif
+                                @endforeach
+
+                                @foreach($orderlist as $list)
+                                @if(!empty($list->id))
+                                <li>
+                                    <p>
+                                        <i class="fa fa-circle me-2 font-danger"></i>A new order has been registered.<span
+                                            class="pull-right">6 hr</span>
+                                    </p>
+                                </li>
+                                @endif
+                                @endforeach
                                 <li>
                                     <a class="btn btn-primary" href="javascript:void(0)">Check all notification</a>
                                 </li>
@@ -297,6 +358,7 @@
                                         <span>Users</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->id == '1')
                                 <li class="sidebar-list">
 
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/subadmin') }}">
@@ -304,6 +366,7 @@
                                         <span>SubAdmin</span>
                                     </a>
                                 </li>
+                                @endif
 
                                 <li class="sidebar-list">
 
@@ -425,6 +488,15 @@
 
     <!-- Theme js -->
     <script src="{{ asset('backend/assets/js/script.js') }}"></script>
+
+    <script>
+        // Assuming you have some JavaScript code to handle deletion
+        document.querySelector('.delete-icon').addEventListener('click', function() {
+          // Code to delete the store goes here
+          // For demonstration, let's just remove the entire store element
+          document.getElementById('store').remove();
+        });
+      </script>
 </body>
 
 </html>

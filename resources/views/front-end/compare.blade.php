@@ -63,7 +63,7 @@
                                 </tr>
 
                                 <tr>
-                                    <th>Color/th>
+                                    <th>Color</th>
                                     @foreach($comparelistProducts as $product)
                                         <td class="text-content">{{ $product->product_color }}</td>
                                     @endforeach
@@ -78,19 +78,19 @@
 
                                 <tr>
                                     <th>Rating</th>
-                                    @foreach($comparelistProducts as $product)
+                                    @foreach($comparelistProducts as $key => $product)
                                     <td>
                                         <div class="compare-rating">
                                             <ul class="rating">
                                                 @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= $ratingWithProductCount[0])
-                                                    <li><i data-feather="star" class="fill"></i></li>
-                                                @else
-                                                    <li><i data-feather="star"></i></li>
-                                                @endif
-                                            @endfor
+                                                    @if ($i <= $ratingWithProductCount[$key][0])
+                                                        <li><i data-feather="star" class="fill"></i></li>
+                                                    @else
+                                                        <li><i data-feather="star"></i></li>
+                                                    @endif
+                                                @endfor
                                             </ul>
-                                            <span class="text-content">({{ $ratingWithProductCount[1] }} Reviews)</span>
+                                            <span class="text-content">({{ $ratingWithProductCount[$key][1] }} Reviews)</span>
                                         </div>
                                     </td>
                                     @endforeach
@@ -130,6 +130,9 @@
 
     <!-- jquery ui-->
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+
+    <!-- table column remove -->
+    <script src="{{ asset('frontend/assets/js/table-column-remove.js') }}"></script>
 
     <script>
     $(document).ready(function() {

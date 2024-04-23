@@ -96,15 +96,12 @@
                                                 <div class="cart_qty">
                                                     <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id, $cartlist->product_id) }}">
                                                         @csrf
-                                                        <div class="input-group">
-                                                            <button type="submit" class="btn qty-left-minus"
-                                                                data-type="minus" data-field="">
+                                                        <div class="input-group qty-box">
+                                                            <button type="submit" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
                                                             </button>
-                                                            <input class="form-control input-number qty-input" type="text"
-                                                                name="quantity" value="{{ $cartlist->quantity }}">
-                                                            <button type="submit" class="btn qty-right-plus"
-                                                                data-type="plus" data-field="">
+                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}">
+                                                            <button type="submit" class="btn qty-right-plus" data-type="" data-field="">
                                                                 <i class="fa fa-plus ms-0"></i>
                                                             </button>
                                                         </div>
@@ -224,19 +221,4 @@
         </div>
     </section>
     <!-- Cart Section End -->
-<script>
-    $(document).ready(function() {
-    $('.qty-right-plus').click(function(e){
-        e.preventDefault();
-        var fieldName = $(this).data('field');
-        var currentVal = parseInt($('input[name='+fieldName+']').val(), 10);
-        if (!isNaN(currentVal) && currentVal < 100) {
-            $('input[name='+fieldName+']').val(currentVal + 1);
-        } else {
-            $('input[name='+fieldName+']').val(100); // Set value to 100 if current value is NaN or already 100
-        }
-    });
-});
-</script>
-
 </x-guest-layout>

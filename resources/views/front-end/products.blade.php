@@ -46,6 +46,8 @@
                                 @foreach($searchHistory as $searchHist)
                                     <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
                                         <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
+                                        <span class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="margin-left: 5px;padding-top: 5px;">
+                                        <i class="fa-solid fa-xmark"></i></span>
                                     </li>
                                 @endforeach
                                 @endif
@@ -355,6 +357,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
+                <input type="hidden" id="searchRemoveValue" name="sRemove" value="{{ $sRemove }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -482,6 +485,11 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                     data-bs-target="#view-product{{ $product->id }}" data-product="{{ $product->id }}">
                                                     <i data-feather="eye"></i>
+                                                </a>
+                                            </li>
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                <a href="{{ route('show-comparelist', ['id' => $product->id ]) }}">
+                                                    <i data-feather="refresh-cw"></i>
                                                 </a>
                                             </li>
                                             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
@@ -659,23 +667,6 @@
     <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
 
     <script>
-        jQuery(document).ready(function($) {
-            var rangeSlider = $(".js-range-slider");
-
-            var price = "{{ $price }}";
-
-            if (price !== null) {
-                var priceRange = price.split(';');
-
-                rangeSlider.data("ionRangeSlider").update({
-                    from: parseFloat(priceRange[0]),
-                    to: parseFloat(priceRange[1])
-                });
-            }
-        });
-    </script>
-
-    <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
             document.getElementById("searchForm").submit();
@@ -705,8 +696,16 @@
         });
         function updateSearchHist(value) {
             document.getElementById('searchHistValue').value = value;
+            document.getElementById('searchRemoveValue').value = null;
+            document.getElementById("searchForm").submit();
+        }
+        function removeSearchItem(element) {
+            var searchHist = element.getAttribute('data-search');
+            document.getElementById('searchRemoveValue').value = searchHist;
+            document.getElementById('searchHistValue').value = null;
             document.getElementById("searchForm").submit();
         }
 
     </script>
+
 </x-guest-layout>

@@ -85,11 +85,11 @@
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
                                     @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> 
-                                            <del>${{ $product->selling_price }}</del>
+                                            <h5 class="price"><span class="theme-color">¥{{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> 
+                                            <del>¥ {{ $product->selling_price }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
                                     @else
-                                            <h5 class="price"><span class="theme-color">${{ $product->selling_price }}</span>
+                                            <h5 class="price"><span class="theme-color">¥{{ $product->selling_price }}</span>
                                     @endif
                                     @php
                                         $starRating = 0;
@@ -566,9 +566,10 @@
         <div class="modal fade" id="writereview" tabindex="-1" aria-labellabedby="exambleModelLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action=""  method="POST">
+                    <form action="{{ route('reviews') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="product" value="{{ $product->id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="seller_id" value="{{ $product->seller_id }}">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">
@@ -580,13 +581,13 @@
                                 <div class="product-wrapper">
                                         <div class="product-image">
                                             <img class="img-fluid" alt="Solid Collared Tshirts"
-                                                src="../assets/images/fashion/product/26.jpg">
+                                                src="">
                                         </div>
                                         <div class="product-content">
-                                            <h5 class="name">Solid Collared Tshirts</h5>
+                                            <h5 class="name">{{ $product->product_name }}</h5>
                                             <div class="product-review-rating">
                                                 <div class="product-rating">
-                                                    <h6 class="price-number">$16.00</h6>
+                                                    <h6 class="price-number">{{ $product->price }}</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -607,7 +608,7 @@
                                     </div>
                                     <div class="review-box">
                                         <label for="content" class="form-label">Comments</label>
-                                        <textarea id="content" rows="3" class="form-control" placeholder="Comments"></textarea>
+                                        <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Comments"></textarea>
                                     </div>
                                 </form>
                         
@@ -621,7 +622,7 @@
             </div>
             <!-- Review Modal End -->
             <!-- Bg overlay Start -->
-        <div class="bg-overlay"></div>
+</div>
     <!-- Bg overlay End -->
 
     </x-guest-layout>

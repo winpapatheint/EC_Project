@@ -1,6 +1,23 @@
 @extends('seller.seller_dashboard')
 @section('seller')
+@php
+    $id = Auth::user()->id;
 
+    $user = App\Models\User::find($id);
+    // dd($user->created_by);
+    if ($user->created_by !== NULL) {
+            $id = Auth::user()->id;
+        }
+    else {
+            $id = $user->created_by;
+        }
+
+    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
+
+    $order = App\Models\Order::where('seller_id',$id)->get();
+    $pending = App\Models\Order::where('seller_id',$id)->where('status', 'Pending')->get();
+    $product = App\Models\Product::where('seller_id', $id)->get();
+@endphp
 <!-- index body start -->
  <div class="page-body">
     <div class="container-fluid">
@@ -12,7 +29,6 @@
                         <div class="media align-items-center static-top-widget">
                             <div class="media-body p-0">
                                 <span class="m-0">Total Revenue</span>
-                                <h4 class="mb-0 counter">{{number_format($revenue) }}</h4>
                                 <h4 class="mb-0 counter">{{number_format($revenue) }}</h4>
                             </div>
                             <div class="align-self-center text-center">
@@ -127,11 +143,11 @@
                                                 <td>{{ $item->transaction_id }}</td>
                                                 <td>Asia 食材</td>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->product_id }}</td>
+                                                <td>{{ $item->product->product_code }}</td>
                                                 <td>{{ $item->product->product_name }}</td>
                                                 <td>{{ $item->qty }}</td>
                                                 <td>￥{{ $item->price }}</td>
-                                                <td>￥{{ $item->total_amount }}</td>
+                                                <td>￥{{ $item->amount }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

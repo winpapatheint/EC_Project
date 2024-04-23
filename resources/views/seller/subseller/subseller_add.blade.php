@@ -15,14 +15,10 @@
 
                                 <form method="POST" action="{{ route('store.subseller') }}" class="theme-form theme-form-2 mega-form" >
                                     @csrf
-                                    <input type="hidden" name="seller_id" value="{{ $seller->id }}">
+                                    <input type="hidden" name="seller_id" value="{{ Auth::user()->id }}">
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-2 mb-0">Name</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" type="text" name="name" value="{{ old('name') }}">
-                                            @error('name')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                             <input class="form-control" type="text" name="name" value="{{ old('name') }}">
                                             @error('name')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -37,20 +33,12 @@
                                             @error('email')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
-                                            <input class="form-control" type="email" name="email" value="{{ old('email') }}">
-                                            @error('email')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-2 mb-0">Password</label>
                                         <div class="col-sm-10">
-                                            <input type="password" name="password" class="form-control" value="{{ old('password') }}">
-                                            @error('password')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                             <input type="password" name="password" class="form-control" value="{{ old('password') }}">
                                             @error('password')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -63,7 +51,6 @@
                                             Password</label>
                                         <div class="col-sm-10">
                                             <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}">
-                                            <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}">
                                         </div>
                                     </div>
 
@@ -71,10 +58,6 @@
                                         <label class="form-label-title col-sm-2 mb-0">Phone
                                             Number</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" type="text" name="phone" value="{{ old('phone') }}">
-                                            @error('phone')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                             <input class="form-control" type="text" name="phone" value="{{ old('phone') }}">
                                             @error('phone')
                                                 <div class="text-danger">{{ $message }}</div>

@@ -19,19 +19,19 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class ProductController extends Controller
 {
     public function allProduct()
-{
-    $id = Auth::user()->id;
-    $products = Product::where(function ($query) use ($id) {
-            $query->where('seller_id', $id)
-                  ->orWhereNull('seller_id');
-        })
-        ->orWhere(function ($query) use ($id) {
-            $query->where('subseller_id', $id)
-                  ->orWhereNull('subseller_id');
-        })->latest()->paginate(5);
+    {
+        $id = Auth::user()->id;
+        $products = Product::where(function ($query) use ($id) {
+                $query->where('seller_id', $id)
+                    ->orWhereNull('seller_id');
+            })
+            ->orWhere(function ($query) use ($id) {
+                $query->where('subseller_id', $id)
+                    ->orWhereNull('subseller_id');
+            })->latest()->paginate(5);
 
-    return view('seller.product.product_all', compact('products'));
-}
+        return view('seller.product.product_all', compact('products'));
+    }
 
 
     public function getSubTitle($categoryId)
@@ -65,7 +65,6 @@ class ProductController extends Controller
 
     public function storeProduct(Request $request)
     {
-        $id = IdGenerator::generate(['table' => 'products','length' =>9, 'prefix' => date('yd')]);
         $request->validate([
             'brand_id' => 'required|string|max:255',
             'country_id' => 'required|string|max:255',
@@ -82,24 +81,23 @@ class ProductController extends Controller
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
             'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif',
-            // 'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif',
             'estimate_date' => 'required|string|max:255',
             'delivery_price' => 'required|string|max:255',
             'delivery_price' => 'required|string|max:255',
         ]);
 
+        $datePrefix = date('ym');
+        $latestProduct = Product::where('product_code', 'like', $datePrefix . '%')->latest()->first();
+        $sequentialNumber = 1;
+        if ($latestProduct) {
+            $latestProductCode = $latestProduct->product_code;
+            $sequentialNumber = intval(substr($latestProductCode, strlen($datePrefix))) + 1;
+        }
+        $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT);
+
         $img = $request->file('product_thambnail');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move('upload/product_thambnail', $filename);
-
-        $images = $request->file('multi_img');
-        $filenames = [];
-
-        foreach ($images as $img) {
-            $filename1 = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/multiImg', $filename1);
-            $filenames[] = $filename1;
-        }
 
         if (!empty(Auth::user()->created_by)) {
             $subseller = Auth::user()->id;
@@ -107,8 +105,8 @@ class ProductController extends Controller
             $seller = Auth::user()->id;
         }
 
-        $product = Product::insertGetId([
-            'id' => $id,
+        $product_id = Product::insertGetId([
+            'product_code' => $newProductCode,
             'brand_id' => $request->input('brand_id'),
             'country_id' => $request->input('country_id'),
             'category_id' => $request->input('category_id'),
@@ -127,12 +125,22 @@ class ProductController extends Controller
             'short_desc' => $request->short_desc,
             'long_desc' => $request->long_desc,
             'product_thambnail' => $filename,
-            'multi_img' => json_encode($filenames),
             'status' => 1,
             'estimate_date' => $request->input('estimate_date'),
             'delivery_price' => $request->input('delivery_price'),
             'created_at' => Carbon::now(),
         ]);
+
+        $images = $request->file('multi_img');
+        foreach ($images as $img) {
+            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+            $img->move('upload/multiImg', $filename);
+            MultiImg::create([
+                'product_id' => $product_id,
+                'photo_name' => $filename,
+                'created_at' => Carbon::now(),
+            ]);
+        }
         return redirect('/productlist')->with('flash_message', 'Data added successfully');
     }
 
@@ -229,18 +237,16 @@ class ProductController extends Controller
         $request->validate([
             'multi_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $imgs = $request->multi_img;
-        foreach($imgs as $id => $img)
-        {
-            $imgDel = MultiImg::findOrFail($id);
-            File::delete($imgDel->photo_name);
+
+        foreach($request->multi_img as $id => $img) {
+            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+            $img->move('upload/multiImg', $filename);
+
+            MultiImg::where('id', $id)->update([
+                'photo_name' => $filename,
+                'updated_at' => Carbon::now(),
+            ]);
         }
-        $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-        $img->move('upload/multiImg', $filename);
-        MultiImg::where('id',$id)->update([
-            'photo_name' => $filename,
-            'updated_at' => Carbon::now(),
-        ]);
         return back()->with('flash_message', 'Image updated successfully');
     }
 

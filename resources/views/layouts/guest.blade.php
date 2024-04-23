@@ -1002,14 +1002,15 @@
                             @foreach($deal as $list)
                             <li class="list-1">
                                 <div class="deal-offer-contain">
-                                    <a href="shop-left-sidebar.html" class="deal-image">
+                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-image">
                                         <img src="{{ asset('upload/product_thambnail/'.$list-> product_thambnail) }}" class="blur-up lazyload"
                                             alt="">
                                     </a>
 
-                                    <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>{{$list->product_name}}</h5>
-                                        <h6>{{  $list->original_price - ($list->original_price * 10)/100 }} <del>{{ $list->original_price }}</del> <span>500 G</span></h6>
+                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-contain">
+                                        <h5>{{ $list->product_name }}</h5>
+                                        <h6>¥{{ $list->selling_price }} <del>¥{{ $list->original_price }}</del>
+                                        <span>{{ $list->product_size}}</span></h6>
                                     </a>
                                 </div>
                             </li>

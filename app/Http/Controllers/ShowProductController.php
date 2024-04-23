@@ -53,7 +53,7 @@ class ShowProductController extends Controller
             $searchHistory = array_slice($searchHistory, 0, 10);
             Session::put('searchHistory', $searchHistory);
         }
-        if ($sRemove != null) {
+        if ($sRemove != null && $sHistory == null) {
             $index = array_search($sRemove, $searchHistory);
             if ($index !== false) {
                 unset($searchHistory[$index]);
@@ -217,7 +217,7 @@ class ShowProductController extends Controller
                                             ->pluck('discount_percent');
 
         return view('front-end.products', compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
-        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory'));
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'searchHistory', 'sHistory', 'sRemove'));
     }
     public function ShowProductleftThumbnail($id)
     {
@@ -246,7 +246,7 @@ class ShowProductController extends Controller
             $ratingWithProductCount[0] = floor($ratingWith / $ratingProject->count());
             $ratingWithProductCount[1] = $productCount;
         }
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'multiImages', 'ratingWithProductCount'));
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'ratingWithProductCount', 'multiImages'));
     }
 
     public function ShowDiscountProductList()

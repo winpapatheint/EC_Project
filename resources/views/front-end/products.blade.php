@@ -44,8 +44,10 @@
                                 <ul>
                                 @if(!empty($searchHistory))
                                 @foreach($searchHistory as $searchHist)
-                                    <li class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
+                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
                                         <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
+                                        <span class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="margin-left: 5px;padding-top: 5px;">
+                                        <i class="fa-solid fa-xmark"></i></span>
                                     </li>
                                 @endforeach
                                 @endif
@@ -355,7 +357,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="searchHistValue" name="sHistory" value="{{ $sHistory }}">
-                <input type="hidden" id="searchRemoveValue" name="sRemove" value="{{ $sHistory }}">
+                <input type="hidden" id="searchRemoveValue" name="sRemove" value="{{ $sRemove }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 
@@ -694,11 +696,13 @@
         });
         function updateSearchHist(value) {
             document.getElementById('searchHistValue').value = value;
+            document.getElementById('searchRemoveValue').value = null;
             document.getElementById("searchForm").submit();
         }
         function removeSearchItem(element) {
             var searchHist = element.getAttribute('data-search');
             document.getElementById('searchRemoveValue').value = searchHist;
+            document.getElementById('searchHistValue').value = null;
             document.getElementById("searchForm").submit();
         }
 

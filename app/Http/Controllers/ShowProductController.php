@@ -158,7 +158,7 @@ class ShowProductController extends Controller
                     break;
                 case 3:
                     $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
-                        ->select('products.*', DB::raw('COUNT(reviews.product_id) as review_count'))
+                        ->select('products.*', DB::raw('FLOOR(AVG(reviews.stars_rated)) as review_count'))
                         ->groupBy('products.id')
                         ->orderBy('review_count', 'desc');
                     break;
@@ -178,7 +178,7 @@ class ShowProductController extends Controller
         }
 
         // Fetch paginated results
-        $products = $query->where('status', '=', '1')->paginate($limit, ['*'], 'page', $page);
+        $products = $query->with('Category')->where('products.status', '=', '1')->paginate($limit, ['*'], 'page', $page);
         $ttl = $products->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -265,23 +265,23 @@ class ShowProductController extends Controller
         $limit = 10; // set the number of products per page
         if($ids)
         {
-            $products = Product::whereIn('id', $ids)->where('status', '=', '1')->get();
+            $products = Product::with('Category')->whereIn('id', $ids)->where('status', '=', '1')->get();
         }
 
         if($topic == 'value-of-the-day')
         {
-            $products = Product::leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
+            $products = Product::with('Category')->leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
                         ->whereDate('order_details.created_at', Carbon::today())->where('products.status', '=', '1')->get();
         }
 
         if($topic == 'top-50-offers')
         {
-            $products = Product::where('status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
+            $products = Product::with('Category')->where('status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
         }
 
         if($topic == 'new-arrivals')
         {
-            $products = Product::whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
+            $products = Product::with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
         }
 
         $reviews = Review::all();
@@ -392,7 +392,7 @@ class ShowProductController extends Controller
             });
         }
 
-        $products = $query->get();
+        $products = $query->with('Category')->get();
         $reviews = Review::all();
         return view('front-end.search',compact('products', 'reviews'));
        

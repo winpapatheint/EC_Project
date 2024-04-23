@@ -16,7 +16,7 @@
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="index.html">
+                                    <a href="/">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
@@ -115,8 +115,8 @@
 
                                     <div class="product-footer">
                                         <div class="product-detail">
-                                            <span class="span-name">Vegetable</span>
-                                            <a href="{{ url('/product-left-thumbnail') }}">
+                                            <span class="span-name">{{ $product->Category->category_name }}</span>
+                                            <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
                                                 <h5 class="name">{{ $product->product_name }}</h5>
                                             </a>
                                             <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc }}</p>
@@ -134,10 +134,12 @@
                                             </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
                                             <h5 class="price">
-                                                <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                                @if ($product->discount_percent != null)
-                                                    <del>¥{{ number_format($product->selling_price, 0, '', ',') }}</del>
-                                                @endif
+                                            @if ($product->discount_percent != null)
+                                                <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                                <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                            @else
+                                                <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            @endif
                                             </h5>
                                         </div>
                                     </div>  
@@ -151,6 +153,125 @@
         </div>
     </section>
     <!-- Product Section End -->
+    @foreach ($products as $product)
+    @if ($product->status == 1)
+    @php
+        $starRating = 0;
+        $count = 0;
+    @endphp
+    @foreach ($reviews as $review)
+        @if ($product->id == $review->product_id)
+            @php
+                $count += 1;
+                $starRating += $review->stars_rated;
+            @endphp
+        @endif
+    @endforeach
+    @if ($count != 0)
+        @php
+            $starRating = $starRating / $count;
+        @endphp
+    @endif
+    <!-- Quick View Modal Box Start -->
+     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                    class="img-fluid blur-up lazyload" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name">{{ $product->product_name }}</h4>
+                                @if ($product->discount_percent != null)
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                    <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                @else
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                @endif
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $starRating)
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span class="ms-2">{{ $count}} Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Product Details :</h4>
+                                    <p>{!! ($product->long_desc) !!}</p>
+                                </div>
+
+                                <ul class="brand-list">
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Brand Name:</h5>
+                                            <h6>
+                                                @php
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
+                                                @endphp
+                                                {{ $brand->brand_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Product Code:</h5>
+                                            <h6>{{ $product->product_code }}</h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Category:</h5>
+                                            <h6>
+                                                @php
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
+                                                @endphp
+                                                {{ $category->category_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                                {{-- remain --}}
+                                <div class="modal-button">
+                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
+                                        @csrf
+                                        <button onclick="location.href = 'cart.html';"
+                                            class="btn btn-md add-cart-button icon">Add
+                                            To Cart</button>
+                                    </form>
+
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        View More Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quick View Modal Box End -->
+    @endif
+    @endforeach
     </body>
 
     </x-guest-layout>

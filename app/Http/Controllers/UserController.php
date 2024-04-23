@@ -58,13 +58,16 @@ class UserController extends Controller
         $customMessages = [
             'name.required' => 'The name is required.',
             'email.required' => 'The email is required.',
-            'email.required' => 'Invalid email format.',
+            'email.email' => 'Invalid email format.',
             'email.unique' => 'The email has already been taken.',
             'password.required' => 'The password is required.',
             'password.min' => 'The password must be at least 8 characters.',
             'password.confirmed' => 'The password confirmation does not match.',
             'birthday.required' => 'The birthday is required.',
             'phone.required' => 'The phone number is required.',
+            'phone.regex' => 'The phone number must be in the format ###-####-####.',
+            'phone.unique' => 'The phone number has already been taken.',
+            'phone.numeric' => 'The phone number must contain only numbers.',
             'zip_code.required' => 'The zip_code is required.',
             'prefecture_id.required' => 'Please choose the prefecture.',
             'city.required' => 'The city is required.',
@@ -73,7 +76,6 @@ class UserController extends Controller
             'room.required' => 'The room number is required.',
 
         ];
-
         
         $validator = Validator::make($request->all(), $rules, $customMessages);
 

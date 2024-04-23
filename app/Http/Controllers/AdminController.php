@@ -1395,16 +1395,48 @@ class AdminController extends Controller
     {
         $limit=10;
 
-        $lists = DB::table('sellers as S')
-                    ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
-                    ->join('users as U', 'U.id', '=', 'S.user_id')
-                    ->orderBy('S.created_at', 'desc')
-                    ->paginate($limit);
+        $lists = Seller::with('productss')->with('productss.reviews')->get();
 
-        $ttl = $lists->total();
+        $ratingWithProductCount = [];
+        foreach ($lists as $shop => $seller) {
+            $ratingWith = 0;
+            $reviewCount = 0;
+            if ($seller->productss->isNotEmpty())
+            {
+                foreach ($seller->productss as $key => $product)
+                {
+                    if ($product->reviews->isNotEmpty())
+                    {
+                        foreach ($product->reviews as $review)
+                        {
+                            $ratingWith += $review->stars_rated;
+                            $reviewCount++;
+                        }
+                    }
+                }
+            }
+            if ($reviewCount > 0)
+            {
+                $ratingWithProductCount[$shop][0] = floor($ratingWith / $reviewCount);
+                $ratingWithProductCount[$shop][1] = $reviewCount;
+            }
+            else
+            {
+                $ratingWithProductCount[$shop][0] = 0;
+                $ratingWithProductCount[$shop][1] = 0;
+            }
+        }
+
+        // $lists = DB::table('sellers as S')
+        //             ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
+        //             ->join('users as U', 'U.id', '=', 'S.user_id')
+        //             ->orderBy('S.created_at', 'desc')
+        //             ->paginate($limit);
+
+        $ttl = $lists->count();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.seller-grid',compact('lists','ttlpage','ttl'));
+        return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));
     }
 
     public function storefaq(Request $request)

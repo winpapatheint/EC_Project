@@ -35,7 +35,8 @@ class GuestLayout extends Component
                                     ->get();
         $allCategories = Category::all();
         $newBlogsExist = Blog::where('created_at', '>=', Carbon::now()->subDays(7))->exists();
+        $deal = Product::whereDate('created_at', $todayDate)->where('status', 1)->where('discount_percent', '!=', null)->get();
 
-        return view('layouts.guest',compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist', 'categories'));
+        return view('layouts.guest',compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist', 'categories', 'deal'));
     }
 }

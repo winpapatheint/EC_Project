@@ -450,13 +450,21 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="header-nav-right">
-                            <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
-                                <i data-feather="zap"></i>
-                                <span>Deal Today</span>
-                            </button>
-                        </div>
+                        @if(!empty(Auth::user()))
+                            <div class="header-nav-right">
+                                <button class="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
+                                    <i data-feather="zap"></i>
+                                    <span>Deal Today</span>
+                                </button>
+                            </div>
+                        @else
+                            <div class="header-nav-right">
+                                <button class="btn deal-button" data-bs-toggle="modal">
+                                    <i data-feather="zap"></i>
+                                <a href="{{ route('login') }}" style="color:#0da487"><span> Deal Today</span></a>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

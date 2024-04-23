@@ -85,11 +85,11 @@
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
                                     @if ($product->discount_percent != null)
-                                            <h5 class="price"><span class="theme-color">¥{{ $product->selling_price - ($product->selling_price * $product->discount_percent)/100 }}</span> 
-                                            <del>¥ {{ $product->selling_price }}</del>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span> 
+                                            <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
                                     @else
-                                            <h5 class="price"><span class="theme-color">¥{{ $product->selling_price }}</span>
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                     @endif
                                     @php
                                         $starRating = 0;
@@ -197,7 +197,7 @@
                                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                                         <div class="product-description">
                                             <div class="nav-desh">
-                                                <p>{{ $product->long_desc}}</p>
+                                                <p>{!! ($product->long_desc) !!}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -321,7 +321,7 @@
                                                                         <i data-feather="star"></i>
                                                                     </h2>
 
-                                                                    <h5>5 Overall Rating</h5>
+                                                                    <h5>{{ $count }} Customer Ratings</h5>
                                                                 </div>
                                                             </div>
 
@@ -498,6 +498,7 @@
                         </div>
 
                         <!-- Trending Product -->
+                        @if ($topProducts->count() > 0)
                         <div class="pt-25">
                             <div class="category-menu">
                                 <h3>Trending Products</h3>
@@ -507,6 +508,7 @@
                                     @php
                                         $prod = DB::table('products')->where('id',$topProduct->product_id)->first();
                                     @endphp
+                                    @if ($prod)
                                     <li>
                                         <div class="offer-product">
                                             <a href="{{ route('show-product-left-thumbnail', ['id' => $prod->id]) }}" class="offer-image">
@@ -519,42 +521,21 @@
                                                     <a href="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}">
                                                         <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
-                                                    {{-- <span>450 G</span>
-                                                    <h6 class="price theme-color">$ 70.00</h6> --}}
                                                     @if ($prod->discount_percent != null)
-                                                        <h6 class="price"><span class="theme-color">${{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>${{ $prod->selling_price }}</del>
+                                                        <h6 class="price"><span class="theme-color">¥{{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>¥{{ $prod->selling_price }}</del>
                                                     @else
-                                                        <h5 class="price"><span class="theme-color">${{ $prod->selling_price }}</span>
+                                                        <h5 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
+                                    @endif
                                 @endforeach
                                 </ul>
                             </div>
                         </div>
-
-                    
-
-                        <!-- Banner Section -->
-                        {{-- <div class="ratio_156 pt-25">
-                            <div class="home-contain">
-                                <img src="../assets/images/vegetable/banner/8.jpg" class="bg-img blur-up lazyload"
-                                    alt="">
-                                <div class="home-detail p-top-left home-p-medium">
-                                    <div>
-                                        <h6 class="text-yellow home-banner">Seafood</h6>
-                                        <h3 class="text-uppercase fw-normal"><span
-                                                class="theme-color fw-bold">Freshes</span> Products</h3>
-                                        <h3 class="fw-light">every hour</h3>
-                                        <button onclick="location.href = 'shop-left-sidebar.html';"
-                                            class="btn btn-animation btn-md fw-bold mend-auto">Shop Now <i
-                                                class="fa-solid fa-arrow-right icon"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -562,65 +543,65 @@
     </section>
     <!-- Product Left Sidebar End -->
 
-        <!-- Review Modal Start -->
-        <div class="modal fade" id="writereview" tabindex="-1" aria-labellabedby="exambleModelLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form action="{{ route('reviews') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="hidden" name="seller_id" value="{{ $product->seller_id }}">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            
-                                <div class="product-wrapper">
-                                        <div class="product-image">
-                                            <img class="img-fluid" alt="Solid Collared Tshirts"
-                                                src="">
-                                        </div>
-                                        <div class="product-content">
-                                            <h5 class="name">{{ $product->product_name }}</h5>
-                                            <div class="product-review-rating">
-                                                <div class="product-rating">
-                                                    <h6 class="price-number">{{ $product->price }}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="rating-css">
-                                        <div class="star-icon">
-                                            <input type="radio" value="1" name="rating" checked id="rating1">
-                                            <label for="rating1" class="fa fa-star"></label>
-                                            <input type="radio" value="2" name="rating" id="rating2">
-                                            <label for="rating2" class="fa fa-star"></label>
-                                            <input type="radio" value="3" name="rating" id="rating3">
-                                            <label for="rating3" class="fa fa-star"></label>
-                                            <input type="radio" value="4" name="rating" id="rating4">
-                                            <label for="rating4" class="fa fa-star"></label>
-                                            <input type="radio" value="5" name="rating" id="rating5">
-                                            <label for="rating5" class="fa fa-star"></label>
-                                        </div>
-                                    </div>
-                                    <div class="review-box">
-                                        <label for="content" class="form-label">Comments</label>
-                                        <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Comments"></textarea>
-                                    </div>
-                                </form>
-                        
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
-                        </div>
-                    </div>
+    <!-- Review Modal Start -->
+    <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
+                <form class="product-review-form" action="{{ route('reviews') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                        <div class="product-wrapper">
+                            <div class="product-image">
+                                <img class="img-fluid" alt="{{ $product->product_name }}"
+                                        src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="name">{{ $product->product_name }}</h5>
+                                <div class="product-review-rating">
+                                    <div class="product-rating">
+                                        <h6 class="price">
+                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-box">
+                            <div class="rating-css">
+                                <div class="star-icon">
+                                    <input type="radio" value="1" name="rating" checked id="rating1">
+                                    <label for="rating1" class="fa fa-star"></label>
+                                    <input type="radio" value="2" name="rating" id="rating2">
+                                    <label for="rating2" class="fa fa-star"></label>
+                                    <input type="radio" value="3" name="rating" id="rating3">
+                                    <label for="rating3" class="fa fa-star"></label>
+                                    <input type="radio" value="4" name="rating" id="rating4">
+                                    <label for="rating4" class="fa fa-star"></label>
+                                    <input type="radio" value="5" name="rating" id="rating5">
+                                    <label for="rating5" class="fa fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-box">
+                            <label for="content" class="form-label">Your Comment *</label>
+                            <textarea id="content" rows="3" class="form-control" placeholder="Your Comment"></textarea>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
+                        data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
+                </div>
+                </form>
             </div>
-            <!-- Review Modal End -->
+        </div>
+    </div>
+    <!-- Review Modal End -->
             <!-- Bg overlay Start -->
 </div>
     <!-- Bg overlay End -->

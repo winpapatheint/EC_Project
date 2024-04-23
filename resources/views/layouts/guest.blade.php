@@ -628,14 +628,10 @@
                                     <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
-                                    <a href="about-us.html" class="text-content">About Us</a>
+                                    <a href="{{ url('/news') }}" class="text-content">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="blog-list.html" class="text-content">Blog</a>
-                                </li>
-                                <li>
-
-                                    <a href="contact-us.html" class="text-content">Contact Us</a>
+                                    <a href="{{ url('/contact') }}" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
                         </div>

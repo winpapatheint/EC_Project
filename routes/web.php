@@ -57,6 +57,9 @@ Route::get('/user/profile', [UserController::class, 'showProfile'])->name('user_
 Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
 Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
+Route::get('search', [ShowProductController::class, 'footerSearch'])->name('footer_search');
+Route::get('ordertracking', [UserController::class, 'footertracking'])->name('footer_tracking');
+
 Route::get('/register', function () {return view('front-end.register');});
 
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
@@ -268,6 +271,3 @@ Route::post('/subsellerdelete', [SellerController::class, 'deleteSubseller'])->m
 
 
 require __DIR__.'/auth.php';
-
-
-

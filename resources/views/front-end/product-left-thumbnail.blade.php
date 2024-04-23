@@ -317,11 +317,11 @@
                                                                         $starRating = $starRating / $count;
                                                                     @endphp
                                                                 @endif
-                                                                    <h2>{{ $starRating }}
+                                                                    <h2>{{ number_format($starRating, 1) }}
                                                                         <i data-feather="star"></i>
                                                                     </h2>
 
-                                                                    <h5>{{ $count }} Customer Ratings</h5>
+                                                                    <h5>{{ $count }} Overall Ratings</h5>
                                                                 </div>
                                                             </div>
 
@@ -385,7 +385,8 @@
                                                                     <p>Let other customers know what you think</p>
                                                                     <button class="btn" type="button"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#writereview">Write a
+                                                                        data-bs-target="#writereview" 
+                                                                        <?php if (!(Auth::user())) echo 'disabled'; ?>>Write a
                                                                         review</button>
                                                                 </div>
                                                             </div>

@@ -28,10 +28,10 @@
     <section class="seller-grid-section">
         <div class="container-fluid-lg">
             <div class="row g-4">
-                @foreach($lists as $data)
+                @foreach($lists as $shop => $seller)
                 <div class="col-xxl-4 col-md-6">
 
-                    <a href="{{ url("/shopleftsidebar/".$data->user_id ) }}" class="seller-grid-box">
+                    <a href="{{ url("/shopleftsidebar/".$seller->id ) }}" class="seller-grid-box">
                         <div class="grid-contain">
                             <div class="seller-contact-details">
                                 <div class="seller-contact">
@@ -40,7 +40,7 @@
                                     </div>
 
                                     <div class="contact-detail">
-                                        <h5>Address: <span> {{ $data -> zip_code }} {{ $data -> city }} {{ $data -> chome }} {{ $data -> building }} {{ $data -> room }}</span></h5>
+                                        <h5>Address: <span> {{ $seller -> zip_code }} {{ $seller -> city }} {{ $seller -> chome }} {{ $seller -> building }} {{ $seller -> room }}</span></h5>
                                     </div>
                                 </div>
 
@@ -51,40 +51,36 @@
 
                                     <div class="contact-detail">
 
-                                        <h5>Contact Us: <span>{{ $data -> phone }}</span></h5>
+                                        <h5>Contact Us: <span>{{ $seller -> phone }}</span></h5>
                                     </div>
                                 </div>
                             </div>
                             <div class="contain-name">
                                 <div>
-                                    <h6>Since {{ date('Y') }}
+                                    <h6>Since {{ \Carbon\Carbon::parse($seller->shop_establish)->format('Y') }}
                                     </h6>
-                                    <h3>{{ $data->shop_name }}</h3>
+                                    <h3>{{ $seller->shop_name }}</h3>
                                     <div class="product-rating">
                                         <ul class="rating">
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star"></i>
-                                            </li>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $ratingWithProductCount[$shop][0])
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                @else
+                                                    <li><i data-feather="star"></i></li>
+                                                @endif
+                                            @endfor
                                         </ul>
-                                        <h6 class="theme-color ms-2">(26)</h6>
+                                        <span>({{ $ratingWithProductCount[$shop][1] }} Reviews)</span>
                                     </div>
-                                    <span class="product-label">{{ $data->product_count }}</span>
+                                    @if ($seller->productss->count() > 1)
+                                    <span class="product-label">{{ $seller->productss->count() }} Products</span>
+                                    @else
+                                    <span class="product-label">{{ $seller->productss->count() }} Product</span>
+                                    @endif
                                 </div>
 
                                 <div class="grid-image">
-                                    <img src="{{ asset('upload/shop/'.($data->shop_logo)   ) }}" alt="" class="img-fluid">
+                                    <img src="{{ asset('upload/shop/'.($seller->shop_logo)   ) }}" alt="" class="img-fluid">
                                 </div>
                             </div>
                         </div>

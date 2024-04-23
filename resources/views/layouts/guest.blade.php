@@ -395,11 +395,11 @@
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-                                            @if(empty(Auth::user()))
+                                            
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-                                            @endif
+                                            
 
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">

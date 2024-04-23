@@ -114,10 +114,12 @@
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
-                                            <span style="color:red">@error('prefecture'){{ $message }}@enderror</span>
+                                            @error('prefecture')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
                                             <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >

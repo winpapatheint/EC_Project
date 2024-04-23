@@ -22,19 +22,6 @@ class SellerController extends Controller
     public function dashboard()
     {
         $id = Auth::user()->id;
-        $user = User::find($id);
-
-        if ($user->created_by !== NULL) {
-            $id = Auth::user()->id;
-        }
-        else {
-            $id = $user->created_by;
-        }
-
-        $revenue =Order::where('seller_id',$id)->where('status', 'Delivered')->sum('amount');
-        $order = Order::where('seller_id',$id)->get();
-        $pending = Order::where('seller_id',$id)->where('status', 'Pending')->get();
-        $product = Product::where('seller_id', $id)->get();
         $transfer = Order::where('seller_id',$id)->latest()->paginate(5);
         $orders = Order::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
@@ -43,9 +30,8 @@ class SellerController extends Controller
 
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product'));
+        return view('seller.index',compact('labels', 'data','transfer'));
     }
-
 
 
     public function profile()

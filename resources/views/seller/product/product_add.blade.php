@@ -1,6 +1,11 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-
+<style>
+    .error{
+        margin:0 auto;
+        display:flex;
+    }
+</style>
 <div class="page-body">
 <!-- New Product Add Start -->
     <div class="container-fluid">
@@ -16,6 +21,7 @@
 
                                 <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="tagsForm">
                                     @csrf
+
                                     @if (session('flash_message'))
                                         <div class="flash_message bg-gradient-success text-center py-3 my-0">
                                             {{ session('flash_message') }}
@@ -74,6 +80,9 @@
                                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                                 @endforeach
                                             </select>
+                                            @if ($errors->has('category_id'))
+                                                <p class="text-danger">{{ $errors->first('category_id') }}</p>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -84,6 +93,12 @@
                                             <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory">
 
                                             </select>
+                                            <p style="display:none" class="sub_category_title_id error text-danger"></p>
+                                            @if (!empty($error['sub_category_title_id']))
+                                                @foreach ($error['sub_category_title_id'] as  $key => $value)
+                                                    <p class="sub_category_title_id error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
 
@@ -94,6 +109,11 @@
                                             <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
 
                                             </select>
+                                            @if (!empty($error['sub_category_id']))
+                                                @foreach ($error['sub_category_id'] as  $key => $value)
+                                                    <p class="sub_category_id error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
 
@@ -130,7 +150,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="short_desc"></textarea>
+                                            <textarea class="form-control" name="short_desc">{{ old('short_desc') }}</textarea>
                                             @error('short_desc')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -140,7 +160,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long_desc" id="ckeditor"></textarea>
+                                            <textarea class="form-control" name="long_desc" id="ckeditor">{{ old('long_desc') }}</textarea>
                                             @error('long_desc')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -148,9 +168,7 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label
-                                            class="col-sm-3 col-form-label form-label-title">Thambnail
-                                            Image</label>
+                                        <label class="col-sm-3 form-label-title">Thambnail Image</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)" value="{{ old('product_thambnail') }}">
                                             @error('product_thambnail')
@@ -161,13 +179,13 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
+                                        <label class="col-sm-3 form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" multiple name="multi_img[]" id="multiImg">
                                             <div id="preview_img"></div>
-                                            {{-- @error('multi_img')
+                                            @error('multi_img')
                                                 <div class="text-danger">{{ $message }}</div>
-                                            @enderror --}}
+                                            @enderror
                                         </div>
                                     </div>
 

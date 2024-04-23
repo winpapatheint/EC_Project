@@ -114,6 +114,7 @@
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
+                                            <span style="color:red">@error('prefecture'){{ $message }}@enderror</span>
                                         </div>
                                     </div>
 

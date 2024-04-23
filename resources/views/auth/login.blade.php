@@ -47,6 +47,7 @@
                       @php $error = $errors->toArray(); @endphp
                       <div class="input-box">
                 <form id="contact-form" class="contact-form" method="POST" action="{{ route('login') }}">
+
                  @csrf
                         <div class="error-container"></div>
                             <div class="row g-4">

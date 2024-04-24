@@ -41,7 +41,7 @@
                                             <td>{{ $key+1 }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>{{ $item['user']['name'] }}</td>
-                                            <td>{{ $item['product']['product_name'] }}</td>
+                                            <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
                                             @if ($item->stars_rated == NULL)
                                                 <td>
                                                     <ul class="rating">

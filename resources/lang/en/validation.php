@@ -31,7 +31,7 @@ return [
         'array' => 'The :attribute must have between :min and :max items.',
     ],
     'boolean' => 'The :attribute field must be true or false.',
-    'confirmed' => 'The:attributesが一致しません',
+    'confirmed' => 'The password does not match.',
     'confirmedpass' => ':attributeが一致しません',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
@@ -43,7 +43,7 @@ return [
     'distinct' => 'The :attribute field has a duplicate value.',
     'email' => '有効な:attributeを入力してください',
     'editemail' => '有効な:attributeを入力してください',
-     'emails' => '有効な:attributeを入力してください',
+    'emails' => '有効な:attributeを入力してください',
 
     'content' => 'content:attributeを入力してください',
     'ends_with' => 'The :attribute must end with one of the following: :values.',
@@ -126,7 +126,7 @@ return [
     ],
 
     'starts_with' => 'The :attribute must start with one of the following: :values.',
-    'string' => 'The :attribute must be a string.',
+    'string' => 'The :attribute must be present.',
     'timezone' => 'The :attribute must be a valid zone.',
     'unique' => ':attributeが既に登録されています',
     'uploaded' => 'The :attribute failed to upload.',
@@ -176,7 +176,6 @@ return [
          'editemail' => 'メールアドレス',
 
         'password' => 'パスワード',
-        'passwords' => 'パスワード',
         'password_confirmations'=>'パスワード',
 
         'name' => '氏名（漢字)',

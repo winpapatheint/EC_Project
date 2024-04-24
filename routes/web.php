@@ -249,7 +249,7 @@ Route::post('/reviewstatus', [ProductController::class, 'changeRtStatus'])->midd
 Route::post('/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
 Route::post('/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
 Route::get('/get-subtitle/{categoryId}', [ProductController::class, 'getSubTitle']);
-Route::get('/get-subcategories-by-title/{subcategoryTitleId}', [ProductController::class, 'getSubcategory']);
+Route::get('/get-subcategories-by-title/{subcategorytitleId}', [ProductController::class, 'getSubcategory']);
 
 //SellerOrder
 Route::get('/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');

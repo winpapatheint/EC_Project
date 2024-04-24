@@ -103,7 +103,7 @@
                                         <label class="col-sm-3 col-form-label form-label-title">SubCategory</label>
                                         <div class="col-sm-9">
                                             <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
-                                                {{-- <option>{{ $products->subcategory->sub_category_name }}</option> --}}
+
                                             </select>
                                         </div>
                                     </div>
@@ -140,6 +140,16 @@
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="long_desc" id="ckeditor">{!! $products->long_desc !!}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" name="care_instructions" id="ckeditor1">{!! $products->care_instructions !!}</textarea>
+                                            @error('care_instructions')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -295,7 +305,7 @@
             var subcategoryTitleId = this.value;
 
             var subcategoryNameSelect = document.getElementById('subname');
-            subcategoryNameSelect.innerHTML = '<option value="">{{ $products->subcategory->sub_category_name }}</option>';
+            subcategoryNameSelect.innerHTML = '<option value="{{ $products->sub_category_id }}">{{ $products->subcategory->sub_category_name }}</option>';
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
@@ -323,8 +333,6 @@
         subcategorySelect.dispatchEvent(event);
     });
 </script>
-
-
 
 
 <script>
@@ -361,5 +369,11 @@
         });
 </script>
 
-
+<script>
+    ClassicEditor
+        .create(document.querySelector('#ckeditor1'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 @endsection

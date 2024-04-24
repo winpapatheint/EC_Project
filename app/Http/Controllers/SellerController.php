@@ -225,12 +225,6 @@ class SellerController extends Controller
         ]);
         event(new Registered($user));
 
-        $user->assignRole('subseller');
-        $user->givePermissionTo(['product.list', 'product.add','product.edit','product.delete',
-        'order.list', 'order.add','order.edit','order.delete',
-        'review.list', 'review.add','review.edit','review.delete',
-        'help.list', 'help.add','help.edit','brand.add','profile', 'dashboard']);
-
         $subseller = Subseller::create([
             'user_id' => $user->id,
             'seller_id' => Auth::user()->id,

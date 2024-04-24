@@ -36,7 +36,7 @@
                                 @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="shop_name" class="form-control" placeholder="Type your shop name" value=" {{ old('shop_name') }}">
+                                        <input type="text" name="shop_name" class="form-control" placeholder="Shop Name" value="{{ old('shop_name') }}">
                                         <label>Shop Name</label>
                                         @error('shop_name')
                                             <div class="text-danger">{{ $message }}</div>
@@ -59,24 +59,24 @@
                                         <input type="file" name="shop_logo" class="form-control" value="{{ old('shop_logo') }}">
                                         <label>Shop Logo</label>
                                         @error('shop_logo')
-                                            <div class="text-danger">{{ $message }}</div>
+                                            <div class="text-danger">The shop logo {{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="phone" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
+                                        <input type="number" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
                                         <label>Phone</label>
                                         @error('phone')
-                                            <div class="text-danger">{{ $message }}</div>
+                                            <div class="text-danger">The phone must be present</div>
                                         @enderror
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" name="zip_code" class="form-control" placeholder="Zip Code" max="7" value="{{ old('zip_code') }}">
+                                        <input type="number" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}">
                                         <label>Zip Code</label>
                                         @error('zip_code')
                                             <div class="text-danger">{{ $message }}</div>
@@ -99,6 +99,9 @@
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('prefecture')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -107,7 +110,7 @@
                                         <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" value="{{ old('city') }}">
                                         <label>City, Ward, Town</label>
                                         @error('city')
-                                            <div class="text-danger">{{ $message }}</div>
+                                            <div class="text-danger">The city {{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -166,12 +169,15 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="bank_acc_type" value="{{ old('bank_acc_type') }}">
-                                            <option>Choose Bank Account Type</option>
-                                            <option>普通</option>
-                                            <option>当座</option>
-                                            <option>貯蓄</option>
+                                        <select class="form-control" name="bank_acc_type">
+                                            <option value="">Choose Bank Account Type</option>
+                                            <option value="普通" {{ old('bank_acc_type') == '普通' ? 'selected' : '' }}>普通</option>
+                                            <option value="当座" {{ old('bank_acc_type') == '当座' ? 'selected' : '' }}>当座</option>
+                                            <option value="貯蓄" {{ old('bank_acc_type') == '貯蓄' ? 'selected' : '' }}>貯蓄</option>
                                         </select>
+                                        @error('bank_acc_type')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -199,9 +205,9 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') }}">
+                                        <input type="text" name="user_name" class="form-control" placeholder="Name" value="{{ old('user_name') }}">
                                         <label>Username</label>
-                                        @error('name')
+                                        @error('user_name')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -212,16 +218,16 @@
                                         <input type="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
                                         <label>Email Address</label>
                                         @error('email')
-                                                <div class="text-danger">{{ $message }}</div>
+                                                <div class="text-danger">The email {{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" name="password" class="form-control" placeholder="Password" value="{{ old('password') }}">
+                                        <input type="password" name="passwords" class="form-control" placeholder="Password" value="{{ old('passwords') }}">
                                         <label>Password</label>
-                                        @error('password')
+                                        @error('passwords')
                                                 <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -231,6 +237,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="password" name="confirmed" class="form-control" placeholder="Password" value="{{ old('confirmed') }}">
                                         <label>Confirm Password</label>
+                                        @error('confirmed')
+                                            <div class="text-danger">The confirmed password does not match.</div>
+                                        @enderror
                                     </div>
                                 </div>
 

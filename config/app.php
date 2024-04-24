@@ -168,10 +168,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
         // Pusher\Laravel\PusherServiceProvider::class,
-        Haruncpi\LaravelIdGenerator\IdGeneratorServiceProvider::class,
-        // Barryvdh\DomPDF\ServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
 
 
 
@@ -241,7 +237,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+
         // 'Pusher' => Pusher\Pusher::class,
 
     ],

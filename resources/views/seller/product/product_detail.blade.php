@@ -104,6 +104,13 @@
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
+                                            <div class="col-sm-9">
+                                                <p>{!! $data->care_instructions !!}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2 row align-items-center">
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Thumbnail
                                                 Image</label>

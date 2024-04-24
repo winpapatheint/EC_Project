@@ -61,10 +61,10 @@ Route::get('search', [ShowProductController::class, 'footerSearch'])->name('foot
 Route::get('ordertracking', [UserController::class, 'footertracking'])->name('footer_tracking');
 
 Route::get('/register', function () {return view('front-end.register');});
-//->middleware(['auth', 'role:buyer'])
+
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
-Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->name('show-wishlist');
-Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->name('show-comparelist');
+Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->middleware(['auth', 'role:buyer'])->name('show-wishlist');
+Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->middleware(['auth', 'role:buyer'])->name('show-comparelist');
 Route::get('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');

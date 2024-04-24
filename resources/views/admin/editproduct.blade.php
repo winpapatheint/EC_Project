@@ -6,6 +6,21 @@
             margin:0 auto;
             display:flex;
         }
+        .btn-group {
+            display: flex;
+            border
+        }
+
+        .btn-group input[type="submit"],
+        .btn-group a {
+            flex: 1;
+            border-radius: 0%;
+        }
+        .btn-group input,
+        .btn-group button {
+
+            border-radius: 0%;
+        }
     </style>
 
     @php $error = $errors->toArray(); if(!isset($editmode)){$editmode = false;} if(!isset($editother)){$editother = false;}
@@ -270,24 +285,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <form class="theme-form theme-form-2 mega-form" method="post" action="{{ route('updatemultiImg') }}"
-                                              enctype="multipart/form-data">
+                                            <form class="theme-form theme-form-2 mega-form" method="POST" action="{{ route('updatemultiImg') }}" enctype="multipart/form-data">
                                                 @csrf
                                                 @foreach ($multiImgs as $key => $img)
                                                     <tr>
                                                         <th>{{ $key+1 }}</th>
-                                                        <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="100"> </td>
-                                                        <td><input type="file" class="form-control" name="multi_img[{{ $img->id }}]"> </td>
+                                                        <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="80"></td>
+                                                        <td><input type="file" class="form-control" name="multi_img[{{ $img->id }}]"></td>
                                                         <td>
-                                                            <div class="input-group">
+                                                            <div class="btn-group">
                                                                 <input type="submit" class="btn btn-primary px-4" value="Update">
-                                                                <a href="{{ route('deletemultiImg',$img->id) }}" class="btn btn-secondary px-4">Delete</a>
+                                                                <a href="{{ route('deletemultiImg', $img->id) }}" class="btn btn-secondary px-3 ms-2">Delete</a>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 @endforeach
                                             </form>
                                         </tbody>
+
                                     </table>
                                 </div>
                             </div>

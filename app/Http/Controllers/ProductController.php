@@ -9,13 +9,15 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\MultiImg;
+use App\Models\Notification;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -142,6 +144,34 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
         }
+
+        $inquiry_email = 'info-test@asia-hd.com';
+        $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
+
+        $email = $user->email;
+        $name = $user->name;
+        $data = array('name'=>$name);
+        if (!empty($request->email)) {
+            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+                $message->from($email,$name);
+                $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                \r\n名前：　".$name."
+                \r\n"."メールアドレス：　".$email."
+                \r\n
+                \r\n"."通知のお知らせ：　
+                \r\n
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            });
+        }
+
+        $notification = Notification::find(3);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
+
         return redirect('/productlist')->with('flash_message', 'Data added successfully');
     }
 

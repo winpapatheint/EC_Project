@@ -23,9 +23,11 @@ use App\Models\Cart;
 use App\Models\CouponDetail;
 use App\Models\seller;
 use App\Models\Prefecture;
+use App\Models\Notification;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Auth\Events\Registered;
-
+use Carbon\Carbon;
+use Mail;
 
 class UserController extends Controller
 {
@@ -41,19 +43,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'birthday' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'prefecture_id' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-        ];
+        // $rules = [
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:users',
+        //     'password' => 'required|string|min:8|confirmed',
+        //     'birthday' => 'required|string|max:255',
+        //     'phone' => 'required|string|max:255',
+        //     'zip_code' => 'required|string|max:255',
+        //     'prefecture_id' => 'required|string|max:255',
+        //     'city' => 'required|string|max:255',
+        //     'chome' => 'required|string|max:255',
+        //     'building' => 'required|string|max:255',
+        //     'room' => 'required|string|max:255',
+        // ];
 
         $customMessages = [
             'name.required' => 'The name is required.',
@@ -76,15 +78,10 @@ class UserController extends Controller
             'room.required' => 'The room number is required.',
 
         ];
-        
+
         $validator = Validator::make($request->all(), $rules, $customMessages);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-        else{
+
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -92,9 +89,9 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'status' => '1',
             ]);
-    
+
             event(new Registered($user));
-    
+
             $buyer = Buyer::create([
                 'user_id' => $user->id,
                 'prefecture_id' => $request->prefecture,
@@ -109,14 +106,40 @@ class UserController extends Controller
                 'building' => $request->building,
                 'room_no' => $request->room,
             ]);
-    
+
             event(new Registered($buyer));
-    
+
+            $inquiry_email = 'info-test@asia-hd.com';
+            $user = User::where('id', $user->id)->select('email', 'name')->first();
+
+            $email = $user->email;
+            $name = $user->name;
+            $data = array('name'=>$name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+                    $message->from($email,$name);
+                    $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$name."
+                    \r\n"."メールアドレス：　".$email."
+                    \r\n
+                    \r\n"."通知のお知らせ：　
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+            }
+
+            $notification = Notification::find(2);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+
             $email = $request->email;
             return view('auth.verify-email', compact('email'));
-        }
-
     }
+
     public function indexuser()
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
@@ -533,13 +556,12 @@ class UserController extends Controller
             $buyerid = $buyer->id;
 
             if(isset($productid))
-                $cart = Cart::create([
+                $cart = Cart::firstorCreate([
                     'product_id' => $productid,
                     'seller_id' => $sellerid,
                     'buyer_id' => $buyerid,
                     'quantity' => '1',
                 ]);
-
 
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
@@ -861,6 +883,11 @@ class UserController extends Controller
     public function showCheckout(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $subtotal = $request->subTotal;
+        $shipping = $request->shipping;
+        $coupon = $request->coupon_discount;
+        $checkouttotal = $request->total;
+        //dd($request->subTotal);
 
         $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -890,9 +917,7 @@ class UserController extends Controller
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
-            }
-
-            $discountedPrices = [];
+                $discountedPrices = [];
                 foreach ($cartLists as $product)
                 {
 
@@ -914,17 +939,10 @@ class UserController extends Controller
                     ];
                 }
 
-        $result = DB::table('coupons')
-                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                    ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
-                    ->select('coupons.discount_amount')
-                    ->pluck('coupons.discount_amount');
-                $discount = $result[0];
-
-
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','discountedPrices','discount'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','discountedPrices','cartLists','subtotal','shipping','coupon','checkouttotal'));
 
     }
+}
     //Purchase
     public function paymentCompleted(Request $request)
     {
@@ -938,8 +956,7 @@ class UserController extends Controller
             $sizes = $request->size;
             $quantities = $request->quantity;
             $totalQty = $request->totalqty;
-            $amount = $request->amount;
-            $amount1 = $request->amount1;
+            $subtotal = $request->subtotal;
             $totalAmount = $request->totalamount;
             $postcode = $request->postcode;
             $city = $request->city;

@@ -14,7 +14,6 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item">Shop</li>
                                 <li class="breadcrumb-item active">Compare</li>
                             </ol>
                         </nav>

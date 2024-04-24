@@ -79,12 +79,7 @@ class UserController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $customMessages);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-        else{
+  
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -114,7 +109,7 @@ class UserController extends Controller
     
             $email = $request->email;
             return view('auth.verify-email', compact('email'));
-        }
+       
 
     }
     public function indexuser()
@@ -533,13 +528,12 @@ class UserController extends Controller
             $buyerid = $buyer->id;
 
             if(isset($productid))
-                $cart = Cart::create([
+                $cart = Cart::firstorCreate([
                     'product_id' => $productid,
                     'seller_id' => $sellerid,
                     'buyer_id' => $buyerid,
                     'quantity' => '1',
                 ]);
-
 
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
@@ -861,6 +855,11 @@ class UserController extends Controller
     public function showCheckout(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $subtotal = $request->subTotal;
+        $shipping = $request->shipping;
+        $coupon = $request->coupon_discount;
+        $checkouttotal = $request->total;
+        //dd($request->subTotal);
 
         $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -890,9 +889,7 @@ class UserController extends Controller
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
-            }
-
-            $discountedPrices = [];
+                $discountedPrices = [];
                 foreach ($cartLists as $product)
                 {
 
@@ -914,17 +911,10 @@ class UserController extends Controller
                     ];
                 }
 
-        $result = DB::table('coupons')
-                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                    ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
-                    ->select('coupons.discount_amount')
-                    ->pluck('coupons.discount_amount');
-                $discount = $result[0];
-
-
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','discountedPrices','discount'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','discountedPrices','cartLists','subtotal','shipping','coupon','checkouttotal'));
 
     }
+}
     //Purchase
     public function paymentCompleted(Request $request)
     {
@@ -938,8 +928,7 @@ class UserController extends Controller
             $sizes = $request->size;
             $quantities = $request->quantity;
             $totalQty = $request->totalqty;
-            $amount = $request->amount;
-            $amount1 = $request->amount1;
+            $subtotal = $request->subtotal;
             $totalAmount = $request->totalamount;
             $postcode = $request->postcode;
             $city = $request->city;

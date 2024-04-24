@@ -16,7 +16,7 @@
                                 <ul>
                                     <li>{{ $order->created_at }}</li>
                                     <li>{{ $order->qty }}</li>
-                                    <li>{{ $order->amount }}</li>
+                                    <li>{{ $order->total_amount }}</li>
                                 </ul>
                             </div> --}}
                         </div>

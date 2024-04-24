@@ -86,9 +86,9 @@
 
             $.ajax({
                 url: '/delete-wishlist/' + wishlistId,
-                method: 'POST',
+                method: 'get',
                 success: function(response) {
-                    console.log('Wishlist item deleted successfully.');
+                    console.log(response);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error deleting wishlist item:', error);

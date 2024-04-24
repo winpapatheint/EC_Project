@@ -1414,6 +1414,9 @@ class AdminController extends Controller
                         }
                     }
                 }
+            }
+            if ($reviewCount > 0)
+            {
                 $ratingWithProductCount[$shop][0] = floor($ratingWith / $reviewCount);
                 $ratingWithProductCount[$shop][1] = $reviewCount;
             }

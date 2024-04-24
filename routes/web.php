@@ -65,14 +65,14 @@ Route::get('/register', function () {return view('front-end.register');});
 Route::get('/products', [ShowProductController::class, 'ShowProductList'])->name('show-product');
 Route::get('/wishlist', [ShowProductController::class, 'ShowWishList'])->middleware(['auth', 'role:buyer'])->name('show-wishlist');
 Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->middleware(['auth', 'role:buyer'])->name('show-comparelist');
-Route::post('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
-Route::post('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
+Route::get('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
+Route::get('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
-Route::get('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
+Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
@@ -218,7 +218,7 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
 Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
-Route::get('/dashboard', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
+
 Route::get('/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
 Route::post('/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');
 Route::post('/shopupdate', [SellerController::class, 'updateShop'])->middleware(['auth','role:seller'])->name('update.shop');

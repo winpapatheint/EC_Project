@@ -167,7 +167,7 @@
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>
-                                <a href="#">Log In</a>
+                                <a href="{{ route('login') }}">Log In</a>
                             </div>
                         </div>
                     </div>

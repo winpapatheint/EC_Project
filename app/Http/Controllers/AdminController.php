@@ -677,7 +677,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.seller_id', $id)
@@ -871,7 +871,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
@@ -1011,7 +1011,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
@@ -1151,7 +1151,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
@@ -1401,6 +1401,8 @@ class AdminController extends Controller
         foreach ($lists as $shop => $seller) {
             $ratingWith = 0;
             $reviewCount = 0;
+            $productStarReview = 0;
+            $productCount = 0;
             if ($seller->productss->isNotEmpty())
             {
                 foreach ($seller->productss as $key => $product)
@@ -1412,12 +1414,15 @@ class AdminController extends Controller
                             $ratingWith += $review->stars_rated;
                             $reviewCount++;
                         }
+                        $productStarReview += $ratingWith / $product->reviews->count();
+                        $ratingWith = 0;
                     }
+                    $productCount++;
                 }
             }
-            if ($reviewCount > 0)
+            if ($productStarReview > 0)
             {
-                $ratingWithProductCount[$shop][0] = floor($ratingWith / $reviewCount);
+                $ratingWithProductCount[$shop][0] = floor($productStarReview / $productCount);
                 $ratingWithProductCount[$shop][1] = $reviewCount;
             }
             else

@@ -45,7 +45,7 @@ class ShowProductController extends Controller
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
 
-        $limit = 10; // set the number of products per page
+        $limit = 9; // set the number of products per page
 
         $searchHistory = Session::get('searchHistory', []);
         if ($mainSearch != null && !in_array($mainSearch, $searchHistory)) {
@@ -233,17 +233,20 @@ class ShowProductController extends Controller
         $ratingWithProductCount = [];
         $ratingWith = 0;
         $productCount = 0;
+        $productStarReview = 0;
         $ratingProject = Product::with('reviews')->where('seller_id', $product->seller->id)->get();
         if ($ratingProject->count() > 0) {
-            foreach ($ratingProject as $rating) {
+            foreach ($ratingProject as $key => $rating) {
                 if($rating->reviews->isNotEmpty()) {
                     foreach ($rating->reviews as $review) {
                         $ratingWith += $review->stars_rated;
                         $productCount++;
                     }
+                    $productStarReview += $ratingWith / $rating->reviews->count();
+                    $ratingWith = 0;
                 }
             }
-            $ratingWithProductCount[0] = floor($ratingWith / $ratingProject->count());
+            $ratingWithProductCount[0] = floor($productStarReview / $ratingProject->count());
             $ratingWithProductCount[1] = $productCount;
         }
         return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'ratingWithProductCount', 'multiImages'));
@@ -262,7 +265,7 @@ class ShowProductController extends Controller
         $ids = $validated['ids'] ?? [];
         $topic = $validated['topic'] ?? null;
 
-        $limit = 10; // set the number of products per page
+        $limit = 9; // set the number of products per page
         if($ids)
         {
             $products = Product::with('Category')->whereIn('id', $ids)->where('status', '=', '1')->get();

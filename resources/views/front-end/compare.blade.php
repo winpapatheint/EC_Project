@@ -14,7 +14,6 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item">Shop</li>
                                 <li class="breadcrumb-item active">Compare</li>
                             </ol>
                         </nav>
@@ -72,7 +71,14 @@
                                 <tr>
                                     <th>Price</th>
                                     @foreach($comparelistProducts as $product)
-                                        <td class="text-content">{{ $product->selling_price }}</td>
+                                        <td class="text-content">
+                                        @if ($product->discount_percent != null)
+                                            <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                        @else
+                                            <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        @endif
+                                        </td>
                                     @endforeach
                                 </tr>
 
@@ -135,24 +141,28 @@
     <script src="{{ asset('frontend/assets/js/table-column-remove.js') }}"></script>
 
     <script>
-    $(document).ready(function() {
-        $('.remove_column').click(function(e) {
-            e.preventDefault();
-            var comparelistId = $(this).data('comparelist-id');
+        $(document).ready(function() {
+            $('.remove_column').click(function(e) {
+                e.preventDefault();
+                var comparelistId = $(this).data('comparelist-id');
 
-            $.ajax({
-                url: '/delete-comparelist/' + comparelistId,
-                method: 'POST',
-                success: function(response) {
-                    console.log('Compare item deleted successfully.');
-                    // For example: $(this).closest('tr').remove();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting comparelist item:', error);
-                }
+                $.ajax({
+                    url: '/delete-comparelist/' + comparelistId,
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        // For example: $(this).closest('tr').remove();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting comparelist item:', error);
+                    }
+                });
             });
         });
-    });
     </script>
+
 
 </x-guest-layout>

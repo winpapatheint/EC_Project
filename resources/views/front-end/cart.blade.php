@@ -42,9 +42,9 @@
                                     <tr class="product-box-contain">
                                         <td class="product-detail">
                                             <div class="product border-0">
-                                                <a href=" {{ url('/product-left-thumbnail') }}" class="product-image">
-                                                    <img src="../assets/images/vegetable/product/1.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
+                                                <a href="{{ route('show-product-left-thumbnail', ['id' => $cartlist->product_id]) }}">
+                                                    <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
+                                                            class="img-fluid blur-up lazyload" alt="">
                                                 </a>
                                                 <div class="product-detail">
                                                     <ul>
@@ -143,82 +143,97 @@
                     </div>
                 @endforeach
                 </div>
-
+                
                 <div class="col-xxl-3">
-                    <div class="summery-box p-sticky">
-                        <div class="summery-header">
-                            <h3>Cart Total</h3>
-                        </div>
-                        @if ($couponapplycheck == 1)
-                        <div class="alert alert-success alert-block" id="alert-success">
-                            <strong>Invalid Coupon Code</strong>
-                        </div>
-                        @endif
-                        <div class="summery-contain" id="ts-form">
-                            <form method="POST" action="{{ route('apply_coupon_code') }}" >
-                                    @csrf                 
-                                <div class="coupon-cart">
-                                    <input type="hidden" name="buyer_id" value="{{ $cartlist->buyer_id }}">
-                                    <h6 class="text-content mb-2">Coupon Apply</h6>
-                                    <div class="mb-3 coupon-box input-group">
-                                        <input type="text" class="form-control" name="coupon" id="exampleFormControlInput1"
-                                            placeholder="Enter Coupon Code Here...">
-                                        <button type="submit" class="btn-apply">Apply</button>
+                <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
+                        <div class="summery-box p-sticky">
+                            <div class="summery-header">
+                                <h3>Cart Total</h3>
+                            </div>
+                            @if ($couponapplycheck == 1)
+                            <div class="alert alert-success alert-block" id="alert-success">
+                                <strong>Invalid Coupon Code</strong>
+                            </div>
+                            @endif
+                            <div class="summery-contain" id="ts-form">
+                                               
+                                    <div class="coupon-cart">
+                                        <input type="hidden" name="buyer_id" value="{{ $cartlist->buyer_id }}">
+                                        <h6 class="text-content mb-2">Coupon Apply</h6>
+                                        <div class="mb-3 coupon-box input-group">
+                                            <input type="text" class="form-control" name="coupon" id="exampleFormControlInput1"
+                                                placeholder="Enter Coupon Code Here...">
+                                            <button id="applyButton" class="btn-apply">Apply</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                            <ul>
-                                <li>
-                                    <h4>Subtotal</h4> 
-                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
-                                </li>
                                 
-                                <li>
-                                    <h4>Coupon Discount</h4>   
-                                    @if ($couponapplycheck != 1)  
-                                    <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                <ul>
+                                    <li>
+                                        <h4>Subtotal</h4> 
+                                        <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
+                                    </li>
+                                    
+                                    
+                                    <li>
+                                        <h4>Coupon Discount</h4>   
+                                        @if ($couponapplycheck != 1)  
+                                        <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
+                                        @else
+                                        <h4 class="price"> (-) ¥ 0</h4>
+                                        @endif
+                                    </li>
+                                   
+                                    
+                                    <li class="align-items-start">
+                                        <h4>Shipping</h4>
+                                        <h4 class="price text-end">¥ 500</h4>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+
+                            <ul class="summery-total">
+                                <li class="list-total border-top-0">
+                                    <h4>Total (JPY)</h4>
+                                    @if($discount)
+                                        @php 
+                                            $total  = $subTotal + 500 - $discount
+                                        @endphp
                                     @else
-                                    <h4 class="price"> (-) ¥ 0</h4>
+                                        @php
+                                            $total  = $subTotal + 500
+                                        @endphp
                                     @endif
-
+                                    <h4 class="price theme-color">¥ {{ number_format($total , 0, '.', ',') }}</h4>
                                 </li>
                                 
-                                <li class="align-items-start">
-                                    <h4>Shipping</h4>
-                                    <h4 class="price text-end">¥ 500</h4>
-                                </li>
-                            </ul>
+                            </ul>              
+                            
+                                <input type="hidden" name="subTotal" value="{{ $subTotal }}">
+                                <input type="hidden" name="shipping" value="500">
+                                <input type="hidden" name="coupon_discount" value="{{ $discount }}">
+                                <input type="hidden" name="total" value="{{ $total }}">
+                            <div class="button-group cart-button">
+                                <ul>
+                                    <li>
+                                        <button type="submit"
+                                            class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            
                         </div>
-
-                        <ul class="summery-total">
-                            <li class="list-total border-top-0">
-                                <h4>Total (JPY)</h4>
-                                @if($discount)
-                                    @php 
-                                        $total  = $subTotal + 500 - $discount
-                                    @endphp
-                                @else
-                                    @php
-                                        $total  = $subTotal + 500
-                                    @endphp
-                                @endif
-                                <h4 class="price theme-color">¥ {{ number_format($total , 0, '.', ',') }}</h4>
-                            </li>
-                        </ul>              
-                        <div class="button-group cart-button">
-                            <ul>
-                                <li>
-                                    <a type="button"
-                                        class="btn btn-animation proceed-btn fw-bold" href="{{ route('checkout') }}">Process To Checkout</a>
-                                </li>
-                                </form>
-                                
-                            </ul>
-                        </div>
-                    </div>
+                        </form>
                 </div>
+
             </div>
         </div>
     </section>
     <!-- Cart Section End -->
+<script>
+    document.getElementById('applyButton').addEventListener('click', function() {
+        window.location.href = "{{ route('apply_coupon_code') }}";
+    });
+</script>
 </x-guest-layout>

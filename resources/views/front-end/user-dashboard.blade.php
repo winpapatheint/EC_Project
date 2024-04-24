@@ -16,7 +16,7 @@
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="index.html">
+                                    <a href="/">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
@@ -43,18 +43,18 @@
                         </div>
                         <div class="profile-box">
                             <div class="cover-image">
-                                <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/inner-page/cover-img.jpg') }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
 
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
-                                        <img src=""
+                                        <img src="{{ asset('frontend/assets/images/profile.png') }}"
                                             class="blur-up lazyload update_img" alt="">
                                         <div class="cover-icon">
                                             <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
+                                                <input type="file" name="user_profile" class="form-control" value="{{ old('user_profile') }}">
                                             </i>
                                         </div>
                                     </div>
@@ -133,9 +133,9 @@
                                         <div class="row g-sm-4 g-3">
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
                                                 <div class="total-contain">
-                                                    <img src="../assets/images/svg/order.svg"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/order.svg') }}"
                                                         class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/order.svg" class="blur-up lazyload"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/order.svg') }}" class="blur-up lazyload"
                                                         alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
@@ -146,9 +146,9 @@
 
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
                                                 <div class="total-contain">
-                                                    <img src="../assets/images/svg/pending.svg"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/pending.svg') }}"
                                                         class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/pending.svg" class="blur-up lazyload"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/pending.svg') }}" class="blur-up lazyload"
                                                         alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Pending Order</h5>
@@ -159,9 +159,9 @@
 
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
                                                 <div class="total-contain">
-                                                    <img src="../assets/images/svg/wishlist.svg"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/wishlist.svg') }}"
                                                         class="img-1 blur-up lazyload" alt="">
-                                                    <img src="../assets/images/svg/wishlist.svg"
+                                                    <img src="{{ asset('/frontend/assets/images/svg/wishlist.svg') }}"
                                                         class="blur-up lazyload" alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Wishlist</h5>

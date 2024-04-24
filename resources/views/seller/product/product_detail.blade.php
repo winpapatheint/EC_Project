@@ -99,7 +99,7 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $data->long_desc }}</p>
+                                                <p>{!! $data->long_desc !!}</p>
                                             </div>
                                         </div>
 
@@ -116,7 +116,7 @@
                                             <label class="col-sm-3 col-form-label form-label-title">Multiple Images</label>
                                             <div class="col-sm-9">
                                                 @foreach ($multiImgs as $key => $img)
-                                                    <img width="100" src="{{ asset('upload/multiImg/'.$img->photo_name) }}">
+                                                    <img width="80" src="{{ asset('upload/multiImg/'.$img->photo_name) }}">
                                                 @endforeach
                                             </div>
                                         </div>

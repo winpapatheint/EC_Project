@@ -10,7 +10,7 @@
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="index.html">
+                                    <a href="/">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
@@ -114,9 +114,12 @@
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('prefecture')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-md-6">
                                         <div class="form-floating theme-form-floating">
                                             <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
@@ -164,7 +167,7 @@
 
                             <div class="sign-up-box">
                                 <h4>Already have an account?</h4>
-                                <a href="#">Log In</a>
+                                <a href="{{ route('login') }}">Log In</a>
                             </div>
                         </div>
                     </div>

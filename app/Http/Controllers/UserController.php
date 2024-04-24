@@ -57,34 +57,31 @@ class UserController extends Controller
         //     'room' => 'required|string|max:255',
         // ];
 
-        // $customMessages = [
-        //     'name.required' => 'The name is required.',
-        //     'email.required' => 'The email is required.',
-        //     'email.required' => 'Invalid email format.',
-        //     'email.unique' => 'The email has already been taken.',
-        //     'password.required' => 'The password is required.',
-        //     'password.min' => 'The password must be at least 8 characters.',
-        //     'password.confirmed' => 'The password confirmation does not match.',
-        //     'birthday.required' => 'The birthday is required.',
-        //     'phone.required' => 'The phone number is required.',
-        //     'zip_code.required' => 'The zip_code is required.',
-        //     'prefecture_id.required' => 'Please choose the prefecture.',
-        //     'city.required' => 'The city is required.',
-        //     'chome.required' => 'The chome is required.',
-        //     'building.required' => 'The building number is required.',
-        //     'room.required' => 'The room number is required.',
+        $customMessages = [
+            'name.required' => 'The name is required.',
+            'email.required' => 'The email is required.',
+            'email.email' => 'Invalid email format.',
+            'email.unique' => 'The email has already been taken.',
+            'password.required' => 'The password is required.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'birthday.required' => 'The birthday is required.',
+            'phone.required' => 'The phone number is required.',
+            'phone.regex' => 'The phone number must be in the format ###-####-####.',
+            'phone.unique' => 'The phone number has already been taken.',
+            'phone.numeric' => 'The phone number must contain only numbers.',
+            'zip_code.required' => 'The zip_code is required.',
+            'prefecture_id.required' => 'Please choose the prefecture.',
+            'city.required' => 'The city is required.',
+            'chome.required' => 'The chome is required.',
+            'building.required' => 'The building number is required.',
+            'room.required' => 'The room number is required.',
 
-        // ];
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $customMessages);
 
 
-        // $validator = Validator::make($request->all(), $rules, $customMessages);
-
-        // if ($validator->fails()) {
-        //     return redirect()->back()
-        //                 ->withErrors($validator)
-        //                 ->withInput();
-        // }
-        // else{
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -141,9 +138,8 @@ class UserController extends Controller
 
             $email = $request->email;
             return view('auth.verify-email', compact('email'));
-        // }
-
     }
+
     public function indexuser()
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
@@ -560,13 +556,12 @@ class UserController extends Controller
             $buyerid = $buyer->id;
 
             if(isset($productid))
-                $cart = Cart::create([
+                $cart = Cart::firstorCreate([
                     'product_id' => $productid,
                     'seller_id' => $sellerid,
                     'buyer_id' => $buyerid,
                     'quantity' => '1',
                 ]);
-
 
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
@@ -888,6 +883,11 @@ class UserController extends Controller
     public function showCheckout(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $subtotal = $request->subTotal;
+        $shipping = $request->shipping;
+        $coupon = $request->coupon_discount;
+        $checkouttotal = $request->total;
+        //dd($request->subTotal);
 
         $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -917,9 +917,7 @@ class UserController extends Controller
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
-            }
-
-            $discountedPrices = [];
+                $discountedPrices = [];
                 foreach ($cartLists as $product)
                 {
 
@@ -941,17 +939,10 @@ class UserController extends Controller
                     ];
                 }
 
-        $result = DB::table('coupons')
-                    ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
-                    ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
-                    ->select('coupons.discount_amount')
-                    ->pluck('coupons.discount_amount');
-                $discount = $result[0];
-
-
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','discountedPrices','discount'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','discountedPrices','cartLists','subtotal','shipping','coupon','checkouttotal'));
 
     }
+}
     //Purchase
     public function paymentCompleted(Request $request)
     {
@@ -965,8 +956,7 @@ class UserController extends Controller
             $sizes = $request->size;
             $quantities = $request->quantity;
             $totalQty = $request->totalqty;
-            $amount = $request->amount;
-            $amount1 = $request->amount1;
+            $subtotal = $request->subtotal;
             $totalAmount = $request->totalamount;
             $postcode = $request->postcode;
             $city = $request->city;

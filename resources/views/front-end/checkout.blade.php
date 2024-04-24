@@ -12,7 +12,7 @@
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="index.html">
+                                    <a href="/">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
@@ -182,13 +182,12 @@
                                 </li>
                             </ul>
                             <input type="hidden" name="totalqty" value="{{ $totalqty }}">
-                                  
                             @endforeach
                             <ul class="summery-total">
                                 <li>
 
                                     <h4>Subtotal</h4>
-                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ {{ number_format($subtotal , 0, '.', ',') }}</h4>
                                 
                                 </li>
 
@@ -200,15 +199,12 @@
                                 <li>
 
                                     <h4>Coupon/Code</h4>
-                                    <h4 class="price">¥ - {{ number_format($discount , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ - {{ number_format($coupon , 0, '.', ',') }}</h4>
                                 </li>
-                                @php 
-                                    $total  =  $subTotal + 500 - $discount
-                                @endphp
-
+                            
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
-                                    <h4 class="price">¥ {{ number_format($total , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ {{ number_format($checkouttotal , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
                             
@@ -271,8 +267,7 @@ function purchasepaymentdone(total, callback) {
     var Newsize = <?php echo json_encode($productSizes ); ?>; 
     var Newquantity = <?php echo json_encode($productQuantities ); ?>;
     var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
-    var Newamount = <?php echo json_encode($amount ); ?>;
-    var Newamount1 = <?php echo json_encode($amount1 ); ?>;
+    var Newsubtotal = <?php echo json_encode($subtotal ); ?>;
     var Newtotalamount = <?php echo json_encode($total ); ?>;
     var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
     var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
@@ -292,8 +287,7 @@ function purchasepaymentdone(total, callback) {
         size: Newsize,
         quantity: Newquantity,
         totalqty: Newtotalqty,
-        amount: Newamount,
-        amount1: Newamount1,
+        subtotal: Newsubtotal,
         totalamount: Newtotalamount,
         postcode: Newbuyerpostcode,
         city: Newbuyercity,

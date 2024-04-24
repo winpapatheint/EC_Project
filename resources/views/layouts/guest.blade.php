@@ -395,11 +395,11 @@
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-                                            @if(empty(Auth::user()))
+                                            
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-                                            @endif
+                                            
 
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">
@@ -628,14 +628,10 @@
                                     <a href="{{ route('shoplist') }}" class="text-content">Shop</a>
                                 </li>
                                 <li>
-                                    <a href="about-us.html" class="text-content">About Us</a>
+                                    <a href="{{ url('/news') }}" class="text-content">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="blog-list.html" class="text-content">Blog</a>
-                                </li>
-                                <li>
-
-                                    <a href="contact-us.html" class="text-content">Contact Us</a>
+                                    <a href="{{ url('/contact') }}" class="text-content">Contact Us</a>
                                 </li>
                             </ul>
                         </div>
@@ -1002,14 +998,15 @@
                             @foreach($deal as $list)
                             <li class="list-1">
                                 <div class="deal-offer-contain">
-                                    <a href="shop-left-sidebar.html" class="deal-image">
+                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-image">
                                         <img src="{{ asset('upload/product_thambnail/'.$list-> product_thambnail) }}" class="blur-up lazyload"
                                             alt="">
                                     </a>
 
-                                    <a href="shop-left-sidebar.html" class="deal-contain">
-                                        <h5>{{$list->product_name}}</h5>
-                                        <h6>{{  $list->original_price - ($list->original_price * 10)/100 }} <del>{{ $list->original_price }}</del> <span>500 G</span></h6>
+                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-contain">
+                                        <h5>{{ $list->product_name }}</h5>
+                                        <h6>¥{{ $list->selling_price }} <del>¥{{ $list->original_price }}</del>
+                                        <span>{{ $list->product_size}}</span></h6>
                                     </a>
                                 </div>
                             </li>

@@ -49,7 +49,7 @@
                                                 <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
-                                                <td>{{ $item->amount }}</td>
+                                                <td>{{ $item->total_amount }}</td>
                                                 <td>
                                                     <ul>
                                                         <li>

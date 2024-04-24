@@ -66,7 +66,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
+                                        <input type="phone" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
                                         <label>Phone</label>
                                         @error('phone')
                                             <div class="text-danger">{{ $message }}</div>
@@ -76,7 +76,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7" value="{{ old('zip_code') }}">
+                                        <input type="number" name="zip_code" class="form-control" placeholder="Zip Code" max="7" value="{{ old('zip_code') }}">
                                         <label>Zip Code</label>
                                         @error('zip_code')
                                             <div class="text-danger">{{ $message }}</div>
@@ -156,22 +156,22 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
+                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" value="{{ old('bank_branch') }}">
+                                        <label>Branch Name</label>
+                                        @error('bank_branch')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
                                         <select class="form-control" name="bank_acc_type" value="{{ old('bank_acc_type') }}">
                                             <option>Choose Bank Account Type</option>
                                             <option>普通</option>
                                             <option>当座</option>
                                             <option>貯蓄</option>
                                         </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" value="{{ old('bank_branch') }}">
-                                        <label>Branch Name</label>
-                                        @error('bank_branch')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                 </div>
 
@@ -187,7 +187,7 @@
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
+                                        <input type="d" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
                                         <label>Bank Account Number</label>
                                         @error('bank_acc_no')
                                             <div class="text-danger">{{ $message }}</div>
@@ -233,15 +233,6 @@
                                         <label>Confirm Password</label>
                                     </div>
                                 </div>
-
-                                {{-- <div class="col-md-12">
-                                    <div class="forgot-box">
-                                        <div class="form-check ps-0 m-0 remember-box">
-                                            <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
-                                            <label class="form-check-label" >I agree with <span>Terms</span> and <span>Privacy</span></label>
-                                        </div>
-                                    </div>
-                                </div> --}}
 
                                 <div class="col-md-12">
                                     <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>

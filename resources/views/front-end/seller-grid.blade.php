@@ -31,7 +31,7 @@
                 @foreach($lists as $shop => $seller)
                 <div class="col-xxl-4 col-md-6">
 
-                    <a href="{{ url("/shopleftsidebar/".$seller->id ) }}" class="seller-grid-box">
+                    <a href="{{ url("/shopleftsidebar/".$seller->user_id ) }}" class="seller-grid-box">
                         <div class="grid-contain">
                             <div class="seller-contact-details">
                                 <div class="seller-contact">

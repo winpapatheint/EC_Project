@@ -70,7 +70,7 @@
                                                 @endif
                                             @endfor
                                         </ul>
-                                        <span>({{ $ratingWithProductCount[$shop][1] }} Reviews)</span>
+                                        <span>({{ $ratingWithProductCount[$shop][1] }} <?php echo ($ratingWithProductCount[$shop][1] > 1) ? 'Reviews' : 'Review'; ?>)</span>
                                     </div>
                                     @if ($seller->user->products->count() > 1)
                                     <span class="product-label">{{ $seller->user->products->count() }} Products</span>

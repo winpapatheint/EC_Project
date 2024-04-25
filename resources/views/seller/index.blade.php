@@ -2,24 +2,21 @@
 @section('seller')
 @php
     $id = Auth::user()->id;
-
     $user = App\Models\User::find($id);
-    // dd($user->created_by);
-    if ($user->created_by !== NULL) {
-            $id = Auth::user()->id;
-        }
+    if ($user->created_by !== null) {
+        $id = $user->created_by;
+    }
     else {
-            $id = $user->created_by;
-        }
+        $id = Auth::user()->id;
+    }
 
     $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('total_amount');
-
     $order = App\Models\Order::where('seller_id',$id)->get();
     $pending = App\Models\Order::where('seller_id',$id)->where('status', 'Pending')->get();
     $product = App\Models\Product::where('seller_id', $id)->get();
 @endphp
 <!-- index body start -->
- <div class="page-body">
+<div class="page-body">
     <div class="container-fluid">
         <div class="row">
             <!-- chart card section start -->
@@ -155,6 +152,7 @@
                                                     <td>￥{{ $item->total_amount }}</td>
                                                 </tr>
                                             @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

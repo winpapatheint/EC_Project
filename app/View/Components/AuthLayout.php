@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use App\Models\User;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -17,78 +18,62 @@ class AuthLayout extends Component
     public function render()
     {
         $currentDate = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $totalcount = 0;
+
 
         $seller = DB::table('users')
-                    ->select('users.id','users.*')
-                    ->whereIn('role',['seller'])
-                    ->where('email_verified_at','<>','')
-                    ->where(function ($query) {
-                        $query->whereNotNull('email_verified_at')
-                    ->orWhereNull('email_verified_at');
-                    })
-                    ->where('created_at','<=',$currentDate)->first();
+                    ->select('users.id','users.*', DB::raw('TIMESTAMPDIFF(MINUTE, users.created_at, NOW()) AS minutes_ago'),
+                    'users.created_at')
+                    ->where('role','seller')
+                    ->whereNotNull('email_verified_at')
+                    ->latest('created_at')
+                    ->first();
+        $sellerhour = $seller->created_at ?? '';
+        if($sellerhour)
+        {
+            $totalcount = 1 ?? 0;
+        }
+
+        $product = DB::table('products')
+                    ->select('products.id', 'products.*','products.created_at',
+                    DB::raw('TIMESTAMPDIFF(MINUTE, products.created_at, NOW()) AS minutes_ago'))
+                    ->latest('created_at')
+                    ->first();
+
+        $producthour = $product->created_at ?? '';
 
         $buyer = DB::table('users')
-                    ->select('users.id','users.*')
+                    ->select('users.id','users.*','users.created_at',DB::raw('TIMESTAMPDIFF(MINUTE, users.created_at, NOW()) AS minutes_ago'))
                     ->whereIn('role',['buyer'])
                     ->where('email_verified_at','<>','')
                     ->where(function ($query) {
                         $query->whereNotNull('email_verified_at')
                     ->orWhereNull('email_verified_at');
                     })
-                    ->where('created_at','<=',$currentDate)->first();
-        $product = DB::table('products')
-                        ->select('products.id')
-                        ->where('created_at','<=',$currentDate)->first();
+                    ->latest('created_at')
+                    ->first();
+
+        $buyerhour = $buyer->created_at ?? '';
+
         $order = DB::table('orders')
-                        ->select('orders.confirmed_date','orders.id')
-                        ->where('created_at','<=',$currentDate)->first();
+                        ->select('orders.confirmed_date','orders.id','orders.created_at',DB::raw('TIMESTAMPDIFF(MINUTE, orders.created_at, NOW()) AS minutes_ago'))
+                        ->latest('created_at')
+                        ->first();
 
-        $sellerlist = DB::table('users')
-                        ->select('users.id','users.*')
-                        ->whereIn('role',['seller'])
-                        ->where('email_verified_at','<>','')
-                        ->where(function ($query) {
-                            $query->whereNotNull('email_verified_at')
-                        ->orWhereNull('email_verified_at');
-                        })
-                        ->where('id','<>',$seller->id)
-                        ->where('created_at','<=',$currentDate)->get();
+        $orderhour = $order->created_at ?? '';
 
-        $sellerlist = DB::table('users')
-                    ->select('users.id','users.*')
-                    ->whereIn('role',['seller'])
-                    ->where('email_verified_at','<>','')
-                    ->where(function ($query) {
-                        $query->whereNotNull('email_verified_at')
-                    ->orWhereNull('email_verified_at');
-                    })
-                    ->where('id','<>',$buyer->id)
-                    ->where('created_at','<=',$currentDate)->get();
-
-        $buyerlist = DB::table('users')
-                    ->select('users.id','users.*')
-                    ->whereIn('role',['seller'])
-                    ->where('email_verified_at','<>','')
-                    ->where(function ($query) {
-                        $query->whereNotNull('email_verified_at')
-                    ->orWhereNull('email_verified_at');
-                    })
-                    ->where('id','<>',$buyer->id)
-                    ->where('created_at','<=',$currentDate)->get();
-
-        $productlist = DB::table('products')
-                    ->select('products.id')
-                    ->where('id','<>',$product->id)
-                    ->where('created_at','<=',$currentDate)->get();
-
-        $orderlist = DB::table('orders')
-                    ->select('orders.id')
-                    ->where('id','<>',$order->id ?? '')
-                    ->where('created_at','<=',$currentDate)->get();
+        $notifications = Notification::select('message', 'time')->get();
+        $notiCount=0;
+        foreach($notifications as $notify)
+        {
+            if(!empty($notify->time))
+            {
+            $notiCount++;
+            }
+        }
 
 
-
-        return view('layouts.auth',compact('seller','buyer','product','order','sellerlist','buyerlist','productlist','orderlist'));
+        return view('layouts.auth',compact('seller','sellerhour','buyer','buyerhour','product','producthour','order','orderhour',
+       'notiCount','notifications'));
     }
 }

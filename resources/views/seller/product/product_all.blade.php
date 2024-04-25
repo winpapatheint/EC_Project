@@ -52,7 +52,7 @@
 
                                             <td>{{ $item->product_qty }}</td>
 
-                                            <td class="td-price">{{ $item->selling_price }}</td>
+                                            <td class="td-price">¥{{ $item->selling_price }}</td>
 
                                             <td class="td-price">
                                                 @if ($item->discount_percent == NULL)

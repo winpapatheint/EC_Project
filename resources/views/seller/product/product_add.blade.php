@@ -43,6 +43,9 @@
                                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('country_id')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -62,6 +65,9 @@
                                                     </button>
                                                 </a>
                                             </div>
+                                            @error('brand_id')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -75,9 +81,9 @@
                                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                                 @endforeach
                                             </select>
-                                            @if ($errors->has('category_id'))
-                                                <p class="text-danger">{{ $errors->first('category_id') }}</p>
-                                            @endif
+                                            @error('category_id')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -88,12 +94,9 @@
                                             <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory">
 
                                             </select>
-                                            <p style="display:none" class="sub_category_title_id error text-danger"></p>
-                                            @if (!empty($error['sub_category_title_id']))
-                                                @foreach ($error['sub_category_title_id'] as  $key => $value)
-                                                    <p class="sub_category_title_id error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            @error('sub_category_title_id')
+                                                <div class="text-danger">The subcategory title {{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -104,11 +107,9 @@
                                             <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
 
                                             </select>
-                                            @if (!empty($error['sub_category_id']))
-                                                @foreach ($error['sub_category_id'] as  $key => $value)
-                                                    <p class="sub_category_id error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            @error('sub_category_id')
+                                                <div class="text-danger">The subcategory {{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -163,11 +164,21 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" name="care_instructions" id="ckeditor1">{{ old('care_instructions') }}</textarea>
+                                            @error('care_instructions')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Thambnail Image</label>
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)" value="{{ old('product_thambnail') }}">
                                             @error('product_thambnail')
-                                                <div class="text-danger">{{ $message }}</div>
+                                                <div class="text-danger">The image {{ $message }}</div>
                                             @enderror
                                             <img src="" id="mainThmb">
                                         </div>
@@ -180,7 +191,7 @@
                                             <div>Attach images with using shift key.</div>
                                             <div id="preview_img"></div>
                                             @error('multi_img')
-                                                <div class="text-danger">{{ $message }}</div>
+                                                <div class="text-danger">The images {{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -349,8 +360,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
             const discountAmount = originalPrice * (discountPercent / 100);
             const sellingPrice = originalPrice - discountAmount;
-            sellingPriceInput.value = Math.round(sellingPrice); // Round to nearest integer
-            calculatedSellingPriceInput.value = Math.round(sellingPrice); // Round to nearest integer
+            sellingPriceInput.value = Math.round(sellingPrice);
+            calculatedSellingPriceInput.value = Math.round(sellingPrice);
         } else {
             sellingPriceInput.value = '';
             calculatedSellingPriceInput.value = '';
@@ -365,6 +376,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
     ClassicEditor
         .create(document.querySelector('#ckeditor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#ckeditor1'))
         .catch(error => {
             console.error(error);
         });

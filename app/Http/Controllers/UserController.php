@@ -23,9 +23,11 @@ use App\Models\Cart;
 use App\Models\CouponDetail;
 use App\Models\seller;
 use App\Models\Prefecture;
+use App\Models\Notification;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Auth\Events\Registered;
-
+use Carbon\Carbon;
+use Mail;
 
 class UserController extends Controller
 {
@@ -41,19 +43,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'birthday' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:255',
-            'prefecture_id' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-        ];
+        // $rules = [
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:users',
+        //     'password' => 'required|string|min:8|confirmed',
+        //     'birthday' => 'required|string|max:255',
+        //     'phone' => 'required|string|max:255',
+        //     'zip_code' => 'required|string|max:255',
+        //     'prefecture_id' => 'required|string|max:255',
+        //     'city' => 'required|string|max:255',
+        //     'chome' => 'required|string|max:255',
+        //     'building' => 'required|string|max:255',
+        //     'room' => 'required|string|max:255',
+        // ];
 
         $customMessages = [
             'name.required' => 'The name is required.',
@@ -76,10 +78,10 @@ class UserController extends Controller
             'room.required' => 'The room number is required.',
 
         ];
-        
+
         $validator = Validator::make($request->all(), $rules, $customMessages);
 
-  
+
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -87,9 +89,9 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'status' => '1',
             ]);
-    
+
             event(new Registered($user));
-    
+
             $buyer = Buyer::create([
                 'user_id' => $user->id,
                 'prefecture_id' => $request->prefecture,
@@ -104,14 +106,40 @@ class UserController extends Controller
                 'building' => $request->building,
                 'room_no' => $request->room,
             ]);
-    
+
             event(new Registered($buyer));
-    
+
+            $inquiry_email = 'info-test@asia-hd.com';
+            $user = User::where('id', $user->id)->select('email', 'name')->first();
+
+            $email = $user->email;
+            $name = $user->name;
+            $data = array('name'=>$name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+                    $message->from($email,$name);
+                    $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\n名前：　".$name."
+                    \r\n"."メールアドレス：　".$email."
+                    \r\n
+                    \r\n"."通知のお知らせ：　
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+            }
+
+            $notification = Notification::find(2);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+
             $email = $request->email;
             return view('auth.verify-email', compact('email'));
-       
-
     }
+
     public function indexuser()
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();

@@ -9,13 +9,15 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\MultiImg;
+use App\Models\Notification;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -66,25 +68,26 @@ class ProductController extends Controller
 
     public function storeProduct(Request $request)
     {
-        $request->validate([
-            'brand_id' => 'required|string|max:255',
-            'country_id' => 'required|string|max:255',
-            'category_id' => 'required|string|max:255',
-            'sub_category_title_id' => 'required|string|max:255',
-            'sub_category_id' => 'required|string|max:255',
-            'sub_category_id' => 'required|string|max:255',
-            'product_name' => 'required|string|max:255',
-            'product_qty' => 'required|numeric',
-            'product_tags' => 'required|string|max:255',
-            'product_size' => 'required|string|max:255',
-            'product_color' => 'required|string|max:255',
-            'original_price' => 'required|numeric',
-            'short_desc' => 'required|string|max:255',
-            'long_desc' => 'required|string|max:255',
-            'product_thambnail' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'estimate_date' => 'required|string|max:255',
-            'delivery_price' => 'required|string|max:255',
-            'delivery_price' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'brand_id' => 'required|exists:brands,id',
+            'country_id' => 'required|exists:countries,id',
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_title_id' => 'present|exists:sub_category_titles,id',
+            'sub_category_id' => 'present|exists:sub_categories,id',
+            'product_name' => 'present|string|max:255',
+            'product_qty' => 'present|string|max:255',
+            'product_tags' => 'present|string|max:255',
+            'product_size' => 'present|string|max:255',
+            'product_color' => 'present|string|max:255',
+            'original_price' => 'present|string|max:255',
+            'short_desc' => 'present|string|max:255',
+            'long_desc' => 'present|string|max:255',
+            'care_instructions' => 'present|string|max:255',
+            'product_thambnail' => 'present|image|mimes:jpeg,png,jpg,gif',
+            'multi_img.*' => 'present|image|mimes:jpeg,png,jpg,gif',
+            'estimate_date' => 'present|string|max:255',
+            'delivery_price' => 'present|string|max:255',
+            'delivery_price' => 'present|string|max:255',
         ]);
 
         $datePrefix = date('ym');
@@ -108,27 +111,28 @@ class ProductController extends Controller
 
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
-            'brand_id' => $request->input('brand_id'),
-            'country_id' => $request->input('country_id'),
-            'category_id' => $request->input('category_id'),
-            'sub_category_title_id' => $request->input('sub_category_title_id'),
-            'sub_category_id' => $request->input('sub_category_id'),
+            'brand_id' => $validatedData['brand_id'],
+            'country_id' => $validatedData['country_id'],
+            'category_id' => $validatedData['category_id'],
+            'sub_category_title_id' => $validatedData['sub_category_title_id'],
+            'sub_category_id' => $validatedData['sub_category_id'],
             'seller_id' => $seller ?? null,
             'subseller_id' => $subseller ?? null,
-            'product_name' => $request->input('product_name'),
-            'product_qty' => $request->input('product_qty'),
-            'product_tags' => $request->input('product_tags'),
-            'product_size' => $request->input('product_size'),
-            'product_color' => $request->input('product_color'),
-            'original_price' => $request->input('original_price'),
-            'selling_price' => $request->input('calculated_selling_price'),
-            'discount_percent' => $request->input('discount_percent'),
-            'short_desc' => $request->short_desc,
-            'long_desc' => $request->long_desc,
+            'product_name' => $validatedData['product_name'],
+            'product_qty' => $validatedData['product_qty'],
+            'product_tags' => $validatedData['product_tags'],
+            'product_size' => $validatedData['product_size'],
+            'product_color' => $validatedData['product_color'],
+            'original_price' => $validatedData['original_price'],
+            'selling_price' => $request->calculated_selling_price,
+            'discount_percent' => $request->discount_percent,
+            'short_desc' => $validatedData['short_desc'] ,
+            'long_desc' => $validatedData['long_desc'],
+            'care_instructions' => $validatedData['care_instructions'],
             'product_thambnail' => $filename,
             'status' => 1,
-            'estimate_date' => $request->input('estimate_date'),
-            'delivery_price' => $request->input('delivery_price'),
+            'estimate_date' => $validatedData['estimate_date'],
+            'delivery_price' => $validatedData['delivery_price'],
             'created_at' => Carbon::now(),
         ]);
 
@@ -142,13 +146,40 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
         }
+
+        $inquiry_email = 'info-test@asia-hd.com';
+        $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
+
+        $email = $user->email;
+        $name = $user->name;
+        $data = array('name'=>$name);
+        if (!empty($request->email)) {
+            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+                $message->from($email,$name);
+                $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                \r\n名前：　".$name."
+                \r\n"."メールアドレス：　".$email."
+                \r\n
+                \r\n"."通知のお知らせ：　
+                \r\n
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            });
+        }
+
+        $notification = Notification::find(3);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
+
         return redirect('/productlist')->with('flash_message', 'Data added successfully');
     }
 
 
     public function editProduct($id)
     {
-
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
         $categories = Category::latest()->get();
@@ -157,15 +188,7 @@ class ProductController extends Controller
         $products = Product::findOrFail($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
 
-        // $data = Product::with('category')->with('SubCategoryTitle')->with('SubCategoryTitle.SubCategory')->find($id);
-
-        $subcategoryId = $products->sub_category_id;
-        $subcategory_name = DB::table('sub_categories')
-                                ->select('sub_categories.sub_category_name')
-                                ->where('id', $subcategoryId)
-                                ->get();
-
-        return view('seller.product.product_edit',compact('subcategory_name','brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
+        return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
     }
 
     public function updateProduct(Request $request)
@@ -210,6 +233,7 @@ class ProductController extends Controller
         $product->selling_price = $request->calculated_selling_price;
         $product->short_desc= $request->short_desc;
         $product->long_desc= $request->long_desc;
+        $product->care_instructions= $request->care_instructions;
         $product->product_thambnail= $filename;
         $product->estimate_date= $request->estimate_date;
         $product->status= 1;

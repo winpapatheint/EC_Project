@@ -143,89 +143,29 @@
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
-                                <span class="badge rounded-pill badge-theme">4</span>
+                                <span class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
                             </div>
-                            <ul class="notification-dropdown onhover-show-div" style="max-height: 200px; overflow-y: auto;">
-                                <li>
+                            <ul class="onhover-show-div" >
+                                <li style="display:block">
                                     <i class="ri-notification-line"></i>
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
-                                @if(!empty($seller->id))
-                                <li>
-                                    <p id="store">
-                                        <i class="fa fa-circle me-2 font-primary delete-icon"></i>A new store has been registered.{{ $seller->id }}<span
-                                            class="pull-right">10 min.</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @if(!empty($buyer->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-success"></i>{{ $buyer->email }}A new user has been registered.<span
-                                            class="pull-right">1 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @if(!empty($product->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-info"></i>{{ $product->id }}A new product has been registered.<span
-                                            class="pull-right">3 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @if(!empty($order->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>A new order has been registered.<span
-                                            class="pull-right">6 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @foreach($sellerlist as $list)
-                                @if(!empty($list->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>A new store has been registered.<span
-                                            class="pull-right">6 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @endforeach
-                                @foreach($buyerlist as $list)
-                                @if(!empty($list->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>A new user has been registered.<span
-                                            class="pull-right">6 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @endforeach
+                                @php
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd"];
+                                @endphp
 
-                                @foreach($productlist as $list)
-                                @if(!empty($list->id))
-                                <li>
+                                @foreach($notifications as $key => $notify)
+                                @if(!empty($notify->time))
+                                <li >
                                     <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>A new product has been registered.<span
-                                            class="pull-right">6 hr</span>
+                                        <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
+                                            class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
                                     </p>
                                 </li>
                                 @endif
                                 @endforeach
-
-                                @foreach($orderlist as $list)
-                                @if(!empty($list->id))
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>A new order has been registered.<span
-                                            class="pull-right">6 hr</span>
-                                    </p>
-                                </li>
-                                @endif
-                                @endforeach
-                                <li>
-                                    <a class="btn btn-primary" href="javascript:void(0)">Check all notification</a>
+                                <li style="display:block">
+                                    <a class="btn btn-primary mx-auto" href="javascript:void(0)" onclick="checkAllNotifications()">Check all notification</a>
                                 </li>
                             </ul>
                         </li>
@@ -497,6 +437,14 @@
           document.getElementById('store').remove();
         });
       </script>
+      <script>
+        function checkAllNotifications() {
+            var notificationCircles = document.querySelectorAll('.notification-circle');
+            notificationCircles.forEach(function(circle) {
+                circle.style.setProperty('color', '#ffffff', 'important');
+            });
+        }
+    </script>
 </body>
 
 </html>

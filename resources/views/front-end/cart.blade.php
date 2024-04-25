@@ -44,7 +44,7 @@
                                             <div class="product border-0">
                                                 <a href="{{ route('show-product-left-thumbnail', ['id' => $cartlist->product_id]) }}">
                                                     <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
-                                                            class="img-fluid blur-up lazyload" alt="">
+                                                            class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                 </a>
                                                 <div class="product-detail">
                                                     <ul>
@@ -198,14 +198,14 @@
                                     <h4>Total (JPY)</h4>
                                     @if($discount)
                                         @php 
-                                            $total  = $subTotal + 500 - $discount
+                                            $Total  = $subTotal + 500 - $discount
                                         @endphp
                                     @else
                                         @php
-                                            $total  = $subTotal + 500
+                                            $Total  = $subTotal + 500
                                         @endphp
                                     @endif
-                                    <h4 class="price theme-color">¥ {{ number_format($total , 0, '.', ',') }}</h4>
+                                    <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
                                 </li>
                                 
                             </ul>              
@@ -213,7 +213,8 @@
                                 <input type="hidden" name="subTotal" value="{{ $subTotal }}">
                                 <input type="hidden" name="shipping" value="500">
                                 <input type="hidden" name="coupon_discount" value="{{ $discount }}">
-                                <input type="hidden" name="total" value="{{ $total }}">
+                                <input type="hidden" name="total" value="{{ $Total }}">
+                                
                             <div class="button-group cart-button">
                                 <ul>
                                     <li>

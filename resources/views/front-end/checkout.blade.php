@@ -12,7 +12,7 @@
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="/">
+                                    <a href="index.html">
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
@@ -182,6 +182,7 @@
                                 </li>
                             </ul>
                             <input type="hidden" name="totalqty" value="{{ $totalqty }}">
+                                  
                             @endforeach
                             <ul class="summery-total">
                                 <li>
@@ -267,7 +268,8 @@ function purchasepaymentdone(total, callback) {
     var Newsize = <?php echo json_encode($productSizes ); ?>; 
     var Newquantity = <?php echo json_encode($productQuantities ); ?>;
     var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
-    var Newsubtotal = <?php echo json_encode($subtotal ); ?>;
+    var Newamount = <?php echo json_encode($amount ); ?>;
+    var Newamount1 = <?php echo json_encode($amount1 ); ?>;
     var Newtotalamount = <?php echo json_encode($total ); ?>;
     var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
     var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
@@ -287,7 +289,8 @@ function purchasepaymentdone(total, callback) {
         size: Newsize,
         quantity: Newquantity,
         totalqty: Newtotalqty,
-        subtotal: Newsubtotal,
+        amount: Newamount,
+        amount1: Newamount1,
         totalamount: Newtotalamount,
         postcode: Newbuyerpostcode,
         city: Newbuyercity,

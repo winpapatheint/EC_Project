@@ -223,7 +223,7 @@ class ShowProductController extends Controller
     {
         $product = Product::with('seller')->find($id);
         $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
-        $reviews = Review::all();
+        $reviews = Review::where('product_id', $id)->get();
         $productOrdered = OrderDetail::where('product_id', $id)->get();
         $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')

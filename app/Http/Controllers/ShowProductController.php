@@ -221,7 +221,7 @@ class ShowProductController extends Controller
     }
     public function ShowProductleftThumbnail($id)
     {
-        $product = Product::with('seller')->find($id);
+        $product = Product::with('user')->with('user.seller')->find($id);
         $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
         $reviews = Review::all();
         $productOrdered = OrderDetail::where('product_id', $id)->get();
@@ -234,7 +234,7 @@ class ShowProductController extends Controller
         $ratingWith = 0;
         $productCount = 0;
         $productStarReview = 0;
-        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller->id)->get();
+        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller_id)->get();
         if ($ratingProject->count() > 0) {
             foreach ($ratingProject as $key => $rating) {
                 if($rating->reviews->isNotEmpty()) {

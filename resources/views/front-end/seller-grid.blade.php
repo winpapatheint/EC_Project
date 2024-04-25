@@ -72,10 +72,10 @@
                                         </ul>
                                         <span>({{ $ratingWithProductCount[$shop][1] }} Reviews)</span>
                                     </div>
-                                    @if ($seller->productss->count() > 1)
-                                    <span class="product-label">{{ $seller->productss->count() }} Products</span>
+                                    @if ($seller->user->products->count() > 1)
+                                    <span class="product-label">{{ $seller->user->products->count() }} Products</span>
                                     @else
-                                    <span class="product-label">{{ $seller->productss->count() }} Product</span>
+                                    <span class="product-label">{{ $seller->user->products->count() }} Product</span>
                                     @endif
                                 </div>
 

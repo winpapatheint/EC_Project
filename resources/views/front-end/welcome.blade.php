@@ -324,6 +324,7 @@
                 </div>
 
                 <div class="col-xxl-9 col-xl-8">
+                @if ($coupons->count() > 0)
                 @if(count($topSaveTodayProducts) > 0)
                     <div class="title title-flex">
                         <div>
@@ -335,55 +336,52 @@
                             </span>
                             <p>Don't miss this opportunity at a special discount just for this week.</p>
                         </div>
-                        @if ($coupon)
-                            <div class="timing-box">
-                                <div class="timing">
-                                    <i data-feather="clock"></i>
-                                    <h6 class="name">Expires in :</h6>
-                                    <div class="time" id="clockdiv-1">
-                                        <ul>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="days">
-                                                        <h6></h6>
-                                                    </div>
+                        <div class="timing-box">
+                            <div class="timing">
+                                <i data-feather="clock"></i>
+                                <h6 class="name">Expires in :</h6>
+                                <div class="time" id="clockdiv-1">
+                                    <ul>
+                                        <li>
+                                            <div class="counter">
+                                                <div class="days">
+                                                    <h6></h6>
                                                 </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="hours">
-                                                        <h6></h6>
-                                                    </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="counter">
+                                                <div class="hours">
+                                                    <h6></h6>
                                                 </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="minutes">
-                                                        <h6></h6>
-                                                    </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="counter">
+                                                <div class="minutes">
+                                                    <h6></h6>
                                                 </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="seconds">
-                                                        <h6></h6>
-                                                    </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="counter">
+                                                <div class="seconds">
+                                                    <h6></h6>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     </div>
 
                     <div class="section-b-space">
                         <div class="product-border border-row overflow-hidden">
                             <div class="product-box-slider no-arrow">
                                 @foreach($topSaveTodayProducts as $topSaveProduct)
-                                <div>
-                                    <div class="row m-0">
-                                        @if ($topSaveProduct->status == 1)
+                                    <div>
+                                        <div class="row m-0">
                                             @php
                                                 $starRating = 0;
                                                 $count = 0;
@@ -442,28 +440,41 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
                                     </div>
-                                </div>
-                                        @endif
-                                    @endforeach
+                                @endforeach
                             </div>
                         </div>
                     </div>
 
-                    @if ($coupon)
-                        <div class="section-t-space section-b-space">
-                            <div class="banner-contain">
-                                <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
-                                <div class="banner-details p-center p-4 text-white text-center">
-                                    <div>
-                                        <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
-                                        <h4 class="lh-base fw-bold offer-text">Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of ¥{{ $coupon->mini_amount}}</h4>
-                                        <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                    <div class="slider-1 product-wrapper no-arrow">
+                    @if ($coupons->count() > 0)
+                        @foreach($coupons as $coupon)
+                            <a href="{{ route('show-coupon-product', ['id' => $coupon->id]) }}">
+                            <div class="section-t-space section-b-space">
+                                <div class="banner-contain">
+                                    <img src="{{ asset('frontend/assets/images/vegetable/banner/15.jpeg') }}" class="bg-img blur-up lazyload" alt="">
+                                    <div class="banner-details p-center p-4 text-white text-center">
+                                        <div>
+                                            <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                            <h4 class="lh-base fw-bold offer-text">
+                                                Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of 
+                                                    ¥{{ $coupon->mini_amount}}
+                                            </h4>
+                                            <h5 class="lh-base fw-bold offer-text">
+                                                {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~ 
+                                                {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                            </h5>
+                                            <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            </a>
+                        @endforeach
                     @endif
+                    </div>
+                @endif
                 @endif
 
                     <div class="title">
@@ -763,9 +774,9 @@
     <!-- Newsletter Section End -->
     @php
         $remainingTime = 0;
-        if ($coupon)
+        if ($coupons->count() > 0)
         {
-            $targetDate = strtotime($coupon->valid_date);
+            $targetDate = strtotime($coupons[0]->enddate);
             $remainingTime = ($targetDate - time()) * 1000;
         }
         if ($remainingTime < 0) {

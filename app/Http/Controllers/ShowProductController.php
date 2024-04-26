@@ -476,6 +476,178 @@ class ShowProductController extends Controller
         , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'ids', 'topic'));
     }
 
+    public function ShowCouponProductList()
+    {
+        $validated = request()->validate([
+            'page' => 'integer|min:1',
+            'sort' => 'integer|min:1',
+            'search' => 'string|nullable',
+            'categories' => 'array',
+            'categories.*' => 'integer|distinct|min:1',
+            'price' => 'string|nullable',
+            'rating' => 'array',
+            'rating.*' => 'integer|distinct|min:1',
+            'discount' => 'array',
+            'discount.*' => 'integer|distinct|min:1',
+        ]);
+
+        $page = $validated['page'] ?? 1;
+        $sort = $validated['sort'] ?? 0;
+        $search = $validated['search'] ?? null;
+        $categories = $validated['categories'] ?? [];
+        $price = $validated['price'] ?? null;
+        $rating = $validated['rating'] ?? [];
+        $discount = $validated['discount'] ?? [];
+        $id = request()->id;
+
+        $limit = 9; // set the number of products per page
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
+        }
+
+        if (!empty($price)) {
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
+        }
+
+        if (!empty($rating)) {
+            $averageRated = Review::select('product_id',
+                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+            )
+            ->groupBy('product_id')
+            ->get();
+            $matchedProductIds = [];
+            foreach ($averageRated as $rated) {
+                if (in_array($rated->average_rating, $rating)) {
+                    $matchedProductIds[] = $rated->product_id;
+                }
+            }
+            $query->whereIn('id', $matchedProductIds);
+        }
+
+        if (!empty($discount)) {
+            if (in_array("1", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
+            }
+            if (in_array("2", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
+            }
+            if (in_array("3", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
+            }
+            if (in_array("4", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
+            }
+            if (in_array("5", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
+            }
+        }
+
+        // Apply sorting
+        switch ($sort) {
+            case 1:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) ASC');
+                break;
+            case 2:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) DESC');
+                break;
+            case 3:
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                    ->select('products.*', DB::raw('FLOOR(AVG(reviews.stars_rated)) as review_count'))
+                    ->groupBy('products.id')
+                    ->orderBy('review_count', 'desc');
+                break;
+            case 4:
+                $query->orderBy('product_name', 'ASC');
+                break;
+            case 5:
+                $query->orderBy('product_name', 'DESC');
+                break;
+            case 6:
+                $query->orderByRaw('CAST(discount_percent AS DECIMAL(10,2)) DESC');
+                break;
+            default:
+                // No sorting applied
+                break;
+        }
+
+        $products = $query->with('Category')
+                    ->leftJoin('sellers', 'products.seller_id', '=', 'sellers.user_id')
+                    ->where(function($query) use ($id) {
+                        $query->where('sellers.coupon_id', '=', $id)
+                            ->orWhere('products.coupon_id', '=', $id);
+                    })
+                    ->where('products.status', '=', '1')
+                    ->where('products.coupon_status', '=', '1')
+                    ->select('products.*')
+                    ->paginate($limit, ['*'], 'page', $page);
+
+        $filterForProduct = Product::with('Category')
+                    ->leftJoin('sellers', 'products.seller_id', '=', 'sellers.user_id')
+                    ->where(function($query) use ($id) {
+                        $query->where('sellers.coupon_id', '=', $id)
+                            ->orWhere('products.coupon_id', '=', $id);
+                    })
+                    ->where('products.status', '=', '1')
+                    ->where('products.coupon_status', '=', '1')
+                    ->select('products.*')
+                    ->get();
+
+        $categoryIds = $filterForProduct->pluck('Category.id')->unique()->toArray();
+        $productIds = $filterForProduct->pluck('id')->unique()->toArray();
+
+        $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                    ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                    ->where('products.status', '=', '1')
+                    ->whereIn('categories.id', $categoryIds)
+                    ->whereIn('products.id', $productIds)
+                    ->groupBy('categories.id')
+                    ->get();
+
+        $ratingWithProductCount = Review::select(
+                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
+                    )
+                    ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
+                    ->whereIn('products.category_id', $categoryIds)
+                    ->whereIn('products.id', $productIds)
+                    ->groupBy('product_id')
+                    ->get()
+                    ->groupBy('average_rating')
+                    ->map(function ($grouped) {
+                        return $grouped->count();
+                    });
+
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
+                    ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
+                    ->where('status', '=', '1')
+                    ->whereIn('products.category_id', $categoryIds)
+                    ->whereIn('products.id', $productIds)
+                    ->first();
+
+        $ttl = $products->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        $reviews = Review::all();
+
+        return view('front-end.coupon-products',compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'id'));
+    }
+
     public function ShowWishList()
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();

@@ -65,7 +65,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->where('status',1)->get();
 
         $reviews = Review::all();
 
@@ -86,7 +86,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-        $coupon = Coupon::where('status', 1)->first();
+        $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -107,7 +107,7 @@ class AdminController extends Controller
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
+         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
     }
 
     public function news()

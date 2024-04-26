@@ -68,6 +68,7 @@ Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->m
 Route::get('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
+Route::get('/coupon-products', [ShowProductController::class, 'ShowCouponProductList'])->name('show-coupon-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');

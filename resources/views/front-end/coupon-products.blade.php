@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Discount Product List</h2>
+                        <h2>Coupon Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-custom-3">
                     <div class="left-box wow fadeInUp">
-                    <form id="searchForm" action="{{ route('show-discount-product') }}" method="GET">
+                    <form id="searchForm" action="{{ route('show-coupon-product') }}" method="GET">
                         <div class="shop-left-sidebar">
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
@@ -48,11 +48,7 @@
 
                                 <div class="accordion-item">
                                     <div style="display: flex;justify-content: flex-end;">
-                                        @if (!empty($ids))
-                                        <a href="{{ route('show-discount-product', ['ids' => $ids]) }}">Clear All</a>
-                                        @else
-                                        <a href="{{ route('show-discount-product', ['topic' => $topic]) }}">Clear All</a>
-                                        @endif
+                                        <a href="{{ route('show-coupon-product', ['id' => $id]) }}">Clear All</a>
                                     </div>
                                 </div>
 
@@ -272,7 +268,6 @@
                                     </div>
                                 </div>
 
-                                @if(empty($ids))
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingFour">
                                         <button class="accordion-button collapsed" type="button"
@@ -346,15 +341,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                @foreach($ids as $id)
-                <input type="hidden" id="ids" name="ids[]" value="{{ $id }}">
-                @endforeach
-                <input type="hidden" id="topic" name="topic" value="{{ $topic }}">
+                <input type="hidden" id="id" name="id" value="{{ $id }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
                 </form>
 

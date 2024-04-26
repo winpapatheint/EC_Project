@@ -26,6 +26,8 @@ use Mail;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Models\Blog;
+use App\Models\Faq;
 use Illuminate\Support\Facades\File;
     /**
      * Store a newly created resource in storage.
@@ -49,7 +51,7 @@ class AdminController extends Controller
                 ->orderBy('created_at', 'desc')->paginate(2);
 
         $maxStarsRatedRow = DB::table('reviews')
-                ->select('users.id', 'users.name','reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
+                ->select('users.id', 'users.name', 'users.user_photo', 'reviews.comment', DB::raw('MAX(stars_rated) as max_stars_rated'))
                 ->join('users', 'users.id', '=', 'reviews.user_id')
                 ->groupBy('users.id', 'users.name','reviews.comment')
                 ->orderByDesc('max_stars_rated')
@@ -63,7 +65,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->where('status',1)->get();
 
         $reviews = Review::all();
 
@@ -84,7 +86,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-        $coupon = Coupon::where('status', 1)->first();
+        $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -105,7 +107,7 @@ class AdminController extends Controller
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
+         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
     }
 
     public function news()
@@ -475,14 +477,24 @@ class AdminController extends Controller
     public function indexcategory()
     {
         $limit = 10;
-        if (!empty($_GET['kword'])) {
-            $kword = $_GET['kword'];
-        } else {
-            $kword = '';
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Category::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('subCategoryTitle', function ($query) use ($mainSearch) {
+                $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('subCategory', function ($query) use ($mainSearch) {
+                $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+            });
         }
 
-        $lists = DB::table('categories')
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -493,14 +505,18 @@ class AdminController extends Controller
     public function indexblog()
     {
         $limit = 10;
-        if (!empty($_GET['kword'])) {
-            $kword = $_GET['kword'];
-        } else {
-            $kword = '';
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Blog::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('title', 'like', '%' . $mainSearch . '%');
+            });
         }
 
-        $lists = DB::table('blogs')
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -514,14 +530,22 @@ class AdminController extends Controller
     public function indexreview()
     {
         $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Review::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('comment', 'like', '%' . $mainSearch . '%')
+                ->where('created_at', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('user', function ($query) use ($mainSearch) {
+                $query->where('name', 'like', '%' . $mainSearch . '%');
+            });
+        }
 
-        $lists = DB::table('reviews')
-                    ->select( 'U.name as authorby', 'reviews.*','U.*','reviews.id','reviews.status')
-                    ->join('users as U', function ($join) {
-                        $join->on('reviews.user_id', '=', 'U.id');
-                    })
-
-                    ->whereIn('role',['seller','buyer'])
+        $lists = $query->whereIn('role',['seller','buyer'])
                     ->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -535,14 +559,22 @@ class AdminController extends Controller
     public function indexproduct()
     {
         $limit = 10;
-        if (!empty($_GET['kword'])) {
-            $kword = $_GET['kword'];
-        } else {
-            $kword = '';
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Product::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('product_name', 'like', '%' . $mainSearch . '%')
+                        ->orWhere('product_qty', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('selling_price', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('discount_percent', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('commission', 'like', '%' . $mainSearch . '%');
+            });
         }
 
-        $lists = DB::table('products')
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -710,7 +742,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.seller_id', $id)
@@ -904,7 +936,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
@@ -1044,7 +1076,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
@@ -1184,7 +1216,7 @@ class AdminController extends Controller
         $reviews = Review::all();
 
         $ratingWithProductCount = Review::select(
-                                        DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+                                        DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
@@ -1463,29 +1495,34 @@ class AdminController extends Controller
     {
         $limit=10;
 
-        $lists = Seller::with('productss')->with('productss.reviews')->get();
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->get();
 
         $ratingWithProductCount = [];
-        foreach ($lists as $shop => $seller) {
+        foreach ($lists as $shop =>$seller) {
             $ratingWith = 0;
             $reviewCount = 0;
-            if ($seller->productss->isNotEmpty())
+            $productStarReview = 0;
+            $productCount = 0;
+            if ($seller->user->products->isNotEmpty())
             {
-                foreach ($seller->productss as $key => $product)
+                foreach($seller->user->products as $product)
                 {
                     if ($product->reviews->isNotEmpty())
                     {
-                        foreach ($product->reviews as $review)
+                        foreach($product->reviews as $review)
                         {
                             $ratingWith += $review->stars_rated;
                             $reviewCount++;
                         }
+                        $productStarReview += $ratingWith / $product->reviews->count();
+                        $ratingWith = 0;
                     }
+                    $productCount++;
                 }
             }
-            if ($reviewCount > 0)
+            if ($productStarReview > 0)
             {
-                $ratingWithProductCount[$shop][0] = floor($ratingWith / $reviewCount);
+                $ratingWithProductCount[$shop][0] = floor($productStarReview / $productCount);
                 $ratingWithProductCount[$shop][1] = $reviewCount;
             }
             else
@@ -1494,12 +1531,6 @@ class AdminController extends Controller
                 $ratingWithProductCount[$shop][1] = 0;
             }
         }
-
-        // $lists = DB::table('sellers as S')
-        //             ->select('S.*', 'U.*', 'S.phone', DB::raw('(SELECT COUNT(*) FROM products WHERE seller_id = S.user_id) as product_count'))
-        //             ->join('users as U', 'U.id', '=', 'S.user_id')
-        //             ->orderBy('S.created_at', 'desc')
-        //             ->paginate($limit);
 
         $ttl = $lists->count();
         $ttlpage = (ceil($ttl / $limit));
@@ -1558,9 +1589,20 @@ class AdminController extends Controller
     public function indexfaq()
     {
         $limit = 10;
-        $lists = DB::table('faqs')
-                    ->select('faqs.*')
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Faq::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->orWhere('title', 'like', '%' . $mainSearch . '%')
+                ->orWhere('ans', 'like', '%' . $mainSearch . '%')
+                ->orWhere('que', 'like', '%' . $mainSearch . '%')
+                ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
+            });
+        }
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -1578,9 +1620,23 @@ class AdminController extends Controller
     public function indexcoupon()
     {
         $limit = 10;
-        $lists = DB::table('coupons')
-                    ->select('coupons.*')
-                    ->orderBy('created_at', 'desc')->paginate($limit);
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Coupon::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->orWhere('name', 'like', '%' . $mainSearch . '%')
+                ->orWhere('coupon_code', 'like', '%' . $mainSearch . '%')
+                ->orWhere('discount_amount', 'like', '%' . $mainSearch . '%')
+                ->orWhere('mini_amount', 'like', '%' . $mainSearch . '%')
+                ->orWhere('valid_amount', 'like', '%' . $mainSearch . '%')
+                ->orWhere('valid_date', 'like', '%' . $mainSearch . '%')
+                ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
+            });
+        }
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -1591,12 +1647,22 @@ class AdminController extends Controller
     public function indexuser()
     {
         $limit = 10;
-
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = User::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->orWhere('name', 'like', '%' . $mainSearch . '%')
+                ->orWhere('email', 'like', '%' . $mainSearch . '%')
+                ->orWhere('role', 'like', '%' . $mainSearch . '%')
+                ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
+            });
+        }
         // print_r($type);die;
 
-        $users = DB::table('users')
-                    ->select('users.id','users.*')
-                    ->whereIn('role',['seller','buyer'])
+        $users = $query->whereIn('role',['seller','buyer'])
                     ->where('email_verified_at','<>','')
                     ->where(function ($query) {
                         $query->whereNotNull('email_verified_at')
@@ -1618,10 +1684,22 @@ class AdminController extends Controller
         }
 
         $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = User::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->orWhere('name', 'like', '%' . $mainSearch . '%')
+                ->orWhere('email', 'like', '%' . $mainSearch . '%')
+                ->orWhere('role', 'like', '%' . $mainSearch . '%')
+                ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
+            });
+        }
 
-        $subadmins = User::where('role','admin')
+        $subadmins = $query->where('role','admin')
                     ->where('id', '!=' , 1)
-
                     ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $subadmins->total();
@@ -2437,6 +2515,18 @@ class AdminController extends Controller
 
     public function indexorderlist()
     {
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Order::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('order_id', 'like', '%' . $mainSearch . '%')
+                      ->where('total_amount', 'like', '%' . $mainSearch . '%')
+                      ->where('confirmed_date', 'like', '%' . $mainSearch . '%');
+            });
+        }
         $order = Order::latest()->paginate(10);
         return view('admin.order.indexorderlist',compact('order'));
 

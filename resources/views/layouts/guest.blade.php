@@ -214,7 +214,7 @@
                                     </li>
                                     <li class="right-side">
                                         <div class="onhover-dropdown header-badge">
-                                            <a href="">
+                                            <a href="{{ route('show_carts') }}">
                                             <button type="button" class="btn p-0 position-relative header-wishlist">
                                                 <i data-feather="shopping-cart"></i>
                                                 @php
@@ -256,9 +256,6 @@
                                                                         <h5>{{ $cart->product_name }}</h5>
                                                                     </a>
                                                                     <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
-                                                                    <button class="close-button close_button">
-                                                                        <i class="fa-solid fa-xmark"></i>
-                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -659,6 +656,9 @@
                                 @endif
                                 <li>
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/comparelist') }}" class="text-content">Your Compare List</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('footer_search') }}" class="text-content">Search</a>

@@ -31,7 +31,7 @@
                 @foreach($lists as $shop => $seller)
                 <div class="col-xxl-4 col-md-6">
 
-                    <a href="{{ url("/shopleftsidebar/".$seller->id ) }}" class="seller-grid-box">
+                    <a href="{{ url("/shopleftsidebar/".$seller->user_id ) }}" class="seller-grid-box">
                         <div class="grid-contain">
                             <div class="seller-contact-details">
                                 <div class="seller-contact">
@@ -70,12 +70,12 @@
                                                 @endif
                                             @endfor
                                         </ul>
-                                        <span>({{ $ratingWithProductCount[$shop][1] }} Reviews)</span>
+                                        <span>({{ $ratingWithProductCount[$shop][1] }} <?php echo ($ratingWithProductCount[$shop][1] > 1) ? 'Reviews' : 'Review'; ?>)</span>
                                     </div>
-                                    @if ($seller->productss->count() > 1)
-                                    <span class="product-label">{{ $seller->productss->count() }} Products</span>
+                                    @if ($seller->user->products->count() > 1)
+                                    <span class="product-label">{{ $seller->user->products->count() }} Products</span>
                                     @else
-                                    <span class="product-label">{{ $seller->productss->count() }} Product</span>
+                                    <span class="product-label">{{ $seller->user->products->count() }} Product</span>
                                     @endif
                                 </div>
 

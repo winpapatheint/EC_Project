@@ -40,7 +40,7 @@
                                         @else
                                         @foreach ($products as $key => $item)
                                         <tr>
-                                            <td>{{ $key+=1 }}</td>
+                                            <td>{{ ($ttl+1) - ($products->firstItem() + $key) }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <div class="table-image">
@@ -52,7 +52,7 @@
 
                                             <td>{{ $item->product_qty }}</td>
 
-                                            <td class="td-price">{{ $item->selling_price }}</td>
+                                            <td class="td-price">¥{{ $item->selling_price }}</td>
 
                                             <td class="td-price">
                                                 @if ($item->discount_percent == NULL)
@@ -100,7 +100,8 @@
                     </div>
                 </div>
             </div>
-            {{ $products->links() }}
+            <!--pagination -->
+            @include('components.pagination')
         </div>
     </div>
     <!-- Container-fluid Ends-->

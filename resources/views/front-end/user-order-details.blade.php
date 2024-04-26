@@ -118,11 +118,11 @@
                                     <div class="title-header title-header-block package-card">
                                     @if($orderDetails->isNotEmpty())
                                         @php
-                                            $orders = $orderDetails->first();
+                                            $orders = $orderDetails->first();@dd($orders->ordercode);
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $orders->order_id }}</h5>
+                                            <h5>Order ID {{ $orders->ordercode }}</h5>
                                         </div>
                                         <div class="card-order-section">   
                                             <ul>

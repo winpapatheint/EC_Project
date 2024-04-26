@@ -68,6 +68,7 @@ Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->m
 Route::get('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
+Route::get('/coupon-products', [ShowProductController::class, 'ShowCouponProductList'])->name('show-coupon-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
@@ -219,7 +220,7 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
-Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
+Route::get('/dashboard', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
 Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
 
@@ -253,7 +254,7 @@ Route::post('/reviewstatus', [ProductController::class, 'changeRtStatus'])->midd
 Route::post('/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');
 Route::post('/reviewdelete', [ProductController::class, 'deleteReview'])->middleware(['auth','role:seller'])->name('review.delete');
 Route::get('/get-subtitle/{categoryId}', [ProductController::class, 'getSubTitle']);
-Route::get('/get-subcategories-by-title/{subcategoryTitleId}', [ProductController::class, 'getSubcategory']);
+Route::get('/get-subcategories-by-title/{subcategorytitleId}', [ProductController::class, 'getSubcategory']);
 
 //SellerOrder
 Route::get('/orderlist', [OrderController::class, 'sellerAllOrder'])->middleware(['auth','role:seller'])->name('all.order');

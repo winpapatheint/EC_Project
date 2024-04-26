@@ -38,10 +38,10 @@
                                         @else
                                         @foreach ($review as $key => $item)
                                         <tr>
-                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ ($ttl+1) - ($review->firstItem() + $key) }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>{{ $item['user']['name'] }}</td>
-                                            <td>{{ $item['product']['product_name'] }}</td>
+                                            <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
                                             @if ($item->stars_rated == NULL)
                                                 <td>
                                                     <ul class="rating">
@@ -147,6 +147,8 @@
                     <!-- Table End -->
                 </div>
             </div>
+        <!--pagination -->
+        @include('components.pagination')
         </div>
     </div>
     <!-- Container-fluid Ends-->

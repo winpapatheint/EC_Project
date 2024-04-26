@@ -56,13 +56,18 @@ class Product extends Model
         return $this->belongsTo(SubCategoryTitle::class,'sub_category_title_id');
     }
 
-    public function seller()
+    public function user()
     {
-        return $this->belongsTo(Seller::class);
+        return $this->belongsTo(User::class, 'seller_id');
     }
 
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
     }
 }

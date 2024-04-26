@@ -31,7 +31,12 @@ return [
         'array' => 'The :attribute must have between :min and :max items.',
     ],
     'boolean' => 'The :attribute field must be true or false.',
+<<<<<<< HEAD
     'confirmed' => 'The :attribute confirmation does not match.',
+=======
+    'confirmed' => 'The password does not match.',
+    'confirmedpass' => ':attributeが一致しません',
+>>>>>>> 9330c050629d8f345f55f03b37e3560f0a1cd8f7
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',
@@ -40,7 +45,15 @@ return [
     'digits_between' => ':max桁以内に入力してくだい',
     'dimensions' => 'The :attribute has invalid image dimensions.',
     'distinct' => 'The :attribute field has a duplicate value.',
+<<<<<<< HEAD
     'email' => 'The :attribute must be a valid email address.',
+=======
+    'email' => '有効な:attributeを入力してください',
+    'editemail' => '有効な:attributeを入力してください',
+    'emails' => '有効な:attributeを入力してください',
+
+    'content' => 'content:attributeを入力してください',
+>>>>>>> 9330c050629d8f345f55f03b37e3560f0a1cd8f7
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'exists' => 'The selected :attribute is invalid.',
     'file' => 'The :attribute must be a file.',
@@ -116,7 +129,7 @@ return [
         'array' => 'The :attribute must contain :size items.',
     ],
     'starts_with' => 'The :attribute must start with one of the following: :values.',
-    'string' => 'The :attribute must be a string.',
+    'string' => 'The :attribute must be present.',
     'timezone' => 'The :attribute must be a valid zone.',
     'unique' => 'The :attribute has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
@@ -161,6 +174,7 @@ return [
     */
 
     'attributes' => [
+<<<<<<< HEAD
         'email' => 'Mail Address',
         'password' => 'Password',
         'name' => 'Name',
@@ -168,6 +182,26 @@ return [
         'gender' => 'Sex',
         'agerange' => 'Age Range',
         'phone' => 'Phone',
+=======
+        'email' => 'メールアドレス',
+         'checks' => 'チェック',
+         'emails' => 'メールアドレス',
+         'editemail' => 'メールアドレス',
+
+        'password' => 'パスワード',
+        'password_confirmations'=>'パスワード',
+
+        'name' => '氏名（漢字)',
+        'names' => '氏名',
+        'startdate' => 'チェックイン',
+        'enddate' => 'チェックアウト',
+        'guest' => '人数',
+
+        'furiname' => '氏名（カタカナ）',
+        'gender' => '性別',
+        'agerange' => '年齢',
+        'phone' => '電話番号',
+>>>>>>> 9330c050629d8f345f55f03b37e3560f0a1cd8f7
         'types' => '分類種類',
         'b_type' => '大分類',
         'm_type' => '中分類',

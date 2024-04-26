@@ -146,7 +146,7 @@
                                             </td>
 
                                             <td>
-                                                <h6>{{ $item->order_id  }}</h6>
+                                                <h6>{{ $item->order_code  }}</h6>
                                             </td>
 
                                             <td>
@@ -161,6 +161,7 @@
 
                                             <td>
                                                 <ul>
+                                                    
                                                     <li>
                                                         <a href="{{route ('user_order_details',['id' => $item->order_id]) }}">
                                                             <i class="ri-eye-line"></i>

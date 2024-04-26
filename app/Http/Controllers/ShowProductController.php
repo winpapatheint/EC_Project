@@ -12,6 +12,7 @@ use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ShowProductController extends Controller
@@ -135,13 +136,13 @@ class ShowProductController extends Controller
                     $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
                 }
                 if (in_array("2", $discount)) {
-                    $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10');
+                    $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
                 }
                 if (in_array("3", $discount)) {
-                    $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15');
+                    $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
                 }
                 if (in_array("4", $discount)) {
-                    $query->whereRaw('CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25');
+                    $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
                 }
                 if (in_array("5", $discount)) {
                     $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
@@ -184,8 +185,6 @@ class ShowProductController extends Controller
 
         $reviews = Review::all();
 
-        $allProduct = Product::count();
-
         $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
                                             ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
                                             ->where('products.status', '=', '1')
@@ -202,10 +201,10 @@ class ShowProductController extends Controller
                                                 return $grouped->count();
                                             });
 
-        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) < 5 THEN 1 END) as group_1_count')
-                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 5 AND 10 THEN 1 END) as group_2_count')
-                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 10 AND 15 THEN 1 END) as group_3_count')
-                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) BETWEEN 15 AND 25 THEN 1 END) as group_4_count')
+        $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
                                             ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
                                             ->where('status', '=', '1')
                                             ->first();
@@ -221,9 +220,9 @@ class ShowProductController extends Controller
     }
     public function ShowProductleftThumbnail($id)
     {
-        $product = Product::with('seller')->find($id);
+        $product = Product::with('user')->with('user.seller')->find($id);
         $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
-        $reviews = Review::all();
+        $reviews = Review::where('product_id', $id)->get();
         $productOrdered = OrderDetail::where('product_id', $id)->get();
         $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')
@@ -234,7 +233,7 @@ class ShowProductController extends Controller
         $ratingWith = 0;
         $productCount = 0;
         $productStarReview = 0;
-        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller->id)->get();
+        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller_id)->get();
         if ($ratingProject->count() > 0) {
             foreach ($ratingProject as $key => $rating) {
                 if($rating->reviews->isNotEmpty()) {
@@ -259,39 +258,222 @@ class ShowProductController extends Controller
             'ids' => 'array',
             'ids.*' => 'integer|distinct|min:1',
             'topic' => 'string|nullable',
+            'sort' => 'integer|min:1',
+            'search' => 'string|nullable',
+            'categories' => 'array',
+            'categories.*' => 'integer|distinct|min:1',
+            'price' => 'string|nullable',
+            'rating' => 'array',
+            'rating.*' => 'integer|distinct|min:1',
+            'discount' => 'array',
+            'discount.*' => 'integer|distinct|min:1',
         ]);
 
         $page = $validated['page'] ?? 1;
         $ids = $validated['ids'] ?? [];
         $topic = $validated['topic'] ?? null;
+        $sort = $validated['sort'] ?? 0;
+        $search = $validated['search'] ?? null;
+        $categories = $validated['categories'] ?? [];
+        $price = $validated['price'] ?? null;
+        $rating = $validated['rating'] ?? [];
+        $discount = $validated['discount'] ?? [];
 
         $limit = 9; // set the number of products per page
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
+        }
+
+        if (!empty($price)) {
+            $priceRange = explode(';', $price);
+
+            if (count($priceRange) == 2) {
+                $minPrice = (float)$priceRange[0];
+                $maxPrice = (float)$priceRange[1];
+
+                $query->whereRaw('CAST(selling_price AS DECIMAL) BETWEEN ? AND ?', [$minPrice, $maxPrice]);
+            }
+        }
+
+        if (!empty($rating)) {
+            $averageRated = Review::select('product_id',
+                DB::raw('FLOOR(AVG(stars_rated)) AS `average_rating`')
+            )
+            ->groupBy('product_id')
+            ->get();
+            $matchedProductIds = [];
+            foreach ($averageRated as $rated) {
+                if (in_array($rated->average_rating, $rating)) {
+                    $matchedProductIds[] = $rated->product_id;
+                }
+            }
+            $query->whereIn('id', $matchedProductIds);
+        }
+
+        if (!empty($discount)) {
+            if (in_array("1", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) <= 5');
+            }
+            if (in_array("2", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10');
+            }
+            if (in_array("3", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15');
+            }
+            if (in_array("4", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25');
+            }
+            if (in_array("5", $discount)) {
+                $query->whereRaw('CAST(discount_percent AS DECIMAL) > 25');
+            }
+        }
+
+        // Apply sorting
+        switch ($sort) {
+            case 1:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) ASC');
+                break;
+            case 2:
+                $query->orderByRaw('CAST(selling_price AS DECIMAL(10,2)) DESC');
+                break;
+            case 3:
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                    ->select('products.*', DB::raw('FLOOR(AVG(reviews.stars_rated)) as review_count'))
+                    ->groupBy('products.id')
+                    ->orderBy('review_count', 'desc');
+                break;
+            case 4:
+                $query->orderBy('product_name', 'ASC');
+                break;
+            case 5:
+                $query->orderBy('product_name', 'DESC');
+                break;
+            case 6:
+                $query->orderByRaw('CAST(discount_percent AS DECIMAL(10,2)) DESC');
+                break;
+            default:
+                // No sorting applied
+                break;
+        }
+
         if($ids)
         {
-            $products = Product::with('Category')->whereIn('id', $ids)->where('status', '=', '1')->get();
+            $products = $query->with('Category')->whereIn('products.id', $ids)->where('products.status', '=', '1')
+            ->paginate($limit, ['*'], 'page', $page);
+
+            $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                                            ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                                            ->where('products.status', '=', '1')
+                                            ->whereIn('products.id', $ids)
+                                            ->groupBy('categories.id')
+                                            ->get();
+
+            $ratingWithProductCount = Review::select(
+                                                DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
+                                            )
+                                            ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
+                                            ->whereIn('products.id', $ids)
+                                            ->groupBy('product_id')
+                                            ->get()
+                                            ->groupBy('average_rating')
+                                            ->map(function ($grouped) {
+                                                return $grouped->count();
+                                            });
+
+            $discountWithProductCount = new Collection([
+                                                'group_1_count' => 0,
+                                                'group_2_count' => 0,
+                                                'group_3_count' => 0,
+                                                'group_4_count' => 0,
+                                                'group_5_count' => 0,
+                                            ]);
+            
+        }
+        else
+        {
+            if($topic == 'value-of-the-day')
+            {
+                $products = $query->with('Category')
+                                    ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+                                    ->whereDate('order_details.created_at', Carbon::today())
+                                    ->where('products.status', '=', '1')
+                                    ->select('products.*') // Select only the columns from the 'products' table
+                                    ->distinct('order_details.product_id') // Retrieve distinct product_ids
+                                    ->paginate($limit, ['*'], 'page', $page);
+
+                $filterForProduct = Product::with('Category')
+                                    ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+                                    ->whereDate('order_details.created_at', Carbon::today())
+                                    ->where('products.status', '=', '1')
+                                    ->select('products.*') // Select only the columns from the 'products' table
+                                    ->distinct('order_details.product_id')
+                                    ->get();
+            }
+
+            if($topic == 'top-50-offers')
+            {
+                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)
+                ->paginate($limit, ['*'], 'page', $page);
+
+                $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
+            }
+
+            if($topic == 'new-arrivals')
+            {
+                $products = $query->with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')
+                ->paginate($limit, ['*'], 'page', $page);
+
+                $filterForProduct = Product::with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
+            }
+
+                $categoryIds = $filterForProduct->pluck('Category.id')->unique()->toArray();
+                $productIds = $filterForProduct->pluck('id')->unique()->toArray();
+
+                $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                            ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                            ->where('products.status', '=', '1')
+                            ->whereIn('categories.id', $categoryIds)
+                            ->whereIn('products.id', $productIds)
+                            ->groupBy('categories.id')
+                            ->get();
+
+                $ratingWithProductCount = Review::select(
+                                DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
+                            )
+                            ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
+                            ->whereIn('products.category_id', $categoryIds)
+                            ->whereIn('products.id', $productIds)
+                            ->groupBy('product_id')
+                            ->get()
+                            ->groupBy('average_rating')
+                            ->map(function ($grouped) {
+                                return $grouped->count();
+                            });
+
+                $discountWithProductCount = Product::selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) <= 5 THEN 1 END) as group_1_count')
+                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 5 AND CAST(discount_percent AS DECIMAL) <= 10 THEN 1 END) as group_2_count')
+                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 10 AND CAST(discount_percent AS DECIMAL) <= 15 THEN 1 END) as group_3_count')
+                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 15 AND CAST(discount_percent AS DECIMAL) <= 25 THEN 1 END) as group_4_count')
+                            ->selectRaw('COUNT(CASE WHEN CAST(discount_percent AS DECIMAL) > 25 THEN 1 END) as group_5_count')
+                            ->where('status', '=', '1')
+                            ->whereIn('products.category_id', $categoryIds)
+                            ->whereIn('products.id', $productIds)
+                            ->first();
         }
 
-        if($topic == 'value-of-the-day')
-        {
-            $products = Product::with('Category')->leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
-                        ->whereDate('order_details.created_at', Carbon::today())->where('products.status', '=', '1')->get();
-        }
-
-        if($topic == 'top-50-offers')
-        {
-            $products = Product::with('Category')->where('status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
-        }
-
-        if($topic == 'new-arrivals')
-        {
-            $products = Product::with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
-        }
+        $ttl = $products->total();
+        $ttlpage = (ceil($ttl / $limit));
 
         $reviews = Review::all();
-        $allProduct = Product::count();
-        $totalPage = ceil($allProduct / $limit);
 
-        return view('front-end.discount-products',compact('products', 'reviews', 'totalPage', 'page'));
+        return view('front-end.discount-products',compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'
+        , 'search', 'categories', 'price', 'rating', 'discount', 'sort', 'ids', 'topic'));
     }
 
     public function ShowWishList()

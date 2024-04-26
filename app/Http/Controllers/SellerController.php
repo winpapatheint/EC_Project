@@ -22,20 +22,23 @@ class SellerController extends Controller
 {
     public function dashboard()
     {
+        $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
         $revenue = OrderDetail::where('seller_id', $id)->where('status', 'Delivered')->sum('amount');
         $order = OrderDetail::where('seller_id', $id)->get();
         $pending = OrderDetail::where('seller_id', $id)->where('status', 'Pending')->get();
         $product = Product::where('seller_id', $id)->get();
-        $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate(5);
+        $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);
         $orders = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
                 ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
                 ->pluck('count', 'month_name');
 
+        $ttl = $transfer->total();
+        $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product'));
+        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
 

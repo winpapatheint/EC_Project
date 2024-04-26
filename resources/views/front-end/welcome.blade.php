@@ -297,29 +297,29 @@
                         </div>
                         @endif
 
+                        @if ($maxStarsRatedRow)
                         <div class="section-t-space">
                             <div class="category-menu">
                                 <h3>Customer Comment</h3>
+                                <div class="review-box">
+                                    <div class="review-contain">
+                                        <h5 class="w-75">We Care About Our Customer Experience</h5>
+                                        <p>{{ $maxStarsRatedRow -> comment }}</p>
+                                    </div>
 
-                                    {{-- <div class="review-box">
-                                        <div class="review-contain">
-                                            <h5 class="w-75">We Care About Our Customer Experience</h5>
-                                            <p>{{ $maxStarsRatedRow -> comment }}</p>
+                                    <div class="review-profile">
+                                        <div class="review-image">
+                                            <img src="{{ asset('upload/profile/'.$maxStarsRatedRow ->user_photo) }}"
+                                                class="img-fluid blur-up lazyload" alt="">
                                         </div>
-
-                                        <div class="review-profile">
-                                            <div class="review-image">
-                                                <img src="../assets/images/vegetable/review/1.jpg"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                            </div>
-                                            <div class="review-detail">
-                                                <h5>{{ $maxStarsRatedRow -> name }}</h5>
-                                            </div>
+                                        <div class="review-detail">
+                                            <h5>{{ $maxStarsRatedRow -> name }}</h5>
                                         </div>
-                                    </div> --}}
-
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
 

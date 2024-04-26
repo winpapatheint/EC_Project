@@ -237,8 +237,7 @@
                                                         <td>Seller</td>
                                                         <td>
                                                             @php
-                                                                $seller = DB::table('sellers')->where('id',$product->seller_id)->first();
-                                                                $seller_name = DB::table('users')->where('id',$seller->user_id)->first();
+                                                                $seller_name = DB::table('users')->where('id',$product->seller_id)->first();
                                                             @endphp
                                                             {{ $seller_name->name }}
                                                         </td>
@@ -390,7 +389,7 @@
                                                                     <div>
                                                                         <div class="people-image people-text">
                                                                             <img alt="user" class="img-fluid "
-                                                                                src="{{ asset('upload/product_thambnail/'.$user->user_photo) }}">
+                                                                                src="{{ asset('upload/profile/'.$user->user_photo) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="people-comment">
@@ -437,11 +436,11 @@
                         <div class="vendor-box">
                             <div class="vendor-contain">
                                 <div class="vendor-image">
-                                    <img src="{{ asset('upload/shop/'.$product->seller->shop_logo) }}" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('upload/shop/'.$product->user->seller->shop_logo) }}" class="blur-up lazyload" alt="">
                                 </div>
 
                                 <div class="vendor-name">
-                                    <h5 class="fw-500">{{ $product->seller->shop_name }}</h5>
+                                    <h5 class="fw-500">{{ $product->user->seller->shop_name }}</h5>
 
                                     <div class="product-rating mt-1">
                                         <ul class="rating">
@@ -464,18 +463,18 @@
                                     <li>
                                         <div class="address-contact">
                                             <i data-feather="map-pin"></i>
-                                            <h5>Address: <span class="text-content">{{ $product->seller->zip_code }}</span><br>
-                                            <span class="text-content">{{ $product->seller->city }}</span>
-                                            <span class="text-content">{{ $product->seller->chome }}</span>
-                                            <span class="text-content">{{ $product->seller->building }}</span>
-                                            <span class="text-content">{{ $product->seller->room }}</span></h5>
+                                            <h5>Address: <span class="text-content">{{ $product->user->seller->zip_code }}</span><br>
+                                            <span class="text-content">{{ $product->user->seller->city }}</span>
+                                            <span class="text-content">{{ $product->user->seller->chome }}</span>
+                                            <span class="text-content">{{ $product->user->seller->building }}</span>
+                                            <span class="text-content">{{ $product->user->seller->room }}</span></h5>
                                         </div>
                                     </li>
 
                                     <li>
                                         <div class="address-contact">
                                             <i data-feather="headphones"></i>
-                                            <h5>Contact Seller: <span class="text-content">{{ $product->seller->phone }}</span></h5>
+                                            <h5>Contact Seller: <span class="text-content">{{ $product->user->seller->phone }}</span></h5>
                                         </div>
                                     </li>
                                 </ul>

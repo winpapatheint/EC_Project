@@ -126,13 +126,13 @@
                                         @else
                                             @foreach ($transfer as $key => $item )
                                                 <tr>
-                                                    <td>{{ $key+1 }}</td>
+                                                    <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
                                                     <td>{{ $item->created_at }}</td>
-                                                    <td>{{ $item->transaction_id }}</td>
+                                                    <td>Bank</td>
                                                     <td>Asia 食材</td>
                                                     <td>{{ $item->id }}</td>
-                                                    {{-- <td>{{ $item->product->product_code }}</td>
-                                                    <td>{{ $item->product->product_name }}</td> --}}
+                                                    <td>{{ $item->product->product_code }}</td>
+                                                    <td>{{ $item->product->product_name }}</td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>￥{{ $item->price }}</td>
                                                     <td>￥{{ $item->amount }}</td>

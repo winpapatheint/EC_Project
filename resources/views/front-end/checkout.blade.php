@@ -123,7 +123,7 @@
                 @php
                     $amount = 0;
                     $amount1 = 0;
-                    $total = 0;
+
                     $subTotal = 0;
                     $totalqty = 0;
                     $productIds = [];
@@ -156,8 +156,8 @@
                                 @endphp
 
                                 <li>
-                                    <img src="../assets/images/vegetable/product/1.png"
-                                        class="img-fluid blur-up lazyloaded checkout-image" alt="">
+                                <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
+                                                            class="img-fluid blur-up lazyload" alt="" style="width: 50px; height: 50px;">
                                     <h4>{{ $cartlist->product_name }} <span>X {{ $cartlist->quantity }}</span></h4>
                                     @if($cartlist->discount_percent)
                                             @php
@@ -187,7 +187,7 @@
                                 <li>
 
                                     <h4>Subtotal</h4>
-                                    <h4 class="price">¥ {{ number_format($subtotal , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
 
                                 </li>
 
@@ -197,14 +197,13 @@
                                 </li>
 
                                 <li>
-
-                                    <h4>Coupon/Code</h4>
-                                    <h4 class="price">¥ - {{ number_format($coupon , 0, '.', ',') }}</h4>
+                                    <h4>Coupon Discount</h4>
+                                    <h4 class="price">¥ - {{ number_format($couponDiscount , 0, '.', ',') }}</h4>
                                 </li>
 
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
-                                    <h4 class="price">¥ {{ number_format($checkouttotal , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ {{ number_format($total , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
 
@@ -312,6 +311,4 @@ function purchasepaymentdone(total, callback) {
 
 }
 </script>
-
-
 </x-guest-layout>

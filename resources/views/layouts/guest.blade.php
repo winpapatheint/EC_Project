@@ -56,9 +56,19 @@
     }
 
     </style>
+
 </head>
 
 <body class="bg-effect">
+
+    <!-- latest jquery-->
+    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- jquery ui-->
+    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+
+    <!-- Price Range Js -->
+    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 
     <!-- Loader Start -->
     <div class="fullpage-loader">
@@ -1078,12 +1088,6 @@
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
 
-    <!-- latest jquery-->
-    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
-    <!-- jquery ui-->
-    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-
     <!-- Bootstrap js-->
     <script src="{{ asset('frontend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
@@ -1123,8 +1127,7 @@
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
 
-    <!-- Price Range Js -->
-    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
+    
 </body>
 
 </html>

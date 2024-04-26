@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -23,11 +22,9 @@ use App\Models\Cart;
 use App\Models\CouponDetail;
 use App\Models\seller;
 use App\Models\Prefecture;
-use App\Models\Notification;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Auth\Events\Registered;
-use Carbon\Carbon;
-use Mail;
+
 
 class UserController extends Controller
 {
@@ -42,104 +39,51 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
+        $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'birthday' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'zip_code' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'chome' => 'required|string|max:255',
+        'building' => 'required|string|max:255',
+        'room' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
+        ]);
 
-        // $rules = [
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => 'required|string|min:8|confirmed',
-        //     'birthday' => 'required|string|max:255',
-        //     'phone' => 'required|string|max:255',
-        //     'zip_code' => 'required|string|max:255',
-        //     'prefecture_id' => 'required|string|max:255',
-        //     'city' => 'required|string|max:255',
-        //     'chome' => 'required|string|max:255',
-        //     'building' => 'required|string|max:255',
-        //     'room' => 'required|string|max:255',
-        // ];
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => 'buyer',
+            'password' => Hash::make($request->input('password')),
+            'status' => '1',
+        ]);
 
-        $customMessages = [
-            'name.required' => 'The name is required.',
-            'email.required' => 'The email is required.',
-            'email.email' => 'Invalid email format.',
-            'email.unique' => 'The email has already been taken.',
-            'password.required' => 'The password is required.',
-            'password.min' => 'The password must be at least 8 characters.',
-            'password.confirmed' => 'The password confirmation does not match.',
-            'birthday.required' => 'The birthday is required.',
-            'phone.required' => 'The phone number is required.',
-            'phone.regex' => 'The phone number must be in the format ###-####-####.',
-            'phone.unique' => 'The phone number has already been taken.',
-            'phone.numeric' => 'The phone number must contain only numbers.',
-            'zip_code.required' => 'The zip_code is required.',
-            'prefecture_id.required' => 'Please choose the prefecture.',
-            'city.required' => 'The city is required.',
-            'chome.required' => 'The chome is required.',
-            'building.required' => 'The building number is required.',
-            'room.required' => 'The room number is required.',
+        event(new Registered($user));
 
-        ];
+        $buyer = Buyer::create([
+            'user_id' => $user->id,
+            'prefecture_id' => $request->prefecture,
+            'name' => $request->name,
+            'email' => $user->email,
+            'birthday' => $request->birthday,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'zip_code' => $request->zip_code,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room_no' => $request->room,
+        ]);
 
-        $validator = Validator::make($request->all(), $rules, $customMessages);
+        event(new Registered($buyer));
 
+        $email = $request->email;
+        return view('auth.verify-email', compact('email'));
 
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'role' => 'buyer',
-                'password' => Hash::make($request->input('password')),
-                'status' => '1',
-            ]);
-
-            event(new Registered($user));
-
-            $buyer = Buyer::create([
-                'user_id' => $user->id,
-                'prefecture_id' => $request->prefecture,
-                'name' => $request->name,
-                'email' => $user->email,
-                'birthday' => $request->birthday,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'zip_code' => $request->zip_code,
-                'city' => $request->city,
-                'chome' => $request->chome,
-                'building' => $request->building,
-                'room_no' => $request->room,
-            ]);
-
-            event(new Registered($buyer));
-
-            $inquiry_email = 'info-test@asia-hd.com';
-            $user = User::where('id', $user->id)->select('email', 'name')->first();
-
-            $email = $user->email;
-            $name = $user->name;
-            $data = array('name'=>$name);
-            if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
-                    $message->from($email,$name);
-                    $message->setBody("E commerce 公式サイトから、以下の通知がありました。
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\n名前：　".$name."
-                    \r\n"."メールアドレス：　".$email."
-                    \r\n
-                    \r\n"."通知のお知らせ：　
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-            }
-
-            $notification = Notification::find(2);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $notification->update( $newval);
-
-            $email = $request->email;
-            return view('auth.verify-email', compact('email'));
     }
-
     public function indexuser()
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
@@ -153,7 +97,6 @@ class UserController extends Controller
                         'buyer_addresses.building',
                         'buyer_addresses.room_no',
                         'buyer_addresses.post_code',
-                        'buyer_addresses.address',
                         'buyer_addresses.phone',
                         'buyer_addresses.place',
                         'buyers.id as userid',
@@ -237,9 +180,9 @@ class UserController extends Controller
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
-            ->select('orders.*', 'orders.order_code as ordercode','orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
+            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
             ->get();
-            dd($orderDetails);
+
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
 
     }
@@ -294,72 +237,89 @@ class UserController extends Controller
     public function showAddresses(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $prefecture = Prefecture::get();
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
         //$user = Buyers::first();
-            return view('front-end.user-address',compact('data','user'));
+            return view('front-end.user-address',compact('data','user','prefecture'));
     }
     //Add New Address
     public function createNewaddress(Request $request)
     {
-        $validatedData = $request->validate([
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $prefecture = Prefecture::get();
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+                     ->get();
 
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'post_code' => 'required|string|max:255',
+            'prefectures' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'chome' => 'required|string|max:255',
             'building' => 'required|string|max:255',
-            'room_no' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+            'roomno' => 'required|string|max:255',
             'place' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
         ]);
 
+        if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
 
-        if(empty($request->id))
-        {
-
-                $Buyer_addresses = BuyerAddress::create([
-
-                    'buyer_id' => "1",
-                    'name' => $request->name,
-                    'post_code' => $request->post_code,
-                    'city' => $request->city,
-                    'chome' => $request->chome,
-                    'building' => $request->building,
-                    'room_no' => $request->roomno,
-                    'address' => $request->address,
-                    'place' => $request->place,
-                    'phone' => $request->phone,
-
-                ]);
-                $saved = $Buyer_addresses->save();
-                return redirect()->route('user_addresses');
-
-        }
-    }
-    //Edit Address
-    public function editAddress(Request $request)
-    {
-        $buyerAddress = BuyerAddress::find($request->id);
-
-        if ($buyerAddress) {
-
-            $buyerAddress->update([
-                'id'=> $request->id,
+            $Buyer_addresses = BuyerAddress::create([
+                'buyer_id' => $request->buyer_id,
                 'name' => $request->name,
                 'post_code' => $request->post_code,
+                'prefectures' => $request->prefectures,
                 'city' => $request->city,
                 'chome' => $request->chome,
                 'building' => $request->building,
                 'room_no' => $request->roomno,
-                'address' => $request->address,
                 'place' => $request->place,
                 'phone' => $request->phone,
             ]);
-            return redirect()->route('user_addresses');
+
+            if ($Buyer_addresses) {
+                return redirect()->route('user_addresses',compact('data','user','prefecture'));
+            } else {
+                // Handle failure to save
+                return back()->withInput()->withErrors(['error' => 'Failed to save address.']);
+            }
+        } else {
+            // Handle missing data
+            return back()->withInput()->withErrors(['error' => 'Missing data for address.']);
+        }
+    }
+
+    //Edit Address
+    public function editAddress(Request $request)
+    {
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $prefecture = Prefecture::get();
+
+        $buyerAddress = BuyerAddress::find($request->id);
+
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+                     ->get();
+
+        if ($buyerAddress) {
+
+            $buyerAddress->update([
+                'buyer_id' => $request->buyer_id,
+                'name' => $request->name,
+                'post_code' => $request->post_code,
+                'prefectures' => $request->prefecture,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->roomno,
+                'place' => $request->place,
+                'phone' => $request->phone,
+            ]);
+            return redirect()->route('user_addresses',compact('data','user','prefecture'));
         } else {
             // Return an error response
             return response()->json(['error' => 'Address not found'], 404);
@@ -368,11 +328,12 @@ class UserController extends Controller
     //Remove Address
     public function removeAddress($id)
     {
+        $prefecture = Prefecture::get();
         $address = BuyerAddress::find($id);
         if ($address)
         {
             $address->delete();
-            return redirect()->route('user_addresses');
+            return redirect()->route('user_addresses',compact('prefecture'));
         }
         else
         {
@@ -549,6 +510,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
+
         if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
@@ -556,12 +518,13 @@ class UserController extends Controller
             $buyerid = $buyer->id;
 
             if(isset($productid))
-                $cart = Cart::firstorCreate([
+                $cart = Cart::create([
                     'product_id' => $productid,
                     'seller_id' => $sellerid,
                     'buyer_id' => $buyerid,
                     'quantity' => '1',
                 ]);
+
 
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
@@ -570,7 +533,7 @@ class UserController extends Controller
                         ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                         ->get();
 
-            foreach($cartLists as $key => $cartItem){
+            foreach($cartLists as $cartItem){
 
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
@@ -580,7 +543,6 @@ class UserController extends Controller
                             ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
-
                 $cartItem->shop_name = $shopName->shopname;
             }
 
@@ -921,7 +883,9 @@ class UserController extends Controller
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
-                $discountedPrices = [];
+            }
+
+            $discountedPrices = [];
                 foreach ($cartLists as $product)
                 {
 
@@ -943,10 +907,9 @@ class UserController extends Controller
                     ];
                 }
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','discountedPrices','cartLists','subtotal','shipping','coupon','checkouttotal'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','discountedPrices','subTotal','couponDiscount','total'));
 
     }
-}
     //Purchase
     public function paymentCompleted(Request $request)
     {
@@ -970,18 +933,11 @@ class UserController extends Controller
             $room = $request->room;
             $payment = $request->payment;
 
-            // Generate a unique order code
-            $datePrefix = date('ym');
-            $latestOrder = Order::where('order_code', 'like', $prefix . $datePrefix . '%')->latest()->first();
-            $sequentialNumber = 1;
-            if ($latestOrder) {
-                $latestOrderCode = $latestOrder->product_code;
-                $sequentialNumber = intval(substr($latestOrderCode, strlen($datePrefix))) + 1;
-            }
-            $newOrderCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT);
+            // Generate a unique order ID
+            $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
 
             $order = Order::create([
-                'order_code' => $newOrderCode,
+                'id' => $id,
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
@@ -992,10 +948,9 @@ class UserController extends Controller
                 'building' => $building,
                 'room_no' => $room,
             ]);
-            event(new Registered($order));
 
             $payment = Payment::create([
-                'order_id' => $order->id,
+                'order_id' => $id,
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
@@ -1005,7 +960,7 @@ class UserController extends Controller
             foreach ($productIds as $key => $product_id) {
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
-                        'order_id' => $order->id,
+                        'order_id' => $id,
                         'buyer_id' => (int)$buyerId,
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],
@@ -1014,9 +969,8 @@ class UserController extends Controller
                         'amount' => $amount,
                     ];
                 } else {
-
                     $orderdetailsData = [
-                        'order_id' => $order->id,
+                        'order_id' => $id,
                         'buyer_id' => (int)$buyerId,
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],
@@ -1040,7 +994,7 @@ class UserController extends Controller
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }
-    //Show Footer Tracking
+        //Show Footer Tracking
     public function footertracking(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();

@@ -539,6 +539,7 @@
                 </div>
                 <form class="product-review-form" action="{{ route('reviews') }}" method="POST">
                 @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <div class="modal-body">
                         <div class="product-wrapper">
                             <div class="product-image">
@@ -572,8 +573,8 @@
                             </div>
                         </div>
                         <div class="review-box">
-                            <label for="content" class="form-label">Your Comment *</label>
-                            <textarea id="content" rows="3" class="form-control" placeholder="Your Comment"></textarea>
+                            <label for="comment" class="form-label">Your Comment *</label>
+                            <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Your Comment"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">

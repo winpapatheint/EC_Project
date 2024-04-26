@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Discount Product List</h2>
+                        <h2>Product List</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Product</li>
+                                <li class="breadcrumb-item active">Discount</li>
                             </ol>
                         </nav>
                     </div>
@@ -656,13 +656,6 @@
     @endif
     @endforeach
 
-
-    <!-- latest jquery-->
-    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
-    <!-- jquery ui-->
-    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-
     <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
@@ -691,7 +684,22 @@
         document.getElementById("searchBtn").addEventListener("click", function() {
             document.getElementById("searchForm").submit();
         });
+    </script>
+    <script>
+        jQuery(document).ready(function($) {
+            var rangeSlider = $(".js-range-slider");
 
+            var price = "{{ $price }}";
+
+            if (price !== null) {
+                var priceRange = price.split(';');
+
+                rangeSlider.data("ionRangeSlider").update({
+                    from: parseFloat(priceRange[0]),
+                    to: parseFloat(priceRange[1])
+                });
+            }
+        });
     </script>
 
 </x-guest-layout>

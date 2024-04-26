@@ -230,7 +230,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $orderItem = $request->id;
-        
+
         $orderDetails = DB::table('orders')
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
@@ -577,10 +577,10 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
-                           
+
                 $cartItem->shop_name = $shopName->shopname;
             }
 
@@ -624,7 +624,7 @@ class UserController extends Controller
 
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
+                        ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
@@ -689,7 +689,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -749,7 +749,7 @@ class UserController extends Controller
 
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
+                        ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
@@ -806,7 +806,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -890,7 +890,10 @@ class UserController extends Controller
         $checkouttotal = $request->total;
         //dd($request->subTotal);
 
-        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome',
+                        'buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address',
+                        'buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username',
+                        'buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
                      ->get();
@@ -914,7 +917,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;

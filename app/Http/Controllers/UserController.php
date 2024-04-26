@@ -230,16 +230,16 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $orderItem = $request->id;
-
+        
         $orderDetails = DB::table('orders')
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
-            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
+            ->select('orders.*', 'orders.order_code as ordercode','orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
             ->get();
-
+            dd($orderDetails);
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
 
     }
@@ -570,7 +570,7 @@ class UserController extends Controller
                         ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
                         ->get();
 
-            foreach($cartLists as $cartItem){
+            foreach($cartLists as $key => $cartItem){
 
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
@@ -580,6 +580,7 @@ class UserController extends Controller
                             ->where('sellers.id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
+                           
                 $cartItem->shop_name = $shopName->shopname;
             }
 
@@ -956,7 +957,8 @@ class UserController extends Controller
             $sizes = $request->size;
             $quantities = $request->quantity;
             $totalQty = $request->totalqty;
-            $subtotal = $request->subtotal;
+            $amount = $request->amount;
+            $amount1 = $request->amount1;
             $totalAmount = $request->totalamount;
             $postcode = $request->postcode;
             $city = $request->city;
@@ -965,11 +967,18 @@ class UserController extends Controller
             $room = $request->room;
             $payment = $request->payment;
 
-            // Generate a unique order ID
-            $id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
+            // Generate a unique order code
+            $datePrefix = date('ym');
+            $latestOrder = Order::where('order_code', 'like', $prefix . $datePrefix . '%')->latest()->first();
+            $sequentialNumber = 1;
+            if ($latestOrder) {
+                $latestOrderCode = $latestOrder->product_code;
+                $sequentialNumber = intval(substr($latestOrderCode, strlen($datePrefix))) + 1;
+            }
+            $newOrderCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT);
 
             $order = Order::create([
-                'id' => $id,
+                'order_code' => $newOrderCode,
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
@@ -980,9 +989,10 @@ class UserController extends Controller
                 'building' => $building,
                 'room_no' => $room,
             ]);
+            event(new Registered($order));
 
             $payment = Payment::create([
-                'order_id' => $id,
+                'order_id' => $order->id,
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
@@ -992,7 +1002,7 @@ class UserController extends Controller
             foreach ($productIds as $key => $product_id) {
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
-                        'order_id' => $id,
+                        'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],
@@ -1001,8 +1011,9 @@ class UserController extends Controller
                         'amount' => $amount,
                     ];
                 } else {
+
                     $orderdetailsData = [
-                        'order_id' => $id,
+                        'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],

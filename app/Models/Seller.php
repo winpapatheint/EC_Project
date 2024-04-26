@@ -38,7 +38,7 @@ class Seller extends Model
         return $this->belongsTo(Prefecture::class,'prefecture_id');
     }
 
-    public function productss()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }

@@ -215,9 +215,9 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
+                                        <input type="email" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
                                         <label>Email Address</label>
-                                        @error('email')
+                                        @error('mail')
                                                 <div class="text-danger">The email {{ $message }}</div>
                                         @enderror
                                     </div>

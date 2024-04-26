@@ -19,8 +19,8 @@
                                             <th>No</th>
                                             <th>Date</th>
                                             <th>Order Image</th>
-                                            <th>Order ID</th>
-                                            <th>Payment Method</th>
+                                            <th>Order Code</th>
+                                            <th>Product Code</th>
                                             <th>Delivery Status</th>
                                             <th>Amount</th>
                                             <th>Option</th>
@@ -35,7 +35,7 @@
                                         @else
                                         @foreach($order as $key => $item)
                                             <tr>
-                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
                                                 <td>{{ $item->created_at }}</td>
                                                 <td>
                                                     <a class="d-block">
@@ -44,12 +44,12 @@
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <td>{{ $item->id }}</td>
-                                                <td>{{ $item->payment_type }}</td>
+                                                <td>{{ $item->order_id }}</td>
+                                                <td>{{ $item->product->product_code }}</td>
                                                 <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
-                                                <td>{{ $item->total_amount }}</td>
+                                                <td>{{ $item->amount }}</td>
                                                 <td>
                                                     <ul>
                                                         <li>
@@ -88,7 +88,8 @@
                     </div>
                 </div>
             </div>
-            {{ $order->links() }}
+            <!--pagination -->
+            @include('components.pagination')
         </div>
     </div>
     <!-- Table End -->

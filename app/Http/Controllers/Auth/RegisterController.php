@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Models\Seller;
 use App\Models\Prefecture;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
@@ -22,7 +25,7 @@ class RegisterController extends Controller
     {
         $validatedData = $request->validate([
             'user_name' => 'present|string|max:255',
-            'email' => 'present|string|email|max:255|unique:users',
+            'mail' => 'present|string|email|max:255|unique:users',
             'passwords' => 'present|string|min:8',
             'confirmed' => 'required|string|same:passwords',
             'bank_name' => 'present|string|max:255',
@@ -49,7 +52,7 @@ class RegisterController extends Controller
 
         $user = User::create([
             'name' => $validatedData['user_name'],
-            'email' => $validatedData['email'],
+            'email' => $validatedData['mail'],
             'role' => 'seller',
             'password' => Hash::make($validatedData['passwords']),
             'status' => 1,

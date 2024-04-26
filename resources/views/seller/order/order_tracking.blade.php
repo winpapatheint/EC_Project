@@ -17,7 +17,7 @@
                                         <div class="order-left-image">
                                             <div class="tracking-product-image">
                                                 <img src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}"
-                                                    class="img-fluid w-100 blur-up lazyload" >
+                                                    class="img-fluid w-100 blur-up lazyload" width="20%">
                                             </div>
 
                                             <div class="order-image-contain">

@@ -3,37 +3,34 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Brand;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\MultiImg;
-use App\Models\Notification;
 use App\Models\SubCategory;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
     public function allProduct()
     {
-        $id = Auth::user()->id;
-        $products = Product::where(function ($query) use ($id) {
-                $query->where('seller_id', $id)
-                    ->orWhereNull('seller_id');
-            })
-            ->orWhere(function ($query) use ($id) {
-                $query->where('subseller_id', $id)
-                    ->orWhereNull('subseller_id');
-            })->latest()->paginate(5);
+        $limit=10;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $products = Product::where('seller_id',$id)->latest()->paginate($limit);
 
-        return view('seller.product.product_all', compact('products'));
+        $ttl = $products->total();
+        $ttlpage = (ceil($ttl / $limit));
+        return view('seller.product.product_all', compact('products','ttl','ttlpage'));
     }
 
 
@@ -298,18 +295,15 @@ class ProductController extends Controller
     }
 
 
-    public function productList()
-    {
-        $id = Auth::user()->id;
-        $products = Product::where('seller_id',$id)->orWhere('subseller_id', $id)->latest()->paginate(5);
-        return view('products', compact('products'));
-    }
-
     public function review()
     {
+        $limit=10;
         $id = Auth::user()->id;
-        $review = Review::where('user_id',$id)->latest()->paginate(10);
-        return view('seller.product.product_review',compact('review'));
+        $review = Review::where('user_id',$id)->latest()->paginate($limit);
+
+        $ttl = $review->total();
+        $ttlpage = (ceil($ttl / $limit));
+        return view('seller.product.product_review',compact('review','ttl','ttlpage'));
     }
 
     public function changeRtStatus(Request $request)

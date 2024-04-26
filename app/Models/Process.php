@@ -19,6 +19,6 @@ class Process extends Model
     ];
 
     function order() {
-        return $this->belongsTo(Order::class,'order_id');
+        return $this->belongsTo(OrderDetail::class,'order_id');
     }
 }

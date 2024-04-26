@@ -1,5 +1,4 @@
 <x-auth-layout>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
         .table>:not(caption)>*>*
@@ -7,6 +6,7 @@
             border-bottom-width:0px !important;
         }
     </style>
+
     <div class="page-body">
         <div class="container-fluid">
             <div class="row">
@@ -44,7 +44,6 @@
                                                     <td data-label="">{{ $list->shop_name }}</td>
                                                     <td data-label="">{{ $list->shop_establish }}</td>
                                                     <td data-label="">{{ $list->phone }}</td>
-                                                    <td data-label="">{{ $list->coupon_code }}</td>
                                                     <td data-label=""><a class="btnlist btn-primary" href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
@@ -123,27 +122,6 @@
             </div>
         </div>
     @endforeach
-
-   <!-- Modal -->
-@foreach($lists as $key => $list)
-<div class="modal fade" id="coupondetailModal{{ $list->coupon_id }}" tabindex="-1" role="dialog" aria-labelledby="coupondetailModalLabel{{ $list->coupon_id }}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="coupondetailModalLabel{{ $list->coupon_id }}">Coupon Detail</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Name:</strong> {{ $list->name }}</p>
-                <p><strong>Coupon Code:</strong> {{ $list->coupon_code }}</p>
-                <p><strong>Discount Amount:</strong> {{ $list->discount_amount }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
         <!-- Delete Modal Box Start -->
             @foreach( $lists as $key => $list )
                 <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">

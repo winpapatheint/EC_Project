@@ -82,8 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
-    'locale' => 'ja',
+    'locale' => 'jp',
 
 
 
@@ -98,7 +97,12 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'jp',
+
+    'available_locales' => [
+      'Japanese' => 'jp',
+      'English' => 'en',
+    ],
 
     /*
     |--------------------------------------------------------------------------

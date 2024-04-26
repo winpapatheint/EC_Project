@@ -9,15 +9,20 @@ class BuyerAddress extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'id',
         'buyer_id',
-        'division',
-        'district',
-        'phone',
-        'address',
+        'name',
         'post_code',
+        'prefectures',
+        'city',
+        'chome',
+        'building',
+        'room_no',
+        'phone',
         'place',
         'photo',
+        'created_at',
+        'updated_at',
 
     ];
 }

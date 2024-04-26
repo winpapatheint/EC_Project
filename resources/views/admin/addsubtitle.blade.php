@@ -64,7 +64,7 @@
                                                         </div>
                                                     </div>
                                                         <div id="dynamic-form"></div>
-                                                            <p style="display:none" class="subtitle error text-danger"></p>
+                                                            <p style="display:none" class="subtitle  error text-danger"></p>
                                                                 @if (!empty($error['subtitle']))
                                                                     @foreach ($error['subtitle'] as  $key => $value)
                                                                         <p class="subtitle error text-danger">{{ $value }}</p>

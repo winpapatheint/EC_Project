@@ -101,6 +101,8 @@
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                         <div class="input-group">
+
+
                             <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
                             <button class="btn" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
@@ -143,7 +145,7 @@
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
-                                <span class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
+                                <span  id="notification-badge" class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
                             </div>
                             <ul class="onhover-show-div" >
                                 <li style="display:block">
@@ -260,6 +262,12 @@
                                     </a>
                                 </li>
 
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
+                                        <i class="ri-store-3-line"></i>
+                                        <span>Shop</span>
+                                    </a>
+                                </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
@@ -443,6 +451,10 @@
             notificationCircles.forEach(function(circle) {
                 circle.style.setProperty('color', '#ffffff', 'important');
             });
+            var badge = document.getElementById('notification-badge');
+        if (badge) {
+            badge.style.display = 'none';
+        }
         }
     </script>
 </body>

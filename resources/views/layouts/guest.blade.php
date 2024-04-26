@@ -658,6 +658,9 @@
                                     <a href="{{ url('/wishlist') }}" class="text-content">Your Wishlist</a>
                                 </li>
                                 <li>
+                                    <a href="{{ url('/comparelist') }}" class="text-content">Your Compare List</a>
+                                </li>
+                                <li>
                                     <a href="{{ route('footer_search') }}" class="text-content">Search</a>
                                 </li>
                                 <li>

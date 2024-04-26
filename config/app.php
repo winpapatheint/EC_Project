@@ -82,8 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
-    'locale' => 'ja',
+    'locale' => 'jp',
 
 
 
@@ -98,7 +97,12 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'jp',
+
+    'available_locales' => [
+      'Japanese' => 'jp',
+      'English' => 'en',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -168,10 +172,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
        // Darryldecode\Cart\CartServiceProvider::class,
         // Pusher\Laravel\PusherServiceProvider::class,
-        Haruncpi\LaravelIdGenerator\IdGeneratorServiceProvider::class,
-        // Barryvdh\DomPDF\ServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
 
 
 
@@ -241,7 +241,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+
         // 'Pusher' => Pusher\Pusher::class,
 
     ],

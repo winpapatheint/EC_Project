@@ -55,8 +55,8 @@ class AuthLayout extends Component
 
         $buyerhour = $buyer->created_at ?? '';
 
-        $order = DB::table('orders')
-                        ->select('orders.confirmed_date','orders.id','orders.created_at',DB::raw('TIMESTAMPDIFF(MINUTE, orders.created_at, NOW()) AS minutes_ago'))
+        $order = DB::table('order_details')
+                        ->select('order_details.confirmed_date','order_details.id','order_details.created_at',DB::raw('TIMESTAMPDIFF(MINUTE, order_details.created_at, NOW()) AS minutes_ago'))
                         ->latest('created_at')
                         ->first();
 

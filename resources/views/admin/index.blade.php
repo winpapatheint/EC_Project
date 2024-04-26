@@ -4,7 +4,7 @@
         $revenue = App\Models\Order::sum('total_amount');
         $order = \App\Models\Order::count();
         $product = App\Models\Product::count();
-        $pending = \App\Models\Order::where('status', 'Pending')->get();
+        $pending = \App\Models\OrderDetail::where('status', 'Pending')->get();
 
     @endphp
     <!-- index body start -->

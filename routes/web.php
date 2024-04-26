@@ -130,15 +130,19 @@ Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
 route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
 Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->name('admin.all.shop');
+route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->name('updatecoupon');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
 Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
 Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
-
+Route::get('shop/{shopid}', [AdminController::class, 'shopdetail']);
+Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->name('shopstatus');
 Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
 route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');

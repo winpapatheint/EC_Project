@@ -65,4 +65,9 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
 }

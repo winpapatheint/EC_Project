@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Process;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF;
+use App\Models\OrderDetail;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
     public function sellerAllOrder()
     {
+        $limit=10;
         $id = Auth::user()->id;
-        $order = Order::where('seller_id', $id)
-                  ->where('status', '!=', 'Cancel')
-                  ->latest()
-                  ->paginate(10);
-        return view('seller.order.order_all',compact('order'));
+        $order = OrderDetail::where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
+        $ttl = $order->total();
+        $ttlpage = (ceil($ttl / $limit));
+        return view('seller.order.order_all',compact('order','ttl','ttlpage'));
     }
 
     public function sellerDetailOrder($id)
@@ -31,7 +36,7 @@ class OrderController extends Controller
     {
         $id = $request->id;
         $status = $request->input('status');
-        $order = Order::find($id);
+        $order = OrderDetail::find($id);
         if(empty($order->confirmed_date))
         {
             $request->validate([
@@ -71,7 +76,6 @@ class OrderController extends Controller
         $order->updated_by = Auth::user()->name;
         $order->save();
 
-        // Save process record
         $process = new Process();
         $process->order_id = $id;
         $process->{$status . '_date'} = now();
@@ -133,7 +137,7 @@ class OrderController extends Controller
 
     public function orderTracking($id)
     {
-        $order = Order::find($id);
+        $order = OrderDetail::find($id);
         $process = Process::where('order_id',$id)->latest()->get();
         return view('seller.order.order_tracking',compact('order','process'));
     }
@@ -147,4 +151,5 @@ class OrderController extends Controller
         ]);
         return $pdf->download('invoice.pdf');
     }
+
 }

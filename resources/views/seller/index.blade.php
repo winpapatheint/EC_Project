@@ -1,20 +1,6 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-@php
-    $id = Auth::user()->id;
-    $user = App\Models\User::find($id);
-    if ($user->created_by !== null) {
-        $id = $user->created_by;
-    }
-    else {
-        $id = Auth::user()->id;
-    }
 
-    $revenue =App\Models\Order::where('seller_id',$id)->where('status', 'Delivered')->sum('total_amount');
-    $order = App\Models\Order::where('seller_id',$id)->get();
-    $pending = App\Models\Order::where('seller_id',$id)->where('status', 'Pending')->get();
-    $product = App\Models\Product::where('seller_id', $id)->get();
-@endphp
 <!-- index body start -->
 <div class="page-body">
     <div class="container-fluid">
@@ -140,16 +126,16 @@
                                         @else
                                             @foreach ($transfer as $key => $item )
                                                 <tr>
-                                                    <td>{{ $key+1 }}</td>
+                                                    <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
                                                     <td>{{ $item->created_at }}</td>
-                                                    <td>{{ $item->transaction_id }}</td>
+                                                    <td>Bank</td>
                                                     <td>Asia 食材</td>
                                                     <td>{{ $item->id }}</td>
-                                                    {{-- <td>{{ $item->product->product_code }}</td>
-                                                    <td>{{ $item->product->product_name }}</td> --}}
+                                                    <td>{{ $item->product->product_code }}</td>
+                                                    <td>{{ $item->product->product_name }}</td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>￥{{ $item->price }}</td>
-                                                    <td>￥{{ $item->total_amount }}</td>
+                                                    <td>￥{{ $item->amount }}</td>
                                                 </tr>
                                             @endforeach
                                         @endif

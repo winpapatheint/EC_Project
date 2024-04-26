@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Help;
 use App\Models\User;
-use App\Models\Order;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Subseller;
 use App\Models\Prefecture;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -21,29 +22,34 @@ class SellerController extends Controller
 {
     public function dashboard()
     {
-        $id = Auth::user()->id;
-        $transfer = Order::where('seller_id',$id)->latest()->paginate(5);
-        $orders = Order::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+        $limit=10;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $revenue = OrderDetail::where('seller_id', $id)->where('status', 'Delivered')->sum('amount');
+        $order = OrderDetail::where('seller_id', $id)->get();
+        $pending = OrderDetail::where('seller_id', $id)->where('status', 'Pending')->get();
+        $product = Product::where('seller_id', $id)->get();
+        $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);
+        $orders = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
                 ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
                 ->pluck('count', 'month_name');
 
+        $ttl = $transfer->total();
+        $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('seller.index',compact('labels', 'data','transfer'));
+        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
 
     public function profile()
     {
-        $id = Auth::user()->id;
-        $seller = Seller::where('user_id', $id)->first();
-        $subseller = Seller::where('subseller_id', $id)->first();
-        $shop = $seller ? $seller : $subseller;
-        $data = User::find($id);
+        $user = Auth::user();
+        $id = $user->created_by !== null ? $user->created_by : $user->id;
+        $data = Seller::where('user_id', $id)->first();
         $prefecture = Prefecture::get();
 
-        return view('seller.profile', compact('data', 'shop', 'prefecture'));
+        return view('seller.profile', compact('user', 'data', 'prefecture'));
     }
 
 
@@ -233,22 +239,6 @@ class SellerController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
         event(new Registered($subseller));
-
-        $seller = Seller::find($seller_id);
-        $seller->subseller_id = $user->id;
-        $seller->save();
-
-        $order = Order::find($seller_id);
-        if ($order) {
-            $order->subseller_id = $user->id;
-            $order->save();
-        }
-
-        $product = Product::find($seller_id);
-        if($product) {
-            $product->subseller_id = $user->id;
-            $product->save();
-        }
 
         $email = $request->email;
         return view('auth.verify-email',compact('email'));

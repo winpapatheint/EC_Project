@@ -240,7 +240,7 @@
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif
-                                                <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                <span class="position-absolute top-0 start-100 translate-middle badge" id="unreadMessages">
                                                     {{ $count }}
                                                     <span class="visually-hidden">unread messages</span>
                                                 </span>
@@ -1144,6 +1144,9 @@
                     method: 'get',
                     success: function(response) {
                         console.log(response);
+                        var countElement = $('#unreadMessages');
+                        var count = parseInt(countElement.text());
+                        countElement.text(count - 1);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error deleting cart item:', error);

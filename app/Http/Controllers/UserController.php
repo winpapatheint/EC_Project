@@ -267,7 +267,7 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
-            
+
             $Buyer_addresses = BuyerAddress::create([
                 'buyer_id' => $request->buyer_id,
                 'name' => $request->name,
@@ -280,7 +280,7 @@ class UserController extends Controller
                 'place' => $request->place,
                 'phone' => $request->phone,
             ]);
-            
+
             if ($Buyer_addresses) {
                 return redirect()->route('user_addresses',compact('data','user','prefecture'));
             } else {
@@ -292,7 +292,7 @@ class UserController extends Controller
             return back()->withInput()->withErrors(['error' => 'Missing data for address.']);
         }
     }
-    
+
     //Edit Address
     public function editAddress(Request $request)
     {
@@ -510,7 +510,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
-        
+
         if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
@@ -540,7 +540,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -586,7 +586,7 @@ class UserController extends Controller
 
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
+                        ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
@@ -651,7 +651,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -711,7 +711,7 @@ class UserController extends Controller
 
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.id', $sellerID)
+                        ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
@@ -768,7 +768,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -846,11 +846,16 @@ class UserController extends Controller
     public function showCheckout(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $subTotal = $request->subTotal;
-        $couponDiscount = $request->coupon_discount;
-        $total = $request->total;
-        
-        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $subtotal = $request->subTotal;
+        $shipping = $request->shipping;
+        $coupon = $request->coupon_discount;
+        $checkouttotal = $request->total;
+        //dd($request->subTotal);
+
+        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome',
+                        'buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.address',
+                        'buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username',
+                        'buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
                      ->get();
@@ -874,7 +879,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;

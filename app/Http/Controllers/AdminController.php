@@ -545,8 +545,10 @@ class AdminController extends Controller
             });
         }
 
-        $lists = $query->whereIn('role',['seller','buyer'])
+        $lists = $query->leftjoin('users', 'users.id', 'reviews.user_id','reviews.id')
+                    ->whereIn('role',['seller','buyer'])
                     ->paginate($limit);
+
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 

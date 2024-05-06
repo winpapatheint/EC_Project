@@ -266,6 +266,9 @@
                                                                         <h5>{{ $cart->product_name }}</h5>
                                                                     </a>
                                                                     <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -1126,8 +1129,29 @@
 
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.close_button').click(function() {
+                var productId = $(this).data('product-id');
 
-    
+                $.ajax({
+                    url: '/remove-cards/' + productId,
+                    method: 'get',
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting cart item:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

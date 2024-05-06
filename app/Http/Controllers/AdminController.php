@@ -962,7 +962,7 @@ class AdminController extends Controller
 
     public function indexcategoryproduct($id)
     {
-        $limit =14;
+        $limit =9;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',

@@ -33,8 +33,6 @@
                         $totalAmount1 = 0;
                         $subTotal = 0;
                         $total = 0;
-                        $cartId = $cartLists[0]->id;
-                        $qty = $cartLists[0]->quantity;
                     @endphp
                     @foreach($cartLists as $cartlist)
                     <div class="cart-table">
@@ -102,7 +100,7 @@
                                                             <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
                                                             </button>
-                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}">
+                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}" data-cart-id="{{ $cartlist->cart_id }}">
                                                             <button type="button" class="btn qty-right-plus" data-type="" data-field="">
                                                                 <i class="fa fa-plus ms-0"></i>
                                                             </button>
@@ -114,9 +112,7 @@
                                         <td class="subtotal">
                                             <h4 class="table-title text-content">Total</h4>
                                             @php
-                                                $sellingPrice = $cartlist->selling_price;
-                                                $quantity = $cartlist->quantity;
-                                                $totalAmount1 = $sellingPrice * $quantity;
+                                                $totalAmount1 = $cartlist->selling_price * $cartlist->quantity;
                                                 $subTotal += $totalAmount1;
                                             @endphp
                                             <h5>¥ {{ number_format($totalAmount1 , 0, '.', ',') }} </h5>
@@ -231,42 +227,45 @@
         });
     </script>
     <script>
-        $('.qty-box .qty-right-plus').off('click').on('click', function () {
-            var $qty = $(this).siblings(".qty-input");
-            var currentVal = parseInt($qty.val(), 10);
-            if (!isNaN(currentVal)) {
-                if (currentVal < 100) {
-                    $qty.val(currentVal + 1);
-                    // updateQuantity($qty.val());
-                }
+    $('.qty-box .qty-right-plus').on('click', function () {
+        var $qty = $(this).parents(".qty-box").find(".qty-input");
+        var currentVal = parseInt($qty.val(), 10);
+        if (!isNaN(currentVal)) {
+            if (currentVal < 99) {
+                $qty.val(currentVal + 1);
+                var NewCardId = $qty.data('cart-id'); // Retrieve the cart ID
+                updateQuantity(NewCardId, $qty.val());
             }
-        });
+        }
+    });
 
-        $('.qty-box .qty-left-minus').off('click').on('click', function () {
-            var $qty = $(this).siblings(".qty-input");
-            var currentVal = parseInt($qty.val(), 10);
-            if (!isNaN(currentVal) && currentVal > 0) {
-                $qty.val(currentVal - 1);
-                // updateQuantity($qty.val());
-            }
-        });
+    $('.qty-box .qty-left-minus').on('click', function () {
+        var $qty = $(this).parents(".qty-box").find(".qty-input");
+        var currentVal = parseInt($qty.val(), 10);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            $qty.val(currentVal - 1);
+            var NewCardId = $qty.data('cart-id'); // Retrieve the cart ID
+            updateQuantity(NewCardId, $qty.val());
+        }
+    });
 
-    function updateQuantity(quantity) {
+    function updateQuantity(cardId, quantity) {
         // Send AJAX request to update quantity
-        var NewCardId = <?php echo json_encode($cartId ); ?>; 
-        var NewQuantity = <?php echo json_encode($qty); ?>; 
-        
         $.ajax({
             type: "POST",
-            url: "/cart/" + NewCardId,
+            url: "/cart/" + cardId,
             data: {
                 '_token': '{{ csrf_token() }}',
-                'quantity': NewQuantity
+                'quantity': quantity
             },
             success: function (response) {
                 // Handle success response if needed
-                alert (response.message);
+                // alert(response.message);
                 console.log('Quantity updated successfully.');
+                if (response.redirect_url) {
+                // Redirect to the provided URL
+                window.location.href = response.redirect_url;
+            }
             },
             error: function (xhr, status, error) {
                 // Handle error response if needed
@@ -274,5 +273,6 @@
             }
         });
     }
+
     </script>
 </x-guest-layout>

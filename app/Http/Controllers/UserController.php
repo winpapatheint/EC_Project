@@ -662,6 +662,13 @@ class UserController extends Controller
                 ->pluck('coupons.discount_amount');
             $discount = $result[0];
         }
+        return response()->json([
+            'message' => 'Quantity updated successfully.',
+            'redirect_url' => route('show_carts', compact('cartLists', 'discount', 'couponapplycheck'))
+        ]);
+        
+        // return response()->json(['message' => 'Cart item added successfully']);
+        
     }
 
     //Product Cupon

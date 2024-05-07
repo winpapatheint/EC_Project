@@ -748,6 +748,18 @@ class UserController extends Controller
         return view('front-end.cart', compact('cartLists','discountedPrices', 'discount', 'couponapplycheck'));
 
     }
+    public function removeCartProduct($id)
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $cartItem = Cart::where('buyer_id', $buyer->id)->where('product_id', $id)->first();
+        if ($cartItem) {
+            $cartItem->delete();
+            return response()->json(['message' => 'Cart item deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Cart item not found'], 404);
+        }
+    }
+
     //Product Cupon
     public function applyCouponCode(Request $request)
     {

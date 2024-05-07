@@ -128,7 +128,7 @@
                                         <th scope="col">Date</th>
                                         <th scope="col">Order Code</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">Amount</th>
+                                        <th scope="col">Amount(tax inc)</th>
                                         <th scope="col">Payment Method</th>
                                         <th scope="col">Option</th>
                                     </tr>

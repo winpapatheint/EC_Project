@@ -603,7 +603,7 @@ class UserController extends Controller
         }
 
         $result = DB::table('coupons')
-                ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
                 ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
                 ->select('coupons.discount_amount')
                 ->pluck('coupons.discount_amount');
@@ -656,7 +656,7 @@ class UserController extends Controller
             }
 
             $result = DB::table('coupons')
-                ->join('coupon_details', 'coupon_details.coupon_code', '=', 'coupons.coupon_code')
+                ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
                 ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
                 ->select('coupons.discount_amount')
                 ->pluck('coupons.discount_amount');

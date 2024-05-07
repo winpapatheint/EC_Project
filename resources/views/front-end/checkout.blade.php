@@ -123,7 +123,7 @@
                 @php
                     $amount = 0;
                     $amount1 = 0;
-
+                    $total = 0;
                     $subTotal = 0;
                     $totalqty = 0;
                     $productIds = [];
@@ -159,16 +159,6 @@
                                 <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 50px; height: 50px;">
                                     <h4>{{ $cartlist->product_name }} <span>X {{ $cartlist->quantity }}</span></h4>
-                                    @if($cartlist->discount_percent)
-                                            @php
-                                                $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
-                                                $quantity = $cartlist->quantity;
-                                                $amount = $discountedPrice * $quantity;
-                                                $subTotal += $amount;
-                                                $totalqty += $quantity
-                                            @endphp
-                                            <h4 class="price">¥ {{ number_format($amount , 0, '.', ',') }}</h4>
-                                        @else
                                             @php
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
@@ -177,7 +167,6 @@
                                                 $totalqty += $quantity
                                             @endphp
                                             <h4 class="price">¥ {{ number_format($amount1 , 0, '.', ',') }}</h4>
-                                        @endif
                                 </li>
                             </ul>
                             <input type="hidden" name="totalqty" value="{{ $totalqty }}">
@@ -203,10 +192,11 @@
 
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
-                                    <h4 class="price">¥ {{ number_format($total , 0, '.', ',') }}</h4>
+                                    <h4 class="price">¥ {{ number_format($total1 , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
-
+                        
+                            
                         </div>
 
 
@@ -219,9 +209,10 @@
     </section>
     <!-- Checkout section End -->
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
 paypal.Buttons({
+
     style: {
         layout: 'vertical',
         color: 'blue',
@@ -233,7 +224,8 @@ paypal.Buttons({
         return actions.order.create({
             purchase_units: [{
                 amount: {
-                    value: '{{ $total }}'
+                    value: '{{ $total1 }}'
+                    
                 }
             }]
         });
@@ -242,8 +234,8 @@ paypal.Buttons({
         return actions.order.capture().then(function(details) {
             if (details.status == 'COMPLETED') {
 
-                purchasepaymentdone('{{ $total }}', function(result) {
-                    if(result==1){
+                purchasepaymentdone('{{ $total1 }}', function(result) {
+                    if(result==1){ 
                       $('#paymentsuccessModal').modal('show');
                     }
                     else{
@@ -258,21 +250,21 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-function purchasepaymentdone(total, callback) {
-    var Newproductid = <?php echo json_encode($productIds ); ?>;
-    var Newbuyerid = <?php echo json_encode($buyerId ); ?>;
-    var Newsellerid = <?php echo json_encode($sellerIds ); ?>;
-    var Newcolor = <?php echo json_encode($productColors ); ?>;
-    var Newsize = <?php echo json_encode($productSizes ); ?>;
+function purchasepaymentdone(total1, callback) {
+    var Newproductid = <?php echo json_encode($productIds ); ?>; 
+    var Newbuyerid = <?php echo json_encode($buyerId ); ?>; 
+    var Newsellerid = <?php echo json_encode($sellerIds ); ?>; 
+    var Newcolor = <?php echo json_encode($productColors ); ?>; 
+    var Newsize = <?php echo json_encode($productSizes ); ?>; 
     var Newquantity = <?php echo json_encode($productQuantities ); ?>;
     var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
     var Newamount = <?php echo json_encode($amount ); ?>;
     var Newamount1 = <?php echo json_encode($amount1 ); ?>;
-    var Newtotalamount = <?php echo json_encode($total ); ?>;
-    var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>;
-    var Newbuyercity = <?php echo json_encode($buyerCity ); ?>;
-    var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>;
-    var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>;
+    var Newtotalamount = <?php echo json_encode($total1 ); ?>;
+    var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
+    var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
+    var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>; 
+    var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>; 
     var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>;
 
     $.ajax({
@@ -308,7 +300,6 @@ function purchasepaymentdone(total, callback) {
         console.error('Error: ' + errorMessage + 'error:' + response);
     }
 });
-
 }
 </script>
 </x-guest-layout>

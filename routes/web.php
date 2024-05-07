@@ -75,7 +75,7 @@ Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('updat
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProduct'])->name('remove_cart_product');
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
-Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
+Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});

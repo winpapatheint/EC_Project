@@ -237,9 +237,9 @@
                                                     class="theme-color fw-bold">Freshes</span> Products</h3>
                                             <h3 class="fw-light">every hour</h3>
                                         @if($seafood != null)
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $seafood]) }}';"
-                                                class="btn btn-animation btn-md mend-auto">Shop Now <i
-                                                    class="fa-solid fa-arrow-right icon"></i></button>
+                                            <button onclick="window.open('{{ route('show-discount-product', ['ids' => $seafood]) }}', '_blank');"
+                                                    class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
+                                            </button>
                                         @endif
                                         </div>
                                     </div>
@@ -257,9 +257,9 @@
                                             <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
                                         @if($vegetableHalfDiscount != null)
                                             <p class="mb-3">Super Offer to 50% Off</p>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
-                                                class="btn btn-animation btn-md mend-auto">Shop Now <i
-                                                    class="fa-solid fa-arrow-right icon"></i></button>
+                                            <button onclick="window.open('{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}', '_blank');"
+                                                    class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
+                                            </button>
                                         @endif
                                         </div>
                                     </div>

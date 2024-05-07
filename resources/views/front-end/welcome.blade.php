@@ -297,28 +297,31 @@
                             </div>
                             @endif
 
-                            @if ($maxStarsRatedRow)
+                            @if ($customers)
+                            @foreach($customers as $customer)
                             <div class="section-t-space">
                                 <div class="category-menu">
-                                    <h3>Customer Comment</h3>
+                                    <h3>{{ $customer->title }}</h3>
                                     <div class="review-box">
                                         <div class="review-contain">
-                                            <h5 class="w-75">We Care About Our Customer Experience</h5>
-                                            <p>{{ $maxStarsRatedRow -> comment }}</p>
+                                            <h5 class="w-75">{{ $customer->subtitle }}</h5>
+                                            <p>{!! $customer->content !!}</p>
                                         </div>
 
                                         <div class="review-profile">
                                             <div class="review-image">
-                                                <img src="{{ asset('upload/profile/'.$maxStarsRatedRow ->user_photo) }}"
+                                                <img src="{{ asset('images/'.$customer->image) }}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                             </div>
                                             <div class="review-detail">
-                                                <h5>{{ $maxStarsRatedRow -> name }}</h5>
+                                                <h5>{{ $customer->name }}</h5>
+                                                <h6>{{ $customer->position }}</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
                             @endif
                         </div>
                     </div>

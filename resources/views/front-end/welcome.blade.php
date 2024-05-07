@@ -22,9 +22,9 @@
                             </div>
                                 <div class="home-detail p-center-left w-75">
                                     <div>
-                                    @if ($productsGroupedByDiscount[30] != null)
+
                                         <h6>Exclusive offer <span>30% OFF</span></h6>
-                                    @endif
+
                                         <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily
                                             Needs</span></h1>
                                         <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that are
@@ -47,10 +47,10 @@
                                             class="bg-img blur-up lazyload" alt="">
                                         <div class="home-detail p-center-left home-p-sm w-75">
                                             <div>
-                                            @if ($productsGroupedByDiscount[45] != null)
+
                                                 <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
                                                 </h2>
-                                            @endif
+
                                                 <h3 class="theme-color">Nut Collection</h3>
                                                 <p class="w-75">We deliver organic vegetables & fruits</p>
                                             @if ($productsGroupedByDiscount[45] != null)
@@ -99,9 +99,9 @@
                             <img src={{ asset('frontend/assets/images/homepage/egg.jpg') }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
-                                @if ($productsGroupedByDiscount[5] != null)
+
                                     <h6 class="text-danger">5% OFF</h6>
-                                @endif
+
                                     <h5>Hot Deals on New Items</h5>
                                     <h6 class="text-content">Daily Essentials Eggs & Dairy</h6>
                                 </div>
@@ -118,9 +118,9 @@
                             <img src={{ asset('frontend/assets/images/homepage/vegetable.jpg') }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
-                                @if ($productsGroupedByDiscount[10] != null)
+
                                     <h6 class="text-danger">10% OFF</h6>
-                                @endif
+
                                     <h5>Buy More & Save More</h5>
                                     <h6 class="text-content">Fresh Vegetables</h6>
                                 </div>
@@ -137,9 +137,9 @@
                             <img src={{ asset('frontend/assets/images/homepage/meat.jpg') }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
-                                @if ($productsGroupedByDiscount[15] != null)
+
                                     <h6 class="text-danger">15% OFF</h6>
-                                @endif
+
                                     <h5>Organic Meat Prepared</h5>
                                     <h6 class="text-content">Delivered to Your Home</h6>
                                 </div>
@@ -156,9 +156,9 @@
                             <img src={{ asset('frontend/assets/images/homepage/snack.jpg')  }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
-                                @if ($productsGroupedByDiscount[20] != null)
+
                                     <h6 class="text-danger">20% OFF</h6>
-                                @endif
+
                                     <h5>Buy More & Save More</h5>
                                     <h6 class="text-content">Nuts & Snacks</h6>
                                 </div>
@@ -230,9 +230,9 @@
                                         alt="">
                                     <div class="home-detail p-top-left home-p-medium">
                                         <div>
-                                        @if($seafood != null)
+
                                             <h6 class="text-yellow home-banner">Seafood</h6>
-                                        @endif
+
                                             <h3 class="text-uppercase fw-normal"><span
                                                     class="theme-color fw-bold">Freshes</span> Products</h3>
                                             <h3 class="fw-light">every hour</h3>
@@ -331,7 +331,7 @@
                                 <h2>Today Coupon Items</h2>
                                 <span class="title-leaf">
                                     <svg class="icon-width">
-                                        <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                        <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                     </svg>
                                 </span>
                                 <p>Don't miss this opportunity at a special discount just for this week.</p>
@@ -461,7 +461,7 @@
                                                     Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
                                                         ¥{{ $coupon->mini_amount}}
                                                 </h4>
-                                                <h5 class="lh-base fw-bold offer-text">
+                                                <h5 class="lh-base fw-bold offer-text">Expired Date :
                                                     {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
                                                     {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
                                                 </h5>
@@ -481,7 +481,7 @@
                             <h2>Bowse by Categories</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
-                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                    <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                 </svg>
                             </span>
                             <p>Top Categories Of The Week</p>
@@ -508,9 +508,9 @@
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
-                                            @if($meatHalfDiscount != null)
+
                                                 <h3 class="text-exo">50% offer</h3>
-                                            @endif
+
                                                 <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
                                             @if($meatHalfDiscount != null)
                                                 <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $meatHalfDiscount]) }}';"
@@ -528,9 +528,9 @@
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
-                                            @if($vegetableHalfDiscount != null)
+
                                                 <h3 class="text-exo">50% offer</h3>
-                                            @endif
+
                                                 <h4 class="text-russo fw-normal theme-color mb-2">Fresh Vegetable</h4>
                                             @if($vegetableHalfDiscount != null)
                                                 <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
@@ -552,9 +552,9 @@
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
-                                            @if ($productsGroupedByDiscount[25] != null)
+
                                                 <h2 class="text-kaushan fw-normal text-danger">25% Off</h2>
-                                            @endif
+
                                                 <h2 class="text-kaushan fw-normal theme-color">Get Ready To</h2>
                                                 <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
                                                 <p class="text-content banner-text">In publishing and graphic design, Lorem
@@ -596,7 +596,7 @@
                                 <h2>Our best Seller</h2>
                                 <span class="title-leaf">
                                     <svg class="icon-width">
-                                        <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                        <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                     </svg>
                                 </span>
                                 <p>A virtual assistant collects the products from your list</p>
@@ -661,7 +661,7 @@
                             <h2>Featured Blog</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
-                                    <use xlink:href="../assets/svg/leaf.svg#leaf"></use>
+                                    <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                 </svg>
                             </span>
                             <p>A virtual assistant collects the products from your list</p>
@@ -688,53 +688,6 @@
 
                         @endforeach
 
-                            <div>
-                                <div class="blog-box">
-                                    <div class="blog-box-image">
-                                        <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-image">
-                                            <img src="../assets/images/vegetable/blog/2.jpg" class="bg-img blur-up lazyload"
-                                                alt="">
-                                        </a>
-                                    </div>
-
-                                    <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
-                                        <h6>10 April, 2022</h6>
-                                        <h5>Fresh Combo Fruit</h5>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="blog-box">
-                                    <div class="blog-box-image">
-                                        <a href="blog-detail.html" class="blog-image">
-                                            <img src="../assets/images/vegetable/blog/3.jpg" class="bg-img blur-up lazyload"
-                                                alt="">
-                                        </a>
-                                    </div>
-
-                                    <a href="blog-detail.html" class="blog-detail">
-                                        <h6>10 April, 2022</h6>
-                                        <h5>Nuts to Eat for Better Health</h5>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="blog-box">
-                                    <div class="blog-box-image">
-                                        <a href="blog-detail.html" class="blog-image">
-                                            <img src="../assets/images/vegetable/blog/1.jpg" class="bg-img blur-up lazyload"
-                                                alt="">
-                                        </a>
-                                    </div>
-
-                                    <a href="blog-detail.html" class="blog-detail">
-                                        <h6>20 March, 2022</h6>
-                                        <h5>Fresh Vegetable Online</h5>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
 
                     </div>

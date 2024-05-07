@@ -122,6 +122,10 @@ Route::get('/admin/review/product', [AdminController::class,'indexreview'])->nam
 Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
 Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
 Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+
+Route::get('/admin/top', [AdminController::class, 'indextop']);
+Route::get('/edittop/{topid}', [AdminController::class, 'edittop']);
+Route::post('admin/registertop', [AdminController::class, 'storetop'])->name('registertop');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);

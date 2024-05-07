@@ -14,6 +14,7 @@ use App\Models\Seller;
 use App\Models\Help;
 use App\Models\MultiImg;
 use App\Models\Coupon;
+use App\Models\Top;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -526,6 +527,30 @@ class AdminController extends Controller
 
         return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
     }
+
+
+    public function indextop()
+    {
+        $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Top::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.top',compact('lists','ttlpage','ttl'));
+    }
+
 
     public function indexreview()
     {
@@ -1898,6 +1923,17 @@ class AdminController extends Controller
 
     }
 
+    public function edittop($id)
+    {
+
+        $data = DB::table('tops')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.registertop',compact('data','editmode'));
+
+    }
+
     public function editblog($id)
     {
         $data = DB::table('blogs')
@@ -2316,6 +2352,35 @@ class AdminController extends Controller
        }
 
    }
+
+   public function storetop(Request $request)
+   {
+      if (!empty($request->image)) {
+          $imageName = time().'.'.$request->image->extension();
+          $request->image->move(public_path('images'), $imageName);
+      } else {
+          $imageName = '';
+      }
+
+      $time = new DateTime();
+
+          $updval = array('phaseone' => $request->phaseone,
+                            'phasetwo' => $request->phasetwo,
+                            'phasethree' => $request->phasethree,
+                            'updated_at' => $time->format('Y-m-d H:i:s')
+                          );
+
+          if (!empty($request->image)) {
+              $updval['image'] = $imageName;
+          }
+
+          DB::table('tops')->where('id',$request->id)->update($updval);
+
+          return redirect('/admin/top')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+
+      }
+
+
 
     public function storecoupon(Request $request)
     {

@@ -103,7 +103,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- User Dashboard Section End --> 
+                <!-- User Dashboard Section End -->
 
                 <!-- Dashboard view Start -->
                 <div class="col-xxl-9 col-lg-8">
@@ -128,7 +128,7 @@
                                             view a snapshot of your recent account activity and update your account
                                             information. Select a link below to view or edit information.</p>
                                     </div>
-                                  
+
                                     <div class="total-box">
                                         <div class="row g-sm-4 g-3">
                                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
@@ -178,8 +178,8 @@
                                             </div>
 
                                         <div class="row g-4">
-                                            <div class="col-xxl-6">      
-                                                <div class="dashboard-detail">           
+                                            <div class="col-xxl-6">
+                                                <div class="dashboard-detail">
 
                                                 <div class="dashboard-detail">
 
@@ -188,29 +188,29 @@
                                                     <h6 class="text-content">{{ $user->phone }}</h6>
                                                 </div>
                                             </div>
-                                        
+
                                     </div>
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
                                                 <h4>Address Book</h4>
                                             </div>
-                                           
+
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Home Address</h6>
 
                                                         <h6 class="text-content">{{ $firstAddress }}</h6>
-                                                         
+
                                                     </div>
                                                 </div>
-                                          
+
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
                                                         <h6 class="text-content">Default Shipping Address</h6>
                                                         @foreach($userAddresses as $address)
-                                                        <h6 class="text-content">{{ $address }}</h6>   
-                                                        @endforeach                                          
+                                                        <h6 class="text-content">{{ $address }}</h6>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>

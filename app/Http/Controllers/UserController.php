@@ -179,7 +179,7 @@ class UserController extends Controller
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
-            ->select('orders.*', 'orders.id as order_id', 'products.*', 'order_details.*','buyers.*')
+            ->select('orders.*', 'orders.id as order_id', 'products.*','products.selling_price as price', 'order_details.*','buyers.*')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -214,11 +214,10 @@ class UserController extends Controller
         $limit = 10;
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
-        $orders = DB::table('orders')
-                    ->join('buyers', 'orders.buyer_id', 'buyers.id')
+        $orders = DB::table('order_details')
+                    ->join('buyers', 'order_details.buyer_id', 'buyers.id')
                     ->where('buyers.user_id', Auth::user()->id)
-                    ->select('orders.*', 'orders.id as order_id', 'orders.created_at')
-                    ->orderBy('order_id', 'desc')
+                    ->select('order_details.*', 'order_details.id as order_id', 'order_details.created_at')
                     ->paginate($limit);
         $processes = [];
         foreach ($orders as $order) {

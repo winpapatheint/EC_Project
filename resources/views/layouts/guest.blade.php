@@ -1140,7 +1140,7 @@
                 var productId = $(this).data('product-id');
 
                 $.ajax({
-                    url: '/remove-cards/' + productId,
+                    url: '/remove-cart-product/' + productId,
                     method: 'get',
                     success: function(response) {
                         console.log(response);

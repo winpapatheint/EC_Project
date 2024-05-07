@@ -38,14 +38,14 @@
                         </div>
                         <div class="profile-box">
                             <div class="cover-image">
-                                <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/inner-page/cover-img.jpg') }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
 
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
-                                        <img src="../assets/images/inner-page/user/1.jpg"
+                                        <img src="{{ asset('frontend/assets/images/profile.png') }}"
                                             class="blur-up lazyload update_img" alt="">
                                         <div class="cover-icon">
                                             <i class="fa-solid fa-pen">
@@ -118,11 +118,11 @@
                                     <div class="title-header title-header-block package-card">
                                     @if($orderDetails->isNotEmpty())
                                         @php
-                                            $orders = $orderDetails->first();@dd($orders->ordercode);
+                                            $orders = $orderDetails->first();
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $orders->ordercode }}</h5>
+                                            <h5>Order ID {{ $orders->order_code }}</h5>
                                         </div>
                                         <div class="card-order-section">   
                                             <ul>
@@ -163,13 +163,13 @@
                                                                 </td>
                                                                 <td>
                                                                     <p>Price</p>
-                                                                    <h5>¥ {{ number_format($order->price , 0, '.', ',') }}</h5>
+                                                                    <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
                                                                 </td>
                                                             </tr>
 
                                                         </tbody>
                                                         @php
-                                                            $subTotal += $order->price;
+                                                            $subTotal += $order->selling_price * $order->qty;
                                                         @endphp
                                                         @endforeach
                                                         <tfoot>
@@ -226,7 +226,7 @@
 
                                                         <div class="payment-mode">
                                                             <h4>payment method</h4>
-                                                            <p>{{ $order->payment_method }}</p>
+                                                            <p>{{ $order->payment_type }}</p>
                                                         </div>
 
                                                         <div class="delivery-sec">

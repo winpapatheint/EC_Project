@@ -164,23 +164,6 @@ $(document).ready(function () {
 /*=====================
   06. quantity js
    ==========================*/
-   $('.qty-box .qty-right-plus').on('click', function () {
-    var $qty = $(this).parents(".qty-box").find(".qty-input");
-    var currentVal = parseInt($qty.val(), 10);
-    if (!isNaN(currentVal)) {
-        if (currentVal < 1000) {
-            $qty.val(currentVal + 1);
-        }
-    }
-});
-
-$('.qty-box .qty-left-minus').on('click', function () {
-    var $qty = $(this).parents(".qty-box").find(".qty-input");
-    var currentVal = parseInt($qty.val(), 10);
-    if (!isNaN(currentVal) && currentVal > 0) {
-        $qty.val(currentVal - 1);
-    }
-});
 
 /*=====================
   07. Tap to Top js

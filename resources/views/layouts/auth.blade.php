@@ -85,9 +85,9 @@
             <div class="header-wrapper m-0">
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
-                        <a href="{{route('admin.dashboard')}}">
+                        <a href="{{route('admin.dashboard')}}">AAAAA
                             <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
-                            <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
+
                         </a>
                     </div>
                     <div class="toggle-sidebar">
@@ -99,10 +99,8 @@
                 </div>
 
                 <div class="search-box">
-                    <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
+                    <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group">
-
-
                             <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
                             <button class="btn" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
@@ -145,7 +143,7 @@
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
-                                <span  id="notification-badge" class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
+                                <span id="notification-badge" class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
                             </div>
                             <ul class="onhover-show-div" >
                                 <li style="display:block">
@@ -232,13 +230,6 @@
                             <i class="ri-apps-line status_toggle middle sidebar-toggle"></i>
                         </div>
                     </div>
-                    <div class="logo-icon-wrapper">
-                        <a href="{{route('admin.dashboard')}}">
-                            <img class="img-fluid main-logo main-white" src="{{ asset('backend/assets/images/logo/logo.png') }}" alt="logo">
-                            <img class="img-fluid main-logo main-dark" src="{{ asset('backend/assets/images/logo/logo-white.png') }}"
-                                alt="logo">
-                        </a>
-                    </div>
                     <nav class="sidebar-main">
                         <div class="left-arrow" id="left-arrow">
                             <i data-feather="arrow-left"></i>
@@ -256,18 +247,19 @@
                                 </li>
 
                                 <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
+                                        <i class="ri-store-3-line"></i>
+                                        <span>Shop</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.product') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Product</span>
                                     </a>
                                 </li>
 
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Shop</span>
-                                    </a>
-                                </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
@@ -339,6 +331,13 @@
                                 </li>
 
                                 <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
+                                        <i class="ri-phone-line"></i>
+                                        <span>Top</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                         <i class="ri-profile-line"></i>
                                         <span>Profile</span>
@@ -362,7 +361,7 @@
                 <footer class="footer">
                     <div class="row">
                         <div class="col-md-12 footer-copyright text-center">
-                            <p class="mb-0">Copyright 2022 © Fastkart theme by pixelstrap</p>
+                            <p class="mb-0">©2024 Asia Human Development, Inc. All rights reserved</p>
                         </div>
                     </div>
                 </footer>
@@ -452,9 +451,9 @@
                 circle.style.setProperty('color', '#ffffff', 'important');
             });
             var badge = document.getElementById('notification-badge');
-        if (badge) {
-            badge.style.display = 'none';
-        }
+            if (badge) {
+                badge.style.display = 'none';
+            }
         }
     </script>
 </body>

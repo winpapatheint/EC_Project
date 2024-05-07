@@ -1,5 +1,5 @@
 <x-auth-layout>
-<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     .error{
         margin:0 auto;
@@ -48,7 +48,8 @@
                                         <label class="col-sm-3 col-form-label form-label-title">Select Category Icon</label>
                                         <div class="col-sm-9">
                                             <input type="file" name="image" id="image" class="form-control" >
-                                                <img id="preview-image-before-upload" alt="your image"
+
+                                                <img id="image" alt="your image"
                                                     @if(!empty($data->category_icon))
                                                         src="{{ asset('images/'.($data->category_icon ?? 'blog/blog-details.jpg')   ) }}"
                                                         style="max-width: 100%;"
@@ -64,7 +65,8 @@
                                                     @endif
                                                 </div>
                                     </div>
-                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">
+
+                                    <button class="btn btn-submit btn-animation ms-auto fw-bold" type="button" role="button" >
                                         @if (!$editmode)
                                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                                             {{ __('auth.doregister') }}
@@ -73,6 +75,37 @@
                                             {{ __('auth.yeschange') }}
                                         @endif
                                     </button>
+
+                                    <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+
+                                                    <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
+                                                        @if (!$editmode)
+                                                           Yes
+                                                        @else
+                                                            Yes
+                                                        @endif
+                                                    </button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -128,5 +161,81 @@
         document.getElementById('selectedIconPreview').style.display = 'block';
     }
 </script>
+<script>
+    $('.btn-submit').click(function() {
+      $('.error').hide()
+      // alert('sas');
+alert($.trim($("#image").val()));
+      if ($.trim($("#title").val()) === "" ||$.trim($("#image").val()) === "" ) {
+
+         if ($.trim($("#title").val()) === "") {
+              $('.error.title').text('Category name is required.')
+              $('.error.title').show()
+         }
+
+
+         if ($.trim($("#image").val()) === "") {
+              $('.error.image').text('Image is required.')
+              $('.error.image').show()
+         }
+
+         return false;
+      } else {
+        $('#confirmModal').modal('show');
+      }
+
+   });
+
+    $(".btn-submits").click(function(e){
+
+        e.preventDefault();
+            var _token = $("input[name='_token']").val();
+            let formData = new FormData(registercategory);
+
+            $.ajax({
+                url: "{{ $action }}",
+                type:'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+
+                success: function(data) {
+                    if($.isEmptyObject(data.error)){
+                    // alert("success");
+                        console.log(data.success);
+                        $('.error').hide()
+                        $('#confirmModal').modal('show');
+                    }else{
+                        // alert("err");
+                        console.log(data.error);
+                        $('.error').hide()
+                        $.each( data.error, function( key, value ) {
+                            if (key == 'password') {
+                                $.each( value, function( k, val ) {
+                                    if (val == 'パスワードが一致しません') {
+                                        $('.error.password_confirmation').text(val)
+                                        $('.error.password_confirmation').show()
+                                        // alert('unset')
+                                    } else {
+                                        $('.error.'+key).text(val)
+                                        $('.error.'+key).show()
+                                    }
+                                });
+                            } else {
+
+                                $('.error.'+key).text(value[0])
+                                $('.error.'+key).show()
+                            }
+                        });
+                    }
+                },
+                fail: function(data) {
+                    alert("エラー：ajax error");
+                }
+            });
+
+        });
+
+    </script>
 
 </x-auth-layout>

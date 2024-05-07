@@ -73,6 +73,7 @@ Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowP
 Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
+Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProduct'])->name('remove_cart_product');
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
@@ -122,6 +123,10 @@ Route::get('/admin/review/product', [AdminController::class,'indexreview'])->nam
 Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
 Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
 Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+
+Route::get('/admin/top', [AdminController::class, 'indextop']);
+Route::get('/edittop/{topid}', [AdminController::class, 'edittop']);
+Route::post('admin/registertop', [AdminController::class, 'storetop'])->name('registertop');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);

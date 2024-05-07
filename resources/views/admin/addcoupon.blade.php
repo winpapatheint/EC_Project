@@ -102,12 +102,11 @@
                                                         @endif
                                                 </div>
                                             </div>
-
                                             <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Start Date</label>
+                                                <label class="form-label-title col-sm-3 mb-0" for="startdate">Start Date</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control" type="datetime-local" placeholder="Start Date" name="startdate" id="startdate" step="1" min="2000-01-01T00:00:00" max="2099-12-31T23:59:59"
-                                                    value="{{ old('startdate') ?? $data->startdate ?? '' }}" >
+                                                    <input class="form-control" type="datetime-local" placeholder="Start Date" name="startdate"
+                                                    id="startdate" value="{{ !empty($data->startdate) ? date('Y-m-d\TH:i', strtotime($data->startdate)) : '' }}">
                                                     <p style="display:none" class="startdate error text-danger"></p>
                                                     @if (!empty($error['startdate']))
                                                         @foreach ($error['startdate'] as $key => $value)
@@ -117,12 +116,13 @@
                                                 </div>
                                             </div>
 
+
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">End Date</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="datetime-local" placeholder="End Date" name="enddate"
                                                     id="enddate" step="1" min="2000-01-01T00:00:00" max="2099-12-31T23:59:59" value="{{ old('enddate') ?? $data->enddate ?? '' }}">
-                                                    <p style="display:none" class="enddate error text-danger"></p>
+                                                    <p style="display:none" class="endate error text-danger"></p>
                                                     @if (!empty($error['enddate']))
                                                         @foreach ($error['enddate'] as $key => $value)
                                                             <p class="enddate error text-danger">{{ $value }}</p>

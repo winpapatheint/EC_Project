@@ -1,6 +1,8 @@
 
 <x-auth-layout>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <style>
         .error{
             margin:0 auto;
@@ -77,16 +79,50 @@
                                                         @endif
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-animation ms-auto fw-bold">
-                                                @if (!$editmode)
-                                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        {{ __('auth.doregister') }}
-                                                @else
-                                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                                        {{ __('auth.yeschange') }}
-                                                @endif
-                                            </button>
+
+
+                                            @if (!$editmode)
+                                            <button class="btn btn-submit btn-animation ms-auto fw-bold" type="button"  role="button" data-toggle="modal" data-target="#confirmModal">
+                                               <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                登録する</button>
+                                           @else
+                                            <button class="btn btn-submit tb-header text-white" type="button"  role="button" data-toggle="modal" data-target="#editModal" >
+                                               <i class="fa fa-edit" aria-hidden="true"></i>
+                                                修正する</button>
+                                           @endif
+                                              </button>
+
+                                              <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header d-block text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="remove-box">
+                                                                <p></p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+
+                                                            <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
+                                                                @if (!$editmode)
+                                                                    登録する
+                                                                @else
+                                                                    Yes
+                                                                @endif
+                                                            </button>
+                                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
@@ -140,6 +176,32 @@
             document.getElementById('selectedIconPreview').src = iconPath;
             document.getElementById('selectedIconPreview').style.display = 'block';
         }
+    </script>
+
+    <script>
+        $('.btn-submit').click(function() {
+    $('.error').hide();
+
+    if ($.trim($("#title").val()) === "" || $.trim($("#image").val()) === "" || $.trim($("#ckeditor").val()) === "") {
+        if ($.trim($("#title").val()) === "") {
+            $('.error.title').text('氏名を入力してください');
+            $('.error.title').show();
+        }
+        if ($.trim($("#image").val()) === "") {
+            $('.error.image').text('イメージ写真を選択してください');
+            $('.error.image').show();
+        }
+        if ($.trim($("#ckeditor").val()) === "") {
+            $('.error.content').text('内容を入力してください');
+            $('.error.content').show();
+        }
+        return false;
+    } else {
+
+        askconfirmboxshow($(this),'registerblog');
+
+      }
+});
     </script>
 
 </x-auth-layout>

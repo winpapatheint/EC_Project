@@ -2,7 +2,7 @@
 <script src="https://www.paypal.com/sdk/js?client-id=AWssbr_5JCWSdK6IogXTxXSw8cVBeb_7gdVCtEue95EqSGYXuATz1fYcAduzXdf8e0k3713fP3tmuW7o&currency=JPY"> // Replace YOUR_CLIENT_ID with your sandbox client ID
       </script>
     <!-- Breadcrumb Section Start -->
-    
+
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
             <div class="row">
@@ -58,6 +58,7 @@
                                                             </div>
                                                             <input type="hidden" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
                                                             <input type="hidden" name="buyer_id" value="{{ $buyeraddress->userid }}">
+
                                                             <div class="label">
                                                                 <label>{{ $buyeraddress->place }}</label>
                                                             </div>
@@ -105,7 +106,7 @@
                                         <div class="checkout-title">
                                             <h4>Payment Option</h4>
                                         </div>
-                                        
+
                                         <div class="row" style="margin-bottom: 50px;" id="paypaldiv">
                                             <div class="col-lg-8 mx-auto">
                                                 <div class="text-center">
@@ -114,7 +115,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li> 
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -144,7 +145,7 @@
                                 <h3>Order Summery</h3>
                             </div>
                             @foreach($cartLists as $cartlist)
-                            
+
                             <ul class="summery-contain">
                                 @php
                                     $productIds[] = $cartlist->product_id;
@@ -169,14 +170,14 @@
                                 </li>
                             </ul>
                             <input type="hidden" name="totalqty" value="{{ $totalqty }}">
-                                  
+
                             @endforeach
                             <ul class="summery-total">
                                 <li>
 
                                     <h4>Subtotal</h4>
                                     <h4 class="price">¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
-                                
+
                                 </li>
 
                                 <li>
@@ -188,7 +189,7 @@
                                     <h4>Coupon Discount</h4>
                                     <h4 class="price">¥ - {{ number_format($couponDiscount , 0, '.', ',') }}</h4>
                                 </li>
-                                
+
                                 <li class="list-total">
                                     <h4>Total (JPY)</h4>
                                     <h4 class="price">¥ {{ number_format($total1 , 0, '.', ',') }}</h4>
@@ -197,7 +198,7 @@
                         
                             
                         </div>
-                        
+
 
                         <!-- Place Order button (initially hidden) -->
                         <button class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold" id="placeOrderButton" style="display: none;">Place Order</button>
@@ -241,13 +242,13 @@ paypal.Buttons({
                       $('#paymentfailModal').modal('show');
                     }
                   });
-               
+
         } else {
                 $('#paymentfailModal').modal('show');
             }
         });
     }
-}).render('#paypal-button-container'); 
+}).render('#paypal-button-container');
 
 function purchasepaymentdone(total1, callback) {
     var Newproductid = <?php echo json_encode($productIds ); ?>; 

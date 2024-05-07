@@ -266,7 +266,7 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
-            
+
             $Buyer_addresses = BuyerAddress::create([
                 'buyer_id' => $request->buyer_id,
                 'name' => $request->name,
@@ -279,7 +279,7 @@ class UserController extends Controller
                 'place' => $request->place,
                 'phone' => $request->phone,
             ]);
-            
+
             if ($Buyer_addresses) {
                 return redirect()->route('user_addresses',compact('data','user','prefecture'));
             } else {
@@ -291,7 +291,7 @@ class UserController extends Controller
             return back()->withInput()->withErrors(['error' => 'Missing data for address.']);
         }
     }
-    
+
     //Edit Address
     public function editAddress(Request $request)
     {
@@ -509,7 +509,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
-        
+
         if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
             $sellerid = $product->seller_id;
@@ -650,7 +650,7 @@ class UserController extends Controller
 
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.id', $sellerID)
+                            ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
@@ -662,14 +662,9 @@ class UserController extends Controller
                 ->select('coupons.discount_amount')
                 ->pluck('coupons.discount_amount');
             $discount = $result[0];
-
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
-
-        } else {
-            return redirect()->back()->with('error', 'Cart item not found.');
         }
     }
-    
+
     //Product Cupon
     public function applyCouponCode(Request $request)
     {

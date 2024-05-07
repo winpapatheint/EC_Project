@@ -33,6 +33,8 @@
                         $totalAmount1 = 0;
                         $subTotal = 0;
                         $total = 0;
+                        $cartId = $cartLists[0]->id;
+                        $qty = $cartLists[0]->quantity;
                     @endphp
                     @foreach($cartLists as $cartlist)
                     <div class="cart-table">
@@ -82,8 +84,9 @@
                                         <td class="price">
                                             <h4 class="table-title text-content">Price</h4>
                                         @if($cartlist->discount_percent)
-                                            <h5>¥ {{ number_format($discountedPrices[$cartlist->id]['discounted_price'], 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</del></h5>
-                                            <h6 class="theme-color">You Save : ¥ {{ number_format($discountedPrices[$cartlist->id]['save_amount'], 0, '.', ',') }}</h6>  
+                                            <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->original_price, 0, '.', ',') }}</del></h5>
+
+                                            <h6 class="theme-color">You Save : ¥ {{ number_format(($cartlist->original_price - $cartlist->selling_price), 0, '.', ',') }}</h6>  
                                         @else
                                             <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</h5>
                                         @endif
@@ -94,32 +97,22 @@
                                             <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
-                                                    <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id, $cartlist->product_id) }}">
-                                                        @csrf
+                                                    
                                                         <div class="input-group qty-box">
-                                                            <button type="submit" class="btn qty-left-minus" data-type="minus" data-field="">
+                                                            <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
                                                             </button>
                                                             <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}">
-                                                            <button type="submit" class="btn qty-right-plus" data-type="" data-field="">
+                                                            <button type="button" class="btn qty-right-plus" data-type="" data-field="">
                                                                 <i class="fa fa-plus ms-0"></i>
                                                             </button>
                                                         </div>
-                                                    </form>
+                                                  
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="subtotal">
                                             <h4 class="table-title text-content">Total</h4>
-                                        @if($cartlist->discount_percent != 0)
-                                            @php
-                                                $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
-                                                $quantity = $cartlist->quantity;
-                                                $totalAmount = $discountedPrice * $quantity;
-                                                $subTotal += $totalAmount;
-                                            @endphp
-                                            <h5>¥ {{ number_format($totalAmount , 0, '.', ',') }}</h5>
-                                        @else
                                             @php
                                                 $sellingPrice = $cartlist->selling_price;
                                                 $quantity = $cartlist->quantity;
@@ -127,7 +120,6 @@
                                                 $subTotal += $totalAmount1;
                                             @endphp
                                             <h5>¥ {{ number_format($totalAmount1 , 0, '.', ',') }} </h5>
-                                        @endif
                                         </td>
                                            
                                         <td class="save-remove">
@@ -145,8 +137,6 @@
                 </div>
                 
                 <div class="col-xxl-3">
-                <form action="{{ route('checkout') }}" method="POST">
-                                @csrf
                         <div class="summery-box p-sticky">
                             <div class="summery-header">
                                 <h3>Cart Total</h3>
@@ -193,6 +183,8 @@
                                 </ul>
                             </div>
 
+                            <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
                             <ul class="summery-total">
                                 <li class="list-total border-top-0">
                                     <h4>Total (JPY)</h4>
@@ -232,9 +224,55 @@
         </div>
     </section>
     <!-- Cart Section End -->
-<script>
-    document.getElementById('applyButton').addEventListener('click', function() {
-        window.location.href = "{{ route('apply_coupon_code') }}";
-    });
-</script>
+    <script>
+        document.getElementById('applyButton').addEventListener('click', function() {
+            var couponCode = document.getElementById('exampleFormControlInput1').value;
+            window.location.href = "{{ route('apply_coupon_code') }}?coupon=" + encodeURIComponent(couponCode);
+        });
+    </script>
+    <script>
+        $('.qty-box .qty-right-plus').off('click').on('click', function () {
+            var $qty = $(this).siblings(".qty-input");
+            var currentVal = parseInt($qty.val(), 10);
+            if (!isNaN(currentVal)) {
+                if (currentVal < 100) {
+                    $qty.val(currentVal + 1);
+                    // updateQuantity($qty.val());
+                }
+            }
+        });
+
+        $('.qty-box .qty-left-minus').off('click').on('click', function () {
+            var $qty = $(this).siblings(".qty-input");
+            var currentVal = parseInt($qty.val(), 10);
+            if (!isNaN(currentVal) && currentVal > 0) {
+                $qty.val(currentVal - 1);
+                // updateQuantity($qty.val());
+            }
+        });
+
+    function updateQuantity(quantity) {
+        // Send AJAX request to update quantity
+        var NewCardId = <?php echo json_encode($cartId ); ?>; 
+        var NewQuantity = <?php echo json_encode($qty); ?>; 
+        
+        $.ajax({
+            type: "POST",
+            url: "/cart/" + NewCardId,
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'quantity': NewQuantity
+            },
+            success: function (response) {
+                // Handle success response if needed
+                alert (response.message);
+                console.log('Quantity updated successfully.');
+            },
+            error: function (xhr, status, error) {
+                // Handle error response if needed
+                console.error('Error updating quantity:', error);
+            }
+        });
+    }
+    </script>
 </x-guest-layout>

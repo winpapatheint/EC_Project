@@ -118,11 +118,11 @@
                                     <div class="title-header title-header-block package-card">
                                     @if($orderDetails->isNotEmpty())
                                         @php
-                                            $orders = $orderDetails->first();@dd($orders->ordercode);
+                                            $orders = $orderDetails->first();
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $orders->ordercode }}</h5>
+                                            <h5>Order ID {{ $orders->order_code }}</h5>
                                         </div>
                                         <div class="card-order-section">   
                                             <ul>
@@ -163,13 +163,13 @@
                                                                 </td>
                                                                 <td>
                                                                     <p>Price</p>
-                                                                    <h5>¥ {{ number_format($order->price , 0, '.', ',') }}</h5>
+                                                                    <h5>¥ {{ number_format($order->selling_price , 0, '.', ',') }}</h5>
                                                                 </td>
                                                             </tr>
 
                                                         </tbody>
                                                         @php
-                                                            $subTotal += $order->price;
+                                                            $subTotal += $order->selling_price;
                                                         @endphp
                                                         @endforeach
                                                         <tfoot>
@@ -226,7 +226,7 @@
 
                                                         <div class="payment-mode">
                                                             <h4>payment method</h4>
-                                                            <p>{{ $order->payment_method }}</p>
+                                                            <p>{{ $order->payment_type }}</p>
                                                         </div>
 
                                                         <div class="delivery-sec">

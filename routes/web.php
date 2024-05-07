@@ -74,7 +74,7 @@ Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
-Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
+Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});

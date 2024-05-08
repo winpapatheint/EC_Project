@@ -1608,6 +1608,7 @@ class AdminController extends Controller
                 'que.required' => '質問を入力してください',
                 'ans.required' => '答えを入力してください',
                 'phone.regex' => '有効な電話番号を入力してください',
+                'place.regex' => '有効な住所を入力してください',
             ]);
 
         $time = new DateTime();

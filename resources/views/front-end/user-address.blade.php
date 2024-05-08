@@ -50,13 +50,20 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
                                         <img src="{{ asset('frontend/assets/images/profile.png') }}"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
-                                            </i>
-                                        </div>
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -131,7 +138,7 @@
                                                     <div class="col-md-2">
                                                     <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="selected_address" 
-                                                            value="{{ $item->id }}" id="address_{{ $item->id }}">
+                                                            value="{{ $item->id }}" id="address_{{ $item->id }}" {{ $item->default == 1 ? 'checked':''}}>
                                                     </div>
                                                     </div>
                                                     <div class="col-md-10">    
@@ -163,7 +170,7 @@
                                                     </table>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="btn btn-sm add-button w-100 edit-address-btn"
+                                                    <button class="btn theme-bg-color btn-sm add-button w-100 edit-address-btn"
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#editAddress{{ $item->id }}"
                                                             onclick="">
@@ -172,7 +179,7 @@
                                                     <button class="btn btn-sm add-button w-100" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#removeProfile"
-                                                            onclick="showDeleteModal('{{ $item->id }}')">
+                                                            onclick="showDeleteModal('{{ $item->id }}')"  style = "background-color: #ff6b6b;">
                                                         <i data-feather="trash-2"></i> Remove
                                                     </button>
                                                     <!-- <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile"
@@ -260,23 +267,26 @@
                         </div>
 
                         <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others">
-                            <label for="place">Place</label>
-                            <span style="color:red">@error('place'){{ $message }}@enderror</span>
-                        </div>
-
-                        <div class="form-floating mb-4 theme-form-floating form-group">
                             <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
                             <label for="phone">Enter Phone Number</label>
                             <span style="color:red">@error('phone'){{ $message }}@enderror</span>
                         </div>
-                        @foreach ($data as $item)
-                        <input type="hidden" name="buyer_id" value="{{ $item->userid }}">
-                        @endforeach
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" name="place" value="{{ old('place') }}">
+                                <option>Choose Place</option>
+                                <option value="Home" name="prefectures">Home</option>
+                                <option value="Office" name="prefectures">Office</option>
+                                <option value="Other" name="prefectures">Other</option>
+                            </select>
+                            <span style="color:red">@error('place'){{ $message }}@enderror</span>
+                        </div>
                     </div>
                 
                     <div class="modal-footer">
-                        <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">
+                        Close</button>
+
                         <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
                             changes</button>
                     </div>
@@ -315,7 +325,6 @@
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <select class="form-control" name="prefectures">
-                                    <option>Choose Prefecture</option>
                                     @foreach ($prefecture as $item1)
                                         <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
                                     @endforeach
@@ -343,21 +352,22 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others" value="{{ $item->place }}">
-                                <label for="place">Place</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
-                            @foreach ($data as $item)
-                            <input type="hidden" name="buyer_id" value="{{ $item->userid }}">
-                            @endforeach
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-control" name="place" value="{{ old('place') }}">
+                                    <option value="Home" name="prefectures" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
+                                    <option value="Office" name="prefectures" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
+                                    <option value="Other" name="prefectures" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
                         </div>
                    
                         <div class="modal-footer">
-                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
+                            Close</button>
 
                             <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
                                 changes</button>
@@ -461,6 +471,7 @@
     });
 });
 </script>
+
 <!-- Remove Address Script -->
 <script>
     function showDeleteModal(id) {
@@ -468,4 +479,25 @@
         // Update the form action URL dynamically with the selected address id
         $('#deleteForm').attr('action', '/user/remove-address/' + id);
     }
+</script>
+
+<!-- Set Default Address Script -->
+<script>
+    $(document).ready(function() {
+        $('input[name="selected_address"]').change(function() {
+            var addressId = $(this).val();
+            $.ajax({
+                url: '/set-default-address/' + addressId,
+                type: 'GET',
+                success: function(response) {
+                    // Handle success response if needed
+                    console.log(response.success);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error if needed
+                    console.error('Error setting default address:', error);
+                }
+            });
+        });
+    });
 </script>

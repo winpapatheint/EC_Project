@@ -37,6 +37,7 @@ Route::post('/products/reviews', [ReviewController::class, 'store'])->name('revi
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
 Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+Route::post('/user-profile-upload', [UserController::class, 'userProfileUpload']);
 Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
 Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
@@ -46,6 +47,7 @@ Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('u
 Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
 Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');
 Route::post('/user/addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
+Route::get('/set-default-address/{id}', [UserController::class, 'setDefaultAddress'])->name('set_default_address');
 Route::delete('/user/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
 
 Route::get('/user/paymentmethod', [UserController::class, 'showCard'])->name('user_cards');

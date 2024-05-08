@@ -223,12 +223,14 @@ class ShowProductController extends Controller
         $product = Product::with('user')->with('user.seller')->find($id);
         $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
         $reviews = Review::where('product_id', $id)->get();
+        $reviewAll = Review::all();
         $productOrdered = OrderDetail::where('product_id', $id)->get();
         $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
         ->groupBy('product_id')
         ->orderByDesc('frequency')
         ->limit(3)
         ->get();
+        $relatedProducts = Product::where('category_id', $product->category_id)->get();
         $ratingWithProductCount = [];
         $ratingWith = 0;
         $productCount = 0;
@@ -248,7 +250,8 @@ class ShowProductController extends Controller
             $ratingWithProductCount[0] = floor($productStarReview / $ratingProject->count());
             $ratingWithProductCount[1] = $productCount;
         }
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 'ratingWithProductCount', 'multiImages'));
+        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 
+        'ratingWithProductCount', 'multiImages', 'relatedProducts', 'reviewAll'));
     }
 
     public function ShowDiscountProductList()

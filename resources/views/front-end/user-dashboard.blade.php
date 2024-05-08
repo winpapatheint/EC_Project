@@ -50,13 +50,20 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
                                         <img src="{{ asset('frontend/assets/images/profile.png') }}"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" name="user_profile" class="form-control" value="{{ old('user_profile') }}">
-                                            </i>
-                                        </div>
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -225,6 +232,41 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
+    <script>
+        function uploadUserProfile() {
+            // Get the selected file
+            const fileInput = document.getElementById('user_profile_upload_input');
+            const file = fileInput.files[0];
+            
+            // Create a FormData object and append the file to it
+            const formData = new FormData();
+            formData.append('user_profile', file);
+            
+            // Send an AJAX request to the user_profile_upload route
+            $.ajax({
+                url: '/user-profile-upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // Handle the response data
+                    if (data.success) {
+                        // If upload successful, update the src attribute of the image tag
+                        console.log(data.file_url);
+                        $('#uploaded_image').attr('src', data.file_url);
+                    } else {
+                        // If upload failed, display an error message
+                        console.error('Upload failed:', data.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error('Error:', error);
+                }
+            });
+        }
+    </script>
 </x-guest-layout>
 
 <!-- Edit Password Script -->

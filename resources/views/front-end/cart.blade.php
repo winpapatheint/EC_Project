@@ -34,11 +34,11 @@
                         $subTotal = 0;
                         $total = 0;
                     @endphp
-                    @foreach($cartLists as $cartlist)
                     <div class="cart-table">
                         <div class="table-responsive-xl">
                             <table class="table">
                                 <tbody>
+                                @foreach($cartLists as $cartlist)
                                     <tr class="product-box-contain">
                                         <td class="product-detail">
                                             <div class="product border-0">
@@ -109,13 +109,22 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="subtotal">
+                                        <td class="subtotal" style="min-width: 100px;">
                                             <h4 class="table-title text-content">Total</h4>
                                             @php
                                                 $totalAmount1 = $cartlist->selling_price * $cartlist->quantity;
                                                 $subTotal += $totalAmount1;
                                             @endphp
                                             <h5>¥ {{ number_format($totalAmount1 , 0, '.', ',') }} </h5>
+                                        </td>
+                                        
+                                        <td class="coupon" style="min-width: 100px;">
+                                            <h4 class="table-title text-content">Coupon</h4>
+                                            @if($cartlist->coupon_id)
+                                            <h5 class="theme-color">{{ $cartlist->coupon_code }} </h5>
+                                            @else
+                                            <h5>-</h5>
+                                            @endif
                                         </td>
                                            
                                         <td class="save-remove">
@@ -125,11 +134,11 @@
                                             </form>
                                         </td> 
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                @endforeach
                 </div>
                 
                 <div class="col-xxl-3">

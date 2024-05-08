@@ -49,7 +49,6 @@ class UserController extends Controller
         'chome' => 'required|string|max:255',
         'building' => 'required|string|max:255',
         'room' => 'required|string|max:255',
-        'address' => 'required|string|max:255',
         ]);
 
         $user = User::create([
@@ -198,7 +197,7 @@ class UserController extends Controller
             ->where('buyers.user_id', Auth::user()->id)
             ->where('order_details.id', $id)
             ->select('order_details.*', 'order_details.id as order_id','sellers.*','order_details.post_code as code','order_details.city as buyercity','order_details.chome as buyerchome','order_details.building as buyerbuilding','order_details.room_no as buyerroom' )
-            ->get();
+            ->get();dd($orderDetails);
 
             foreach ($orderDetails as $location)
             {
@@ -236,8 +235,9 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+                     ->where('buyers.user_id', $user->id)
                      ->get();
 
         //$user = Buyers::first();
@@ -247,6 +247,7 @@ class UserController extends Controller
     public function createNewaddress(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
         $prefecture = Prefecture::get();
         $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -260,14 +261,14 @@ class UserController extends Controller
             'chome' => 'required|string|max:255',
             'building' => 'required|string|max:255',
             'roomno' => 'required|string|max:255',
-            'place' => 'required|string|max:255',
+            'place' => 'required|in:Home,Office,Other',
             'phone' => 'required|string|max:255',
         ]);
 
         if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
 
             $Buyer_addresses = BuyerAddress::create([
-                'buyer_id' => $request->buyer_id,
+                'buyer_id' => $buyer->id,
                 'name' => $request->name,
                 'post_code' => $request->post_code,
                 'prefecture_id' => $request->prefectures,
@@ -295,6 +296,7 @@ class UserController extends Controller
     public function editAddress(Request $request)
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
         $prefecture = Prefecture::get();
 
         $buyerAddress = BuyerAddress::find($request->id);
@@ -308,7 +310,7 @@ class UserController extends Controller
         if ($buyerAddress) {
 
             $buyerAddress->update([
-                'buyer_id' => $request->buyer_id,
+                'buyer_id' => $buyer->id,
                 'name' => $request->name,
                 'post_code' => $request->post_code,
                 'prefecture_id' => $request->prefectures,
@@ -358,7 +360,6 @@ class UserController extends Controller
         ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
         ->where('buyers.user_id', Auth::user()->id)
         ->get();
-        //dd($data);
         return view('front-end.user-payment-method',compact('data','user'));
     }
     //Add New Card
@@ -530,8 +531,9 @@ class UserController extends Controller
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
                         ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->leftjoin('coupons', 'products.coupon_id', 'coupons.id')
                         ->where('buyers.user_id', Auth::user()->id)
-                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*', 'coupons.coupon_code')
                         ->get();
 
             foreach($cartLists as $cartItem){
@@ -557,8 +559,9 @@ class UserController extends Controller
             $cartLists = DB::table('carts')
                         ->leftjoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
                         ->leftjoin('products', 'carts.product_id', '=', 'products.id')
+                        ->leftjoin('coupons', 'products.coupon_id', 'coupons.id')
                         ->where('buyers.user_id', Auth::user()->id)
-                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+                        ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*', 'coupons.coupon_code')
                         ->get();
 
             foreach($cartLists as $cartItem){
@@ -774,7 +777,7 @@ class UserController extends Controller
         $couponDiscount = $request->coupon_discount;
         $total1 = $request->total;
         
-        $buyerAddress = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.post_code','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
                      ->get();
@@ -823,12 +826,16 @@ class UserController extends Controller
             $amount = $request->amount;
             $amount1 = $request->amount1;
             $totalAmount = $request->totalamount;
-            $postcode = $request->postcode;
-            $city = $request->city;
-            $chome = $request->chome;
-            $building = $request->building;
-            $room = $request->room;
+            $buyerAddressId = $request->buyeraddressid;
+            $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $postcode = $buyerAddressFirst->post_code;
+            $city = $buyerAddressFirst->city;
+            $chome = $buyerAddressFirst->chome;
+            $building = $buyerAddressFirst->building;
+            $room = $buyerAddressFirst->room_no;
             $payment = $request->payment;
+
+            // return response()->json(['message' => $postcode.",".$city.",".$chome.",".$building.",".$room]);
             
             
             // Generate a unique order code
@@ -869,6 +876,11 @@ class UserController extends Controller
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $amount,
+                        'post_code' => $postcode,
+                        'city' => $city,
+                        'chome' => $chome,
+                        'building' => $building,
+                        'room_no' => $room,
                     ];
                 } else {
                     $orderdetailsData = [
@@ -879,6 +891,11 @@ class UserController extends Controller
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $amount1,
+                        'post_code' => $postcode,
+                        'city' => $city,
+                        'chome' => $chome,
+                        'building' => $building,
+                        'room_no' => $room,
                     ];
                 }
 
@@ -918,5 +935,54 @@ class UserController extends Controller
             }
         return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails',));
 
+    }
+
+    public function userProfileUpload(Request $request)
+    {
+        $request->validate([
+            'user_profile' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Adjust validation rules as needed
+        ]);
+
+        // Get the uploaded file
+        $file = $request->file('user_profile');
+
+        // Generate a unique name for the file
+        $fileName = time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
+
+        // Store the file in the specified directory
+        $filePath = 'upload/profile/' . $fileName;
+        $file->move(public_path('upload/profile'), $fileName);
+
+        // Update the user's photo path in the database
+        $user = Auth::user(); // Assuming you're using authentication
+        $user->user_photo = $fileName;
+        $user->save();
+        $fileUrl = '{{ asset(\'' . $filePath . '\') }}';
+
+        // Return a JSON response with the file path
+        // return response()->json(['success' => true, 'file_url' => $fileUrl]);
+        return response()->json(['success' => true, 'file_url' => asset($filePath)]);
+    }
+
+    public function setDefaultAddress($id)
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $buyerAddresses = BuyerAddress::where('buyer_id', $buyer->id)->get();
+        foreach($buyerAddresses as $buyerAddress)
+        {
+            if($buyerAddress->id == $id)
+            {
+                $buyerAddress->default = TRUE;
+                $buyerAddress->save();
+            }
+            else
+            {
+                $buyerAddress->default = FALSE;
+                $buyerAddress->save();
+            }
+        }
+
+        // return response()->json(['success' => 'Successfully set default address']);
+        return response()->json(['success' => 'Successfully set default address']);
     }
 }

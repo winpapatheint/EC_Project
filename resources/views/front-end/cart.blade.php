@@ -80,7 +80,7 @@
                                         
                                         
                                         <td class="price">
-                                            <h4 class="table-title text-content">Price</h4>
+                                            <h4 class="table-title text-content">Price(tax inc)</h4>
                                         @if($cartlist->discount_percent)
                                             <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->original_price, 0, '.', ',') }}</del></h5>
 

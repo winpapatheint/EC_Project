@@ -915,62 +915,64 @@ header {
           &::after {
             content: none !important;
           }
-
-          .drop-cart {
-            @include flex_wrap($dis: flex, $wrap: nowrap, $gap: 15px);
-            align-items: center;
-            position: relative;
-
-            &::after {
-              content: none;
-            }
-
-            .drop-image {
-              img {
+          .product-box-contain {
+            margin: 0 !important;
+          
+            .drop-cart {
+              display: flex;
+              flex-wrap: nowrap;
+              align-items: center;
+              position: relative;
+          
+              .drop-image img {
                 width: 87px;
                 background: $light-gray;
                 padding: 10px;
               }
-            }
-
-            .drop-contain {
-              h5 {
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                display: -webkit-box;
-                overflow: hidden;
-                margin-bottom: 5px;
-                font-size: calc(15px + (17 - 15) * ((100vw - 320px) / (1920 - 320)));
-                color: var(--theme-color);
-                font-weight: 500;
-              }
-
-              h6 {
-                @include flex_wrap($dis: flex, $wrap: nowrap, $gap: 5px);
-                align-items: flex-end;
-
-                span {
-                  margin-top: -2px;
-                  color: $content-color;
+          
+              .drop-contain {
+                h5 {
+                  -webkit-line-clamp: 1;
+                  -webkit-box-orient: vertical;
+                  display: -webkit-box;
+                  overflow: hidden;
+                  margin-bottom: 5px;
+                  font-size: calc(15px + (17 - 15) * ((100vw - 320px) / (1920 - 320)));
+                  color: var(--theme-color);
+                  font-weight: 500;
+                }
+          
+                h6 {
+                  display: flex;
+                  flex-wrap: nowrap;
+                  gap: 5px;
+                  align-items: flex-end;
+          
+                  span {
+                    margin-top: -2px;
+                    color: $content-color;
+                  }
                 }
               }
-
+          
               .close-button {
-                position: absolute;
-                top: 0;
-                right: 0;
-                background-color: transparent;
+                background: none;
                 border: none;
+                cursor: pointer;
                 padding: 0;
-                color: $content-color;
-
-                [dir="rtl"] & {
-                  right: unset;
-                  left: 0;
+                margin: 0;
+                outline: none;
+                display: flex;
+                align-items: center;
+          
+                i {
+                  font-size: 1rem;
+                  color: #000; /* Adjust the color as needed */
                 }
               }
             }
           }
+          
         }
       }
 

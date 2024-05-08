@@ -314,10 +314,10 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <select class="form-control" name="prefectures" value="{{ old('prefecture') }}">
+                                <select class="form-control" name="prefectures">
                                     <option>Choose Prefecture</option>
-                                    @foreach ($prefecture as $item)
-                                        <option value="{{ $item->id }}" name="prefectures">{{ $item->name }}</option>
+                                    @foreach ($prefecture as $item1)
+                                        <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

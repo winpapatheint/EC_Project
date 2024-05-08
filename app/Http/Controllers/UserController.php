@@ -236,7 +236,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
@@ -248,7 +248,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
@@ -270,7 +270,7 @@ class UserController extends Controller
                 'buyer_id' => $request->buyer_id,
                 'name' => $request->name,
                 'post_code' => $request->post_code,
-                'prefectures' => $request->prefectures,
+                'prefecture_id' => $request->prefectures,
                 'city' => $request->city,
                 'chome' => $request->chome,
                 'building' => $request->building,
@@ -299,7 +299,9 @@ class UserController extends Controller
 
         $buyerAddress = BuyerAddress::find($request->id);
 
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefectures','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city',
+                                    'buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id',
+                                    'buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->get();
 
@@ -309,7 +311,7 @@ class UserController extends Controller
                 'buyer_id' => $request->buyer_id,
                 'name' => $request->name,
                 'post_code' => $request->post_code,
-                'prefectures' => $request->prefecture,
+                'prefecture_id' => $request->prefectures,
                 'city' => $request->city,
                 'chome' => $request->chome,
                 'building' => $request->building,
@@ -690,7 +692,6 @@ class UserController extends Controller
             $productID = $cartItem->id;
             $sellerID = $cartItem->seller_id;
 
-
             $shopName = DB::table('sellers')
                         ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
@@ -762,8 +763,7 @@ class UserController extends Controller
                 }
             }
         }
-
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
     }
     //Product Checkout
     public function showCheckout(Request $request)

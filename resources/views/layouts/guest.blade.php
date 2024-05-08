@@ -265,11 +265,20 @@
                                                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
                                                                         <h5>{{ $cart->product_name }}</h5>
                                                                     </a>
-                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ number_format($cart->selling_price , 0, '.', ',') }}</h6>
                                                                     <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
                                                                         <i class="fa-solid fa-xmark"></i>
                                                                     </button>
                                                                 </div>
+                                                                <div class="drop-contain">
+                                                                    <h5>Total</h5>
+                                                                   
+                                                                    <h6>¥{{ number_format($cart->quantity * $cart->selling_price , 0, '.', ',') }}</h6>
+                                                                    <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                </div>
+
                                                             </div>
                                                         </li>
                                                         @php
@@ -396,7 +405,7 @@
 
                                             @if(!empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{ url('/user') }}">Dashboard</a>
+                                                <a class="nav-link" href="{{ url('/user') }}">My Menu</a>
 
                                             </li>
                                             @endif

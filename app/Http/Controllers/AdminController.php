@@ -15,6 +15,7 @@ use App\Models\Help;
 use App\Models\MultiImg;
 use App\Models\Coupon;
 use App\Models\Top;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -57,6 +58,9 @@ class AdminController extends Controller
                 ->groupBy('users.id', 'users.name','reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
+
+        $customers =  Customer::all();
+
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
         $productsGroupedByDiscount = [];
@@ -108,7 +112,7 @@ class AdminController extends Controller
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
+         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount','customers'));
     }
 
     public function news()
@@ -550,6 +554,31 @@ class AdminController extends Controller
 
         return view('admin.top',compact('lists','ttlpage','ttl'));
     }
+
+
+
+    public function indexcustomer()
+    {
+        $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Customer::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.indexcustomer',compact('lists','ttlpage','ttl'));
+    }
+
 
 
     public function indexreview()
@@ -1934,6 +1963,17 @@ class AdminController extends Controller
 
     }
 
+    public function editcustomer($id)
+    {
+
+        $data = DB::table('customers')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.customer',compact('data','editmode'));
+
+    }
+
     public function editblog($id)
     {
         $data = DB::table('blogs')
@@ -2379,6 +2419,35 @@ class AdminController extends Controller
           return redirect('/admin/top')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
       }
+
+      public function storecustomer(Request $request)
+      {
+         if (!empty($request->image)) {
+             $imageName = time().'.'.$request->image->extension();
+             $request->image->move(public_path('images'), $imageName);
+         } else {
+             $imageName = '';
+         }
+
+         $time = new DateTime();
+
+             $updval = array('title' => $request->title,
+                               'subtitle' => $request->subtitle,
+                               'content' => $request->content,
+                               'name' => $request->name,
+                               'position' => $request->position,
+                               'updated_at' => $time->format('Y-m-d H:i:s')
+                             );
+
+             if (!empty($request->image)) {
+                 $updval['image'] = $imageName;
+             }
+
+             DB::table('customers')->where('id',$request->id)->update($updval);
+
+             return redirect('/admin/indexcustomer')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+
+         }
 
 
 

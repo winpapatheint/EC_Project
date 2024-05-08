@@ -354,16 +354,17 @@ class UserController extends Controller
 
     // Use $lastFourDigits as needed
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
+        $data = BuyerPayment::select('buyer_payments.*','buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
         ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
         ->where('buyers.user_id', Auth::user()->id)
         ->get();
+        //dd($data);
         return view('front-end.user-payment-method',compact('data','user'));
     }
     //Add New Card
     public function createNewcard(Request $request)
     {
-
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $validatedData = $request->validate([
 
                 'acc_name' => 'required|string|max:255',
@@ -375,7 +376,7 @@ class UserController extends Controller
 
         $Buyer_cards = BuyerPayment::create([
 
-            'buyer_id' => "1",
+            'buyer_id' => $buyer->id,
             'acc_name' => $request->acc_name,
             'acc_no' => $request->acc_no,
             'expired_date' => $request->expired_date,

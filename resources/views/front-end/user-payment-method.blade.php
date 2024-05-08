@@ -108,7 +108,7 @@
                     <div class="dashboard-right-sidebar">
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
-                                <div class="dashboard-card">
+                                <div class="dashboard-address">
                                     <div class="title title-flex">
                                         <div>
                                             <h2>Payment Methods</h2>
@@ -139,47 +139,50 @@
                                                 <label>{{ $item->card_type }}</label>
                                         </div>
                                     </div>
-                                        <div class="table-responsive address-table">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{ $item->acc_no }}</td>
-                                                        <td>
-                                                            <p></p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Valid Date :</td>
-                                                        <td>
-                                                            <p>{{ $item->expired_date }}</p>
-                                                        </td>
-                                                    </tr>
+                                    <div class="table-responsive address-table">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $item->acc_no }}</td>
+                                                    <td>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Valid Date :</td>
+                                                    <td>
+                                                        <p>{{ $item->expired_date }}</p>
+                                                    </td>
+                                                </tr>
 
-                                                    <tr>
-                                                        <td>{{ $item->acc_name }}</td>
-                                                        <td>
-                                                            <p></p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
+                                                <tr>
+                                                    <td>{{ $item->acc_name }}</td>
+                                                    <td>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="button-group">
-                                        <button class="btn btn-sm add-button w-100 edit-address-btn" 
+                                        <button class="btn btn-sm add-button w-100 edit-address-btn"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editCard{{ $item->id }}"
                                                 onclick="">
-                                            <i data-feather="edit"></i> Edit
+                                                <i data-feather="edit"></i> Edit
                                         </button>
-
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeCard" 
-                                        onclick=>
+                                        <button class="btn btn-sm add-button w-100" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#removeCard" 
+                                                onclick="showDeleteModal('{{ $item->id }}')">
                                             <i data-feather="trash-2"></i> Remove
                                         </button>
+                                        <!-- <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile"
+                                        onclick="showDeleteModal('{{ $item->id }}')">
+                                            <i data-feather="trash-2"></i> Remove
+                                        </button> -->
 
                                     </div>
-
                                 </div>
                             </div>
                             @endforeach
@@ -315,7 +318,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="remove-box">
-                        <p>You cannot see this address nomore in your address book.</p>
+                        <p>You cannot see this payment no more in your payment list.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -406,6 +409,6 @@
     function showDeleteModal(id) {
         $('#removeCard').modal('show');
         // Update the form action URL dynamically with the selected address id
-        $('#removeCard form').attr('action', '/remove_card/' + id);
+        $('#deleteForm').attr('action', '/remove-cards/' + id);
     }
 </script>

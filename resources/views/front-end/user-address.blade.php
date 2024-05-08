@@ -348,7 +348,7 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">{{ $item->phone }}
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
                             @foreach ($data as $item)

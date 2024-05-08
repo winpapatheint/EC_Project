@@ -122,7 +122,7 @@
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $orders->order_code }}</h5>
+                                            <h5>Order Code {{ $orders->order_code }}</h5>
                                         </div>
                                         <div class="card-order-section">   
                                             <ul>
@@ -212,7 +212,7 @@
                                                     <div class="row g-4">
                                                         <h4>summery</h4>
                                                         <ul class="order-details">
-                                                            <li>Order ID: {{ $order->order_id }}</li>
+                                                            <li>Order Code: {{ $order->order_code }}</li>
                                                             <li>Order Date: {{ $order->created_at }}</li>
                                                             <li>Order Total: ¥ {{ number_format($totalAmount , 0, '.', ',') }}</li>
                                                         </ul>

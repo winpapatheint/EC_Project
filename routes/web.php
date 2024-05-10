@@ -40,9 +40,10 @@ Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','v
 Route::post('/user-profile-upload', [UserController::class, 'userProfileUpload']);
 Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user/orderdetailtracking', [UserController::class, 'showOrderDetailTracking'])->name('order_detail_tracking');
+Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
 
-Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 
 Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
 Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');

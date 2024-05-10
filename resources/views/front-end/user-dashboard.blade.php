@@ -89,18 +89,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -199,24 +199,19 @@
                                     </div>
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
-                                                <h4>Address Book</h4>
+                                                <h4>Default Address</h4>
                                             </div>
 
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Home Address</h6>
-
-                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Shipping Address</h6>
-                                                        @foreach($userAddresses as $address)
-                                                        <h6 class="text-content">{{ $address }}</h6>
+                                                        @foreach($addresses as $address)
+                                                        @if($address->default == 1)
+                                                            <h6 class="text-content">{{ $address->post_code}}</h6>
+                                                            <h6 class="text-content">{{ $address->city}}</h6>
+                                                            <h6 class="text-content">{{ $address->chome}} chome</h6>
+                                                            <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>
+                                                        @endif
                                                         @endforeach
                                                     </div>
                                                 </div>

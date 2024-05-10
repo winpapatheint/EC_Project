@@ -88,18 +88,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="pills-card-tab"
+                            {{-- <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -220,16 +220,37 @@
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input type="text" class="form-control" id="acc_name" name="acc_name" placeholder="Your account name">
                                 <label for="acc_name">Name on card</label>
+                                <span style="color:red">@error('acc_name'){{ $message }}@enderror</span>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="acc_no" name="acc_no" placeholder="Your account number">
-                                <label for="acc_no">Card Number</label>
+                                <div class="d-flex">
+                                    <label for="acc_no">Card Number</label>
+                                    <input type="text" class="form-control mx-1" id="acc_no_1" name="acc_no_1" maxlength="4" pattern="\d{4}" title="Please enter 4 digits" placeholder="1234">
+                                    
+                                    <span class="mx-1" style="padding-top: 15px;">/</span>
+                                    <input type="text" class="form-control mx-1" id="acc_no_2" name="acc_no_2" maxlength="4" pattern="\d{4}" title="Please enter 4 digits" placeholder="1234">
+                                    
+                                    <span class="mx-1" style="padding-top: 15px;">/</span>
+                                    <input type="text" class="form-control mx-1" id="acc_no_3" name="acc_no_3" maxlength="4" pattern="\d{4}" title="Please enter 4 digits" placeholder="1234">
+                                    
+                                    <span class="mx-1" style="padding-top: 15px;">/</span>
+                                    <input type="text" class="form-control mx-1" id="acc_no_4" name="acc_no_4" maxlength="4" pattern="\d{4}" title="Please enter 4 digits" placeholder="1234">
+                                    
+                                </div>
+                                <span style="color:red">@error('acc_no_*'){{ $message }}@enderror</span>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="expired_date" name="expired_date" placeholder="Your card valid date">
-                                <label for="expired_date">Expiration Date</label>
+                                <div class="d-flex">
+                                    <label for="expired_date">Expired Date</label>
+                                    <input type="text" class="form-control mx-1" id="expired_date_1" name="expired_date_1" maxlength="2" pattern="\d{2}" title="Please enter 2 digits" placeholder="YY">
+                            
+                                    <span class="mx-1" style="padding-top: 15px;">/</span>
+                                    <input type="text" class="form-control mx-1" id="expired_date_2" name="expired_date_2" maxlength="2" pattern="\d{2}" title="Please enter 2 digits" placeholder="MM">
+                            
+                                </div>
+                                <span style="color:red">@error('expired_date_*'){{ $message }}@enderror</span>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
@@ -240,12 +261,13 @@
                                     <option value="RuPay">RuPay Card</option>
                                     <option value="Maestro">Maestro Card</option>
                                 </select>
+                                <span style="color:red">@error('card_type'){{ $message }}@enderror</span>
                             </div>
                             <input type="hidden" name="buyer_id" value="1">
                         </div>
                    
                         <div class="modal-footer">
-                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
                             </button>
                         </div>
@@ -300,7 +322,7 @@
                         </div>
                    
                         <div class="modal-footer">
-                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
 
                             <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
                                 changes</button>

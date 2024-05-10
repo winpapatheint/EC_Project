@@ -87,18 +87,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -157,8 +157,9 @@
                                                             <tr>
                                                                 <td>Address:</td>
                                                                 <td>
-                                                                    <p>{{ $item->post_code }},{{ $item->city }}</p>
-                                                                    <p>{{ $item->chome }},{{ $item->building }},{{ $item->room_no }}</p>
+                                                                    <p>{{ $item->post_code }}.</p>
+                                                                    <p>{{ $item->city }} {{ $item->chome }} chome,</p>
+                                                                    <p>{{ $item->building }} - {{ $item->room_no }}</p>
                                                                 </td>
                                                             </tr>
 
@@ -182,11 +183,6 @@
                                                             onclick="showDeleteModal('{{ $item->id }}')"  style = "background-color: #ff6b6b;">
                                                         <i data-feather="trash-2"></i> Remove
                                                     </button>
-                                                    <!-- <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile"
-                                                    onclick="showDeleteModal('{{ $item->id }}')">
-                                                        <i data-feather="trash-2"></i> Remove
-                                                    </button> -->
-
                                                 </div>
                                             </div>
                                         </div>

@@ -608,12 +608,12 @@
 
                         <div class="best-selling-slider product-wrapper wow fadeInUp">
                         @for ($i = 0; $i < ceil($productCount / 4); $i++)
+                            <div>
+                                <ul class="product-list">
                             @php
                                 $index = $i * 4;
                             @endphp
-                            <div>
-                                <ul class="product-list">
-                                 @for ($j = 0; $j < 4 && ($index + $j) < $productCount; $j++)
+                            @for ($j = 0; $j < 4 && ($index + $j) < $productCount; $j++)
                                     @php
                                         $product = $bestSellerProducts[$index + $j];
                                     @endphp
@@ -635,12 +635,12 @@
                                             </div>
                                         </div>
                                     </li>
-                                @endfor
+                            @endfor
                                 </ul>
                             </div>
+                        @endfor
+                        @endif
                         </div>
-                            @endfor
-                            @endif
 
                         <div class="section-t-space">
                             <div class="banner-contain hover-effect">

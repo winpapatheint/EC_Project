@@ -87,18 +87,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -149,7 +149,7 @@
                                             <td>{{ $counter++ }}</td>
                                             
                                             <td>
-                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</h6>
+                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</h6>
                                             </td>
 
                                             <td>
@@ -168,15 +168,10 @@
 
                                             <td>
                                                 <ul>
-                                                    
                                                     <li>
                                                         <a href="{{route ('user_order_details',['id' => $item->order_id]) }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
-                                                    </li>
-                                                    <li>
-                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('user_order_tracking',['id' => $item->order_id]) }}">Tracking</a>
-                                                                                                                                                                                         
                                                     </li>
                                                 </ul>
                                             </td>

@@ -36,7 +36,18 @@
                     @endphp
                     <div class="cart-table">
                         <div class="table-responsive-xl">
-                            <table class="table">
+                            <table class="table cart-table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td><h5>Price(tax inc)</h5></td>
+                                        <td><h5>Quantity</h5></td>
+                                        <td><h5>Total</h5></td>
+                                        <td><h5>Coupon</h5></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr><td></td></tr>
+                                </thead>
                                 <tbody>
                                 @foreach($cartLists as $cartlist)
                                     <tr class="product-box-contain">
@@ -80,7 +91,6 @@
                                         
                                         
                                         <td class="price">
-                                            <h4 class="table-title text-content">Price(tax inc)</h4>
                                         @if($cartlist->discount_percent)
                                             <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->original_price, 0, '.', ',') }}</del></h5>
 
@@ -92,10 +102,8 @@
                       
                 
                                         <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
-                                                    
                                                         <div class="input-group qty-box">
                                                             <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
@@ -110,7 +118,6 @@
                                             </div>
                                         </td>
                                         <td class="subtotal" style="min-width: 100px;">
-                                            <h4 class="table-title text-content">Total</h4>
                                             @php
                                                 $totalAmount1 = $cartlist->selling_price * $cartlist->quantity;
                                                 $subTotal += $totalAmount1;
@@ -119,9 +126,12 @@
                                         </td>
                                         
                                         <td class="coupon" style="min-width: 100px;">
-                                            <h4 class="table-title text-content">Coupon</h4>
-                                            @if($cartlist->coupon_id)
-                                            <h5 class="theme-color">{{ $cartlist->coupon_code }} </h5>
+                                            @if($cartlist->coupon_code)
+                                            <button class="theme-bg-color btn-sm btn-animation proceed-btn fw-bold"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#viewCoupon{{ $cartlist->coupon_id }}"
+                                                onclick="">{{ $cartlist->coupon_code }}
+                                            </button>
                                             @else
                                             <h5>-</h5>
                                             @endif
@@ -130,7 +140,9 @@
                                         <td class="save-remove">
                                             <form method="POST" action="{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}">
                                                 @csrf
-                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">Remove</button>
+                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" 
+                                                style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">
+                                                Remove</button>
                                             </form>
                                         </td> 
                                     </tr>
@@ -149,6 +161,10 @@
                             @if ($couponapplycheck == 1)
                             <div class="alert alert-success alert-block" id="alert-success">
                                 <strong>Invalid Coupon Code</strong>
+                            </div>
+                            @elseif ($couponapplycheck != null)
+                            <div class="alert alert-success alert-block" id="alert-success">
+                                <strong>Buy at least ¥{{$couponapplycheck}}</strong>
                             </div>
                             @endif
                             <div class="summery-contain" id="ts-form">
@@ -190,49 +206,91 @@
 
                             <form action="{{ route('checkout') }}" method="POST">
                                 @csrf
-                            <ul class="summery-total">
-                                <li class="list-total border-top-0">
-                                    <h4>Total (JPY)</h4>
-                                    @if($discount)
-                                        @php 
-                                            $Total  = $subTotal + 500 - $discount
-                                        @endphp
-                                    @else
-                                        @php
-                                            $Total  = $subTotal + 500
-                                        @endphp
-                                    @endif
-                                    <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
-                                </li>
-                                
-                            </ul>              
-                            
-                                <input type="hidden" name="subTotal" value="{{ $subTotal }}">
-                                <input type="hidden" name="shipping" value="500">
-                                <input type="hidden" name="coupon_discount" value="{{ $discount }}">
-                                <input type="hidden" name="total" value="{{ $Total }}">
-                                
-                            <div class="button-group cart-button">
-                                <ul>
-                                    <li>
-                                        <button type="submit"
-                                            class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                                <ul class="summery-total">
+                                    <li class="list-total border-top-0">
+                                        <h4>Total (JPY)</h4>
+                                        @if($discount)
+                                            @php 
+                                                $Total  = $subTotal + 500 - $discount
+                                            @endphp
+                                        @else
+                                            @php
+                                                $Total  = $subTotal + 500
+                                            @endphp
+                                        @endif
+                                        <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
                                     </li>
-                                </ul>
-                            </div>
-                            
+                                    
+                                </ul>              
+                                
+                                    <input type="hidden" name="subTotal" value="{{ $subTotal }}">
+                                    <input type="hidden" name="shipping" value="500">
+                                    <input type="hidden" name="coupon_discount" value="{{ $discount }}">
+                                    <input type="hidden" name="total" value="{{ $Total }}">
+                                    
+                                <div class="button-group cart-button">
+                                    <ul>
+                                        <li>
+                                            <button type="submit"
+                                                class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
                         </div>
-                        </form>
                 </div>
 
             </div>
         </div>
     </section>
     <!-- Cart Section End -->
+
+    @foreach($cartLists as $cartlist)
+    @if($cartlist->coupon_id)
+    <div class="modal fade theme-modal remove-profile" id="viewCoupon{{ $cartlist->coupon_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        @php
+                            $coupon = DB::table('coupons')->where('id', $cartlist->coupon_id)->first();
+                        @endphp
+                        <div class="banner-contain">
+                            <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                            <div class="banner-details p-center p-4 text-white text-center">
+                                <div>
+                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                    <h4 class="lh-base fw-bold offer-text">
+                                        Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
+                                            ¥{{ $coupon->mini_amount}}
+                                    </h4>
+                                    <h5 class="lh-base fw-bold offer-text" style="color: black;">Expired Date :
+                                        {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
+                                        {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                    </h5>
+                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @endforeach
     <script>
         document.getElementById('applyButton').addEventListener('click', function() {
             var couponCode = document.getElementById('exampleFormControlInput1').value;
-            window.location.href = "{{ route('apply_coupon_code') }}?coupon=" + encodeURIComponent(couponCode);
+            if (couponCode)
+            {
+                window.location.href = "{{ route('apply_coupon_code') }}?coupon=" + encodeURIComponent(couponCode);
+            }
         });
     </script>
     <script>

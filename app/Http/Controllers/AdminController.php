@@ -676,7 +676,7 @@ class AdminController extends Controller
 
     public function indexshopproduct($id)
     {
-        $limit = 10;
+        $limit = 9;
 
         // $shoplist = DB::table('products as P')
         //             ->select( 'P.*','C.*')

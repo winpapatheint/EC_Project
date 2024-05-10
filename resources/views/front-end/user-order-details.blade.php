@@ -83,18 +83,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -132,7 +132,7 @@
                                             <h5>Order Code <span style="color: var(--theme-color);">{{ $orders->order_code }}</span></h5>
                                         </div>
                                         <div class="card-order-section">
-                                            <h5 style="color: var(--theme-color);">{{ \Carbon\Carbon::parse($orders->created_at)->format('F d, Y') }}</h5>
+                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->created_at)) }}</h5>
                                             <h5>Items: <span style="color: var(--theme-color);">{{ $orders->total_qty }}</span></h5>
                                             <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>   
                                         </div>
@@ -149,6 +149,7 @@
                                                                 <th>Product Name</th>
                                                                 <th>Quantity</th>
                                                                 <th>Price</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         
@@ -166,6 +167,10 @@
                                                                 </td>
                                                                 <td>
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
+                                                                </td>
+                                                                <td>
+                                                                <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" 
+                                                                    href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
                                                                 </td>
                                                             </tr>
 
@@ -215,32 +220,23 @@
                                                         <h3>Summery</h3>
                                                         <ul class="order-details">
                                                             <li>Order Code: {{ $order->order_code }}</li>
-                                                            <li>Order Date: {{ $order->created_at }}</li>
+                                                            <li>Order Date: {{ date('Y/m/d H:i', strtotime($order->created_at)) }}</li>
                                                             <li>Order Total: ¥ {{ number_format($totalAmount , 0, '.', ',') }}</li>
                                                         </ul>
 
                                                         <div class="payment-mode">
                                                             <h4>Shipping address</h4>
                                                             <ul class="order-details">
-                                                                <li>{{ $order->post_code }}</li>
+                                                                <li>{{ $order->post_code }}.</li>
                                                                 <li>{{ $order->city }}</li>
-                                                                <li>{{ $order->chome }} chome</li>
-                                                                <li>{{ $order->building }} {{ $order->room_no }}</li>
+                                                                <li>{{ $order->chome }} chome,</li>
+                                                                <li>{{ $order->building }} - {{ $order->room_no }}</li>
                                                             </ul>
                                                         </div>
 
                                                         <div class="payment-mode">
                                                             <h4>Payment method</h4>
                                                             <p>{{ $order->payment_type }}</p>
-                                                        </div>
-
-                                                        <div class="delivery-sec">
-                                                            <h3>Expected date of delivery: <span>{{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('F d, Y') }}</span>
-                                                            </h3>
-                                                        </div>
-
-                                                        <div>
-                                                            <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('user_order_tracking',['id' => $order->id]) }}">Tracking</a>
                                                         </div>
                                                     </div>
                                                 </div>

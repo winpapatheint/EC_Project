@@ -84,7 +84,7 @@
                                 @endif
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    @if ($product->discount_percent != null)
+                                    @if ($product->discount_percent != null || $discount->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span> 
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
@@ -612,7 +612,7 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                         <h6 class="unit">{{ $relatedProduct->product_size }}</h6>
-                                        @if ($product->discount_percent != null)
+                                        @if ($product->discount_percent != null || $discount->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                         @else
@@ -674,7 +674,7 @@
                         <div class="col-lg-6">
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
-                                @if ($product->discount_percent != null)
+                                @if ($product->discount_percent != null || $discount->discount_percent != 0)
                                     <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                     <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                 @else

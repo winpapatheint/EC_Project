@@ -88,18 +88,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -150,12 +150,9 @@
                                                 <table class="table">
                                                     <tbody>
                                                         <tr>
-                                                            <td>Phone Number  :</td>
-                                                            <td><a href="javascript:void(0)"> +91 {{ $user->phone }}</a></td>      
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Address  :</td>
-                                                            <td>{{ $user->address }}</td>
+                                                            <td>Phone Number  : </td>   
+                                                            <td>{{ $user->phone }}</td> 
+                                                            <td></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -170,19 +167,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>Email  :</td>
-                                                            <td><a href="javascript:void(0)">{{ $user->email }}<span data-bs-toggle="modal"
-                                                                        data-bs-target="#editProfile">Edit</span></a>
-                                                            </td>
+                                                            <td>{{ $user->email }}</td>
+                                                            <td></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Password :</td>
+                                                            <td>{{ $maskedPassword }}</td>
                                                             <td>
-                                                                <!-- <a href="javascript:void(0)">●●●●●●
-                                                                    <span data-bs-toggle="modal"
-                                                                        data-bs-target="#editProfile">Edit</span></a> -->
-
                                                                 <a data-bs-toggle="modal"
-                                                                href="javascript:void(0)">{{ $maskedPassword }}<span data-bs-toggle="modal"
+                                                                href="javascript:void(0)"><span data-bs-toggle="modal"
                                                                         data-bs-target="#editPassword">Edit</span></a>
                                                             </td>
                                                         </tr>
@@ -229,13 +222,8 @@
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ $user->address }}">
-                                <label for="address">Enter Address</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $user->phone }}">
-                                <label for="phone">Enter Phone Number</label>
+                                <label for="phone">Phone Number</label>
                             </div>
                         </div>
                    

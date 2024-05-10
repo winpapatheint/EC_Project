@@ -161,17 +161,6 @@
                             </a>
 
                             <div class="middle-box">
-                                <div class="location-box">
-                                    <button class="btn location-button" data-bs-toggle="modal"
-                                        data-bs-target="#locationModal">
-                                        <span class="location-arrow">
-                                            <i data-feather="map-pin"></i>
-                                        </span>
-                                        <span class="locat-name">Your Location</span>
-                                        <i class="fa-solid fa-angle-down"></i>
-                                    </button>
-                                </div>
-
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
@@ -558,7 +547,7 @@
                                 </div>
 
                                 <div class="service-detail">
-                                    <h5>Free Delivery For Order Over $50</h5>
+                                    <h5>Free Delivery For Order Over ¥5000</h5>
                                 </div>
                             </div>
 

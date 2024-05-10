@@ -12,7 +12,7 @@
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                        <form method="POST" action="{{ route('help.add') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
+                                        <form method="GET" action="{{ route('help.add') }}" class="theme-form theme-form-2 mega-form" >
                                             @csrf
                                             <div class="card-header-1">
                                                 <h5>Order ID: {{ $helps->id }}</h5>
@@ -46,7 +46,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-grid gap-2 d-md-block"  style="margin-top: 20px;">
-                                                <a href="{{ route('help.add') }}">
+                                                <a href="#">
                                                     <button class="btn btn-animation" type="submit">Reply</button>
                                                 </a>
                                             </div>

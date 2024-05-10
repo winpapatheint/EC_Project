@@ -243,7 +243,7 @@ Route::get('/help', [SellerController::class, 'help'])->middleware(['auth','role
 Route::get('/helpadd', [SellerController::class, 'addHelp'])->middleware(['auth','role:seller'])->name('help.add');
 Route::post('/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');
 Route::get('/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
-Route::get('/helpdelete/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
+Route::post('/helpdelete', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
 
 
 //Brand
@@ -260,7 +260,7 @@ Route::post('/productupdate', [ProductController::class, 'updateProduct'])->midd
 Route::post('/productdelete', [ProductController::class, 'deleteProduct'])->middleware(['auth','role:seller'])->name('delete.product');
 Route::post('/productstatus', [ProductController::class, 'changeStatus'])->middleware(['auth','role:seller'])->name('change.status');
 Route::post('/product/multiImg', [ProductController::class, 'updateMultiImg'])->middleware(['auth','role:seller'])->name('update.multiImg');
-Route::get('/product/multiImg/delete/{id}', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
+Route::post('/product/multiImg/delete', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
 Route::get('/review', [ProductController::class, 'review'])->middleware(['auth','role:seller'])->name('seller.review');
 Route::post('/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
 Route::post('/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');

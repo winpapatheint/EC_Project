@@ -41,7 +41,7 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="form-label-title col-sm-2 mb-0">Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="password">
+                                                <input class="form-control" type="password" name="password" value="{{ $user->password}}">
                                                 @error('password')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -52,7 +52,7 @@
                                             <label class="form-label-title col-sm-2 mb-0">Confirm
                                                 Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="confirmed">
+                                                <input class="form-control" type="password" name="confirmed" value="{{ $user->password }}">
                                             </div>
                                         </div>
 
@@ -60,12 +60,36 @@
                                             <label
                                                 class="form-label-title col-sm-2 mb-0">Photo</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="file" id="formFile" onchange="mainThamUrl(this)" name="photo">
-                                                <img src="" id="mainThmb">
+                                                <input class="form-control" type="file" id="formFile" name="photo">
+                                                <img src="{{ asset(!empty($user->user_photo)) ? url('upload/profile/'.$user->user_photo) : url('upload/profile/profile.jpg') }}" width="100">
                                             </div>
                                         </div>
                                         <div class="d-grid gap-2 d-md-block">
-                                            <button class="btn btn-animation" type="submit">Update Profile</button>
+                                            <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimBox_{{ $user->id }}">Update Profile</button>
+
+                                            <!-- Confirm Modal Box -->
+                                            <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $user->id }}" aria-hidden="true" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header d-block text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="remove-box">
+                                                                <p>The data will be added permanently.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                            <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Confirm Modal Box End-->
                                         </div>
                                     </div>
                                 </form>
@@ -79,6 +103,11 @@
                                 </div>
                                 <form method="POST" action="{{ route('update.shop')}}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
                                     @csrf
+                                    @if (session('flash_message'))
+                                        <div class="flash_message bg-gradient-success text-center py-3 my-0">
+                                            {{ session('flash_message') }}
+                                        </div>
+                                    @endif
                                     <input type="hidden" name="old_img" value="{{ $data->shop_logo }}">
                                     <input type="hidden" name="seller_id" value="{{ $data->id }}">
                                     <div class="row">
@@ -204,7 +233,31 @@
 
                                         @if(empty(Auth::user()->created_by))
                                             <div class="d-grid gap-2 d-md-block">
-                                                <button class="btn btn-animation" type="submit">Update</button>
+                                                <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimBox_{{ $data->id }}">Update Profile</button>
+
+                                                <!-- Confirm Modal Box -->
+                                                <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $data->id }}" aria-hidden="true" tabindex="-1">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header d-block text-center">
+                                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="remove-box">
+                                                                    <p>The data will be added permanently.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                                <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Confirm Modal Box End-->
                                             </div>
                                         @endif
                                     </div>
@@ -219,16 +272,4 @@
     </div>
 </div>
 <!-- Settings Section End -->
-
-<script>
-    function mainThamUrl(input){
-        if(input.files && input.files[0]){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#mainThmb').attr('src', e.target.result).width(100).height(100);
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
 @endsection

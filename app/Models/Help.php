@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Help extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'type',
+        'sent',
+        'notice',
+        'title',
+        'img',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

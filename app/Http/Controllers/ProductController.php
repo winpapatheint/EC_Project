@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class ProductController extends Controller
@@ -100,11 +101,7 @@ class ProductController extends Controller
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('upload/product_thambnail'), $filename);
 
-        if (!empty(Auth::user()->created_by)) {
-            $subseller = Auth::user()->id;
-        } else {
-            $seller = Auth::user()->id;
-        }
+        $id = Auth::user()->created_by ?? Auth::id();
 
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
@@ -113,8 +110,7 @@ class ProductController extends Controller
             'category_id' => $validatedData['category_id'],
             'sub_category_title_id' => $validatedData['sub_category_title_id'],
             'sub_category_id' => $validatedData['sub_category_id'],
-            'seller_id' => $seller ?? null,
-            'subseller_id' => $subseller ?? null,
+            'seller_id' => $id,
             'product_name' => $validatedData['product_name'],
             'product_qty' => $validatedData['product_qty'],
             'product_tags' => $validatedData['product_tags'],
@@ -122,7 +118,7 @@ class ProductController extends Controller
             'product_color' => $validatedData['product_color'],
             'original_price' => $validatedData['original_price'],
             'selling_price' => $request->calculated_selling_price,
-            'discount_percent' => $request->discount_percent,
+            'discount_percent' => $request->discount_percent ?? 0,
             'short_desc' => $validatedData['short_desc'] ,
             'long_desc' => $validatedData['long_desc'],
             'care_instructions' => $validatedData['care_instructions'],
@@ -226,7 +222,7 @@ class ProductController extends Controller
         $product->product_size= $request->product_size;
         $product->product_color= $request->product_color;
         $product->original_price= $request->original_price;
-        $product->discount_percent= $request->discount_percent;
+        $product->discount_percent= $request->discount_percent ?? 0;
         $product->selling_price = $request->calculated_selling_price;
         $product->short_desc= $request->short_desc;
         $product->long_desc= $request->long_desc;
@@ -285,11 +281,16 @@ class ProductController extends Controller
         return redirect('/productlist')->with('flash_message', 'Image updated successfully');
     }
 
-
-    public function deleteMultiImg($id)
+    public function deleteMultiImg(Request $request)
     {
+        $id = $request->id;
         $old_img = MultiImg::findOrFail($id);
-        File::delete($old_img->photo_name);
+        $filePath = public_path('upload/multiImg/' . $old_img->photo_name);
+
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+
         MultiImg::findOrFail($id)->delete();
         return redirect('/productlist')->with('flash_message', 'Image deleted successfully');
     }
@@ -298,8 +299,8 @@ class ProductController extends Controller
     public function review()
     {
         $limit=10;
-        $id = Auth::user()->id;
-        $review = Review::where('user_id',$id)->latest()->paginate($limit);
+        $id = Auth::user()->created_by ?? Auth::id();
+        $review = Review::where('seller_id',$id)->latest()->paginate($limit);
 
         $ttl = $review->total();
         $ttlpage = (ceil($ttl / $limit));

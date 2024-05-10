@@ -56,10 +56,12 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    {{-- <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
+
 
 </head>
 
@@ -250,7 +252,7 @@
                                     </a>
                                 </li>
 
-                                @if(Auth::user()->can('subseller.list'))
+                                @if(Auth::user()->create_by == NULL)
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.subseller') }}">
                                         <i class="ri-user-3-line"></i>
@@ -258,6 +260,7 @@
                                     </a>
                                 </li>
                                 @endif
+
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.profile') }}">

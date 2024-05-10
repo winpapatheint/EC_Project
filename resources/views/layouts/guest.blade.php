@@ -36,7 +36,7 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/review.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/review.min.css') }}">
 
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/feather-icon/_feather-icon.scss') }}">
@@ -403,11 +403,11 @@
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-                                            
+
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-                                            
+
 
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">

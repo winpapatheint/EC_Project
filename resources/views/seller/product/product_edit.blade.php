@@ -1,3 +1,4 @@
+@php $error = $errors->toArray();  @endphp
 @extends('seller.seller_dashboard')
 @section('seller')
 <style>
@@ -147,9 +148,6 @@
                                         <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="care_instructions" id="ckeditor1">{!! $products->care_instructions !!}</textarea>
-                                            @error('care_instructions')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
 
@@ -162,7 +160,7 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 form-label-title">Original Price</label>
+                                        <label class="col-sm-3 form-label-title">Original Price(tax inc)</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="original_price" id="original_price" type="number" min="1" value="{{  $products->original_price }}">
                                         </div>
@@ -174,8 +172,8 @@
                                             <input class="form-control" name="discount_percent" id="discount_percent" type="number" min="0" max="100" value="{{ $products->discount_percent }}">
                                         </div>
                                         <div class="col-sm-3">
-                                            <input class="form-control" name="selling_price" id="selling_price" type="number" value="calculated_selling_price" disabled>
-                                            <input type="hidden" name="calculated_selling_price" id="calculated_selling_price">
+                                            <input class="form-control" name="selling_price" id="selling_price" type="number" value="" disabled>
+                                            <input type="hidden" name="calculated_selling_price" id="calculated_selling_price" value="{{ $products->calculated_selling_price }}">
                                         </div>
                                     </div>
 
@@ -194,13 +192,37 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 form-label-title">Delivery Price</label>
+                                        <label class="col-sm-3 form-label-title">Delivery Price(tax inc)</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="delivery_price" type="number" min="1" value="{{ $products->delivery_price }}">
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-animation">Update</button>
+                                    <button type="button" class="btn btn-animation" data-bs-toggle="modal" data-bs-target="#confirmModal">Update</button>
+
+                                    <!-- Confirm Modal Box -->
+                                    <div class="modal fade theme-modal remove-coupon" id="confirmModal" aria-hidden="true" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p>The data will be updated permanently.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Confirm Modal Box End-->
                                 </form>
                             </div>
                         </div>
@@ -226,14 +248,43 @@
                                                 <tr>
                                                     <th>{{ $key+1 }}</th>
                                                     <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="80"></td>
-                                                    <td><input type="file" class="form-control" name="multi_img[{{ $img->id }}]"></td>
+                                                    <td>
+                                                        <input type="file" class="form-control" name="multi_img[{{ $img->id }}]" onchange="checkFile(this)">
+                                                        @error('multi_img.' . $img->id)
+                                                            <p class="multi_img error text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </td>
                                                     <td>
                                                         <div class="btn-group">
-                                                            <input type="submit" class="btn btn-primary px-4" value="Update">
-                                                            <a href="{{ route('delete.multiImg', $img->id) }}" class="btn btn-secondary px-3 ms-2">Delete</a>
+                                                            <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#confirmBox_{{ $img->id }}" disabled>Update</button>
+                                                            <button type="button" class="btn btn-secondary px-4 ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal_{{ $img->id }}">Delete</button>
                                                         </div>
                                                     </td>
                                                 </tr>
+
+                                                <!-- Confirm Modal Box -->
+                                                <div class="modal fade theme-modal remove-coupon" id="confirmBox_{{ $img->id }}" aria-hidden="true" tabindex="-1">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header d-block text-center">
+                                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="remove-box">
+                                                                    <p>The data will be added permanently.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                                <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Confirm Modal Box End-->
                                             @endforeach
                                         </form>
                                     </tbody>
@@ -246,6 +297,38 @@
         </div>
     </div>
     <!-- New Product Add End -->
+
+
+<!-- Delete Modal Box Start -->
+@foreach ($multiImgs as $key => $img)
+<div class="modal fade theme-modal remove-coupon" id="deleteModal_{{ $img->id }}" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="remove-box">
+                    <p>The data will be deleted permanently.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                <form method="POST" action="{{ route('delete.multiImg') }}">
+                    @csrf
+                        <input type="hidden" name="id" value="{{ $img->id }}">
+                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+<!-- Delete Modal Box End -->
+
 </div>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
@@ -258,6 +341,17 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+</script>
+
+<script>
+    function checkFile(input) {
+        var btn = input.parentNode.parentNode.querySelector('button[type="button"]');
+        if (input.files.length > 0) {
+            btn.removeAttribute('disabled');
+        } else {
+            btn.setAttribute('disabled', 'disabled');
+        }
+    }
 </script>
 
 <script>
@@ -345,14 +439,14 @@
         const originalPrice = parseFloat(originalPriceInput.value);
         const discountPercent = parseFloat(discountPercentInput.value);
 
-        if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+        if (!isNaN(discountPercent)) {
             const discountAmount = originalPrice * (discountPercent / 100);
             const sellingPrice = originalPrice - discountAmount;
             sellingPriceInput.value = Math.round(sellingPrice);
             calculatedSellingPriceInput.value = Math.round(sellingPrice);
         } else {
-            sellingPriceInput.value = '';
-            calculatedSellingPriceInput.value = '';
+            selling_price.value = originalPriceInput.value;
+            calculatedSellingPriceInput.value = originalPriceInput.value;
         }
     }
 
@@ -362,18 +456,11 @@
 </script>
 
 <script>
-    ClassicEditor
-        .create(document.querySelector('#ckeditor'))
-        .catch(error => {
-            console.error(error);
-        });
+    ClassicEditor.create(document.querySelector('#ckeditor'))
+        .catch(error => { console.error(error); });
+
+    ClassicEditor.create(document.querySelector('#ckeditor1'))
+        .catch(error => { console.error(error); });
 </script>
 
-<script>
-    ClassicEditor
-        .create(document.querySelector('#ckeditor1'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
 @endsection

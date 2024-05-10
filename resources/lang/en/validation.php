@@ -199,7 +199,7 @@ return [
         'participant_limit' => '制限人数',
         'subject' => '件名',
         'message' => 'お問い合わせ内容',
-        'title' => 'タイトル',
+        'titled' => 'タイトル',
         'category' => 'カテゴリー',
         'content' => '内容',
         'contents' => '内容',

@@ -18,7 +18,7 @@ class OrderController extends Controller
     public function sellerAllOrder()
     {
         $limit=10;
-        $id = Auth::user()->id;
+        $id = Auth::user()->created_by ?? Auth::id();
         $order = OrderDetail::where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
         $ttl = $order->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -27,8 +27,8 @@ class OrderController extends Controller
 
     public function sellerDetailOrder($id)
     {
-        $seller_id = Auth::user()->id;
-        $order = Order::where('seller_id',$seller_id)->find($id);
+        $id = Auth::user()->created_by ?? Auth::id();
+        $order = OrderDetail::where('seller_id',$id)->find($id);
         return view('seller.order.order_detail',compact('order'));
     }
 
@@ -115,9 +115,9 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request)
     {
-        $id = $request->id;
-        $seller_id = Auth::user()->id;
-        $order = Order::where('seller_id',$seller_id)->find($id);
+        $order_id = $request->id;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $order = OrderDetail::where('seller_id',$id)->find($order_id);
         return view('seller.order.order_cancel',compact('order'));
     }
 
@@ -127,7 +127,7 @@ class OrderController extends Controller
             'cancelled_reason' => 'required|string|max:255',
         ]);
 
-        $order = Order::find($request->id);
+        $order = OrderDetail::find($request->id);
         $order->cancelled_reason = $request->cancelled_reason;
         $order->updated_at = now();
         $order->save();

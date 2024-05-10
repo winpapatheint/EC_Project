@@ -37,20 +37,4 @@ class Order extends Model
         'updated_at',
 
     ];
-
-    function user() {
-        return $this->belongsTo(User::class,'user_id');
-    }
-
-    function product() {
-        return $this->belongsTo(Product::class,'product_id');
-    }
-
-    function prefecture() {
-        return $this->belongsTo(Prefecture::class,'prefecture_id');
-    }
-
-    function seller() {
-        return $this->belongsTo(Seller::class,'seller_id');
-    }
 }

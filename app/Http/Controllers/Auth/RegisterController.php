@@ -48,7 +48,7 @@ class RegisterController extends Controller
 
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
-        $img->move('upload/shop', $filename);
+        $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
             'name' => $validatedData['user_name'],

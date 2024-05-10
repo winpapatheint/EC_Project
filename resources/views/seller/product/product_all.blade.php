@@ -39,6 +39,11 @@
                                             </tr>
                                         @else
                                         @foreach ($products as $key => $item)
+                                        @if (session('flash_message'))
+                                            <div class="flash_message bg-gradient-success text-center py-3 my-0">
+                                                {{ session('flash_message') }}
+                                            </div>
+                                        @endif
                                         <tr>
                                             <td>{{ ($ttl+1) - ($products->firstItem() + $key) }}</td>
                                             <td>{{ $item->created_at }}</td>
@@ -52,10 +57,10 @@
 
                                             <td>{{ $item->product_qty }}</td>
 
-                                            <td class="td-price">¥{{ $item->selling_price }}</td>
+                                            <td class="td-price">¥{{number_format($item->selling_price) }}</td>
 
                                             <td class="td-price">
-                                                @if ($item->discount_percent == NULL)
+                                                @if ($item->discount_percent == NULL || $item->discount_percent == '0')
                                                     <p>No Discount</p>
                                                 @else
                                                 <p>{{ $item->discount_percent }}%</p>

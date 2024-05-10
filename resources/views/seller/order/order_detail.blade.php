@@ -36,8 +36,7 @@
                                                 <tr class="table-order">
                                                     <td>
                                                         <a href="javascript:void(0)">
-                                                            <img src="assets/images/profile/1.jpg"
-                                                                class="img-fluid blur-up lazyload" alt="">
+                                                            <img width="80" src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}">
                                                         </a>
                                                     </td>
                                                     <td>
@@ -50,7 +49,7 @@
                                                     </td>
                                                     <td>
                                                         <p>Price</p>
-                                                        <h5>¥{{ $order['product']['selling_price'] }}</h5>
+                                                        <h5>¥{{ number_format($order['product']['selling_price']) }}</h5>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -61,7 +60,7 @@
                                                         <h5>Subtotal :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ $price = $order['product']['selling_price'] * $order->qty }}</h4>
+                                                        <h4>¥{{ number_format($price = $order['product']['selling_price'] * $order->qty) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -70,7 +69,7 @@
                                                         <h5>Shipping :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>{{ $deli = $order['product']['delivery_price'] }}</h4>
+                                                        <h4>¥{{ number_format($deli = $order['product']['delivery_price']) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -88,7 +87,7 @@
                                                         <h4 class="theme-color fw-bold">Total Price :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ $total = ($price - ($price * ($com / 100)))+ $deli }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($total = ($price - ($price * ($com / 100)))+ $deli) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -103,7 +102,7 @@
                                             <ul class="order-details">
                                                 <li>Order ID: {{ $order->id }}</li>
                                                 <li>Order Date: {{ $order->created_at }}</li>
-                                                <li>Order Total: ¥{{ $total }}</li>
+                                                <li>Order Total: ¥{{ number_format($total) }}</li>
                                             </ul>
 
                                             <h4>shipping address</h4>
@@ -121,7 +120,7 @@
                                             <div class="delivery-sec">
                                                 <h3>Expected date of delivery: </h3>
                                                 <span>{{ $order->expected_date }}</span>
-                                                <a href="order-tracking.html">Track order</a>
+                                                <a href="{{ route('order.tracking',$order->id) }}">Track order</a>
                                             </div>
                                         </div>
                                     </div>

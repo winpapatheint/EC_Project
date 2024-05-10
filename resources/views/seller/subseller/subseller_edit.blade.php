@@ -52,7 +52,30 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-animation">Update</button>
+                                    <button type="submit" class="btn btn-animation" data-bs-toggle="modal" data-bs-target="#confrimModalToggle">Update</button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade theme-modal remove-coupon" id="confrimModalToggle" aria-hidden="true" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Do you want to update it?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p>Please check information before saving.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>

@@ -32,4 +32,16 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    function user() {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    function prefecture() {
+        return $this->belongsTo(Prefecture::class,'prefecture_id');
+    }
+
+    function seller() {
+        return $this->belongsTo(Seller::class,'seller_id');
+    }
 }

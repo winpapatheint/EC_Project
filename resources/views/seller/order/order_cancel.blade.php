@@ -48,7 +48,7 @@
                                                     </td>
                                                     <td>
                                                         <p>Price</p>
-                                                        <h5>¥{{ $order['product']['selling_price'] }}</h5>
+                                                        <h5>¥{{number_format($order['product']['selling_price']) }}</h5>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -59,7 +59,7 @@
                                                         <h5>Subtotal :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ $price = $order['product']['selling_price'] * $order->qty }}</h4>
+                                                        <h4>¥{{number_format($price = $order['product']['selling_price'] * $order->qty) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -68,7 +68,7 @@
                                                         <h5>Shipping :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>{{ $deli = $order['product']['delivery_price'] }}</h4>
+                                                        <h4>{{number_format($deli = $order['product']['delivery_price']) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -86,7 +86,7 @@
                                                         <h4 class="theme-color fw-bold">Total Price :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ $total = ($price - ($price * ($com / 100)))+ $deli }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{number_format($total = ($price - ($price * ($com / 100)))+ $deli) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>

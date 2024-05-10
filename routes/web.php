@@ -37,15 +37,18 @@ Route::post('/products/reviews', [ReviewController::class, 'store'])->name('revi
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
 Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+Route::post('/user-profile-upload', [UserController::class, 'userProfileUpload']);
 Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user/orderdetailtracking', [UserController::class, 'showOrderDetailTracking'])->name('order_detail_tracking');
+Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
 
-Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 
 Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
 Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');
 Route::post('/user/addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
+Route::get('/set-default-address/{id}', [UserController::class, 'setDefaultAddress'])->name('set_default_address');
 Route::delete('/user/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
 
 Route::get('/user/paymentmethod', [UserController::class, 'showCard'])->name('user_cards');
@@ -68,12 +71,14 @@ Route::get('/comparelist', [ShowProductController::class, 'ShowCompareList'])->m
 Route::get('/delete-wishlist/{id}', [ShowProductController::class, 'DeleteWishList'])->name('delete-wishlist');
 Route::get('/delete-comparelist/{id}', [ShowProductController::class, 'DeleteCompareList'])->name('delete-comparelist');
 Route::get('/discount-products', [ShowProductController::class, 'ShowDiscountProductList'])->name('show-discount-product');
+Route::get('/coupon-products', [ShowProductController::class, 'ShowCouponProductList'])->name('show-coupon-product');
 Route::get('/product-left-thumbnail/{id}', [ShowProductController::class, 'ShowProductleftThumbnail'])->name('show-product-left-thumbnail');
 Route::get('/carts', [UserController::class, 'showCarts'])->middleware(['auth', 'role:buyer'])->name('show_carts');
 Route::post('/cart/{id}', [UserController::class, 'updateCartQty'])->name('update_cart_qty');
 Route::post('user/remove-cart/{id}', [UserController::class, 'removeCart'])->name('remove_cart');
+Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProduct'])->name('remove_cart_product');
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
-Route::post('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
+Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
@@ -121,6 +126,14 @@ Route::get('/admin/review/product', [AdminController::class,'indexreview'])->nam
 Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
 Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
 Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
+
+Route::get('/admin/indexcustomer', [AdminController::class, 'indexcustomer']);
+Route::get('/editcustomer/{topid}', [AdminController::class, 'editcustomer']);
+Route::post('admin/registercustomer', [AdminController::class, 'storecustomer'])->name('registercustomer');
+
+Route::get('/admin/top', [AdminController::class, 'indextop']);
+Route::get('/edittop/{topid}', [AdminController::class, 'edittop']);
+Route::post('admin/registertop', [AdminController::class, 'storetop'])->name('registertop');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
 Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
@@ -130,15 +143,19 @@ Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
 route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
 //AdminProduct
 Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
+Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->name('admin.all.shop');
+route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->name('updatecoupon');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
 Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
 Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
-
+Route::get('shop/{shopid}', [AdminController::class, 'shopdetail']);
+Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
+Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->name('shopstatus');
 Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
 route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');

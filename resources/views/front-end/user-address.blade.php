@@ -5,7 +5,7 @@
         }
 
     </style>
-    
+
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -43,20 +43,27 @@
                         </div>
                         <div class="profile-box">
                             <div class="cover-image">
-                                <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/inner-page/cover-img.jpg') }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
 
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
-                                        <img src="../assets/images/inner-page/user/1.jpg"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
-                                            </i>
-                                        </div>
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
+                                        <img src="{{ asset('frontend/assets/images/profile.png') }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -80,18 +87,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -122,70 +129,70 @@
                                         <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3"
                                             data-bs-toggle="modal" data-bs-target="#add-address"><i data-feather="plus"
                                                 class="me-2"></i> Add New Address</button>
-                                    </div>   
-                                </div>   
-                            </div>
-
-                        <div class="row g-sm-4 g-3">
-                            @foreach($data as $item)
-                            <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
-                                <div class="address-box">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                        <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="selected_address" 
-                                                value="{{ $item->id }}" id="address_{{ $item->id }}">
-                                        </div>
-                                        </div>
-                                        <div class="col-md-10">    
-                                                <label>{{ $item->place }}</label>
-                                        </div>
                                     </div>
-                                   <div class="table-responsive address-table">
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Name:</td>
-                                                    <td>
-                                                        <p>{{ $item->name }}</p>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Address:</td>
-                                                    <td>
-                                                        <p>{{ $item->post_code }},{{ $item->city }},{{ $item->chome }},{{ $item->building }},{{ $item->room_no }}</p>
-                                                    </td>
-                                                </tr>
+                                    <div class="row g-sm-4 g-3">
+                                        @foreach($data as $item)
+                                        <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
+                                            <div class="address-box">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                    <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="selected_address" 
+                                                            value="{{ $item->id }}" id="address_{{ $item->id }}" {{ $item->default == 1 ? 'checked':''}}>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-10">    
+                                                            <label>{{ $item->place }}</label>
+                                                    </div>
+                                                </div>
+                                            <div class="table-responsive address-table">
+                                                    <table class="table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Name:</td>
+                                                                <td>
+                                                                    <p>{{ $item->name }}</p>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Address:</td>
+                                                                <td>
+                                                                    <p>{{ $item->post_code }}.</p>
+                                                                    <p>{{ $item->city }} {{ $item->chome }} chome,</p>
+                                                                    <p>{{ $item->building }} - {{ $item->room_no }}</p>
+                                                                </td>
+                                                            </tr>
 
-                                                <tr>
-                                                    <td>Phone:</td>
-                                                    <td>{{ $item->phone }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="button-group">
-                                        <button class="btn btn-sm add-button w-100 edit-address-btn" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#editAddress{{ $item->id }}"
-                                                onclick="">
-                                            <i data-feather="edit"></i> Edit
-                                        </button>
-
-                                        <button class="btn btn-sm add-button w-100" data-bs-toggle="modal" data-bs-target="#removeProfile" 
-                                        onclick="showDeleteModal('{{ $item->id }}')">
-                                            <i data-feather="trash-2"></i> Remove
-                                        </button>
-
+                                                            <tr>
+                                                                <td>Phone:</td>
+                                                                <td>{{ $item->phone }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="button-group">
+                                                    <button class="btn theme-bg-color btn-sm add-button w-100 edit-address-btn"
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#editAddress{{ $item->id }}"
+                                                            onclick="">
+                                                            <i data-feather="edit"></i> Edit
+                                                    </button>
+                                                    <button class="btn btn-sm add-button w-100" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#removeProfile"
+                                                            onclick="showDeleteModal('{{ $item->id }}')"  style = "background-color: #ff6b6b;">
+                                                        <i data-feather="trash-2"></i> Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+                            <!-- Address View End -->
                         </div>
                     </div>
-                </div>
-                <!-- Address View End -->
-                </div>
                 </div>
             </div>
         </div>
@@ -203,63 +210,83 @@
                     </button>
                 </div>
 
-                    <form method="POST" action="{{ route('add_newaddress') }}" class="row g-4" >
-                    @csrf
-                        <div class="modal-body">
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
-                                <label for="name">Name</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
-                                <label for="post_code">Post Code</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
-                                <label for="city">City</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
-                                <label for="chome">Chome</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
-                                <label for="building">Building</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
-                                <label for="roomno">Room No</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <textarea class="form-control" placeholder="Leave a comment here" id="address" name="address"
-                                    style="height: 100px"></textarea>
-                                <label for="address">Enter Address</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others">
-                                <label for="place">Place</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
-                                <label for="phone">Enter Phone Number</label>
-                            </div>
-                            <input type="hidden" name="buyer_id" value="1">
+                <form method="POST" action="{{ route('add_newaddress') }}" class="row g-4" >
+                @csrf
+                    <div class="modal-body">
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                            <label for="name">Name</label>
+                            <span style="color:red">@error('Name'){{ $message }}@enderror</span>
                         </div>
-                   
-                        <div class="modal-footer">
-                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                                changes</button>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
+                            <label for="post_code">Post Code</label>
+                            <span style="color:red">@error('post_code'){{ $message }}@enderror</span>
                         </div>
-                    </form> 
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" name="prefectures" value="{{ old('prefecture') }}">
+                                <option>Choose Prefecture</option>
+                                @foreach ($prefecture as $item)
+                                    <option value="{{ $item->id }}" name="prefectures">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
+                            <label for="city">City</label>
+                            <span style="color:red">@error('city'){{ $message }}@enderror</span>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
+                            <label for="chome">Chome</label>
+                            <span style="color:red">@error('chome'){{ $message }}@enderror</span>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
+                            <label for="building">Building</label>
+                            @error('building')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
+                            <label for="roomno">Room No</label>
+                            @error('room')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                            <label for="phone">Enter Phone Number</label>
+                            <span style="color:red">@error('phone'){{ $message }}@enderror</span>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" name="place" value="{{ old('place') }}">
+                                <option>Choose Place</option>
+                                <option value="Home" name="prefectures">Home</option>
+                                <option value="Office" name="prefectures">Office</option>
+                                <option value="Other" name="prefectures">Other</option>
+                            </select>
+                            <span style="color:red">@error('place'){{ $message }}@enderror</span>
+                        </div>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">
+                        Close</button>
+
+                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
+                            changes</button>
+                    </div>
+                </form> 
             </div>
         </div>
     </div>
@@ -275,62 +302,68 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-
+               
                     <form method="post" action="{{ route('edit_address') }}" class="row g-4" >
                     @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
                         
                         <div class="modal-body">
                         <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
+                                value="{{ $item->name }}">
                                 <label for="name">Name</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
+                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
                                 <label for="post_code">Post Code</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
+                                <select class="form-control" name="prefectures">
+                                    @foreach ($prefecture as $item1)
+                                        <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $item->city }}">
                                 <label for="city">City</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
+                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $item->chome }}">
                                 <label for="chome">Chome</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
+                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $item->building }}">
                                 <label for="building">Building</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
+                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $item->room_no }}">
                                 <label for="roomno">Room No</label>
                             </div>
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
-                                <textarea class="form-control" placeholder="Leave a comment here" id="address" name="address"
-                                    style="height: 100px"></textarea>
-                                <label for="address">Enter Address</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="place" name="place" placeholder="Home, Office or Others">
-                                <label for="place">Place</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
                                 <label for="phone">Enter Phone Number</label>
                             </div>
-                            <input type="hidden" name="buyer_id" value="1">
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-control" name="place" value="{{ old('place') }}">
+                                    <option value="Home" name="prefectures" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
+                                    <option value="Office" name="prefectures" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
+                                    <option value="Other" name="prefectures" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
                         </div>
                    
                         <div class="modal-footer">
-                            <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
+                            Close</button>
 
                             <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
                                 changes</button>
@@ -369,27 +402,7 @@
         </div>
     </div>
     @endforeach
-    <div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="remove-box text-center">
-                        <h4 class="text-content">It's Removed.</h4>
-                    </div>
-                </div>
-                <div class="modal-footer pt-0">
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
-                        data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Remove Address Modal End -->
 </x-guest-layout>
 <!-- Edit Address Script-->
@@ -397,27 +410,30 @@
     $(document).ready(function() {
     $('.edit-btn').on('click', function() {
         var addressData = JSON.parse($(this).data('address'));
+        alert(addressData);
         $('#address_id').val(addressData.id);
-        $('#edit_name').val(addressData.name);
-        $('#edit_email').val(addressData.email);
-        $('#edit_division').val(addressData.division);
-        $('#edit_district').val(addressData.district); // Corrected field name
-        $('#edit_post_code').val(addressData.post_code);
-        $('#edit_address').val(addressData.address);
-        $('#edit_place').val(addressData.place);
-        $('#edit_phone').val(addressData.phone);
+        $('#name').val(addressData.name);
+        $('#post_code').val(addressData.post_code);
+        $('#prefectures').val(addressData.prefectures);
+        $('#city').val(addressData.city);
+        $('#chome').val(addressData.chome);
+        $('#building').val(addressData.building);
+        $('#roomno').val(addressData.roomno);
+        $('#place').val(addressData.place);
+        $('#phone').val(addressData.phone);
     });
 
     $('#saveChanges').on('click', function() {
         var addressId = $('#address_id').val();
-        var newName = $('#edit_name').val();
-        var newEmail = $('#edit_email').val();
-        var newDivision = $('#edit_division').val();
-        var newDistrict = $('#edit_district').val();
-        var newPostCode = $('#edit_post_code').val();
-        var newAddress = $('#edit_address').val();
-        var newPlace = $('#edit_place').val();
-        var newPhone = $('#edit_phone').val();
+        var newName = $('#name').val();
+        var newPostCode = $('#post_code').val();
+        var newPrefectures = $('#prefectures').val();
+        var newCity = $('#city').val();
+        var newChome = $('#chome').val();
+        var newBuilding = $('#building').val();
+        var newRoomNo = $('#roomno').val();
+        var newPlace = $('#place').val();
+        var newPhone = $('#phone').val();
 
         // Perform AJAX request to update data in the controller
         $.ajax({
@@ -427,11 +443,12 @@
                 _token: '{{ csrf_token() }}',
                 id: addressId,
                 name: newName,
-                email: newEmail,
-                division: newDivision,
-                district: newDistrict, // Corrected field name
                 post_code: newPostCode,
-                address: newAddress,
+                prefectures: newPrefectures,
+                city: newCity,
+                chome: newChome,
+                building: newBuilding,
+                room_no: newRoomNo,
                 place: newPlace,
                 phone: newPhone
             },
@@ -450,11 +467,33 @@
     });
 });
 </script>
+
 <!-- Remove Address Script -->
 <script>
     function showDeleteModal(id) {
         $('#removeProfile').modal('show');
         // Update the form action URL dynamically with the selected address id
-        $('#removeProfile form').attr('action', '/remove-address/' + id);
+        $('#deleteForm').attr('action', '/user/remove-address/' + id);
     }
+</script>
+
+<!-- Set Default Address Script -->
+<script>
+    $(document).ready(function() {
+        $('input[name="selected_address"]').change(function() {
+            var addressId = $(this).val();
+            $.ajax({
+                url: '/set-default-address/' + addressId,
+                type: 'GET',
+                success: function(response) {
+                    // Handle success response if needed
+                    console.log(response.success);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error if needed
+                    console.error('Error setting default address:', error);
+                }
+            });
+        });
+    });
 </script>

@@ -84,7 +84,7 @@
                                 @endif
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    @if ($product->discount_percent != null)
+                                    @if ($product->discount_percent != null || $product->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span> 
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
@@ -527,6 +527,229 @@
     </section>
     <!-- Product Left Sidebar End -->
 
+    <!-- Related Product Section Start -->
+    @if($relatedProducts->count() > 0)
+    <section class="product-list-section section-b-space">
+        <div class="container-fluid-lg">
+            <div class="title">
+                <h2>Related Products</h2>
+                <span class="title-leaf">
+                    <svg class="icon-width">
+                        <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="slider-6_1 product-wrapper">
+                        @foreach ($relatedProducts as $relatedProduct)
+                        @if ($product->status == 1)
+                            @php
+                                $starRating = 0;
+                                $count = 0;
+                            @endphp
+                            @foreach ($reviewAll as $review)
+                                @if ($relatedProduct->id == $review->product_id)
+                                    @php
+                                        $count += 1;
+                                        $starRating += $review->stars_rated;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if ($count != 0)
+                                @php
+                                    $starRating = $starRating / $count;
+                                @endphp
+                            @endif
+                        <div>
+                            <div class="product-box-3 wow fadeInUp">
+                                <div class="product-header">
+                                    <div class="product-image">
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $relatedProduct->id]) }}">
+                                            <img src="{{ asset('upload/product_thambnail/'.$relatedProduct-> product_thambnail) }}"
+                                                class="img-fluid blur-up lazyload" alt="">
+                                        </a>
+
+                                        <ul class="product-option">
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                    data-bs-target="#view-product{{ $relatedProduct->id }}" data-product="{{ $relatedProduct->id }}">
+                                                    <i data-feather="eye"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                <a href="{{ route('show-comparelist', ['id' => $product->id ]) }}">
+                                                    <i data-feather="refresh-cw"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="product-footer">
+                                    <div class="product-detail">
+                                        <span class="span-name">{{ $relatedProduct->name }}</span>
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $relatedProduct->id]) }}">
+                                            <h5 class="name">{{ $relatedProduct->name }}</h5>
+                                        </a>
+                                        <div class="product-rating mt-2">
+                                            <ul class="rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $starRating)
+                                                        <li><i data-feather="star" class="fill"></i></li>
+                                                    @else
+                                                        <li><i data-feather="star"></i></li>
+                                                    @endif
+                                                @endfor
+                                            </ul>
+                                            <span>(<?php echo number_format($starRating, 1); ?>)</span>
+                                        </div>
+                                        <h6 class="unit">{{ $relatedProduct->product_size }}</h6>
+                                        @if ($product->discount_percent != null || $product->discount_percent != 0)
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                        @else
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        @endif
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+    <!-- Related Product Section End -->
+
+
+    <!-- Quick View Modal Box Start -->
+    @foreach ($relatedProducts as $product)
+    @if ($product->status == 1)
+    @php
+        $starRating = 0;
+        $count = 0;
+    @endphp
+    @foreach ($reviews as $review)
+        @if ($product->id == $review->product_id)
+            @php
+                $count += 1;
+                $starRating += $review->stars_rated;
+            @endphp
+        @endif
+    @endforeach
+    @if ($count != 0)
+        @php
+            $starRating = $starRating / $count;
+        @endphp
+    @endif
+     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                    class="img-fluid blur-up lazyload" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name">{{ $product->product_name }}</h4>
+                                @if ($product->discount_percent != null || $product->discount_percent != 0)
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                    <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                @else
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                @endif
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $starRating)
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span class="ms-2">{{ $count}} Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Product Details :</h4>
+                                    <p>{!! ($product->long_desc) !!}</p>
+                                </div>
+
+                                <ul class="brand-list">
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Brand Name:</h5>
+                                            <h6>
+                                                @php
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
+                                                @endphp
+                                                {{ $brand->brand_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Product Code:</h5>
+                                            <h6>{{ $product->product_code }}</h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Category:</h5>
+                                            <h6>
+                                                @php
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
+                                                @endphp
+                                                {{ $category->category_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="modal-button">
+                                    <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
+                                        class="btn btn-md add-cart-button icon">Add
+                                        To Cart</button>
+
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        View More Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @endforeach
+    <!-- Quick View Modal Box End -->
+
     <!-- Review Modal Start -->
     <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -539,6 +762,7 @@
                 </div>
                 <form class="product-review-form" action="{{ route('reviews') }}" method="POST">
                 @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <div class="modal-body">
                         <div class="product-wrapper">
                             <div class="product-image">
@@ -572,8 +796,8 @@
                             </div>
                         </div>
                         <div class="review-box">
-                            <label for="content" class="form-label">Your Comment *</label>
-                            <textarea id="content" rows="3" class="form-control" placeholder="Your Comment"></textarea>
+                            <label for="comment" class="form-label">Your Comment *</label>
+                            <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Your Comment"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -589,5 +813,4 @@
             <!-- Bg overlay Start -->
 </div>
     <!-- Bg overlay End -->
-
-    </x-guest-layout>
+</x-guest-layout>

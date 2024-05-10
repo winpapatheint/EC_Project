@@ -72,7 +72,7 @@
                                     <th>Price</th>
                                     @foreach($comparelistProducts as $product)
                                         <td class="text-content">
-                                        @if ($product->discount_percent != null)
+                                        @if ($product->discount_percent != null || $product->discount_percent != 0)
                                             <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                         @else

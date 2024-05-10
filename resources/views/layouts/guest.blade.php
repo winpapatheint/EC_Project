@@ -56,9 +56,19 @@
     }
 
     </style>
+
 </head>
 
 <body class="bg-effect">
+
+    <!-- latest jquery-->
+    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- jquery ui-->
+    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
+
+    <!-- Price Range Js -->
+    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
 
     <!-- Loader Start -->
     <div class="fullpage-loader">
@@ -88,7 +98,7 @@
                             <div class="notification-slider">
                                 <div>
                                     <div class="timer-notification">
-                                        <h6><strong class="me-1">Welcome to the アジア食彩館 EC site!</strong>
+                                        <h6><strong class="me-1">Welcome to the Asian Food Museum EC site!</strong>
                                         </h6>
                                     </div>
                                 </div>
@@ -151,17 +161,6 @@
                             </a>
 
                             <div class="middle-box">
-                                <div class="location-box">
-                                    <button class="btn location-button" data-bs-toggle="modal"
-                                        data-bs-target="#locationModal">
-                                        <span class="location-arrow">
-                                            <i data-feather="map-pin"></i>
-                                        </span>
-                                        <span class="locat-name">Your Location</span>
-                                        <i class="fa-solid fa-angle-down"></i>
-                                    </button>
-                                </div>
-
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
@@ -230,7 +229,7 @@
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif
-                                                <span class="position-absolute top-0 start-100 translate-middle badge">
+                                                <span class="position-absolute top-0 start-100 translate-middle badge" id="unreadMessages">
                                                     {{ $count }}
                                                     <span class="visually-hidden">unread messages</span>
                                                 </span>
@@ -255,8 +254,20 @@
                                                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
                                                                         <h5>{{ $cart->product_name }}</h5>
                                                                     </a>
-                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ number_format($cart->selling_price , 0, '.', ',') }}</h6>
+                                                                    <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
                                                                 </div>
+                                                                <div class="drop-contain">
+                                                                    <h5>Total</h5>
+                                                                   
+                                                                    <h6>¥{{ number_format($cart->quantity * $cart->selling_price , 0, '.', ',') }}</h6>
+                                                                    <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                </div>
+
                                                             </div>
                                                         </li>
                                                         @php
@@ -383,7 +394,7 @@
 
                                             @if(!empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{ url('/user') }}">Dashboard</a>
+                                                <a class="nav-link" href="{{ url('/user') }}">My Menu</a>
 
                                             </li>
                                             @endif
@@ -536,7 +547,7 @@
                                 </div>
 
                                 <div class="service-detail">
-                                    <h5>Free Delivery For Order Over $50</h5>
+                                    <h5>Free Delivery For Order Over ¥5000</h5>
                                 </div>
                             </div>
 
@@ -575,8 +586,7 @@
                             </div>
 
                             <div class="footer-logo-contain">
-                                <p>We are a friendly bar serving a variety of cocktails, wines and beers. Our bar is a
-                                    perfect place for a couple.</p>
+                                <p>Specializing in Asian cuisine, we're dedicated to providing fresh, top-quality food to Japan daily.</p>
 
                                 <ul class="address">
                                     <li>
@@ -1078,12 +1088,6 @@
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
 
-    <!-- latest jquery-->
-    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
-    <!-- jquery ui-->
-    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-
     <!-- Bootstrap js-->
     <script src="{{ asset('frontend/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
@@ -1122,9 +1126,32 @@
 
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.close_button').click(function() {
+                var productId = $(this).data('product-id');
 
-    <!-- Price Range Js -->
-    <script src="{{ asset('frontend/assets/js/ion.rangeSlider.min.js') }}"></script>
+                $.ajax({
+                    url: '/remove-cart-product/' + productId,
+                    method: 'get',
+                    success: function(response) {
+                        console.log(response);
+                        var countElement = $('#unreadMessages');
+                        var count = parseInt(countElement.text());
+                        countElement.text(count - 1);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting cart item:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

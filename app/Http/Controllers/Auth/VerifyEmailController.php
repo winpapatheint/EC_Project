@@ -51,7 +51,6 @@ class VerifyEmailController extends Controller
         $admin = User::where('role','admin')->where('noalert', null)->get();
         Notification::send($admin, new NewUserRegister($admin));
 
-
         return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
     }
 }

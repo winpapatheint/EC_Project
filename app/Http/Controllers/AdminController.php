@@ -14,6 +14,8 @@ use App\Models\Seller;
 use App\Models\Help;
 use App\Models\MultiImg;
 use App\Models\Coupon;
+use App\Models\Top;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -56,6 +58,9 @@ class AdminController extends Controller
                 ->groupBy('users.id', 'users.name','reviews.comment')
                 ->orderByDesc('max_stars_rated')
                 ->first();
+
+        $customers =  Customer::all();
+
         $mostDiscountPercentages = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
         $productsGroupedByDiscount = [];
@@ -65,7 +70,7 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->get();
+        $topSaveTodayProducts = Product::where('coupon_status', 1)->where('status',1)->get();
 
         $reviews = Review::all();
 
@@ -86,7 +91,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-        $coupon = Coupon::where('status', 1)->first();
+        $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')->pluck('products.id')
@@ -107,7 +112,7 @@ class AdminController extends Controller
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupon', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount'));
+         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount','customers'));
     }
 
     public function news()
@@ -527,6 +532,55 @@ class AdminController extends Controller
         return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
     }
 
+
+    public function indextop()
+    {
+        $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Top::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.top',compact('lists','ttlpage','ttl'));
+    }
+
+
+
+    public function indexcustomer()
+    {
+        $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Customer::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.indexcustomer',compact('lists','ttlpage','ttl'));
+    }
+
+
+
     public function indexreview()
     {
         $limit = 10;
@@ -545,8 +599,10 @@ class AdminController extends Controller
             });
         }
 
-        $lists = $query->whereIn('role',['seller','buyer'])
+        $lists = $query->leftjoin('users', 'users.id', 'reviews.user_id','reviews.id')
+                    ->whereIn('role',['seller','buyer'])
                     ->paginate($limit);
+
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -585,9 +641,42 @@ class AdminController extends Controller
         return view('admin.product.product_all',compact('lists','ttlpage','ttl'));
     }
 
-    public function indexshopproduct($id)
+    public function shoplist()
     {
         $limit = 10;
+
+        // Identify expired coupons
+        $expiredCoupons = DB::table('coupons')
+                            ->where('enddate', '<', now())
+                            ->pluck('id');
+
+        // Update status of corresponding sellers
+        $inactivestatus = DB::table('sellers')
+                            ->whereIn('coupon_id', $expiredCoupons)
+                            ->update(['status' => 0]);
+
+        $lists = DB::table('sellers')
+                    ->select('coupons.*','sellers.*')
+                    ->Join('coupons', function ($join) {
+                         $join->on('coupons.id', '=', 'sellers.coupon_id');
+                    })
+                    ->orderBy('sellers.created_at', 'desc')->paginate($limit);
+                    $updval = array('status' => '1',
+                    );
+
+        DB::table('sellers')->update($updval);
+
+        $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.allshop',compact('lists','ttlpage','ttl','coupons'));
+    }
+
+
+    public function indexshopproduct($id)
+    {
+        $limit = 9;
 
         // $shoplist = DB::table('products as P')
         //             ->select( 'P.*','C.*')
@@ -929,7 +1018,7 @@ class AdminController extends Controller
 
     public function indexcategoryproduct($id)
     {
-        $limit =14;
+        $limit =9;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1260,6 +1349,34 @@ class AdminController extends Controller
         return view('admin.product.product_detail',compact('product'));
     }
 
+    public function shopdetail($id)
+    {
+        $shops = DB::table('sellers')
+                    ->select( 'sellers.*')
+                    ->where('sellers.id',$id)->get();
+        $coupon_id = DB::table('sellers')
+                        ->where('id', $id)
+                        ->pluck('coupon_id')
+                        ->first();
+        $coupon_code = DB::table('coupons')
+                        ->where('id', $coupon_id)
+                        ->pluck('coupon_code')
+                        ->first();
+        $shop = $shops[0];
+
+        return view('admin.shopdetail',compact('shop','coupon_code'));
+    }
+
+    public function coupondetail($id)
+    {
+        $coupon = DB::table('coupons')
+                        ->select('coupons.*')
+                        ->where('id', $id)
+                        ->first();
+
+        return view('admin.coupondetail',compact('coupon'));
+    }
+
 
     public function editdata(Request $request, $role, $id)
     {
@@ -1382,6 +1499,13 @@ class AdminController extends Controller
         $product->save();
         return redirect()->back();
     }
+    public function indexshopstatus(Request $request)
+    {
+        $shop = Seller::find($request->shop_id);
+        $shop->status = $request->status;
+        $shop->save();
+        return redirect()->back();
+    }
     public function indexcouponstatus(Request $request)
     {
         $coupon = Coupon::find($request->coupon_id);
@@ -1484,6 +1608,7 @@ class AdminController extends Controller
                 'que.required' => '質問を入力してください',
                 'ans.required' => '答えを入力してください',
                 'phone.regex' => '有効な電話番号を入力してください',
+                'place.regex' => '有効な住所を入力してください',
             ]);
 
         $time = new DateTime();
@@ -1770,6 +1895,18 @@ class AdminController extends Controller
         return redirect('/admin/all/product')->with('success','削除されました。');
 
     }
+    public function  updatecoupon(Request $request)
+    {
+        $time = new DateTime();
+        $updval = array( 'coupon_id' => $request->couponid,
+                        'updated_at' => $time->format('Y-m-d H:i:s')
+                        );
+
+        DB::table('sellers')->where('id',$request->id)->update($updval);
+
+        return redirect('/admin/shoplist')->with('success','coupon added');
+
+    }
 
 
     public function deleteuser(Request $request)
@@ -1813,6 +1950,28 @@ class AdminController extends Controller
         $editmode = true;
 
         return view('admin.addcategory',compact('data','editmode'));
+
+    }
+
+    public function edittop($id)
+    {
+
+        $data = DB::table('tops')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.registertop',compact('data','editmode'));
+
+    }
+
+    public function editcustomer($id)
+    {
+
+        $data = DB::table('customers')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.customer',compact('data','editmode'));
 
     }
 
@@ -1987,16 +2146,13 @@ class AdminController extends Controller
             return view('admin.editsubcattitle',compact('subtitle','categories','category','editmode'));
         }
 
-
     }
 
     public function storesubtitle(Request $request)
     {
-
         $valarr = [
             'category' => 'not_in:0',
-            'subtitle' => 'required|array',
-            'subtitle.*' => 'required|string|max:255', // Validate each subtitle individually
+            'subtitle' => 'required|array|max:255',
         ];
 
         $request->validate($valarr);
@@ -2238,63 +2394,142 @@ class AdminController extends Controller
 
    }
 
-   public function storecoupon(Request $request)
+   public function storetop(Request $request)
+   {
+      if (!empty($request->image)) {
+          $imageName = time().'.'.$request->image->extension();
+          $request->image->move(public_path('images'), $imageName);
+      } else {
+          $imageName = '';
+      }
+
+      $time = new DateTime();
+
+          $updval = array('phaseone' => $request->phaseone,
+                            'phasetwo' => $request->phasetwo,
+                            'phasethree' => $request->phasethree,
+                            'updated_at' => $time->format('Y-m-d H:i:s')
+                          );
+
+          if (!empty($request->image)) {
+              $updval['image'] = $imageName;
+          }
+
+          DB::table('tops')->where('id',$request->id)->update($updval);
+
+          return redirect('/admin/top')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+
+      }
+
+      public function storecustomer(Request $request)
+      {
+         if (!empty($request->image)) {
+             $imageName = time().'.'.$request->image->extension();
+             $request->image->move(public_path('images'), $imageName);
+         } else {
+             $imageName = '';
+         }
+
+         $time = new DateTime();
+
+             $updval = array('title' => $request->title,
+                               'subtitle' => $request->subtitle,
+                               'content' => $request->content,
+                               'name' => $request->name,
+                               'position' => $request->position,
+                               'updated_at' => $time->format('Y-m-d H:i:s')
+                             );
+
+             if (!empty($request->image)) {
+                 $updval['image'] = $imageName;
+             }
+
+             DB::table('customers')->where('id',$request->id)->update($updval);
+
+             return redirect('/admin/indexcustomer')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+
+         }
+
+
+
+    public function storecoupon(Request $request)
     {
+        $existingCoupon = DB::table('coupons')
+        ->where('coupon_code', $request->code)
+        ->exists();
+
+        if ($existingCoupon) {
+
+            $request->validate([
+                'code' => 'required|string|max:255|unique:coupons,coupon_code',
+                ], [
+                'code.required' => 'Code is required.',
+                'code.unique' => 'Coupon code "'.$request->code.'" already exists. Please choose a different one.',
+                ]);
+        }
+
         if (empty($request->id)) {
         $request->validate(['title' => 'required|string|max:255',
         'code' => 'required|string|max:255',
         'disamount' => 'required|numeric|max:9999999999.999999',
         'miniamount' => 'required|numeric|max:9999999999.999999',
-        'validamount' => 'required|numeric|max:9999999999.999999',
-        'validdate' => 'required|date',
+        'validcount' => 'required|numeric|max:9999999999.999999',
+        'startdate' => 'required|date',
+        'enddate' => 'required|date',
         ],
             [
-                'code.required' => 'コードを入力してください',
+                'code.required' => 'code is required',
                 'disamount.required' => 'disamount is required',
                 'miniamount.required' => 'miniamount is required',
-                'validamount.required' => 'validamount is required',
+                'validcount.required' => 'validcount is required',
                 'validdate.required' => 'validdate is required',
                 ]);
             }
 
-       $time = new DateTime();
+        $time = new DateTime();
 
-       if (empty($request->id)) {
+        if (!$existingCoupon) {
+            if (empty($request->id)) {
 
-           DB::table('coupons')->insert([
-               'name' => $request->title,
-               'coupon_code' => $request->code,
-               'discount_amount' => $request->disamount,
-               'mini_amount' => $request->miniamount,
-               'valid_amount' => $request->validamount,
-               'valid_date' => $request->validdate,
-               'created_at' => $time->format('Y-m-d H:i:s'),
-               'updated_at' => $time->format('Y-m-d H:i:s')
-           ]);
+                DB::table('coupons')->insert([
+                    'name' => $request->title,
+                    'coupon_code' => $request->code,
+                    'discount_amount' => $request->disamount,
+                    'mini_amount' => $request->miniamount,
+                    'valid_count' => $request->validcount,
+                    'startdate' => $request->startdate,
+                    'enddate' => $request->enddate,
+                    'status' => '1',
+                    'created_at' => $time->format('Y-m-d H:i:s'),
+                    'updated_at' => $time->format('Y-m-d H:i:s')
 
-           $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-           return redirect('/admin/coupon')->with('success', $msg );
-       } else {
+                ]);
 
-           $updval = array('name' => $request->title,
-                            'coupon_code' => $request->code,
-                            'discount_amount' => $request->disamount,
-                            'mini_amount' => $request->miniamount,
-                            'valid_amount' => $request->validamount,
-                            'valid_date' => $request->validdate,
-                            'updated_at' => $time->format('Y-m-d H:i:s')
-                           );
+                $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+                return redirect('/admin/coupon')->with('success', $msg );
+            } else {
 
-           DB::table('coupons')->where('id',$request->id)->update($updval);
+                $updval = array('name' => $request->title,
+                                'coupon_code' => $request->code,
+                                'discount_amount' => $request->disamount,
+                                'mini_amount' => $request->miniamount,
+                                'valid_count' => $request->validcount,
+                                'startdate' => $request->startdate,
+                                'enddate' => $request->enddate,
+                                'updated_at' => $time->format('Y-m-d H:i:s')
+                                );
 
-           return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+                DB::table('coupons')->where('id',$request->id)->update($updval);
 
-       }
+                return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
 
-   }
+            }
+        }
 
-   public function storeproduct(Request $request)
-     {
+    }
+
+    public function storeproduct(Request $request)
+    {
         $time = new DateTime();
 
         //commision calculate
@@ -2360,9 +2595,7 @@ class AdminController extends Controller
     public function storecategory(Request $request)
      {
 
-        $valarr = array('title' => 'required|string|max:255',
-
-                    );
+        $valarr = array('title' => 'required|string|max:255',);
 
         if (empty($request->id)) {
             $valarr['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:2048';

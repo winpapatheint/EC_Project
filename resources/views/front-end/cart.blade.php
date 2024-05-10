@@ -34,11 +34,22 @@
                         $subTotal = 0;
                         $total = 0;
                     @endphp
-                    @foreach($cartLists as $cartlist)
                     <div class="cart-table">
                         <div class="table-responsive-xl">
-                            <table class="table">
+                            <table class="table cart-table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td><h5>Price(tax inc)</h5></td>
+                                        <td><h5>Quantity</h5></td>
+                                        <td><h5>Total</h5></td>
+                                        <td><h5>Coupon</h5></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr><td></td></tr>
+                                </thead>
                                 <tbody>
+                                @foreach($cartLists as $cartlist)
                                     <tr class="product-box-contain">
                                         <td class="product-detail">
                                             <div class="product border-0">
@@ -80,10 +91,10 @@
                                         
                                         
                                         <td class="price">
-                                            <h4 class="table-title text-content">Price</h4>
                                         @if($cartlist->discount_percent)
-                                            <h5>¥ {{ number_format($discountedPrices[$cartlist->id]['discounted_price'], 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</del></h5>
-                                            <h6 class="theme-color">You Save : ¥ {{ number_format($discountedPrices[$cartlist->id]['save_amount'], 0, '.', ',') }}</h6>  
+                                            <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}<del class="text-content">¥ {{ number_format($cartlist->original_price, 0, '.', ',') }}</del></h5>
+
+                                            <h6 class="theme-color">You Save : ¥ {{ number_format(($cartlist->original_price - $cartlist->selling_price), 0, '.', ',') }}</h6>  
                                         @else
                                             <h5>¥ {{ number_format($cartlist->selling_price, 0, '.', ',') }}</h5>
                                         @endif
@@ -91,62 +102,58 @@
                       
                 
                                         <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
                                             <div class="quantity-price">
                                                 <div class="cart_qty">
-                                                    <form id="updateCartForm" method="POST" action="{{ route('update_cart_qty', $cartlist->cart_id, $cartlist->product_id) }}">
-                                                        @csrf
                                                         <div class="input-group qty-box">
-                                                            <button type="submit" class="btn qty-left-minus" data-type="minus" data-field="">
+                                                            <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
                                                                 <i class="fa fa-minus ms-0"></i>
                                                             </button>
-                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}">
-                                                            <button type="submit" class="btn qty-right-plus" data-type="" data-field="">
+                                                            <input class="form-control input-number qty-input" type="text" name="quantity" value="{{ $cartlist->quantity }}" data-cart-id="{{ $cartlist->cart_id }}">
+                                                            <button type="button" class="btn qty-right-plus" data-type="" data-field="">
                                                                 <i class="fa fa-plus ms-0"></i>
                                                             </button>
                                                         </div>
-                                                    </form>
+                                                  
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="subtotal">
-                                            <h4 class="table-title text-content">Total</h4>
-                                        @if($cartlist->discount_percent != 0)
+                                        <td class="subtotal" style="min-width: 100px;">
                                             @php
-                                                $discountedPrice = $discountedPrices[$cartlist->id]['discounted_price'];
-                                                $quantity = $cartlist->quantity;
-                                                $totalAmount = $discountedPrice * $quantity;
-                                                $subTotal += $totalAmount;
-                                            @endphp
-                                            <h5>¥ {{ number_format($totalAmount , 0, '.', ',') }}</h5>
-                                        @else
-                                            @php
-                                                $sellingPrice = $cartlist->selling_price;
-                                                $quantity = $cartlist->quantity;
-                                                $totalAmount1 = $sellingPrice * $quantity;
+                                                $totalAmount1 = $cartlist->selling_price * $cartlist->quantity;
                                                 $subTotal += $totalAmount1;
                                             @endphp
                                             <h5>¥ {{ number_format($totalAmount1 , 0, '.', ',') }} </h5>
-                                        @endif
+                                        </td>
+                                        
+                                        <td class="coupon" style="min-width: 100px;">
+                                            @if($cartlist->coupon_code)
+                                            <button class="theme-bg-color btn-sm btn-animation proceed-btn fw-bold"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#viewCoupon{{ $cartlist->coupon_id }}"
+                                                onclick="">{{ $cartlist->coupon_code }}
+                                            </button>
+                                            @else
+                                            <h5>-</h5>
+                                            @endif
                                         </td>
                                            
                                         <td class="save-remove">
                                             <form method="POST" action="{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}">
                                                 @csrf
-                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">Remove</button>
+                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" 
+                                                style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">
+                                                Remove</button>
                                             </form>
                                         </td> 
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                @endforeach
                 </div>
                 
                 <div class="col-xxl-3">
-                <form action="{{ route('checkout') }}" method="POST">
-                                @csrf
                         <div class="summery-box p-sticky">
                             <div class="summery-header">
                                 <h3>Cart Total</h3>
@@ -154,6 +161,10 @@
                             @if ($couponapplycheck == 1)
                             <div class="alert alert-success alert-block" id="alert-success">
                                 <strong>Invalid Coupon Code</strong>
+                            </div>
+                            @elseif ($couponapplycheck != null)
+                            <div class="alert alert-success alert-block" id="alert-success">
+                                <strong>Buy at least ¥{{$couponapplycheck}}</strong>
                             </div>
                             @endif
                             <div class="summery-contain" id="ts-form">
@@ -193,48 +204,142 @@
                                 </ul>
                             </div>
 
-                            <ul class="summery-total">
-                                <li class="list-total border-top-0">
-                                    <h4>Total (JPY)</h4>
-                                    @if($discount)
-                                        @php 
-                                            $Total  = $subTotal + 500 - $discount
-                                        @endphp
-                                    @else
-                                        @php
-                                            $Total  = $subTotal + 500
-                                        @endphp
-                                    @endif
-                                    <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
-                                </li>
-                                
-                            </ul>              
-                            
-                                <input type="hidden" name="subTotal" value="{{ $subTotal }}">
-                                <input type="hidden" name="shipping" value="500">
-                                <input type="hidden" name="coupon_discount" value="{{ $discount }}">
-                                <input type="hidden" name="total" value="{{ $Total }}">
-                                
-                            <div class="button-group cart-button">
-                                <ul>
-                                    <li>
-                                        <button type="submit"
-                                            class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                            <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
+                                <ul class="summery-total">
+                                    <li class="list-total border-top-0">
+                                        <h4>Total (JPY)</h4>
+                                        @if($discount)
+                                            @php 
+                                                $Total  = $subTotal + 500 - $discount
+                                            @endphp
+                                        @else
+                                            @php
+                                                $Total  = $subTotal + 500
+                                            @endphp
+                                        @endif
+                                        <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
                                     </li>
-                                </ul>
-                            </div>
-                            
+                                    
+                                </ul>              
+                                
+                                    <input type="hidden" name="subTotal" value="{{ $subTotal }}">
+                                    <input type="hidden" name="shipping" value="500">
+                                    <input type="hidden" name="coupon_discount" value="{{ $discount }}">
+                                    <input type="hidden" name="total" value="{{ $Total }}">
+                                    
+                                <div class="button-group cart-button">
+                                    <ul>
+                                        <li>
+                                            <button type="submit"
+                                                class="btn btn-animation proceed-btn fw-bold">Process To Checkout</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
                         </div>
-                        </form>
                 </div>
 
             </div>
         </div>
     </section>
     <!-- Cart Section End -->
-<script>
-    document.getElementById('applyButton').addEventListener('click', function() {
-        window.location.href = "{{ route('apply_coupon_code') }}";
+
+    @foreach($cartLists as $cartlist)
+    @if($cartlist->coupon_id)
+    <div class="modal fade theme-modal remove-profile" id="viewCoupon{{ $cartlist->coupon_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        @php
+                            $coupon = DB::table('coupons')->where('id', $cartlist->coupon_id)->first();
+                        @endphp
+                        <div class="banner-contain">
+                            <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                            <div class="banner-details p-center p-4 text-white text-center">
+                                <div>
+                                    <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
+                                    <h4 class="lh-base fw-bold offer-text">
+                                        Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
+                                            ¥{{ $coupon->mini_amount}}
+                                    </h4>
+                                    <h5 class="lh-base fw-bold offer-text" style="color: black;">Expired Date :
+                                        {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
+                                        {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                    </h5>
+                                    <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @endforeach
+    <script>
+        document.getElementById('applyButton').addEventListener('click', function() {
+            var couponCode = document.getElementById('exampleFormControlInput1').value;
+            if (couponCode)
+            {
+                window.location.href = "{{ route('apply_coupon_code') }}?coupon=" + encodeURIComponent(couponCode);
+            }
+        });
+    </script>
+    <script>
+    $('.qty-box .qty-right-plus').on('click', function () {
+        var $qty = $(this).parents(".qty-box").find(".qty-input");
+        var currentVal = parseInt($qty.val(), 10);
+        if (!isNaN(currentVal)) {
+            if (currentVal < 99) {
+                $qty.val(currentVal + 1);
+                var NewCardId = $qty.data('cart-id'); // Retrieve the cart ID
+                updateQuantity(NewCardId, $qty.val());
+            }
+        }
     });
-</script>
+
+    $('.qty-box .qty-left-minus').on('click', function () {
+        var $qty = $(this).parents(".qty-box").find(".qty-input");
+        var currentVal = parseInt($qty.val(), 10);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            $qty.val(currentVal - 1);
+            var NewCardId = $qty.data('cart-id'); // Retrieve the cart ID
+            updateQuantity(NewCardId, $qty.val());
+        }
+    });
+
+    function updateQuantity(cardId, quantity) {
+        // Send AJAX request to update quantity
+        $.ajax({
+            type: "POST",
+            url: "/cart/" + cardId,
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'quantity': quantity
+            },
+            success: function (response) {
+                // Handle success response if needed
+                // alert(response.message);
+                console.log('Quantity updated successfully.');
+                if (response.redirect_url) {
+                // Redirect to the provided URL
+                window.location.href = response.redirect_url;
+            }
+            },
+            error: function (xhr, status, error) {
+                // Handle error response if needed
+                console.error('Error updating quantity:', error);
+            }
+        });
+    }
+
+    </script>
 </x-guest-layout>

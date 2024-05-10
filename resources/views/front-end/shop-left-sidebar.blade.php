@@ -539,7 +539,7 @@
                         <div class="col-lg-6">
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
-                                @if ($product->discount_percent != null)
+                                @if ($product->discount_percent != null || $product->discount_percent != 0)
                                     <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                     <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                 @else
@@ -618,36 +618,7 @@
     <!-- Quick View Modal Box End -->
     @endif
     @endforeach
-    <!-- latest jquery-->
-    <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
-    <!-- jquery ui-->
-    <script src="{{ asset('frontend/assets/js/jquery-ui.min.js') }}"></script>
-
-    <script>
-        jQuery(document).ready(function($) {
-            var rangeSlider = $(".js-range-slider").ionRangeSlider({
-                type: "double",
-                grid: true,
-                min: 0,
-                max: 1000000,
-                from: 0,
-                to: 1000000,
-                prefix: "¥"
-            });
-
-            var price = "{{ $price }}";
-
-            if (price !== null) {
-                var priceRange = price.split(';');
-
-                rangeSlider.data("ionRangeSlider").update({
-                    from: parseFloat(priceRange[0]),
-                    to: parseFloat(priceRange[1])
-                });
-            }
-        });
-    </script>
     <script>
         document.getElementById("drop1").addEventListener("click", function() {
             document.getElementById("sortValue").value = "1";
@@ -675,6 +646,22 @@
         });
         document.getElementById("searchBtn").addEventListener("click", function() {
             document.getElementById("searchForm").submit();
+        });
+    </script>
+    <script>
+        jQuery(document).ready(function($) {
+            var rangeSlider = $(".js-range-slider");
+
+            var price = "{{ $price }}";
+
+            if (price !== null) {
+                var priceRange = price.split(';');
+
+                rangeSlider.data("ionRangeSlider").update({
+                    from: parseFloat(priceRange[0]),
+                    to: parseFloat(priceRange[1])
+                });
+            }
         });
     </script>
 

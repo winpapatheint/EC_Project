@@ -1,6 +1,8 @@
 
 <x-auth-layout>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         .error{
             margin:0 auto;
@@ -88,35 +90,47 @@
 
 
                                             <div class="mb-4 row  align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Valid Amount</label>
+                                                <label class="form-label-title col-sm-3 mb-0">Valid Count</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control" type="number" placeholder="Valid Amount" name="validamount" id="validamount"
-                                                        value="{{ old('validamount') ?? $data->valid_amount ?? '' }}">
-                                                    <p style="display:none" class="validamount error text-danger"></p>
-                                                        @if (!empty($error['validamount']))
-                                                            @foreach ($error['validamount'] as  $key => $value)
-                                                                <p class="validamount error text-danger">{{ $value }}</p>
+                                                    <input class="form-control" type="number" placeholder="Valid Count" name="validcount" id="validcount"
+                                                        value="{{ old('validcount') ?? $data->valid_count ?? '' }}">
+                                                    <p style="display:none" class="validcount error text-danger"></p>
+                                                        @if (!empty($error['validcount']))
+                                                            @foreach ($error['validcount'] as  $key => $value)
+                                                                <p class="validcount error text-danger">{{ $value }}</p>
                                                             @endforeach
                                                         @endif
                                                 </div>
                                             </div>
-
-
-                                            <div class="mb-4 row  align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Valid Date</label>
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0" for="startdate">Start Date</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control" type="date" placeholder="Valid Date" name="validdate" id="validdate"
-                                                        value="{{ old('validdate') ?? $data->valid_date ?? '' }}">
-                                                    <p style="display:none" class="validdate error text-danger"></p>
-                                                        @if (!empty($error['validdate']))
-                                                            @foreach ($error['validdate'] as  $key => $value)
-                                                                <p class="validdate error text-danger">{{ $value }}</p>
-                                                            @endforeach
-                                                        @endif
+                                                    <input class="form-control" type="datetime-local" placeholder="Start Date" name="startdate"
+                                                    id="startdate" value="{{ !empty($data->startdate) ? date('Y-m-d\TH:i', strtotime($data->startdate)) : '' }}">
+                                                    <p style="display:none" class="startdate error text-danger"></p>
+                                                    @if (!empty($error['startdate']))
+                                                        @foreach ($error['startdate'] as $key => $value)
+                                                            <p class="startdate error text-danger">{{ $value }}</p>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
 
-                                  
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">End Date</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="datetime-local" placeholder="End Date" name="enddate"
+                                                    id="enddate" step="1" min="2000-01-01T00:00:00" max="2099-12-31T23:59:59" value="{{ old('enddate') ?? $data->enddate ?? '' }}">
+                                                    <p style="display:none" class="endate error text-danger"></p>
+                                                    @if (!empty($error['enddate']))
+                                                        @foreach ($error['enddate'] as $key => $value)
+                                                            <p class="enddate error text-danger">{{ $value }}</p>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            </div>
+
                                             <button type="submit" class="btn btn-animation ms-auto fw-bold">
                                                 @if (!$editmode)
                                                     <i class="fa fa-user-plus" aria-hidden="true"></i>

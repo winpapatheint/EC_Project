@@ -34,7 +34,8 @@
                                                 <th>Discount_amount</th>
                                                 <th>Mini_amount</th>
                                                 <th>Valid_amount</th>
-                                                <th>Valid_date</th>
+                                                <th>Startdate</th>
+                                                <th>Enddate</th>
                                                 <th>Status</th>
                                                 <th>Option</th>
                                             </tr>
@@ -50,16 +51,17 @@
                                                     <td data-label="タイトル">{{ $list->coupon_code }}</td>
                                                     <td data-label="タイトル">{{ $list->discount_amount }}</td>
                                                     <td data-label="タイトル">{{ $list->mini_amount }}</td>
-                                                    <td data-label="タイトル">{{ $list->valid_amount }}</td>
-                                                    <td data-label="タイトル">{{ $list->valid_date }}</td>
+                                                    <td data-label="タイトル">{{ $list->valid_count }}</td>
+                                                    <td data-label="タイトル">{{ $list->startdate }}</td>
+                                                    <td data-label="タイトル">{{ $list->enddate }}</td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
-                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" 
-                                                               data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" 
+                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
+                                                               data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
                                                                data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>
-                                                   
+
                                                     <td>
                                                         <ul>
                                                             <li>

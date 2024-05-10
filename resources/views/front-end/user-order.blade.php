@@ -43,20 +43,27 @@
                         </div>
                         <div class="profile-box">
                             <div class="cover-image">
-                                <img src="../assets/images/inner-page/cover-img.jpg" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('frontend/assets/images/inner-page/cover-img.jpg') }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </div>
 
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
-                                        <img src="../assets/images/inner-page/user/1.jpg"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
-                                            </i>
-                                        </div>
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
+                                        <img src="{{ asset('frontend/assets/images/profile.png') }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -80,18 +87,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -128,7 +135,7 @@
                                         <th scope="col">Date</th>
                                         <th scope="col">Order Code</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">Amount</th>
+                                        <th scope="col">Amount(tax inc)</th>
                                         <th scope="col">Payment Method</th>
                                         <th scope="col">Option</th>
                                     </tr>
@@ -142,7 +149,7 @@
                                             <td>{{ $counter++ }}</td>
                                             
                                             <td>
-                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</h6>
+                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</h6>
                                             </td>
 
                                             <td>
@@ -161,15 +168,10 @@
 
                                             <td>
                                                 <ul>
-                                                    
                                                     <li>
                                                         <a href="{{route ('user_order_details',['id' => $item->order_id]) }}">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
-                                                    </li>
-                                                    <li>
-                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" href="{{route ('user_order_tracking',['id' => $item->order_id]) }}">Tracking</a>
-                                                                                                                                                                                         
                                                     </li>
                                                 </ul>
                                             </td>

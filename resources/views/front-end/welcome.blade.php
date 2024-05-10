@@ -708,8 +708,8 @@
                             <div class="row">
                                 <div class="col-xxl-4 col-lg-5 col-md-7 col-sm-9 offset-xxl-2 offset-md-1">
                                     <div class="newsletter-detail">
-                                        <h2>Get access to the latest information.</h2>
-                                        <h5>¥ 500 discount for your first order.</h5>
+                                        <h2>Join Our Newsletter And Get...</h2>
+                                        <h5>Get access to the latest information.</h5>
                                         <div class="input-box">
                                             <input type="email" class="form-control" id="exampleFormControlInput1"
                                                 placeholder="Enter Your Email">

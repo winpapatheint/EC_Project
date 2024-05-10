@@ -98,7 +98,7 @@
                             <div class="notification-slider">
                                 <div>
                                     <div class="timer-notification">
-                                        <h6><strong class="me-1">Welcome to the アジア食彩館 EC site!</strong>
+                                        <h6><strong class="me-1">Welcome to the Asian Food Museum EC site!</strong>
                                         </h6>
                                     </div>
                                 </div>
@@ -586,8 +586,7 @@
                             </div>
 
                             <div class="footer-logo-contain">
-                                <p>We are a friendly bar serving a variety of cocktails, wines and beers. Our bar is a
-                                    perfect place for a couple.</p>
+                                <p>Specializing in Asian cuisine, we're dedicated to providing fresh, top-quality food to Japan daily.</p>
 
                                 <ul class="address">
                                     <li>

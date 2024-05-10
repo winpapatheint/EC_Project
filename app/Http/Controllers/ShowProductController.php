@@ -406,8 +406,8 @@ class ShowProductController extends Controller
                                     ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
                                     ->whereDate('order_details.created_at', Carbon::today())
                                     ->where('products.status', '=', '1')
-                                    ->select('products.*') // Select only the columns from the 'products' table
-                                    ->distinct('order_details.product_id') // Retrieve distinct product_ids
+                                    ->select('products.*')
+                                    ->distinct('order_details.product_id')
                                     ->paginate($limit, ['*'], 'page', $page);
 
                 $filterForProduct = Product::with('Category')
@@ -421,7 +421,7 @@ class ShowProductController extends Controller
 
             if($topic == 'top-50-offers')
             {
-                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)
+                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(9)
                 ->paginate($limit, ['*'], 'page', $page);
 
                 $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();

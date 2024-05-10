@@ -54,7 +54,7 @@
                                 <h6 class="unit mt-1">{{ $wishlistProduct->product_size }}</h6>
                                 <h5 class="price">
                                     <span class="theme-color">¥{{ number_format($wishlistProduct->selling_price, 0, '', ',') }}</span>
-                                    @if ($wishlistProduct->discount_percent != null)
+                                    @if ($wishlistProduct->discount_percent != 0)
                                     <del>¥{{ number_format($wishlistProduct->selling_price, 0, '', ',') }}</del>
                                     @endif
                                 </h5>

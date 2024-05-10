@@ -339,7 +339,7 @@
                                 </span>
                                 <p>Don't miss this opportunity at a special discount just for this week.</p>
                             </div>
-                            <div class="timing-box">
+                            {{-- <div class="timing-box">
                                 <div class="timing">
                                     <i data-feather="clock"></i>
                                     <h6 class="name">Expires in :</h6>
@@ -375,6 +375,13 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+                            </div> --}}
+                            <div class="timing-box">
+                                <div class="timing">
+                                    <i data-feather="clock"></i>
+                                    <h6 class="name">Today :</h6>
+                                    <h6 class="name" id="formatted-date"></h6>
                                 </div>
                             </div>
                         </div>
@@ -422,7 +429,7 @@
                                                             <h5 class="sold text-content">
                                                                     <span class="theme-color price">¥{{ number_format($topSaveProduct->selling_price, 0, '.', ',') }}</span>
 
-                                                                @if ($topSaveProduct->discount_percent != null)
+                                                                @if ($topSaveProduct->discount_percent != 0)
                                                                     <del>¥{{ number_format($topSaveProduct->original_price, 0, '.', ',') }}</del>
                                                                 @endif
                                                             </h5>
@@ -741,12 +748,18 @@
         @endphp
 
         <!-- Timer Js -->
-        <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
+        <!-- <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
         <script>
             var remainingTime = {{ $remainingTime }};
             var deadline = new Date(Date.parse(new Date()) + remainingTime);
             console.log(deadline);
             initializeClock('clockdiv-1', deadline);
+        </script> -->
+
+        <script>
+            var today = new Date();
+            var formattedDate = today.getFullYear() + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + ('0' + today.getDate()).slice(-2);
+            document.getElementById("formatted-date").innerText = formattedDate;
         </script>
 
 

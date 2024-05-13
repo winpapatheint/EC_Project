@@ -69,10 +69,8 @@
                                             alt="">
                                         <div class="home-detail p-center-left home-p-sm w-75">
                                             <div>
-                                            @if ($productsGroupedByDiscount[50] != null)
                                                 <h2 class="mt-0 text-danger">50% <span class="discount text-title">OFF</span>
                                                 </h2>
-                                            @endif
                                                 <h3 class="theme-color">Nut Collection</h3>
                                                 <p class="w-75">We deliver organic vegetables & fruits</p>
                                             @if ($productsGroupedByDiscount[50] != null)
@@ -203,14 +201,14 @@
                                     <li>
                                         <div class="category-list">
                                             <h5 class="ms-0 text-title">
-                                                <a href="{{ route('show-discount-product', ['topic' => 'value-of-the-day']) }}">Value of the Day</a>
+                                                <a href="{{ route('show-discount-product', ['topic' => 'value-of-the-day']) }}">Today Best Seller</a>
                                             </h5>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="category-list">
                                             <h5 class="ms-0 text-title">
-                                                <a href="{{ route('show-discount-product', ['topic' => 'top-50-offers']) }}">Top 50 Offers</a>
+                                                <a href="{{ route('show-discount-product', ['topic' => 'top-50-offers']) }}">Top 50 Discounts</a>
                                             </h5>
                                         </div>
                                     </li>
@@ -690,7 +688,7 @@
                                     </div>
 
                                     <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
-                                        <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} </h6>
+                                        <h6>{{ date('Y/m/d', strtotime($list->created_at)) }}</h6>
                                         <h5>{{ $list->title }}</h5>
                                     </a>
                                 </div>

@@ -145,10 +145,16 @@
                                             $orderedCount += $ordered->qty;
                                         @endphp
                                     @endforeach
-                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
+                                    @php
+                                    $leftProduct = $product->product_qty - $orderedCount;
+                                    @endphp
+                                        <h6>Please hurry! Only {{ $leftProduct }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            if($leftProduct >= 10)
+                                            $percentage = 100;
+                                            else
+                                            $percentage = ($leftProduct) * 10;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>

@@ -82,10 +82,12 @@ class AdminController extends Controller
             ->orderByDesc('total_orders')
             ->get();
 
+        $endDate = Carbon::now()->endOfDay();
+        $startDate = Carbon::now()->subDays(7)->startOfDay();
         $trendingProducts = DB::table('products')
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
-            ->whereDate('order_details.created_at', '=', Carbon::today())
+            ->whereBetween('order_details.created_at', [$startDate, $endDate])
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
@@ -701,6 +703,7 @@ class AdminController extends Controller
         $page = $validated['page'] ?? 1;
         $sort = $validated['sort'] ?? 0;
         $search = $validated['search'] ?? null;
+        $categories = $validated['categories'] ?? [];
         $price = $validated['price'] ?? null;
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
@@ -709,6 +712,10 @@ class AdminController extends Controller
 
         if (!empty($search)) {
             $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
         }
 
         if (!empty($price)) {
@@ -797,6 +804,13 @@ class AdminController extends Controller
 
         $reviews = Review::all();
 
+        $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                                    ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                                    ->where('products.status', '=', '1')
+                                    ->where('products.seller_id', $id)
+                                    ->groupBy('categories.id')
+                                    ->get();
+
         $ratingWithProductCount = Review::select(
                                         DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
@@ -818,8 +832,10 @@ class AdminController extends Controller
                                     ->where('status', '=', '1')
                                     ->first();
 
+        $shopInfo = Seller::where('user_id', $id)->first();
+
         return view('front-end.shop-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
-        'discount','discountWithProductCount', 'sort', 'reviews'));
+        'discount','discountWithProductCount', 'sort', 'reviews', 'shopInfo', 'categoryWithProductCount', 'categories'));
     }
 
     public function indexsubcategory()
@@ -1035,6 +1051,7 @@ class AdminController extends Controller
         $page = $validated['page'] ?? 1;
         $sort = $validated['sort'] ?? 0;
         $search = $validated['search'] ?? null;
+        $categories = $validated['categories'] ?? [];
         $price = $validated['price'] ?? null;
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
@@ -1043,6 +1060,10 @@ class AdminController extends Controller
 
         if (!empty($search)) {
             $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
         }
 
         if (!empty($price)) {
@@ -1131,6 +1152,13 @@ class AdminController extends Controller
 
         $reviews = Review::all();
 
+        $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                                            ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                                            ->where('products.status', '=', '1')
+                                            ->where('products.category_id', $id)
+                                            ->groupBy('categories.id')
+                                            ->get();
+
         $ratingWithProductCount = Review::select(
                                         DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
@@ -1153,7 +1181,7 @@ class AdminController extends Controller
                                     ->first();
 
         return view('front-end.category-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
-        'discount','discountWithProductCount', 'sort', 'reviews'));
+        'discount','discountWithProductCount', 'sort', 'reviews', 'categories', 'categoryWithProductCount'));
     }
 
     public function indexsubcategoryproduct($id)
@@ -1175,6 +1203,7 @@ class AdminController extends Controller
         $page = $validated['page'] ?? 1;
         $sort = $validated['sort'] ?? 0;
         $search = $validated['search'] ?? null;
+        $categories = $validated['categories'] ?? [];
         $price = $validated['price'] ?? null;
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
@@ -1183,6 +1212,10 @@ class AdminController extends Controller
 
         if (!empty($search)) {
             $query->where('product_name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
         }
 
         if (!empty($price)) {
@@ -1271,6 +1304,13 @@ class AdminController extends Controller
 
         $reviews = Review::all();
 
+        $categoryWithProductCount = Category::leftJoin('products', 'categories.id', '=', 'products.category_id')
+                                    ->select('categories.*', DB::raw('COUNT(products.category_id) as product_count'))
+                                    ->where('products.status', '=', '1')
+                                    ->where('products.sub_category_id', $id)
+                                    ->groupBy('categories.id')
+                                    ->get();
+
         $ratingWithProductCount = Review::select(
                                         DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                     )
@@ -1293,7 +1333,7 @@ class AdminController extends Controller
                                     ->first();
 
         return view('front-end.sub-category-left-sidebar',compact('id','shoplist','ttlpage','ttl', 'price', 'search', 'rating', 'ratingWithProductCount', 'discount',
-        'discount','discountWithProductCount', 'sort', 'reviews'));
+        'discount','discountWithProductCount', 'sort', 'reviews', 'categories', 'categoryWithProductCount'));
     }
 
     public function bloglistdetail($id)

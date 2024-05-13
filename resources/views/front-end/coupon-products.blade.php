@@ -35,7 +35,23 @@
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                             </div>
-
+                            <div class="filter-category">
+                                <div class="filter-title">
+                                    <h2>Filters</h2>
+                                    <a href="{{ route('show-coupon-product', ['id' => $id]) }}">Clear All</a>
+                                </div>
+                                {{-- <ul>
+                                @if(!empty($searchHistory))
+                                @foreach($searchHistory as $searchHist)
+                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
+                                        <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
+                                        <span class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="margin-left: 5px;padding-top: 5px;">
+                                        <i class="fa-solid fa-xmark"></i></span>
+                                    </li>
+                                @endforeach
+                                @endif
+                                </ul> --}}
+                            </div>
                             <div class="accordion custom-accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <div style="display: flex; align-items: center;">
@@ -43,12 +59,6 @@
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;">
                                         <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
                                         style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <div style="display: flex;justify-content: flex-end;">
-                                        <a href="{{ route('show-coupon-product', ['id' => $id]) }}">Clear All</a>
                                     </div>
                                 </div>
 

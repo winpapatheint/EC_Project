@@ -89,11 +89,11 @@ class ShowProductController extends Controller
                 ->orWhereHas('Category', function ($query) use ($sHistory) {
                     $query->where('category_name', 'like', '%' . $sHistory . '%');
                 })
-                ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
-                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                ->orWhereHas('SubCategoryTitle', function ($query) use ($sHistory) {
+                    $query->where('sub_category_titlename', 'like', '%' . $sHistory . '%');
                 })
-                ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
-                    $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+                ->orWhereHas('SubCategory', function ($query) use ($sHistory) {
+                    $query->where('sub_category_name', 'like', '%' . $sHistory . '%');
                 });
             }
 

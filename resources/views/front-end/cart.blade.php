@@ -40,10 +40,10 @@
                                 <thead>
                                     <tr>
                                         <td></td>
-                                        <td><h5>Price(tax inc)</h5></td>
-                                        <td><h5>Quantity</h5></td>
-                                        <td><h5>Total</h5></td>
-                                        <td><h5>Coupon</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Price(tax inc)</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Quantity</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Total</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Coupon</h5></td>
                                         <td></td>
                                     </tr>
                                     <tr><td></td></tr>
@@ -57,32 +57,14 @@
                                                     <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                 </a>
-                                                <div class="product-detail">
+                                                <div class="product-detail" style="width: 100px;">
                                                     <ul>
                                                         <li class="name">
-                                                            <a href=" {{ url('/product-left-thumbnail') }} ">{{ $cartlist->product_name }}</a>
+                                                            <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
                                                         </li>
 
                                                         <li class="text-content"><span class="text-title">Sold
                                                                 By:</span>{{ $cartlist->shop_name }}
-                                                        </li>
-
-                                                        <li class="text-content"><span
-                                                                class="text-title">Quantity</span>{{ $cartlist->product_name }}
-                                                        </li>
-
-                                                        <li class="text-content"><span
-                                                                class="text-title">Color</span>{{ $cartlist->product_color }}
-                                                        </li>
-                                                        <li class="text-content"><span
-                                                                class="text-title">Color</span>{{ $cartlist->product_size }}
-                                                        </li>
-                                                    
-                                                        <li>
-
-                                                            <h5 class="text-content d-inline-block">Price :</h5>
-                                                            <span>{{ $cartlist->selling_price }}</span>
-                                                            <span class="text-content"></span>
                                                         </li>
                                                     </ul>
                                                 </div>

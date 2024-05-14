@@ -22,7 +22,6 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-<<<<<<< HEAD
                                                 <th style="min-width: 50px">No</th>
                                                 <th >Date</th>
                                                 <th style="min-width: 200px">Product Image</th>
@@ -32,18 +31,6 @@
                                                 <th style="min-width: 50px">Discount</th>
                                                 <th style="min-width: 150px">Commision</th>
                                                 <th style="min-width: 150px;">Status</th>
-=======
-                                                <th>No</th>
-                                                <th>Date</th>
-                                                <th>Product Image</th>
-                                                <th>Product Name</th>
-                                                <th>Current Qty</th>
-                                                <th>Price</th>
-                                                <th>Discount</th>
-                                                <th>Commision</th>
-                                                <th>Status</th>
-                                                <th>Special Corner</th>
->>>>>>> f4c0d3dbb4cd28ea174c0055c1e4f6c282e3b63e
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -67,10 +54,10 @@
                                                             <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
 =======
                                                         <label class="switch" style="margin-top: 8px;">
-                                                            <input data-width="100" data-id="{{$list->id}}" 
-                                                            class="toggle-class" type="checkbox" 
-                                                            data-offstyle="outline-secondary" data-toggle="toggle" 
-                                                            data-on="Active" data-off="InActive"  
+                                                            <input data-width="100" data-id="{{$list->id}}"
+                                                            class="toggle-class" type="checkbox"
+                                                            data-offstyle="outline-secondary" data-toggle="toggle"
+                                                            data-on="Active" data-off="InActive"
                                                             {{ $list->status ? 'checked' : '' }}>
 >>>>>>> f4c0d3dbb4cd28ea174c0055c1e4f6c282e3b63e
                                                         </label>
@@ -78,14 +65,14 @@
                                                     <td class="col-sm-9">
                                                         @if($list->special_sub_category_id)
                                                         <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
-                                                                data-bs-toggle="modal" 
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#removeProfile"
                                                                 onclick="showDeleteModal('{{ $list->id }}')"
                                                                 onclick="">Remove
                                                         </button>
                                                         @else
                                                         <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
-                                                                data-bs-toggle="modal" 
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#editAddress{{ $list->id }}"
                                                                 onclick="">Add
                                                         </button>
@@ -241,7 +228,7 @@
                                             Add
                                         </button>
                                     </div>
-                                </form> 
+                                </form>
                             </div>
                         </div>
                     </div>

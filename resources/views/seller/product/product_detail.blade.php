@@ -131,7 +131,7 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{ $data->original_price }}</p>
+                                                <p>¥{{number_format($data->original_price) }}</p>
                                             </div>
                                         </div>
 
@@ -143,9 +143,9 @@
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label class="col-sm-3 form-label-title">Price</label>
+                                            <label class="col-sm-3 form-label-title">Price(tax inc)</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{ $data->selling_price }}</p>
+                                                <p>¥{{number_format($data->selling_price) }}</p>
                                             </div>
                                         </div>
 
@@ -162,9 +162,9 @@
                                             </div>
                                         </div>
                                         <div class="mb-2 row align-items-center">
-                                            <label class="col-sm-3 form-label-title">Delivey Price</label>
+                                            <label class="col-sm-3 form-label-title">Delivey Price(tax inc)</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{ $data->delivery_price }}</p>
+                                                <p>¥{{number_format($data->delivery_price) }}</p>
                                             </div>
                                         </div>
                                         <a href="{{ route('edit.product',$data->id) }}">

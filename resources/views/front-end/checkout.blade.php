@@ -46,7 +46,8 @@
                                         <div class="checkout-title">
                                             <h4>Delivery Address</h4>
                                         </div>
-                                        @foreach($buyerAddress as $buyeraddress)
+                                        @if($buyerAddress->count() > 0)
+                                        @foreach($buyerAddress as $index => $buyeraddress)
                                         <div class="checkout-detail">
                                             <div class="row g-4">
                                                 <div class="col-xxl-6 col-lg-12 col-md-6">
@@ -54,9 +55,9 @@
                                                         <div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="jack"
-                                                                    id="flexRadioDefault2" checked="checked">
+                                                                    id="flexRadioDefault2" {{ $buyeraddress->default == 1 ? 'checked' : '' }}>
                                                             </div>
-                                                            <input type="hidden" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
+                                                            <input type="hidden" id="buyeraddress_id" name="buyeraddress_id" value="{{ $buyeraddress->id }}">
                                                             <input type="hidden" name="buyer_id" value="{{ $buyeraddress->userid }}">
 
                                                             <div class="label">
@@ -92,6 +93,7 @@
                                             </div>
                                         </div>
                                         @endforeach
+                                        @endif
                                     </div>
                                 </li>
 
@@ -131,12 +133,8 @@
                     $productColors = [];
                     $productSizes = [];
                     $productQuantities = [];
-                    $buyerId = $buyerAddress[0]->userid;
-                    $buyerPostCode = $buyerAddress[0]->post_code;
-                    $buyerCity = $buyerAddress[0]->city;
-                    $buyerChome = $buyerAddress[0]->chome;
-                    $buyerBuilding = $buyerAddress[0]->building;
-                    $buyerRoomCode = $buyerAddress[0]->room_no;
+                    $buyerId = $buyerAddress[0]->buyer_id;
+                    $buyerAddressIdFirst = $buyerAddress[0]->id;
                 @endphp
                 <div class="col-lg-4">
                     <div class="right-side-summery-box">
@@ -208,9 +206,16 @@
         </div>
     </section>
     <!-- Checkout section End -->
-
 <script type="text/javascript">
-
+    var Newbuyeraddressid = <?php echo json_encode($buyerAddressIdFirst ); ?>; 
+    document.querySelectorAll('input[name="jack"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                // Get the value of buyeraddress_id using id attribute
+                Newbuyeraddressid = this.closest('.checkout-detail').querySelector('input[name="buyeraddress_id"]').value;console.log(Newbuyeraddressid);
+            }
+        });
+    });
 paypal.Buttons({
 
     style: {
@@ -250,7 +255,7 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-function purchasepaymentdone(total1, callback) {
+function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     var Newproductid = <?php echo json_encode($productIds ); ?>; 
     var Newbuyerid = <?php echo json_encode($buyerId ); ?>; 
     var Newsellerid = <?php echo json_encode($sellerIds ); ?>; 
@@ -261,11 +266,6 @@ function purchasepaymentdone(total1, callback) {
     var Newamount = <?php echo json_encode($amount ); ?>;
     var Newamount1 = <?php echo json_encode($amount1 ); ?>;
     var Newtotalamount = <?php echo json_encode($total1 ); ?>;
-    var Newbuyerpostcode = <?php echo json_encode($buyerPostCode ); ?>; 
-    var Newbuyercity = <?php echo json_encode($buyerCity ); ?>; 
-    var Newbuyerchome = <?php echo json_encode($buyerChome ); ?>; 
-    var Newbuyerbuilding = <?php echo json_encode($buyerBuilding ); ?>; 
-    var Newbuyerroomcode = <?php echo json_encode($buyerRoomCode ); ?>;
 
     $.ajax({
     url: '{{ route("payment_completed") }}',
@@ -282,11 +282,7 @@ function purchasepaymentdone(total1, callback) {
         amount: Newamount,
         amount1: Newamount1,
         totalamount: Newtotalamount,
-        postcode: Newbuyerpostcode,
-        city: Newbuyercity,
-        chome: Newbuyerchome,
-        building: Newbuyerbuilding,
-        room: Newbuyerroomcode,
+        buyeraddressid : Newbuyeraddressid,
         payment: "PayPal"
     },
     async : false,

@@ -72,6 +72,7 @@
     </div>
     <!-- Container-fluid Ends-->
 </div>
+
 <!-- Delete Modal Box Start -->
 @foreach( $subseller as $key => $item )
     <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">

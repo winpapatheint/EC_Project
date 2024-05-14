@@ -1,3 +1,4 @@
+@php $error = $errors->toArray();  @endphp
 @extends('seller.seller_dashboard')
 @section('seller')
 <!-- Page Sidebar Start -->
@@ -24,6 +25,12 @@
                                                         class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
                                                     <div class="col-md-9 col-lg-10">
                                                         <input class="form-control" type="text" name="title">
+                                                        <p style="display:none" class="title error text-danger"></p>
+                                                        @if (!empty($error['title']))
+                                                            @foreach ($error['title'] as  $key => $value)
+                                                                <p class="title error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
 
@@ -31,7 +38,8 @@
                                                     <label
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="file" name="image">
+                                                        <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                                                        <img src="" id="mainThmb">
                                                     </div>
                                                 </div>
 
@@ -41,6 +49,12 @@
                                                         </label>
                                                     <div class="col-md-9 col-lg-10">
                                                         <textarea class="form-control" name="reason" id="" rows="5"></textarea>
+                                                        <p style="display:none" class="reason error text-danger"></p>
+                                                        @if (!empty($error['reason']))
+                                                            @foreach ($error['reason'] as  $key => $value)
+                                                                <p class="reason error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -60,4 +74,16 @@
     <!-- New User End -->
 </div>
 <!-- Page Sidebar End -->
+
+<script>
+    function mainThamUrl(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('#mainThmb').attr('src', e.target.result).width(80).height(80);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 @endsection

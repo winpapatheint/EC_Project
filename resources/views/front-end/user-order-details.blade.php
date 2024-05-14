@@ -45,13 +45,20 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
                                         <img src="{{ asset('frontend/assets/images/profile.png') }}"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
-                                            </i>
-                                        </div>
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -76,18 +83,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -122,17 +129,15 @@
                                         @endphp
                                     @endif
                                         <div>
-                                            <h5>Order ID {{ $orders->order_code }}</h5>
+                                            <h5>Order Code <span style="color: var(--theme-color);">{{ $orders->order_code }}</span></h5>
                                         </div>
-                                        <div class="card-order-section">   
-                                            <ul>
-                                                <li>{{ \Carbon\Carbon::parse($orders->created_at)->format('F d, Y') }}</li>
-                                                <li>{{ $orders->total_qty }} items</li>
-                                                <li>Total ¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</li>
-                                            </ul>    
+                                        <div class="card-order-section">
+                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->created_at)) }}</h5>
+                                            <h5>Items: <span style="color: var(--theme-color);">{{ $orders->total_qty }}</span></h5>
+                                            <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>   
                                         </div>
-                                    
                                     </div>
+                                    <br>
                                     <div class="bg-inner cart-section order-details-table">
                                         <div class="row g-4">
                                             <div class="col-xl-8">
@@ -140,30 +145,32 @@
                                                     <table class="table cart-table table-borderless">
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="2">Items</th>
+                                                                <th>No</th>
+                                                                <th>Product Name</th>
+                                                                <th>Quantity</th>
+                                                                <th>Price</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         
-                                                        @foreach($orderDetails as $order)
+                                                        @foreach($orderDetails as $index => $order)
                                                         <tbody>
                                                             <tr class="table-order">
                                                                 <td>
-                                                                    <a href="javascript:void(0)">
-                                                                        <img src="assets/images/profile/1.jpg"
-                                                                            class="img-fluid blur-up lazyload" alt="">
-                                                                    </a>
+                                                                    {{ $index + 1 }}
                                                                 </td>
                                                                 <td>
-                                                                    <p>Product Name</p>
                                                                     <h5>{{ $order->product_name }}</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <p>Quantity</p>
                                                                     <h5>{{ $order->qty }}</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <p>Price</p>
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
+                                                                </td>
+                                                                <td>
+                                                                <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" 
+                                                                    href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
                                                                 </td>
                                                             </tr>
 
@@ -210,29 +217,26 @@
                                             <div class="col-xl-4">
                                                 <div class="order-success">
                                                     <div class="row g-4">
-                                                        <h4>summery</h4>
+                                                        <h3>Summery</h3>
                                                         <ul class="order-details">
-                                                            <li>Order ID: {{ $order->order_id }}</li>
-                                                            <li>Order Date: {{ $order->created_at }}</li>
+                                                            <li>Order Code: {{ $order->order_code }}</li>
+                                                            <li>Order Date: {{ date('Y/m/d H:i', strtotime($order->created_at)) }}</li>
                                                             <li>Order Total: ¥ {{ number_format($totalAmount , 0, '.', ',') }}</li>
                                                         </ul>
 
-                                                        <h4>shipping address</h4>
-                                                        <ul class="order-details">
-                                                            <li>{{ $order->address }}</li>
-                                                            <li>568, Suite Ave.</li>
-                                                            <li>Austrlia, 235153 Contact No. 48465465465</li>
-                                                        </ul>
-
                                                         <div class="payment-mode">
-                                                            <h4>payment method</h4>
-                                                            <p>{{ $order->payment_type }}</p>
+                                                            <h4>Shipping address</h4>
+                                                            <ul class="order-details">
+                                                                <li>{{ $order->post_code }}.</li>
+                                                                <li>{{ $order->city }}</li>
+                                                                <li>{{ $order->chome }} chome,</li>
+                                                                <li>{{ $order->building }} - {{ $order->room_no }}</li>
+                                                            </ul>
                                                         </div>
 
-                                                        <div class="delivery-sec">
-                                                            <h3>expected date of delivery: <span>{{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('F d, Y') }}</span>
-                                                            </h3>
-                                                            <a href="order-tracking.html">track order</a>
+                                                        <div class="payment-mode">
+                                                            <h4>Payment method</h4>
+                                                            <p>{{ $order->payment_type }}</p>
                                                         </div>
                                                     </div>
                                                 </div>

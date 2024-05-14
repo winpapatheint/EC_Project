@@ -40,7 +40,7 @@
                                                 <td>
                                                     <a class="d-block">
                                                         <span class="order-image">
-                                                            <img width="100" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
+                                                            <img width="100" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
                                                         </span>
                                                     </a>
                                                 </td>
@@ -49,7 +49,7 @@
                                                 <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
-                                                <td>{{ $item->amount }}</td>
+                                                <td>¥{{ number_format($item->amount) }}</td>
                                                 <td>
                                                     <ul>
                                                         <li>

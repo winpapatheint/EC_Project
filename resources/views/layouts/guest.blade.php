@@ -36,7 +36,7 @@
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/scss/base/_typography.scss') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/review.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/review.min.css') }}">
 
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/scss/vendors/feather-icon/_feather-icon.scss') }}">
@@ -98,7 +98,7 @@
                             <div class="notification-slider">
                                 <div>
                                     <div class="timer-notification">
-                                        <h6><strong class="me-1">Welcome to the アジア食彩館 EC site!</strong>
+                                        <h6><strong class="me-1">Welcome to the Asian Food Museum EC site!</strong>
                                         </h6>
                                     </div>
                                 </div>
@@ -112,21 +112,21 @@
                                 <div class="dropdown theme-form-select">
                                     <button class="btn dropdown-toggle" type="button" id="select-language"
                                         data-bs-toggle="dropdown">
-                                        <img src="../assets/images/country/united-states.png"
+                                        <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
                                             class="img-fluid blur-up lazyload" alt="">
                                         <span>Japanese</span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                                <img src="../assets/images/country/united-kingdom.png"
+                                                <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                                 <span>Japanese</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                                <img src="../assets/images/country/germany.png"
+                                                <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                                 <span>English</span>
                                             </a>
@@ -161,17 +161,6 @@
                             </a>
 
                             <div class="middle-box">
-                                <div class="location-box">
-                                    <button class="btn location-button" data-bs-toggle="modal"
-                                        data-bs-target="#locationModal">
-                                        <span class="location-arrow">
-                                            <i data-feather="map-pin"></i>
-                                        </span>
-                                        <span class="locat-name">Your Location</span>
-                                        <i class="fa-solid fa-angle-down"></i>
-                                    </button>
-                                </div>
-
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
@@ -266,11 +255,20 @@
                                                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $cart->product_id]) }}">
                                                                         <h5>{{ $cart->product_name }}</h5>
                                                                     </a>
-                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ $cart->selling_price }}</h6>
+                                                                    <h6><span>{{ $cart->quantity }} x</span> ¥{{ number_format($cart->selling_price , 0, '.', ',') }}</h6>
                                                                     <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
                                                                         <i class="fa-solid fa-xmark"></i>
                                                                     </button>
                                                                 </div>
+                                                                <div class="drop-contain">
+                                                                    <h5>Total</h5>
+                                                                   
+                                                                    <h6>¥{{ number_format($cart->quantity * $cart->selling_price , 0, '.', ',') }}</h6>
+                                                                    <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
+                                                                        <i class="fa-solid fa-xmark"></i>
+                                                                    </button>
+                                                                </div>
+
                                                             </div>
                                                         </li>
                                                         @php
@@ -397,7 +395,7 @@
 
                                             @if(!empty(Auth::user()))
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link" href="{{ url('/user') }}">Dashboard</a>
+                                                <a class="nav-link" href="{{ url('/user') }}">My Menu</a>
 
                                             </li>
                                             @endif
@@ -425,7 +423,7 @@
                                                                     <div class="dropdown-column col-xl-3">
                                                                         <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                                         @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                                            <a class="dropdown-item" href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">
+                                                                            <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
                                                                                 {{ $subCategory->sub_category_name }}
                                                                             </a>
                                                                         @endforeach
@@ -501,7 +499,7 @@
             </li>
 
             <li>
-                <a href="search.html" class="search-box">
+                <a href="{{ url('/search') }}" class="search-box">
                     <i class="iconly-Search icli"></i>
                     <span>Search</span>
                 </a>
@@ -515,7 +513,7 @@
             </li>
 
             <li>
-                <a href="cart.html">
+                <a href="{{ url('/carts') }}">
                     <i class="iconly-Bag-2 icli fly-cate"></i>
                     <span>Cart</span>
                 </a>
@@ -550,7 +548,7 @@
                                 </div>
 
                                 <div class="service-detail">
-                                    <h5>Free Delivery For Order Over $50</h5>
+                                    <h5>Free Delivery For Order Over ¥5000</h5>
                                 </div>
                             </div>
 
@@ -589,8 +587,7 @@
                             </div>
 
                             <div class="footer-logo-contain">
-                                <p>We are a friendly bar serving a variety of cocktails, wines and beers. Our bar is a
-                                    perfect place for a couple.</p>
+                                <p>Specializing in Asian cuisine, we're dedicated to providing fresh, top-quality food to Japan daily.</p>
 
                                 <ul class="address">
                                     <li>

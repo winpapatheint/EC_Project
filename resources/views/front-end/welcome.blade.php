@@ -69,10 +69,8 @@
                                             alt="">
                                         <div class="home-detail p-center-left home-p-sm w-75">
                                             <div>
-                                            @if ($productsGroupedByDiscount[50] != null)
                                                 <h2 class="mt-0 text-danger">50% <span class="discount text-title">OFF</span>
                                                 </h2>
-                                            @endif
                                                 <h3 class="theme-color">Nut Collection</h3>
                                                 <p class="w-75">We deliver organic vegetables & fruits</p>
                                             @if ($productsGroupedByDiscount[50] != null)
@@ -203,14 +201,14 @@
                                     <li>
                                         <div class="category-list">
                                             <h5 class="ms-0 text-title">
-                                                <a href="{{ route('show-discount-product', ['topic' => 'value-of-the-day']) }}">Value of the Day</a>
+                                                <a href="{{ route('show-discount-product', ['topic' => 'value-of-the-day']) }}">Today Best Seller</a>
                                             </h5>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="category-list">
                                             <h5 class="ms-0 text-title">
-                                                <a href="{{ route('show-discount-product', ['topic' => 'top-50-offers']) }}">Top 50 Offers</a>
+                                                <a href="{{ route('show-discount-product', ['topic' => 'top-50-offers']) }}">Top 50 Discounts</a>
                                             </h5>
                                         </div>
                                     </li>
@@ -237,9 +235,9 @@
                                                     class="theme-color fw-bold">Freshes</span> Products</h3>
                                             <h3 class="fw-light">every hour</h3>
                                         @if($seafood != null)
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $seafood]) }}';"
-                                                class="btn btn-animation btn-md mend-auto">Shop Now <i
-                                                    class="fa-solid fa-arrow-right icon"></i></button>
+                                            <button onclick="window.open('{{ route('show-discount-product', ['ids' => $seafood]) }}', '_blank');"
+                                                    class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
+                                            </button>
                                         @endif
                                         </div>
                                     </div>
@@ -257,9 +255,9 @@
                                             <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
                                         @if($vegetableHalfDiscount != null)
                                             <p class="mb-3">Super Offer to 50% Off</p>
-                                            <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
-                                                class="btn btn-animation btn-md mend-auto">Shop Now <i
-                                                    class="fa-solid fa-arrow-right icon"></i></button>
+                                            <button onclick="window.open('{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}', '_blank');"
+                                                    class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
+                                            </button>
                                         @endif
                                         </div>
                                     </div>
@@ -339,7 +337,7 @@
                                 </span>
                                 <p>Don't miss this opportunity at a special discount just for this week.</p>
                             </div>
-                            <div class="timing-box">
+                            {{-- <div class="timing-box">
                                 <div class="timing">
                                     <i data-feather="clock"></i>
                                     <h6 class="name">Expires in :</h6>
@@ -375,6 +373,13 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+                            </div> --}}
+                            <div class="timing-box">
+                                <div class="timing">
+                                    <i data-feather="clock"></i>
+                                    <h6 class="name">Today :</h6>
+                                    <h6 class="name" id="formatted-date"></h6>
                                 </div>
                             </div>
                         </div>
@@ -422,7 +427,7 @@
                                                             <h5 class="sold text-content">
                                                                     <span class="theme-color price">¥{{ number_format($topSaveProduct->selling_price, 0, '.', ',') }}</span>
 
-                                                                @if ($topSaveProduct->discount_percent != null)
+                                                                @if ($topSaveProduct->discount_percent != 0)
                                                                     <del>¥{{ number_format($topSaveProduct->original_price, 0, '.', ',') }}</del>
                                                                 @endif
                                                             </h5>
@@ -437,7 +442,16 @@
                                                                     @endfor
                                                                 </ul>
                                                                 @if ($topSaveProduct->product_qty > 0)
-                                                                    <h6 class="theme-color">{{ $topSaveProduct->product_qty }}In Stock</h6>
+                                                                @php
+                                                                    $orderedCount = 0;
+                                                                    $productOrdered = DB::table('order_details')->where('product_id', $topSaveProduct->id)->get();
+                                                                    foreach($productOrdered as $order)
+                                                                    {
+                                                                        $orderedCount += $order->qty;
+                                                                    }
+                                                                    $leftProduct = $topSaveProduct->product_qty - $orderedCount;
+                                                                @endphp
+                                                                    <h6 class="theme-color">{{ $leftProduct }} In Stock</h6>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -456,17 +470,17 @@
                                 <a href="{{ route('show-coupon-product', ['id' => $coupon->id]) }}">
                                 <div class="section-t-space section-b-space">
                                     <div class="banner-contain">
-                                        <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                                        <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                                         <div class="banner-details p-center p-4 text-white text-center">
                                             <div>
                                                 <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
                                                 <h4 class="lh-base fw-bold offer-text">
-                                                    Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
-                                                        ¥{{ $coupon->mini_amount}}
+                                                    Get ¥{{ number_format($coupon->discount_amount, 0, '', ',') }} Cashback! Min Order of
+                                                        ¥{{ number_format($coupon->mini_amount, 0, '', ',') }}
                                                 </h4>
                                                 <h5 class="lh-base fw-bold offer-text">Expired Date :
-                                                    {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
-                                                    {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                                    {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
+                                                    {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                                 </h5>
                                                 <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                             </div>
@@ -608,12 +622,12 @@
 
                         <div class="best-selling-slider product-wrapper wow fadeInUp">
                         @for ($i = 0; $i < ceil($productCount / 4); $i++)
+                            <div>
+                                <ul class="product-list">
                             @php
                                 $index = $i * 4;
                             @endphp
-                            <div>
-                                <ul class="product-list">
-                                 @for ($j = 0; $j < 4 && ($index + $j) < $productCount; $j++)
+                            @for ($j = 0; $j < 4 && ($index + $j) < $productCount; $j++)
                                     @php
                                         $product = $bestSellerProducts[$index + $j];
                                     @endphp
@@ -635,12 +649,12 @@
                                             </div>
                                         </div>
                                     </li>
-                                @endfor
+                            @endfor
                                 </ul>
                             </div>
+                        @endfor
+                        @endif
                         </div>
-                            @endfor
-                            @endif
 
                         <div class="section-t-space">
                             <div class="banner-contain hover-effect">
@@ -683,7 +697,7 @@
                                     </div>
 
                                     <a href="{{ url('/blogdetail/'.$list->id ) }}" class="blog-detail">
-                                        <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }} </h6>
+                                        <h6>{{ date('Y/m/d', strtotime($list->created_at)) }}</h6>
                                         <h5>{{ $list->title }}</h5>
                                     </a>
                                 </div>
@@ -708,8 +722,8 @@
                             <div class="row">
                                 <div class="col-xxl-4 col-lg-5 col-md-7 col-sm-9 offset-xxl-2 offset-md-1">
                                     <div class="newsletter-detail">
-                                        <h2>Join our newsletter and get...</h2>
-                                        <h5>$20 discount for your first order</h5>
+                                        <h2>Join Our Newsletter And Get...</h2>
+                                        <h5>Get access to the latest information.</h5>
                                         <div class="input-box">
                                             <input type="email" class="form-control" id="exampleFormControlInput1"
                                                 placeholder="Enter Your Email">
@@ -741,12 +755,18 @@
         @endphp
 
         <!-- Timer Js -->
-        <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
+        <!-- <script src="{{ asset('frontend/assets/js/timer1.js') }}"></script>
         <script>
             var remainingTime = {{ $remainingTime }};
             var deadline = new Date(Date.parse(new Date()) + remainingTime);
             console.log(deadline);
             initializeClock('clockdiv-1', deadline);
+        </script> -->
+
+        <script>
+            var today = new Date();
+            var formattedDate = today.getFullYear() + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + ('0' + today.getDate()).slice(-2);
+            document.getElementById("formatted-date").innerText = formattedDate;
         </script>
 
 

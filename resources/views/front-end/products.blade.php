@@ -521,7 +521,7 @@
                                         </div>
                                             <h6 class="unit">{{ $product->product_size }}</h6>
                                         <h5 class="price">
-                                        @if ($product->discount_percent != null)
+                                        @if ($product->discount_percent != 0)
                                             <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                         @else
@@ -582,7 +582,7 @@
                         <div class="col-lg-6">
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
-                                @if ($product->discount_percent != null)
+                                @if ($product->discount_percent != 0)
                                     <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                     <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                 @else

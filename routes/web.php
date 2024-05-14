@@ -37,15 +37,18 @@ Route::post('/products/reviews', [ReviewController::class, 'store'])->name('revi
 route::post('/user-registration/add-user',[UserController::class,'store'])->name('adduser');
 
 Route::get('/user', [UserController::class, 'indexuser'])->middleware(['auth','verified','role:buyer'])->name('user_dashboard');
+Route::post('/user-profile-upload', [UserController::class, 'userProfileUpload']);
 Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user_order');
 Route::get('/user/orderdetails', [UserController::class, 'showOrderDetails'])->name('user_order_details');
+Route::get('/user/orderdetailtracking', [UserController::class, 'showOrderDetailTracking'])->name('order_detail_tracking');
+Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 Route::get('/user/ordertracking', [UserController::class, 'orderTracking'])->name('user_order_tracking');
 
-Route::get('/user/delivery', [UserController::class, 'showDelistatus'])->name('user_deivery_status');
 
 Route::get('/user/addresses', [UserController::class, 'showAddresses'])->name('user_addresses');
 Route::post('/user/addresses', [UserController::class, 'createNewaddress'])->name('add_newaddress');
 Route::post('/user/addresses/edit-address', [UserController::class, 'editAddress'])->name('edit_address');
+Route::get('/set-default-address/{id}', [UserController::class, 'setDefaultAddress'])->name('set_default_address');
 Route::delete('/user/remove-address/{id}', [UserController::class, 'removeAddress'])->name('remove_address');
 
 Route::get('/user/paymentmethod', [UserController::class, 'showCard'])->name('user_cards');
@@ -85,6 +88,7 @@ Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shopli
 
 Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
 Route::get('subcategorysidebar/{subcategoryid}', [AdminController::class, 'indexsubcategoryproduct']);
+Route::get('specialsubcategorysidebar/{subcategoryid}', [AdminController::class, 'indexspecialsubcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 
@@ -200,6 +204,8 @@ Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory'
 Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);
 Route::get('/editsubcategory/{categorytype}/{categoryid}', [AdminController::class, 'editsubcategory']);
 route::post('/admin/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
+route::post('/addtospecial',[AdminController::class,'addToSpecial'])->name('add_to_special_corner');
+route::delete('/removefromspecial/{id}',[AdminController::class,'removeFromSpecial'])->name('remove_from_special_corner');
 
 Route::get('/admin/category', [AdminController::class,'indexsubcategory'])->name('admin.category');
 
@@ -240,7 +246,7 @@ Route::get('/help', [SellerController::class, 'help'])->middleware(['auth','role
 Route::get('/helpadd', [SellerController::class, 'addHelp'])->middleware(['auth','role:seller'])->name('help.add');
 Route::post('/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');
 Route::get('/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middleware(['auth','role:seller'])->name('help.detail');
-Route::get('/helpdelete/{id}', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
+Route::post('/helpdelete', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
 
 
 //Brand
@@ -257,7 +263,7 @@ Route::post('/productupdate', [ProductController::class, 'updateProduct'])->midd
 Route::post('/productdelete', [ProductController::class, 'deleteProduct'])->middleware(['auth','role:seller'])->name('delete.product');
 Route::post('/productstatus', [ProductController::class, 'changeStatus'])->middleware(['auth','role:seller'])->name('change.status');
 Route::post('/product/multiImg', [ProductController::class, 'updateMultiImg'])->middleware(['auth','role:seller'])->name('update.multiImg');
-Route::get('/product/multiImg/delete/{id}', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
+Route::post('/product/multiImg/delete', [ProductController::class, 'deleteMultiImg'])->middleware(['auth','role:seller'])->name('delete.multiImg');
 Route::get('/review', [ProductController::class, 'review'])->middleware(['auth','role:seller'])->name('seller.review');
 Route::post('/reviewstatus', [ProductController::class, 'changeRtStatus'])->middleware(['auth','role:seller'])->name('rating.status');
 Route::post('/reviewupdate', [ProductController::class, 'updateReview'])->middleware(['auth','role:seller'])->name('review.update');

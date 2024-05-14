@@ -51,13 +51,20 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
                                         <img src="{{ asset('frontend/assets/images/profile.png') }}"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" onchange="readURL(this,0)">
-                                            </i>
-                                        </div>
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -82,18 +89,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -125,44 +132,29 @@
                                             
                                                 <tr>
                                                     <th scope="col">No</th>
-                                                    <th scope="col">Date</th>
-                                                    <th scope="col">Order Code</th>
-                                                    <th scope="col">Status</th>  
+                                                    <th scope="col" colspan="2">Product</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Total</th>
+                                                    <th scope="col">Delivered Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php $counter = 1; @endphp
-                                                @if (empty($processes))
+                                                @if ($orders->count() == 0)
                                                     <tr>
                                                         <td colspan="4" style="text-align: center">No data available</td>
                                                     </tr>
                                                 @else
-                                                    @foreach($orders as $order)
+                                                    @foreach($orders as $counter=>$order)
                                                         <tr>
-                                                            <td><h6>{{ $counter++ }}</h6></td>
-                                                            <td><h6>{{ \Carbon\Carbon::parse($order->shipped_date)->format('F d, Y') }}</h6></td> 
-                                                            <td><h6>{{ $order->order_id }}</h6></td>
-                                                            @if (isset($processes[$order->order_id]))
-                                                                @php $item = $processes[$order->order_id]; @endphp
-                                                                @if (!empty($item->confirmed_date))
-                                                                    <td><p class="fw-bold">Confirmed</p></td>
-                                                                    <td><p class="fw-bold">{{ $item->confirmed_date }}</p></td>
-                                                                @elseif (!empty($item->processing_date))
-                                                                    <td><p class="fw-bold">Processing</p></td>
-                                                                    <td><p class="fw-bold">{{ $item->processing_date }}</p></td>
-                                                                @elseif (!empty($item->picked_date))
-                                                                    <td><p class="fw-bold">Picked</p></td>
-                                                                    <td><p class="fw-bold">{{ $item->picked_date }}</p></td>
-                                                                @elseif (!empty($item->shipped_date))
-                                                                    <td><p class="fw-bold">Shipped</p></td>
-                                                                    <td><p class="fw-bold">{{ $item->shipped_date }}</p></td>
-                                                                @else
-                                                                    <td><p class="fw-bold">Delivered</p></td>
-                                                                    <td><p class="fw-bold">{{ $item->delivered_date }}</p></td>
-                                                                @endif
-                                                            @else
-                                                                <td colspan="2"><p class="fw-bold">No process data available</p></td>
-                                                            @endif
+                                                            <td><h6>{{ $counter + 1 }}</h6></td>
+                                                            <td>
+                                                            <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
+                                                            class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
+                                                            </td>
+                                                            <td><h6>{{ $order->product_name }}</h6></td>
+                                                            <td><h6>{{ $order->product_qty }}</h6></td>
+                                                            <td><h6>¥ {{ number_format($order->price , 0, '.', ',') }}</h6></td>
+                                                            <td><h6>{{ date('Y/m/d H:i', strtotime($order->delivered_date)) }}</h6></td>
                                                         </tr>
                                                     @endforeach
                                                 @endif

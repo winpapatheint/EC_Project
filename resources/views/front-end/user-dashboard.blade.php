@@ -50,13 +50,20 @@
                             <div class="profile-contain">
                                 <div class="profile-image">
                                     <div class="position-relative">
+                                        @if ($user->user_photo)
+                                        <img src="{{ asset('upload/profile/' . $user->user_photo) }}"
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @else
                                         <img src="{{ asset('frontend/assets/images/profile.png') }}"
-                                            class="blur-up lazyload update_img" alt="">
-                                        <div class="cover-icon">
-                                            <i class="fa-solid fa-pen">
-                                                <input type="file" name="user_profile" class="form-control" value="{{ old('user_profile') }}">
-                                            </i>
-                                        </div>
+                                            class="blur-up lazyload update_img" alt=""  id="uploaded_image">
+                                        @endif
+                                            <div class="cover-icon">
+                                                <label for="user_profile_upload_input">
+                                                    <i class="fa-solid fa-pen">
+                                                    <input type="file" id="user_profile_upload_input" name="user_profile" class="form-control" onchange="uploadUserProfile()">
+                                                    </i>
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -82,18 +89,18 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivery Status</a>
+                                    Delivered Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_addresses')}}"><i
                                         data-feather="map-pin"></i>Addresses</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-card-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_cards')}}"><i
                                         data-feather="credit-card"></i>Payment Methods</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
@@ -192,24 +199,19 @@
                                     </div>
                                         <div class="col-12">
                                             <div class="dashboard-content-title">
-                                                <h4>Address Book</h4>
+                                                <h4>Default Address</h4>
                                             </div>
 
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Home Address</h6>
-
-                                                        <h6 class="text-content">{{ $firstAddress }}</h6>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xxl-6">
-                                                    <div class="dashboard-detail">
-                                                        <h6 class="text-content">Default Shipping Address</h6>
-                                                        @foreach($userAddresses as $address)
-                                                        <h6 class="text-content">{{ $address }}</h6>
+                                                        @foreach($addresses as $address)
+                                                        @if($address->default == 1)
+                                                            <h6 class="text-content">{{ $address->post_code}}</h6>
+                                                            <h6 class="text-content">{{ $address->city}}</h6>
+                                                            <h6 class="text-content">{{ $address->chome}} chome</h6>
+                                                            <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>
+                                                        @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -225,6 +227,41 @@
         </div>
     </section>
     <!-- User Dashboard Section End -->
+    <script>
+        function uploadUserProfile() {
+            // Get the selected file
+            const fileInput = document.getElementById('user_profile_upload_input');
+            const file = fileInput.files[0];
+            
+            // Create a FormData object and append the file to it
+            const formData = new FormData();
+            formData.append('user_profile', file);
+            
+            // Send an AJAX request to the user_profile_upload route
+            $.ajax({
+                url: '/user-profile-upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // Handle the response data
+                    if (data.success) {
+                        // If upload successful, update the src attribute of the image tag
+                        console.log(data.file_url);
+                        $('#uploaded_image').attr('src', data.file_url);
+                    } else {
+                        // If upload failed, display an error message
+                        console.error('Upload failed:', data.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error('Error:', error);
+                }
+            });
+        }
+    </script>
 </x-guest-layout>
 
 <!-- Edit Password Script -->

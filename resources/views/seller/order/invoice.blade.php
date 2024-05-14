@@ -110,7 +110,7 @@
         <td align="center">{{ $data->size }}</td>
         <td align="center">{{ $data->color }}</td>
         <td align="center">{{ $data->qty }}</td>
-        <td align="center">&yen;{{ $data->price }}</td>
+        <td align="center">&yen;{{number_format($data->price) }}</td>
       </tr>
 
     </tbody>
@@ -119,7 +119,7 @@
   <table width="100%" style=" padding:0 10px 0 10px;">
     <tr>
         <td align="right" >
-            <h2><span style="color: green;">Subtotal:</span> &yen;{{ $data->total_amount }}</h2>
+            <h2><span style="color: green;">Subtotal:</span> &yen;{{number_format($data->total_amount) }}</h2>
             {{-- <h2><span style="color: green;">Full Payment PAID</h2> --}}
         </td>
     </tr>

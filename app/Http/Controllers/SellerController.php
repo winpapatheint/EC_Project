@@ -48,7 +48,6 @@ class SellerController extends Controller
         $id = $user->created_by !== null ? $user->created_by : $user->id;
         $data = Seller::where('user_id', $id)->first();
         $prefecture = Prefecture::get();
-
         return view('seller.profile', compact('user', 'data', 'prefecture'));
     }
 
@@ -65,18 +64,23 @@ class SellerController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        if ($request->hasFile('photo')) {
-            $img = $request->file('photo');
+        $img = $request->file('photo');
+        if ($img) {
             $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/profile', $filename);
+            $img->move(public_path('upload/profile'), $filename);
             $data->user_photo = $filename;
         }
 
         $data->name = $request->name;
         $data->email = $request->email;
-        $data->password = Hash::make($request->password);
+
+
+        if ($request->password !== $data->password) {
+            $data->password = Hash::make($request->password);
+        }
+
         $data->save();
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
     }
 
 
@@ -109,7 +113,7 @@ class SellerController extends Controller
             }
             $img = $request->file('shop_logo');
             $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/shop', $filename);
+            $img->move(public_path('upload/shop'), $filename);
         } else {
             $filename = $old_img;
         }
@@ -131,14 +135,15 @@ class SellerController extends Controller
         $seller->bank_acc_no = $request->bank_acc_no;
         $seller->updated_at = Carbon::now();
         $seller->update();
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
     }
 
 
 
     public function help()
     {
-        $helps = Help::latest()->paginate(4);
+        $id = Auth::user()->created_by ?? Auth::id();
+        $helps = Help::where('user_id',$id)->latest()->paginate(4);
         return view('seller.help.help',compact('helps'));
     }
 
@@ -162,36 +167,35 @@ class SellerController extends Controller
     public function storeHelp(Request $request)
     {
         $help = new Help();
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'reason' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'title' => 'present|string|max:255',
+            'reason' => 'present|string|max:255',
         ]);
 
         if($request->hasFile('image'))
         {
             $img = $request->file('image');
             $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move('upload/shop', $filename);
+            $img->move(public_path('upload/shop'), $filename);
             $help->img = $filename;
         }
 
         $help->user_id = Auth::user()->id;
-        $help->title = $request->title;
-        $help->reason = $request->reason;
+        $help->title = $validatedData['title'];
+        $help->reason = $validatedData['reason'];
+        $help->type = 'sent';
+        $help->sent = '1';
         $help->created_at = Carbon::now();
         $help->save();
         return redirect('/help')->with('flash_message', 'Data added successfully');
     }
 
 
-
-    public function deleteHelp($id)
+    public function deleteHelp(Request $request)
     {
+        $id = $request->id;
         $help = Help::findOrFail($id);
-        $img = $help->img;
-        if (File::exists($img)) {
-            File::delete($img);
-        }
+        File::delete($help->img);
         $help->delete();
         return back()->with('flash_message', 'Data deleted successfully');
     }
@@ -216,17 +220,18 @@ class SellerController extends Controller
     public function storeSubseller(Request $request)
     {
         $seller_id = $request->seller_id;
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+        $validatedData = $request->validate([
+            'user_name' => 'present|string|max:255',
+            'mail' => 'present|string|email|max:255|unique:users,email',
+            'passwords' => 'present|string|min:8',
+            'confirmed' => 'required|string|same:passwords',
         ]);
 
         $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
+            'name' => $validatedData['user_name'],
+            'email' => $validatedData['mail'],
             'role' => 'seller',
-            'password' => Hash::make($request->input('password')),
+            'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
         ]);
         event(new Registered($user));
@@ -234,9 +239,9 @@ class SellerController extends Controller
         $subseller = Subseller::create([
             'user_id' => $user->id,
             'seller_id' => Auth::user()->id,
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+            'name' => $validatedData['user_name'],
+            'email' => $validatedData['mail'],
+            'password' => Hash::make($validatedData['passwords']),
         ]);
         event(new Registered($subseller));
 
@@ -248,8 +253,16 @@ class SellerController extends Controller
     public function deleteSubseller(Request $request)
     {
         $id = $request->id;
+
+        User::whereExists(function ($query) use ($id) {
+            $query->select(DB::raw(1))
+                ->from('subsellers')
+                ->whereColumn('subsellers.email', 'users.email')
+                ->where('subsellers.id', $id);
+        })->delete();
+
         Subseller::findOrFail($id)->delete();
-        User::where('user_id',$id)->delete();
+
         return back()->with('flash_message', 'Data deleted successfully');
     }
 

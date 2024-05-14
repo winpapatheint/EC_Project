@@ -79,12 +79,12 @@
 
                         <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="right-box-contain">
-                                @if($product->discount_percent != null)
+                                @if($product->discount_percent != 0)
                                 <h6 class="offer-top">{{ $product-> discount_percent }}% Off</h6>
                                 @endif
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    @if ($product->discount_percent != null)
+                                    @if ($product->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span> 
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
@@ -145,10 +145,16 @@
                                             $orderedCount += $ordered->qty;
                                         @endphp
                                     @endforeach
-                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
+                                    @php
+                                    $leftProduct = $product->product_qty - $orderedCount;
+                                    @endphp
+                                        <h6>Please hurry! Only {{ $leftProduct }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            if($leftProduct >= 10)
+                                            $percentage = 100;
+                                            else
+                                            $percentage = ($leftProduct) * 10;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
@@ -234,12 +240,12 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Seller</td>
+                                                        <td>Sub Category</td>
                                                         <td>
                                                             @php
-                                                                $seller_name = DB::table('users')->where('id',$product->seller_id)->first();
+                                                                $sub_category = DB::table('sub_categories')->where('id',$product->sub_category_id)->first();
                                                             @endphp
-                                                            {{ $seller_name->name }}
+                                                            {{ $sub_category->sub_category_name }}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -388,8 +394,13 @@
                                                                 <div class="people-box">
                                                                     <div>
                                                                         <div class="people-image people-text">
+                                                                            @if ($user->user_photo)
                                                                             <img alt="user" class="img-fluid "
                                                                                 src="{{ asset('upload/profile/'.$user->user_photo) }}">
+                                                                            @else
+                                                                            <img alt="user" class="img-fluid "
+                                                                                src="{{ asset('upload/profile/profile.jpg') }}">
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                     <div class="people-comment">
@@ -397,7 +408,7 @@
                                                                                 href="javascript:void(0)"
                                                                                 class="name">{{ $user->name }}</a>
                                                                             <div class="date-time">
-                                                                                <h6 class="text-content"> {{ \Carbon\Carbon::parse($review->updated_at)->format('d M Y h:i:s A') }}
+                                                                                <h6 class="text-content"> {{ date('Y/m/d H:i:s', strtotime($review->updated_at)) }}
                                                                                 </h6>
                                                                                 <div class="product-rating">
                                                                                     <ul class="rating">
@@ -505,7 +516,7 @@
                                                     <a href="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}">
                                                         <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
-                                                    @if ($prod->discount_percent != null)
+                                                    @if ($prod->discount_percent != 0)
                                                         <h6 class="price"><span class="theme-color">¥{{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>¥{{ $prod->selling_price }}</del>
                                                     @else
                                                         <h5 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span>
@@ -526,6 +537,229 @@
         </div>
     </section>
     <!-- Product Left Sidebar End -->
+
+    <!-- Related Product Section Start -->
+    @if($relatedProducts->count() > 0)
+    <section class="product-list-section section-b-space">
+        <div class="container-fluid-lg">
+            <div class="title">
+                <h2>Related Products</h2>
+                <span class="title-leaf">
+                    <svg class="icon-width">
+                        <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="slider-6_1 product-wrapper">
+                        @foreach ($relatedProducts as $relatedProduct)
+                        @if ($product->status == 1)
+                            @php
+                                $starRating = 0;
+                                $count = 0;
+                            @endphp
+                            @foreach ($reviewAll as $review)
+                                @if ($relatedProduct->id == $review->product_id)
+                                    @php
+                                        $count += 1;
+                                        $starRating += $review->stars_rated;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if ($count != 0)
+                                @php
+                                    $starRating = $starRating / $count;
+                                @endphp
+                            @endif
+                        <div>
+                            <div class="product-box-3 wow fadeInUp">
+                                <div class="product-header">
+                                    <div class="product-image">
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $relatedProduct->id]) }}">
+                                            <img src="{{ asset('upload/product_thambnail/'.$relatedProduct-> product_thambnail) }}"
+                                                class="img-fluid blur-up lazyload" alt="">
+                                        </a>
+
+                                        <ul class="product-option">
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                    data-bs-target="#view-product{{ $relatedProduct->id }}" data-product="{{ $relatedProduct->id }}">
+                                                    <i data-feather="eye"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                <a href="{{ route('show-comparelist', ['id' => $product->id ]) }}">
+                                                    <i data-feather="refresh-cw"></i>
+                                                </a>
+                                            </li>
+
+                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
+                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="product-footer">
+                                    <div class="product-detail">
+                                        <span class="span-name">{{ $relatedProduct->name }}</span>
+                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $relatedProduct->id]) }}">
+                                            <h5 class="name">{{ $relatedProduct->name }}</h5>
+                                        </a>
+                                        <div class="product-rating mt-2">
+                                            <ul class="rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $starRating)
+                                                        <li><i data-feather="star" class="fill"></i></li>
+                                                    @else
+                                                        <li><i data-feather="star"></i></li>
+                                                    @endif
+                                                @endfor
+                                            </ul>
+                                            <span>(<?php echo number_format($starRating, 1); ?>)</span>
+                                        </div>
+                                        <h6 class="unit">{{ $relatedProduct->product_size }}</h6>
+                                        @if ($product->discount_percent != 0)
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                            <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                        @else
+                                            <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        @endif
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+    <!-- Related Product Section End -->
+
+
+    <!-- Quick View Modal Box Start -->
+    @foreach ($relatedProducts as $product)
+    @if ($product->status == 1)
+    @php
+        $starRating = 0;
+        $count = 0;
+    @endphp
+    @foreach ($reviews as $review)
+        @if ($product->id == $review->product_id)
+            @php
+                $count += 1;
+                $starRating += $review->stars_rated;
+            @endphp
+        @endif
+    @endforeach
+    @if ($count != 0)
+        @php
+            $starRating = $starRating / $count;
+        @endphp
+    @endif
+     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header p-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-sm-4 g-2">
+                        <div class="col-lg-6">
+                            <div class="slider-image">
+                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
+                                    class="img-fluid blur-up lazyload" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="right-sidebar-modal">
+                                <h4 class="title-name">{{ $product->product_name }}</h4>
+                                @if ($product->discount_percent != 0)
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                    <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                @else
+                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                @endif
+                                <div class="product-rating">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $starRating)
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span class="ms-2">{{ $count}} Reviews</span>
+                                </div>
+
+                                <div class="product-detail">
+                                    <h4>Product Details :</h4>
+                                    <p>{!! ($product->long_desc) !!}</p>
+                                </div>
+
+                                <ul class="brand-list">
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Brand Name:</h5>
+                                            <h6>
+                                                @php
+                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
+                                                @endphp
+                                                {{ $brand->brand_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Product Code:</h5>
+                                            <h6>{{ $product->product_code }}</h6>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>Category:</h5>
+                                            <h6>
+                                                @php
+                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
+                                                @endphp
+                                                {{ $category->category_name }}
+                                            </h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="modal-button">
+                                    <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
+                                        class="btn btn-md add-cart-button icon">Add
+                                        To Cart</button>
+
+                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
+                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                        View More Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @endforeach
+    <!-- Quick View Modal Box End -->
 
     <!-- Review Modal Start -->
     <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
@@ -590,5 +824,4 @@
             <!-- Bg overlay Start -->
 </div>
     <!-- Bg overlay End -->
-
-    </x-guest-layout>
+</x-guest-layout>

@@ -1649,9 +1649,9 @@ class AdminController extends Controller
 
     public function indexshoplist(Request $request)
     {
-        $limit=10;
+        $limit=9;
 
-        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->get();
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
 
         $ratingWithProductCount = [];
         foreach ($lists as $shop =>$seller) {
@@ -1688,7 +1688,7 @@ class AdminController extends Controller
             }
         }
 
-        $ttl = $lists->count();
+        $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));

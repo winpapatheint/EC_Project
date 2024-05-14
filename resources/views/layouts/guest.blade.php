@@ -109,29 +109,11 @@
                     <div class="col-lg-3">
                         <ul class="about-list right-nav-about">
                             <li class="right-nav-list">
-                                <div class="dropdown theme-form-select">
-                                    <button class="btn dropdown-toggle" type="button" id="select-language"
-                                        data-bs-toggle="dropdown">
+                                <div class="dropdown theme-form-select" style="display: flex;">
                                         <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <span>Japanese</span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                                <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>Japanese</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                                <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>English</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                            class="img-fluid blur-up lazyload" alt="" width="30px">
+                                        <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
+                                                class="img-fluid blur-up lazyload" alt="" width="30px">
                                 </div>
                             </li>
                             <li class="right-nav-list">

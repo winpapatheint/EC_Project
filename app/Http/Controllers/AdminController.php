@@ -684,13 +684,6 @@ class AdminController extends Controller
     {
         $limit = 9;
 
-        // $shoplist = DB::table('products as P')
-        //             ->select( 'P.*','C.*')
-        //             ->Join('Categories as C', function ($join) {
-        //                 $join->on('C.id', '=', 'P.category_id');
-        //             })
-        //             ->where('P.seller_id',$id)->orderBy('P.created_at', 'desc')->paginate($limit);
-
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -784,7 +777,7 @@ class AdminController extends Controller
                 $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
                     ->select('products.*', DB::raw('COUNT(reviews.product_id) as review_count'))
                     ->groupBy('products.id')
-                    ->orderBy('review_count', 'desc');
+                    ->orderBy('review_count', 'DESC');
                 break;
             case 4:
                 $query->orderBy('product_name', 'ASC');
@@ -800,7 +793,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('seller_id',$id)
+        $shoplist = $query->where('products.seller_id',$id)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1622,9 +1615,9 @@ class AdminController extends Controller
 
     public function indexshoplist(Request $request)
     {
-        $limit=10;
+        $limit=9;
 
-        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->get();
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
 
         $ratingWithProductCount = [];
         foreach ($lists as $shop =>$seller) {
@@ -1661,7 +1654,7 @@ class AdminController extends Controller
             }
         }
 
-        $ttl = $lists->count();
+        $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));
@@ -2795,7 +2788,8 @@ class AdminController extends Controller
         // $hcompanies = array();
         // print_r($lists);die;
 
-        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
+        // return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
+        return redirect()->route('admin.all.product',compact('lists','ttlpage','ttl', 'subCatTitle'));
     }
 
     public function removeFromSpecial($id)
@@ -2820,7 +2814,8 @@ class AdminController extends Controller
         // $hcompanies = array();
         // print_r($lists);die;
 
-        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
+        // return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
+        return redirect()->route('admin.all.product',compact('lists','ttlpage','ttl', 'subCatTitle'));
     }
 
     public function indexspecialsubcategoryproduct($id)

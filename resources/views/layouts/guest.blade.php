@@ -327,6 +327,12 @@
                             </button>
 
                             <div class="category-dropdown">
+                                <div class="category-title">
+                                    <h5>All Categories</h5>
+                                    <button type="button" class="btn p-0 close-button text-content">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
                             @foreach ($categories as $category)
                                 <ul class="category-list">
                                     <li class="onhover-category-list">
@@ -592,7 +598,7 @@
 
                         <div class="footer-contain">
                             <ul>
-                            @foreach ($allCategories as $category)
+                            @foreach ($categories as $category)
                                 <li>
                                     <a href="{{ url('/categorysidebar/'.$category->id)}}" class="text-content">{{ $category->category_name }}</a>
                                 </li>

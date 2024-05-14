@@ -468,7 +468,7 @@
                         @if ($coupons->count() > 0)
                             @foreach($coupons as $coupon)
                                 <a href="{{ route('show-coupon-product', ['id' => $coupon->id]) }}">
-                                <div class="section-t-space section-b-space">
+                                <div class="">
                                     <div class="banner-contain">
                                         <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                                         <div class="banner-details p-center p-4 text-white text-center">
@@ -494,8 +494,8 @@
                     @endif
                     @endif
 
-                        <div class="title">
-                            <h2>Bowse by Categories</h2>
+                        <div class="title section-t-space">
+                            <h2>Browse by Categories</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
@@ -561,7 +561,7 @@
                             </div>
                         </div>
 
-                        <div class="section-t-space section-b-space">
+                        <div class="section-b-space">
                             <div class="row g-md-4 g-3">
                                 <div class="col-xxl-8 col-xl-12 col-md-7">
                                     <div class="banner-contain hover-effect">

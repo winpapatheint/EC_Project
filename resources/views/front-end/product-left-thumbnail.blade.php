@@ -258,7 +258,7 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="care" role="tabpanel">
-                                        <div class="information-box">
+                                        <div class="">
                                             <ul>
                                                 <li>{!! $product->care_instructions !!}</li>
                                             </ul>

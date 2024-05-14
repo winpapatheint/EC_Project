@@ -25,7 +25,7 @@ class RegisterController extends Controller
     {
         $validatedData = $request->validate([
             'user_name' => 'present|string|max:255',
-            'mail' => 'present|string|email|max:255|unique:users',
+            'mail' => 'present|string|email|max:255|unique:users,email',
             'passwords' => 'present|string|min:8',
             'confirmed' => 'required|string|same:passwords',
             'bank_name' => 'present|string|max:255',
@@ -48,7 +48,7 @@ class RegisterController extends Controller
 
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
-        $img->move('upload/shop', $filename);
+        $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
             'name' => $validatedData['user_name'],
@@ -76,11 +76,13 @@ class RegisterController extends Controller
             'chome' => $validatedData['chome'],
             'building' => $validatedData['building'],
             'room' => $validatedData['room'],
-            'url' => $request->url
+            'url' => $request->url,
+            'status' => '1'
         ]);
 
         event(new Registered($seller));
 
+        $email = $request->email;
         $inquiry_email = 'info-test@asia-hd.com';
         $user = User::where('id', $user->id)->select('email', 'name')->first();
 
@@ -107,8 +109,6 @@ class RegisterController extends Controller
                         'created_at' => Carbon::now(),
                         );
         $notification->update( $newval);
-
-        $email = $request->email;
         return view('auth.verify-email',compact('email'));
     }
 }

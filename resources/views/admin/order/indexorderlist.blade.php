@@ -35,7 +35,7 @@
                                         @foreach($order as $key => $item)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $item->created_at }}</td>
+                                                <td data-label="登録日">{{ date('Y/m/d', strtotime($item->created_at)) }}<br>{{ date('H:i', strtotime($item->created_at)) }}</td>
                                                 <td>
                                                     <a class="d-block">
                                                         <span class="order-image">

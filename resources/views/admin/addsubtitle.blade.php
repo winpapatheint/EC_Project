@@ -1,6 +1,6 @@
 
     <x-auth-layout>
-        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <style>
             .error{
                 margin:0 auto;
@@ -28,7 +28,6 @@
                                             @csrf
                                             @if ($editmode)
                                             <input type="hidden" name="id" value="{{ $subtitle->id }}">
-
                                             @endif
 
                                             <div class="mb-4 row align-items-center">
@@ -53,7 +52,7 @@
                                             </div>
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Sub Title</label>
-                                                <div class="col-sm-8">
+                                                <div class="col-sm-9">
                                                     <div class="input-group">
                                                         <input class="form-control" type="text" placeholder="Sub Title" name="subtitle[]" id="subtitle"
                                                             value="{{ old('sub_category_titlename') ?? $subtitle->sub_category_titlename ?? '' }}">
@@ -72,15 +71,47 @@
                                                                 @endif
                                                         </div>
                                                 </div>
-                                                    <button type="submit" class="btn btn-animation ms-auto fw-bold">
+
+                                                <button type="button" class="btn btn-submit btn-animation ms-auto fw-bold">
+                                                    @if (!$editmode)
+                                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                           Save
+                                                    @else
+                                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                                            Edit
+                                                    @endif
+                                                </button>
+
+
+                                                <!-- Confirm Modal Box -->
+                                    <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" data-bs-toggle="modal" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
                                                         @if (!$editmode)
-                                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                                {{ __('auth.doregister') }}
+                                                            Yes
                                                         @else
-                                                            <i class="fa fa-edit" aria-hidden="true"></i>
-                                                                {{ __('auth.yeschange') }}
+                                                            Yes
                                                         @endif
                                                     </button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Confirm Modal Box End-->
                                         </form>
                                     </div>
                                 </div>
@@ -166,6 +197,30 @@
                     }
                 });
         </script>
+
+
+<script>
+    $('.btn-submit').click(function() {
+
+        $('.error').hide();
+        if ($.trim($("#category").val()) === "0"  ||  $.trim($("#subtitle").val()) === "" ) {
+            if ($.trim($("#category").val()) === "0") {
+                $('.error.category').text('Category Name is required');
+                $('.error.category').show();
+            }
+            if ( $.trim($("#subtitle").val()) === "") {
+                $('.error.subtitle').text('Subtitle Name is required');
+                $('.error.subtitle').show();
+            }
+            return false;
+        } else {
+
+            $('.error').hide()
+        $('#confirmModal').modal('show');
+
+        }
+        });
+    </script>
 
     </x-auth-layout>
 

@@ -85,7 +85,7 @@
             <div class="header-wrapper m-0">
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
-                        <a href="{{route('admin.dashboard')}}">AAAAA
+                        <a href="{{route('admin.dashboard')}}">
                             <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
 
                         </a>
@@ -158,6 +158,7 @@
                                 @if(!empty($notify->time))
                                 <li >
                                     <p>
+
                                         <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
                                             class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
                                     </p>
@@ -177,7 +178,8 @@
                         </li>
                         <li class="profile-nav onhover-dropdown pe-0 me-0">
                             <div class="media profile-media">
-                                <img class="user-profile rounded-circle" src="{{ asset('backend/assets/images/users/4.jpg') }}" alt="">
+                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('images/'.Auth::user()->user_photo) : url('backend/assets/images/users/4.jpg') }}" class="user-profile rounded-circle">
+
                                 <div class="user-name-hide media-body">
                                     <span>{{ auth()->user()->name }}</span>
                                     <p class="mb-0 font-roboto">{{ auth()->user()->role }}<i class="middle ri-arrow-down-s-line"></i></p>
@@ -185,6 +187,24 @@
                             </div>
 
                             <ul class="profile-dropdown onhover-show-div">
+                                <li>
+                                    <a href="{{ route('admin.profile') }}">
+                                        <i data-feather="user"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li><br>
+
+                                <li>
+                                    <form method="POST" action="{{ route('adminlogout') }}">
+                                        @csrf
+                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            <i data-feather="log-out"></i>
+                                            <span>Log Out</span>
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+<ul class="profile-dropdown onhover-show-div">
                                <div>
 
                                     <li>
@@ -206,6 +226,7 @@
                                 </li>
                             </div>
                             </ul>
+
                         </li>
                     </ul>
                 </div>
@@ -338,7 +359,7 @@
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/customer') }}">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Customer</span>
                                     </a>

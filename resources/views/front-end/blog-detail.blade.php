@@ -39,7 +39,7 @@
 
                                 <div class="blog-contain blog-contain-2">
                                     <div class="blog-label">
-                                        <span class="time"><i data-feather="clock"></i> <span> {{ date('Y\年m\月d\日', strtotime($blog->created_at)) }} </span></span>
+                                        <span class="time"><i data-feather="clock"></i> <span> {{ date('Y/m/d', strtotime($blog->created_at)) }} </span></span>
                                         <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
                                     </div>
                                     <p>{!! $blog->content !!}</p>
@@ -86,7 +86,7 @@
                                                     <a href="{{ url('/blogdetail/'.$list->id ) }}">
                                                         <h5 class="recent-name">{{ $list->title }}</h5>
                                                     </a>
-                                                    <h6>{{ date('Y\年m\月d\日', strtotime($list->created_at)) }}</h6>
+                                                    <h6> {{ date('Y/m/d', strtotime($blog->created_at)) }}</h6>
                                                 </div>
                                             </div>
                                             @endforeach

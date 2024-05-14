@@ -237,6 +237,7 @@
                                                                     ->join('products', 'carts.product_id', '=', 'products.id')
                                                                     ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
                                                                     ->where('buyers.user_id', Auth::user()->id)->get();
+
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif
@@ -405,11 +406,11 @@
                                                 <a class="nav-link " href="{{ url('/products') }}">Products</a>
                                             </li>
 
-                                            
+
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
-                                            
+
 
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">

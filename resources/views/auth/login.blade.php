@@ -41,7 +41,7 @@
             <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                 <div class="log-in-box">
                     <div class="log-in-title">
-                        <h3>Welcome To Fastkart</h3>
+                        <h3 style="text-wrap">Welcome to Asian Food Museum </h3>
                         <h4>Log In Your Account</h4>
                     </div>
                       @php $error = $errors->toArray(); @endphp

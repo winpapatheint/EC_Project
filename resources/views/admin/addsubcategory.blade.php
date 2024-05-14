@@ -281,12 +281,12 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-list">
-      <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/subadmin' )}}">
-          <i class="ri-admin-line"></i>
-          <span>SubAdmin</span>
-      </a>
-  </li>
-   <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/subadmin' )}}">
+                                        <i class="ri-admin-line"></i>
+                                        <span>SubAdmin</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
@@ -363,7 +363,7 @@
                                                 <div class="mb-4 row align-items-center">
                                                     <label
                                                         class="col-sm-3 col-form-label form-label-title">SubCategory  Title</label>
-                                                    <div class="col-sm-9">
+                                                    <div class="col-sm-8">
                                                         <select class="js-example-basic-single w-100 get_subcategory" name="subcategory" id="subcategory">
 
                                                         </select>
@@ -376,29 +376,66 @@
                                                     </div>
                                                 </div>
 
-                                                  <div class="mb-4 row align-items-center">
-                                                                                      <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
-                                                                                      <div class="col-sm-9">
-                                                                                          <input class="form-control" name="subname" id="subname" type="text" placeholder="SubCategory Name"
-                                                                                          value="{{ old('subname')}}">
-                                                                                          <p style="display:none" class="subcategory error text-danger"></p>
-                                                        @if (!empty($error['subname']))
-                                                            @foreach ($error['subname'] as  $key => $value)
-                                                                <p class="subname error text-danger">{{ $value }}</p>
-                                                            @endforeach
-                                                        @endif
-                                                                                      </div>
-                                                                                  </div>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group">
+                                                            <input class="form-control" type="text" placeholder="SubCategory Name" name="subname[]" id="subname"
+                                                                value="{{ old('subname')  }}">
+                                                            <div class="input-group-append align-self-center mx-auto justify-content-center">
+                                                                <a href="#" class="align-items-center d-flex" id="add-more-field">
+                                                                    <i data-feather="plus-square"></i> Add
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                            <div id="dynamic-form"></div>
+                                                                <p style="display:none" class="subname error text-danger"></p>
+                                                                    @if (!empty($error['subname']))
+                                                                        @foreach ($error['subname'] as  $key => $value)
+                                                                            <p class="subname error text-danger">{{ $value }}</p>
+                                                                        @endforeach
+                                                                    @endif
+                                                            </div>
+                                                    </div>
+                                                        <button type="button" class="btn btn-submit btn-animation ms-auto fw-bold">
+                                                            @if (!$editmode)
+                                                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                                    Save
+                                                            @else
+                                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                                                  Edit
+                                                            @endif
+                                                        </button>
 
-                                                <button type="submit" class="btn btn-animation ms-auto fw-bold">
-                                                    @if (!$editmode)
-                                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        {{ __('auth.doregister') }}
-                                                    @else
-                                                        <i class="fa fa-edit" aria-hidden="true"></i>
-                                                        {{ __('auth.yeschange') }}
-                                                    @endif
-                                                </button>
+                                                        <!-- Confirm Modal Box -->
+                                    <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" data-bs-toggle="modal" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
+                                                        @if (!$editmode)
+                                                            Yes
+                                                        @else
+                                                            Yes
+                                                        @endif
+                                                    </button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Confirm Modal Box End-->
                                             </form>
                                         </div>
                                     </div>
@@ -448,7 +485,80 @@
             });
         });
     </script>
+
+    <script>
+        $('.btn-submit').click(function() {
+
+            $('.error').hide();
+
+            if ($.trim($("#category").val()) === "0"  ||  $.trim($("#subcategory").val()) === "" || ($.trim($("#subname").val()) === "" )) {
+                if ($.trim($("#category").val()) === "0") {
+                    $('.error.category').text('Category Name is required');
+                    $('.error.category').show();
+                }
+                if ( $.trim($("#subcategory").val()) === "") {
+                    $('.error.subcategory').text('Subcategory Title Name is required');
+                    $('.error.subcategory').show();
+                }
+
+                if ($.trim($("#subname").val()) === "" ) {
+                    $('.error.subname').text('Subcategory Name is required');
+                    $('.error.subname').show();
+                }
+
+                if ($.trim($("#addedsubname").val()) === "" ) {
+                    $('.error.subname').text('Subcategory Name is required');
+                    $('.error.subname').show();
+                }
+                return false;
+            } else {
+
+                $('.error').hide()
+            $('#confirmModal').modal('show');
+
+            }
+            });
+        </script>
+
+<script>
+    // Function to add new input field
+    function addInputField()
+    {
+        var inputGroup = document.createElement('div');
+        inputGroup.classList.add('mb-4', 'row', 'align-items-center');
+        inputGroup.innerHTML = `
+
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="SubCategory Name" name="subname[]" id="addedsubname">
+                    <div class="input-group-append align-self-center mx-auto justify-content-center">
+                        <a href="#" class="align-items-center d-flex remove-field">
+                            <i data-feather="minus-square" class="remove-field"></i> Remove
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('dynamic-form').appendChild(inputGroup);
+        feather.replace(); // Refresh Feather icons
+    }
+
+        // Add event listener to the add button
+        document.getElementById('add-more-field').addEventListener('click', function(event) {
+            event.preventDefault();
+            addInputField();
+        });
+
+        // Event delegation to handle remove button click
+        document.getElementById('dynamic-form').addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-field')) {
+                event.preventDefault();
+                event.target.closest('.row').remove();
+            }
+        });
+</script>
     <!-- latest js -->
+
 
     <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script>
 

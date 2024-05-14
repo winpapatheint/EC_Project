@@ -20,7 +20,7 @@
                         <div class="card card-table">
                             <div class="card-body">
                                 <div class="title-header option-title">
-                                    <h5>All  SubCategory</h5>
+                                    <h5>All Category</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.all.addcategory') }}"
                                         class="align-items-center btn btn-theme d-flex">
@@ -64,6 +64,7 @@
                                                     @php
                                                     $id = "0";
                                                     $type = 0;
+
                                                         if($list->subCatId != null)
                                                         {
                                                             $id = $list->subCatId;
@@ -71,11 +72,14 @@
                                                         }elseif ($list->subCatTitleId != null) {
                                                             $id = $list->subCatTitleId;
                                                             $type = 2;
-                                                        }else {
+                                                        }elseif($list->subCatId == null)
+                                                        {
                                                             $id = $list->categoryId;
                                                             $type = 1;
                                                         }
+
                                                     @endphp
+
                                                     <li>
                                                         <a href='{{ url("/editsubcategory/".$type.'/'.$id ) }}'>
                                                             <i class="ri-pencil-line"></i>
@@ -87,9 +91,10 @@
                                                             <i class="ri-delete-bin-line"></i>
                                                         </a> --}}
                                                             <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteConfirmModal{{ $id  }}">
+                                                                data-bs-target="#deleteConfirmModal{{ $id . $type   }}">
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </a>
+
 
                                                         @endif
                                                     </li>
@@ -129,7 +134,7 @@
             }
     @endphp
 
- <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $id }}" aria-hidden="true" tabindex="-1">
+ <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $id .$type }}" aria-hidden="true" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -141,8 +146,7 @@
             </div>
             <div class="modal-body">
                 <div class="remove-box">
-                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                        new permission for this object</p>
+                    <p></p>
                 </div>
             </div>
 
@@ -150,6 +154,7 @@
                 <form method="POST" action="{{ route('deletecategory') }}" style="display:flex;">
                     @csrf
                     <input type="hidden" name="id" value="{{ $id }}">
+                    <input type="hidden" name="type" value="{{ $type }}">
                     <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>

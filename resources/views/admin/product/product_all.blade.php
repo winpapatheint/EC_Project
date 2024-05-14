@@ -22,15 +22,15 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Date</th>
-                                                <th>Product Image</th>
-                                                <th>Product Name</th>
-                                                <th>Current Qty</th>
-                                                <th>Price</th>
-                                                <th>Discount</th>
-                                                <th>Commision</th>
-                                                <th>Status</th>
+                                                <th style="min-width: 50px">No</th>
+                                                <th >Date</th>
+                                                <th style="min-width: 200px">Product Image</th>
+                                                <th style="min-width: 200px">Product Name</th>
+                                                <th style="min-width: 120px">Current Qty</th>
+                                                <th style="min-width: 120px">Price</th>
+                                                <th style="min-width: 50px">Discount</th>
+                                                <th style="min-width: 150px">Commision</th>
+                                                <th style="min-width: 150px;">Status</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -50,7 +50,7 @@
                                                         {{ $list->commission ? $list->commission . '%' : '' }}
                                                     </td>
                                                     <td class="col-sm-9">
-                                                        <label class="switch">
+                                                        <label class="switch mx-auto">
                                                             <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>

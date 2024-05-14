@@ -208,6 +208,7 @@
                                                                     ->join('products', 'carts.product_id', '=', 'products.id')
                                                                     ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
                                                                     ->where('buyers.user_id', Auth::user()->id)->get();
+
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif

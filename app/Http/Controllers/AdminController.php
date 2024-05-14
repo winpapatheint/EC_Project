@@ -320,7 +320,7 @@ class AdminController extends Controller
         $sellerupd = $sellerprofile->update($newval);
         }
         // print_r($userprofile->role);die;
-        $msg = __('auth.donechange');
+        $msg = __('Profile Updated Successfully');
 
         return back()->with('success',$msg);
 
@@ -661,20 +661,28 @@ class AdminController extends Controller
                             ->whereIn('coupon_id', $expiredCoupons)
                             ->update(['status' => 0]);
 
-        $lists = DB::table('sellers')
-                    ->select('coupons.*','sellers.*')
-                    ->Join('coupons', function ($join) {
-                         $join->on('coupons.id', '=', 'sellers.coupon_id');
-                    })
-                    ->orderBy('sellers.created_at', 'desc')->paginate($limit);
-                    $updval = array('status' => '1',
-                    );
+        // $lists = Seller::with('user')
+        //             ->with('user.products')
+        //             ->with('user.products.reviews')
+        //             ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
+        //             ->select('sellers.*','coupons.*','sellers.id','seller.coupon_id','sellers.created_at','sellers.shop_establish') // Select all columns from the sellers table
+        //             ->latest('sellers.created_at') // Specify the table for ordering
+        //             ->paginate($limit);
 
-        DB::table('sellers')->update($updval);
 
-        $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+                    $lists = Seller::with('user')
+                    ->with('user.products')
+                    ->with('user.products.reviews')
+                    ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
+                    ->leftJoin('users', 'sellers.user_id', '=', 'users.id') // Join users table with condition
+                    ->select('sellers.*', 'coupons.*', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id') // Select all columns from the sellers table
+                    ->latest('sellers.created_at') // Specify the table for ordering
+                    ->paginate($limit);
+
+
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
+        $coupons = DB::table('coupons')->orderBY('created_at', 'desc')->get();
 
         return view('admin.allshop',compact('lists','ttlpage','ttl','coupons'));
     }
@@ -873,7 +881,6 @@ class AdminController extends Controller
             $kword = '';
         }
 
-
         $lists = DB::table('categories')
                     ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
                     ->leftJoin('sub_category_titles as S', function ($join) {
@@ -883,10 +890,7 @@ class AdminController extends Controller
                         $join->on('Sb.sub_category_title_id', '=', 'S.id');
                         $join->on('Sb.category_id', '=', 'categories.id');
                     })
-
-
                     ->paginate($limit);
-
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1558,6 +1562,36 @@ class AdminController extends Controller
 
     }
 
+    public function shoptakeremote(Request $request, $id)
+    {
+
+        $adminid = Auth::user()->id;
+
+        $adminrole = Auth::user()->role;
+
+        if (strlen($id) > 5) {
+
+            // print_r(substr($id, 5));die;
+            $id = substr($id, 5);
+
+            $edituser = User::find($id);
+
+            $editother = true;
+
+        }
+
+       Auth::loginUsingId($id);
+
+        session(['isadmincontrol' => $adminid , 'rolecontrol' => $adminrole , 'returnurl' => url()->previous()]);
+        print_r(session()->all());
+        // print_r(Auth::user()->role);die;
+        if (Auth::user()->role == 'seller') {
+
+            return redirect('/dashboard');
+        }
+
+    }
+
     public function indexstatus(Request $request)
     {
         $product = Product::find($request->product_id);
@@ -1615,9 +1649,9 @@ class AdminController extends Controller
 
     public function indexshoplist(Request $request)
     {
-        $limit=9;
+        $limit=10;
 
-        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->get();
 
         $ratingWithProductCount = [];
         foreach ($lists as $shop =>$seller) {
@@ -1654,11 +1688,58 @@ class AdminController extends Controller
             }
         }
 
-        $ttl = $lists->total();
+        $ttl = $lists->count();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));
     }
+
+    public function storeblog(Request $request)
+    {
+
+       if (!empty($request->image)) {
+           $imageName = time().'.'.$request->image->extension();
+           $request->image->move(public_path('images'), $imageName);
+       } else {
+           $imageName = '';
+       }
+
+       $time = new DateTime();
+
+       if (empty($request->id)) {
+
+           DB::table('blogs')->insert([
+               'title' => $request->title,
+               'content' => $request->content_desc,
+               'image' => $imageName,
+               'created_by' => Auth::user()->id,
+               'author' => Auth::user()->name,
+               'created_at' => $time->format('Y-m-d H:i:s'),
+               'updated_at' => $time->format('Y-m-d H:i:s')
+           ]);
+
+
+           $msg = trans('Register Successfully', [ 'name' => $request->title ]);
+           return redirect('/admin/all/blog')->with('success', $msg );
+       } else {
+           $updval = array('title' => $request->title,
+                           'content' => $request->content_desc,
+                           'created_by' => Auth::user()->id,
+                           'author' => Auth::user()->name,
+                           'updated_at' => $time->format('Y-m-d H:i:s')
+                           );
+
+           if (!empty($request->image)) {
+               $updval['image'] = $imageName;
+           }
+
+           DB::table('blogs')->where('id',$request->id)->update($updval);
+
+           return redirect('/admin/all/blog')->with('success','「'.$request->title.'」'.__('Updated Successfully.'));
+
+       }
+
+   }
 
     public function storefaq(Request $request)
     {
@@ -1907,14 +1988,20 @@ class AdminController extends Controller
 
     public function deletecategory(Request $request)
     {
-        $cat = SubCategoryTitle::find($request->id);
-        $categoryId = $cat->category_id;
-        DB::table('sub_category_titles')->where('id', $request->id)->delete();
-        $categoryIdExist = SubCategoryTitle::where('category_id', $categoryId)->exists();
-        if (!$categoryIdExist){
-            Category::where('id', $categoryId)->delete();
+        if($request->type=='1')
+        {
+                Category::where('id', $request->id)->delete();
         }
-        return redirect('/admin/category')->with('success','削除されました。');
+        else{
+            $cat = SubCategoryTitle::find($request->id);
+            $categoryId = $cat->category_id;
+            DB::table('sub_category_titles')->where('id', $request->id)->delete();
+            $categoryIdExist = SubCategoryTitle::where('category_id', $categoryId)->exists();
+            if (!$categoryIdExist){
+                Category::where('id', $categoryId)->delete();
+            }
+        }
+        return redirect('/admin/category')->with('success','deleted.');
     }
 
     public function deleteblog(Request $request)
@@ -1922,7 +2009,7 @@ class AdminController extends Controller
 
         $data = DB::table('blogs')
                     ->delete($request->id);
-        return redirect('/admin/all/blog')->with('success','削除されました。');
+        return redirect('/admin/all/blog')->with('success','Deleted Successfully.');
 
     }
 
@@ -2051,6 +2138,16 @@ class AdminController extends Controller
 
     }
 
+    public function edithelp($id)
+    {
+        $data = DB::table('helps')
+                    ->find($id);
+        $editmode = true;
+
+        return view('admin.addhelp',compact('data','editmode'));
+
+    }
+
 
     public function editcoupon($id)
     {
@@ -2152,6 +2249,7 @@ class AdminController extends Controller
 
     public function editsubcategory($type,$id)
     {
+
         if($type==3)
         {
             $subtitle = DB::table('sub_categories')
@@ -2237,7 +2335,7 @@ class AdminController extends Controller
                     ]);
             }
 
-            $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+            $msg = trans('Register Successfully', [ 'name' => 'Subtitle' ]);
             return redirect('/admin/category')->with('success', $msg );
         } else {
 
@@ -2250,7 +2348,7 @@ class AdminController extends Controller
 
             DB::table('sub_category_titles')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success',__('Subtitle Updated Successfully'));
         }
 
     }
@@ -2259,40 +2357,43 @@ class AdminController extends Controller
     public function storesubcategory(Request $request)
     {
 
-
-        $valarr = [
-            'category' => 'not_in:0',
-            'subcategory' => 'required|string|max:255',
-            'subname' => 'required|string|max:255', // Validate each subtitle individually
-        ];
-        if (empty($request->id))
-        {
-        $request->validate($valarr);
-    }
         $time = new DateTime();
+        $subname_arr = $request->subname;
         if (empty($request->id)) {
-
+            foreach ($subname_arr as $subname) {
                 DB::table('sub_categories')->insert([
                     'category_id' => $request->category,
-                    'sub_category_name' => $request->subname,
+                    'sub_category_name' => $subname,
                     'sub_category_title_id' => $request->subcategory,
                     'created_at' => $time->format('Y-m-d H:i:s'),
                     'updated_at' => $time->format('Y-m-d H:i:s')
                     ]);
-
-            $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+            }
+            $msg = trans('Register Successfully', [ 'name' => $request->title ]);
             return redirect('/admin/category')->with('success', $msg );
-        } else {
+        }
+        else{
+            if (!empty($request->image)) {
+                $imageName = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images'), $imageName);
+            } else {
+                $imageName = '';
+            }
+
+            if (!empty($request->image)) {
+                $updvals['category_icon'] = $imageName;
+            }
 
             $updval = array( 'category_id' => $request->category,
                              'sub_category_name' => $request->subname ?? '',
                              'sub_category_title_id' => $request->subcategory ?? '',
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
-
-            DB::table('sub_categories')->where('id',$request->id)->update($updval);
-
-            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            if (!empty($request->image)) {
+                DB::table('categories')->where('id',$request->category)->update($updvals);
+            }
+                DB::table('sub_categories')->where('id',$request->id)->update($updval);
+                return redirect('/admin/category')->with('success',__('SubCategory Updated Successfully'));
         }
 
     }
@@ -2402,62 +2503,37 @@ class AdminController extends Controller
         }
     }
 
-    public function storeblog(Request $request)
+
+    public function notice(Request $request)
     {
+        if ($request->from == 'notice') {
 
-       $valarr = array('title' => 'required|string|max:255',
-                       'content' => 'required|string|max:255',
+            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->Array();
 
-                   );
+            $inquiry_email = 'info-test@asia-hd.com';
+            $data = array('title' => $request->title);
 
-       if (empty($request->id)) {
-           $valarr['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:2048';
-       }
+            if (!empty(  $sellerEmails)) {
+                foreach ($sellerEmails as $email) {
+                    Mail::send([], $data, function ($message) use ($request, $email, $inquiry_email) {
+                        $message->to($email)->subject($request->title . 'からの質問');
+                        $message->from($inquiry_email, $request->title);
+                        $message->setBody("We received the following notice message from the official e-commerce website.
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                            \r\nName：　" . $request->title . "
+                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\n
+                            \r\nMessage：　
+                            \r\n" . $request->message . "
+                            \r\n
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                    });
+                }
+            }
 
-       $request->validate($valarr);
+            return redirect('/admin/addhelp#notice')->with('success', 'お問い合わせ内容が正常に送信されました。');
 
-       if (!empty($request->image)) {
-           $imageName = time().'.'.$request->image->extension();
-           $request->image->move(public_path('images'), $imageName);
-       } else {
-           $imageName = '';
-       }
-
-       $time = new DateTime();
-
-       if (empty($request->id)) {
-
-           DB::table('blogs')->insert([
-               'title' => $request->title,
-               'content' => $request->content,
-               'image' => $imageName,
-               'created_by' => Auth::user()->id,
-               'author' => Auth::user()->name,
-               'created_at' => $time->format('Y-m-d H:i:s'),
-               'updated_at' => $time->format('Y-m-d H:i:s')
-           ]);
-
-           $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
-           return redirect('/admin/all/blog')->with('success', $msg );
-       } else {
-
-           $updval = array('title' => $request->title,
-                           'content' => $request->content,
-                           'created_by' => Auth::user()->id,
-                           'author' => Auth::user()->name,
-                           'updated_at' => $time->format('Y-m-d H:i:s')
-                           );
-
-           if (!empty($request->image)) {
-               $updval['image'] = $imageName;
-           }
-
-           DB::table('blogs')->where('id',$request->id)->update($updval);
-
-           return redirect('/admin/all/blog')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
-
-       }
-
+        }
    }
 
    public function storetop(Request $request)
@@ -2520,11 +2596,12 @@ class AdminController extends Controller
 
     public function storecoupon(Request $request)
     {
+
         $existingCoupon = DB::table('coupons')
         ->where('coupon_code', $request->code)
         ->exists();
 
-        if ($existingCoupon) {
+        if ($existingCoupon && empty($request->id)) {
 
             $request->validate([
                 'code' => 'required|string|max:255|unique:coupons,coupon_code',
@@ -2554,8 +2631,7 @@ class AdminController extends Controller
 
         $time = new DateTime();
 
-        if (!$existingCoupon) {
-            if (empty($request->id)) {
+        if ($existingCoupon == false && empty($request->id)) {
 
                 DB::table('coupons')->insert([
                     'name' => $request->title,
@@ -2571,7 +2647,7 @@ class AdminController extends Controller
 
                 ]);
 
-                $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+                $msg = trans('Coupon Register Successfully', [ 'name' => $request->title ]);
                 return redirect('/admin/coupon')->with('success', $msg );
             } else {
 
@@ -2587,12 +2663,10 @@ class AdminController extends Controller
 
                 DB::table('coupons')->where('id',$request->id)->update($updval);
 
-                return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+                return redirect('/admin/coupon')->with('success','「'.$request->title.'」'.__('Updated Successfully'));
 
             }
         }
-
-    }
 
     public function storeproduct(Request $request)
     {
@@ -2687,7 +2761,7 @@ class AdminController extends Controller
                 'updated_at' => $time->format('Y-m-d H:i:s')
             ]);
 
-            $msg = trans('auth.doneregister', [ 'name' => $request->title ]);
+            $msg = trans('Register Successfully', [ 'name' => $request->title ]);
             return redirect('/admin/category')->with('success', $msg );
         } else {
 
@@ -2701,14 +2775,14 @@ class AdminController extends Controller
 
             DB::table('categories')->where('id',$request->id)->update($updval);
 
-            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
+            return redirect('/admin/category')->with('success','「'.$request->title.'」'.__('Updated Successfully.'));
 
         }
     }
 
     public function getSubcategories(Request $request) {
 
-        $subcategories =   DB::table('sub_category_titles')->where('sub_category_id','=',$request->category)->get();
+        $subcategories =   DB::table('sub_category_titles')->where('category_id','=',$request->category)->get();
         return response()->json([
             'status' => 'success',
             'subcategories' => $subcategories,
@@ -2752,8 +2826,31 @@ class AdminController extends Controller
 
     public function indexhelp()
     {
-        $helps = Help::latest()->paginate(4);
-        return view('admin.indexhelp',compact('helps'));
+        $limit = 10;
+
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Help::query()
+                    ->join('users', 'helps.user_id', '=', 'users.id')
+                    ->select('helps.*', 'users.name')
+                    ->where('users.role', 'send');
+
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('title', 'like', '%' . $mainSearch . '%');
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        // $hcompanies = array();
+        // print_r($lists);die;
+
+        return view('admin.indexhelp',compact('lists','ttlpage','ttl'));
     }
 
     public function addHelp()

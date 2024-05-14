@@ -165,6 +165,7 @@ Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstat
 
 Route::get('/admin/all/users', [Admincontroller::class, 'indexuser'])->name('admin.all.users');
 Route::get('/takeremote/{id}', [AdminController::class, 'takeremote'])->middleware(['auth','role:admin']);
+Route::get('/shoptakeremote/{shopid}', [AdminController::class, 'shoptakeremote'])->middleware(['auth','role:admin']);
 Route::get('userdetail/{userid}', [AdminController::class, 'userdetail']);
 Route::get('subadmindetail/{userid}', [AdminController::class, 'subadmindetail']);
 Route::get('/edit/{role}/{id}', [AdminController::class, 'editdata'])->middleware(['auth']);
@@ -192,9 +193,8 @@ Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
 
 //starthelp
 
-Route::get('/admin/indexhelp', function () {return view('admin.indexhelp');})->name('admin.indexhelp');
+Route::get('/admin/indexhelp', [AdminController::class,'indexhelp'])->name('admin.indexhelp');
 Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name('admin.addhelp');
-
 //endhelp
 
 //startcategory
@@ -235,9 +235,9 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 
 
 //Seller
-Route::get('/dashboard', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
+Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
-Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
+Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->middleware(['auth','verified','role:seller'])->name('seller.registered');
 
 Route::get('/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
 Route::post('/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');

@@ -25,7 +25,7 @@ class RegisterController extends Controller
     {
         $validatedData = $request->validate([
             'user_name' => 'present|string|max:255',
-            'mail' => 'present|string|email|max:255|unique:users',
+            'mail' => 'present|string|email|max:255|unique:users,email',
             'passwords' => 'present|string|min:8',
             'confirmed' => 'required|string|same:passwords',
             'bank_name' => 'present|string|max:255',
@@ -76,11 +76,13 @@ class RegisterController extends Controller
             'chome' => $validatedData['chome'],
             'building' => $validatedData['building'],
             'room' => $validatedData['room'],
-            'url' => $request->url
+            'url' => $request->url,
+            'status' => '1'
         ]);
 
         event(new Registered($seller));
 
+        $email = $request->email;
         $inquiry_email = 'info-test@asia-hd.com';
         $user = User::where('id', $user->id)->select('email', 'name')->first();
 
@@ -107,8 +109,6 @@ class RegisterController extends Controller
                         'created_at' => Carbon::now(),
                         );
         $notification->update( $newval);
-
-        $email = $request->email;
         return view('auth.verify-email',compact('email'));
     }
 }

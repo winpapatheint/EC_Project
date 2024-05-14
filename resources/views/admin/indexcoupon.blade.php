@@ -5,20 +5,23 @@
         {
             border-bottom-width:0px !important;
         }
+
     </style>
 
     <div class="page-body">
         <div class="container-fluid">
+
+            @include('components.messagebox')
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card card-table">
                         <div class="card-body">
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>News</h5>
+                                <h5>Coupons</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.addcoupon') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
+                                                <i data-feather="plus-square"></i>Add Coupon
                                         </a>
                                     </form>
                             </div>

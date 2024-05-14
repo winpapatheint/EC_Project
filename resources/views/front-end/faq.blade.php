@@ -102,7 +102,6 @@
                                             <input type="text" class="form-control" id="name"
                                                 placeholder="Enter First Name" name="name"  value="{{ old('name') }}">
                                             <i class="fa-solid fa-user"></i>
-
                                             @if (!empty($error['name']))
                                                 @foreach ($error['name'] as  $key => $value)
                                                     <p class="error text-danger">{{ $value }}</p>

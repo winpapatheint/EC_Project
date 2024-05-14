@@ -112,21 +112,21 @@
                                 <div class="dropdown theme-form-select">
                                     <button class="btn dropdown-toggle" type="button" id="select-language"
                                         data-bs-toggle="dropdown">
-                                        <img src="../assets/images/country/united-states.png"
+                                        <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
                                             class="img-fluid blur-up lazyload" alt="">
                                         <span>Japanese</span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                                <img src="../assets/images/country/united-kingdom.png"
+                                                <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                                 <span>Japanese</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                                <img src="../assets/images/country/germany.png"
+                                                <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
                                                     class="img-fluid blur-up lazyload" alt="">
                                                 <span>English</span>
                                             </a>
@@ -422,7 +422,7 @@
                                                                     <div class="dropdown-column col-xl-3">
                                                                         <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                                         @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                                            <a class="dropdown-item" href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">
+                                                                            <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
                                                                                 {{ $subCategory->sub_category_name }}
                                                                             </a>
                                                                         @endforeach
@@ -498,7 +498,7 @@
             </li>
 
             <li>
-                <a href="search.html" class="search-box">
+                <a href="{{ url('/search') }}" class="search-box">
                     <i class="iconly-Search icli"></i>
                     <span>Search</span>
                 </a>
@@ -512,7 +512,7 @@
             </li>
 
             <li>
-                <a href="cart.html">
+                <a href="{{ url('/carts') }}">
                     <i class="iconly-Bag-2 icli fly-cate"></i>
                     <span>Cart</span>
                 </a>

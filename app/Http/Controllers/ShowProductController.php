@@ -421,7 +421,8 @@ class ShowProductController extends Controller
 
             if($topic == 'top-50-offers')
             {
-                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(9)
+                if ($page == 6) $limit = 5;
+                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')
                 ->paginate($limit, ['*'], 'page', $page);
 
                 $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
@@ -469,10 +470,14 @@ class ShowProductController extends Controller
                             ->whereIn('products.id', $productIds)
                             ->first();
         }
-
         $ttl = $products->total();
-        $ttlpage = (ceil($ttl / $limit));
-
+        if ($topic == 'top-50-offers' && $ttl > 50) {
+            $ttl = 50;
+            $ttlpage = 6; // Assigning specific value when $ttl is limited to 50
+        } else {
+            $ttlpage = ceil($ttl / $limit);
+        }
+        
         $reviews = Review::all();
 
         return view('front-end.discount-products',compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'

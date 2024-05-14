@@ -31,28 +31,48 @@
                                                 <th>Discount</th>
                                                 <th>Commision</th>
                                                 <th>Status</th>
+                                                <th>Special Corner</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             @foreach( $lists as $key => $list )
-
                                                 <tr>
                                                     <th data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 200px;"></td>
                                                     <td data-label="">{{ $list->product_name }}</td>
                                                     <td data-label="">{{ $list->product_qty }}</td>
-                                                    <td data-label="">{{ $list->selling_price }}</td>
+                                                    <td data-label="">{{ number_format($list->selling_price, 0, '', ',') }}</td>
                                                     <td data-label=""> {{ $list->discount_percent ? $list->discount_percent . '%' :  'No Discount' }} </td>
                                                     <td class="col-sm-9">
                                                         {{ $list->commission ? $list->commission . '%' : '' }}
                                                     </td>
                                                     <td class="col-sm-9">
-                                                        <label class="switch">
-                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
+                                                        <label class="switch" style="margin-top: 8px;">
+                                                            <input data-width="100" data-id="{{$list->id}}" 
+                                                            class="toggle-class" type="checkbox" 
+                                                            data-offstyle="outline-secondary" data-toggle="toggle" 
+                                                            data-on="Active" data-off="InActive"  
+                                                            {{ $list->status ? 'checked' : '' }}>
                                                         </label>
+                                                    </td>
+                                                    <td class="col-sm-9">
+                                                        @if($list->special_sub_category_id)
+                                                        <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#removeProfile"
+                                                                onclick="showDeleteModal('{{ $list->id }}')"
+                                                                onclick="">Remove
+                                                        </button>
+                                                        @else
+                                                        <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#editAddress{{ $list->id }}"
+                                                                onclick="">Add
+                                                        </button>
+                                                        @endif
                                                     </td>
 
                                                     <td>
@@ -153,6 +173,96 @@
             </div>
         <!-- Delete Modal Box End -->
 
+        <!-- Edit Special Modal Box Start -->
+        @foreach($lists as $item)
+            <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add To Special Corner</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" action="{{ route('add_to_special_corner') }}" class="row g-4 theme-form theme-form-2 mega-form">
+                                    @csrf
+                                    <input type="hidden" name="productId" id="productId" value="{{ $item->id }}">
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title w-50">Category</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="category_id" id="category">
+                                                <option>Special Corner</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title w-50">SubCategory Title</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory_{{ $item->id }}">
+                                                <option>Choose SubCategoryTitle</option>
+                                                @foreach ($subCatTitle as $subCategoryTitle)
+                                                    <option value="{{ $subCategoryTitle->id }}">{{ $subCategoryTitle->sub_category_titlename }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title w-50">SubCategory</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="sub_category_id" id="subname_{{ $item->id }}">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">
+                                            Add
+                                        </button>
+                                    </div>
+                                </form> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+        <!-- Edit Special Modal Box End -->
+        <!-- Remove Address Modal Start -->
+        @foreach($lists as $item)
+            <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                    <div class="modal-content">
+                        <div class="modal-header d-block text-center">
+                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="remove-box">
+                                <p>Remove this product from Special Corner?</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                            <form action="{{ route('remove_from_special_corner', ['id' => $item->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
+        <!-- Remove Address Modal End -->
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <script>
@@ -179,5 +289,41 @@
                     });
                 });
             });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var subcategoryElements = document.querySelectorAll('.get_sub');
+                    subcategoryElements.forEach(function(element) {
+                        element.addEventListener('change', function() {
+                            var subcategoryTitleId = this.value;
+                            var itemId = this.id.split('_')[1];
+                            var subcategorySelect = document.getElementById('subname_' + itemId);
+                            subcategorySelect.innerHTML = '<option value="">Choose SubCategory</option>';
+
+                            if (!subcategoryTitleId) {
+                                return;
+                            }
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === XMLHttpRequest.DONE) {
+                                    if (xhr.status === 200) {
+                                        var subcategories = JSON.parse(xhr.responseText);
+                                        subcategories.forEach(function(subcategory) {
+                                            var option = document.createElement('option');
+                                            option.value = subcategory.id;
+                                            option.textContent = subcategory.sub_category_name;
+                                            subcategorySelect.appendChild(option);
+                                        });
+                                    } else {
+                                        console.error('Failed to fetch subcategories');
+                                    }
+                                }
+                            };
+                            xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
+                            xhr.send();
+                        });
+                    });
+                });
             </script>
 </x-auth-layout>

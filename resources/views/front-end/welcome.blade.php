@@ -442,7 +442,16 @@
                                                                     @endfor
                                                                 </ul>
                                                                 @if ($topSaveProduct->product_qty > 0)
-                                                                    <h6 class="theme-color">{{ $topSaveProduct->product_qty }}In Stock</h6>
+                                                                @php
+                                                                    $orderedCount = 0;
+                                                                    $productOrdered = DB::table('order_details')->where('product_id', $topSaveProduct->id)->get();
+                                                                    foreach($productOrdered as $order)
+                                                                    {
+                                                                        $orderedCount += $order->qty;
+                                                                    }
+                                                                    $leftProduct = $topSaveProduct->product_qty - $orderedCount;
+                                                                @endphp
+                                                                    <h6 class="theme-color">{{ $leftProduct }} In Stock</h6>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -461,17 +470,17 @@
                                 <a href="{{ route('show-coupon-product', ['id' => $coupon->id]) }}">
                                 <div class="section-t-space section-b-space">
                                     <div class="banner-contain">
-                                        <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                                        <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                                         <div class="banner-details p-center p-4 text-white text-center">
                                             <div>
                                                 <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
                                                 <h4 class="lh-base fw-bold offer-text">
-                                                    Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
-                                                        ¥{{ $coupon->mini_amount}}
+                                                    Get ¥{{ number_format($coupon->discount_amount, 0, '', ',') }} Cashback! Min Order of
+                                                        ¥{{ number_format($coupon->mini_amount, 0, '', ',') }}
                                                 </h4>
                                                 <h5 class="lh-base fw-bold offer-text">Expired Date :
-                                                    {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
-                                                    {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                                    {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
+                                                    {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                                 </h5>
                                                 <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                             </div>

@@ -88,6 +88,7 @@ Route::get('/shoplist', [AdminController::class, 'indexshoplist'])->name('shopli
 
 Route::get('categorysidebar/{categoryid}', [AdminController::class, 'indexcategoryproduct']);
 Route::get('subcategorysidebar/{subcategoryid}', [AdminController::class, 'indexsubcategoryproduct']);
+Route::get('specialsubcategorysidebar/{subcategoryid}', [AdminController::class, 'indexspecialsubcategoryproduct']);
 Route::get('shopleftsidebar/{shopid}', [AdminController::class, 'indexshopproduct']);
 
 
@@ -203,6 +204,8 @@ Route::get('/editcategory/{categoryid}', [AdminController::class, 'editcategory'
 Route::get('/editsubtitle/{categoryid}', [AdminController::class, 'editsubtitle']);
 Route::get('/editsubcategory/{categorytype}/{categoryid}', [AdminController::class, 'editsubcategory']);
 route::post('/admin/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
+route::post('/addtospecial',[AdminController::class,'addToSpecial'])->name('add_to_special_corner');
+route::delete('/removefromspecial/{id}',[AdminController::class,'removeFromSpecial'])->name('remove_from_special_corner');
 
 Route::get('/admin/category', [AdminController::class,'indexsubcategory'])->name('admin.category');
 

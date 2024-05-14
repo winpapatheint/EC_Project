@@ -359,12 +359,21 @@
                     <div class="banner-contain-2 hover-effect">
                         <img src="{{ asset('upload/shop/shop_banner.jpeg'   ) }}" class="bg-img rounded-3 blur-up lazyload" alt="">
                         <div class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
-                            <div>
-                                <img src="{{ asset('upload/shop/'.($shopInfo->shop_logo)   ) }}" class="blur-up lazyload" alt="" style="width: 60px;">
-                                <h2>{{ $shopInfo->shop_name }}</h2>
-                                <h3>{{ $shopInfo->zip_code }}.</h3>
-                                <h3>{{ $shopInfo->city }} {{ $shopInfo->city }}chome,</h3>
-                                <h3>{{ $shopInfo->building }} - {{ $shopInfo->building }}</h3>
+                            <div style="width: 150%;display: flex;">
+                                <img src="{{ asset('upload/shop/'.($shopInfo->shop_logo)) }}" class="blur-up lazyload" alt="" style="width: 100px;">
+                                <h2 style="margin-left: 20px;">{{ $shopInfo->shop_name }}
+                                <div class="product-rating" style="margin-top: 20px;">
+                                    <ul class="rating">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $ratingForShop[0])
+                                                <li><i data-feather="star" class="fill"></i></li>
+                                            @else
+                                                <li><i data-feather="star"></i></li>
+                                            @endif
+                                        @endfor
+                                    </ul>
+                                    <span style="color: white;">({{ $ratingForShop[1] }} <?php echo ($ratingForShop[1] > 1) ? 'Reviews' : 'Review'; ?>)</span>
+                                </div></h2>
                             </div>
                         </div>
                     </div>

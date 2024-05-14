@@ -243,17 +243,17 @@
                             $coupon = DB::table('coupons')->where('id', $cartlist->coupon_id)->first();
                         @endphp
                         <div class="banner-contain">
-                            <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center p-4 text-white text-center">
                                 <div>
                                     <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
                                     <h4 class="lh-base fw-bold offer-text">
-                                        Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
-                                            ¥{{ $coupon->mini_amount}}
+                                        Get ¥{{ number_format($coupon->discount_amount, 0, '', ',') }} Cashback! Min Order of
+                                            ¥{{ number_format($coupon->mini_amount, 0, '', ',') }}
                                     </h4>
-                                    <h5 class="lh-base fw-bold offer-text" style="color: black;">Expired Date :
-                                        {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
-                                        {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                    <h5 class="lh-base fw-bold offer-text">Expired Date :
+                                        {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
+                                        {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                     </h5>
                                     <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                 </div>

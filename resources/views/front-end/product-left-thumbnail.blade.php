@@ -394,8 +394,13 @@
                                                                 <div class="people-box">
                                                                     <div>
                                                                         <div class="people-image people-text">
+                                                                            @if ($user->user_photo)
                                                                             <img alt="user" class="img-fluid "
                                                                                 src="{{ asset('upload/profile/'.$user->user_photo) }}">
+                                                                            @else
+                                                                            <img alt="user" class="img-fluid "
+                                                                                src="{{ asset('upload/profile/profile.jpg') }}">
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                     <div class="people-comment">

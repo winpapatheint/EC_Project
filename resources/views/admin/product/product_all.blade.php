@@ -25,12 +25,12 @@
                                                 <th style="min-width: 50px">No</th>
                                                 <th >Date</th>
                                                 <th style="min-width: 200px">Product Image</th>
-                                                <th style="min-width: 200px">Product Name</th>
+                                                <th style="min-width: 300px">Product Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
                                                 <th style="min-width: 120px">Price</th>
-                                                <th style="min-width: 50px">Discount</th>
                                                 <th style="min-width: 150px">Commision</th>
                                                 <th style="min-width: 150px;">Status</th>
+                                                <th>Special Corner</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -38,28 +38,30 @@
                                         <tbody>
                                             @foreach( $lists as $key => $list )
                                                 <tr>
-                                                    <th data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+
+                                                    <td  class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 200px;"></td>
-                                                    <td data-label="">{{ $list->product_name }}</td>
+                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
+                                                    <td style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
+                                                        @if(strlen($list->product_name) > 30)
+                                                            {!! substr($list->product_name, 0, 30) . '<br>' . substr($list->product_name, 30, 30) . '...' !!}
+                                                        @else
+                                                            {!! nl2br(e($list->product_name)) !!}
+                                                        @endif
+                                                    </td>
+
                                                     <td data-label="">{{ $list->product_qty }}</td>
-                                                    <td data-label="">{{ number_format($list->selling_price, 0, '', ',') }}</td>
-                                                    <td data-label=""> {{ $list->discount_percent ? $list->discount_percent . '%' :  'No Discount' }} </td>
+                                                    <td data-label="">¥{{ number_format($list->selling_price, 0, '', ',') }}</td>
                                                     <td class="col-sm-9">
                                                         {{ $list->commission ? $list->commission . '%' : '' }}
                                                     </td>
                                                     <td class="col-sm-9">
-<<<<<<< HEAD
-                                                        <label class="switch mx-auto">
-                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
-=======
                                                         <label class="switch" style="margin-top: 8px;">
                                                             <input data-width="100" data-id="{{$list->id}}"
                                                             class="toggle-class" type="checkbox"
                                                             data-offstyle="outline-secondary" data-toggle="toggle"
                                                             data-on="Active" data-off="InActive"
                                                             {{ $list->status ? 'checked' : '' }}>
->>>>>>> f4c0d3dbb4cd28ea174c0055c1e4f6c282e3b63e
                                                         </label>
                                                     </td>
                                                     <td class="col-sm-9">

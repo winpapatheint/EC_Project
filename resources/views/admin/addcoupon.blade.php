@@ -156,15 +156,19 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p></p>
+                                                        @if (!$editmode)
+                                                        <p>Coupon data will be added?</p>
+                                                        @else
+                                                        <p>Coupon data will be updated?</p>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
                                                         @if (!$editmode)
-                                                            Yes
+                                                          Yes
                                                         @else
-                                                            Yes
+                                                          Yes
                                                         @endif
                                                     </button>
                                                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>

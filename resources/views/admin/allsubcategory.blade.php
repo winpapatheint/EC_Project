@@ -42,10 +42,10 @@
                                         <table class="table all-package theme-table" id="table_id">
                                             <thead>
                                                 <tr>
-                                                    <th>No</th>
-                                                    <th>Main Category Name</th>
-                                                    <th>SubTitle Category Name</th>
-                                                    <th>SubCategory Name</th>
+                                                    <th style="min-width: 5px">No</th>
+                                                    <th style="min-width: 5px">Main Category Name</th>
+                                                    <th style="min-width: 5px">SubTitle Category Name</th>
+                                                    <th style="min-width: 5px">SubCategory Name</th>
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
@@ -54,7 +54,7 @@
                                                 @foreach( $lists as $key => $list )
 
                                             <tr>
-                                              <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                              <td class="text-center" style="min-width: 5px !important">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->category }}</td>
                                               <td data-label="タイトル" style="font-size:14px;">{!! $list->sub_category_titlename  !!} </td>
                                               <td data-label="タイトル" style="font-size:14px;">{{ $list->sub_category_name }}</td>

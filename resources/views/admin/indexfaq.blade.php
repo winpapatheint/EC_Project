@@ -30,10 +30,10 @@
                                             <tr>
                                                 <th class="pro-quantity">#</th>
                                                 <th>Date</th>
-                                                <th class="pro-title">タイトル</th>
-                                                <th class="pro-thumbnail">質問</th>
-                                                <th class="pro-location">答え</th>
-                                                <th class="pro-remove">アクション</th>
+                                                <th class="pro-title">Title</th>
+                                                <th class="pro-thumbnail">Question</th>
+                                                <th class="pro-location">Answer</th>
+                                                <th class="pro-remove">Option</th>
                                             </tr>
                                         </thead>
 
@@ -41,7 +41,7 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="タイトル">{{ $list->title }}</td>
                                                     <td data-label="タイトル">{!! $list->que !!}</td>

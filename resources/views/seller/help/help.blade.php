@@ -64,7 +64,7 @@
                                                                 <td>
                                                                     <ul>
                                                                         <li>
-                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#replyReceiveModal{{ $item->id }}">
                                                                                 <i class="fa-solid fa-reply"></i>
                                                                             </a>
                                                                         </li>
@@ -153,6 +153,57 @@
 </div>
 <!-- Create Coupon Table End -->
 
+<!-- Reply Modal -->
+@foreach ($received as $item)
+<div class="modal fade theme-modal remove-coupon" id="replyReceiveModal{{ $item->id }}" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block">
+                <h5 class="modal-title" >Reply</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ route('reply.sent') }}" class="theme-form theme-form-2 mega-form" >
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $item->id}}">
+                    <input type="hidden" name="subject" value="{{ $item->subject}}">
+                    <div class="mb-2 row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                            <img src="" id="mainThmb">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Body
+                            </label>
+                        <div class="col-md-9 col-lg-10">
+                            <textarea class="form-control" name="body" id="" rows="8"></textarea>
+                            <p style="display:none" class="body error text-danger"></p>
+                            @if (!empty($error['body']))
+                                @foreach ($error['body'] as  $key => $value)
+                                    <p class="body error text-danger">{{ $value }}</p>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-animation">Reply</button>
+                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endforeach
+<!-- Reply Modal End-->
 
 <!-- Reply Modal -->
 @foreach ($sent as $item)

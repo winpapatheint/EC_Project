@@ -384,10 +384,10 @@ $(".close_button").click(function () {
    22. Category Box js
    ==========================*/
 $(".mobile-category").click(function () {
-    $(".bg-overlay, .category-dropdown").addClass("show");
+    $(".bg-overlay, .category-dropdown").addClass("show").css("overflow-y", "auto");
 });
 $(".close-button, .bg-overlay").click(function () {
-    $(".bg-overlay, .category-dropdown").removeClass("show");
+    $(".bg-overlay, .category-dropdown").removeClass("show").css("overflow-y", "");
 });
 
 /*=====================
@@ -402,7 +402,7 @@ $(".close-notification").click(function () {
 ==========================*/
 var contentwidth = $(window).width();
 if (contentwidth < "767") {
-    $(".onhover-category-list .category-name").append('<span class="according-menu">+</span>');
+    $(".onhover-category-list .category-name").append('<span class="according-menu">-</span>');
     $(".category-name").on("click", function () {
         $(".category-name")
             .removeClass("active")

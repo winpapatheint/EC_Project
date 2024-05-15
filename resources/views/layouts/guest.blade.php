@@ -109,29 +109,11 @@
                     <div class="col-lg-3">
                         <ul class="about-list right-nav-about">
                             <li class="right-nav-list">
-                                <div class="dropdown theme-form-select">
-                                    <button class="btn dropdown-toggle" type="button" id="select-language"
-                                        data-bs-toggle="dropdown">
+                                <div class="dropdown theme-form-select" style="display: flex;">
                                         <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <span>Japanese</span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                                <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>Japanese</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                                <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>English</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                            class="img-fluid blur-up lazyload" alt="" width="30px">
+                                        <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
+                                                class="img-fluid blur-up lazyload" alt="" width="30px">
                                 </div>
                             </li>
                             <li class="right-nav-list">
@@ -345,6 +327,12 @@
                             </button>
 
                             <div class="category-dropdown">
+                                <div class="category-title">
+                                    <h5>All Categories</h5>
+                                    <button type="button" class="btn p-0 close-button text-content">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
                             @foreach ($categories as $category)
                                 <ul class="category-list">
                                     <li class="onhover-category-list">
@@ -610,7 +598,7 @@
 
                         <div class="footer-contain">
                             <ul>
-                            @foreach ($allCategories as $category)
+                            @foreach ($categories as $category)
                                 <li>
                                     <a href="{{ url('/categorysidebar/'.$category->id)}}" class="text-content">{{ $category->category_name }}</a>
                                 </li>

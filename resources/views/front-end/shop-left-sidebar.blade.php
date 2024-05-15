@@ -357,7 +357,7 @@
 
                 <div class="col-custom-">
                     <div class="banner-contain-2 hover-effect">
-                        <img src="{{ asset('upload/shop/shop_banner.jpeg'   ) }}" class="bg-img rounded-3 blur-up lazyload" alt="">
+                        <img src="{{ asset('upload/shop/shop_banner.jpg'   ) }}" class="bg-img rounded-3 blur-up lazyload" alt="">
                         <div class="banner-detail p-center-right position-relative shop-banner ms-auto banner-small">
                             <div style="width: 150%;display: flex;">
                                 <img src="{{ asset('upload/shop/'.($shopInfo->shop_logo)) }}" class="blur-up lazyload" alt="" style="width: 100px;">

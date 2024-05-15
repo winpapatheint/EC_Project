@@ -90,7 +90,11 @@
                                             <select class="js-example-basic-single w-100" name="category_id" id="category">
                                                 <option>Choose Category</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                                    @if ($category->category_name === "Special Corner")
+                                                        <option value="{{ $category->id }}" disabled>{{ $category->category_name }}</option>
+                                                    @else
+                                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                             <p style="display:none" class="category error text-danger"></p>
@@ -325,8 +329,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                     <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                 </div>
                                             </div>
                                         </div>

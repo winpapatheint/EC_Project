@@ -15,38 +15,64 @@
                                         <form method="GET" action="{{ route('help.add') }}" class="theme-form theme-form-2 mega-form" >
                                             @csrf
                                             <div class="card-header-1">
-                                                <h5>Order ID: {{ $helps->id }}</h5>
+                                                <h5>Contact</h5>
                                             </div>
 
-                                            <div class="row">
+                                            <div class="mb-4 row">
                                                 <div class="mb-4 row align-items-center">
                                                     <label
-                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
+                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Subject</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <p>{{ $helps->title }}</p>
+                                                        <p>{{ $start->subject }}</p>
                                                     </div>
                                                 </div>
 
-                                                @if (!empty($helps->img))
+                                                @if (!empty($start->img))
                                                     <div class="mb-4 row align-items-center">
-                                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                                         <div class="col-md-9 col-lg-10">
-                                                            <img width="200" src="{{ asset('upload/shop/'.$helps->img) }}">
+                                                            <img width="100" src="{{ asset('upload/shop/'.$start->img) }}">
                                                         </div>
                                                     </div>
                                                 @endif
 
                                                 <div class="row align-items-center">
                                                     <label
-                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Message
+                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Me
                                                         </label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <p>{{ $helps->reason }}</p>
+                                                        <p>{{ $start->body }}</p>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            @if(isset($reply))
+                                                @foreach ($reply as $item)
+                                                <div class="mb-4 row">
+                                                    @if (!empty($item->img))
+                                                        <div class="mb-4 row align-items-center">
+                                                            <label class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                            <div class="col-md-9 col-lg-10">
+                                                                <img width="100" src="{{ asset('upload/shop/'.$item->img) }}">
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="row align-items-center">
+                                                        <label
+                                                            class="col-lg-2 col-md-3 col-form-label form-label-title">Me
+                                                            </label>
+                                                        <div class="col-md-9 col-lg-10">
+                                                            <p>{{ $item->body }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @endif
+
+
                                             <div class="d-grid gap-2 d-md-block"  style="margin-top: 20px;">
-                                                <a href="#">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#replyModal">
                                                     <button class="btn btn-animation" type="submit">Reply</button>
                                                 </a>
                                             </div>
@@ -63,4 +89,59 @@
     <!-- New User End -->
 </div>
 <!-- Page Sidebar End -->
+
+<!-- Reply Modal -->
+@if(isset($reply))
+    @foreach ($reply as $item)
+    <div class="modal fade theme-modal remove-coupon" id="replyModal" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h5 class="modal-title" >Reply</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('review.update')}}" method="POST">
+                        <input type="hidden" name="review_id" value="{{ $item->id }}">
+                        @csrf
+                        <div class="mb-2 row align-items-center">
+                            <label
+                                class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                                <img src="" id="mainThmb">
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label
+                                class="col-lg-2 col-md-3 col-form-label form-label-title">Body
+                                </label>
+                            <div class="col-md-9 col-lg-10">
+                                <textarea class="form-control" name="body" id="" rows="8"></textarea>
+                                <p style="display:none" class="body error text-danger"></p>
+                                @if (!empty($error['body']))
+                                    @foreach ($error['body'] as  $key => $value)
+                                        <p class="body error text-danger">{{ $value }}</p>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('reply.sent') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-animation">Reply</button>
+                    </form>
+                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+@endif
+<!-- Reply Modal End-->
 @endsection

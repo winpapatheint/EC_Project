@@ -189,6 +189,9 @@ class ProductController extends Controller
         $product = Product::find($request->id);
         $old_img = $request->old_img;
         $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_title_id' => 'present|exists:sub_category_titles,id',
+            'sub_category_id' => 'present|exists:sub_categories,id',
             'product_name' => 'required|string|max:255',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',

@@ -62,7 +62,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
 
-
 </head>
 
 <body>
@@ -304,35 +303,30 @@
     </div>
     <!-- page-wrapper End-->
 
-    <!-- Modal Start -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal fade theme-modal remove-coupon" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
-                    <p>Are you sure you want to log out?</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
-                        <form action="{{ route('adminlogout')}}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn--yes btn-primary">Yes</button>
-                        </form>
+                    <div class="remove-box">
+                        <p>Are you sure you want to log out?</p>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('adminlogout')}}">
+                        @csrf
+                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal End -->
-
-    <script>
-        @if (session('flash_message'))
-            $(function () {
-                    toastr.success('{{ session('flash_message') }}');
-            });
-        @endif
-    </script>
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>

@@ -1,9 +1,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @extends('seller.seller_dashboard')
 @section('seller')
-<!-- product review section start -->
+<!-- Section start -->
 <div class="page-body">
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
@@ -39,7 +38,8 @@
                                         @foreach ($review as $key => $item)
                                         <tr>
                                             <td>{{ ($ttl+1) - ($review->firstItem() + $key) }}</td>
-                                            <td>{{ $item->created_at }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                             <td>{{ $item->user->name }}</td>
                                             <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
                                             @if ($item->stars_rated == NULL)
@@ -122,7 +122,7 @@
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a class="sidebar-link sidebar-title link-nav" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                        <a class="sidebar-link sidebar-title link-nav" data-bs-toggle="modal" data-bs-target="#editReview"
                                                             href="javascript:void(0)">
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
@@ -153,30 +153,30 @@
     </div>
     <!-- Container-fluid Ends-->
 </div>
-<!-- product review section End -->
+<!-- Section End -->
 
 <!-- Modal Start -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="editReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog  modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-body">
-            <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
-            @if(isset($item->id))
-                <form action="{{ route('review.update')}}" method="POST">
-                    <input type="hidden" name="review_id" value="{{ $item->id }}">
-                    @csrf
-                    <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn--yes btn-primary">Update</button>
-                    </div>
-                </form>
-            @endif
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
+                @if(isset($item->id))
+                    <form action="{{ route('review.update')}}" method="POST">
+                        <input type="hidden" name="review_id" value="{{ $item->id }}">
+                        @csrf
+                        <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="button-box">
+                            <button type="submit" class="btn btn--yes btn-primary">Update</button>
+                            <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                @endif
+            </div>
         </div>
     </div>
-</div>
 </div>
 <!-- Modal End -->
 
@@ -197,12 +197,12 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form method="POST" action="{{ route('review.delete') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

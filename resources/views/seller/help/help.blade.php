@@ -49,24 +49,18 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if (session('flash_message'))
-                                                            <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                                                {{ session('flash_message') }}
-                                                            </div>
-                                                        @endif
-
-                                                        @if ($helps->isEmpty())
+                                                        @if ($received->isEmpty())
                                                             <tr>
                                                                 <td colspan="9">No data available</td>
                                                             </tr>
                                                         @else
 
-                                                        @foreach ($helps as $item)
+                                                        @foreach ($received as $item)
                                                             <tr>
-                                                                <td>{{ $item->title }}</td>
-                                                                <td>{{ $item->user->name }}</td>
-                                                                <td>{{ strlen($item->reason) > 50 ? substr($item->reason, 0, 50) . '...' : $item->reason }}</td>
-                                                                <td>{{ $item->created_at->toDateString() }}</td>
+                                                                <td>{{ $item->subject }}</td>
+                                                                <td>{{ $item->name }}</td>
+                                                                <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d H:i') }}</td>
                                                                 <td>
                                                                     <ul>
                                                                         <li>
@@ -108,21 +102,22 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if ($helps->isEmpty())
+                                                        @if ($sent->isEmpty())
                                                             <tr>
                                                                 <td colspan="9">No data available</td>
                                                             </tr>
                                                         @else
-                                                        @foreach ($helps as $item)
+                                                        @foreach ($sent as $item)
                                                             <tr>
-                                                                <td>{{ $item->title }}</td>
-                                                                <td>{{ $item->user->name }}</td>
-                                                                <td>{{ strlen($item->reason) > 50 ? substr($item->reason, 0, 50) . '...' : $item->reason }}</td>
-                                                                <td>{{ $item->created_at->toDateString() }}</td>
+                                                                <td>{{ $item->subject }}</td>
+                                                                <td>Me</td>
+                                                                <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                                 <td>
                                                                     <ul>
                                                                         <li>
-                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#replyModal{{ $item->id }}">
                                                                                 <i class="fa-solid fa-reply"></i>
                                                                             </a>
                                                                         </li>
@@ -132,7 +127,7 @@
                                                                             </a>
                                                                         </li>
                                                                         <li>
-                                                                            <a href="{{ route('help.delete',$item->id) }}">
+                                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteModalToggle{{ $item->id }}">
                                                                                 <i class="ri-delete-bin-line"></i>
                                                                             </a>
                                                                         </li>
@@ -158,8 +153,61 @@
 </div>
 <!-- Create Coupon Table End -->
 
+
+<!-- Reply Modal -->
+@foreach ($sent as $item)
+<div class="modal fade theme-modal remove-coupon" id="replyModal{{ $item->id }}" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block">
+                <h5 class="modal-title" >Reply</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ route('reply.sent') }}" class="theme-form theme-form-2 mega-form" >
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $item->id}}">
+                    <input type="hidden" name="subject" value="{{ $item->subject}}">
+                    <div class="mb-2 row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                            <img src="" id="mainThmb">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Body
+                            </label>
+                        <div class="col-md-9 col-lg-10">
+                            <textarea class="form-control" name="body" id="" rows="8"></textarea>
+                            <p style="display:none" class="body error text-danger"></p>
+                            @if (!empty($error['body']))
+                                @foreach ($error['body'] as  $key => $value)
+                                    <p class="body error text-danger">{{ $value }}</p>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-animation">Reply</button>
+                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endforeach
+<!-- Reply Modal End-->
+
 <!-- Delete Modal Box Start -->
-@foreach( $helps as $key => $item )
+@foreach( $sent as $key => $item )
     <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -175,12 +223,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form method="POST" action="{{ route('help.delete') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

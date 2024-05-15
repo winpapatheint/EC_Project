@@ -1,10 +1,13 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @extends('seller.seller_dashboard')
 @section('seller')
+<!-- Section start -->
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
+                    <!-- Table Start -->
                     <div class="card-body">
                         <div class="title-header option-title d-sm-flex d-block">
                             <h5>Products List</h5>
@@ -18,7 +21,12 @@
                         </div>
                         <div>
                             <div class="table-responsive">
-                                <table class="table all-package theme-table table-product" id="table_id">
+                                <table class="user-table ticket-table review-table theme-table table" id="table_id">
+                                    @if (session('flash_message'))
+                                        <div class="flash_message bg-gradient-success text-center py-3 my-0">
+                                            {{ session('flash_message') }}
+                                        </div>
+                                    @endif
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -39,17 +47,13 @@
                                             </tr>
                                         @else
                                         @foreach ($products as $key => $item)
-                                        @if (session('flash_message'))
-                                            <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                                {{ session('flash_message') }}
-                                            </div>
-                                        @endif
                                         <tr>
                                             <td>{{ ($ttl+1) - ($products->firstItem() + $key) }}</td>
-                                            <td>{{ $item->created_at }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                             <td>
                                                 <div class="table-image">
-                                                    <img width="100" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
+                                                    <img width="80" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
                                                 </div>
                                             </td>
 
@@ -103,14 +107,16 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Table End -->
                 </div>
             </div>
-            <!--pagination -->
-            @include('components.pagination')
+        <!--pagination -->
+        @include('components.pagination')
         </div>
     </div>
     <!-- Container-fluid Ends-->
 </div>
+<!-- Section End -->
 
 <!-- Delete Modal Box Start -->
 @foreach( $products as $key => $item )
@@ -129,12 +135,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form method="POST" action="{{ route('delete.product') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

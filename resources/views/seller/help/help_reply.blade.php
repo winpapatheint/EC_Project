@@ -1,6 +1,10 @@
-@php $error = $errors->toArray();  @endphp
 @extends('seller.seller_dashboard')
 @section('seller')
+@if (session('flash_message'))
+<div class="flash_message bg-gradient-success text-center py-3 my-0">
+    {{ session('flash_message') }}
+</div>
+@endif
 <!-- Page Sidebar Start -->
 <div class="page-body">
     <!-- New User start -->
@@ -13,28 +17,38 @@
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                        <form method="POST" action="{{ route('help.store') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" >
-                                            @csrf
-                                            <div class="card-header-1">
-                                                <h5>Contact Us</h5>
+                                        <div class="card-header-1">
+                                            <h5>{{ $help->subject }}</h5>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="row align-items-center">
+                                                <label
+                                                    class="col-lg-2 col-md-3 col-form-label form-label-title">Me
+                                                    </label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <p>{{ $help->body }}</p>
+                                                </div>
                                             </div>
 
-                                            <div class="row">
+                                            @if (!empty($help->img))
                                                 <div class="mb-4 row align-items-center">
-                                                    <label
-                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Subject</label>
+                                                    <label class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="text" name="subject">
-                                                        <p style="display:none" class="subject error text-danger"></p>
-                                                        @if (!empty($error['subject']))
-                                                            @foreach ($error['subject'] as  $key => $value)
-                                                                <p class="subject error text-danger">{{ $value }}</p>
-                                                            @endforeach
-                                                        @endif
+                                                        <img width="100" src="{{ asset('upload/shop/'.$helps->img) }}">
                                                     </div>
                                                 </div>
-
-                                                <div class="mb-4 row align-items-center">
+                                            @endif
+                                        </div>
+                                        <form method="POST" action="{{ route('reply.sent') }}" class="theme-form theme-form-2 mega-form" >
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $help->id}}">
+                                            <input type="hidden" name="subject" value="{{ $help->subject}}">
+                                            <div class="row">
+                                                <div class="card-header-1">
+                                                    <h5>Reply</h5>
+                                                </div>
+                                                <div class="mb-2 row align-items-center">
                                                     <label
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                                                     <div class="col-md-9 col-lg-10">
@@ -58,8 +72,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-grid gap-2 d-md-block">
-                                                <button class="btn btn-animation" type="submit">Send</button>
+                                            <div class="d-grid gap-2 d-md-block"  style="margin-top: 20px;">
+                                                <a href="#">
+                                                    <button class="btn btn-animation" type="submit">Reply</button>
+                                                </a>
                                             </div>
                                         </form>
                                     </div>

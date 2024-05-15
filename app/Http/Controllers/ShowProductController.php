@@ -46,7 +46,7 @@ class ShowProductController extends Controller
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
 
-        $limit = 9; // set the number of products per page
+        $limit = 12; // set the number of products per page
 
         $searchHistory = Session::get('searchHistory', []);
         if ($mainSearch != null && !in_array($mainSearch, $searchHistory)) {
@@ -282,7 +282,7 @@ class ShowProductController extends Controller
         $rating = $validated['rating'] ?? [];
         $discount = $validated['discount'] ?? [];
 
-        $limit = 9; // set the number of products per page
+        $limit = 12; // set the number of products per page
         $query = Product::query();
 
         if (!empty($search)) {
@@ -508,7 +508,7 @@ class ShowProductController extends Controller
         $discount = $validated['discount'] ?? [];
         $id = request()->id;
 
-        $limit = 9; // set the number of products per page
+        $limit = 12; // set the number of products per page
         $query = Product::query();
 
         if (!empty($search)) {

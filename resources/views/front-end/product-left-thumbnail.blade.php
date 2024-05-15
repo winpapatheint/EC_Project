@@ -129,32 +129,25 @@
                                 </div>
 
                                 <div class="note-box product-package">
-                                     <a type="button "                              
-                                        class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts', ['id' => $id]) }}">
-                                        Add To Cart</a>
+                                        <button onclick="location.href = '{{ route('show_carts', ['id' => $id]) }}';"
+                                        class="btn btn-md bg-dark cart-button text-white w-100" @if ($product->in_stock < 1) disabled @endif>
+                                        Add To Cart</button>
                                    
                                 </div>
 
                                 <div class="progress-sec">
                                     <div class="left-progressbar">
-                                    @php
-                                        $orderedCount = 0;
-                                    @endphp
-                                    @foreach ($productOrdered as $ordered)
-                                        @php
-                                            $orderedCount += $ordered->qty;
-                                        @endphp
-                                    @endforeach
-                                    @php
-                                    $leftProduct = $product->product_qty - $orderedCount;
-                                    @endphp
-                                        <h6>Please hurry! Only {{ $leftProduct }} left in stock</h6>
+                                        @if ($product->in_stock > 0)
+                                        <h6>Please hurry! Only {{ $product->in_stock }} left in stock</h6>
+                                        @else
+                                        <h6>No stock left</h6>
+                                        @endif
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            if($leftProduct >= 10)
+                                            if($product->in_stock >= 10)
                                             $percentage = 100;
                                             else
-                                            $percentage = ($leftProduct) * 10;
+                                            $percentage = ($product->in_stock) * 10;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>

@@ -151,6 +151,7 @@
                                     $productColors[] = $cartlist->product_color;
                                     $productSizes[] = $cartlist->product_size;
                                     $productQuantities[] = $cartlist->quantity;
+                                    $productAmounts[] = $cartlist->selling_price * $cartlist->quantity;
                                 @endphp
 
                                 <li>
@@ -164,7 +165,7 @@
                                                 $subTotal += $amount1;
                                                 $totalqty += $quantity
                                             @endphp
-                                            <h4 class="price">¥ {{ number_format($amount1 , 0, '.', ',') }}</h4>
+                                            <h4 class="price" style="color: black;">¥{{ number_format($amount1 , 0, '.', ',') }}</h4>
                                 </li>
                             </ul>
                             <input type="hidden" name="totalqty" value="{{ $totalqty }}">
@@ -180,12 +181,12 @@
 
                                 <li>
                                     <h4>Shipping</h4>
-                                    <h4 class="price">¥ 500</h4>
+                                    <h4 class="price">¥ {{ number_format($shippingFee , 0, '.', ',') }}</h4>
                                 </li>
 
                                 <li>
                                     <h4>Coupon Discount</h4>
-                                    <h4 class="price">¥ - {{ number_format($couponDiscount , 0, '.', ',') }}</h4>
+                                    <h4 class="price">(-)¥ {{ number_format($couponDiscount , 0, '.', ',') }}</h4>
                                 </li>
 
                                 <li class="list-total">
@@ -262,10 +263,14 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     var Newcolor = <?php echo json_encode($productColors ); ?>; 
     var Newsize = <?php echo json_encode($productSizes ); ?>; 
     var Newquantity = <?php echo json_encode($productQuantities ); ?>;
+    var Newproductamount = <?php echo json_encode($productAmounts ); ?>;
     var Newtotalqty = <?php echo json_encode($totalqty ); ?>;
     var Newamount = <?php echo json_encode($amount ); ?>;
     var Newamount1 = <?php echo json_encode($amount1 ); ?>;
     var Newtotalamount = <?php echo json_encode($total1 ); ?>;
+    var Newsubtotalamount = <?php echo json_encode($subTotal ); ?>;
+    var Newshippingfee = <?php echo json_encode($shippingFee ); ?>;
+    var Newcoupondiscount = <?php echo json_encode($couponDiscount ); ?>;
 
     $.ajax({
     url: '{{ route("payment_completed") }}',
@@ -278,16 +283,20 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
         color: Newcolor,
         size: Newsize,
         quantity: Newquantity,
+        productamount: Newproductamount,
         totalqty: Newtotalqty,
         amount: Newamount,
         amount1: Newamount1,
         totalamount: Newtotalamount,
+        subtotalamount: Newsubtotalamount,
+        shippingfee: Newshippingfee,
+        coupondiscountamount: Newcoupondiscount,
         buyeraddressid : Newbuyeraddressid,
         payment: "PayPal"
     },
     async : false,
     success: function(response) {
-        alert(response.message);
+        window.location.href = "{{ route('show-product') }}";
     },
     error: function(xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;

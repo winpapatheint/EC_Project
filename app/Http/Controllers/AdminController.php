@@ -639,7 +639,7 @@ class AdminController extends Controller
 
         $subCatTitle = SubCategoryTitle::whereHas('category', function($query) {
             $query->where('category_name', 'Special Corner');
-        })->get();        
+        })->get();
 
         // $hcompanies = array();
         // print_r($lists);die;
@@ -651,34 +651,23 @@ class AdminController extends Controller
     {
         $limit = 10;
 
-        // Identify expired coupons
+        //Identify expired coupons
         $expiredCoupons = DB::table('coupons')
                             ->where('enddate', '<', now())
                             ->pluck('id');
-
         // Update status of corresponding sellers
         $inactivestatus = DB::table('sellers')
                             ->whereIn('coupon_id', $expiredCoupons)
-                            ->update(['status' => 0]);
+                            ->update(['coupon_id' => null]);
 
-        // $lists = Seller::with('user')
-        //             ->with('user.products')
-        //             ->with('user.products.reviews')
-        //             ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
-        //             ->select('sellers.*','coupons.*','sellers.id','seller.coupon_id','sellers.created_at','sellers.shop_establish') // Select all columns from the sellers table
-        //             ->latest('sellers.created_at') // Specify the table for ordering
-        //             ->paginate($limit);
-
-
-                    $lists = Seller::with('user')
+        $lists = Seller::with('user')
                     ->with('user.products')
                     ->with('user.products.reviews')
                     ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
                     ->leftJoin('users', 'sellers.user_id', '=', 'users.id') // Join users table with condition
-                    ->select('sellers.*', 'coupons.*', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id') // Select all columns from the sellers table
+                    ->select('sellers.*', 'coupons.*','sellers.status', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id') // Select all columns from the sellers table
                     ->latest('sellers.created_at') // Specify the table for ordering
                     ->paginate($limit);
-
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1835,8 +1824,9 @@ class AdminController extends Controller
                 ->orWhere('coupon_code', 'like', '%' . $mainSearch . '%')
                 ->orWhere('discount_amount', 'like', '%' . $mainSearch . '%')
                 ->orWhere('mini_amount', 'like', '%' . $mainSearch . '%')
-                ->orWhere('valid_amount', 'like', '%' . $mainSearch . '%')
-                ->orWhere('valid_date', 'like', '%' . $mainSearch . '%')
+                ->orWhere('valid_count', 'like', '%' . $mainSearch . '%')
+                ->orWhere('startdate', 'like', '%' . $mainSearch . '%')
+                ->orWhere('enddate', 'like', '%' . $mainSearch . '%')
                 ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
             });
         }
@@ -2880,7 +2870,7 @@ class AdminController extends Controller
 
         $subCatTitle = SubCategoryTitle::whereHas('category', function($query) {
             $query->where('category_name', 'Special Corner');
-        })->get();        
+        })->get();
 
         // $hcompanies = array();
         // print_r($lists);die;
@@ -2906,7 +2896,7 @@ class AdminController extends Controller
 
         $subCatTitle = SubCategoryTitle::whereHas('category', function($query) {
             $query->where('category_name', 'Special Corner');
-        })->get();        
+        })->get();
 
         // $hcompanies = array();
         // print_r($lists);die;

@@ -13,9 +13,11 @@ use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Mail;
 use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller
@@ -142,17 +144,28 @@ class SellerController extends Controller
 
     public function help()
     {
-        $id = Auth::user()->created_by ?? Auth::id();
-        $helps = Help::where('user_id',$id)->latest()->paginate(4);
-        return view('seller.help.help',compact('helps'));
+        $email = Auth::user()->email;
+        $received = Help::where('to',$email)->latest()->paginate(10);
+        $sent = Help::where('from',$email)->latest()->paginate(10);
+        return view('seller.help.help',compact('received','sent'));
     }
 
 
 
     public function detailHelp($id)
     {
-        $helps = Help::find($id);
-        return view('seller.help.help_detail',compact('helps'));
+        $getId = Help::find($id);
+        $helpId = $getId->help_id;
+        if ($helpId) {
+            $start = Help::find($helpId);
+            $reply = Help::where('help_id', $helpId)->get();
+        } else {
+            $start = $getId;
+            $reply = null;
+        }
+
+        return view('seller.help.help_detail', compact('start', 'reply'));
+
     }
 
 
@@ -166,12 +179,12 @@ class SellerController extends Controller
 
     public function storeHelp(Request $request)
     {
-        $help = new Help();
         $validatedData = $request->validate([
-            'title' => 'present|string|max:255',
-            'reason' => 'present|string|max:255',
+            'subject' => 'present|string|max:255',
+            'body' => 'present|string|max:255',
         ]);
 
+        $help = new Help();
         if($request->hasFile('image'))
         {
             $img = $request->file('image');
@@ -180,14 +193,73 @@ class SellerController extends Controller
             $help->img = $filename;
         }
 
-        $help->user_id = Auth::user()->id;
-        $help->title = $validatedData['title'];
-        $help->reason = $validatedData['reason'];
-        $help->type = 'sent';
-        $help->sent = '1';
+        $help->name = Auth::user()->name;
+        $help->to = 'info-test@asia-hd.com';
+        $help->from = Auth::user()->email;
+        $help->subject = $validatedData['subject'];
+        $help->body = $validatedData['body'];
         $help->created_at = Carbon::now();
         $help->save();
-        return redirect('/help')->with('flash_message', 'Data added successfully');
+
+        // $inquiry_email = 'info-test@asia-hd.com';
+        // $email = Auth::user()->email;
+        // $name = Auth::user()->name;
+        // $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
+        //     $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+        //     $message->from(Auth::user()->email, Auth::user()->name);
+        // });
+
+        return redirect('/help')->with('flash_message', 'Data sent successfully');
+    }
+
+
+    public function reply($id)
+    {
+        $getId = Help::find($id);
+        $helpId = $getId->help_id;
+        $data = Help::where(function ($query) use ($helpId) {
+                $query->where('help_id', $helpId)
+                ->orWhere('id', $helpId);
+                })->get();
+        return view('seller.help.help_reply',compact('data'));
+    }
+
+
+    public function storeReply(Request $request)
+    {
+        $validatedData = $request->validate([
+            'body' => 'present|string|max:255',
+        ]);
+
+        $help = new Help();
+        if($request->hasFile('image'))
+        {
+            $img = $request->file('image');
+            $filename = time() . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('upload/shop'), $filename);
+            $help->img = $filename;
+        }
+
+        $check = Help::find($request->id);
+        $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
+        $help->name = Auth::user()->name;
+        $help->to = 'info-test@asia-hd.com';
+        $help->from = Auth::user()->email;
+        $help->subject = $request->subject;
+        $help->body = $validatedData['body'];
+        $help->updated_at = Carbon::now();
+        $help->save();
+
+        // $inquiry_email = 'info-test@asia-hd.com';
+        // $email = Auth::user()->email;
+        // $name = Auth::user()->name;
+        // $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
+        //     $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+        //     $message->from(Auth::user()->email, Auth::user()->name);
+        // });
+
+
+        return redirect('/help')->with('flash_message', 'Data sent successfully');
     }
 
 
@@ -195,10 +267,14 @@ class SellerController extends Controller
     {
         $id = $request->id;
         $help = Help::findOrFail($id);
-        File::delete($help->img);
+        $imagePath = public_path('upload/shop/' . $help->img);
         $help->delete();
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
         return back()->with('flash_message', 'Data deleted successfully');
     }
+
 
 
     public function allSubseller()

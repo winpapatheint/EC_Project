@@ -63,6 +63,12 @@
                                             Password</label>
                                         <div class="col-sm-10">
                                             <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}" id="confirmed">
+                                            <p style="display:none" class="confirmed error text-danger"></p>
+                                            @if (!empty($error['confirmed']))
+                                                @foreach ($error['confirmed'] as  $key => $value)
+                                                    <p class="confirmed error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
 
@@ -92,8 +98,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                     <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                 </div>
                                             </div>
                                         </div>

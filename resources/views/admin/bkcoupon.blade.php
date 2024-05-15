@@ -1,26 +1,27 @@
 <x-auth-layout>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <style>
         .table>:not(caption)>*>*
         {
             border-bottom-width:0px !important;
         }
+
     </style>
 
     <div class="page-body">
         <div class="container-fluid">
+
             @include('components.messagebox')
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card card-table">
                         <div class="card-body">
-
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>News</h5>
+                                <h5>Coupons</h5>
                                     <form class="d-inline-flex">
-                                        <a href="{{ route('admin.addblog') }}"
+                                        <a href="{{ route('admin.addcoupon') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
+                                                <i data-feather="plus-square"></i>Add Coupon
                                         </a>
                                     </form>
                             </div>
@@ -31,9 +32,15 @@
                                             <tr>
                                                 <th style="min-width: 50px">No</th>
                                                 <th style="min-width: 50px">Date</th>
-                                                <th style="min-width: 50px">News Name</th>
-                                                <th style="min-width: 50px">Image</th>
-                                                <th style="min-width: 50px">Option</th>
+                                                <th style="min-width: 50px">Name</th>
+                                                <th style="min-width: 50px">Coupon_code</th>
+                                                <th style="min-width: 50px">Discount_amount</th>
+                                                <th style="min-width: 50px">Mini_amount</th>
+                                                <th style="min-width: 50px">Valid_amount</th>
+                                                <th style="min-width: 150px">Startdate</th>
+                                                <th style="min-width: 150px">Enddate</th>
+                                                <th style="min-width: 150px">Status</th>
+                                                <th>Option</th>
                                             </tr>
                                         </thead>
 
@@ -41,20 +48,27 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
-                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="タイトル">{{ $list->title }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                                    <td class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                    <td >{{ $list->name }}</td>
+                                                    <td >{{ $list->coupon_code }}</td>
+                                                    <td >{{ $list->discount_amount }}</td>
+                                                    <td >{{ $list->mini_amount }}</td>
+                                                    <td >{{ $list->valid_count }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->startdate)) }}<br>{{ date('H:i', strtotime($list->startdate)) }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
+                                                    <td class="col-sm-9">
+                                                        <label class="switch">
+                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
+                                                               data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
+                                                               data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
+                                                        </label>
+                                                    </td>
+
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/blog/".$list->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href='{{ url("/editblog/".$list->id ) }}'>
+                                                                <a href='{{ url("/editcoupon/".$list->id ) }}'>
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>
@@ -78,6 +92,7 @@
                 </div>
                     <!--pagination -->
                     @include('components.pagination')
+
             </div>
         </div>
         <!-- Container-fluid Ends-->
@@ -95,11 +110,13 @@
                             </div>
                             <div class="modal-body">
                                 <div class="remove-box">
+                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
+                                        new permission for this object</p>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <form method="POST" action="{{ route('deleteblog') }}" style="display:flex;">
+                                <form method="POST" action="{{ route('deletecoupon') }}" style="display:flex;">
                                     @csrf
                                         <input type="hidden" name="id" value="{{ $list->id }}">
                                             <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
@@ -139,4 +156,32 @@
                 </div>
             </div>
         <!-- Delete Modal Box End -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $(function() {
+                $('.toggle-class').change(function() {
+
+                    var status = $(this).prop('checked') ? 1 : 0;
+
+                    var coupon_id = $(this).data('id');
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "{{ route('coupon') }}",
+                        data: {
+                            'status': status,
+                            'coupon_id': coupon_id,
+                            '_token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+                            alert('2');
+                            console.log(data.success);
+                        }
+                    });
+                });
+            });
+            </script>
 </x-auth-layout>

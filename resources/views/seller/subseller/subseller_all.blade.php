@@ -1,12 +1,15 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @extends('seller.seller_dashboard')
 @section('seller')
+<!-- Section start -->
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
+                    <!-- Table Start -->
                     <div class="card-body">
-                        <div class="title-header option-title d-sm-flex d-block">
+                        <div class="title-header option-title">
                             <h5>Subseller List</h5>
                             <div class="right-options">
                                 <ul>
@@ -18,19 +21,22 @@
                         </div>
                         <div>
                             <div class="table-responsive">
-                                <table class="table all-package theme-table table-product" id="table_id">
+                                <table class="user-table ticket-table review-table theme-table table"
+                                    id="table_id">
+
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Date</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Photo</th>
-                                            <th>Option</th>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Photo</th>
+                                                <th>Option</th>
+                                            </tr>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         @if ($subseller->isEmpty())
                                             <tr>
@@ -40,13 +46,14 @@
                                             @foreach ($subseller as $key => $item)
                                                 <tr>
                                                     <td>{{ $key+1 }}</td>
-                                                    <td>{{ $item->created_at }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>{{ $item->name }}</td>
                                                     <td>{{ $item->email }}</td>
                                                     <td>{{ $item->phone }}</td>
                                                     <td>
                                                         <div class="table-image">
-                                                            <img src="{{ (!empty($item->photo)) ? url('upload/profile/'.$item->photo) : url('upload/profile/profile.jpg') }}" width="100px" >
+                                                            <img src="{{ (!empty($item->photo)) ? url('upload/profile/'.$item->photo) : url('upload/profile/profile.jpg') }}" width="80px" >
                                                         </div>
                                                     </td>
                                                     <td>
@@ -66,12 +73,15 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Table End -->
                 </div>
             </div>
         </div>
     </div>
     <!-- Container-fluid Ends-->
 </div>
+<!-- Section End -->
+
 
 <!-- Delete Modal Box Start -->
 @foreach( $subseller as $key => $item )
@@ -90,16 +100,17 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form method="POST" action="{{ route('delete.subseller') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
 @endforeach
 <!-- Delete Modal Box End -->
+
 @endsection

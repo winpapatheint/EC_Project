@@ -126,10 +126,10 @@
                                             <button class="btn btn-submit btn-animation ms-auto fw-bold" type="submit">
                                                 @if (!$editmode)
                                                     <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                    {{ __('auth.doregister') }}
+                                                    Register
                                                 @else
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
-                                                    {{ __('auth.yeschange') }}
+                                                     Edit
                                                 @endif
                                             </button>
 

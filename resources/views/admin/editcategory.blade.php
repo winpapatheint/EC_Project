@@ -13,6 +13,7 @@
 <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" type="image/x-icon">
 <title>Fastkart - Reports</title>
     <title>Dynamic Dependent Dropdown - WebJourney</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Google font -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -342,16 +343,44 @@
 
                                                 <div class="mb-4 row align-items-center">
                                                     <label class="col-sm-3 col-form-label form-label-title">Category</label>
-                                                        <div class="col-sm-8">
-                                                            <select class="js-example-basic-single w-100" name="category" id="category">
+                                                        <div class="col-sm-9">
+                                                            <select class="js-example-basic-single w-100" name="category" id="category" style="width:400px">
                                                                 <option>select Category</option>
                                                                 @foreach($categories as $category)
-                                                                    <option value="{{ $category -> id }}"  @if($category -> id == $subtitle->category_id ) selected @endif >
+                                                                    <option value="{{ $category -> id }}" data-image="{{ $category->category_icon }}"  @if($category -> id == $subtitle->category_id ) selected @endif >
                                                                         {{ $category -> category_name }}  </option>
                                                                 @endforeach
 
                                                             </select>
                                                         </div>
+                                                </div>
+
+                                                <div class="mb-4 row align-items-center" >
+                                                    <label class="col-sm-3 col-form-label form-label-title" >Select Category Icon</label>
+
+                                                    <div class="col-sm-9"  >
+                                                        <input type="file" name="image" id="image" class="form-control" >
+                                                        <div id="categoryImageContainer">
+                                                            @foreach($categories as $category)
+                                                                @if($category -> id == $subtitle->category_id )
+                                                                    <img id="category-image" alt="your image"
+                                                                        @if(!empty($category->category_icon))
+                                                                            src="{{ asset('images/'.($category->category_icon ?? 'blog/blog-details.jpg')   ) }}"
+                                                                            style="max-width: 100%;"
+                                                                        @else
+                                                                            style="display: none; max-width: 100%;"
+                                                                        @endif
+                                                                    />
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                        <p style="display:none" class="image error text-danger"></p>
+                                                        @if (!empty($error['image']))
+                                                            @foreach ($error['image'] as  $key => $value)
+                                                                <p class="image error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
                                                 </div>
 
                                                 <div class="mb-4 row align-items-center">
@@ -361,27 +390,69 @@
                                                         <select class="js-example-basic-single w-100 get_subcategory" name="subcategory" id="subcategory">
                                                             <option value="{{ $subcategory_titlename->id  }}">{{ $subcategory_titlename->sub_category_titlename   }}</option>
                                                         </select>
-
+                                                        <p style="display:none" class="subcategory error text-danger"></p>
+                                                        @if (!empty($error['subcategory']))
+                                                            @foreach ($error['subcategory'] as  $key => $value)
+                                                                <p class="subcategory error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
 
-                                                  <div class="mb-4 row align-items-center">
-                                                                                      <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
-                                                                                      <div class="col-sm-9">
-                                                                                          <input class="form-control" name="subname" id="subname" type="text" placeholder="SubCategory Name"
-                                                                                          value="{{ old('subname') ?? $subcategory_name->sub_category_name  ?? '' }}">
-                                                                                      </div>
-                                                                                  </div>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" name="subname" id="subname" type="text" placeholder="SubCategory Name"
+                                                        value="{{ old('subname') ?? $subcategory_name->sub_category_name  ?? '' }}">
+                                                        <p style="display:none" class="subname error text-danger"></p>
+                                                        @if (!empty($error['subname']))
+                                                            @foreach ($error['subname'] as  $key => $value)
+                                                                <p class="subname error text-danger">{{ $value }}</p>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
 
-                                                <button type="submit" class="btn btn-animation ms-auto fw-bold">
+                                                <button class="btn btn-submit btn-animation ms-auto fw-bold" type="submit">
                                                     @if (!$editmode)
                                                         <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        {{ __('auth.doregister') }}
+                                                         Save
                                                     @else
                                                         <i class="fa fa-edit" aria-hidden="true"></i>
-                                                        {{ __('auth.yeschange') }}
+                                                        Edit
                                                     @endif
                                                 </button>
+
+                                                <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header d-block text-center">
+                                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="remove-box">
+                                                                    <p></p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+
+                                                                <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
+                                                                    @if (!$editmode)
+                                                                        登録する
+                                                                    @else
+                                                                        Yes
+                                                                    @endif
+                                                                </button>
+                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -431,6 +502,76 @@
             });
         });
     </script>
+    <script>
+        // Get reference to the select element
+        var categorySelect = document.getElementById('category');
+        // Get reference to the image container
+        var categoryImageContainer = document.getElementById('categoryImageContainer');
+
+        // Add event listener for change event on select element
+        categorySelect.addEventListener('change', function() {
+            // Get the selected option
+            var selectedOption = this.options[this.selectedIndex];
+            // Get the data-image attribute value
+            var imageUrl = selectedOption.getAttribute('data-image');
+            // Update the image in the container
+            categoryImageContainer.innerHTML = `<img src="{{ asset('images/${imageUrl}') }}" alt="Category Image">`;
+        });
+    </script>
+
+    <script>
+        $(".btn-submit").click(function(e){
+
+            e.preventDefault();
+                var _token = $("input[name='_token']").val();
+                let formData = new FormData(registersubcategory);
+                $('#confirmModal').modal('show');
+
+            });
+    </script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            $('#confirmModal').on('shown.bs.modal', function () {
+            });
+
+            $('#confirmModal').on('hidden.bs.modal', function () {
+            });
+
+            $('#confirmModal').on('click', '.btn-submit', function() {
+
+                if ($.trim($("#subcategory").val()) === "" || $.trim($("#subname").val()) === "") {
+
+                    if ($.trim($("#subcategory").val()) === "") {
+                        $('.error.subcategory').text('subcategory is required')
+                        $('.error.subcategory').show()
+                    }
+                    else{
+                        $('.error.subcategory').hide()
+                    }
+
+                    if ($.trim($("#subname").val()) === "") {
+                        $('.error.subname').text('subname is required')
+                        $('.error.subname').show()
+                    }
+                    else{
+                        $('.error.subname').hide()
+                    }
+
+                    $('#confirmModal').modal('hide');
+                    return false;
+                } else
+                {
+                    $('#registersubcategory').submit();
+                }
+            });
+        });
+
+    </script>
+
+
     <!-- latest js -->
 
     <script src="{{ asset('backend/assets/bootstrap_tagsinput/bootstrap-tagsinput.js') }}"></script>

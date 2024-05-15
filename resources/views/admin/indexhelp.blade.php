@@ -1,122 +1,151 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" integrity="sha512-UuQ/zJlbMVAw/UU8vVBhnI4op+/tFOpQZVT+FormmIEhRSCnJWyHiBbEVgM4Uztsht41f3FzVWgLuwzUqOObKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <x-auth-layout>
-<!-- Container-fluid starts-->
+<!-- Create Coupon Table start -->
 <div class="page-body">
-    <!-- All User Table Start -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-table">
-                    <div class="card-body">
-                        <div class="title-header option-title">
-                            <h5>Get in Touch</h5>
-                            <form class="d-inline-flex">
-                                <a href="{{ route('admin.addhelp') }}" class="align-items-center btn btn-theme d-flex">
-                                    <i data-feather="plus-square"></i>Contact
-                                </a>
-                            </form>
-                        </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-header option-title d-sm-flex d-block">
+                                    <h5>Contact</h5>
+                                    <div class="right-options">
+                                        <ul>
+                                            <li>
+                                                <a class="btn btn-solid" href="{{ route('notice') }}">Contact</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product-section-box">
+                                    <ul class="nav nav-tabs custom-nav right-options" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                                                data-bs-target="#description" type="button" role="tab"><i class="icon-cloud-down">Inbox</i></button>
+                                        </li>
 
-                        <div class="table-responsive category-table">
-                            <table class="table all-package theme-table" id="table_id">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Option</th>
-                                    </tr>
-                                </thead>
-                             
-                                <tbody>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2022-12-26 15:23</td>
-                                        <td>Everett C. Green Essex Court</td>
-                                        <td>Error</td>
-                                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="info-tab" data-bs-toggle="tab"
+                                                data-bs-target="#info" type="button" role="tab"><i class="icon-cloud-up">Sent</i></button>
+                                        </li>
 
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2022-12-26 15:23</td>
-                                        <td>Caroline L. Harris Davis Lane</td>
-                                        <td>Message</td>
-                                        <td>officiis nesciunt qui nostrum quod voluptatem corrupti.<br>amet consectetur adipisicing elit</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                    </ul>
 
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2022-12-26 15:23</td>
-                                        <td>Caroline L. Harris Davis Lane</td>
-                                        <td>Message</td>
-                                        <td>officiis nesciunt qui nostrum quod voluptatem corrupti.<br>amet consectetur adipisicing elit</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalToggle">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    <div class="tab-content custom-tab" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                                            <div class="table-responsive category-table">
+                                                <table class="table all-package theme-table" id="table_id">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Title</th>
+                                                            <th>Name</th>
+                                                            <th>Reason</th>
+                                                            <th>Date</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if ($helps->isEmpty())
+                                                            <tr>
+                                                                <td colspan="9">No data available</td>
+                                                            </tr>
+                                                        @else
+                                                        @foreach ($helps as $item)
+                                                            <tr>
+                                                                <td>{{ $item->title }}</td>
+                                                                <td>{{ $item->user->name }}</td>
+                                                                <td>{{ strlen($item->reason) > 50 ? substr($item->reason, 0, 50) . '...' : $item->reason }}</td>
+                                                                <td>{{ $item->created_at->toDateString() }}</td>
+                                                                <td>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                                <i class="fa-solid fa-reply"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                                <i class="ri-eye-line"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{ route('help.delete',$item->id) }}">
+                                                                                <i class="ri-delete-bin-line"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="info" role="tabpanel">
+                                            <div class="table-responsive category-table">
+                                                <table class="table all-package theme-table" id="table_id">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Title</th>
+                                                            <th>Name</th>
+                                                            <th>Reason</th>
+                                                            <th>Date</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if ($helps->isEmpty())
+                                                            <tr>
+                                                                <td colspan="9">No data available</td>
+                                                            </tr>
+                                                        @else
+                                                        @foreach ($lists as $key => $item)
+                                                            <tr>
+                                                                <td>{{ $item->title }}</td>
+                                                                <td>{{ $item->user->name }}</td>
+                                                                <td>{{ strlen($item->reason) > 50 ? substr($item->reason, 0, 50) . '...' : $item->reason }}</td>
+                                                                <td>{{ $item->created_at->toDateString() }}</td>
+                                                                <td>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                                <i class="fa-solid fa-reply"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{ route('help.detail',$item->id) }}">
+                                                                                <i class="ri-eye-line"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{ route('help.delete',$item->id) }}">
+                                                                                <i class="ri-delete-bin-line"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- All User Table Ends-->
-
-    <div class="container-fluid">
-        <!-- footer start-->
-        <footer class="footer">
-            <div class="footer-copyright text-center">
-                <p class="mb-0">Copyright 2022 © Fastkart theme by pixelstrap</p>
-            </div>
-        </footer>
-        <!-- footer end-->
-    </div>
 </div>
-<!-- Container-fluid end -->
+<!-- Create Coupon Table End -->
 </x-auth-layout>

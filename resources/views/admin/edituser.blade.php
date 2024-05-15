@@ -22,7 +22,7 @@
                                                 @php
                                                   if($editmode) {
                                                     if (!$editother) {
-                                                      $subtitle="Edit User Information";
+                                                      $subtitle="Edit Admin Information";
                                                     }
                                                   } else {
                                                     $subtitle="Register SubAdmin";
@@ -136,10 +136,10 @@
                                                         <button class="btn btn-submit btn-animation ms-auto fw-bold" type="submit">
                                                             @if (!$editmode)
                                                                 <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                                    登録する
+                                                                    Register
                                                             @else
                                                                 <i class="fa fa-edit" aria-hidden="true"></i>
-                                                                    情報を修正する
+                                                                   Edit
                                                             @endif
                                                         </button>
                                                     </div>
@@ -155,8 +155,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="remove-box">
-                                                                        <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                                                            new permission for this object</p>
+                                                                        <p>Are you sure your admin profile?</p>
                                                                     </div>
                                                                 </div>
 
@@ -164,12 +163,12 @@
 
                                                                     <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
                                                                         @if (!$editmode)
-                                                                            登録する
+                                                                            Register
                                                                         @else
-                                                                            修正する
+                                                                           Yes
                                                                         @endif
                                                                     </button>
-                                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">キャンセル</button>
+                                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                                 </div>
 
                                                             </div>

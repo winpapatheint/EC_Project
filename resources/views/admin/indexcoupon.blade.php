@@ -1,5 +1,6 @@
 <x-auth-layout>
 
+
     <style>
         .table>:not(caption)>*>*
         {
@@ -14,11 +15,11 @@
                     <div class="card card-table">
                         <div class="card-body">
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>News</h5>
+                                <h5>Coupons</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.addcoupon') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
+                                                <i data-feather="plus-square"></i>Add Coupon
                                         </a>
                                     </form>
                             </div>
@@ -27,16 +28,16 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Date</th>
-                                                <th>Name</th>
-                                                <th>Coupon_code</th>
-                                                <th>Discount_amount</th>
-                                                <th>Mini_amount</th>
-                                                <th>Valid_amount</th>
-                                                <th>Startdate</th>
-                                                <th>Enddate</th>
-                                                <th>Status</th>
+                                                <th  style="min-width: 70px">No</th>
+                                                <th style="min-width: 150px">Date</th>
+                                                <th style="min-width: 50px">Name</th>
+                                                <th style="min-width: 50px">Coupon_code</th>
+                                                <th style="min-width: 50px">Discount_amount</th>
+                                                <th style="min-width: 50px">Mini_amount</th>
+                                                <th style="min-width: 50px">Valid_amount</th>
+                                                <th style="min-width: 150px">Startdate</th>
+                                                <th style="min-width: 150px">Enddate</th>
+                                                <th style="min-width: 150px">Status</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -45,15 +46,15 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="タイトル">{{ $list->name }}</td>
-                                                    <td data-label="タイトル">{{ $list->coupon_code }}</td>
-                                                    <td data-label="タイトル">{{ $list->discount_amount }}</td>
-                                                    <td data-label="タイトル">{{ $list->mini_amount }}</td>
-                                                    <td data-label="タイトル">{{ $list->valid_count }}</td>
-                                                    <td data-label="タイトル">{{ $list->startdate }}</td>
-                                                    <td data-label="タイトル">{{ $list->enddate }}</td>
+                                                    <td class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                    <td >{{ $list->name }}</td>
+                                                    <td >{{ $list->coupon_code }}</td>
+                                                    <td >{{ $list->discount_amount }}</td>
+                                                    <td >{{ $list->mini_amount }}</td>
+                                                    <td >{{ $list->valid_count }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->startdate)) }}<br>{{ date('H:i', strtotime($list->startdate)) }}</td>
+                                                    <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
@@ -95,90 +96,90 @@
         <!-- Container-fluid Ends-->
     </div>
         <!-- Delete Modal Box Start -->
-            @foreach( $lists as $key => $list )
-                <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header d-block text-center">
-                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="remove-box">
-                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                        new permission for this object</p>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <form method="POST" action="{{ route('deletecoupon') }}" style="display:flex;">
-                                    @csrf
-                                        <input type="hidden" name="id" value="{{ $list->id }}">
-                                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
-                                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                                </form>
-                            </div>
+        @foreach( $lists as $key => $list )
+        <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-block text-center">
+                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="remove-box">
+                            <p>The permission for the use/group, preview is inherited from the object, object will create a
+                                new permission for this object</p>
                         </div>
                     </div>
-                </div>
-            @endforeach
 
-            <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="remove-box text-center">
-                                <div class="wrapper">
-                                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                                    </svg>
-                                </div>
-                                <h4 class="text-content">It's Removed.</h4>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
-                        </div>
+                    <div class="modal-footer">
+                        <form method="POST" action="{{ route('deletecoupon') }}" style="display:flex;">
+                            @csrf
+                                <input type="hidden" name="id" value="{{ $list->id }}">
+                                    <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                                        data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        <!-- Delete Modal Box End -->
+        </div>
+    @endforeach
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box text-center">
+                        <div class="wrapper">
+                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                        </div>
+                        <h4 class="text-content">It's Removed.</h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Delete Modal Box End -->
 
-        <script>
-            $(function() {
-                $('.toggle-class').change(function() {
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-                    var status = $(this).prop('checked') ? 1 : 0;
+<script>
+    $(function() {
+        $('.toggle-class').change(function() {
 
-                    var coupon_id = $(this).data('id');
+            var status = $(this).prop('checked') ? 1 : 0;
 
-                    $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: "{{ route('coupon') }}",
-                        data: {
-                            'status': status,
-                            'coupon_id': coupon_id,
-                            '_token': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            alert('2');
-                            console.log(data.success);
-                        }
-                    });
-                });
+            var coupon_id = $(this).data('id');
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('coupon') }}",
+                data: {
+                    'status': status,
+                    'coupon_id': coupon_id,
+                    '_token': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    alert('2');
+                    console.log(data.success);
+                }
             });
-            </script>
+        });
+    });
+    </script>
 </x-auth-layout>

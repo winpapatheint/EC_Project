@@ -40,10 +40,10 @@
                                 <thead>
                                     <tr>
                                         <td></td>
-                                        <td><h5>Price(tax inc)</h5></td>
-                                        <td><h5>Quantity</h5></td>
-                                        <td><h5>Total</h5></td>
-                                        <td><h5>Coupon</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Price(tax inc)</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Quantity</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Total</h5></td>
+                                        <td style="padding-left: 20px;"><h5>Coupon</h5></td>
                                         <td></td>
                                     </tr>
                                     <tr><td></td></tr>
@@ -57,32 +57,14 @@
                                                     <img src="{{ asset('upload/product_thambnail/'.$cartlist-> product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                 </a>
-                                                <div class="product-detail">
+                                                <div class="product-detail" style="width: 100px;">
                                                     <ul>
                                                         <li class="name">
-                                                            <a href=" {{ url('/product-left-thumbnail') }} ">{{ $cartlist->product_name }}</a>
+                                                            <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
                                                         </li>
 
                                                         <li class="text-content"><span class="text-title">Sold
                                                                 By:</span>{{ $cartlist->shop_name }}
-                                                        </li>
-
-                                                        <li class="text-content"><span
-                                                                class="text-title">Quantity</span>{{ $cartlist->product_name }}
-                                                        </li>
-
-                                                        <li class="text-content"><span
-                                                                class="text-title">Color</span>{{ $cartlist->product_color }}
-                                                        </li>
-                                                        <li class="text-content"><span
-                                                                class="text-title">Color</span>{{ $cartlist->product_size }}
-                                                        </li>
-                                                    
-                                                        <li>
-
-                                                            <h5 class="text-content d-inline-block">Price :</h5>
-                                                            <span>{{ $cartlist->selling_price }}</span>
-                                                            <span class="text-content"></span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -261,17 +243,17 @@
                             $coupon = DB::table('coupons')->where('id', $cartlist->coupon_id)->first();
                         @endphp
                         <div class="banner-contain">
-                            <img src="{{ asset('frontend/assets/images/homepage/coupon.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                            <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details p-center p-4 text-white text-center">
                                 <div>
                                     <h3 class="lh-base fw-bold offer-text">{{ $coupon->name }}</h3>
                                     <h4 class="lh-base fw-bold offer-text">
-                                        Get ¥{{ $coupon->discount_amount }} Cashback! Min Order of
-                                            ¥{{ $coupon->mini_amount}}
+                                        Get ¥{{ number_format($coupon->discount_amount, 0, '', ',') }} Cashback! Min Order of
+                                            ¥{{ number_format($coupon->mini_amount, 0, '', ',') }}
                                     </h4>
-                                    <h5 class="lh-base fw-bold offer-text" style="color: black;">Expired Date :
-                                        {{ date('Y-m-d H:i', strtotime($coupon->startdate)) }} ~
-                                        {{ date('Y-m-d H:i', strtotime($coupon->enddate)) }}
+                                    <h5 class="lh-base fw-bold offer-text">Expired Date :
+                                        {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
+                                        {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                     </h5>
                                     <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                 </div>

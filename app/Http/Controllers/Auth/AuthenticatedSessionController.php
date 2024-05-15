@@ -20,12 +20,12 @@ class AuthenticatedSessionController extends Controller
         if (!empty(Auth::user()->role)) {
             return redirect('/'.Auth::user()->role);
         }
-        
+
         if (!empty(Auth::user()->role)) {
             if (Auth::user()->role == 'admin') {
                 return redirect()->intended(RouteServiceProvider::ADMIN);
             } else if (Auth::user()->role == 'seller') {
-            return redirect()->intended(RouteServiceProvider::SELLER);
+            return redirect()->intended(RouteServiceProvider::DASHBOARD);
             } else if (Auth::user()->role == 'buyer') {
                 return redirect('/user');
             } else {
@@ -50,14 +50,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         // print_r(Auth::user()->role);die();
-      
+
         if (Auth::user()->role == 'admin') {
 
             return redirect('/admin');
         }
-        else if (Auth::user()->role == 'seller') {      
-          
-           return redirect()->intended(RouteServiceProvider::SELLER);
+        else if (Auth::user()->role == 'seller') {
+
+           return redirect()->intended(RouteServiceProvider::DASHBOARD);
         } else if (Auth::user()->role == 'buyer') {
             $intendedUrlWithDomain = $request->session()->pull('url.intended');
             $intendedUrlComponents = parse_url($intendedUrlWithDomain);
@@ -67,11 +67,11 @@ class AuthenticatedSessionController extends Controller
 
             if ($intendedUrl)
             return redirect($intendedUrl);
-        
+
             else
             return redirect('/user');
         } else {
-            
+
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 

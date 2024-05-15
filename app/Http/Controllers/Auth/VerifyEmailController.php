@@ -40,7 +40,7 @@ class VerifyEmailController extends Controller
         Auth::login($user);
 
         if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
+            return redirect()->intended(RouteServiceProvider::SELLER.'?verified=1');
         }
 
         if ($user->markEmailAsVerified()) {
@@ -51,6 +51,6 @@ class VerifyEmailController extends Controller
         $admin = User::where('role','admin')->where('noalert', null)->get();
         Notification::send($admin, new NewUserRegister($admin));
 
-        return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
+        return redirect()->intended(RouteServiceProvider::SELLER.'?verified=1');
     }
 }

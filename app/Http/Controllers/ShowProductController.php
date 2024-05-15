@@ -89,11 +89,11 @@ class ShowProductController extends Controller
                 ->orWhereHas('Category', function ($query) use ($sHistory) {
                     $query->where('category_name', 'like', '%' . $sHistory . '%');
                 })
-                ->orWhereHas('SubCategoryTitle', function ($query) use ($mainSearch) {
-                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                ->orWhereHas('SubCategoryTitle', function ($query) use ($sHistory) {
+                    $query->where('sub_category_titlename', 'like', '%' . $sHistory . '%');
                 })
-                ->orWhereHas('SubCategory', function ($query) use ($mainSearch) {
-                    $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
+                ->orWhereHas('SubCategory', function ($query) use ($sHistory) {
+                    $query->where('sub_category_name', 'like', '%' . $sHistory . '%');
                 });
             }
 
@@ -406,8 +406,8 @@ class ShowProductController extends Controller
                                     ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
                                     ->whereDate('order_details.created_at', Carbon::today())
                                     ->where('products.status', '=', '1')
-                                    ->select('products.*') // Select only the columns from the 'products' table
-                                    ->distinct('order_details.product_id') // Retrieve distinct product_ids
+                                    ->select('products.*')
+                                    ->distinct('order_details.product_id')
                                     ->paginate($limit, ['*'], 'page', $page);
 
                 $filterForProduct = Product::with('Category')
@@ -421,7 +421,8 @@ class ShowProductController extends Controller
 
             if($topic == 'top-50-offers')
             {
-                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)
+                if ($page == 6) $limit = 5;
+                $products = $query->with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')
                 ->paginate($limit, ['*'], 'page', $page);
 
                 $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('discount_percent', 'desc')->take(50)->get();
@@ -469,10 +470,14 @@ class ShowProductController extends Controller
                             ->whereIn('products.id', $productIds)
                             ->first();
         }
-
         $ttl = $products->total();
-        $ttlpage = (ceil($ttl / $limit));
-
+        if ($topic == 'top-50-offers' && $ttl > 50) {
+            $ttl = 50;
+            $ttlpage = 6; // Assigning specific value when $ttl is limited to 50
+        } else {
+            $ttlpage = ceil($ttl / $limit);
+        }
+        
         $reviews = Review::all();
 
         return view('front-end.discount-products',compact('products', 'reviews', 'ttl', 'ttlpage', 'page', 'categoryWithProductCount', 'ratingWithProductCount', 'discountWithProductCount'

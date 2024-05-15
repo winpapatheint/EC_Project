@@ -1,5 +1,5 @@
 <x-auth-layout>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .table>:not(caption)>*>*
         {
@@ -9,10 +9,12 @@
 
     <div class="page-body">
         <div class="container-fluid">
+            @include('components.messagebox')
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card card-table">
                         <div class="card-body">
+
                             <div class="title-header option-title d-sm-flex d-block">
                                 <h5>News</h5>
                                     <form class="d-inline-flex">
@@ -27,11 +29,11 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Date</th>
-                                                <th>News Name</th>
-                                                <th>Image</th>
-                                                <th>Option</th>
+                                                <th style="min-width: 50px">No</th>
+                                                <th style="min-width: 50px">Date</th>
+                                                <th style="min-width: 50px">News Name</th>
+                                                <th style="min-width: 50px">Image</th>
+                                                <th style="min-width: 50px">Option</th>
                                             </tr>
                                         </thead>
 
@@ -39,7 +41,7 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="タイトル">{{ $list->title }}</td>
                                                     <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
@@ -76,7 +78,6 @@
                 </div>
                     <!--pagination -->
                     @include('components.pagination')
-
             </div>
         </div>
         <!-- Container-fluid Ends-->
@@ -94,8 +95,6 @@
                             </div>
                             <div class="modal-body">
                                 <div class="remove-box">
-                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                        new permission for this object</p>
                                 </div>
                             </div>
 

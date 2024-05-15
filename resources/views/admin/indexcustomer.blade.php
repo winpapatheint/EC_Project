@@ -43,7 +43,7 @@
                                               <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
                                               <td data-label="タイトル">{{ $list->title }}</td>
                                               <td data-label="タイトル">{{ $list->subtitle }}</td>
-                                              <td data-label="タイトル">{!! $list->content !!}</td>
+                                              <td data-label="タイトル"> {!! strlen($list->content) > 50 ? substr($list->content, 0, 50) . '...' : $list->content !!}</td>
                                               <td data-label="タイトル">{{ $list->name }}</td>
                                               <td data-label="タイトル">{{ $list->position }}</td>
 

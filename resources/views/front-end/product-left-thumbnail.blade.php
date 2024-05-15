@@ -79,12 +79,12 @@
 
                         <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="right-box-contain">
-                                @if($product->discount_percent != null)
+                                @if($product->discount_percent != 0)
                                 <h6 class="offer-top">{{ $product-> discount_percent }}% Off</h6>
                                 @endif
                                 <h2 class="name">{{ $product-> product_name }}</h2>
                                 <div class="price-rating">
-                                    @if ($product->discount_percent != null || $product->discount_percent != 0)
+                                    @if ($product->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span> 
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                             <span class="offer theme-color">({{ $product-> discount_percent }}% off)</span></h3>
@@ -145,10 +145,16 @@
                                             $orderedCount += $ordered->qty;
                                         @endphp
                                     @endforeach
-                                        <h6>Please hurry! Only {{ $product->product_qty - $orderedCount }} left in stock</h6>
+                                    @php
+                                    $leftProduct = $product->product_qty - $orderedCount;
+                                    @endphp
+                                        <h6>Please hurry! Only {{ $leftProduct }} left in stock</h6>
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            $percentage = ($orderedCount / $product->product_qty) * 100;
+                                            if($leftProduct >= 10)
+                                            $percentage = 100;
+                                            else
+                                            $percentage = ($leftProduct) * 10;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
@@ -234,12 +240,12 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Seller</td>
+                                                        <td>Sub Category</td>
                                                         <td>
                                                             @php
-                                                                $seller_name = DB::table('users')->where('id',$product->seller_id)->first();
+                                                                $sub_category = DB::table('sub_categories')->where('id',$product->sub_category_id)->first();
                                                             @endphp
-                                                            {{ $seller_name->name }}
+                                                            {{ $sub_category->sub_category_name }}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -252,7 +258,7 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="care" role="tabpanel">
-                                        <div class="information-box">
+                                        <div class="">
                                             <ul>
                                                 <li>{!! $product->care_instructions !!}</li>
                                             </ul>
@@ -388,8 +394,13 @@
                                                                 <div class="people-box">
                                                                     <div>
                                                                         <div class="people-image people-text">
+                                                                            @if ($user->user_photo)
                                                                             <img alt="user" class="img-fluid "
                                                                                 src="{{ asset('upload/profile/'.$user->user_photo) }}">
+                                                                            @else
+                                                                            <img alt="user" class="img-fluid "
+                                                                                src="{{ asset('upload/profile/profile.jpg') }}">
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                     <div class="people-comment">
@@ -397,7 +408,7 @@
                                                                                 href="javascript:void(0)"
                                                                                 class="name">{{ $user->name }}</a>
                                                                             <div class="date-time">
-                                                                                <h6 class="text-content"> {{ \Carbon\Carbon::parse($review->updated_at)->format('d M Y h:i:s A') }}
+                                                                                <h6 class="text-content"> {{ date('Y/m/d H:i:s', strtotime($review->updated_at)) }}
                                                                                 </h6>
                                                                                 <div class="product-rating">
                                                                                     <ul class="rating">
@@ -505,7 +516,7 @@
                                                     <a href="{{ asset('upload/product_thambnail/'.$prod-> product_thambnail) }}">
                                                         <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
-                                                    @if ($prod->discount_percent != null)
+                                                    @if ($prod->discount_percent != 0)
                                                         <h6 class="price"><span class="theme-color">¥{{ $prod->selling_price - ($prod->selling_price * $prod->discount_percent)/100 }}</span> <del>¥{{ $prod->selling_price }}</del>
                                                     @else
                                                         <h5 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span>
@@ -612,7 +623,7 @@
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
                                         <h6 class="unit">{{ $relatedProduct->product_size }}</h6>
-                                        @if ($product->discount_percent != null || $product->discount_percent != 0)
+                                        @if ($product->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                         @else
@@ -674,7 +685,7 @@
                         <div class="col-lg-6">
                             <div class="right-sidebar-modal">
                                 <h4 class="title-name">{{ $product->product_name }}</h4>
-                                @if ($product->discount_percent != null || $product->discount_percent != 0)
+                                @if ($product->discount_percent != 0)
                                     <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                     <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
                                 @else

@@ -1,5 +1,4 @@
 <x-auth-layout>
-
     <style>
         .table>:not(caption)>*>*
         {
@@ -21,16 +20,14 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Date</th>
-                                                <th>Shop Image</th>
-                                                <th>Shop Name</th>
-                                                <th>Shop establish</th>
-                                                <th>Phone</th>
-                                                <th>Coupon Code</th>
-                                                <th>Status</th>
-                                                <th>Coupon</th>
-                                                <th>Option</th>
+                                                <th style="min-width: 70px">No</th>
+                                                <th style="min-width: 150px">Date</th>
+                                                <th style="min-width: 150px">Shop Image</th>
+                                                <th  style="min-width: 150px">Shop Name</th>
+                                                <th  style="min-width: 150px" >Coupon Code</th>
+                                                <th  style="min-width: 100px">Coupon</th>
+                                                <th style="min-width:  100px">Status</th>
+                                                <th  style="min-width: 100px">Option</th>
                                             </tr>
                                         </thead>
 
@@ -38,13 +35,21 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <th data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                                    <td data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/shop/'.($list->shop_logo)   ) }}" alt="thumb" style="width: 200px;"></td>
-                                                    <td data-label="">{{ $list->shop_name }}</td>
-                                                    <td data-label="">{{ $list->shop_establish }}</td>
-                                                    <td data-label="">{{ $list->phone }}</td>
-                                                    <td data-label=""><a class="btnlist btn-primary" href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
+                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/shop/'.($list->shop_logo)   ) }}" alt="thumb"  style="width: 50px;"></td>
+                                                    <td data-label="氏名"><a
+                                                      href="{{ url('/shoptakeremote/'.rand ( 10000 , 99999 ).$list->user_id ) }}"
+                                                      >{{ $list->shop_name }}</a></td>
+                                                    <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
+
+                                                    <td class="col-sm-9">
+
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal" class="toggle-class btn btn-animation" data-offstyle="outline-secondary" style="width:120px"
+                                                        data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}">
+                                                        Coupon
+                                                    </a>
+                                                    </td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
@@ -52,13 +57,6 @@
                                                         </label>
                                                     </td>
 
-                                                    <td class="col-sm-9">
-
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal" class="toggle-class btn btn-animation" data-offstyle="outline-secondary"
-                                                        data-bs-target="#couponModal{{ $list->id }}">
-                                                        Coupon
-                                                    </a>
-                                                    </td>
 
                                                     <td>
                                                         <ul>
@@ -85,145 +83,145 @@
         </div>
         <!-- Container-fluid Ends-->
     </div>
-
-    <!-- Modal -->
+        <!-- Modal -->
     @foreach( $lists as $key => $list )
-        <div class="modal fade theme-modal remove-coupon" id="couponModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header d-block text-center">
-                        <h5 class="modal-title w-100" id="exampleModalLabel22">Select Coupon</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fas fa-times"></i>
-                            </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <!-- Add class "js-example-basic-single" to select element to initialize Select2 -->
-                            <select class="form-control js-example-basic-single" id="coupon-select">
-                                <option value="0">select Coupon List</option>
+
+    <div class="modal fade theme-modal remove-coupon" id="couponModal{{ $list->id . $list->coupon_id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Select Coupon</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Clost">
+                            <i class="fas fa-times"></i>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <!-- Add class "js-example-basic-single" to select element to initialize Select2 -->
+                        <select class="form-control js-example-basic-single" id="coupon-select">
                                 @foreach($coupons as $coupon)
-                                    <option value="{{ $coupon->id }}">{{ $coupon->coupon_code }}</option>
+
+                                    <option value="{{ $coupon->id }}"  @if($coupon->id == $list->coupon_id ) selected @endif >{{ $coupon->coupon_code }} </option>
                                 @endforeach
-                            </select>
-                        </div>
+                        </select>
                     </div>
-                    <div class="modal-footer">
-                        <form id="coupon-form" method="POST" action="{{ route('updatecoupon') }}" style="display:flex;">
-                            @csrf
-                            <input type="hidden" id="coupon-id" name="couponid" value="">
-                            <input type="hidden" name="id" value="{{ $list->id }}">
-                            <button type="submit" class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
-                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                        </form>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="coupon-form" method="POST" action="{{ route('updatecoupon') }}" style="display:flex;">
+                        @csrf
+                        <input type="hidden" id="coupon-id" name="couponid" value="">
+                        <input type="hidden" name="id" value="{{ $list->id }}">
+                        <button type="submit" class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                            data-bs-toggle="modal" data-bs-dismiss="modal" >Yes</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    </form>
                 </div>
             </div>
         </div>
-    @endforeach
-        <!-- Delete Modal Box Start -->
-            @foreach( $lists as $key => $list )
-                <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header d-block text-center">
-                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="remove-box">
-                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                        new permission for this object</p>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <form method="POST" action="{{ route('deleteproduct') }}" style="display:flex;">
-                                    @csrf
-                                        <input type="hidden" name="id" value="{{ $list->id }}">
-                                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
-                                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-
-            <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+    </div>
+@endforeach
+    <!-- Delete Modal Box Start -->
+        @foreach( $lists as $key => $list )
+            <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                        <div class="modal-header d-block text-center">
+                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fas fa-times"></i>
                                 </button>
                         </div>
                         <div class="modal-body">
-                            <div class="remove-box text-center">
-                                <div class="wrapper">
-                                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                                    </svg>
-                                </div>
-                                <h4 class="text-content">It's Removed.</h4>
+                            <div class="remove-box">
+                                <p>The permission for the use/group, preview is inherited from the object, object will create a
+                                    new permission for this object</p>
                             </div>
                         </div>
+
                         <div class="modal-footer">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+                            <form method="POST" action="{{ route('deleteproduct') }}" style="display:flex;">
+                                @csrf
+                                    <input type="hidden" name="id" value="{{ $list->id }}">
+                                        <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                                            data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        <!-- Delete Modal Box End -->
+        @endforeach
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
 
-        <script>
-            $(function() {
-                $('.toggle-class').change(function() {
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="remove-box text-center">
+                            <div class="wrapper">
+                                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                </svg>
+                            </div>
+                            <h4 class="text-content">It's Removed.</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Delete Modal Box End -->
 
-                    var status = $(this).prop('checked') ? 1 : 0;
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-                    var shop_id = $(this).data('id');
+    <script>
+        $(function() {
+            $('.toggle-class').change(function() {
 
-                    $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: "{{ route('shopstatus') }}",
-                        data: {
-                            'status': status,
-                            'shop_id': shop_id,
-                            '_token': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            alert('2');
-                            console.log(data.success);
-                        }
-                    });
+                var status = $(this).prop('checked') ? 1 : 0;
+                var shop_id = $(this).data('id');
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "{{ route('shopstatus') }}",
+                    data: {
+                        'status': status,
+                        'shop_id': shop_id,
+                        '_token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        alert('2');
+                        console.log(data.success);
+                    }
                 });
             });
-            </script>
+        });
+        </script>
 
 
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-            <script>
-                $(document).ready(function() {
-                    // When the value of the select box changes
-                    $('#coupon-select').change(function() {
-                        // Get the selected value from the select box
-                        var selectedValue = $(this).val();
+<script>
+$(document).ready(function(){
+    // When the "Yes" button is clicked within any modal
+    $(document).on('click', '.remove-coupon .btn-animation', function(){
+        // Find the closest modal to the clicked button
+        var modal = $(this).closest('.remove-coupon');
+        // Get the selected value from the coupon-select dropdown within the modal
+        var selectedValue = modal.find('.js-example-basic-single').val();
 
-                        // Set the selected value into the hidden input field
-                        $('#coupon-id').val(selectedValue);
-                    });
-                });
-            </script>
-
+        // Update the value of the hidden input field within the modal
+        modal.find('#coupon-id').val(selectedValue);
+    });
+});
+</script>
 </x-auth-layout>

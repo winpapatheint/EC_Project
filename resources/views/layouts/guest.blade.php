@@ -109,29 +109,11 @@
                     <div class="col-lg-3">
                         <ul class="about-list right-nav-about">
                             <li class="right-nav-list">
-                                <div class="dropdown theme-form-select">
-                                    <button class="btn dropdown-toggle" type="button" id="select-language"
-                                        data-bs-toggle="dropdown">
-                                        <img src="../assets/images/country/united-states.png"
-                                            class="img-fluid blur-up lazyload" alt="">
-                                        <span>Japanese</span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                                <img src="../assets/images/country/united-kingdom.png"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>Japanese</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                                <img src="../assets/images/country/germany.png"
-                                                    class="img-fluid blur-up lazyload" alt="">
-                                                <span>English</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <div class="dropdown theme-form-select" style="display: flex;">
+                                        <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
+                                            class="img-fluid blur-up lazyload" alt="" width="30px">
+                                        <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
+                                                class="img-fluid blur-up lazyload" alt="" width="30px">
                                 </div>
                             </li>
                             <li class="right-nav-list">
@@ -226,6 +208,7 @@
                                                                     ->join('products', 'carts.product_id', '=', 'products.id')
                                                                     ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
                                                                     ->where('buyers.user_id', Auth::user()->id)->get();
+
                                                     $count = $userCarts->count();
                                                 @endphp
                                                 @endif
@@ -344,6 +327,12 @@
                             </button>
 
                             <div class="category-dropdown">
+                                <div class="category-title">
+                                    <h5>All Categories</h5>
+                                    <button type="button" class="btn p-0 close-button text-content">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
                             @foreach ($categories as $category)
                                 <ul class="category-list">
                                     <li class="onhover-category-list">
@@ -422,7 +411,7 @@
                                                                     <div class="dropdown-column col-xl-3">
                                                                         <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                                         @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                                            <a class="dropdown-item" href="{{ url('/subcategorysidebar/'.$subCategory->id)}}">
+                                                                            <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
                                                                                 {{ $subCategory->sub_category_name }}
                                                                             </a>
                                                                         @endforeach
@@ -498,7 +487,7 @@
             </li>
 
             <li>
-                <a href="search.html" class="search-box">
+                <a href="{{ url('/search') }}" class="search-box">
                     <i class="iconly-Search icli"></i>
                     <span>Search</span>
                 </a>
@@ -512,7 +501,7 @@
             </li>
 
             <li>
-                <a href="cart.html">
+                <a href="{{ url('/carts') }}">
                     <i class="iconly-Bag-2 icli fly-cate"></i>
                     <span>Cart</span>
                 </a>
@@ -609,7 +598,7 @@
 
                         <div class="footer-contain">
                             <ul>
-                            @foreach ($allCategories as $category)
+                            @foreach ($categories as $category)
                                 <li>
                                     <a href="{{ url('/categorysidebar/'.$category->id)}}" class="text-content">{{ $category->category_name }}</a>
                                 </li>

@@ -38,8 +38,13 @@
 
                                                 <div class="row align-items-center">
                                                     <label
-                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Me
-                                                        </label>
+                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">
+                                                        @if ($start->from == Auth::user()->mail)
+                                                            Me
+                                                        @elseif ($start->from != Auth::user()->mail)
+                                                            {{ $start->name }}
+                                                        @endif
+                                                    </label>
                                                     <div class="col-md-9 col-lg-10">
                                                         <p>{{ $start->body }}</p>
                                                     </div>

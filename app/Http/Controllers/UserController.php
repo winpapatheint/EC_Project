@@ -1018,6 +1018,7 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
@@ -1033,6 +1034,7 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],

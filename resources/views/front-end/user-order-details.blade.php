@@ -153,6 +153,7 @@
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Product Name</th>
+                                                                <th>Shop</th>
                                                                 <th>Quantity</th>
                                                                 <th>Price</th>
                                                                 <th></th>
@@ -166,7 +167,15 @@
                                                                     {{ $index + 1 }}
                                                                 </td>
                                                                 <td>
-                                                                    <h5 style="width: 100px;">{{ $order->product_name }}</h5>
+                                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $order->product_id]) }}">
+                                                                        <h5 style="width: 100px;">{{ $order->product_name }}</h5>
+                                                                    </a>
+                                                                </td>
+                                                                @php
+                                                                    $shop = DB::table('sellers')->where('user_id', $order->seller_id)->first();
+                                                                @endphp
+                                                                <td>
+                                                                    <h5>{{ $shop->shop_name }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5>{{ $order->qty }}</h5>
@@ -183,7 +192,7 @@
                                                         @endforeach
                                                         <tfoot>
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Subtotal :</h5>
                                                                 </td>
                                                                 <td>
@@ -192,7 +201,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Shipping :</h5>
                                                                 </td>
                                                                 <td>
@@ -201,7 +210,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Coupon Discounted :</h5>
                                                                 </td>
                                                                 <td>
@@ -210,7 +219,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h4 class="theme-color fw-bold">Total Price :</h4>
                                                                 </td>
                                                                 <td>

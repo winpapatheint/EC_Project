@@ -441,17 +441,10 @@
                                                                         @endif
                                                                     @endfor
                                                                 </ul>
-                                                                @if ($topSaveProduct->product_qty > 0)
-                                                                @php
-                                                                    $orderedCount = 0;
-                                                                    $productOrdered = DB::table('order_details')->where('product_id', $topSaveProduct->id)->get();
-                                                                    foreach($productOrdered as $order)
-                                                                    {
-                                                                        $orderedCount += $order->qty;
-                                                                    }
-                                                                    $leftProduct = $topSaveProduct->product_qty - $orderedCount;
-                                                                @endphp
-                                                                    <h6 class="theme-color">{{ $leftProduct }} In Stock</h6>
+                                                                @if ($topSaveProduct->in_stock > 0)
+                                                                    <h6 class="theme-color">{{ $topSaveProduct->in_stock }} In Stock</h6>
+                                                                @else
+                                                                    <h6 class="theme-color">No Stock Left</h6>
                                                                 @endif
                                                             </div>
                                                         </div>

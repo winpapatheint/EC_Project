@@ -127,7 +127,8 @@
                                             @foreach ($transfer as $key => $item )
                                                 <tr>
                                                     <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
-                                                    <td>{{ $item->created_at }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>Bank</td>
                                                     <td>Asia 食材</td>
                                                     <td>{{ $item->id }}</td>

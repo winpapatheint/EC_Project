@@ -6,9 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Fastkart">
-    <meta name="keywords" content="Fastkart">
-    <meta name="author" content="Fastkart">
+    <meta name="description" content="Asian food museum">
+    <meta name="keywords" content="Asian food museum">
+
     <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
     <title>Asian food museum</title>
 
@@ -113,7 +113,7 @@
                                         <img src="{{ asset('frontend/assets/images/country/japan.png')}}"
                                             class="img-fluid blur-up lazyload" alt="" width="30px">
                                         <img src="{{ asset('frontend/assets/images/country/united-states.png')}}"
-                                                class="img-fluid blur-up lazyload" alt="" width="30px">
+                                                class="img-fluid blur-up lazyload" alt="" width="30px" style="margin-left: 5px;">
                                 </div>
                             </li>
                             <li class="right-nav-list">
@@ -261,7 +261,7 @@
 
                                                     <div class="price-box">
                                                         <h5>Total :</h5>
-                                                        <h4 class="theme-color fw-bold">¥{{ $total }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($total , 0, '.', ',') }}</h4>
                                                     </div>
 
                                                     <div class="button-group">

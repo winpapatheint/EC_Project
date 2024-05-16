@@ -101,7 +101,7 @@
                                             <h4>summery</h4>
                                             <ul class="order-details">
                                                 <li>Order ID: {{ $order->id }}</li>
-                                                <li>Order Date: {{ $order->created_at }}</li>
+                                                <li>Order Date: {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d H:i') }}</li>
                                                 <li>Order Total: ¥{{ number_format($total) }}</li>
                                             </ul>
 

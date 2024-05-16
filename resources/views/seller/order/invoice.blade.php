@@ -80,7 +80,7 @@
 
         <td style="text-align: right;">
             <h3><span style="color: green;">Order ID:</span>{{ $data->id }}</h3>
-            Order Date: {{ $data->created_at }} <br>
+            Order Date: {{ \Carbon\Carbon::parse($data->created_at)->format('Y/m/d') }} <br>
             Delivery Date: {{ $data->shipped_date }} <br>
             Payment Type : {{ $data->payment_method }}
         </td>

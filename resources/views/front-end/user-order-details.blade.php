@@ -116,7 +116,9 @@
                         <div class="col-sm-12">
                         @php
                             $price = 0;
-                            $subTotal  = 0;
+                            $shippingFee = 0;
+                            $couponDiscountAmount = 0;
+                            $subTotalAmount  = 0;
                             $totalAmount = 0;
                             $orders = 0;
                         @endphp
@@ -126,6 +128,10 @@
                                     @if($orderDetails->isNotEmpty())
                                         @php
                                             $orders = $orderDetails->first();
+                                            $subTotalAmount = $orders->sub_total_amount;
+                                            $totalAmount = $orders->total_amount;
+                                            $couponDiscountAmount = $orders->coupon_discount_amout;
+                                            $shippingFee = $orders->shipping_fee;
                                         @endphp
                                     @endif
                                         <div>
@@ -160,7 +166,7 @@
                                                                     {{ $index + 1 }}
                                                                 </td>
                                                                 <td>
-                                                                    <h5>{{ $order->product_name }}</h5>
+                                                                    <h5 style="width: 100px;">{{ $order->product_name }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5>{{ $order->qty }}</h5>
@@ -173,11 +179,7 @@
                                                                     href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
                                                                 </td>
                                                             </tr>
-
                                                         </tbody>
-                                                        @php
-                                                            $subTotal += $order->selling_price * $order->qty;
-                                                        @endphp
                                                         @endforeach
                                                         <tfoot>
                                                             <tr class="table-order">
@@ -185,7 +187,7 @@
                                                                     <h5>Subtotal :</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <h4>¥ {{ number_format($subTotal , 0, '.', ',') }}</h4>
+                                                                    <h4>¥ {{ number_format($subTotalAmount , 0, '.', ',') }}</h4>
                                                                 </td>
                                                             </tr>
 
@@ -194,12 +196,19 @@
                                                                     <h5>Shipping :</h5>
                                                                 </td>
                                                                 <td>
-                                                                    <h4>¥ 500</h4>
+                                                                    <h4>¥ {{ number_format($shippingFee , 0, '.', ',') }}</h4>
                                                                 </td>
                                                             </tr>
-                                                            @php       
-                                                                $totalAmount = $subTotal + 500
-                                                            @endphp
+
+                                                            <tr class="table-order">
+                                                                <td colspan="3">
+                                                                    <h5>Coupon Discounted :</h5>
+                                                                </td>
+                                                                <td>
+                                                                    <h4>¥ {{ number_format($couponDiscountAmount , 0, '.', ',') }}</h4>
+                                                                </td>
+                                                            </tr>
+
                                                             <tr class="table-order">
                                                                 <td colspan="3">
                                                                     <h4 class="theme-color fw-bold">Total Price :</h4>
@@ -209,7 +218,6 @@
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
-                                                        
                                                     </table>
                                                 </div>
                                             </div>

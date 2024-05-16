@@ -22,13 +22,13 @@
                                             <div class="row">
                                                 <div class="mb-4 row align-items-center">
                                                     <label
-                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Title</label>
+                                                        class="form-label-title col-lg-2 col-md-3 mb-0">Subject</label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <input class="form-control" type="text" name="title">
-                                                        <p style="display:none" class="title error text-danger"></p>
-                                                        @if (!empty($error['title']))
-                                                            @foreach ($error['title'] as  $key => $value)
-                                                                <p class="title error text-danger">{{ $value }}</p>
+                                                        <input class="form-control" type="text" name="subject">
+                                                        <p style="display:none" class="subject error text-danger"></p>
+                                                        @if (!empty($error['subject']))
+                                                            @foreach ($error['subject'] as  $key => $value)
+                                                                <p class="subject error text-danger">{{ $value }}</p>
                                                             @endforeach
                                                         @endif
                                                     </div>
@@ -45,14 +45,14 @@
 
                                                 <div class="row align-items-center">
                                                     <label
-                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Message
+                                                        class="col-lg-2 col-md-3 col-form-label form-label-title">Body
                                                         </label>
                                                     <div class="col-md-9 col-lg-10">
-                                                        <textarea class="form-control" name="reason" id="" rows="5"></textarea>
-                                                        <p style="display:none" class="reason error text-danger"></p>
-                                                        @if (!empty($error['reason']))
-                                                            @foreach ($error['reason'] as  $key => $value)
-                                                                <p class="reason error text-danger">{{ $value }}</p>
+                                                        <textarea class="form-control" name="body" id="" rows="5"></textarea>
+                                                        <p style="display:none" class="body error text-danger"></p>
+                                                        @if (!empty($error['body']))
+                                                            @foreach ($error['body'] as  $key => $value)
+                                                                <p class="body error text-danger">{{ $value }}</p>
                                                             @endforeach
                                                         @endif
                                                     </div>

@@ -1,19 +1,23 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @extends('seller.seller_dashboard')
 @section('seller')
-<!-- Order section Start -->
+
+<!-- Section start -->
 <div class="page-body">
-    <!-- Table Start -->
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
+                    <!-- Table Start -->
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Order List</h5>
+                            <h5>Product Reviews</h5>
                         </div>
                         <div>
                             <div class="table-responsive">
-                                <table class="table all-package order-table theme-table" id="table_id">
+                                <table class="user-table ticket-table review-table theme-table table"
+                                    id="table_id">
+
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -26,7 +30,6 @@
                                             <th>Option</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         @if ($order->isEmpty())
                                             <tr>
@@ -36,11 +39,12 @@
                                         @foreach($order as $key => $item)
                                             <tr>
                                                 <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
-                                                <td>{{ $item->created_at }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}/td>
                                                 <td>
                                                     <a class="d-block">
                                                         <span class="order-image">
-                                                            <img width="100" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
+                                                            <img width="80" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
                                                         </span>
                                                     </a>
                                                 </td>
@@ -86,14 +90,16 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Table End -->
                 </div>
             </div>
-            <!--pagination -->
-            @include('components.pagination')
+        <!--pagination -->
+        @include('components.pagination')
         </div>
     </div>
-    <!-- Table End -->
-<!-- Order section End -->
+    <!-- Container-fluid Ends-->
+</div>
+<!-- Section End -->
 
 <!-- Offcanvas Box Start -->
 @foreach( $order as $key => $item )

@@ -25,7 +25,7 @@
                                                 <div class="tracker-number">
                                                 <p>Order Number : <span>{{ $order->id }}</span></p>
                                                     <p>Brand : <span>{{ $order->product->brand->brand_name }}</span></p>
-                                                    <p>Order Placed : <span>{{ $order->created_at }}</span></p>
+                                                    <p>Order Placed : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d') }}</span></p>
                                                 </div>
                                                 <h5>Your items is on the way. Tracking information will be
                                                     available within 24 hours.</h5>
@@ -73,7 +73,7 @@
                                                         @foreach ($process as $key => $item)
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $item->created_at }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d H:i') }}</td>
                                                                 @if (!empty($item->confirmed_date))
                                                                     <td><p class="fw-bold">Confirmed</p></td>
                                                                     <td><p class="fw-bold">{{ $item->order->updated_by }}</p></td>

@@ -216,8 +216,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                     <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,8 +278,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                                 <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
+                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -316,12 +316,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 <form method="POST" action="{{ route('delete.multiImg') }}">
                     @csrf
                         <input type="hidden" name="id" value="{{ $img->id }}">
                         <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                 </form>
+                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
             </div>
         </div>
     </div>
@@ -355,78 +355,64 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var categoryId = '{{ $products->category_id }}';
-        var subcategorySelect = document.getElementById('subcategory');
-        if (subcategorySelect) {
-            subcategorySelect.innerHTML = '<option value="">Choose SubCategoryTitle</option>';
+    var categorySelect = document.querySelector('[name="category_id"]');
+    var subcategorySelect = document.getElementById('subcategory');
+    var selectedSubcategory = '{{ $products->sub_category_title_id }}';
 
-            if (categoryId) {
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            var subcategories = JSON.parse(xhr.responseText);
-                            subcategories.forEach(function(subcategory) {
-                                var option = document.createElement('option');
-                                option.value = subcategory.id;
-                                option.textContent = subcategory.sub_category_titlename;
-                                subcategorySelect.appendChild(option);
-                            });
+    categorySelect.addEventListener('change', function() {
+        var categoryId = this.value;
+        subcategorySelect.innerHTML = '<option>Choose SubCategoryTitle</option>';
 
-                            subcategorySelect.value = '{{ $products->sub_category_title_id }}';
-                        } else {
-                            console.error('Failed to fetch subcategories');
-                        }
+        if (categoryId) {
+            fetch('/get-subtitle/' + categoryId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subcategory => {
+                        subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.sub_category_titlename}</option>`;
+                    });
+                    if (selectedSubcategory) {
+                        subcategorySelect.value = selectedSubcategory;
+                        selectedSubcategory = '';
                     }
-                };
-                xhr.open('GET', '/get-subtitle/' + categoryId);
-                xhr.send();
-            }
-        } else {
-            console.error('Subcategory select element not found');
+                });
         }
     });
+
+    if (categorySelect.value) {
+        categorySelect.dispatchEvent(new Event('change'));
+    }
 </script>
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var selectedSubcategoryTitleId = '{{ $products->sub_category_title_id }}';
-
         var subcategorySelect = document.getElementById('subcategory');
+        var subcategoryNameSelect = document.getElementById('subname');
+
+        subcategoryNameSelect.innerHTML = '<option value="{{ $products->sub_category_id }}">{{ $products->subcategory->sub_category_name }}</option>';
+
         subcategorySelect.addEventListener('change', function() {
             var subcategoryTitleId = this.value;
 
-            var subcategoryNameSelect = document.getElementById('subname');
-            subcategoryNameSelect.innerHTML = '<option value="{{ $products->sub_category_id }}">{{ $products->subcategory->sub_category_name }}</option>';
+            fetch('/get-subcategories-by-title/' + subcategoryTitleId)
+                .then(response => response.json())
+                .then(subcategories => {
+                    subcategoryNameSelect.innerHTML = '';
+                    subcategories.forEach(subcategory => {
+                        subcategoryNameSelect.innerHTML += `<option value="${subcategory.id}">${subcategory.sub_category_name}</option>`;
+                    });
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var subcategories = JSON.parse(xhr.responseText);
-                        subcategories.forEach(function(subcategory) {
-                            var option = document.createElement('option');
-                            option.value = subcategory.id;
-                            option.textContent = subcategory.sub_category_name;
-                            subcategoryNameSelect.appendChild(option);
-                        });
-
-                        subcategoryNameSelect.value = '{{ $products->sub_category_id }}';
-                    } else {
-                        console.error('Failed to fetch subcategories');
-                    }
-                }
-            };
-            xhr.open('GET', '/get-subcategories-by-title/' + subcategoryTitleId);
-            xhr.send();
+                    subcategoryNameSelect.value = '{{ $products->sub_category_id }}';
+                })
+                .catch(error => console.error('Failed to fetch subcategories'));
         });
 
         var event = new Event('change');
         subcategorySelect.dispatchEvent(event);
     });
 </script>
+
 
 
 <script>

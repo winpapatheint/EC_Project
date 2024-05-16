@@ -686,7 +686,7 @@ class AdminController extends Controller
 
     public function indexshopproduct($id)
     {
-        $limit = 9;
+        $limit = 12;
 
         $validated = request()->validate([
             'page' => 'integer|min:1',
@@ -920,7 +920,7 @@ class AdminController extends Controller
 
     public function indexshop($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1060,7 +1060,7 @@ class AdminController extends Controller
 
     public function indexcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1212,7 +1212,7 @@ class AdminController extends Controller
 
     public function indexsubcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1660,7 +1660,7 @@ class AdminController extends Controller
 
     public function indexshoplist(Request $request)
     {
-        $limit=9;
+        $limit = 12;
 
         $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
 
@@ -2929,7 +2929,7 @@ class AdminController extends Controller
 
     public function indexspecialsubcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',

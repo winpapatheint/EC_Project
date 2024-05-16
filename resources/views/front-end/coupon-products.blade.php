@@ -421,17 +421,17 @@
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
-                                    <li class="three-grid active">
-                                        <a href="javascript:void(0)">
-                                            <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
-                                        </a>
-                                    </li>
-                                    <li class="grid-btn d-xxl-inline-block d-none">
+                                    <li class="grid-btn d-xxl-inline-block d-none active">
                                         <a href="javascript:void(0)">
                                             <img src="{{ asset('frontend/assets/svg/grid-4.svg') }}"
                                                 class="blur-up lazyload d-lg-inline-block d-none" alt="">
                                             <img src="{{ asset('frontend/assets/svg/grid.svg') }}"
                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="three-grid">
+                                        <a href="javascript:void(0)">
+                                            <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                     <li class="list-btn">
@@ -447,7 +447,7 @@
                     @if($products->count() < 1)
                         <h1 class="text-center">No Products Found</h1>
                     @endif
-                    <div class="row g-sm-4 g-3 product-list-section row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
+                    <div class="row g-sm-4 g-3 product-list-section row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
                     
                         @foreach ($products as $product)
                             @php

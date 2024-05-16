@@ -242,6 +242,14 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>In Stock</td>
+                                                        <td>{{ $product->in_stock }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Fee</td>
+                                                        <td>{{ $product->delivery_price }}</td>
+                                                    </tr>
+                                                    <tr>
                                                         <td>Estimated Date</td>
                                                         <td>{{ $product->estimate_date }}</td>
                                                     </tr>
@@ -733,10 +741,17 @@
                                             </h6>
                                         </div>
                                     </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>In Stock:</h5>
+                                            <h6>{{ $product->in_stock }}</h6>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <div class="modal-button">
                                     <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
-                                        class="btn btn-md add-cart-button icon">Add
+                                        class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>Add
                                         To Cart</button>
 
                                     <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"

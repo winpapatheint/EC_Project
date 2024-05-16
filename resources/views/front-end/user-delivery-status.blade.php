@@ -144,16 +144,22 @@
                                                         <td colspan="4" style="text-align: center">No data available</td>
                                                     </tr>
                                                 @else
-                                                    @foreach($orders as $counter=>$order)
+                                                    @foreach($orders as $key=>$order)
                                                         <tr>
-                                                            <td><h6>{{ $counter + 1 }}</h6></td>
+                                                            <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
                                                             <td>
                                                             <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                             </td>
-                                                            <td><h6>{{ $order->product_name }}</h6></td>
+                                                            <td><h6>
+                                                            @if(strlen($order->product_name) > 30)
+                                                                {!! substr($order->product_name, 0, 30) . '<br>' . substr($order->product_name, 30) . '...' !!}
+                                                            @else
+                                                                {!! nl2br(e($order->product_name)) !!}
+                                                            @endif
+                                                            </h6></td>
                                                             <td><h6>{{ $order->product_qty }}</h6></td>
-                                                            <td><h6>¥ {{ number_format($order->price , 0, '.', ',') }}</h6></td>
+                                                            <td><h6>¥ {{ number_format($order->amount , 0, '.', ',') }}</h6></td>
                                                             <td><h6>{{ date('Y/m/d H:i', strtotime($order->delivered_date)) }}</h6></td>
                                                         </tr>
                                                     @endforeach

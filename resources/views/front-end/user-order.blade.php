@@ -142,14 +142,14 @@
                                  </thead>
                                  <tbody>
                                  @php $counter = 1; @endphp
-                                 @foreach($orders as $item)
+                                 @foreach($orders as $key => $item)
                                  @csrf
                                         <tr>
                                             
-                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
                                             
                                             <td>
-                                                <h6>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}</h6>
+                                                <h6>{{ date('Y/m/d', strtotime($item->created_at)) }}</h6>
                                             </td>
 
                                             <td>

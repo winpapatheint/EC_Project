@@ -1,6 +1,6 @@
-
 <x-auth-layout>
-    <!-- bootstrap  css -->
+
+
     <style>
         .table>:not(caption)>*>*
         {
@@ -9,38 +9,36 @@
     </style>
 
     <div class="page-body">
-        <!-- All User Table Start -->
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card card-table">
-                            <div class="card-body">
-                                <div class="title-header option-title">
-                                    <h5>All Customer</h5>
-                                </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+                            <div class="title-header option-title d-sm-flex d-block">
+                                <h5>All Customer</h5>
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table all-package theme-table table-product" id="table_id">
+                                        <thead>
+                                            <tr>
+                                                <th style="min-width: 50px">No</th>
+                                                <th style="min-width: 50px">Image</th>
+                                                <th>Title</th>
+                                                <th style="min-width: 200px">Sub Title</th>
+                                                <th style="min-width: 300px">Content</th>
+                                                <th style="min-width: 200px">Name</th>
+                                                <th style="min-width: 200px">Position</th>
+                                                <th>Option</th>
+                                            </tr>
+                                        </thead>
 
-                                <div class="table-responsive category-table">
-                                    <div>
-                                        <table class="table all-package theme-table" id="table_id">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th >Image</th>
-                                                    <th>Title</th>
-                                                    <th style="min-width: 200px">Sub Title</th>
-                                                    <th style="min-width: 300px">Content</th>
-                                                    <th style="min-width: 200px">Name</th>
-                                                    <th style="min-width: 200px">Position</th>
-                                                    <th>Option</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @foreach( $lists as $key => $list )
+                                        <tbody>
+                                            @foreach( $lists as $key => $list )
 
                                             <tr>
-                                              <th style="text-align:center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                              <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                              <td style="text-align:center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                              <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 50px;"></td>
                                               <td data-label="タイトル">{{ $list->title }}</td>
                                               <td data-label="タイトル">{{ $list->subtitle }}</td>
                                               <td data-label="タイトル"> {!! strlen($list->content) > 50 ? substr($list->content, 0, 50) . '...' : $list->content !!}</td>
@@ -59,18 +57,19 @@
                                             </td>
                                             </tr>
                                             @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+                </div>
+                    <!--pagination -->
                     @include('components.pagination')
-            </div>
-        <!-- All User Table Ends-->
 
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
     </div>
 
 </x-auth-layout>

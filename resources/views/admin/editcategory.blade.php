@@ -434,7 +434,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="remove-box">
-                                                                    <p></p>
+                                                                    <p>Category data will be updated?</p>
                                                                 </div>
                                                             </div>
 

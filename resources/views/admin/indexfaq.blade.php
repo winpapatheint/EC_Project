@@ -15,11 +15,11 @@
                     <div class="card card-table">
                         <div class="card-body">
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>News</h5>
+                                <h5>FAQ</h5>
                                     <form class="d-inline-flex">
                                         <a href="{{ route('admin.registerfaq') }}"
                                             class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
+                                                <i data-feather="plus-square"></i>Add FAQ
                                         </a>
                                     </form>
                             </div>
@@ -28,7 +28,7 @@
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th class="pro-quantity">#</th>
+                                                <th style="min-width:50px" class="pro-quantity">No</th>
                                                 <th>Date</th>
                                                 <th class="pro-title">Title</th>
                                                 <th class="pro-thumbnail">Question</th>

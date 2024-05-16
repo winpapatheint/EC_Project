@@ -76,6 +76,20 @@ class UserController extends Controller
             'room_no' => $request->room,
         ]);
 
+        $buyerAddress = BuyerAddress::create([
+            'buyer_id' => $buyer->id,
+            'name' => $request->name,
+            'post_code' => $request->zip_code,
+            'prefecture_id' => $request->prefecture,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room_no' => $request->room,
+            'phone' => $request->phone,
+            'place' => "HOME",
+            'default' => 1,
+        ]);
+
         event(new Registered($buyer));
 
         $email = $request->email;

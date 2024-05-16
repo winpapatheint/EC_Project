@@ -70,7 +70,9 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->where('status',1)->get();
+        $topSaveTodayProducts = Product::whereHas('Seller', function ($query) {
+            $query->where('coupon_status', 1);
+        })->orWhere('coupon_status', 1)->where('status', 1)->get();
 
         $reviews = Review::all();
 

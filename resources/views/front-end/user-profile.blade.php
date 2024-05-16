@@ -228,10 +228,8 @@
                         </div>
                    
                         <div class="modal-footer">
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
                             <button type="close" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-
-                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
-                                changes</button>
                         </div>
                     </form> 
             </div>
@@ -278,8 +276,8 @@
         </div>
     </div>
     <div class="modal-footer">
+        <button type="submit" class="btn theme-bg-color btn-md text-white edit-btn" id="changePassword">Save</button>
         <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn theme-bg-color btn-md text-white edit-btn" id="changePassword">Save changes</button>
     </div>
 </form>
 

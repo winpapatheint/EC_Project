@@ -149,7 +149,7 @@
                                             <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
                                             
                                             <td>
-                                                <h6>{{ date('Y/m/d', strtotime($item->created_at)) }}</h6>
+                                                <h6>{{ date('Y/m/d', strtotime($item->order_created_at)) }}</h6>
                                             </td>
 
                                             <td>
@@ -248,9 +248,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save</button>
                     <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                        changes</button>
                 </div>
             </div>
         </div>
@@ -473,10 +472,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal"
+                        class="btn theme-bg-color btn-md fw-bold text-light">Save</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Close</button>
-                    <button type="button" data-bs-dismiss="modal"
-                        class="btn theme-bg-color btn-md fw-bold text-light">Save changes</button>
                 </div>
             </div>
         </div>
@@ -524,9 +523,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Password</button>
                 </div>
             </div>
         </div>
@@ -581,9 +580,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
                 </div>
             </div>
         </div>
@@ -607,9 +606,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
                         data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

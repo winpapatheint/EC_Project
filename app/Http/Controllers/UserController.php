@@ -161,7 +161,7 @@ class UserController extends Controller
             $orders = DB::table('orders')
                 ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
                 ->where('buyers.user_id', $user->id)
-                ->select('orders.*', 'orders.id as order_id', 'buyers.*')
+                ->select('orders.*','orders.created_at as order_created_at', 'orders.id as order_id', 'buyers.*')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($limit);
 
@@ -185,7 +185,8 @@ class UserController extends Controller
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*', 'products.*','products.selling_price as price', 'order_details.*','buyers.*')
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -972,6 +973,7 @@ class UserController extends Controller
             $couponDiscountAmount = $request->coupondiscountamount;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $prefectureId = $buyerAddressFirst->prefecture_id;
             $postcode = $buyerAddressFirst->post_code;
             $city = $buyerAddressFirst->city;
             $chome = $buyerAddressFirst->chome;
@@ -1020,6 +1022,7 @@ class UserController extends Controller
                         'buyer_id' => (int)$buyerId,
                         'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
@@ -1036,6 +1039,7 @@ class UserController extends Controller
                         'buyer_id' => (int)$buyerId,
                         'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],

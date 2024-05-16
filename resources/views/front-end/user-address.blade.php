@@ -280,11 +280,9 @@
                     </div>
                 
                     <div class="modal-footer">
+                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save</button>
                         <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">
                         Close</button>
-
-                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                            changes</button>
                     </div>
                 </form> 
             </div>
@@ -362,11 +360,9 @@
                         </div>
                    
                         <div class="modal-footer">
+                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
                             <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
                             Close</button>
-
-                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save
-                                changes</button>
                         </div>
                     </form> 
             </div>
@@ -391,12 +387,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form action="{{ route('remove_address', ['id' => $item->id]) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

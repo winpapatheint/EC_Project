@@ -138,7 +138,7 @@
                                             <h5>Order Code <span style="color: var(--theme-color);">{{ $orders->order_code }}</span></h5>
                                         </div>
                                         <div class="card-order-section">
-                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->created_at)) }}</h5>
+                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->order_created_at)) }}</h5>
                                             <h5>Items: <span style="color: var(--theme-color);">{{ $orders->total_qty }}</span></h5>
                                             <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>   
                                         </div>
@@ -155,7 +155,7 @@
                                                                 <th>Product Name</th>
                                                                 <th>Shop</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price</th>
+                                                                <th>Price(tax inc)</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -244,6 +244,8 @@
                                                         <div class="payment-mode">
                                                             <h4>Shipping address</h4>
                                                             <ul class="order-details">
+                                                                <li>{{ $order->name }}</li><br>
+                                                                <li>{{ $order->phone }}</li><br>
                                                                 <li>{{ $order->post_code }}.</li>
                                                                 <li>{{ $order->city }}</li>
                                                                 <li>{{ $order->chome }} chome,</li>

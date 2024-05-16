@@ -820,9 +820,9 @@
                         </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save</button>
                     <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
                         data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
                 </div>
                 </form>
             </div>

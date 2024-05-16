@@ -419,7 +419,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p></p>
+                                                        <p>SubCategory will be added?</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

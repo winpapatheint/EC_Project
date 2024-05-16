@@ -27,7 +27,7 @@
                                                 <th style="min-width: 200px">Product Image</th>
                                                 <th style="min-width: 300px">Product Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
-                                                <th style="min-width: 120px">Price</th>
+                                                <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision</th>
                                                 <th style="min-width: 150px;">Status</th>
                                                 <th>Special Corner</th>

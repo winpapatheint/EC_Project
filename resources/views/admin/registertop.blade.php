@@ -1,13 +1,13 @@
 <x-auth-layout>
 
-
     <style>
         .error{
             margin:0 auto;
             display:flex;
         }
     </style>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     @php $error = $errors->toArray(); if(!isset($editmode)){$editmode = false;} if(!isset($editother)){$editother = false;}
     @endphp
     <div class="page-body">
@@ -115,10 +115,10 @@
                                         <button class="btn btn-submit btn-animation ms-auto fw-bold" type="submit">
                                             @if (!$editmode)
                                                 <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                {{ __('auth.doregister') }}
+                                                Save
                                             @else
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
-                                                {{ __('auth.yeschange') }}
+                                                Edit
                                             @endif
                                         </button>
 
@@ -133,7 +133,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="remove-box">
-                                                            <p></p>
+                                                            <p>Top data will be updated?</p>
                                                         </div>
                                                     </div>
 
@@ -141,7 +141,7 @@
 
                                                         <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
                                                             @if (!$editmode)
-                                                                登録する
+                                                                Yes
                                                             @else
                                                                 Yes
                                                             @endif

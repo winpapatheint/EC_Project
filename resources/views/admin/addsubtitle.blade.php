@@ -63,7 +63,7 @@
                                                         </div>
                                                     </div>
                                                         <div id="dynamic-form"></div>
-                                                            <p style="display:none" class="subtitle  error text-danger"></p>
+                                                            <p style="display:none" class="subtitle error text-danger"></p>
                                                                 @if (!empty($error['subtitle']))
                                                                     @foreach ($error['subtitle'] as  $key => $value)
                                                                         <p class="subtitle error text-danger">{{ $value }}</p>
@@ -95,7 +95,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p></p>
+                                                        <p>Category Subtitle will be added?</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

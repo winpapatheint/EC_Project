@@ -360,7 +360,7 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
-                                        <i class="ri-phone-line"></i>
+                                        <i class="ri-admin-line"></i>
                                         <span>Customer</span>
                                     </a>
                                 </li>

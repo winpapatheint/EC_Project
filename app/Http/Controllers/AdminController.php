@@ -545,7 +545,10 @@ class AdminController extends Controller
         $query = Top::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+                $query->where('discount', 'like', '%' . $mainSearch . '%')
+                        ->orWhere('phaseone', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('phasetwo', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('phasethree', 'like', '%' . $mainSearch . '%');
             });
         }
 
@@ -569,7 +572,11 @@ class AdminController extends Controller
         $query = Customer::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+                $query->where('title', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('subtitle', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('content', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('name', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('position', 'like', '%' . $mainSearch . '%');
             });
         }
 
@@ -1600,6 +1607,21 @@ class AdminController extends Controller
         $coupon = Coupon::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
+
+        $shop = Seller::where('coupon_id',$request->coupon_id)->get();
+        foreach($shop as $status)
+        {
+            $status->coupon_status = $request->status;
+            $status->save();
+        }
+
+        $product = Product::where('coupon_id',$request->coupon_id)->get();
+        foreach($product as $status)
+        {
+            $status->coupon_status = $request->status;
+            $status->save();
+        }
+
         return redirect('/admin/profile')->back();
     }
 

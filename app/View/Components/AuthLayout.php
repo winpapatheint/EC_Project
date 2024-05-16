@@ -42,6 +42,14 @@ class AuthLayout extends Component
 
         $producthour = $product->created_at ?? '';
 
+        $customer = DB::table('customers')
+                    ->select('customers.id', 'customers.*','customers.created_at',
+                    DB::raw('TIMESTAMPDIFF(MINUTE, customers.created_at, NOW()) AS minutes_ago'))
+                    ->latest('created_at')
+                    ->first();
+
+        $customerhour = $customer->created_at ?? '';
+
         $buyer = DB::table('users')
                     ->select('users.id','users.*','users.created_at',DB::raw('TIMESTAMPDIFF(MINUTE, users.created_at, NOW()) AS minutes_ago'))
                     ->whereIn('role',['buyer'])
@@ -74,6 +82,6 @@ class AuthLayout extends Component
 
 
         return view('layouts.auth',compact('seller','sellerhour','buyer','buyerhour','product','producthour','order','orderhour',
-       'notiCount','notifications'));
+       'notiCount','notifications','customer','customerhour',));
     }
 }

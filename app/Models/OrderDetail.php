@@ -20,6 +20,8 @@ class OrderDetail extends Model
         'qty',
         'price',
         'notes',
+        'name',
+        'phone',
         'post_code',
         'city',
         'chome',
@@ -50,8 +52,8 @@ class OrderDetail extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    function user() {
-        return $this->belongsTo(User::class,'user_id');
+    function buyer() {
+        return $this->belongsTo(Buyer::class,'buyer_id');
     }
 
     function prefecture() {
@@ -59,7 +61,12 @@ class OrderDetail extends Model
     }
 
     function seller() {
-        return $this->belongsTo(Seller::class,'seller_id');
+        return $this->belongsTo(Seller::class,'seller_id', 'user_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     public function order()

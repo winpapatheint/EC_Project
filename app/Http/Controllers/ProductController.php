@@ -113,6 +113,7 @@ class ProductController extends Controller
             'seller_id' => $id,
             'product_name' => $validatedData['product_name'],
             'product_qty' => $validatedData['product_qty'],
+            'in_stock' => $validatedData['product_qty'],
             'product_tags' => $validatedData['product_tags'],
             'product_size' => $validatedData['product_size'],
             'product_color' => $validatedData['product_color'],
@@ -222,6 +223,7 @@ class ProductController extends Controller
         $product->sub_category_title_id= $request->sub_category_title_id;
         $product->product_name= $request->product_name;
         $product->product_qty= $request->product_qty;
+        $product->in_stock= $request->product_qty;
         $product->product_tags= $request->product_tags;
         $product->product_size= $request->product_size;
         $product->product_color= $request->product_color;

@@ -42,6 +42,29 @@ class AdminController extends Controller
 {
     public function welcome()
     {
+        //coupon to be inactive for the end date
+        $couponAll = Coupon::where('enddate', '<=', Carbon::now()->startOfDay())->get();
+        foreach ($couponAll as $couponInactive)
+        {
+            $couponInactive->status = 0;
+            $couponInactive->save();
+
+            $sellers = Seller::where('coupon_id', $couponInactive->id)->get();
+            foreach($sellers as $seller)
+            {
+                $seller->coupon_id = NULL;
+                $seller->coupon_status = 0;
+                $seller->save();
+            }
+
+            $products = Product::where('coupon_id', $couponInactive->id)->get();
+            foreach($products as $product)
+            {
+                $product->coupon_id = NULL;
+                $product->coupon_status = 0;
+                $product->save();
+            }
+        }
 
         $categories = Category::all();
 
@@ -70,8 +93,13 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::where('coupon_status', 1)->where('status',1)->get();
-
+        $topSaveTodayProducts = Product::where(function($query) {
+            $query->whereHas('Seller', function ($query) {
+                    $query->where('coupon_status', 1);
+                })
+                ->orWhere('products.coupon_status', '=', '1');
+        })->where('status', 1)->get();
+        
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
@@ -545,7 +573,10 @@ class AdminController extends Controller
         $query = Top::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+                $query->where('discount', 'like', '%' . $mainSearch . '%')
+                        ->orWhere('phaseone', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('phasetwo', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('phasethree', 'like', '%' . $mainSearch . '%');
             });
         }
 
@@ -569,7 +600,11 @@ class AdminController extends Controller
         $query = Customer::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->where('phaseone', 'like', '%' . $mainSearch . '%');
+                $query->where('title', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('subtitle', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('content', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('name', 'like', '%' . $mainSearch . '%')
+                      ->orWhere('position', 'like', '%' . $mainSearch . '%');
             });
         }
 
@@ -679,7 +714,7 @@ class AdminController extends Controller
 
     public function indexshopproduct($id)
     {
-        $limit = 9;
+        $limit = 12;
 
         $validated = request()->validate([
             'page' => 'integer|min:1',
@@ -913,7 +948,7 @@ class AdminController extends Controller
 
     public function indexshop($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1053,7 +1088,7 @@ class AdminController extends Controller
 
     public function indexcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1205,7 +1240,7 @@ class AdminController extends Controller
 
     public function indexsubcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',
@@ -1600,6 +1635,21 @@ class AdminController extends Controller
         $coupon = Coupon::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
+
+        $shop = Seller::where('coupon_id',$request->coupon_id)->get();
+        foreach($shop as $status)
+        {
+            $status->coupon_status = $request->status;
+            $status->save();
+        }
+
+        $product = Product::where('coupon_id',$request->coupon_id)->get();
+        foreach($product as $status)
+        {
+            $status->coupon_status = $request->status;
+            $status->save();
+        }
+
         return redirect('/admin/profile')->back();
     }
 
@@ -1638,7 +1688,7 @@ class AdminController extends Controller
 
     public function indexshoplist(Request $request)
     {
-        $limit=9;
+        $limit = 12;
 
         $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
 
@@ -2907,7 +2957,7 @@ class AdminController extends Controller
 
     public function indexspecialsubcategoryproduct($id)
     {
-        $limit =9;
+        $limit = 12;
         $validated = request()->validate([
             'page' => 'integer|min:1',
             'sort' => 'integer|min:1',

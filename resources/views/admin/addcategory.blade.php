@@ -92,16 +92,12 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p></p>
+                                                        <p>Category data will be added? </p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
-                                                        @if (!$editmode)
-                                                            Yes
-                                                        @else
-                                                            Yes
-                                                        @endif
+                                                        Yes
                                                     </button>
                                                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                 </div>

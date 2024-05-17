@@ -27,7 +27,7 @@
                                                 <th style="min-width: 200px">Product Image</th>
                                                 <th style="min-width: 300px">Product Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
-                                                <th style="min-width: 120px">Price</th>
+                                                <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision</th>
                                                 <th style="min-width: 150px;">Status</th>
                                                 <th>Special Corner</th>
@@ -68,7 +68,7 @@
                                                         @if($list->special_sub_category_id)
                                                         <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#removeProfile"
+                                                                data-bs-target="#removeProfile{{ $list->id }}"
                                                                 onclick="showDeleteModal('{{ $list->id }}')"
                                                                 onclick="">Remove
                                                         </button>
@@ -240,7 +240,7 @@
         <!-- Edit Special Modal Box End -->
         <!-- Remove Address Modal Start -->
         @foreach($lists as $item)
-            <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1" aria-hidden="true">
+            <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                     <div class="modal-content">
                         <div class="modal-header d-block text-center">
@@ -255,12 +255,12 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                             <form action="{{ route('remove_from_special_corner', ['id' => $item->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
                             </form>
+                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>

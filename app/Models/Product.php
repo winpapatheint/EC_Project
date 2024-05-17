@@ -20,6 +20,7 @@ class Product extends Model
         'product_name',
         'product_code',
         'product_qty',
+        'in_stock',
         'product_tags',
         'product_size',
         'product_color',
@@ -42,6 +43,11 @@ class Product extends Model
 
     function Brand() {
         return $this->belongsTo(Brand::class,'brand_id');
+    }
+
+    public function Seller()
+    {
+        return $this->belongsTo(Seller::class, 'seller_id', 'user_id');
     }
 
     function Category() {

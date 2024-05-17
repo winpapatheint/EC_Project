@@ -205,14 +205,10 @@
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
-                                                        @foreach($addresses as $address)
-                                                        @if($address->default == 1)
-                                                            <h6 class="text-content">{{ $address->post_code}}</h6>
-                                                            <h6 class="text-content">{{ $address->city}}</h6>
-                                                            <h6 class="text-content">{{ $address->chome}} chome</h6>
-                                                            <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>
-                                                        @endif
-                                                        @endforeach
+                                                        <h6 class="text-content">{{ $address->zip_code}}</h6>
+                                                        <h6 class="text-content">{{ $address->city}}</h6>
+                                                        <h6 class="text-content">{{ $address->chome}}</h6>
+                                                        <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>
                                                     </div>
                                                 </div>
                                             </div>

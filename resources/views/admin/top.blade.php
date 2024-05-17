@@ -1,6 +1,5 @@
-
 <x-auth-layout>
-    <!-- bootstrap  css -->
+
     <style>
         .table>:not(caption)>*>*
         {
@@ -9,39 +8,37 @@
     </style>
 
     <div class="page-body">
-        <!-- All User Table Start -->
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card card-table">
-                            <div class="card-body">
-                                <div class="title-header option-title">
-                                    <h5>All Top</h5>
-                                </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+                            <div class="title-header option-title d-sm-flex d-block">
+                                <h5>All Top</h5>
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table all-package theme-table table-product" id="table_id">
+                                        <thead>
+                                            <tr>
+                                                <th style="min-width: 100px">No</th>
+                                                <th style="min-width: 100px">Discount</th>
+                                                <th style="min-width: 100px">PhaseOne</th>
+                                                <th style="min-width: 300px">PhaseTwo</th>
+                                                <th style="min-width: 300px">PhaseThree</th>
+                                                <th>Option</th>
+                                            </tr>
+                                        </thead>
 
-                                <div class="table-responsive category-table">
-                                    <div>
-                                        <table class="table all-package theme-table" id="table_id">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Discount</th>
-                                                    <th style="min-width: 200px">PhaseOne</th>
-                                                    <th style="min-width: 300px">PhaseTwo</th>
-                                                    <th style="min-width: 200px">PhaseThree</th>
-                                                    <th>Option</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @foreach( $lists as $key => $list )
+                                        <tbody>
+                                            @foreach( $lists as $key => $list )
 
                                             <tr>
-                                              <th style="text-align:center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                              <td data-label="タイトル">{{ $list->discount }}</td>
-                                              <td data-label="タイトル">{{ $list->phaseone }}</td>
-                                              <td data-label="タイトル">{{ $list->phasetwo }}</td>
-                                              <td data-label="タイトル">{{ $list->phasethree }}</td>
+                                                <td style="text-align:center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                <td data-label="タイトル">{{ $list->discount }}</td>
+                                                <td style="text-align:left;min-width: 250px">{{ $list->phaseone }}</td>
+                                                <td style="text-align:left;min-width: 250px">{{ $list->phasetwo }}</td>
+                                                <td style="text-align:left;">{{ $list->phasethree }}</td>
 
                                               <td>
                                                 <ul>
@@ -55,18 +52,18 @@
                                             </td>
                                             </tr>
                                             @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+                </div>
+                    <!--pagination -->
                     @include('components.pagination')
             </div>
-        <!-- All User Table Ends-->
-
+        </div>
+        <!-- Container-fluid Ends-->
     </div>
 
 </x-auth-layout>

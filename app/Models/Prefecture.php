@@ -16,4 +16,9 @@ class Prefecture extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function buyerAddressed()
+    {
+        return $this->hasMany(BuyerAddress::class);
+    }
 }

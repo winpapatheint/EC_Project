@@ -62,7 +62,6 @@
                                                                data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>
-
                                                     <td>
                                                         <ul>
                                                             <li>
@@ -108,8 +107,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="remove-box">
-                            <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                new permission for this object</p>
+                            <p>Coupon data will be deleted?</p>
                         </div>
                     </div>
 
@@ -182,4 +180,5 @@
         });
     });
     </script>
+
 </x-auth-layout>

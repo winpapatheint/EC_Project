@@ -144,7 +144,7 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="remove-box">
-                                                                <p></p>
+                                                                <p>Customer data will be updated?</p>
                                                             </div>
                                                         </div>
 

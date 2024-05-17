@@ -76,6 +76,20 @@ class UserController extends Controller
             'room_no' => $request->room,
         ]);
 
+        $buyerAddress = BuyerAddress::create([
+            'buyer_id' => $buyer->id,
+            'name' => $request->name,
+            'post_code' => $request->zip_code,
+            'prefecture_id' => $request->prefecture,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room_no' => $request->room,
+            'phone' => $request->phone,
+            'place' => "HOME",
+            'default' => 1,
+        ]);
+
         event(new Registered($buyer));
 
         $email = $request->email;
@@ -87,30 +101,25 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
 
                 if (Auth::check()) {
-                    $addresses = BuyerAddress::select(
-                        'buyer_addresses.*',
-                        'buyers.id as userid',
-                        'buyers.name as username',
-                        'buyers.email as useremail'
-                    )->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->get();
+                    $address = Buyer::where('user_id', $user->id)->first();
                         
                     $profile = route('user_profile');
 
-                    $userOrders = DB::table('order_details')
-                        ->join('buyers', 'order_details.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->select('order_details.*', 'order_details.id as order_id', 'buyers.*', 'buyers.address as buyer_address')
-                        ->get();
+                    $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
+                    $orderCount = Order::where('buyer_id', $buyer->id)->count();
 
-                    $orderCount = $userOrders->count();
-
-                    $pendingCount = $userOrders->filter(function ($order) {
-                        return !is_null($order->processing_date);
-                    })->count();
-
-                    $userAddresses = $userOrders->pluck('buyer_address')->unique()->toArray();
+                    $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
+                    $countForPending = [];
+                    foreach ($orderDetails as $orderDetail) {
+                        if (!isset($countForPending[$orderDetail->order_id])) {
+                            $countForPending[$orderDetail->order_id] = 1;
+                        }
+                    
+                        if (is_null($orderDetail->delivered_date)) {
+                            $countForPending[$orderDetail->order_id] = 0;
+                        }
+                    }
+                    $pendingCount = array_sum($countForPending);
 
                     $wishlist = DB::table('wishlists')
                         ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
@@ -123,12 +132,10 @@ class UserController extends Controller
 
                     return view('front-end.user-dashboard', compact(
                         'user',
-                        'addresses',
+                        'address',
                         'profile',
-                        'userOrders',
                         'orderCount',
                         'wishlistCount',
-                        'userAddresses',
                         'pendingCount'
                     ));
                 } else {
@@ -147,7 +154,7 @@ class UserController extends Controller
             $orders = DB::table('orders')
                 ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
                 ->where('buyers.user_id', $user->id)
-                ->select('orders.*', 'orders.id as order_id', 'buyers.*')
+                ->select('orders.*','orders.created_at as order_created_at', 'orders.id as order_id', 'buyers.*')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($limit);
 
@@ -163,15 +170,17 @@ class UserController extends Controller
     public function showOrderDetails(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orderItem = $request->id;
+        $auth = Auth::user()->id;
 
         $orderDetails = DB::table('orders')
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
-            ->where('orders.id', $orderItem)
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*', 'products.*','products.selling_price as price', 'order_details.*','buyers.*')
+            ->where('orders.id', $request->id)
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -251,7 +260,7 @@ class UserController extends Controller
         $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', $user->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         //$user = Buyers::first();
             return view('front-end.user-address',compact('data','user','prefecture'));
@@ -291,6 +300,7 @@ class UserController extends Controller
                 'room_no' => $request->roomno,
                 'place' => $request->place,
                 'phone' => $request->phone,
+                'default' => 0,
             ]);
 
             if ($Buyer_addresses) {
@@ -540,106 +550,66 @@ class UserController extends Controller
 
         if(isset($productid)){
             $product = DB::table('products')->where('id', $productid)->first();
-            $sellerid = $product->seller_id;
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
-            $buyerid = $buyer->id;
 
-            if(isset($productid))
+            if($product)
                 $cart = Cart::firstorcreate([
-                    'product_id' => $productid,
-                    'seller_id' => $sellerid,
-                    'buyer_id' => $buyerid,
+                    'product_id' => $product->id,
+                    'seller_id' => $product->seller_id,
+                    'buyer_id' => $buyer->id,
                     'quantity' => '1',
                 ]);
-
-
-                $cartLists = DB::table('carts')
-                            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                            ->where('buyers.user_id', Auth::user()->id)
-                            ->select(
-                                'carts.*',
-                                'carts.id as cart_id',
-                                'buyers.*',
-                                'buyers.id as buyer_id',
-                                'carts.product_id as product_id',
-                                'products.*',
-                                DB::raw('CASE 
-                                            WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
-                                            WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                            ELSE NULL 
-                                        END AS coupon_id'),
-                                DB::raw('CASE 
-                                            WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
-                                            WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                            ELSE NULL 
-                                        END AS coupon_code')
-                            )
-                            ->get();
-
-            foreach($cartLists as $cartItem){
-
-                $productID = $cartItem->id;
-                $sellerID = $cartItem->seller_id;
-
-                $shopName = DB::table('sellers')
-                            ->where('sellers.user_id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
-                $cartItem->shop_name = $shopName->shopname;
-            }
-
-            
-            $discount = 0;
-
-            $couponapplycheck = 0;
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
         }
-        else{
-            $cartLists = DB::table('carts')
-                            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                            ->where('buyers.user_id', Auth::user()->id)
-                            ->select(
-                                'carts.*',
-                                'carts.id as cart_id',
-                                'buyers.*',
-                                'buyers.id as buyer_id',
-                                'carts.product_id as product_id',
-                                'products.*',
-                                DB::raw('CASE 
-                                            WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
-                                            WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                            ELSE NULL 
-                                        END AS coupon_id'),
-                                DB::raw('CASE 
-                                            WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
-                                            WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                            ELSE NULL 
-                                        END AS coupon_code')
-                            )
-                            ->get();
 
-            foreach($cartLists as $cartItem){
-
-                $productID = $cartItem->id;
-                $sellerID = $cartItem->seller_id;
-
+        $cartLists = DB::table('carts')
+                    ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+                    ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                    ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
+                    ->where('buyers.user_id', Auth::user()->id)
+                    ->select(
+                        'carts.*',
+                        'carts.id as cart_id',
+                        'buyers.*',
+                        'buyers.id as buyer_id',
+                        'carts.product_id as product_id',
+                        'products.*',
+                        DB::raw('CASE 
+                                    WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
+                                    WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
+                                    ELSE NULL 
+                                END AS coupon_id'),
+                        DB::raw('CASE 
+                                    WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
+                                    WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
+                                    ELSE NULL 
+                                END AS coupon_code')
+                    )
+                    ->get();
+        $maxDeliveryPrices = [];
+        foreach($cartLists as $key => $cartItem){
+            $productID = $cartItem->id;
+            $sellerID = $cartItem->seller_id;
 
             $shopName = DB::table('sellers')
                         ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
-        }
 
-            $discount = 0;
-            $couponapplycheck = 0;
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
+            $sellerID = $cartItem->seller_id;
+            if (!isset($maxDeliveryPrices[$sellerID])) {
+                $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
+            } else {
+                $maxDeliveryPrices[$sellerID] = max($maxDeliveryPrices[$sellerID], $cartItem->delivery_price);
+            }
         }
+        $shippingFee = array_sum($maxDeliveryPrices);
+        if ($shippingFee >= 5000)
+            $shippingFee = 0;
 
+        $discount = 0;
+        $couponapplycheck = 0;
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck' ,'shippingFee'));
     }
     public function removeCart($id)
     {
@@ -671,18 +641,27 @@ class UserController extends Controller
                     )
                     ->get();
 
-        foreach($cartLists as $cartItem){
-
+        $maxDeliveryPrices = [];
+        foreach($cartLists as $key => $cartItem){
             $productID = $cartItem->id;
             $sellerID = $cartItem->seller_id;
-
 
             $shopName = DB::table('sellers')
                         ->where('sellers.user_id', $sellerID)
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
+
+            $sellerID = $cartItem->seller_id;
+            if (!isset($maxDeliveryPrices[$sellerID])) {
+                $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
+            } else {
+                $maxDeliveryPrices[$sellerID] = max($maxDeliveryPrices[$sellerID], $cartItem->delivery_price);
+            }
         }
+        $shippingFee = array_sum($maxDeliveryPrices);
+        if ($shippingFee >= 5000)
+            $shippingFee = 0;
 
         $result = DB::table('coupons')
                 ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
@@ -691,7 +670,7 @@ class UserController extends Controller
                 ->pluck('coupons.discount_amount');
                 $discount = 0;
         $couponapplycheck = 0;
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
 
     }
     public function removeCartProduct($id)
@@ -742,18 +721,27 @@ class UserController extends Controller
                             )
                             ->get();
 
-            foreach($cartLists as $cartItem){
-
+            $maxDeliveryPrices = [];
+            foreach($cartLists as $key => $cartItem){
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
-
-
+    
                 $shopName = DB::table('sellers')
                             ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
+    
+                $sellerID = $cartItem->seller_id;
+                if (!isset($maxDeliveryPrices[$sellerID])) {
+                    $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
+                } else {
+                    $maxDeliveryPrices[$sellerID] = max($maxDeliveryPrices[$sellerID], $cartItem->delivery_price);
+                }
             }
+            $shippingFee = array_sum($maxDeliveryPrices);
+            if ($shippingFee >= 5000)
+                $shippingFee = 0;
 
             $result = DB::table('coupons')
                 ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
@@ -764,7 +752,7 @@ class UserController extends Controller
         }
         return response()->json([
             'message' => 'Quantity updated successfully.',
-            'redirect_url' => route('show_carts', compact('cartLists', 'discount', 'couponapplycheck'))
+            'redirect_url' => route('show_carts', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'))
         ]);
         
         // return response()->json(['message' => 'Cart item added successfully']);
@@ -803,9 +791,8 @@ class UserController extends Controller
                             )
                             ->get();
 
-        foreach($cartLists as $cartItem)
-        {
-
+        $maxDeliveryPrices = [];
+        foreach($cartLists as $key => $cartItem){
             $productID = $cartItem->id;
             $sellerID = $cartItem->seller_id;
 
@@ -814,7 +801,17 @@ class UserController extends Controller
                         ->select('sellers.shop_name as shopname')
                         ->first();
             $cartItem->shop_name = $shopName->shopname;
+
+            $sellerID = $cartItem->seller_id;
+            if (!isset($maxDeliveryPrices[$sellerID])) {
+                $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
+            } else {
+                $maxDeliveryPrices[$sellerID] = max($maxDeliveryPrices[$sellerID], $cartItem->delivery_price);
+            }
         }
+        $shippingFee = array_sum($maxDeliveryPrices);
+        if ($shippingFee >= 5000)
+            $shippingFee = 0;
 
         $discount = 0;
         $couponapplycheck = null;
@@ -830,7 +827,7 @@ class UserController extends Controller
 
         if(empty($couponcheck)){
             $couponapplycheck = 1;
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
+            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
         }
         else 
         {
@@ -850,7 +847,7 @@ class UserController extends Controller
                     ->update(['status' => 0]);
                 
                 $couponapplycheck = 1;
-                return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck'));
+                return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
             }
             else
             {
@@ -874,7 +871,7 @@ class UserController extends Controller
                     {
                         $couponapplycheck = $couponcheck->mini_amount;
                     }
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck'));
+                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
                 }
                 else
                 {
@@ -897,15 +894,15 @@ class UserController extends Controller
                         {
                             $couponapplycheck = $couponcheck->mini_amount;
                         }
-                        return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck'));
+                        return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
                     }
                     $couponapplycheck = 1;
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck'));
+                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
 
                 }
             }
         }
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
     }
     //Product Checkout
     public function showCheckout(Request $request)
@@ -913,12 +910,13 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $subTotal = $request->subTotal;
         $couponDiscount = $request->coupon_discount;
+        $shippingFee = $request->shipping;
         $total1 = $request->total;
         
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         $buyerPayment = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
                     ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
@@ -945,7 +943,7 @@ class UserController extends Controller
                 $cartItem->shop_name = $shopName->shopname;
             }
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','total1'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1'));
 
     }
     //Purchase
@@ -960,12 +958,19 @@ class UserController extends Controller
             $colors = $request->color;
             $sizes = $request->size;
             $quantities = $request->quantity;
+            $productamounts = $request->productamount;
             $totalQty = $request->totalqty;
             $amount = $request->amount;
             $amount1 = $request->amount1;
             $totalAmount = $request->totalamount;
+            $subTotalAmount = $request->subtotalamount;
+            $shippingFee = $request->shippingfee;
+            $couponDiscountAmount = $request->coupondiscountamount;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $name = $buyerAddressFirst->name;
+            $phone = $buyerAddressFirst->phone;
+            $prefectureId = $buyerAddressFirst->prefecture_id;
             $postcode = $buyerAddressFirst->post_code;
             $city = $buyerAddressFirst->city;
             $chome = $buyerAddressFirst->chome;
@@ -993,6 +998,9 @@ class UserController extends Controller
                 'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
+                'sub_total_amount' => $subTotalAmount,
+                'coupon_discount_amout' => $couponDiscountAmount,
+                'shipping_fee' => $shippingFee,
                 'total_qty'=> $totalQty,
                 'payment_type'=> $payment,
             ]);
@@ -1009,11 +1017,15 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
-                        'amount' => $amount,
+                        'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,
@@ -1024,11 +1036,15 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
-                        'amount' => $amount1,
+                        'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,
@@ -1036,14 +1052,16 @@ class UserController extends Controller
                         'room_no' => $room,
                     ];
                 }
-
                 OrderDetail::create($orderdetailsData);
+
+                $productForInStock = Product::find($product_id);
+                $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];
+                $productForInStock->save();
             }
+            $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
+                    ->delete();
+
             return response()->json(['message' => 'Your order has been successfully placed.']);
-
-            $cartItem = DB::table('carts')
-                    ->delete($productIds);
-
 
         } catch (\Exception $e) {
             // Log any exceptions for debugging

@@ -144,16 +144,22 @@
                                                         <td colspan="4" style="text-align: center">No data available</td>
                                                     </tr>
                                                 @else
-                                                    @foreach($orders as $counter=>$order)
+                                                    @foreach($orders as $key=>$order)
                                                         <tr>
-                                                            <td><h6>{{ $counter + 1 }}</h6></td>
+                                                            <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
                                                             <td>
                                                             <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                             </td>
-                                                            <td><h6>{{ $order->product_name }}</h6></td>
+                                                            <td><h6>
+                                                            @if(strlen($order->product_name) > 30)
+                                                                {!! substr($order->product_name, 0, 30) . '<br>' . substr($order->product_name, 30) . '...' !!}
+                                                            @else
+                                                                {!! nl2br(e($order->product_name)) !!}
+                                                            @endif
+                                                            </h6></td>
                                                             <td><h6>{{ $order->product_qty }}</h6></td>
-                                                            <td><h6>¥ {{ number_format($order->price , 0, '.', ',') }}</h6></td>
+                                                            <td><h6>¥ {{ number_format($order->amount , 0, '.', ',') }}</h6></td>
                                                             <td><h6>{{ date('Y/m/d H:i', strtotime($order->delivered_date)) }}</h6></td>
                                                         </tr>
                                                     @endforeach
@@ -226,9 +232,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save</button>
                     <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save
-                        changes</button>
                 </div>
             </div>
         </div>
@@ -451,10 +456,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal"
+                        class="btn theme-bg-color btn-md fw-bold text-light">Save</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Close</button>
-                    <button type="button" data-bs-dismiss="modal"
-                        class="btn theme-bg-color btn-md fw-bold text-light">Save changes</button>
                 </div>
             </div>
         </div>
@@ -502,9 +507,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Password</button>
                 </div>
             </div>
         </div>
@@ -559,9 +564,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update</button>
                     <button type="button" class="btn btn-animation btn-md fw-bold"
                         data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light">Update Card</button>
                 </div>
             </div>
         </div>
@@ -585,9 +590,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
                         data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

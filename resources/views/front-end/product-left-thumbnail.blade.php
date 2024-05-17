@@ -129,32 +129,25 @@
                                 </div>
 
                                 <div class="note-box product-package">
-                                     <a type="button "                              
-                                        class="btn btn-md bg-dark cart-button text-white w-100" href="{{route ('show_carts', ['id' => $id]) }}">
-                                        Add To Cart</a>
+                                        <button onclick="location.href = '{{ route('show_carts', ['id' => $id]) }}';"
+                                        class="btn btn-md bg-dark cart-button text-white w-100" @if ($product->in_stock < 1) disabled @endif>
+                                        Add To Cart</button>
                                    
                                 </div>
 
                                 <div class="progress-sec">
                                     <div class="left-progressbar">
-                                    @php
-                                        $orderedCount = 0;
-                                    @endphp
-                                    @foreach ($productOrdered as $ordered)
-                                        @php
-                                            $orderedCount += $ordered->qty;
-                                        @endphp
-                                    @endforeach
-                                    @php
-                                    $leftProduct = $product->product_qty - $orderedCount;
-                                    @endphp
-                                        <h6>Please hurry! Only {{ $leftProduct }} left in stock</h6>
+                                        @if ($product->in_stock > 0)
+                                        <h6>Please hurry! Only {{ $product->in_stock }} left in stock</h6>
+                                        @else
+                                        <h6>No stock left</h6>
+                                        @endif
                                         <div role="progressbar" class="progress warning-progress">
                                             <?php
-                                            if($leftProduct >= 10)
+                                            if($product->in_stock >= 10)
                                             $percentage = 100;
                                             else
-                                            $percentage = ($leftProduct) * 10;
+                                            $percentage = ($product->in_stock) * 10;
                                             ?>
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $percentage; ?>%;"></div>
                                         </div>
@@ -247,6 +240,14 @@
                                                             @endphp
                                                             {{ $sub_category->sub_category_name }}
                                                         </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>In Stock</td>
+                                                        <td>{{ $product->in_stock }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Fee</td>
+                                                        <td>¥ {{ number_format($product->delivery_price, '0','',',') }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Estimated Date</td>
@@ -740,10 +741,17 @@
                                             </h6>
                                         </div>
                                     </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>In Stock:</h5>
+                                            <h6>{{ $product->in_stock }}</h6>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <div class="modal-button">
                                     <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
-                                        class="btn btn-md add-cart-button icon">Add
+                                        class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>Add
                                         To Cart</button>
 
                                     <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
@@ -812,9 +820,9 @@
                         </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save</button>
                     <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
                         data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
                 </div>
                 </form>
             </div>

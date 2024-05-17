@@ -157,9 +157,10 @@
                                                             <tr>
                                                                 <td>Address:</td>
                                                                 <td>
-                                                                    <p>{{ $item->post_code }}.</p>
-                                                                    <p>{{ $item->city }} {{ $item->chome }} chome,</p>
-                                                                    <p>{{ $item->building }} - {{ $item->room_no }}</p>
+                                                                    <p>{{ $item->post_code }}</p>
+                                                                    <p>{{ $item->prefecture->name }}</p>
+                                                                    <p>{{ $item->city }} {{ $item->chome }}</p>
+                                                                    <p>{{ $item->building }} {{ $item->room_no }}</p>
                                                                 </td>
                                                             </tr>
 

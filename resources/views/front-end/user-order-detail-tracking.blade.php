@@ -169,8 +169,8 @@
                                 <div class="order-details-name">
                                     <h5 class="text-content">From</h5>
                                     <h4>{{ $orderDetail->shop_post_code }}. </h4>
-                                    <h4>{{ $orderDetail->shop_city }} {{ $orderDetail->shop_chome }} chome, </h4>
-                                    <h4>{{ $orderDetail->shop_building }} - {{ $orderDetail->shop_room }}.</h4>
+                                    <h4>{{ $orderDetail->shop_city }} {{ $orderDetail->shop_chome }}, </h4>
+                                    <h4>{{ $orderDetail->shop_building }} {{ $orderDetail->shop_room }}.</h4>
                                 </div>
                             </div>
                         </div>
@@ -183,9 +183,9 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Destination</h5>
-                                    <h4>{{ $orderDetail->cus_post_code }}. </h4>
-                                    <h4>{{ $orderDetail->cus_city }} {{ $orderDetail->cus_chome }} chome, </h4>
-                                    <h4>{{ $orderDetail->cus_building }} - {{ $orderDetail->cus_room }}.</h4>
+                                    <h4>{{ $orderDetail->cus_post_code }} </h4>
+                                    <h4>{{ $orderDetail->cus_city }} {{ $orderDetail->cus_chome }} </h4>
+                                    <h4>{{ $orderDetail->cus_building }} {{ $orderDetail->cus_room }}</h4>
                                 </div>
                             </div>
                         </div>

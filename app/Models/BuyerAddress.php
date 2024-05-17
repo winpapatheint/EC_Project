@@ -22,6 +22,9 @@ class BuyerAddress extends Model
         'default',
         'created_at',
         'updated_at',
-
     ];
+
+    function prefecture() {
+        return $this->belongsTo(prefecture::class);
+    }
 }

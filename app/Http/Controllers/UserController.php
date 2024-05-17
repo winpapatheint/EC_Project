@@ -101,30 +101,25 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
 
                 if (Auth::check()) {
-                    $addresses = BuyerAddress::select(
-                        'buyer_addresses.*',
-                        'buyers.id as userid',
-                        'buyers.name as username',
-                        'buyers.email as useremail'
-                    )->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->get();
+                    $address = Buyer::where('user_id', $user->id)->first();
                         
                     $profile = route('user_profile');
 
-                    $userOrders = DB::table('order_details')
-                        ->join('buyers', 'order_details.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->select('order_details.*', 'order_details.id as order_id', 'buyers.*', 'buyers.address as buyer_address')
-                        ->get();
+                    $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
+                    $orderCount = Order::where('buyer_id', $buyer->id)->count();
 
-                    $orderCount = $userOrders->count();
-
-                    $pendingCount = $userOrders->filter(function ($order) {
-                        return !is_null($order->processing_date);
-                    })->count();
-
-                    $userAddresses = $userOrders->pluck('buyer_address')->unique()->toArray();
+                    $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
+                    $countForPending = [];
+                    foreach ($orderDetails as $orderDetail) {
+                        if (!isset($countForPending[$orderDetail->order_id])) {
+                            $countForPending[$orderDetail->order_id] = 1;
+                        }
+                    
+                        if (is_null($orderDetail->delivered_date)) {
+                            $countForPending[$orderDetail->order_id] = 0;
+                        }
+                    }
+                    $pendingCount = array_sum($countForPending);
 
                     $wishlist = DB::table('wishlists')
                         ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
@@ -137,12 +132,10 @@ class UserController extends Controller
 
                     return view('front-end.user-dashboard', compact(
                         'user',
-                        'addresses',
+                        'address',
                         'profile',
-                        'userOrders',
                         'orderCount',
                         'wishlistCount',
-                        'userAddresses',
                         'pendingCount'
                     ));
                 } else {
@@ -177,14 +170,14 @@ class UserController extends Controller
     public function showOrderDetails(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orderItem = $request->id;
+        $auth = Auth::user()->id;
 
         $orderDetails = DB::table('orders')
             ->join('order_details', 'order_details.order_id', '=', 'orders.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->where('buyers.user_id', Auth::user()->id)
-            ->where('orders.id', $orderItem)
+            ->where('orders.id', $request->id)
             ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
             'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at',
             'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
@@ -267,7 +260,7 @@ class UserController extends Controller
         $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', $user->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         //$user = Buyers::first();
             return view('front-end.user-address',compact('data','user','prefecture'));
@@ -307,6 +300,7 @@ class UserController extends Controller
                 'room_no' => $request->roomno,
                 'place' => $request->place,
                 'phone' => $request->phone,
+                'default' => 0,
             ]);
 
             if ($Buyer_addresses) {
@@ -922,7 +916,7 @@ class UserController extends Controller
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         $buyerPayment = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
                     ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')

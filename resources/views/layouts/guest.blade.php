@@ -139,7 +139,7 @@
                                 </span>
                             </button>
                             <a href="/" class="web-logo nav-logo">
-                                <img src="{{ asset('images/logos/logo_foods.png') }}" class="img-fluid blur-up lazyload" alt="">
+                                <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="img-fluid blur-up lazyload" alt="">
                             </a>
 
                             <div class="middle-box">

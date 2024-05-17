@@ -186,7 +186,8 @@ class UserController extends Controller
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $orderItem)
             ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
-            'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at')
+            'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -973,6 +974,8 @@ class UserController extends Controller
             $couponDiscountAmount = $request->coupondiscountamount;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $name = $buyerAddressFirst->name;
+            $phone = $buyerAddressFirst->phone;
             $prefectureId = $buyerAddressFirst->prefecture_id;
             $postcode = $buyerAddressFirst->post_code;
             $city = $buyerAddressFirst->city;
@@ -1027,6 +1030,8 @@ class UserController extends Controller
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,
@@ -1044,6 +1049,8 @@ class UserController extends Controller
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,

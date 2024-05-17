@@ -20,6 +20,8 @@ class OrderDetail extends Model
         'qty',
         'price',
         'notes',
+        'name',
+        'phone',
         'post_code',
         'city',
         'chome',

@@ -244,8 +244,8 @@
                                                         <div class="payment-mode">
                                                             <h4>Shipping address</h4>
                                                             <ul class="order-details">
-                                                                <li>{{ $order->name }}</li><br>
-                                                                <li>{{ $order->phone }}</li><br>
+                                                                <li>{{ $order->order_details_name }}</li><br>
+                                                                <li>{{ $order->order_details_phone }}</li><br>
                                                                 <li>{{ $order->post_code }}.</li>
                                                                 <li>{{ $order->city }}</li>
                                                                 <li>{{ $order->chome }} chome,</li>

@@ -247,7 +247,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Delivery Fee</td>
-                                                        <td>{{ $product->delivery_price }}</td>
+                                                        <td>¥ {{ number_format($product->delivery_price, '0','',',') }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Estimated Date</td>

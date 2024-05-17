@@ -598,7 +598,10 @@ class ShowProductController extends Controller
                             ->orWhere('products.coupon_id', '=', $id);
                     })
                     ->where('products.status', '=', '1')
-                    ->where('products.coupon_status', '=', '1')
+                    ->where(function($query) {
+                        $query->where('sellers.coupon_status', '=', '1')
+                            ->orWhere('products.coupon_status', '=', '1');
+                    })
                     ->select('products.*')
                     ->paginate($limit, ['*'], 'page', $page);
 
@@ -609,7 +612,10 @@ class ShowProductController extends Controller
                             ->orWhere('products.coupon_id', '=', $id);
                     })
                     ->where('products.status', '=', '1')
-                    ->where('products.coupon_status', '=', '1')
+                    ->where(function($query) {
+                        $query->where('sellers.coupon_status', '=', '1')
+                            ->orWhere('products.coupon_status', '=', '1');
+                    })
                     ->select('products.*')
                     ->get();
 

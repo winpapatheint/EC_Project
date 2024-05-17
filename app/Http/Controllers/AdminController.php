@@ -42,6 +42,29 @@ class AdminController extends Controller
 {
     public function welcome()
     {
+        //coupon to be inactive for the end date
+        $couponAll = Coupon::where('enddate', '<=', Carbon::now()->startOfDay())->get();
+        foreach ($couponAll as $couponInactive)
+        {
+            $couponInactive->status = 0;
+            $couponInactive->save();
+
+            $sellers = Seller::where('coupon_id', $couponInactive->id)->get();
+            foreach($sellers as $seller)
+            {
+                $seller->coupon_id = NULL;
+                $seller->coupon_status = 0;
+                $seller->save();
+            }
+
+            $products = Product::where('coupon_id', $couponInactive->id)->get();
+            foreach($products as $product)
+            {
+                $product->coupon_id = NULL;
+                $product->coupon_status = 0;
+                $product->save();
+            }
+        }
 
         $categories = Category::all();
 
@@ -70,10 +93,13 @@ class AdminController extends Controller
             ->toArray();
         }
 
-        $topSaveTodayProducts = Product::whereHas('Seller', function ($query) {
-            $query->where('coupon_status', 1);
-        })->orWhere('coupon_status', 1)->where('status', 1)->get();
-
+        $topSaveTodayProducts = Product::where(function($query) {
+            $query->whereHas('Seller', function ($query) {
+                    $query->where('coupon_status', 1);
+                })
+                ->orWhere('products.coupon_status', '=', '1');
+        })->where('status', 1)->get();
+        
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')

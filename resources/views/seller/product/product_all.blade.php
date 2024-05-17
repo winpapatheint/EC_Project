@@ -5,6 +5,7 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
+            @include('components.messagebox')
             <div class="col-sm-12">
                 <div class="card card-table">
                     <!-- Table Start -->
@@ -53,11 +54,11 @@
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                             <td>
                                                 <div class="table-image">
-                                                    <img width="80" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
+                                                    <img width="50" height="50" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
                                                 </div>
                                             </td>
 
-                                            <td>{{ $item->product_name }}</td>
+                                            <td>{{ strlen($item->product_name) > 20 ? substr($item->product_name, 0, 20) . '...' : $item->product_name }}</td>
 
                                             <td>{{ $item->product_qty }}</td>
 

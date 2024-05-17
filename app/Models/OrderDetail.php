@@ -61,4 +61,9 @@ class OrderDetail extends Model
     function seller() {
         return $this->belongsTo(Seller::class,'seller_id');
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

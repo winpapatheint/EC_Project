@@ -40,3 +40,11 @@
     Please check the form below for errors
 </div>
 @endif
+
+<script>
+    $(document).ready(function() {
+        $('.alert .close').click(function() {
+            $(this).closest('.alert').hide();
+        });
+    });
+</script>

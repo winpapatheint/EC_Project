@@ -792,46 +792,46 @@
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <div class="modal-body">
-                        <div class="product-wrapper">
-                            <div class="product-image">
-                                <img class="img-fluid" alt="{{ $product->product_name }}"
-                                        src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}">
-                            </div>
-                            <div class="product-content">
-                                <h5 class="name">{{ $product->product_name }}</h5>
-                                <div class="product-review-rating">
-                                    <div class="product-rating">
-                                        <h6 class="price">
-                                        <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span></h6>
-                                    </div>
+                    <div class="product-wrapper">
+                        <div class="product-image">
+                            <img class="img-fluid" alt="{{ $product->product_name }}"
+                                    src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}">
+                        </div>
+                        <div class="product-content">
+                            <h5 class="name">{{ $product->product_name }}</h5>
+                            <div class="product-review-rating">
+                                <div class="product-rating">
+                                    <h6 class="price">
+                                    <span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span></h6>
                                 </div>
                             </div>
                         </div>
-                        <div class="review-box">
-                            <div class="rating-css">
-                                <div class="star-icon">
-                                    <input type="radio" value="1" name="rating" checked id="rating1">
-                                    <label for="rating1" class="fa fa-star"></label>
-                                    <input type="radio" value="2" name="rating" id="rating2">
-                                    <label for="rating2" class="fa fa-star"></label>
-                                    <input type="radio" value="3" name="rating" id="rating3">
-                                    <label for="rating3" class="fa fa-star"></label>
-                                    <input type="radio" value="4" name="rating" id="rating4">
-                                    <label for="rating4" class="fa fa-star"></label>
-                                    <input type="radio" value="5" name="rating" id="rating5">
-                                    <label for="rating5" class="fa fa-star"></label>
-                                </div>
+                    </div>
+                    <div class="review-box">
+                        <div class="rating-css">
+                            <div class="star-icon">
+                                <input type="radio" value="1" name="rating" checked id="rating1">
+                                <label for="rating1" class="fa fa-star"></label>
+                                <input type="radio" value="2" name="rating" id="rating2">
+                                <label for="rating2" class="fa fa-star"></label>
+                                <input type="radio" value="3" name="rating" id="rating3">
+                                <label for="rating3" class="fa fa-star"></label>
+                                <input type="radio" value="4" name="rating" id="rating4">
+                                <label for="rating4" class="fa fa-star"></label>
+                                <input type="radio" value="5" name="rating" id="rating5">
+                                <label for="rating5" class="fa fa-star"></label>
                             </div>
                         </div>
-                        <div class="review-box">
-                            <label for="comment" class="form-label">Your Comment *</label>
-                            <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Your Comment"></textarea>
-                        </div>
+                    </div>
+                    <div class="review-box">
+                        <label for="comment" class="form-label">Your Comment *</label>
+                        <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Your Comment"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save</button>
-                    <button type="button" class="btn btn-md btn-theme-outline fw-bold btn-close"
-                        data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-md fw-bold text-light"
+                        data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
                 </div>
                 </form>
             </div>

@@ -224,9 +224,9 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $orders = Product::leftjoin('order_details', 'products.id', 'order_details.product_id')
+                    ->leftjoin('orders', 'order_details.order_id', 'orders.id')
                     ->where('order_details.buyer_id', $buyer->id)
-                    ->whereNotNull('order_details.delivered_date')
-                    ->orderBy('order_details.created_at', 'desc')
+                    ->orderBy('orders.order_code', 'desc')
                     ->paginate($limit);
         // $orders = DB::table('order_details')
         //             ->join('buyers', 'order_details.buyer_id', 'buyers.id')

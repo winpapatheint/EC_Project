@@ -89,7 +89,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="delivery-detail" 
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivered Status</a>
+                                    Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"
@@ -132,10 +132,11 @@
                                             
                                                 <tr>
                                                     <th scope="col">No</th>
+                                                    <th scope="col">Order Code</th>
                                                     <th scope="col" colspan="2">Product</th>
                                                     <th scope="col">Quantity</th>
-                                                    <th scope="col">Total</th>
-                                                    <th scope="col">Delivered Date</th>
+                                                    <th scope="col">Total(tax inc)</th>
+                                                    <th scope="col">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -147,20 +148,38 @@
                                                     @foreach($orders as $key=>$order)
                                                         <tr>
                                                             <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
+                                                            <td><h6>{{ $order->order_code }}</h6></td>
                                                             <td>
                                                             <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
                                                             class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                             </td>
                                                             <td><h6 style="text-align: left">
-                                                            @if(strlen($order->product_name) > 20)
-                                                                {!! substr($order->product_name, 0, 20) . '<br>' . substr($order->product_name, 20) . '...' !!}
+                                                            @if(strlen($order->product_name) > 10)
+                                                                {!! substr($order->product_name, 0, 10) . '<br>' . substr($order->product_name, 10, 10) . '...' !!}
                                                             @else
                                                                 {!! nl2br(e($order->product_name)) !!}
                                                             @endif
                                                             </h6></td>
                                                             <td><h6>{{ $order->product_qty }}</h6></td>
                                                             <td><h6>¥ {{ number_format($order->amount , 0, '.', ',') }}</h6></td>
-                                                            <td><h6>{{ date('Y/m/d H:i', strtotime($order->delivered_date)) }}</h6></td>
+                                                            @php
+                                                                $status = "Pending";
+                                                                if ($order->delivered_date)
+                                                                    $status = "Delivered";
+                                                                elseif ($order->shipped_date) {
+                                                                    $status = "Shipping";
+                                                                }
+                                                                elseif ($order->picked_date) {
+                                                                    $status = "Picked";
+                                                                }
+                                                                elseif ($order->confirmed_date) {
+                                                                    $status = "Confirmed";
+                                                                }
+                                                                elseif ($order->processing_date) {
+                                                                    $status = "Processing";
+                                                                }
+                                                            @endphp
+                                                            <td><h6>{{ $status }}</h6></td>
                                                         </tr>
                                                     @endforeach
                                                 @endif

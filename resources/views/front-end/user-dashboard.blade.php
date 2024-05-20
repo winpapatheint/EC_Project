@@ -89,7 +89,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
-                                    Delivered Status</a>
+                                    Delivery Status</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-address-tab"

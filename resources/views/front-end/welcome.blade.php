@@ -724,26 +724,25 @@
                                         @php $action= route('registernewsletter'); @endphp
                                         <form class="theme-form theme-form-2 mega-form" id="registernewsletter" class="contact-form" method="POST" action="{{ $action }}" enctype="multipart/form-data">
                                             @csrf
-                                        <div class="input-box">
-                                            <input type="email" class="form-control" id="newsletter" name="newsletter"
-                                                placeholder="Enter Your Email">
-                                                <p style="display:none" class="newsletter error text-danger"></p>
-                                                @if (!empty($error['newsletter']))
-                                                    @foreach ($error['newsletter'] as  $key => $value)
-                                                        <p class="newsletter error text-danger">{{ $value }}</p>
-                                                    @endforeach
-                                                @endif
-                                            <i class="fa-solid fa-envelope arrow"></i>
-                                            <button class="sub-btn btn-submit  btn-animation">
-                                                <span class="d-sm-block d-none">Subscribe</span>
-                                                <i class="fa-solid fa-arrow-right icon"></i>
-                                            </button>
-                                        </div>
-                                    </form>
+                                            <div class="input-box">
+                                                <input type="email" class="form-control" id="newsletter" name="newsletter"
+                                                    placeholder="Enter Your Email">
+                                                <i class="fa-solid fa-envelope arrow"></i>
+                                                <button class="sub-btn btn-submit  btn-animation">
+                                                    <span class="d-sm-block d-none">Subscribe</span>
+                                                    <i class="fa-solid fa-arrow-right icon"></i>
+                                                </button>
+                                            </div>
+                                            <p style="display:none" class="newsletter error text-danger"></p>
+                                            @if (!empty($error['newsletter']))
+                                                @foreach ($error['newsletter'] as  $key => $value)
+                                                    <p class="newsletter error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -779,16 +778,21 @@
         <script>
             $('.btn-submit').click(function() {
                 $('.error').hide();
-                    if ($.trim($("#newsletter").val()) === "" ) {
-                        if ($.trim($("#newsletter").val()) === "") {
-                            $('.error.newsletter').text('newsletter is required');
-                            $('.error.newsletter').show();
-                        }
-                            return false;
-                    } else {
-                        $('.error').hide()
-                        $('#confirmModal').modal('show');
-                    }
+                var email = $.trim($("#newsletter").val());
+                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+                if (email === "") {
+                    $('.error.newsletter').text('Email is required');
+                    $('.error.newsletter').show();
+                    return false;
+                } else if (!emailPattern.test(email)) {
+                    $('.error.newsletter').text('Invalid email format');
+                    $('.error.newsletter').show();
+                    return false;
+                } else {
+                    $('.error').hide();
+                    $('#confirmModal').modal('show');
+                }
             });
         </script>
 

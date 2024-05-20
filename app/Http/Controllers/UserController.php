@@ -63,17 +63,10 @@ class UserController extends Controller
 
         $buyer = Buyer::create([
             'user_id' => $user->id,
-            'prefecture_id' => $request->prefecture,
             'name' => $request->name,
             'email' => $user->email,
             'birthday' => $request->birthday,
-            'address' => $request->address,
             'phone' => $request->phone,
-            'zip_code' => $request->zip_code,
-            'city' => $request->city,
-            'chome' => $request->chome,
-            'building' => $request->building,
-            'room_no' => $request->room,
         ]);
 
         $buyerAddress = BuyerAddress::create([
@@ -88,6 +81,7 @@ class UserController extends Controller
             'phone' => $request->phone,
             'place' => "HOME",
             'default' => 1,
+            'main_address' => 1
         ]);
 
         event(new Registered($buyer));
@@ -101,7 +95,8 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
 
                 if (Auth::check()) {
-                    $address = Buyer::where('user_id', $user->id)->first();
+                    $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
+                        ->where('user_id', $user->id)->where('buyer_addresses.main_address', 1)->first();
                         
                     $profile = route('user_profile');
 
@@ -171,16 +166,16 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $auth = Auth::user()->id;
-
-        $orderDetails = DB::table('orders')
-            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+        
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+            ->join('products', 'products.id', 'order_details.product_id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->with('prefecture')
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $request->id)
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
-            'products.*','products.selling_price as price', 'order_details.*','buyers.*', 'orders.created_at as order_created_at',
-            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -190,14 +185,13 @@ class UserController extends Controller
     public function showOrderDetailTracking(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orderDetail = OrderDetail::select('order_details.*', 'products.*', 'sellers.*', 'sellers.zip_code as shop_post_code',
-                                            'sellers.city as shop_city','sellers.chome as shop_chome','sellers.building as shop_building',
-                                            'sellers.room as shop_room','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
+        $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
+                                    ->select('order_details.*', 'products.*','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
                                             'order_details.chome as cus_chome','order_details.building as cus_building', 
                                             'order_details.room_no as cus_room', 'order_details.created_at as order_detail_created_at')
                                     ->leftjoin('products', 'order_details.product_id', 'products.id')
-                                    ->leftjoin('sellers', 'products.seller_id', 'sellers.user_id')
-                                    ->where('order_details.id', $request->id)->first();
+                                    ->where('order_details.id', $request->id)
+                                    ->first();
         return view('front-end.user-order-detail-tracking', compact('user', 'orderDetail'));
     }
     //Show Order Tracking
@@ -460,19 +454,17 @@ class UserController extends Controller
    public function showProfile(Request $request)
    {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-
         $buyer = DB::table('buyers')
-
                     ->join('users', 'buyers.user_id', '=', 'users.id')
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('users.*', 'buyers.*')
                     ->first();
-
+        $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
         $maskedPassword = str_repeat('*', strlen($user->password));
+        $prefecture = Prefecture::get();
         if($user && $buyer)
         {
-            return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
-
+            return view('front-end.user-profile',compact('user','buyer', 'buyerAddress','maskedPassword', 'prefecture'));
         }
         else
         {
@@ -482,36 +474,34 @@ class UserController extends Controller
     //Edit Profile
     public function editProfile(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $user = User::find(Auth::user()->id);
-        $password = User::find($request->oldpassword);
-        $buyer = buyer::find($request->buyer_id);
+        $buyer = Buyer::find($request->buyer_id);
+        $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
 
-        if ($user && $buyer)
+        if ($user && $buyer && $buyerAddress)
         {
-            if ($request->has('password'))
-                {
-                    $userData['password'] = bcrypt($request->input('password'));
-                    $user->update($userData);
-                    $buyer->update($userData);
-                    DB::commit();
-                    return redirect()->route('user_profile');
-                }
-                else
-                {
-                    $user->update([
-                        'name' => $request->input('name'),
-                        'email' => $request->input('email'),
-                        'phone' => $request->input('phone'),
-
-                    ]);
-                    $buyer->update([
-                        'name' => $request->input('name'),
-                        'email' => $request->input('email'),
-                        'phone' => $request->input('phone'),
-                    ]);
-                    return redirect()->route('user_profile');
-                }
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
+            $buyer->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
+            $buyerAddress->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'post_code' => $request->post_code,
+                'prefecture_id' => $request->prefectures,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->roomno,
+                'place' => $request->place,
+            ]);
+            return redirect()->route('user_profile');
         }
         else
         {
@@ -535,7 +525,6 @@ class UserController extends Controller
             $user->save();
 
             return redirect()->route('edit_password');
-
         }
         else
         {

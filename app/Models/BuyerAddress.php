@@ -25,6 +25,6 @@ class BuyerAddress extends Model
     ];
 
     function prefecture() {
-        return $this->belongsTo(prefecture::class);
+        return $this->belongsTo(Prefecture::class);
     }
 }

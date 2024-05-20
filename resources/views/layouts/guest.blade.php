@@ -984,8 +984,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
+                        @if ($deal->count() > 0)
                         <h5 class="modal-title w-100" id="deal_today">Deal Today</h5>
-                        <p class="mt-1 text-content">Recommended deals for you.</p>
+                        <p class="mt-1 text-content">Your ordered items for today.</p>
+                        @else
+                        <p class="mt-1 text-content">Today, no order yet.</p>
+                        @endif
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
@@ -1004,8 +1008,14 @@
 
                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-contain">
                                         <h5>{{ $list->product_name }}</h5>
-                                        <h6>¥{{ $list->selling_price }} <del>¥{{ $list->original_price }}</del>
-                                        <span>{{ $list->product_size}}</span></h6>
+                                        @if ($list->discount_percent != 0)
+                                        <h6>¥{{ number_format($list->selling_price, '0','',',') }}<del>¥{{ number_format($list->original_price, '0','',',') }}</del></h6>
+                                        @else
+                                        <h6>¥{{ number_format($list->selling_price, '0','',',') }}</h6>
+                                        @endif
+                                        @if ($list->estimate_date)
+                                        <span>Estimated Waiting Time : {{ $list->estimate_date}} {{ $list->estimate_date > 1 ? 'days' : 'day' }}</span>
+                                        @endif
                                     </a>
                                 </div>
                             </li>

@@ -39,56 +39,66 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-        'birthday' => 'required|string|max:255',
-        'phone' => 'required|string|max:255',
-        'zip_code' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'chome' => 'required|string|max:255',
-        'building' => 'required|string|max:255',
-        'room' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'birthday' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'chome' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room' => 'required|string|max:255',
+            'prefecture' => 'required|integer',
         ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'role' => 'buyer',
-            'password' => Hash::make($request->input('password')),
-            'status' => '1',
-        ]);
+        DB::beginTransaction();
 
-        event(new Registered($user));
+        try {
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'role' => 'buyer',
+                'password' => Hash::make($request->input('password')),
+                'status' => '1',
+            ]);
 
-        $buyer = Buyer::create([
-            'user_id' => $user->id,
-            'name' => $request->name,
-            'email' => $user->email,
-            'birthday' => $request->birthday,
-            'phone' => $request->phone,
-        ]);
+            event(new Registered($user));
 
-        $buyerAddress = BuyerAddress::create([
-            'buyer_id' => $buyer->id,
-            'name' => $request->name,
-            'post_code' => $request->zip_code,
-            'prefecture_id' => $request->prefecture,
-            'city' => $request->city,
-            'chome' => $request->chome,
-            'building' => $request->building,
-            'room_no' => $request->room,
-            'phone' => $request->phone,
-            'place' => "HOME",
-            'default' => 1,
-            'main_address' => 1
-        ]);
+            $buyer = Buyer::create([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'email' => $user->email,
+                'birthday' => $request->birthday,
+                'phone' => $request->phone,
+            ]);
 
-        event(new Registered($buyer));
+            $buyerAddress = BuyerAddress::create([
+                'buyer_id' => $buyer->id,
+                'name' => $request->name,
+                'post_code' => $request->zip_code,
+                'prefecture_id' => $request->prefecture,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->room,
+                'phone' => $request->phone,
+                'place' => "HOME",
+                'default' => 1,
+                'main_address' => 1
+            ]);
 
-        $email = $request->email;
-        return view('auth.verify-email', compact('email'));
+            event(new Registered($buyer));
 
+            DB::commit();
+
+            $email = $request->email;
+            return view('auth.verify-email', compact('email'));
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withErrors(['error' => 'An error occurred while processing your request. Please try again.']);
+        }
     }
     public function indexuser()
     {

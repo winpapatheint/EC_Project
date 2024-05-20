@@ -53,7 +53,7 @@
                                                         </li>
 
                                                         <li>
-                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
+                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}" {{ empty($item->delivered_date) ? 'disabled' : '' }}>
                                                                 <i class="ri-pencil-line"></i>
                                                             </a>
                                                         </li>

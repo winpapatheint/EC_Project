@@ -285,7 +285,7 @@
         if(input.files && input.files[0]){
             var reader = new FileReader();
             reader.onload = function(e){
-                $('#mainThmb').attr('src', e.target.result).width(80).height(80);
+                $('#mainThmb').attr('src', e.target.result).width(100);
                 $('#existingProfileImage').hide(); // Hide the existing profile image
             };
             reader.readAsDataURL(input.files[0]);

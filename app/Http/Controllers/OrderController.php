@@ -38,10 +38,17 @@ class OrderController extends Controller
     public function sellerDetailOrder($id)
     {
         $sellerId = Auth::user()->created_by ?? Auth::id();
-        $orderDetails = OrderDetail::with(['order', 'product', 'prefecture'])
-            ->where('seller_id', $sellerId)
-            ->where('order_id', $id)
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+            ->join('products', 'products.id', 'order_details.product_id')
+            ->join('users', 'orders.seller_id', '=', 'users.id')
+            ->with('prefecture')
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
+            ->where('users.id', $sellerId)
+            ->where('orders.id', $id)
             ->get();
+        dd($orderDetails);
         return view('seller.order.order_detail', compact('orderDetails'));
     }
 

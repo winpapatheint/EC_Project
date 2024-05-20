@@ -257,7 +257,7 @@
                                     </a>
                                 </li>
 
-                                @if(Auth::user()->create_by == NULL)
+                                @if(Auth::user()->created_by == NULL)
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.subseller') }}">
                                         <i class="ri-user-3-line"></i>

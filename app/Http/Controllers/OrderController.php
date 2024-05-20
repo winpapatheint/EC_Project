@@ -17,20 +17,34 @@ class OrderController extends Controller
 {
     public function sellerAllOrder()
     {
-        $limit=10;
+        $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::with('order')->where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
+
+        $order = OrderDetail::with('order')
+            ->where('seller_id', $id)
+            ->where('status', '!=', 'Cancel')
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
+
         $ttl = $order->total();
-        $ttlpage = (ceil($ttl / $limit));
-        return view('seller.order.order_all',compact('order','ttl','ttlpage'));
+        $ttlpage = ceil($ttl / $limit);
+
+        return view('seller.order.order_all', compact('order', 'ttl', 'ttlpage'));
     }
+
 
     public function sellerDetailOrder($id)
     {
         $sellerId = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::where('seller_id',$sellerId)->first();
-        return view('seller.order.order_detail',compact('order'));
+        $orderDetails = OrderDetail::with(['order', 'product', 'prefecture'])
+            ->where('seller_id', $sellerId)
+            ->where('order_id', $id)
+            ->get();
+        return view('seller.order.order_detail', compact('orderDetails'));
     }
+
 
     public function updateOrderStatus(Request $request)
     {

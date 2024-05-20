@@ -10,15 +10,8 @@
                     <div class="card-body">
                         <div class="title-header title-header-block package-card">
                             <div>
-                                <h5>Order ID: {{ $order->order->order_code }}</h5>
+                                {{-- <h5>Order ID: {{ $orderDetails->first()->order->order_code }}</h5> --}}
                             </div>
-                            {{-- <div class="card-order-section">
-                                <ul>
-                                    <li>{{ $order->created_at }}</li>
-                                    <li>{{ $order->qty }}</li>
-                                    <li>{{ $order->total_amount }}</li>
-                                </ul>
-                            </div> --}}
                         </div>
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">
@@ -31,63 +24,68 @@
                                                     <th class="text-end" colspan="2"></th>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
+                                                @foreach ($orderDetails as $orderDetail)
                                                 <tr class="table-order">
                                                     <td>
                                                         <a href="javascript:void(0)">
-                                                            <img width="80" src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}">
+                                                            <img width="80" src="{{ asset('upload/product_thambnail/' . $orderDetail->product->product_thambnail) }}">
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <p>Product Name</p>
-                                                        <h5>{{ $order['product']['product_name'] }}</h5>
+                                                        <h5>{{ $orderDetail->product->product_name }}</h5>
                                                     </td>
                                                     <td>
                                                         <p>Quantity</p>
-                                                        <h5>{{ $order->qty }}</h5>
+                                                        <h5>{{ $orderDetail->qty }}</h5>
                                                     </td>
                                                     <td>
                                                         <p>Price</p>
-                                                        <h5>¥{{ number_format($order['product']['selling_price']) }}</h5>
+                                                        <h5>¥{{ number_format($orderDetail->product->selling_price) }}</h5>
                                                     </td>
                                                 </tr>
+                                                @endforeach
                                             </tbody>
-
                                             <tfoot>
+                                                @php
+                                                    $subtotal = $orderDetails->sum(function($orderDetail) {
+                                                        return $orderDetail->product->selling_price * $orderDetail->qty;
+                                                    });
+                                                    $shipping = $orderDetails->first()->product->delivery_price;
+                                                    $commission = $orderDetails->first()->product->commission;
+                                                    $total = ($subtotal - ($subtotal * ($commission / 100))) + $shipping;
+                                                @endphp
                                                 <tr class="table-order">
                                                     <td colspan="3">
                                                         <h5>Subtotal :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($price = $order['product']['selling_price'] * $order->qty) }}</h4>
+                                                        <h4>¥{{ number_format($subtotal) }}</h4>
                                                     </td>
                                                 </tr>
-
                                                 <tr class="table-order">
                                                     <td colspan="3">
                                                         <h5>Shipping :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($deli = $order['product']['delivery_price']) }}</h4>
+                                                        <h4>¥{{ number_format($shipping) }}</h4>
                                                     </td>
                                                 </tr>
-
                                                 <tr class="table-order">
                                                     <td colspan="3">
                                                         <h5>Commission</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>{{ $com = $order['product']['commission'] }}%</h4>
+                                                        <h4>{{ $commission }}%</h4>
                                                     </td>
                                                 </tr>
-
                                                 <tr class="table-order">
                                                     <td colspan="3">
                                                         <h4 class="theme-color fw-bold">Total Price :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($total = ($price - ($price * ($com / 100)))+ $deli) }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($total) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -98,30 +96,31 @@
                                 <div class="col-xl-4">
                                     <div class="order-success">
                                         <div class="row g-4">
-                                            <h4>summery</h4>
+                                            <h4>Summary</h4>
                                             <ul class="order-details">
-                                                <li>Order ID: {{ $order->order->order_code }}</li>
-                                                <li>Order Date: {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d H:i') }}</li>
+                                                <li>Order ID: {{ $orderDetails->first()->order->order_code }}</li>
+                                                <li>Order Date: {{ \Carbon\Carbon::parse($orderDetails->first()->created_at)->format('Y/m/d H:i') }}</li>
                                                 <li>Order Total: ¥{{ number_format($total) }}</li>
                                             </ul>
 
-                                            <h4>shipping address</h4>
+                                            <h4>Shipping Address</h4>
                                             <ul class="order-details">
-                                                <li>{{ $order->prefecture->name }}</li>
-                                                <li>{{ $order->city }}{{ $order->chome }}</li>
-                                                <li>{{ $order->building }} {{ $order->room }}</li>
+                                                <li>{{ $orderDetails->first()->prefecture->name }}</li>
+                                                <li>{{ $orderDetails->first()->city }}{{ $orderDetails->first()->chome }}</li>
+                                                <li>{{ $orderDetails->first()->building }} {{ $orderDetails->first()->room }}</li>
                                             </ul>
 
                                             <div class="delivery-sec">
-                                                <h3>Expected date of delivery: </h3>
-                                                <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
-                                                <a href="{{ route('order.tracking',$order->id) }}">Track order</a>
+                                                <h3>Expected date of delivery:</h3>
+                                                <span>{{ \Carbon\Carbon::parse($orderDetails->first()->expected_from)->format('Y/m/d') }} - {{ \Carbon\Carbon::parse($orderDetails->first()->expected_to)->format('Y/m/d') }}</span>
+                                                <a href="{{ route('order.tracking', $orderDetails->first()->id) }}">Track order</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- section end -->
                     </div>
                 </div>

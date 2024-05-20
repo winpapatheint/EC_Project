@@ -54,7 +54,7 @@
                                                     <td>{{ $item->phone }}</td>
                                                     <td>
                                                         <div class="table-image">
-                                                            <img src="{{ (!empty($item->photo)) ? url('upload/profile/'.$item->photo) : url('upload/profile/profile.jpg') }}" width="50" height="50" >
+                                                            <img src="{{ (!empty($item->user_photo)) ? url('upload/profile/'.$item->user_photo) : url('upload/profile/profile.jpg') }}" width="50" height="50" >
                                                         </div>
                                                     </td>
                                                     <td>

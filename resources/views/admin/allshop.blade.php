@@ -44,11 +44,20 @@
                                                     <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
 
                                                     <td class="col-sm-9">
-
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal" class="toggle-class btn btn-animation" data-offstyle="outline-secondary" style="width:120px"
-                                                        data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}">
-                                                        Coupon
-                                                    </a>
+                                                        @if($list->coupon_id)
+                                                            <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#removeProfile{{ $list->id }}"
+                                                                    onclick="showDeleteModal('{{ $list->id }}')"
+                                                                    onclick="">Remove
+                                                            </button>
+                                                        @else
+                                                            <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
+                                                                    onclick="">Coupon
+                                                            </button>
+                                                        @endif
                                                     </td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
@@ -133,8 +142,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="remove-box">
-                                <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                    new permission for this object</p>
+                                <p>This product will be deleted?</p>
                             </div>
                         </div>
 
@@ -206,6 +214,35 @@
             });
         });
         </script>
+
+
+@foreach($lists as $item)
+       <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
+           <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+               <div class="modal-content">
+                   <div class="modal-header d-block text-center">
+                       <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal">
+                           <i class="fa-solid fa-xmark"></i>
+                       </button>
+                   </div>
+                   <div class="modal-body">
+                       <div class="remove-box">
+                           <p>Remove this coupon from Shop?</p>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       <form action="{{ route('remove_from_shop', ['id' => $item->id]) }}" method="POST">
+                           @csrf
+                           @method('DELETE')
+                           <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                       </form>
+                       <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+   @endforeach
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

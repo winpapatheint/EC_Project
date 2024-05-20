@@ -259,10 +259,10 @@
                                             <button type="submit" class="btn  btn-submit  btn-animation ms-auto fw-bold">
                                                 @if (!$editmode)
                                                     <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        {{ __('auth.doregister') }}
+                                                        Register
                                                 @else
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
-                                                        {{ __('auth.yeschange') }}
+                                                        Edit
                                                 @endif
                                             </button>
                                             <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
@@ -283,11 +283,7 @@
                                                         <div class="modal-footer">
 
                                                             <button type="submit" class="btn btn-animation btn-md fw-bold me-2">
-                                                                @if (!$editmode)
-                                                                    登録する
-                                                                @else
-                                                                    Yes
-                                                                @endif
+                                                                Yes
                                                             </button>
                                                             <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                                                         </div>

@@ -1,5 +1,7 @@
 
 <x-guest-layout>
+    @php $error = $errors->toArray();
+    @endphp
     <style>
         .home-section pt-2
         {
@@ -707,28 +709,41 @@
         <!-- Product Section End -->
 
         <!-- Newsletter Section Start -->
+
         <section class="newsletter-section section-b-space">
             <div class="container-fluid-lg">
                 <div class="newsletter-box newsletter-box-2">
                     <div class="newsletter-contain py-5">
                         <div class="container-fluid">
+                            @include('components.messagebox')
                             <div class="row">
                                 <div class="col-xxl-4 col-lg-5 col-md-7 col-sm-9 offset-xxl-2 offset-md-1">
                                     <div class="newsletter-detail">
                                         <h2>Join Our Newsletter And Get...</h2>
                                         <h5>Get access to the latest information.</h5>
+                                        @php $action= route('registernewsletter'); @endphp
+                                        <form class="theme-form theme-form-2 mega-form" id="registernewsletter" class="contact-form" method="POST" action="{{ $action }}" enctype="multipart/form-data">
+                                            @csrf
                                         <div class="input-box">
-                                            <input type="email" class="form-control" id="exampleFormControlInput1"
+                                            <input type="email" class="form-control" id="newsletter" name="newsletter"
                                                 placeholder="Enter Your Email">
+                                                <p style="display:none" class="newsletter error text-danger"></p>
+                                                @if (!empty($error['newsletter']))
+                                                    @foreach ($error['newsletter'] as  $key => $value)
+                                                        <p class="newsletter error text-danger">{{ $value }}</p>
+                                                    @endforeach
+                                                @endif
                                             <i class="fa-solid fa-envelope arrow"></i>
-                                            <button class="sub-btn  btn-animation">
+                                            <button class="sub-btn btn-submit  btn-animation">
                                                 <span class="d-sm-block d-none">Subscribe</span>
                                                 <i class="fa-solid fa-arrow-right icon"></i>
                                             </button>
                                         </div>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -761,6 +776,20 @@
             var formattedDate = today.getFullYear() + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + ('0' + today.getDate()).slice(-2);
             document.getElementById("formatted-date").innerText = formattedDate;
         </script>
-
+        <script>
+            $('.btn-submit').click(function() {
+                $('.error').hide();
+                    if ($.trim($("#newsletter").val()) === "" ) {
+                        if ($.trim($("#newsletter").val()) === "") {
+                            $('.error.newsletter').text('newsletter is required');
+                            $('.error.newsletter').show();
+                        }
+                            return false;
+                    } else {
+                        $('.error').hide()
+                        $('#confirmModal').modal('show');
+                    }
+            });
+        </script>
 
     </x-guest-layout>

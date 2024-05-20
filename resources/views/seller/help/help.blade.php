@@ -118,11 +118,6 @@
                                                                 <td>
                                                                     <ul>
                                                                         <li>
-                                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#replyModal{{ $item->id }}">
-                                                                                <i class="fa-solid fa-reply"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
                                                                             <a href="{{ route('help.detail',$item->id) }}">
                                                                                 <i class="ri-eye-line"></i>
                                                                             </a>

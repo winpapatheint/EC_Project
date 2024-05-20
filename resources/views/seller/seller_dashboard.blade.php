@@ -178,7 +178,7 @@
                                         <i data-feather="user"></i>
                                         <span>Profile</span>
                                     </a>
-                                </li>
+                                </li><br>
 
                                 <li>
                                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"

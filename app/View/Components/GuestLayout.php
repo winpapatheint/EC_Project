@@ -2,13 +2,15 @@
 
 namespace App\View\Components;
 
-use App\Models\Category;
-use App\Models\Product;
+use Carbon\Carbon;
 use App\Models\Blog;
+use App\Models\Buyer;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+
 class GuestLayout extends Component
 {
     /**
@@ -24,18 +26,19 @@ class GuestLayout extends Component
 
         $todayDate = Carbon::now()->toDateString();
 
-        $deal = DB::table('products')
-                ->select('products.*')
-                ->whereNotNull('discount_percent')
-                ->whereDate('created_at', $todayDate)
-                ->get();
-
         $specialCorner = Category::with(['subCategoryTitle', 'subCategoryTitle.subCategory'])
                                     ->where('category_name', 'Special Corner')
                                     ->get();
         $allCategories = Category::all();
         $newBlogsExist = Blog::where('created_at', '>=', Carbon::now()->subDays(7))->exists();
-        $deal = Product::whereDate('created_at', $todayDate)->where('status', 1)->where('discount_percent', '!=', null)->get();
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $deal = Product::leftjoin('order_details', 'products.id', 'order_details.product_id')
+                    ->leftjoin('orders', 'order_details.order_id', 'orders.id')
+                    ->select('products.*')
+                    ->where('order_details.buyer_id', $buyer->id)
+                    ->whereDate('order_details.created_at', $todayDate)
+                    ->orderBy('orders.order_code', 'desc')
+                    ->get();
 
         return view('layouts.guest',compact('deal', 'allCategories', 'specialCorner', 'newBlogsExist', 'categories', 'deal'));
     }

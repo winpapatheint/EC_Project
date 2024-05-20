@@ -979,6 +979,30 @@
     <!-- Cookie Bar Box End -->
 
     <!-- Deal Box Modal Start -->
+    @php
+        if (Auth::check()) {
+            $buyer = DB::table('buyers')
+                        ->where('user_id', Auth::user()->id)
+                        ->first();
+            if ($buyer) {
+                $todayDate = Carbon::today()->toDateString();
+
+                // Perform the query to get today's deals
+                $deal = DB::table('products')
+                            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+                            ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
+                            ->select('products.*')
+                            ->where('order_details.buyer_id', $buyer->id)
+                            ->whereDate('order_details.created_at', $todayDate)
+                            ->orderBy('orders.order_code', 'desc')
+                            ->get();
+            } else {
+                $deal = collect();
+            }
+        } else {
+            $deal = collect();
+        }
+    @endphp
     <div class="modal fade theme-modal deal-modal" id="deal-box" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">

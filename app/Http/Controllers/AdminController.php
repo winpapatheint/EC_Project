@@ -15,6 +15,7 @@ use App\Models\Help;
 use App\Models\MultiImg;
 use App\Models\Coupon;
 use App\Models\Top;
+use App\Models\NewsLetter;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -560,7 +561,28 @@ class AdminController extends Controller
         return view('admin.top',compact('lists','ttlpage','ttl'));
     }
 
+    public function indexnewsletter()
+    {
+        $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = NewsLetter::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('email', 'like', '%' . $mainSearch . '%');
 
+            });
+        }
+
+        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.newsletter',compact('lists','ttlpage','ttl'));
+    }
 
     public function indexcustomer()
     {
@@ -600,11 +622,13 @@ class AdminController extends Controller
         $query = Review::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->where('comment', 'like', '%' . $mainSearch . '%')
-                ->where('created_at', 'like', '%' . $mainSearch . '%');
+                $query->orwhere('comment', 'like', '%' . $mainSearch . '%');
             })
             ->orWhereHas('user', function ($query) use ($mainSearch) {
                 $query->where('name', 'like', '%' . $mainSearch . '%');
+            })
+            ->orWhereHas('product', function ($query) use ($mainSearch) {
+                $query->where('product_name', 'like', '%' . $mainSearch . '%');
             });
         }
 
@@ -638,8 +662,12 @@ class AdminController extends Controller
                       ->orWhere('commission', 'like', '%' . $mainSearch . '%');
             });
         }
+        $query->leftjoin('coupons', 'products.coupon_id', '=', 'coupons.id')
+                ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
+                ->orderBy('products.created_at', 'desc');
 
-        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+        $lists = $query->paginate($limit);
+        $lists = $query->orderBy('products.created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -648,10 +676,12 @@ class AdminController extends Controller
             $query->where('category_name', 'Special Corner');
         })->get();
 
+        $coupons = DB::table('coupons')->where('status',1)->orderBY('created_at', 'desc')->get();
+
         // $hcompanies = array();
         // print_r($lists);die;
 
-        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
+        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle','coupons'));
     }
 
     public function shoplist()
@@ -678,7 +708,7 @@ class AdminController extends Controller
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
-        $coupons = DB::table('coupons')->orderBY('created_at', 'desc')->get();
+        $coupons = DB::table('coupons')->where('status',1)->orderBY('created_at', 'desc')->get();
 
         return view('admin.allshop',compact('lists','ttlpage','ttl','coupons'));
     }
@@ -871,10 +901,16 @@ class AdminController extends Controller
     public function indexsubcategory()
     {
         $limit = 10;
-        if (!empty($_GET['kword'])) {
-            $kword = $_GET['kword'];
-        } else {
-            $kword = '';
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+
+        $query = SubCategoryTitle::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->orWhere('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+            });
         }
 
         $lists = DB::table('categories')
@@ -1578,13 +1614,19 @@ class AdminController extends Controller
 
        Auth::loginUsingId($id);
 
-        session(['isadmincontrol' => $adminid , 'rolecontrol' => $adminrole , 'returnurl' => url()->previous()]);
-        print_r(session()->all());
-        // print_r(Auth::user()->role);die;
-        if (Auth::user()->role == 'seller') {
-
-            return redirect('/dashboard');
-        }
+       session(['isadmincontrol' => $adminid , 'rolecontrol' => $adminrole , 'returnurl' => url()->previous()]);
+       print_r(session()->all());
+       // print_r(Auth::user()->role);die;
+       // print_r(Auth::user()->role);die();
+       if (Auth::user()->role == 'admin' OR Auth::user()->role == 'subadmin') {
+           return redirect()->intended(RouteServiceProvider::ADMIN);
+       } else if (Auth::user()->role == 'buyer') {
+           return redirect()->intended(RouteServiceProvider::USER);
+       } else if (Auth::user()->role == 'seller' OR Auth::user()->role == 'idlehost') {
+           return redirect()->intended(RouteServiceProvider::SELLER);
+       } else {
+           return redirect()->intended(RouteServiceProvider::HOME);
+       }
 
     }
 
@@ -1657,7 +1699,6 @@ class AdminController extends Controller
         return redirect('/admin/profile')->back();
     }
 
-
     public function indexshoplist(Request $request)
     {
         $limit = 12;
@@ -1704,6 +1745,37 @@ class AdminController extends Controller
 
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));
     }
+
+    public function storenewsletter(Request $request)
+    {
+       $time = new DateTime();
+
+       $existingEmail = DB::table('newsletters')
+       ->where('email', $request->newsletter)
+       ->exists();
+
+       if ($existingEmail) {
+
+        $msg = trans('Email is duplicated.', [ 'name' => $request->title ]);
+        return redirect('/')->with('error', $msg );
+       }
+
+
+       if (empty($request->id)) {
+
+           DB::table('newsletters')->insert([
+               'email' => $request->newsletter,
+               'created_at' => $time->format('Y-m-d H:i:s'),
+               'updated_at' => $time->format('Y-m-d H:i:s')
+           ]);
+
+           $msg = trans('Sending newsletter mail successfully', [ 'name' => $request->title ]);
+           return redirect('/')->with('success', $msg );
+       }
+
+       return redirect('/')->with('success', $msg );
+
+       }
 
     public function storeblog(Request $request)
     {
@@ -1853,6 +1925,14 @@ class AdminController extends Controller
             });
         }
         $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
+        foreach ($lists as $list) {
+            // Check if the enddate has passed
+            if (Carbon::parse($list->enddate)->isPast()) {
+                // Update the status to 0
+                $list->status = 0;
+                $list->save();
+            }
+        }
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
@@ -2025,6 +2105,15 @@ class AdminController extends Controller
 
     }
 
+    public function deletenewsletter(Request $request)
+    {
+
+        $data = DB::table('newsletters')
+                    ->delete($request->id);
+        return redirect('/admin/newsletter')->with('success','Deleted Successfully.');
+
+    }
+
     public function deleteorderlist(Request $request)
     {
 
@@ -2064,12 +2153,26 @@ class AdminController extends Controller
     {
         $time = new DateTime();
         $updval = array( 'coupon_id' => $request->couponid,
+                         'coupon_status' => 1,
                         'updated_at' => $time->format('Y-m-d H:i:s')
                         );
 
         DB::table('sellers')->where('id',$request->id)->update($updval);
 
         return redirect('/admin/shoplist')->with('success','coupon added');
+
+    }
+    public function  updateproductcoupon(Request $request)
+    {
+        $time = new DateTime();
+        $updval = array( 'coupon_id' => $request->couponid,
+                        'coupon_status' => 1,
+                        'updated_at' => $time->format('Y-m-d H:i:s')
+                        );
+
+        DB::table('products')->where('id',$request->id)->update($updval);
+
+        return redirect('/admin/product')->with('success','coupon added');
 
     }
 
@@ -2695,6 +2798,7 @@ class AdminController extends Controller
         $sellerAmount = $discountedPrice - $commisonAmount;
 
         $adminAmount = $discountedPrice -  $sellerAmount;
+
         $updval = array('product_code' => $request->productcode,
                         'product_name' => $request->productname,
                         'country_id' => $request->country,
@@ -2926,6 +3030,50 @@ class AdminController extends Controller
         // return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle'));
         return redirect()->route('admin.all.product',compact('lists','ttlpage','ttl', 'subCatTitle'));
     }
+
+    public function removeCoupon(Request $request)
+    {
+        $product = Product::find($request->id);
+        $seller = Seller::find($product->user_id);
+        if ($product) {
+            $product->coupon_id = null;
+            $product->coupon_status = 0;
+            $product->save();
+
+            if ($seller) {
+                $seller->coupon_id = null;
+                $seller->coupon_status = 0;
+                $seller->save();
+            }
+        }
+
+        return redirect('/admin/product');
+    }
+
+    public function removeFromShop($id)
+    {
+        $seller = Seller::find($id);
+
+        if ($seller) {
+            // Update the seller's coupon information
+            $seller->coupon_id = null;
+            $seller->coupon_status = 0;
+            $seller->save();
+
+            // Fetch all products of the seller
+            $products = Product::where('seller_id', $seller->user_id)->get();
+
+            // Update coupon information for each product
+            foreach ($products as $product) {
+                $product->coupon_id = null;
+                $product->coupon_status = 0;
+                $product->save();
+            }
+        }
+
+        return redirect('/admin/shoplist');
+    }
+
 
     public function indexspecialsubcategoryproduct($id)
     {

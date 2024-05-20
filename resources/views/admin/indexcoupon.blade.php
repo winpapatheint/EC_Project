@@ -57,17 +57,22 @@
                                                     <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
-                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
-                                                               data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
-                                                               data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
+                                                            @php
+                                                                $isExpired = \Carbon\Carbon::parse($list->enddate)->isPast();
+                                                            @endphp
+                                                           <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
+                                                           data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
+                                                           data-off="InActive" {{ $list->status ? 'checked' : '' }} {{ $isExpired ? 'disabled' : '' }}>
                                                         </label>
                                                     </td>
                                                     <td>
                                                         <ul>
                                                             <li>
+                                                            @if (!$isExpired)
                                                                 <a href='{{ url("/editcoupon/".$list->id ) }}'>
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
+                                                            @endif
                                                             </li>
 
                                                             <li>

@@ -1,5 +1,4 @@
-@extends('seller.seller_dashboard')
-@section('seller')
+<x-auth-layout>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .table>:not(caption)>*>*
@@ -17,13 +16,7 @@
                         <div class="card-body">
 
                             <div class="title-header option-title d-sm-flex d-block">
-                                <h5>News</h5>
-                                    <form class="d-inline-flex">
-                                        <a href="{{ route('admin.addblog') }}"
-                                            class="align-items-center btn btn-theme d-flex">
-                                                <i data-feather="plus-square"></i>Add New
-                                        </a>
-                                    </form>
+                                <h5>NewsLetter</h5>
                             </div>
                             <div>
                                 <div class="table-responsive">
@@ -32,8 +25,7 @@
                                             <tr>
                                                 <th style="min-width: 50px">No</th>
                                                 <th style="min-width: 50px">Date</th>
-                                                <th style="min-width: 50px">News Name</th>
-                                                <th style="min-width: 50px">Image</th>
+                                                <th style="min-width: 50px">Email</th>
                                                 <th style="min-width: 50px">Option</th>
                                             </tr>
                                         </thead>
@@ -42,24 +34,11 @@
                                             @foreach( $lists as $key => $list )
 
                                                 <tr>
-                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td  class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="タイトル">{{ $list->title }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 200px;"></td>
+                                                    <td data-label="タイトル">{{ $list->email }}</td>
                                                     <td>
                                                         <ul>
-                                                            <li>
-                                                                <a href="{{ url("/blog/".$list->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href='{{ url("/editblog/".$list->id ) }}'>
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
                                                             <li>
                                                                 <a href="javascript:void(0)" data-bs-toggle="modal"
                                                                     data-bs-target="#deleteConfirmModal{{ $list->id }}">
@@ -100,7 +79,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <form method="POST" action="{{ route('deleteblog') }}" style="display:flex;">
+                                <form method="POST" action="{{ route('deletenewsletter') }}" style="display:flex;">
                                     @csrf
                                         <input type="hidden" name="id" value="{{ $list->id }}">
                                             <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
@@ -140,4 +119,4 @@
                 </div>
             </div>
         <!-- Delete Modal Box End -->
-@endsection
+</x-auth-layout>

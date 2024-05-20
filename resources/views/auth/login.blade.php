@@ -42,7 +42,7 @@
                 <div class="log-in-box">
                     <div class="log-in-title">
                         <h3 style="text-wrap">Welcome to Asian Food Museum </h3>
-                        <h4>Log In Your Account</h4>
+                        <h5>Log In Your Account</h5>
                     </div>
                       @php $error = $errors->toArray(); @endphp
                       <div class="input-box">

@@ -204,9 +204,8 @@
                                     </form>
                                 </li>
                             </ul>
-<ul class="profile-dropdown onhover-show-div">
+                            <ul class="profile-dropdown onhover-show-div">
                                <div>
-
                                     <li>
                                         <a href="{{ route('admin.profile') }}">
                                             <i data-feather="user"></i>
@@ -362,6 +361,13 @@
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
                                         <i class="ri-admin-line"></i>
                                         <span>Customer</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
+                                        <i class="ri-archive-line"></i>
+                                        <span>NewsLetter</span>
                                     </a>
                                 </li>
 

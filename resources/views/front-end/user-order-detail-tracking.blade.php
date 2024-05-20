@@ -123,7 +123,11 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Product Info</h5>
-                                    <h3>{{ $orderDetail->product_name }}</h3>
+                                    <h3>@if(strlen($orderDetail->product_name) > 30)
+                                        {!! substr($orderDetail->product_name, 0, 30) . '<br>' . substr($orderDetail->product_name, 30, 30) . '...' !!}
+                                    @else
+                                        {!! nl2br(e($orderDetail->product_name)) !!}
+                                    @endif</h3>
                                     <h5>¥ {{ number_format($orderDetail->selling_price , 0, '.', ',') }}</h5>
                                 </div>
                             </div>
@@ -164,9 +168,10 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">From</h5>
-                                    <h4>{{ $orderDetail->shop_post_code }}. </h4>
-                                    <h4>{{ $orderDetail->shop_city }} {{ $orderDetail->shop_chome }} chome, </h4>
-                                    <h4>{{ $orderDetail->shop_building }} - {{ $orderDetail->shop_room }}.</h4>
+                                    <h4>{{ $orderDetail->seller->zip_code }} </h4>
+                                    <h4>{{ $orderDetail->seller->prefecture->name }} </h4>
+                                    <h4>{{ $orderDetail->seller->city }} {{ $orderDetail->seller->chome }} </h4>
+                                    <h4>{{ $orderDetail->seller->building }} {{ $orderDetail->seller->room }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -179,9 +184,10 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Destination</h5>
-                                    <h4>{{ $orderDetail->cus_post_code }}. </h4>
-                                    <h4>{{ $orderDetail->cus_city }} {{ $orderDetail->cus_chome }} chome, </h4>
-                                    <h4>{{ $orderDetail->cus_building }} - {{ $orderDetail->cus_room }}.</h4>
+                                    <h4>{{ $orderDetail->cus_post_code }} </h4>
+                                    <h4>{{ $orderDetail->prefecture->name }} </h4>
+                                    <h4>{{ $orderDetail->cus_city }} {{ $orderDetail->cus_chome }} </h4>
+                                    <h4>{{ $orderDetail->cus_building }} {{ $orderDetail->cus_room }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -243,23 +249,43 @@
                                 </li>
                                 <li class="{{ $confirmedDone }}">
                                     <h5>Confirmed</h5>
+                                    @if($confirmedDate != "Pending")
                                     <h6>{{ date('Y/m/d H:i', strtotime($confirmedDate)) }}</h6>
+                                    @else
+                                    <h6>{{ $confirmedDate }}</h6>
+                                    @endif
                                 </li>
                                 <li class="{{ $processingDone }}">
                                     <h5>Processing</h5>
+                                    @if($processingDate != "Pending")
                                     <h6>{{ date('Y/m/d H:i', strtotime($processingDate)) }}</h6>
+                                    @else
+                                    <h6>{{ $processingDate }}</h6>
+                                    @endif
                                 </li>
                                 <li class="{{ $pickedDone }}">
                                     <h5>Picked</h5>
+                                    @if($pickedDate != "Pending")
                                     <h6>{{ date('Y/m/d H:i', strtotime($pickedDate)) }}</h6>
+                                    @else
+                                    <h6>{{ $pickedDate }}</h6>
+                                    @endif
                                 </li>
                                 <li class="{{ $shippedDone }}">
                                     <h5>Shipped</h5>
+                                    @if($shippedDate != "Pending")
                                     <h6>{{ date('Y/m/d H:i', strtotime($shippedDate)) }}</h6>
+                                    @else
+                                    <h6>{{ $shippedDate }}</h6>
+                                    @endif
                                 </li>
                                 <li class="{{ $deliveredDone }}">
                                     <h5>Delivered</h5>
+                                    @if($deliveredDate != "Pending")
                                     <h6>{{ date('Y/m/d H:i', strtotime($deliveredDate)) }}</h6>
+                                    @else
+                                    <h6>{{ $deliveredDate }}</h6>
+                                    @endif
                                 </li>
                             </ol>
                         </div>

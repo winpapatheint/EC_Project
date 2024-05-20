@@ -1,9 +1,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @php $error = $errors->toArray();  @endphp
-
 @extends('seller.seller_dashboard')
 @section('seller')
-
 <div class="page-body">
 <!-- New Product Add Start -->
     <div class="container-fluid">
@@ -19,13 +17,6 @@
 
                                 <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="tagsForm">
                                     @csrf
-
-                                    @if (session('flash_message'))
-                                        <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                            {{ session('flash_message') }}
-                                        </div>
-                                    @endif
-
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
@@ -193,7 +184,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long_desc" id="long_desc">{{ old('long_desc') }}</textarea>
+                                            <textarea class="form-control" name="long_desc" id="long_desc">{{ old('content_long_desc') }}</textarea>
                                             <input type="hidden" name="content" id="content_long_desc">
                                             <p style="display:none" class="content_long_desc error text-danger"></p>
                                             @if (!empty($error['content_long_desc']))
@@ -207,7 +198,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('care_instructions') }}</textarea>
+                                            <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('content_care_instructions') }}</textarea>
                                             <input type="hidden" name="content" id="content_care_instructions">
                                             <p style="display:none" class="content_care_instructions error text-danger"></p>
                                             @if (!empty($error['content_care_instructions']))
@@ -223,10 +214,10 @@
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)" value="{{ old('product_thambnail') }}">
                                             <img src="" id="mainThmb">
-                                            <p style="display:none" class="formFile error text-danger"></p>
-                                            @if (!empty($error['formFile']))
-                                                @foreach ($error['formFile'] as  $key => $value)
-                                                    <p class="formFile error text-danger">{{ $value }}</p>
+                                            <p style="display:none" class="product_thambnail error text-danger"></p>
+                                            @if (!empty($error['product_thambnail']))
+                                                @foreach ($error['product_thambnail'] as  $key => $value)
+                                                    <p class="product_thambnail error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
 
@@ -236,13 +227,19 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Multiple Images</label>
                                         <div class="col-sm-9">
-                                            <input type="file" class="form-control" multiple name="multi_img[]" id="multiImg">
-                                            <div>&ast;Attach images with using shift key.</div>
-                                            <div id="preview_img"></div>
-                                            <p style="display:none" class="multiImg error text-danger"></p>
-                                            @if (!empty($error['multiImg']))
-                                                @foreach ($error['multiImg'] as  $key => $value)
-                                                    <p class="multiImg error text-danger">{{ $value }}</p>
+                                            <div class="input-group">
+                                                <div id="fileInputs" class="custom-select">
+                                                    <input class="form-control" type="file" name="images[]" accept="image/*" id="multiImg" >
+                                                </div>
+                                                <button type="button" class="btn btn-light" id="addFileInput">
+                                                    <i data-feather="plus-square"></i>
+                                                </button>
+                                            </div>
+
+                                            <p style="display:none" class="images error text-danger"></p>
+                                            @if (!empty($error['images']))
+                                                @foreach ($error['images'] as  $key => $value)
+                                                    <p class="images error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -360,6 +357,81 @@
 </script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addFileInputBtn = document.getElementById('addFileInput');
+        const initialFileInput = document.getElementById('multiImg');
+        const fileInputsContainer = document.getElementById('fileInputs');
+        let imageCount = 0;
+
+        function createImageContainer(file, fileInput) {
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('file-input-container');
+
+            const newImage = document.createElement('img');
+            newImage.src = URL.createObjectURL(file);
+            newImage.classList.add('uploaded-image');
+            newImage.style.width = newImage.style.height = '70px';
+
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '&#10006;';
+            closeButton.classList.add('close-button');
+            closeButton.addEventListener('click', () => {
+                fileInputsContainer.removeChild(imageContainer);
+                fileInputsContainer.removeChild(fileInput);
+                imageCount--;
+            });
+
+            imageContainer.appendChild(newImage);
+            imageContainer.appendChild(closeButton);
+            fileInputsContainer.appendChild(imageContainer);
+        }
+
+        function handleFileInputChange(event) {
+            const fileInput = event.target;
+            for (const file of fileInput.files) {
+                if (imageCount < 5) {
+                    createImageContainer(file, fileInput);
+                    imageCount++;
+                } else {
+                    alert('You can only upload a maximum of 5 images.');
+                    break;
+                }
+            }
+        }
+
+        initialFileInput.addEventListener('change', handleFileInputChange);
+
+        addFileInputBtn.addEventListener('click', () => {
+            if (imageCount < 5) {
+                const newFileInput = document.createElement('input');
+                newFileInput.type = 'file';
+                newFileInput.name = 'images[]';
+                newFileInput.accept = 'image/*';
+                newFileInput.style.display = 'none';
+                newFileInput.addEventListener('change', handleFileInputChange);
+                fileInputsContainer.appendChild(newFileInput);
+                newFileInput.click();
+            } else {
+                alert('You can only upload a maximum of 5 images.');
+            }
+        });
+    });
+</script>
+
+
+<script>
+    function mainThamUrl(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('#mainThmb').attr('src', e.target.result).width(80).height(80);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('category').addEventListener('change', function() {
         var categoryId = this.value;
@@ -429,7 +501,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var subcategoryId = this.value;
     });
 });
-
 </script>
 
 <script>
@@ -487,44 +558,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error(error);
             });
-    });
-</script>
-
-<script>
-    function mainThamUrl(input){
-        if(input.files && input.files[0]){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#mainThmb').attr('src', e.target.result).width(70).height(70);
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
-
-<script>
-    document.getElementById('multiImg').addEventListener('change', function(event) {
-        const files = event.target.files;
-        const preview = document.getElementById('preview_img');
-        preview.innerHTML = '';
-
-        if (files.length > 5) {
-            alert('Please select a maximum of 5 images.');
-            this.value = '';
-            return;
-        }
-
-        Array.from(files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '80px';
-                img.style.maxHeight = '80px';
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
     });
 </script>
 

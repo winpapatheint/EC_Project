@@ -15,13 +15,23 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>アジア食彩館</title>
 
-    <!-- Google font-->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <!-- Google font -->
 
-    <!-- Linear Icon css -->
-    <link rel="stylesheet" href="{{ asset('backend/assets/css/linearicon.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+
+    <!-- Template css -->
+
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
@@ -91,21 +101,17 @@
                     </div>
                 </div>
 
-                <form class="form-inline search-full" action="javascript:void(0)" method="get">
-                    <div class="form-group w-100">
-                        <div class="Typeahead Typeahead--twitterUsers">
-                            <div class="u-posRelative">
-                                <input class="demo-input Typeahead-input form-control-plaintext w-100" type="text"
-                                    placeholder="Search Fastkart .." name="q" title="" autofocus>
-                                <i class="close-search" data-feather="x"></i>
-                                <div class="spinner-border Typeahead-spinner" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                            <div class="Typeahead-menu"></div>
+                <div class="search-box">
+                    <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
+                        <div class="input-group">
+                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                            <button class="btn" type="submit" id="button-addon2">
+                                <i data-feather="search"></i>
+                            </button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li>
@@ -172,7 +178,7 @@
                                         <i data-feather="user"></i>
                                         <span>Profile</span>
                                     </a>
-                                </li>
+                                </li><br>
 
                                 <li>
                                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
@@ -240,7 +246,7 @@
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('all.order') }}">
                                         <i class="ri-archive-line"></i>
-                                        <span>Orders</span>
+                                        <span>Order</span>
                                     </a>
                                 </li>
 

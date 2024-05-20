@@ -8,6 +8,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
+                    @include('components.messagebox')
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
@@ -116,11 +117,6 @@
                                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                                 <td>
                                                                     <ul>
-                                                                        <li>
-                                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#replyModal{{ $item->id }}">
-                                                                                <i class="fa-solid fa-reply"></i>
-                                                                            </a>
-                                                                        </li>
                                                                         <li>
                                                                             <a href="{{ route('help.detail',$item->id) }}">
                                                                                 <i class="ri-eye-line"></i>

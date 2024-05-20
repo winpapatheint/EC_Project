@@ -11,7 +11,7 @@
                     <!-- Table Start -->
                     <div class="card-body">
                         <div class="title-header option-title">
-                            <h5>Product Reviews</h5>
+                            <h5>Order List</h5>
                         </div>
                         <div>
                             <div class="table-responsive">
@@ -40,15 +40,15 @@
                                             <tr>
                                                 <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}/td>
+                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                 <td>
                                                     <a class="d-block">
                                                         <span class="order-image">
-                                                            <img width="80" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
+                                                            <img width="50" height="50" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <td>{{ $item->order_id }}</td>
+                                                <td>{{ $item->order->order_code }}</td>
                                                 <td>{{ $item->product->product_code }}</td>
                                                 <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>

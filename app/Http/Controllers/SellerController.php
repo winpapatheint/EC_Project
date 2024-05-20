@@ -82,7 +82,8 @@ class SellerController extends Controller
         }
 
         $data->save();
-        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
+        $msg = ('Data updated successfully');
+        return redirect('/dashboard')->with('success', $msg);
     }
 
 
@@ -137,7 +138,9 @@ class SellerController extends Controller
         $seller->bank_acc_no = $request->bank_acc_no;
         $seller->updated_at = Carbon::now();
         $seller->update();
-        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
+
+        $msg = ('Data updated successfully');
+        return redirect('/dashboard')->with('success', $msg);
     }
 
 
@@ -209,7 +212,8 @@ class SellerController extends Controller
         //     $message->from(Auth::user()->email, Auth::user()->name);
         // });
 
-        return redirect('/help')->with('flash_message', 'Data sent successfully');
+        $msg = ('Data sent successfully');
+        return redirect('/help')->with('success', $msg);
     }
 
 
@@ -258,8 +262,8 @@ class SellerController extends Controller
         //     $message->from(Auth::user()->email, Auth::user()->name);
         // });
 
-
-        return redirect('/help')->with('flash_message', 'Data sent successfully');
+        $msg = ('Data sent successfully');
+        return redirect('/help')->with('success', $msg);
     }
 
 
@@ -272,7 +276,8 @@ class SellerController extends Controller
         if (File::exists($imagePath)) {
             File::delete($imagePath);
         }
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Data deleted successfully');
+        return back()->with('success', $msg);
     }
 
 
@@ -310,7 +315,6 @@ class SellerController extends Controller
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
         ]);
-        event(new Registered($user));
 
         $subseller = Subseller::create([
             'user_id' => $user->id,
@@ -318,11 +322,10 @@ class SellerController extends Controller
             'name' => $validatedData['user_name'],
             'email' => $validatedData['mail'],
             'password' => Hash::make($validatedData['passwords']),
+            'phone' => $request->input('phone'),
         ]);
-        event(new Registered($subseller));
 
-        $email = $request->email;
-        return view('auth.verify-email',compact('email'));
+        return redirect('/subsellerlist');
     }
 
 
@@ -339,7 +342,8 @@ class SellerController extends Controller
 
         Subseller::findOrFail($id)->delete();
 
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Subseller deleted successfully');
+        return back()->with('success', $msg);
     }
 
 

@@ -63,17 +63,25 @@ class UserController extends Controller
 
         $buyer = Buyer::create([
             'user_id' => $user->id,
-            'prefecture_id' => $request->prefecture,
             'name' => $request->name,
             'email' => $user->email,
             'birthday' => $request->birthday,
-            'address' => $request->address,
             'phone' => $request->phone,
-            'zip_code' => $request->zip_code,
+        ]);
+
+        $buyerAddress = BuyerAddress::create([
+            'buyer_id' => $buyer->id,
+            'name' => $request->name,
+            'post_code' => $request->zip_code,
+            'prefecture_id' => $request->prefecture,
             'city' => $request->city,
             'chome' => $request->chome,
             'building' => $request->building,
             'room_no' => $request->room,
+            'phone' => $request->phone,
+            'place' => "HOME",
+            'default' => 1,
+            'main_address' => 1
         ]);
 
         event(new Registered($buyer));
@@ -87,30 +95,26 @@ class UserController extends Controller
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
 
                 if (Auth::check()) {
-                    $addresses = BuyerAddress::select(
-                        'buyer_addresses.*',
-                        'buyers.id as userid',
-                        'buyers.name as username',
-                        'buyers.email as useremail'
-                    )->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->get();
+                    $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
+                        ->where('user_id', $user->id)->where('buyer_addresses.main_address', 1)->first();
                         
                     $profile = route('user_profile');
 
-                    $userOrders = DB::table('order_details')
-                        ->join('buyers', 'order_details.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->select('order_details.*', 'order_details.id as order_id', 'buyers.*', 'buyers.address as buyer_address')
-                        ->get();
+                    $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
+                    $orderCount = Order::where('buyer_id', $buyer->id)->count();
 
-                    $orderCount = $userOrders->count();
-
-                    $pendingCount = $userOrders->filter(function ($order) {
-                        return !is_null($order->processing_date);
-                    })->count();
-
-                    $userAddresses = $userOrders->pluck('buyer_address')->unique()->toArray();
+                    $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
+                    $countForPending = [];
+                    foreach ($orderDetails as $orderDetail) {
+                        if (!isset($countForPending[$orderDetail->order_id])) {
+                            $countForPending[$orderDetail->order_id] = 1;
+                        }
+                    
+                        if (is_null($orderDetail->delivered_date)) {
+                            $countForPending[$orderDetail->order_id] = 0;
+                        }
+                    }
+                    $pendingCount = array_sum($countForPending);
 
                     $wishlist = DB::table('wishlists')
                         ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
@@ -123,12 +127,10 @@ class UserController extends Controller
 
                     return view('front-end.user-dashboard', compact(
                         'user',
-                        'addresses',
+                        'address',
                         'profile',
-                        'userOrders',
                         'orderCount',
                         'wishlistCount',
-                        'userAddresses',
                         'pendingCount'
                     ));
                 } else {
@@ -147,7 +149,7 @@ class UserController extends Controller
             $orders = DB::table('orders')
                 ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
                 ->where('buyers.user_id', $user->id)
-                ->select('orders.*', 'orders.id as order_id', 'buyers.*')
+                ->select('orders.*','orders.created_at as order_created_at', 'orders.id as order_id', 'buyers.*')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($limit);
 
@@ -163,15 +165,17 @@ class UserController extends Controller
     public function showOrderDetails(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orderItem = $request->id;
-
-        $orderDetails = DB::table('orders')
-            ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+        $auth = Auth::user()->id;
+        
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+            ->join('products', 'products.id', 'order_details.product_id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->with('prefecture')
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
             ->where('buyers.user_id', Auth::user()->id)
-            ->where('orders.id', $orderItem)
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*', 'products.*','products.selling_price as price', 'order_details.*','buyers.*')
+            ->where('orders.id', $request->id)
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
@@ -181,14 +185,13 @@ class UserController extends Controller
     public function showOrderDetailTracking(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $orderDetail = OrderDetail::select('order_details.*', 'products.*', 'sellers.*', 'sellers.zip_code as shop_post_code',
-                                            'sellers.city as shop_city','sellers.chome as shop_chome','sellers.building as shop_building',
-                                            'sellers.room as shop_room','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
+        $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
+                                    ->select('order_details.*', 'products.*','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
                                             'order_details.chome as cus_chome','order_details.building as cus_building', 
                                             'order_details.room_no as cus_room', 'order_details.created_at as order_detail_created_at')
                                     ->leftjoin('products', 'order_details.product_id', 'products.id')
-                                    ->leftjoin('sellers', 'products.seller_id', 'sellers.user_id')
-                                    ->where('order_details.id', $request->id)->first();
+                                    ->where('order_details.id', $request->id)
+                                    ->first();
         return view('front-end.user-order-detail-tracking', compact('user', 'orderDetail'));
     }
     //Show Order Tracking
@@ -251,7 +254,7 @@ class UserController extends Controller
         $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', $user->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         //$user = Buyers::first();
             return view('front-end.user-address',compact('data','user','prefecture'));
@@ -291,6 +294,7 @@ class UserController extends Controller
                 'room_no' => $request->roomno,
                 'place' => $request->place,
                 'phone' => $request->phone,
+                'default' => 0,
             ]);
 
             if ($Buyer_addresses) {
@@ -450,19 +454,17 @@ class UserController extends Controller
    public function showProfile(Request $request)
    {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
-
         $buyer = DB::table('buyers')
-
                     ->join('users', 'buyers.user_id', '=', 'users.id')
                     ->where('buyers.user_id', Auth::user()->id)
                     ->select('users.*', 'buyers.*')
                     ->first();
-
+        $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
         $maskedPassword = str_repeat('*', strlen($user->password));
+        $prefecture = Prefecture::get();
         if($user && $buyer)
         {
-            return view('front-end.user-profile',compact('user','buyer','maskedPassword'));
-
+            return view('front-end.user-profile',compact('user','buyer', 'buyerAddress','maskedPassword', 'prefecture'));
         }
         else
         {
@@ -472,36 +474,34 @@ class UserController extends Controller
     //Edit Profile
     public function editProfile(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
         $user = User::find(Auth::user()->id);
-        $password = User::find($request->oldpassword);
-        $buyer = buyer::find($request->buyer_id);
+        $buyer = Buyer::find($request->buyer_id);
+        $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
 
-        if ($user && $buyer)
+        if ($user && $buyer && $buyerAddress)
         {
-            if ($request->has('password'))
-                {
-                    $userData['password'] = bcrypt($request->input('password'));
-                    $user->update($userData);
-                    $buyer->update($userData);
-                    DB::commit();
-                    return redirect()->route('user_profile');
-                }
-                else
-                {
-                    $user->update([
-                        'name' => $request->input('name'),
-                        'email' => $request->input('email'),
-                        'phone' => $request->input('phone'),
-
-                    ]);
-                    $buyer->update([
-                        'name' => $request->input('name'),
-                        'email' => $request->input('email'),
-                        'phone' => $request->input('phone'),
-                    ]);
-                    return redirect()->route('user_profile');
-                }
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
+            $buyer->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
+            $buyerAddress->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'post_code' => $request->post_code,
+                'prefecture_id' => $request->prefectures,
+                'city' => $request->city,
+                'chome' => $request->chome,
+                'building' => $request->building,
+                'room_no' => $request->roomno,
+                'place' => $request->place,
+            ]);
+            return redirect()->route('user_profile');
         }
         else
         {
@@ -525,7 +525,6 @@ class UserController extends Controller
             $user->save();
 
             return redirect()->route('edit_password');
-
         }
         else
         {
@@ -906,7 +905,7 @@ class UserController extends Controller
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
-                     ->get();
+                     ->with('prefecture')->get();
 
         $buyerPayment = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
                     ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
@@ -958,6 +957,9 @@ class UserController extends Controller
             $couponDiscountAmount = $request->coupondiscountamount;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $name = $buyerAddressFirst->name;
+            $phone = $buyerAddressFirst->phone;
+            $prefectureId = $buyerAddressFirst->prefecture_id;
             $postcode = $buyerAddressFirst->post_code;
             $city = $buyerAddressFirst->city;
             $chome = $buyerAddressFirst->chome;
@@ -1004,11 +1006,15 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,
@@ -1019,11 +1025,15 @@ class UserController extends Controller
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
                         'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
                         'amount' => $productamounts[$key],
+                        'name' => $name,
+                        'phone' => $phone,
                         'post_code' => $postcode,
                         'city' => $city,
                         'chome' => $chome,

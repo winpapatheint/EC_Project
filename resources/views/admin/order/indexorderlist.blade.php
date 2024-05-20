@@ -117,12 +117,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                     <form method="POST" action="{{ route('deleteorderlist') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

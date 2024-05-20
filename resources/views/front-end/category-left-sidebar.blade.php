@@ -638,13 +638,20 @@
                                             </h6>
                                         </div>
                                     </li>
+
+                                    <li>
+                                        <div class="brand-box">
+                                            <h5>In Stock:</h5>
+                                            <h6>{{ $product->in_stock }}</h6>
+                                        </div>
+                                    </li>
                                 </ul>
                                 {{-- remain --}}
                                 <div class="modal-button">
                                     <form method="POST" action="{{ route('show_carts', ['id' => $product->id]) }}" >
                                         @csrf
                                         <button onclick="location.href = 'cart.html';"
-                                            class="btn btn-md add-cart-button icon">Add
+                                            class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>Add
                                             To Cart</button>
                                     </form>
                                     

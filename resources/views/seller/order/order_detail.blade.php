@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <div class="title-header title-header-block package-card">
                             <div>
-                                <h5>Order ID: {{ $order->id }}</h5>
+                                <h5>Order ID: {{ $order->order->order_code }}</h5>
                             </div>
                             {{-- <div class="card-order-section">
                                 <ul>
@@ -100,26 +100,21 @@
                                         <div class="row g-4">
                                             <h4>summery</h4>
                                             <ul class="order-details">
-                                                <li>Order ID: {{ $order->id }}</li>
+                                                <li>Order ID: {{ $order->order->order_code }}</li>
                                                 <li>Order Date: {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d H:i') }}</li>
                                                 <li>Order Total: ¥{{ number_format($total) }}</li>
                                             </ul>
 
                                             <h4>shipping address</h4>
                                             <ul class="order-details">
-                                                <li>{{ $order['prefecture']['name'] }}</li>
+                                                <li>{{ $order->prefecture->name }}</li>
                                                 <li>{{ $order->city }}{{ $order->chome }}</li>
                                                 <li>{{ $order->building }} {{ $order->room }}</li>
                                             </ul>
 
-                                            <div class="payment-mode">
-                                                <h4>Payment method</h4>
-                                                <p>{{$order->payment_method}}</p>
-                                            </div>
-
                                             <div class="delivery-sec">
                                                 <h3>Expected date of delivery: </h3>
-                                                <span>{{ $order->expected_date }}</span>
+                                                <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
                                                 <a href="{{ route('order.tracking',$order->id) }}">Track order</a>
                                             </div>
                                         </div>

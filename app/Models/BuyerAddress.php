@@ -19,9 +19,12 @@ class BuyerAddress extends Model
         'room_no',
         'phone',
         'place',
-        'photo',
+        'default',
         'created_at',
         'updated_at',
-
     ];
+
+    function prefecture() {
+        return $this->belongsTo(Prefecture::class);
+    }
 }

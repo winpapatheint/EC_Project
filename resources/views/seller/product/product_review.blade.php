@@ -39,7 +39,7 @@
                                         <tr>
                                             <td>{{ ($ttl+1) - ($review->firstItem() + $key) }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}  </td>
                                             <td>{{ $item->user->name }}</td>
                                             <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
                                             @if ($item->stars_rated == NULL)
@@ -111,7 +111,17 @@
                                                     </ul>
                                                 </td>
                                             @endif
-                                            <td>{{ $item->comment }}</td>
+
+                                            @php
+                                                $comment = $item->comment;
+                                                $lines = array_chunk(str_word_count($comment, 1), 20);
+                                            @endphp
+
+                                            <td>
+                                                @foreach ($lines as $line)
+                                                    {{ implode(' ', $line) }}<br>
+                                                @endforeach
+                                            </td>
 
                                             <td>
                                                 <label class="switch">

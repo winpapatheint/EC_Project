@@ -70,21 +70,17 @@
                                                                 </li>
 
                                                                 <li>
-                                                                    <p class="text-content"><span
-                                                                            class="text-title">Address
-                                                                            :</span>{{ $buyeraddress->post_code }}
-                                                                    </p>
-                                                                    <p class="text-content">{{ $buyeraddress->city }}</p>
-                                                                    <p class="text-content">{{ $buyeraddress->chome }}</p>
-                                                                    <p class="text-content">{{ $buyeraddress->building }}</p>
-                                                                    <p class="text-content">{{ $buyeraddress->room_no }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->post_code }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->prefecture->name }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->city }} {{ $buyeraddress->chome }}</p>
+                                                                    <p class="text-content">{{ $buyeraddress->building }} {{ $buyeraddress->room_no }}</p>
 
                                                                 </li>
 
                                                                 <li>
                                                                     <h6 class="text-content mb-0"><span
                                                                             class="text-title">Phone
-                                                                            :</span> + 380 {{ $buyeraddress->phone }}</h6>
+                                                                            :</span>{{ $buyeraddress->phone }}</h6>
                                                                 </li>
                                                             </ul>
                                                         </div>

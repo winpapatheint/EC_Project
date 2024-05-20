@@ -24,7 +24,7 @@
     <!-- Breadcrumb Section End -->
     <!-- Cart Section Start -->
     <section class="cart-section section-b-space">
-        <div class="container-fluid-lg">
+        <div class="container-fluid" style="margin-left: 10px;">
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-9">
                     @php
@@ -133,14 +133,40 @@
                                         </td>
                                            
                                         <td class="save-remove">
-                                            <form method="POST" action="{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}">
-                                                @csrf
-                                                <button type="submit" class="btn-sm btn-animation proceed-btn fw-bold" 
-                                                style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;">
-                                                Remove</button>
-                                            </form>
+                                            <button
+                                            data-bs-toggle="modal" data-bs-target="#removeProfile{{ $cartlist->cart_id }}"
+                                            onclick="showDeleteModal('{{ $cartlist->cart_id }}')"
+                                            class="btn-sm btn-animation proceed-btn fw-bold">
+                                            Remove</button>
                                         </td> 
                                     </tr>
+                                    <!-- Confirm Modal Box Start -->
+                                    <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $cartlist->cart_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p>Remove this item from your cart?</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="POST" action="{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}">
+                                                        @csrf
+                                                        <button onclick="location.href = '{{ route('remove_cart', ['id' => $cartlist->cart_id]) }}';" type="submit"
+                                                        class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endforeach
                                 </tbody>
                             </table>

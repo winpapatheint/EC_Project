@@ -5,6 +5,7 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
+            @include('components.messagebox')
             <div class="col-sm-12">
                 <div class="card card-table">
                     <!-- Table Start -->
@@ -53,7 +54,7 @@
                                                     <td>{{ $item->phone }}</td>
                                                     <td>
                                                         <div class="table-image">
-                                                            <img src="{{ (!empty($item->photo)) ? url('upload/profile/'.$item->photo) : url('upload/profile/profile.jpg') }}" width="80px" >
+                                                            <img src="{{ (!empty($item->photo)) ? url('upload/profile/'.$item->photo) : url('upload/profile/profile.jpg') }}" width="50" height="50" >
                                                         </div>
                                                     </td>
                                                     <td>

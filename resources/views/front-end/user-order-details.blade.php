@@ -138,7 +138,7 @@
                                             <h5>Order Code <span style="color: var(--theme-color);">{{ $orders->order_code }}</span></h5>
                                         </div>
                                         <div class="card-order-section">
-                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->created_at)) }}</h5>
+                                            <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->order_created_at)) }}</h5>
                                             <h5>Items: <span style="color: var(--theme-color);">{{ $orders->total_qty }}</span></h5>
                                             <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>   
                                         </div>
@@ -153,8 +153,9 @@
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Product Name</th>
+                                                                <th>Shop</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price</th>
+                                                                <th>Price(tax inc)</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -166,7 +167,15 @@
                                                                     {{ $index + 1 }}
                                                                 </td>
                                                                 <td>
-                                                                    <h5 style="width: 100px;">{{ $order->product_name }}</h5>
+                                                                    <a href="{{ route('show-product-left-thumbnail', ['id' => $order->product_id]) }}">
+                                                                        <h5 style="width: 100px;">{{ $order->product_name }}</h5>
+                                                                    </a>
+                                                                </td>
+                                                                @php
+                                                                    $shop = DB::table('sellers')->where('user_id', $order->seller_id)->first();
+                                                                @endphp
+                                                                <td>
+                                                                    <h5>{{ $shop->shop_name }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5>{{ $order->qty }}</h5>
@@ -183,7 +192,7 @@
                                                         @endforeach
                                                         <tfoot>
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Subtotal :</h5>
                                                                 </td>
                                                                 <td>
@@ -192,7 +201,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Shipping :</h5>
                                                                 </td>
                                                                 <td>
@@ -201,7 +210,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h5>Coupon Discounted :</h5>
                                                                 </td>
                                                                 <td>
@@ -210,7 +219,7 @@
                                                             </tr>
 
                                                             <tr class="table-order">
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <h4 class="theme-color fw-bold">Total Price :</h4>
                                                                 </td>
                                                                 <td>
@@ -235,10 +244,13 @@
                                                         <div class="payment-mode">
                                                             <h4>Shipping address</h4>
                                                             <ul class="order-details">
-                                                                <li>{{ $order->post_code }}.</li>
+                                                                <li>{{ $order->order_details_name }}</li><br>
+                                                                <li>{{ $order->post_code }}</li><br>
+                                                                <li>{{ $order->prefecture->name }}</li>
                                                                 <li>{{ $order->city }}</li>
-                                                                <li>{{ $order->chome }} chome,</li>
-                                                                <li>{{ $order->building }} - {{ $order->room_no }}</li>
+                                                                <li>{{ $order->chome }}</li>
+                                                                <li>{{ $order->building }} {{ $order->room_no }}</li><br>
+                                                                <li>{{ $order->order_details_phone }}</li>
                                                             </ul>
                                                         </div>
 

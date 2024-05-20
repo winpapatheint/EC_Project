@@ -212,164 +212,167 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-
-                <form method="POST" action="{{ route('add_newaddress') }}" class="row g-4" >
-                @csrf
+    
+                <form id="address-form" class="row g-4">
+                    @csrf
                     <div class="modal-body">
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                             <label for="name">Name</label>
-                            <span style="color:red">@error('name'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-name"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code">
                             <label for="post_code">Post Code</label>
-                            <span style="color:red">@error('post_code'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-post_code"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
-                            <select class="form-control" name="prefectures" value="{{ old('prefecture') }}">
+                            <select class="form-control" id="prefectures" name="prefectures">
                                 <option>Choose Prefecture</option>
                                 @foreach ($prefecture as $item)
-                                    <option value="{{ $item->id }}" name="prefectures">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
-                            <span style="color:red">@error('prefectures'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-prefectures"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town">
                             <label for="city">City</label>
-                            <span style="color:red">@error('city'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-city"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go">
                             <label for="chome">Chome</label>
-                            <span style="color:red">@error('chome'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-chome"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name">
                             <label for="building">Building</label>
-                            @error('building')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                            <span class="error" style="color:red" id="error-building"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
                             <label for="roomno">Room No</label>
-                            @error('roomno')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                            <span class="error" style="color:red" id="error-roomno"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
                             <label for="phone">Enter Phone Number</label>
-                            <span style="color:red">@error('phone'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-phone"></span>
                         </div>
-
+    
                         <div class="form-floating mb-4 theme-form-floating form-group">
-                            <select class="form-control" name="place" value="{{ old('place') }}">
+                            <select class="form-control" id="place" name="place">
                                 <option>Choose Place</option>
-                                <option value="Home" name="prefectures">Home</option>
-                                <option value="Office" name="prefectures">Office</option>
-                                <option value="Other" name="prefectures">Other</option>
+                                <option value="Home">Home</option>
+                                <option value="Office">Office</option>
+                                <option value="Other">Other</option>
                             </select>
-                            <span style="color:red">@error('place'){{ $message }}@enderror</span>
+                            <span class="error" style="color:red" id="error-place"></span>
                         </div>
                     </div>
-                
+    
                     <div class="modal-footer">
-                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-toggle="modal">Save</button>
+                        <button type="button" class="btn theme-bg-color btn-md text-white" onclick="validateForm()">Save</button>
                         <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
-                    </div>                  
-                </form> 
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <!-- Add Address Modal Box End -->
     <!-- Edit Address Modal Box Start -->
     @foreach($data as $item)
-    <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit address</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <form method="post" action="{{ route('edit_address') }}" class="row g-4" >
-                @csrf
-                    <input type="hidden" name="id" value="{{ $item->id }}">
-                    
-                    <div class="modal-body">
-                    <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
-                            value="{{ $item->name }}">
-                            <label for="name">Name</label>
-                        </div>
-
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
-                            <label for="post_code">Post Code</label>
-                        </div>
-
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <select class="form-control" name="prefectures">
-                                @foreach ($prefecture as $item1)
-                                    <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+        <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <form method="post" action="{{ route('edit_address') }}" class="row g-4" id="edit-form-{{ $item->id }}">
+                    @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
                         
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $item->city }}">
-                            <label for="city">City</label>
-                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="name-{{ $item->id }}" name="name" placeholder="Enter Name" value="{{ $item->name }}">
+                                <label for="name">Name</label>
+                                <span class="error" style="color:red" id="error-name-{{ $item->id }}"></span>
+                            </div>
 
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $item->chome }}">
-                            <label for="chome">Chome</label>
-                        </div>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="post_code-{{ $item->id }}" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
+                                <label for="post_code">Post Code</label>
+                                <span class="error" style="color:red" id="error-post_code-{{ $item->id }}"></span>
+                            </div>
 
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $item->building }}">
-                            <label for="building">Building</label>
-                        </div>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-control" id="prefectures-{{ $item->id }}" name="prefectures">
+                                    @foreach ($prefecture as $item1)
+                                        <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="error" style="color:red" id="error-prefectures-{{ $item->id }}"></span>
+                            </div>
+                            
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="city-{{ $item->id }}" name="city" placeholder="City, Ward, Town" value="{{ $item->city }}">
+                                <label for="city">City</label>
+                                <span class="error" style="color:red" id="error-city-{{ $item->id }}"></span>
+                            </div>
 
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $item->room_no }}">
-                            <label for="roomno">Room No</label>
-                        </div>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="chome-{{ $item->id }}" name="chome" placeholder="Chome, Banchi, Go" value="{{ $item->chome }}">
+                                <label for="chome">Chome</label>
+                                <span class="error" style="color:red" id="error-chome-{{ $item->id }}"></span>
+                            </div>
 
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
-                            <label for="phone">Enter Phone Number</label>
-                        </div>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="building-{{ $item->id }}" name="building" placeholder="Building, Apartment, Company Name" value="{{ $item->building }}">
+                                <label for="building">Building</label>
+                                <span class="error" style="color:red" id="error-building-{{ $item->id }}"></span>
+                            </div>
 
-                        <div class="form-floating mb-4 theme-form-floating form-group">
-                            <select class="form-control" name="place" value="{{ old('place') }}">
-                                <option value="Home" name="prefectures" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
-                                <option value="Office" name="prefectures" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
-                                <option value="Other" name="prefectures" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
-                            </select>
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input type="text" class="form-control" id="roomno-{{ $item->id }}" name="roomno" placeholder="Unit, Room No" value="{{ $item->room_no }}">
+                                <label for="roomno">Room No</label>
+                                <span class="error" style="color:red" id="error-roomno-{{ $item->id }}"></span>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <input class="form-control" id="phone-{{ $item->id }}" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
+                                <label for="phone">Enter Phone Number</label>
+                                <span class="error" style="color:red" id="error-phone-{{ $item->id }}"></span>
+                            </div>
+
+                            <div class="form-floating mb-4 theme-form-floating form-group">
+                                <select class="form-control" id="place-{{ $item->id }}" name="place">
+                                    <option value="Home" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
+                                    <option value="Office" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
+                                    <option value="Other" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                                <span class="error" style="color:red" id="error-place-{{ $item->id }}"></span>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="modal-footer">
-                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
-                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
-                        Close</button>
-                    </div>
-                </form> 
+                    
+                        <div class="modal-footer">
+                            <button type="button" class="btn theme-bg-color btn-md text-white" onclick="validateEditForm({{ $item->id }})">Save</button>
+                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
+                        </div>
+                    </form> 
+                </div>
             </div>
         </div>
-    </div>
     @endforeach
     <!-- Edit Address Modal Box End -->
     <!-- Remove Address Modal Start -->
@@ -385,7 +388,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="remove-box">
-                        <p>You cannot see this address nomore in your address book.</p>
+                        <p>You cannot see this address no more in your address book.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -495,3 +498,181 @@
         });
     });
 </script>
+
+<script>
+    function validateForm() {
+        let isValid = true;
+    
+        const name = document.getElementById('name').value.trim();
+        const post_code = document.getElementById('post_code').value.trim();
+        const prefectures = document.getElementById('prefectures').value;
+        const city = document.getElementById('city').value.trim();
+        const chome = document.getElementById('chome').value.trim();
+        const building = document.getElementById('building').value.trim();
+        const roomno = document.getElementById('roomno').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const place = document.getElementById('place').value;
+    
+        // Clear previous error messages
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+    
+        if (!name) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Please provide your name.';
+        } else if (name.length > 255) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Your name must not exceed 255 characters.';
+        }
+    
+        if (!post_code) {
+            isValid = false;
+            document.getElementById('error-post_code').textContent = 'Please provide your post code.';
+        } else if (post_code.length > 255) {
+            isValid = false;
+            document.getElementById('error-post_code').textContent = 'Your post code must not exceed 255 characters.';
+        }
+    
+        if (!prefectures || prefectures === 'Choose Prefecture') {
+            isValid = false;
+            document.getElementById('error-prefectures').textContent = 'Please select a valid prefecture.';
+        }
+    
+        if (!city) {
+            isValid = false;
+            document.getElementById('error-city').textContent = 'Please provide your city.';
+        } else if (city.length > 255) {
+            isValid = false;
+            document.getElementById('error-city').textContent = 'Your city must not exceed 255 characters.';
+        }
+    
+        if (!chome) {
+            isValid = false;
+            document.getElementById('error-chome').textContent = 'Please provide your chome.';
+        } else if (chome.length > 255) {
+            isValid = false;
+            document.getElementById('error-chome').textContent = 'Your chome must not exceed 255 characters.';
+        }
+    
+        if (!building) {
+            isValid = false;
+            document.getElementById('error-building').textContent = 'Please provide your building.';
+        } else if (building.length > 255) {
+            isValid = false;
+            document.getElementById('error-building').textContent = 'Your building must not exceed 255 characters.';
+        }
+    
+        if (!roomno) {
+            isValid = false;
+            document.getElementById('error-roomno').textContent = 'Please provide your room number.';
+        } else if (roomno.length > 255) {
+            isValid = false;
+            document.getElementById('error-roomno').textContent = 'Your room number must not exceed 255 characters.';
+        }
+    
+        if (!phone) {
+            isValid = false;
+            document.getElementById('error-phone').textContent = 'Please provide your phone number.';
+        } else if (phone.length > 255) {
+            isValid = false;
+            document.getElementById('error-phone').textContent = 'The phone number must not exceed 255 characters.';
+        }
+    
+        if (!place || place === 'Choose Place') {
+            isValid = false;
+            document.getElementById('error-place').textContent = 'Please select a valid place.';
+        }
+    
+        if (isValid) {
+            document.getElementById('address-form').submit();
+        }
+    }
+</script>
+<script>
+    function validateEditForm(id) {
+        let isValid = true;
+    
+        const name = document.getElementById(`name-${id}`).value.trim();
+        const post_code = document.getElementById(`post_code-${id}`).value.trim();
+        const prefectures = document.getElementById(`prefectures-${id}`).value;
+        const city = document.getElementById(`city-${id}`).value.trim();
+        const chome = document.getElementById(`chome-${id}`).value.trim();
+        const building = document.getElementById(`building-${id}`).value.trim();
+        const roomno = document.getElementById(`roomno-${id}`).value.trim();
+        const phone = document.getElementById(`phone-${id}`).value.trim();
+        const place = document.getElementById(`place-${id}`).value;
+    
+        // Clear previous error messages
+        document.querySelectorAll(`#edit-form-${id} .error`).forEach(el => el.textContent = '');
+    
+        if (!name) {
+            isValid = false;
+            document.getElementById(`error-name-${id}`).textContent = 'Please provide your name.';
+        } else if (name.length > 255) {
+            isValid = false;
+            document.getElementById(`error-name-${id}`).textContent = 'Your name must not exceed 255 characters.';
+        }
+    
+        if (!post_code) {
+            isValid = false;
+            document.getElementById(`error-post_code-${id}`).textContent = 'Please provide your post code.';
+        } else if (post_code.length > 255) {
+            isValid = false;
+            document.getElementById(`error-post_code-${id}`).textContent = 'Your post code must not exceed 255 characters.';
+        }
+    
+        if (!prefectures || prefectures === 'Choose Prefecture') {
+            isValid = false;
+            document.getElementById(`error-prefectures-${id}`).textContent = 'Please select a valid prefecture.';
+        }
+    
+        if (!city) {
+            isValid = false;
+            document.getElementById(`error-city-${id}`).textContent = 'Please provide your city.';
+        } else if (city.length > 255) {
+            isValid = false;
+            document.getElementById(`error-city-${id}`).textContent = 'Your city must not exceed 255 characters.';
+        }
+    
+        if (!chome) {
+            isValid = false;
+            document.getElementById(`error-chome-${id}`).textContent = 'Please provide your chome.';
+        } else if (chome.length > 255) {
+            isValid = false;
+            document.getElementById(`error-chome-${id}`).textContent = 'Your chome must not exceed 255 characters.';
+        }
+    
+        if (!building) {
+            isValid = false;
+            document.getElementById(`error-building-${id}`).textContent = 'Please provide your building.';
+        } else if (building.length > 255) {
+            isValid = false;
+            document.getElementById(`error-building-${id}`).textContent = 'Your building must not exceed 255 characters.';
+        }
+    
+        if (!roomno) {
+        isValid = false;
+        document.getElementById(`error-roomno-${id}`).textContent = 'Please provide your room number.';
+    } else if (roomno.length > 255) {
+        isValid = false;
+        document.getElementById(`error-roomno-${id}`).textContent = 'Your room number must not exceed 255 characters.';
+    }
+
+    if (!phone) {
+        isValid = false;
+        document.getElementById(`error-phone-${id}`).textContent = 'Please provide your phone number.';
+    } else if (phone.length > 255) {
+        isValid = false;
+        document.getElementById(`error-phone-${id}`).textContent = 'The phone number must not exceed 255 characters.';
+    }
+
+    if (!place || place === 'Choose Place') {
+        isValid = false;
+        document.getElementById(`error-place-${id}`).textContent = 'Please select a valid place.';
+    }
+
+    if (isValid) {
+        document.getElementById(`edit-form-${id}`).submit();
+    }
+}
+</script>
+

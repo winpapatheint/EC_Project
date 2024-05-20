@@ -204,75 +204,85 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-
-                    <form method="post" action="{{ route('edit_profile') }}" class="row g-4" >
+    
+                <form method="post" action="{{ route('edit_profile') }}" class="row g-4" id="edit-profile-form">
                     @csrf
-                        <input type="hidden" name="id" value="{{ $user->id }}">
-                        <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
+                    <input type="hidden" name="id" value="{{ $user->id }}">
+                    <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
+                    
+                    <div class="modal-body">
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
+                            <label for="name">Name</label>
+                            <span class="error" style="color:red" id="error-name"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="email" name="email" value="{{ $user->email }}">
+                            <label for="email">Email Address</label>
+                            <span class="error" style="color:red" id="error-email"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $user->phone }}">
+                            <label for="phone">Phone Number</label>
+                            <span class="error" style="color:red" id="error-phone"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $buyerAddress->post_code }}">
+                            <label for="post_code">Post Code</label>
+                            <span class="error" style="color:red" id="error-post_code"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" id="prefectures" name="prefectures">
+                                @foreach ($prefecture as $item1)
+                                    <option value="{{ $item1->id }}" {{ $item1->id == $buyerAddress->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
+                                @endforeach
+                            </select>
+                            <span class="error" style="color:red" id="error-prefectures"></span>
+                        </div>
                         
-                        <div class="modal-body">
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
-                                <label for="name">Name</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="email" name="email" value="{{ $user->email }}">
-                                <label for="email">Email Address</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $user->phone }}">
-                                <label for="phone">Phone Number</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $buyerAddress->post_code }}">
-                                <label for="post_code">Post Code</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <select class="form-control" name="prefectures">
-                                    @foreach ($prefecture as $item1)
-                                        <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $buyerAddress->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $buyerAddress->city }}">
-                                <label for="city">City</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $buyerAddress->chome }}">
-                                <label for="chome">Chome</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $buyerAddress->building }}">
-                                <label for="building">Building</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $buyerAddress->room_no }}">
-                                <label for="roomno">Room No</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <select class="form-control" name="place" value="{{ old('place') }}">
-                                    <option value="Home" name="prefectures" {{ $buyerAddress->place == 'Home' ? 'selected' : '' }}>Home</option>
-                                    <option value="Office" name="prefectures" {{ $buyerAddress->place == 'Office' ? 'selected' : '' }}>Office</option>
-                                    <option value="Other" name="prefectures" {{ $buyerAddress->place == 'Other' ? 'selected' : '' }}>Other</option>
-                                </select>
-                            </div>
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $buyerAddress->city }}">
+                            <label for="city">City</label>
+                            <span class="error" style="color:red" id="error-city"></span>
                         </div>
-                   
-                        <div class="modal-footer">
-                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
-                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">Close</button>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $buyerAddress->chome }}">
+                            <label for="chome">Chome</label>
+                            <span class="error" style="color:red" id="error-chome"></span>
                         </div>
-                    </form> 
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $buyerAddress->building }}">
+                            <label for="building">Building</label>
+                            <span class="error" style="color:red" id="error-building"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $buyerAddress->room_no }}">
+                            <label for="roomno">Room No</label>
+                            <span class="error" style="color:red" id="error-roomno"></span>
+                        </div>
+    
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" id="place" name="place">
+                                <option value="Home" {{ $buyerAddress->place == 'Home' ? 'selected' : '' }}>Home</option>
+                                <option value="Office" {{ $buyerAddress->place == 'Office' ? 'selected' : '' }}>Office</option>
+                                <option value="Other" {{ $buyerAddress->place == 'Other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <span class="error" style="color:red" id="error-place"></span>
+                        </div>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn theme-bg-color btn-md text-white" onclick="validateProfileForm()">Save</button>
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
+                    </div>
+                </form> 
             </div>
         </div>
     </div>
@@ -288,7 +298,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <form method="post" action="{{ route('edit_password') }}" class="row g-4">
+                <form method="post" action="{{ route('edit_password') }}" class="row g-4" id="editPasswordForm">
                     @csrf
                     <input type="hidden" name="id" value="{{ $user->id }}">
                     <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
@@ -300,33 +310,34 @@
                                     <label for="email">Email Address</label>
                                 </div>
                             </div>
-
+    
                             <div class="col-xxl-12">
                                 <div class="form-floating theme-form-floating">
                                     <input type="password" class="form-control" id="oldpassword" name="oldpassword" placeholder="Old Password">
                                     <label for="oldpassword">Old Password</label>
-                                    <span style="color:red">@error('oldpassword'){{ $message }}@enderror</span>
+                                    <span class="error" style="color:red">@error('oldpassword'){{ $message }}@enderror</span>
+                                    <span class="error" style="color:red" id="error-oldpassword"></span>
                                 </div>
                             </div>
-
+    
                             <div class="col-xxl-12">
                                 <div class="form-floating theme-form-floating">
                                     <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="New Password">
                                     <label for="newpassword">New Password</label>
-                                    <span style="color:red">@error('newpassword'){{ $message }}@enderror</span>
+                                    <span class="error" style="color:red">@error('newpassword'){{ $message }}@enderror</span>
+                                    <span class="error" style="color:red" id="error-newpassword"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn theme-bg-color btn-md text-white edit-btn" id="changePassword">Save</button>
+                        <button type="button" class="btn theme-bg-color btn-md text-white edit-btn" onclick="validatePasswordChangeForm()">Save</button>
                         <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">Cancel</button>
                     </div>
                 </form>
-
             </div>
         </div>
-    </div>
+    </div>    
     <!-- Change Password End -->
 </x-guest-layout>
 <!-- Edit Profile Script-->
@@ -421,3 +432,132 @@
     });
 });
 </script>
+<script>
+    function validateProfileForm() {
+        let isValid = true;
+    
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const post_code = document.getElementById('post_code').value.trim();
+        const prefectures = document.getElementById('prefectures').value;
+        const city = document.getElementById('city').value.trim();
+        const chome = document.getElementById('chome').value.trim();
+        const building = document.getElementById('building').value.trim();
+        const roomno = document.getElementById('roomno').value.trim();
+        const place = document.getElementById('place').value;
+    
+        // Clear previous error messages
+        document.querySelectorAll('#edit-profile-form .error').forEach(el => el.textContent = '');
+    
+        if (!name) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Please provide your name.';
+        } else if (name.length > 255) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Your name must not exceed 255 characters.';
+        }
+    
+        if (!email) {
+            isValid = false;
+            document.getElementById('error-email').textContent = 'Please provide your email address.';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            isValid = false;
+            document.getElementById('error-email').textContent = 'Please provide a valid email address.';
+        }
+    
+        if (!phone) {
+            isValid = false;
+            document.getElementById('error-phone').textContent = 'Please provide your phone number.';
+        } else if (phone.length > 255) {
+            isValid = false;
+            document.getElementById('error-phone').textContent = 'The phone number must not exceed 255 characters.';
+        }
+    
+        if (!post_code) {
+            isValid = false;
+            document.getElementById('error-post_code').textContent = 'Please provide your post code.';
+        } else if (post_code.length > 255) {
+            isValid = false;
+            document.getElementById('error-post_code').textContent = 'The post code must not exceed 255 characters.';
+        }
+    
+        if (!prefectures) {
+            isValid = false;
+            document.getElementById('error-prefectures').textContent = 'Please select a prefecture.';
+        }
+    
+        if (!city) {
+            isValid = false;
+            document.getElementById('error-city').textContent = 'Please provide your city.';
+        } else if (city.length > 255) {
+            isValid = false;
+            document.getElementById('error-city').textContent = 'The city must not exceed 255 characters.';
+        }
+    
+        if (!chome) {
+            isValid = false;
+            document.getElementById('error-chome').textContent = 'Please provide your chome.';
+        } else if (chome.length > 255) {
+            isValid = false;
+            document.getElementById('error-chome').textContent = 'The chome must not exceed 255 characters.';
+        }
+    
+        if (!building) {
+            isValid = false;
+        document.getElementById('error-building').textContent = 'Please provide your building information.';
+    } else if (building.length > 255) {
+        isValid = false;
+        document.getElementById('error-building').textContent = 'The building information must not exceed 255 characters.';
+    }
+
+    if (!roomno) {
+        isValid = false;
+        document.getElementById('error-roomno').textContent = 'Please provide your room number.';
+    } else if (roomno.length > 255) {
+        isValid = false;
+        document.getElementById('error-roomno').textContent = 'The room number must not exceed 255 characters.';
+    }
+
+    if (!place || place === 'Choose Place') {
+        isValid = false;
+        document.getElementById('error-place').textContent = 'Please select a valid place.';
+    }
+
+    if (isValid) {
+        document.getElementById('edit-profile-form').submit();
+    }
+}
+</script>
+<script>
+    function validatePasswordChangeForm() {
+        let isValid = true;
+
+        const oldPassword = document.getElementById('oldpassword').value.trim();
+        const newPassword = document.getElementById('newpassword').value.trim();
+
+        // Clear previous error messages
+        document.querySelectorAll('#editPassword .error').forEach(el => el.textContent = '');
+
+        if (!oldPassword) {
+            isValid = false;
+            document.getElementById('error-oldpassword').textContent = 'Please provide your old password.';
+            document.querySelector('#editPassword #oldpassword + .error').textContent = 'Please provide your old password.';
+        }
+
+        if (!newPassword) {
+            isValid = false;
+            document.getElementById('error-newpassword').textContent = 'Please provide your new password.';
+            document.querySelector('#editPassword #newpassword + .error').textContent = 'Please provide your new password.';
+        } else if (newPassword.length < 8) {
+            isValid = false;
+            document.getElementById('error-newpassword').textContent = 'The password must be at least 8 characters long.';
+            document.querySelector('#editPassword #newpassword + .error').textContent = 'The password must be at least 8 characters long.';
+        }
+
+        if (isValid) {
+            document.getElementById('editPasswordForm').submit();
+        }
+    }
+</script>
+    

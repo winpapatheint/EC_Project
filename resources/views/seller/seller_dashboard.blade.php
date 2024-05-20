@@ -88,14 +88,14 @@
             <div class="header-wrapper m-0">
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
-                        <a href="index.html">
+                        <a href="{{ route('seller.dashboard') }}">
                             <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                             <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
-                        <a href="index.html">
+                        <a href="{{ route('seller.dashboard') }}">
                             <img src="{{ asset('backend/assets/images/logo-food.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
@@ -203,7 +203,7 @@
                 <div id="sidebarEffect"></div>
                 <div>
                     <div class="logo-wrapper logo-wrapper-center">
-                        <a href="index.html" data-bs-original-title="" title="">
+                        <a href="{{ route('seller.dashboard') }}" data-bs-original-title="" title="">
                             <img class="img-fluid for-white" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                         </a>
                         <div class="back-btn">
@@ -214,7 +214,7 @@
                         </div>
                     </div>
                     <div class="logo-icon-wrapper">
-                        <a href="index.html">
+                        <a href="{{ route('seller.dashboard') }}">
                             <img class="img-fluid main-logo main-white" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                             <img class="img-fluid main-logo main-dark" src="{{ asset('backend/assets/images/logo/logo-white.png') }}"
                                 alt="logo">

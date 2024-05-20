@@ -315,7 +315,6 @@ class SellerController extends Controller
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
         ]);
-        event(new Registered($user));
 
         $subseller = Subseller::create([
             'user_id' => $user->id,
@@ -323,11 +322,10 @@ class SellerController extends Controller
             'name' => $validatedData['user_name'],
             'email' => $validatedData['mail'],
             'password' => Hash::make($validatedData['passwords']),
+            'phone' => $request->input('phone'),
         ]);
-        event(new Registered($subseller));
 
-        $email = $request->email;
-        return view('auth.verify-email',compact('email'));
+        return redirect('/subsellerlist');
     }
 
 

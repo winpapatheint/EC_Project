@@ -36,11 +36,21 @@ class VerifyEmailController extends Controller
                           sha1($user->getEmailForVerification()))) {
             return false;
         }
-
+        $user->markEmailAsVerified();
         Auth::login($user);
 
         if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::SELLER.'?verified=1');
+
+            if (Auth::user()->role == 'admin') {
+                return redirect()->intended(RouteServiceProvider::ADMIN);
+            } else if (Auth::user()->role == 'seller') {
+            return redirect('/seller');
+            } else if (Auth::user()->role == 'buyer') {
+                return redirect('/user');
+            } else {
+                return redirect()->intended(RouteServiceProvider::HOME);
+            }
+           // return redirect()->intended(RouteServiceProvider::SELLER.'?verified=1');
         }
 
         if ($user->markEmailAsVerified()) {

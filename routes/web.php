@@ -133,6 +133,7 @@ Route::get('/editcustomer/{topid}', [AdminController::class, 'editcustomer']);
 Route::post('admin/registercustomer', [AdminController::class, 'storecustomer'])->name('registercustomer');
 
 Route::get('/admin/top', [AdminController::class, 'indextop']);
+Route::get('/admin/newsletter', [AdminController::class, 'indexnewsletter']);
 Route::get('/edittop/{topid}', [AdminController::class, 'edittop']);
 Route::post('admin/registertop', [AdminController::class, 'storetop'])->name('registertop');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
@@ -146,6 +147,7 @@ route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq'
 Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->name('admin.all.shop');
 route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->name('updatecoupon');
+route::post('/admin/updateproductcoupon',[AdminController::class,'updateproductcoupon'])->name('updateproductcoupon');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
 Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
 Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
@@ -183,7 +185,9 @@ route::post('/admin/deletesubadmin',[AdminController::class,'deletesubadmin'])->
 Route::get('/admin/all/blog', [AdminController::class,'indexblog'])->name('admin.all.blog');
 Route::get('/admin/add/blog', function () {return view('admin.blog.addblog');})->name('admin.addblog');
 route::post('/admin/all/deleteblog',[AdminController::class,'deleteblog'])->name('deleteblog');
+route::post('/admin/deletenewsletter',[AdminController::class,'deletenewsletter'])->name('deletenewsletter');
 Route::post('admin/registerblog', [AdminController::class, 'storeblog'])->name('registerblog');
+Route::post('admin/registernewsletter', [AdminController::class, 'storenewsletter'])->name('registernewsletter');
 Route::get('blog/{blogid}', [AdminController::class, 'blogdetail']);
 Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
 
@@ -206,7 +210,9 @@ Route::get('/editsubcategory/{categorytype}/{categoryid}', [AdminController::cla
 route::post('/admin/deletecategory',[AdminController::class,'deletecategory'])->name('deletecategory');
 route::post('/addtospecial',[AdminController::class,'addToSpecial'])->name('add_to_special_corner');
 route::delete('/removefromspecial/{id}',[AdminController::class,'removeFromSpecial'])->name('remove_from_special_corner');
-
+//route::delete('/removecoupon/{id}',[AdminController::class,'removeCoupon'])->name('removecoupon');
+route::post('/removeCoupon',[AdminController::class,'removeCoupon'])->name('removeCoupon');
+route::post('/remove_shop_coupon',[AdminController::class,'remove_shopCoupon'])->name('remove_shop_coupon');
 Route::get('/admin/category', [AdminController::class,'indexsubcategory'])->name('admin.category');
 
 Route::get('/admin/addsubtitle',[AdminController::class,'addsubtitle'])->name('admin.all.addsubtitle');
@@ -242,6 +248,7 @@ Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'
 Route::get('/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
 Route::post('/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');
 Route::post('/shopupdate', [SellerController::class, 'updateShop'])->middleware(['auth','role:seller'])->name('update.shop');
+route::delete('/removeshopcoupon/{id}',[AdminController::class,'removeFromShop'])->name('remove_from_shop');
 Route::get('/help', [SellerController::class, 'help'])->middleware(['auth','role:seller'])->name('seller.help');
 Route::get('/helpadd', [SellerController::class, 'addHelp'])->middleware(['auth','role:seller'])->name('help.add');
 Route::post('/helpstore', [SellerController::class, 'storeHelp'])->middleware(['auth','role:seller'])->name('help.store');

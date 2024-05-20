@@ -178,12 +178,14 @@
                                                             onclick="">
                                                             <i data-feather="edit"></i> Edit
                                                     </button>
+                                                    @if ($item->main_address != 1)
                                                     <button class="btn btn-sm add-button w-100" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#removeProfile"
-                                                            onclick="showDeleteModal('{{ $item->id }}')"  style = "background-color: #ff6b6b;">
+                                                            onclick="showDeleteModal('{{ $item->id }}')" style = "background-color: #ff6b6b;">
                                                         <i data-feather="trash-2"></i> Remove
                                                     </button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

@@ -19,7 +19,7 @@ class OrderController extends Controller
     {
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
+        $order = OrderDetail::with('order')->where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
         $ttl = $order->total();
         $ttlpage = (ceil($ttl / $limit));
         return view('seller.order.order_all',compact('order','ttl','ttlpage'));
@@ -27,8 +27,8 @@ class OrderController extends Controller
 
     public function sellerDetailOrder($id)
     {
-        $id = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::where('seller_id',$id)->find($id);
+        $sellerId = Auth::user()->created_by ?? Auth::id();
+        $order = OrderDetail::where('seller_id',$sellerId)->first();
         return view('seller.order.order_detail',compact('order'));
     }
 
@@ -109,7 +109,8 @@ class OrderController extends Controller
                         );
         $notification->update( $newval);
 
-        return back()->with('success', 'Order status updated successfully');
+        $msg = ('Order status updated Successfully');
+        return back()->with('success', $msg);
 
     }
 

@@ -82,7 +82,8 @@ class SellerController extends Controller
         }
 
         $data->save();
-        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
+        $msg = ('Data updated successfully');
+        return redirect('/dashboard')->with('success', $msg);
     }
 
 
@@ -137,7 +138,9 @@ class SellerController extends Controller
         $seller->bank_acc_no = $request->bank_acc_no;
         $seller->updated_at = Carbon::now();
         $seller->update();
-        return redirect('/dashboard')->with('flash_message', 'Data updated successfully');
+
+        $msg = ('Data updated successfully');
+        return redirect('/dashboard')->with('success', $msg);
     }
 
 
@@ -209,7 +212,8 @@ class SellerController extends Controller
         //     $message->from(Auth::user()->email, Auth::user()->name);
         // });
 
-        return redirect('/help')->with('flash_message', 'Data sent successfully');
+        $msg = ('Data sent successfully');
+        return redirect('/help')->with('success', $msg);
     }
 
 
@@ -258,8 +262,8 @@ class SellerController extends Controller
         //     $message->from(Auth::user()->email, Auth::user()->name);
         // });
 
-
-        return redirect('/help')->with('flash_message', 'Data sent successfully');
+        $msg = ('Data sent successfully');
+        return redirect('/help')->with('success', $msg);
     }
 
 
@@ -272,7 +276,8 @@ class SellerController extends Controller
         if (File::exists($imagePath)) {
             File::delete($imagePath);
         }
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Data deleted successfully');
+        return back()->with('success', $msg);
     }
 
 
@@ -339,7 +344,8 @@ class SellerController extends Controller
 
         Subseller::findOrFail($id)->delete();
 
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Subseller deleted successfully');
+        return back()->with('success', $msg);
     }
 
 

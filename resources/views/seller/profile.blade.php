@@ -5,8 +5,10 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
+            @include('components.messagebox')
             <div class="col-12">
                 <div class="row">
+                    @include('components.messagebox')
                     <div class="col-sm-12">
                         <!-- Details Start -->
                         <div class="card">

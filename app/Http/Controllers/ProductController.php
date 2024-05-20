@@ -82,7 +82,7 @@ class ProductController extends Controller
             'long_desc' => 'present|string|max:255',
             'care_instructions' => 'present|string|max:255',
             'product_thambnail' => 'present|image|mimes:jpeg,png,jpg,gif',
-            'multi_img.*' => 'present|image|mimes:jpeg,png,jpg,gif',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'estimate_date' => 'present|string|max:255',
             'delivery_price' => 'present|string|max:255',
             'delivery_price' => 'present|string|max:255',
@@ -130,7 +130,7 @@ class ProductController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        $images = $request->file('multi_img');
+        $images = $request->file('images');
         foreach ($images as $img) {
             $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
             $img->move(public_path('upload/multiImg'), $filename);
@@ -168,7 +168,8 @@ class ProductController extends Controller
                         );
         $notification->update( $newval);
 
-        return redirect('/productlist')->with('flash_message', 'Data added successfully');
+        $msg = ('Product added Successfully');
+        return redirect('/productlist')->with('success', $msg);
     }
 
 
@@ -239,7 +240,8 @@ class ProductController extends Controller
         $product->updated_by = Auth::user()->id;
         $product->updated_at= Carbon::now();
         $product->update();
-        return redirect('/productlist')->with('flash_message', 'Data updated successfully');
+        $msg = ('Product updated Successfully');
+        return redirect('/productlist')->with('success', $msg);
     }
 
     public function deleteProduct(Request $request)
@@ -253,7 +255,8 @@ class ProductController extends Controller
             File::delete($img->photo_name);
             MultiImg::where('product_id', $id)->delete();
         }
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Product deleted Successfully');
+        return back()->with('success', $msg);
     }
 
 
@@ -282,8 +285,8 @@ class ProductController extends Controller
                 ]);
             }
         }
-
-        return redirect('/productlist')->with('flash_message', 'Image updated successfully');
+        $msg = ('Image updated Successfully');
+        return redirect('/productlist')->with('success', $msg);
     }
 
     public function deleteMultiImg(Request $request)
@@ -297,7 +300,8 @@ class ProductController extends Controller
         }
 
         MultiImg::findOrFail($id)->delete();
-        return redirect('/productlist')->with('flash_message', 'Image deleted successfully');
+        $msg = ('Image deleted Successfully');
+        return redirect('/productlist')->with('success', $msg);
     }
 
 
@@ -333,6 +337,7 @@ class ProductController extends Controller
     {
         $id = $request->id;
         Review::findOrFail($id)->delete();
-        return back()->with('flash_message', 'Data deleted successfully');
+        $msg = ('Review deleted Successfully');
+        return back()->with('success', $msg);
     }
 }

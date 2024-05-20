@@ -83,7 +83,7 @@ class SellerController extends Controller
 
         $data->save();
         $msg = ('Data updated successfully');
-        return redirect('/dashboard')->with('success', $msg);
+        return redirect('/profile')->with('success', $msg);
     }
 
 
@@ -140,7 +140,7 @@ class SellerController extends Controller
         $seller->update();
 
         $msg = ('Data updated successfully');
-        return redirect('/dashboard')->with('success', $msg);
+        return redirect('/seller')->with('success', $msg);
     }
 
 
@@ -204,13 +204,13 @@ class SellerController extends Controller
         $help->created_at = Carbon::now();
         $help->save();
 
-        // $inquiry_email = 'info-test@asia-hd.com';
-        // $email = Auth::user()->email;
-        // $name = Auth::user()->name;
-        // $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
-        //     $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
-        //     $message->from(Auth::user()->email, Auth::user()->name);
-        // });
+        $inquiry_email = 'info-test@asia-hd.com';
+        $email = Auth::user()->email;
+        $name = Auth::user()->name;
+        $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
+            $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+            $message->from(Auth::user()->email, Auth::user()->name);
+        });
 
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
@@ -254,13 +254,13 @@ class SellerController extends Controller
         $help->updated_at = Carbon::now();
         $help->save();
 
-        // $inquiry_email = 'info-test@asia-hd.com';
-        // $email = Auth::user()->email;
-        // $name = Auth::user()->name;
-        // $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
-        //     $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
-        //     $message->from(Auth::user()->email, Auth::user()->name);
-        // });
+        $inquiry_email = 'info-test@asia-hd.com';
+        $email = Auth::user()->email;
+        $name = Auth::user()->name;
+        $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
+            $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+            $message->from(Auth::user()->email, Auth::user()->name);
+        });
 
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
@@ -285,7 +285,7 @@ class SellerController extends Controller
     public function allSubseller()
     {
         $id = Auth::user()->id;
-        $subseller =  Subseller::where('seller_id',$id)->latest()->get();
+        $subseller =  User::where('created_by',$id)->latest()->get();
         return view('seller.subseller.subseller_all',compact('subseller'));
     }
 

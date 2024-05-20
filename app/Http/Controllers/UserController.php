@@ -262,24 +262,42 @@ class UserController extends Controller
     //Add New Address
     public function createNewaddress(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
-        $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                     ->get();
-
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'post_code' => 'required|string|max:255',
-            'prefectures' => 'required|string|max:255',
+            'prefectures' => 'required|string|max:255|not_in:Choose Prefecture',
             'city' => 'required|string|max:255',
             'chome' => 'required|string|max:255',
             'building' => 'required|string|max:255',
             'roomno' => 'required|string|max:255',
             'place' => 'required|in:Home,Office,Other',
             'phone' => 'required|string|max:255',
+        ], [
+            'name.required' => 'Please provide your name.',
+            'name.max' => 'Your name must not be exceed 255 characters.',
+            'post_code.required' => 'Please provide your post_code.',
+            'post_code.max' => 'Your post_code must not be exceed 255 characters.',
+            'prefectures.required' => 'Please provide your prefecture.',
+            'prefectures.max' => 'Your prefecture must not be exceed 255 characters.',
+            'prefectures.not_in' => 'Please select a valid prefecture.',
+            'city.required' => 'Please provide your city.',
+            'city.max' => 'Your city must not be exceed 255 characters.',
+            'chome.required' => 'Please provide your chome.',
+            'chome.max' => 'Your chome must not be exceed 255 characters.',
+            'building.required' => 'Please provide your building.',
+            'building.max' => 'Your building must not be exceed 255 characters.',
+            'roomno.required' => 'Please provide your roomno.',
+            'roomno.max' => 'Your roomno must not be exceed 255 characters.',
+            'place.in' => 'Please select a valid place.',
+            'phone.required' => 'Please provide your phone number.',
+            'phone.min' => 'The phone number must not be exceed 255 characters.',
         ]);
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
+        $prefecture = Prefecture::get();
+        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
+                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+                     ->get();
 
         if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
 
@@ -513,7 +531,11 @@ class UserController extends Controller
     {
         $request->validate([
             'oldpassword' => 'required',
-            'newpassword' => 'required|min:6',
+            'newpassword' => 'required|min:8',
+        ], [
+            'oldpassword.required' => 'Please provide your old password.',
+            'newpassword.required' => 'Please provide your new password.',
+            'newpassword.min' => 'The password must be at least 8 characters.',
         ]);
 
         $user = User::find(Auth::user()->id);
@@ -524,7 +546,7 @@ class UserController extends Controller
             $user->password = $newPasswordHash;
             $user->save();
 
-            return redirect()->route('edit_password');
+            return redirect()->route('user_profile');
         }
         else
         {

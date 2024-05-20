@@ -289,38 +289,40 @@
                     </button>
                 </div>
                 <form method="post" action="{{ route('edit_password') }}" class="row g-4">
-    @csrf
-    <input type="hidden" name="id" value="{{ $user->id }}">
-    <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
-    <div class="modal-body">
-        <div class="row g-4">
-            <div class="col-xxl-6">
-                <div class="form-floating theme-form-floating">
-                    <input type="text" class="form-control" id="email" value="{{ $user->email }}" disabled>
-                    <label for="email">Email Address</label>
-                </div>
-            </div>
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $user->id }}">
+                    <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
+                    <div class="modal-body">
+                        <div class="row g-4">
+                            <div class="col-xxl-12">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="email" value="{{ $user->email }}" disabled>
+                                    <label for="email">Email Address</label>
+                                </div>
+                            </div>
 
-            <div class="col-xxl-6">
-                <div class="form-floating theme-form-floating">
-                    <input type="password" class="form-control" id="oldpassword" name="oldpassword" placeholder="Old Password">
-                    <label for="oldpassword">Old Password</label>
-                </div>
-            </div>
+                            <div class="col-xxl-12">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="password" class="form-control" id="oldpassword" name="oldpassword" placeholder="Old Password">
+                                    <label for="oldpassword">Old Password</label>
+                                    <span style="color:red">@error('oldpassword'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
 
-            <div class="col-xxl-4">
-                <div class="form-floating theme-form-floating">
-                    <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="New Password">
-                    <label for="newpassword">New Password</label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn theme-bg-color btn-md text-white edit-btn" id="changePassword">Save</button>
-        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal">Cancel</button>
-    </div>
-</form>
+                            <div class="col-xxl-12">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="New Password">
+                                    <label for="newpassword">New Password</label>
+                                    <span style="color:red">@error('newpassword'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn theme-bg-color btn-md text-white edit-btn" id="changePassword">Save</button>
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">Cancel</button>
+                    </div>
+                </form>
 
             </div>
         </div>

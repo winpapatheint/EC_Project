@@ -219,7 +219,7 @@
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                             <label for="name">Name</label>
-                            <span style="color:red">@error('Name'){{ $message }}@enderror</span>
+                            <span style="color:red">@error('name'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-floating mb-4 theme-form-floating form-group">
@@ -235,6 +235,7 @@
                                     <option value="{{ $item->id }}" name="prefectures">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            <span style="color:red">@error('prefectures'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-floating mb-4 theme-form-floating form-group">
@@ -260,7 +261,7 @@
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No">
                             <label for="roomno">Room No</label>
-                            @error('room')
+                            @error('roomno')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
@@ -283,10 +284,9 @@
                     </div>
                 
                     <div class="modal-footer">
-                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal">Save</button>
-                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style = "background-color: #ff6b6b;">
-                        Close</button>
-                    </div>
+                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-toggle="modal">Save</button>
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
+                    </div>                  
                 </form> 
             </div>
         </div>
@@ -303,71 +303,70 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-               
-                    <form method="post" action="{{ route('edit_address') }}" class="row g-4" >
-                    @csrf
-                        <input type="hidden" name="id" value="{{ $item->id }}">
-                        
-                        <div class="modal-body">
+                <form method="post" action="{{ route('edit_address') }}" class="row g-4" >
+                @csrf
+                    <input type="hidden" name="id" value="{{ $item->id }}">
+                    
+                    <div class="modal-body">
+                    <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
+                            value="{{ $item->name }}">
+                            <label for="name">Name</label>
+                        </div>
+
                         <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
-                                value="{{ $item->name }}">
-                                <label for="name">Name</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
-                                <label for="post_code">Post Code</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <select class="form-control" name="prefectures">
-                                    @foreach ($prefecture as $item1)
-                                        <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $item->city }}">
-                                <label for="city">City</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $item->chome }}">
-                                <label for="chome">Chome</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $item->building }}">
-                                <label for="building">Building</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $item->room_no }}">
-                                <label for="roomno">Room No</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
-                                <label for="phone">Enter Phone Number</label>
-                            </div>
-
-                            <div class="form-floating mb-4 theme-form-floating form-group">
-                                <select class="form-control" name="place" value="{{ old('place') }}">
-                                    <option value="Home" name="prefectures" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
-                                    <option value="Office" name="prefectures" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
-                                    <option value="Other" name="prefectures" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
-                                </select>
-                            </div>
+                            <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Post Code" value="{{ $item->post_code }}">
+                            <label for="post_code">Post Code</label>
                         </div>
-                   
-                        <div class="modal-footer">
-                            <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
-                            <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
-                            Close</button>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" name="prefectures">
+                                @foreach ($prefecture as $item1)
+                                    <option value="{{ $item1->id }}" name="prefectures" {{ $item1->id == $item->prefecture_id ? 'selected' : '' }}>{{ $item1->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </form> 
+                        
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="city" name="city" placeholder="City, Ward, Town" value="{{ $item->city }}">
+                            <label for="city">City</label>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="chome" name="chome" placeholder="Chome, Banchi, Go" value="{{ $item->chome }}">
+                            <label for="chome">Chome</label>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="building" name="building" placeholder="Building, Apartment, Company Name" value="{{ $item->building }}">
+                            <label for="building">Building</label>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input type="text" class="form-control" id="roomno" name="roomno" placeholder="Unit, Room No" value="{{ $item->room_no }}">
+                            <label for="roomno">Room No</label>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
+                            <label for="phone">Enter Phone Number</label>
+                        </div>
+
+                        <div class="form-floating mb-4 theme-form-floating form-group">
+                            <select class="form-control" name="place" value="{{ old('place') }}">
+                                <option value="Home" name="prefectures" {{ $item->place == 'Home' ? 'selected' : '' }}>Home</option>
+                                <option value="Office" name="prefectures" {{ $item->place == 'Office' ? 'selected' : '' }}>Office</option>
+                                <option value="Other" name="prefectures" {{ $item->place == 'Other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="submit" class="btn theme-bg-color btn-md text-white" data-bs-dismiss="modal" id="saveChanges">Save</button>
+                        <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal"  style = "background-color: #ff6b6b;">
+                        Close</button>
+                    </div>
+                </form> 
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Process;
 use App\Models\Category;
 use App\Models\SubCategoryTitle;
@@ -2842,26 +2843,46 @@ class AdminController extends Controller
     // }
 
 
-public function noticeall(Request $request)
+    public function noticeall(Request $request)
     {
-        $user = Auth::user();
+        $sellers = DB::table('users')
+        ->where('role', 'seller')
+        ->select('name', 'email','id')
+        ->get();
+
+        // Create Help records for each seller
+        foreach ($sellers as $seller) {
+        $help = new Help();
+        $help->name = $seller->name;
+        $help->to = $seller->email;
+        $help->help_id =  $seller->id;
+        $help->from = 'info-test@asia-hd.com';
+        $help->subject = $request->title;
+        $help->body = $request->message;
+        $help->created_at = Carbon::now();
+        $help->save();
+        }
         $help = new Help();
         $help->name = 'all';
         $help->to = 'all';
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->title;
-        $help->body =  $request->message;
+        $help->body = $request->message;
         $help->created_at = Carbon::now();
         $help->save();
 
+        // Check if the request is from 'notice'
         if ($request->from == 'notice') {
-            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->to();
+            // Fetch all seller emails
+            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->toArray();
             $sender_email = 'info-test@asia-hd.com';
             $data = ['title' => $request->title];
 
             if (!empty($sellerEmails)) {
+                // Send email to all sellers
                 Mail::send([], $data, function ($message) use ($request, $sellerEmails, $sender_email) {
-                    $message->to($sellerEmails)->subject($request->title . 'からの質問');
+                    $message->to($sellerEmails);
+                    $message->subject($request->title . 'からの質問');
                     $message->from($sender_email, $request->title);
                     $message->setBody("We received the following notice message from the official e-commerce website.
                         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -2875,9 +2896,8 @@ public function noticeall(Request $request)
                 });
             }
 
-            return redirect('/admin/indexhelp')->with('success','Sending Email successfully');
+            return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
         }
-
     }
 
    public function storetop(Request $request)
@@ -3156,17 +3176,23 @@ public function noticeall(Request $request)
 
     public function admindashboard()
     {
-        $limit=5;
-        $transfer = Order::latest()->paginate($limit);
-        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-                        ->whereYear('created_at', date('Y'))
-                        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-                        ->pluck('count', 'month_name');
+        $limit=10;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $revenue = OrderDetail::where('status', 'Delivered')->sum('amount');
+        $order = OrderDetail::get();
+        $pending = OrderDetail::where('status', 'Pending')->get();
+        $product = Product::get();
+        $transfer = OrderDetail::latest()->paginate($limit);
+        $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                ->pluck('count', 'month_name');
+
         $ttl = $transfer->total();
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('admin.index',compact('labels', 'data','transfer','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()

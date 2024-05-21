@@ -26,6 +26,9 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Product Left Sidebar Start -->
+    @if (!$product)
+        <h1 class="text-center">Product Not Found</h1>
+    @else
     <section class="product-section">
         <div class="container-fluid-lg">
             <div class="row">
@@ -291,7 +294,6 @@
                                                                     $rate3 = 0;
                                                                     $rate4 = 0;
                                                                     $rate5 = 0;
-                                                                    $reviews = DB::table('reviews')->where('product_id',$product->id)->get();
                                                                 @endphp
                                                                 @foreach ($reviews as $review)
                                                                     @php
@@ -840,5 +842,6 @@
     <!-- Review Modal End -->
             <!-- Bg overlay Start -->
 </div>
+    @endif
     <!-- Bg overlay End -->
 </x-guest-layout>

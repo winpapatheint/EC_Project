@@ -184,11 +184,36 @@
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
                                                                 </td>
                                                                 <td>
-                                                                <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
-                                                                    href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
+                                                                    @if ($order->status != "Cancel")
+                                                                    <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
+                                                                        href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
+                                                                    @else
+                                                                    <button type="button" class="btn btn-sm" style="background-color: #ff6b6b; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
+                                                                        onclick="cancelReason({{ $order->order_detail_id }})">Canceled</button>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
                                                         </tbody>
+                                                        <!-- Confirmation Modal for Edit -->
+                                                        @if ($order->status == "Cancel")
+                                                        <div class="modal fade theme-modal remove-profile" id="showCancelReason{{ $order->order_detail_id }}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-block text-center">
+                                                                        <h5 class="modal-title w-100" id="exampleModalLabel{{ $order->order_detail_id }}">Cancelled Reason</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="remove-box">
+                                                                            <p>{{ $order->cancelled_reason}}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
                                                         @endforeach
                                                         <tfoot>
                                                             <tr class="table-order">
@@ -314,6 +339,12 @@
             reader.readAsDataURL(file);
         });
     });
+</script>
+<script>
+    function cancelReason(id) {
+        const confirmModal = new bootstrap.Modal(document.getElementById('showCancelReason' + id));
+            confirmModal.show();
+    }
 </script>
 
 </x-guest-layout>

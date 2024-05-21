@@ -213,7 +213,7 @@
                     </button>
                 </div>
     
-                <form id="address-form" class="row g-4">
+                <form id="address-form" class="row g-4" action="{{ route('add_newaddress') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-floating mb-4 theme-form-floating form-group">
@@ -264,7 +264,7 @@
     
                         <div class="form-floating mb-4 theme-form-floating form-group">
                             <input class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
-                            <label for="phone">Enter Phone Number</label>
+                            <label for="phone">Phone Number</label>
                             <span class="error" style="color:red" id="error-phone"></span>
                         </div>
     
@@ -287,6 +287,29 @@
             </div>
         </div>
     </div>
+    <!-- Confirm Add Address Modal Start -->
+    <div class="modal fade theme-modal remove-profile" id="confirmToAdd" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+            <div class="modal-content" style="background-color: #f5f5f5;">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>Add this address to your address book.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYes">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirm Add Address Modal End -->
     <!-- Add Address Modal Box End -->
     <!-- Edit Address Modal Box Start -->
     @foreach($data as $item)
@@ -351,7 +374,7 @@
 
                             <div class="form-floating mb-4 theme-form-floating form-group">
                                 <input class="form-control" id="phone-{{ $item->id }}" name="phone" placeholder="Enter your phone number" value="{{ $item->phone }}">
-                                <label for="phone">Enter Phone Number</label>
+                                <label for="phone">Phone Number</label>
                                 <span class="error" style="color:red" id="error-phone-{{ $item->id }}"></span>
                             </div>
 
@@ -370,6 +393,28 @@
                             <button type="button" class="btn btn-secondary btn-md" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Close</button>
                         </div>
                     </form> 
+                </div>
+            </div>
+        </div>
+        <!-- Confirmation Modal for Edit -->
+        <div class="modal fade theme-modal remove-profile" id="confirmEdit{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+                <div class="modal-content" style="background-color: #f5f5f5;">
+                    <div class="modal-header d-block text-center">
+                        <h5 class="modal-title w-100" id="exampleModalLabel{{ $item->id }}">Are You Sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="remove-box">
+                            <p>Are you sure you want to save changes?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" onclick="submitEditForm({{ $item->id }})">Yes</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -403,7 +448,6 @@
         </div>
     </div>
     @endforeach
-
     <!-- Remove Address Modal End -->
 </x-guest-layout>
 <!-- Edit Address Script-->
@@ -583,7 +627,14 @@
         }
     
         if (isValid) {
-            document.getElementById('address-form').submit();
+        // Show confirmation modal
+            const confirmModal = new bootstrap.Modal(document.getElementById('confirmToAdd'));
+            confirmModal.show();
+
+            // Handle form submission within the confirmation modal
+            document.getElementById('confirmYes').addEventListener('click', function() {
+                document.getElementById('address-form').submit();
+            });
         }
     }
 </script>
@@ -650,29 +701,33 @@
         }
     
         if (!roomno) {
-        isValid = false;
-        document.getElementById(`error-roomno-${id}`).textContent = 'Please provide your room number.';
-    } else if (roomno.length > 255) {
-        isValid = false;
-        document.getElementById(`error-roomno-${id}`).textContent = 'Your room number must not exceed 255 characters.';
-    }
+            isValid = false;
+            document.getElementById(`error-roomno-${id}`).textContent = 'Please provide your room number.';
+        } else if (roomno.length > 255) {
+            isValid = false;
+            document.getElementById(`error-roomno-${id}`).textContent = 'Your room number must not exceed 255 characters.';
+        }
 
-    if (!phone) {
-        isValid = false;
-        document.getElementById(`error-phone-${id}`).textContent = 'Please provide your phone number.';
-    } else if (phone.length > 255) {
-        isValid = false;
-        document.getElementById(`error-phone-${id}`).textContent = 'The phone number must not exceed 255 characters.';
-    }
+        if (!phone) {
+            isValid = false;
+            document.getElementById(`error-phone-${id}`).textContent = 'Please provide your phone number.';
+        } else if (phone.length > 255) {
+            isValid = false;
+            document.getElementById(`error-phone-${id}`).textContent = 'The phone number must not exceed 255 characters.';
+        }
 
-    if (!place || place === 'Choose Place') {
-        isValid = false;
-        document.getElementById(`error-place-${id}`).textContent = 'Please select a valid place.';
-    }
+        if (!place || place === 'Choose Place') {
+            isValid = false;
+            document.getElementById(`error-place-${id}`).textContent = 'Please select a valid place.';
+        }
 
-    if (isValid) {
-        document.getElementById(`edit-form-${id}`).submit();
+        if (isValid) {
+            const confirmModal = new bootstrap.Modal(document.getElementById('confirmEdit' + id));
+            confirmModal.show();
+        }
     }
-}
+    function submitEditForm(id) {
+        document.getElementById('edit-form-' + id).submit();
+    }
 </script>
 

@@ -61,7 +61,8 @@
                                                             class="toggle-class" type="checkbox"
                                                             data-offstyle="outline-secondary" data-toggle="toggle"
                                                             data-on="Active" data-off="InActive"
-                                                            {{ $list->status ? 'checked' : '' }}>
+                                                            {{ $list->status ? 'checked' : '' }}
+                                                            {{ $list->Seller->status == 0 ? 'disabled' : '' }}>
                                                         </label>
                                                     </td>
                                                     <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>

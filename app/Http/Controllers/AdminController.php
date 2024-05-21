@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Process;
 use App\Models\Category;
 use App\Models\SubCategoryTitle;
@@ -43,7 +44,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        //coupon to be inactive for the end date
+        // coupon to be inactive for the end date
         $couponAll = Coupon::where('enddate', '<=', Carbon::now()->startOfDay())->get();
         foreach ($couponAll as $couponInactive)
         {
@@ -66,6 +67,7 @@ class AdminController extends Controller
                 $product->save();
             }
         }
+        // end coupon to be inactive for the end date
 
         $categories = Category::all();
 
@@ -90,7 +92,9 @@ class AdminController extends Controller
         $productsGroupedByDiscount = [];
 
         foreach ($mostDiscountPercentages as $discountPercent) {
-            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)->pluck('id')
+            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)
+            ->where('status', 1)
+            ->pluck('id')
             ->toArray();
         }
 
@@ -100,13 +104,14 @@ class AdminController extends Controller
                 })
                 ->orWhere('products.coupon_status', '=', '1');
         })->where('status', 1)->get();
-        
+
         $reviews = Review::all();
 
         $bestSellerProducts = DB::table('products')
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
             ->whereMonth('order_details.created_at', '=', Carbon::now()->month)
+            ->where('products.status', 1)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
@@ -117,6 +122,7 @@ class AdminController extends Controller
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
             ->whereBetween('order_details.created_at', [$startDate, $endDate])
+            ->where('products.status', 1)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
@@ -125,21 +131,25 @@ class AdminController extends Controller
         $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
-            ->where('categories.category_name', 'Seafood')->pluck('products.id')
+            ->where('categories.category_name', 'Seafood')
+            ->where('products.status', 1)->pluck('products.id')
             ->toArray();
 
         $vegetable = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
-            ->where('categories.category_name', 'Vegetable')->pluck('products.id')
+            ->where('categories.category_name', 'Vegetable')
+            ->where('products.status', 1)->pluck('products.id')
             ->toArray();
 
         $meatHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('discount_percent', 50)
             ->where('categories.category_name', 'Meat')
+            ->where('products.status', 1)
             ->pluck('products.id')->toArray();
 
         $vegetableHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('discount_percent', 50)
             ->where('categories.category_name', 'Vegetable')
+            ->where('products.status', 1)
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
@@ -650,25 +660,22 @@ class AdminController extends Controller
         $query = Review::query();
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
-                $query->orwhere('comment', 'like', '%' . $mainSearch . '%');
+                $query->where('comment', 'like', '%' . $mainSearch . '%')
+                ->where('created_at', 'like', '%' . $mainSearch . '%');
             })
             ->orWhereHas('user', function ($query) use ($mainSearch) {
                 $query->where('name', 'like', '%' . $mainSearch . '%');
-            })
-            ->orWhereHas('product', function ($query) use ($mainSearch) {
-                $query->where('product_name', 'like', '%' . $mainSearch . '%');
             });
         }
 
-        $lists = $query->leftjoin('users', 'users.id', 'reviews.user_id','reviews.id')
-                    ->whereIn('role',['seller','buyer'])
-                    ->paginate($limit);
+        $lists = $query->leftjoin('users', 'users.id', '=', 'reviews.user_id')
+                        ->leftjoin('products','products.id', '=', 'reviews.product_id')
+                        ->select('reviews.*','reviews.created_at as reviewdate','products.*','users.*','reviews.id','reviews.status')
+                        ->orderBy('reviews.created_at', 'desc') // Assuming created_at belongs to reviews table
+                        ->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
-
-    // $hcompanies = array();
-        // print_r($lists);die;
 
         return view('admin.product.product_review',compact('lists','ttlpage','ttl'));
     }
@@ -694,7 +701,7 @@ class AdminController extends Controller
                 ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
                 ->orderBy('products.created_at', 'desc');
 
-        $lists = $query->paginate($limit);
+        $lists = $query->with('Seller')->paginate($limit);
         $lists = $query->orderBy('products.created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -856,6 +863,7 @@ class AdminController extends Controller
         }
 
         $shoplist = $query->where('products.seller_id',$id)
+                          ->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1234,7 +1242,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('category_id',$id)
+        $shoplist = $query->where('category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1254,6 +1262,7 @@ class AdminController extends Controller
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
+                                    ->where('products.status', '=', '1')
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1387,6 +1396,7 @@ class AdminController extends Controller
         }
 
         $shoplist = $query->where('sub_category_id',$id)
+                        ->where('products.status', '=', '1')
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1406,6 +1416,7 @@ class AdminController extends Controller
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
+                                    ->where('products.status', '=', '1')
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1670,6 +1681,7 @@ class AdminController extends Controller
         $shop = Seller::find($request->shop_id);
         $shop->status = $request->status;
         $shop->save();
+        Product::where('seller_id', $shop->user_id)->update(['status' => $request->status]);
         return redirect()->back();
     }
     public function indexcouponstatus(Request $request)
@@ -1731,7 +1743,8 @@ class AdminController extends Controller
     {
         $limit = 12;
 
-        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')
+                    ->where('status', 1)->paginate($limit);
 
         $ratingWithProductCount = [];
         foreach ($lists as $shop =>$seller) {
@@ -1772,6 +1785,71 @@ class AdminController extends Controller
         $ttlpage = (ceil($ttl / $limit));
 
         return view('front-end.seller-grid',compact('lists','ttlpage','ttl', 'ratingWithProductCount'));
+    }
+
+
+    public function storeReply(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'body' => 'present|string|max:255',
+        ]);
+
+        $help = new Help();
+        if($request->hasFile('image'))
+        {
+            $img = $request->file('image');
+            $filename = time() . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('upload/shop'), $filename);
+            $help->img = $filename;
+        }
+
+        $check = Help::find($request->id);
+        $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
+        $help->name = 'admin';
+        $help->to =  $check->from;
+        $help->from = 'info-test@asia-hd.com';
+        $help->subject = $request->subject;
+        $help->body = $validatedData['body'];
+        $help->updated_at = Carbon::now();
+        $help->save();
+
+        $inquiry_email = 'info-test@asia-hd.com';
+        $sellerEmails =  $check->from;
+        $data = ['subject' => $request->subject];
+
+            Mail::send([], $data, function ($message) use ($request, $sellerEmails, $inquiry_email) {
+                $message->to($sellerEmails)->subject($request->subject . 'からの質問');
+                $message->from($inquiry_email, $request->subject);
+                $message->setBody("We received the following notice message from the official e-commerce website.
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\nName：　" . $request->subject . "
+                    \r\nEmail：　" .  $inquiry_email . "
+                    \r\n
+                    \r\nMessage：　
+                    \r\n" . $request->subject . "
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            });
+
+        $msg = ('Data sent successfully');
+        return redirect('/admin/indexhelp')->with('success', $msg);
+    }
+
+    public function helpDetail($id)
+    {
+        $getId = Help::find($id);
+        $helpId = $getId->help_id;
+        if ($helpId) {
+            $start = DB::table('helps')->where('id',$id)->first();
+            $reply = Help::where('help_id', $helpId)->get();
+        } else {
+            $start = $getId;
+            $reply = null;
+        }
+
+        return view('admin.helpdetail', compact('start', 'reply'));
+
     }
 
     public function storenewsletter(Request $request)
@@ -2106,6 +2184,19 @@ class AdminController extends Controller
         return view('admin.allsubtitle',compact('lists','ttlpage','ttl'));
     }
 
+    public function deleteNotice(Request $request)
+    {
+        $id = $request->id;
+        $help = Help::findOrFail($id);
+        $imagePath = public_path('upload/shop/' . $help->img);
+        $help->delete();
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+        $msg = ('Data deleted successfully');
+      return redirect()->back()->with('success', $msg);
+    }
+
     public function deletecategory(Request $request)
     {
         if($request->type=='1')
@@ -2291,6 +2382,23 @@ class AdminController extends Controller
 
     }
 
+    public function addhelp()
+    {
+        $data = DB::table('users')
+                ->select('users.*')
+                ->where('role', 'seller')
+                ->get();
+
+    return view('admin.addhelp', compact('data'));
+
+    }
+
+    public function addnotice()
+    {
+
+    return view('admin.addnotice');
+
+    }
 
     public function editcoupon($id)
     {
@@ -2646,38 +2754,147 @@ class AdminController extends Controller
         }
     }
 
-
     public function notice(Request $request)
     {
+        $sellername = DB::table('users')->select('name')->where('id',$request->selleremail)->first();
+        $inquiry_email = DB::table('users')->select('email')->where('id',$request->selleremail)->first();
+        $inquiry_emails =  $inquiry_email ->email;
+        $help = new Help();
+        $help->name =$sellername->name;
+        $help->help_id = $request->selleremail;
+        $help->to = $inquiry_email->email;
+        $help->from = 'info-test@asia-hd.com';
+        $help->subject = $request->title;
+        $help->body =  $request->message;
+        $help->created_at = Carbon::now();
+        $help->save();
+        $data = array('title' => $request->title);
+        if (!empty($request->selleremail)) {
+            $mail = Mail::send([], $data, function($message) use ($request,$inquiry_emails ) {
+                $message->to($inquiry_emails, 'Ecommerce ')->subject($request->name.'からの質問');
+                $message->from('info-test@asia-hd.com','admin');
+                $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                \r\n名前：　".$request->name."
+                \r\n"."メールアドレス：　".$request->email."
+                \r\n
+                \r\n"."お問い合わせ内容：　
+                \r\n".$request->message."
+                \r\n
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            });
+        }
+
+        return redirect('/admin/indexhelp')->with('success','Sending Email successfully');
+    }
+
+    // if (!empty($sellerEmails)) {
+    //     $user = Auth::user();
+
+    //     // Validate the incoming request data
+    //     $validator = Validator::make($request->all(), [
+    //         'subject' => 'required|string|max:255',
+    //         'body' => 'required|string',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['errors' => $validator->errors()], 422);
+    //     }
+
+    //     foreach ($sellerEmails as $email) {
+    //         $help = new Help();
+    //         $help->name = $user->name;
+    //         $help->to = $email;
+    //         $help->from = 'info-test@asia-hd.com';
+    //         $help->subject = $request->title;
+    //         $help->body =  $request->message;
+    //         $help->created_at = Carbon::now();
+
+
+    //         $help->save();
+    //     }
+
+        // $inquiry_email = 'info-test@asia-hd.com';
+        // $email = Auth::user()->email;
+        // $name = Auth::user()->name;
+        // $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
+        //     $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+        //     $message->from(Auth::user()->email, Auth::user()->name);
+        // });
+
+        // $msg = ('Data sent successfully');
+        // return redirect('/help')->with('success', $msg);
+        // if ($request->from == 'notice') {
+
+        //     $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->Array();
+
+        //     $inquiry_email = 'info-test@asia-hd.com';
+        //     $data = array('title' => $request->title);
+
+        //     if (!empty(  $sellerEmails)) {
+        //         foreach ($sellerEmails as $email) {
+        //             Mail::send([], $data, function ($message) use ($request, $email, $inquiry_email) {
+        //                 $message->to($email)->subject($request->title . 'からの質問');
+        //                 $message->from($inquiry_email, $request->title);
+        //                 $message->setBody("We received the following notice message from the official e-commerce website.
+        //                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+        //                     \r\nName：　" . $request->title . "
+        //                     \r\nEmail：　" .  $inquiry_email . "
+        //                     \r\n
+        //                     \r\nMessage：　
+        //                     \r\n" . $request->message . "
+        //                     \r\n
+        //                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+        //             });
+        //         }
+        //     }
+
+        //     return redirect('/admin/addhelp#notice')->with('success', 'お問い合わせ内容が正常に送信されました。');
+
+        // }
+    //       $msg = ('Data sent successfully');
+    //     return redirect('/admin/indexhelp')->with('success', $msg);
+    // }
+
+
+public function noticeall(Request $request)
+    {
+        $user = Auth::user();
+        $help = new Help();
+        $help->name = 'all';
+        $help->to = 'all';
+        $help->from = 'info-test@asia-hd.com';
+        $help->subject = $request->title;
+        $help->body =  $request->message;
+        $help->created_at = Carbon::now();
+        $help->save();
+
         if ($request->from == 'notice') {
+            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->to();
+            $sender_email = 'info-test@asia-hd.com';
+            $data = ['title' => $request->title];
 
-            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->Array();
-
-            $inquiry_email = 'info-test@asia-hd.com';
-            $data = array('title' => $request->title);
-
-            if (!empty(  $sellerEmails)) {
-                foreach ($sellerEmails as $email) {
-                    Mail::send([], $data, function ($message) use ($request, $email, $inquiry_email) {
-                        $message->to($email)->subject($request->title . 'からの質問');
-                        $message->from($inquiry_email, $request->title);
-                        $message->setBody("We received the following notice message from the official e-commerce website.
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                            \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $inquiry_email . "
-                            \r\n
-                            \r\nMessage：　
-                            \r\n" . $request->message . "
-                            \r\n
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                    });
-                }
+            if (!empty($sellerEmails)) {
+                Mail::send([], $data, function ($message) use ($request, $sellerEmails, $sender_email) {
+                    $message->to($sellerEmails)->subject($request->title . 'からの質問');
+                    $message->from($sender_email, $request->title);
+                    $message->setBody("We received the following notice message from the official e-commerce website.
+                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                        \r\nName：　" . $request->title . "
+                        \r\nEmail：　" .  $sender_email . "
+                        \r\n
+                        \r\nMessage：　
+                        \r\n" . $request->message . "
+                        \r\n
+                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
             }
 
-            return redirect('/admin/addhelp#notice')->with('success', 'お問い合わせ内容が正常に送信されました。');
-
+            return redirect('/admin/indexhelp')->with('success','Sending Email successfully');
         }
-   }
+
+    }
 
    public function storetop(Request $request)
    {
@@ -2955,17 +3172,23 @@ class AdminController extends Controller
 
     public function admindashboard()
     {
-        $limit=5;
-        $transfer = Order::latest()->paginate($limit);
-        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-                        ->whereYear('created_at', date('Y'))
-                        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-                        ->pluck('count', 'month_name');
+        $limit=10;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $revenue = OrderDetail::where('status', 'Delivered')->sum('amount');
+        $order = OrderDetail::get();
+        $pending = OrderDetail::where('status', 'Pending')->get();
+        $product = Product::get();
+        $transfer = OrderDetail::latest()->paginate($limit);
+        $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                ->pluck('count', 'month_name');
+
         $ttl = $transfer->total();
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('admin.index',compact('labels', 'data','transfer','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()
@@ -2976,10 +3199,8 @@ class AdminController extends Controller
             'mainSearch' => 'string|nullable',
         ]);
         $mainSearch = $validated['mainSearch'] ?? null;
-        $query = Help::query()
-                    ->join('users', 'helps.user_id', '=', 'users.id')
-                    ->select('helps.*', 'users.name')
-                    ->where('users.role', 'send');
+        $query = Help::query();
+
 
         if ($mainSearch != null) {
             $query->where(function ($query) use ($mainSearch) {
@@ -2987,19 +3208,15 @@ class AdminController extends Controller
             });
         }
 
-        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
-        $ttl = $lists->total();
-        $ttlpage = (ceil($ttl / $limit));
+        $email = 'info-test@asia-hd.com';
+        $received = Help::where('to',$email)->latest()->paginate(10);
 
-        // $hcompanies = array();
-        // print_r($lists);die;
+        $sent = Help::where('from',$email)->latest()->paginate(10);
 
-        return view('admin.indexhelp',compact('lists','ttlpage','ttl'));
-    }
+        $notice = Help::where('from', $email)->where('to', 'all')->latest()->paginate(10);
 
-    public function addHelp()
-    {
-        return view('admin.addhelp');
+        return view('admin.indexhelp',compact('received','sent','notice'));
+
     }
 
     public function addToSpecial(Request $request)

@@ -42,7 +42,6 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'birthday' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -69,7 +68,6 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'name' => $request->name,
                 'email' => $user->email,
-                'birthday' => $request->birthday,
                 'phone' => $request->phone,
             ]);
 
@@ -104,48 +102,48 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id',Auth::user()->id)->first();
 
-                if (Auth::check()) {
-                    $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
-                        ->where('user_id', $user->id)->where('buyer_addresses.main_address', 1)->first();
+        if (Auth::check()) {
+            $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
+                ->where('user_id', $user->id)->where('buyer_addresses.main_address', 1)->first();
 
-                    $profile = route('user_profile');
+            $profile = route('user_profile');
 
-                    $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
-                    $orderCount = Order::where('buyer_id', $buyer->id)->count();
+            $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
+            $orderCount = Order::where('buyer_id', $buyer->id)->count();
 
-                    $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
-                    $countForPending = [];
-                    foreach ($orderDetails as $orderDetail) {
-                        if (!isset($countForPending[$orderDetail->order_id])) {
-                            $countForPending[$orderDetail->order_id] = 1;
-                        }
-
-                        if (is_null($orderDetail->delivered_date)) {
-                            $countForPending[$orderDetail->order_id] = 0;
-                        }
-                    }
-                    $pendingCount = array_sum($countForPending);
-
-                    $wishlist = DB::table('wishlists')
-                        ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
-                        ->where('buyers.user_id', Auth::user()->id)
-                        ->select('wishlists.*', 'buyers.*')
-
-                        ->get();
-
-                    $wishlistCount = $wishlist->count();
-
-                    return view('front-end.user-dashboard', compact(
-                        'user',
-                        'address',
-                        'profile',
-                        'orderCount',
-                        'wishlistCount',
-                        'pendingCount'
-                    ));
-                } else {
-                    return redirect()->route('login');
+            $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
+            $countForPending = [];
+            foreach ($orderDetails as $orderDetail) {
+                if (!isset($countForPending[$orderDetail->order_id])) {
+                    $countForPending[$orderDetail->order_id] = 1;
                 }
+
+                if (is_null($orderDetail->delivered_date)) {
+                    $countForPending[$orderDetail->order_id] = 0;
+                }
+            }
+            $pendingCount = array_sum($countForPending);
+
+            $wishlist = DB::table('wishlists')
+                ->join('buyers', 'wishlists.buyer_id', '=', 'buyers.id')
+                ->where('buyers.user_id', Auth::user()->id)
+                ->select('wishlists.*', 'buyers.*')
+
+                ->get();
+
+            $wishlistCount = $wishlist->count();
+
+            return view('front-end.user-dashboard', compact(
+                'user',
+                'address',
+                'profile',
+                'orderCount',
+                'wishlistCount',
+                'pendingCount'
+            ));
+        } else {
+            return redirect()->route('login');
+        }
 
     }
     //Show Orders
@@ -238,17 +236,6 @@ class UserController extends Controller
                     ->where('order_details.buyer_id', $buyer->id)
                     ->orderBy('orders.order_code', 'desc')
                     ->paginate($limit);
-        // $orders = DB::table('order_details')
-        //             ->join('buyers', 'order_details.buyer_id', 'buyers.id')
-        //             ->leftjoin('orders','order_details.order_id','orders.id')
-        //             ->where('buyers.user_id', Auth::user()->id)
-        //             ->select('order_details.*', 'order_details.id as order_id', 'orders.*')
-        //             ->paginate($limit);
-        // $processes = [];
-        // foreach ($orders as $order) {
-        //     $checkid = $order->order_id;
-        //     $processes[$checkid] = Process::where('order_id', $checkid)->latest()->first();
-        // }
 
         $ttl = $orders->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -323,6 +310,7 @@ class UserController extends Controller
                 'place' => $request->place,
                 'phone' => $request->phone,
                 'default' => 0,
+                'main_address' => 0,
             ]);
 
             if ($Buyer_addresses) {
@@ -539,31 +527,34 @@ class UserController extends Controller
     //Edit Password
     public function editPassword(Request $request)
     {
-        $request->validate([
-            'oldpassword' => 'required',
-            'newpassword' => 'required|min:8',
-        ], [
-            'oldpassword.required' => 'Please provide your old password.',
-            'newpassword.required' => 'Please provide your new password.',
-            'newpassword.min' => 'The password must be at least 8 characters.',
-        ]);
-
         $user = User::find(Auth::user()->id);
 
-        if (Hash::check($request->oldpassword, $user->password)) {
-
-            $newPasswordHash = Hash::make($request->newpassword);
-            $user->password = $newPasswordHash;
-            $user->save();
-
-            return redirect()->route('user_profile');
+        // Check if the old password matches
+        if (!Hash::check($request->oldpassword, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'errors' => [
+                    'oldpassword' => 'The old password is incorrect.',
+                ],
+            ]);
         }
-        else
-        {
-            return back()->withErrors(['oldpassword' => 'Incorrect old password'])->withInput();
-        }
+
+        // Update the new password
+        $user->password = Hash::make($request->newpassword);
+        $user->save();
+
+        session()->flash('success', 'Password changed successfully.');
+
+        return response()->json([
+            'success' => true,
+            'message' => view('components.messagebox')->render(),
+        ]);
+
+        // return response()->json([
+        //     'success' => true,
+        // ]);
     }
-    //Show Cart Product
+
     public function showCarts(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();

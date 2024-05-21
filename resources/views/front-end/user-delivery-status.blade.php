@@ -150,22 +150,28 @@
                                                             <td>{{ ($ttl+1) - ($orders->firstItem() + $key) }}</td>
                                                             <td><h6>{{ $order->order_code }}</h6></td>
                                                             <td>
-                                                            <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
-                                                            class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
+                                                                <img src="{{ asset('upload/product_thambnail/'.$order->product_thambnail) }}"
+                                                                class="img-fluid blur-up lazyload" alt="" style="width: 60px; height: 60px;">
                                                             </td>
-                                                            <td><h6 style="text-align: left">
-                                                            @if(strlen($order->product_name) > 10)
-                                                                {!! substr($order->product_name, 0, 10) . '<br>' . substr($order->product_name, 10, 10) . '...' !!}
-                                                            @else
-                                                                {!! nl2br(e($order->product_name)) !!}
-                                                            @endif
-                                                            </h6></td>
-                                                            <td><h6>{{ $order->product_qty }}</h6></td>
+                                                            <td>
+                                                                <h6 style="text-align: left">
+                                                                @if(strlen($order->product_name) > 10)
+                                                                    {!! substr($order->product_name, 0, 10) . '<br>' . substr($order->product_name, 10, 10) . '...' !!}
+                                                                @else
+                                                                    {!! nl2br(e($order->product_name)) !!}
+                                                                @endif
+                                                                </h6>
+                                                            </td>
+                                                            <td><h6>{{ $order->qty }}</h6></td>
                                                             <td><h6>¥ {{ number_format($order->amount , 0, '.', ',') }}</h6></td>
                                                             @php
                                                                 $status = "Pending";
-                                                                if ($order->delivered_date)
+                                                                if ($order->cancel_date) {
+                                                                    $status = "Cancelled";
+                                                                }
+                                                                elseif ($order->delivered_date){
                                                                     $status = "Delivered";
+                                                                }
                                                                 elseif ($order->shipped_date) {
                                                                     $status = "Shipping";
                                                                 }

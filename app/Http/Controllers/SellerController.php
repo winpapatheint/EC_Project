@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Mail;
+use DateTime;
 use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller
@@ -197,6 +198,7 @@ class SellerController extends Controller
         }
 
         $help->name = Auth::user()->name;
+        $help->help_id = Auth::user()->id;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->subject = $validatedData['subject'];
@@ -300,6 +302,7 @@ class SellerController extends Controller
 
     public function storeSubseller(Request $request)
     {
+        $time = new Datetime();
         $seller_id = $request->seller_id;
         $validatedData = $request->validate([
             'user_name' => 'present|string|max:255',
@@ -314,6 +317,7 @@ class SellerController extends Controller
             'role' => 'seller',
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
+            'email_verified_at' => $time->format('Y-m-d H:i:s'),
         ]);
 
         $subseller = Subseller::create([

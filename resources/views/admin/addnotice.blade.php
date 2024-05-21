@@ -32,30 +32,12 @@
                                    @endif
 
                                     @php $error = $errors->toArray(); @endphp
-                                    @php $action= route('notice'); @endphp
+                                    @php $action= route('noticeall'); @endphp
 
-                                    <form action="{{ route('notice') }}" method="POST">
+                                    <form action="{{ route('noticeall') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="from" value="notice">
                                         <div class="row">
-                                        <div class="mb-4 row align-items-center">
-                                            <label
-                                            class="form-label-title col-lg-2 col-md-3 mb-0">Email</label>
-                                            <div class="col-sm-10">
-                                                <select class="js-example-basic-single w-100 form-control" name="selleremail" id="selleremail">
-                                                    <option value="0">Choose Email</option>
-                                                    @foreach($data as $seller)
-                                                        <option value="{{ $seller->id }}">{{ $seller->email }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <p style="display:none" class="selleremail error text-danger"></p>
-                                                @if (!empty($error['selleremail']))
-                                                    @foreach ($error['selleremail'] as  $key => $value)
-                                                        <p class="selleremail error text-danger">{{ $value }}</p>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
 
                                         <div class="mb-4 row align-items-center">
                                             <label

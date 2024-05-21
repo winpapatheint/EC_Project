@@ -45,11 +45,11 @@
                             <table class="table cart-table table-borderless">
                                 <thead>
                                     <tr>
-                                        <td></td>
-                                        <td style="padding-left: 20px;"><h5>Price(tax inc)</h5></td>
-                                        <td style="padding-left: 20px;"><h5>Quantity</h5></td>
-                                        <td style="padding-left: 20px;"><h5>Total</h5></td>
-                                        <td style="padding-left: 20px;"><h5>Coupon</h5></td>
+                                        <td style="text-align: center;"><h5>Product</h5></td>
+                                        <td style="padding-left: 15px;"><h5>Price(tax inc)</h5></td>
+                                        <td style="padding-left: 15px;"><h5>Quantity</h5></td>
+                                        <td style="padding-left: 15px;"><h5>Total</h5></td>
+                                        <td style="padding-left: 15px;"><h5>Coupon</h5></td>
                                         <td></td>
                                     </tr>
                                     <tr><td></td></tr>
@@ -65,7 +65,7 @@
                                                 </a>
                                                 <div class="product-detail" style="width: 100px;">
                                                     <ul>
-                                                        <li class="name">
+                                                        <li class="text-content">
                                                             <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
                                                         </li>
                                                         <li class="text-content"><span class="text-title">In

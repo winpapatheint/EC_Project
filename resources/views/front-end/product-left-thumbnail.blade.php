@@ -294,7 +294,6 @@
                                                                     $rate3 = 0;
                                                                     $rate4 = 0;
                                                                     $rate5 = 0;
-                                                                    $reviews = DB::table('reviews')->where('product_id',$product->id)->get();
                                                                 @endphp
                                                                 @foreach ($reviews as $review)
                                                                     @php

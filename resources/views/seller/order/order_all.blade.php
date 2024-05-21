@@ -15,16 +15,14 @@
                         </div>
                         <div>
                             <div class="table-responsive">
-                                <table class="user-table ticket-table review-table theme-table table"
+                                <table class="table all-package order-table theme-table dataTable no-footer"
                                     id="table_id">
 
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Date</th>
-                                            <th>Order Image</th>
                                             <th>Order Code</th>
-                                            <th>Product Code</th>
                                             <th>Delivery Status</th>
                                             <th>Amount</th>
                                             <th>Option</th>
@@ -41,15 +39,7 @@
                                                 <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                <td>
-                                                    <a class="d-block">
-                                                        <span class="order-image">
-                                                            <img width="50" height="50" src="{{ asset('upload/product_thambnail/'.$item->product-> product_thambnail) }}">
-                                                        </span>
-                                                    </a>
-                                                </td>
                                                 <td>{{ $item->order->order_code }}</td>
-                                                <td>{{ $item->product->product_code }}</td>
                                                 <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
@@ -63,7 +53,7 @@
                                                         </li>
 
                                                         <li>
-                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
+                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}" {{ empty($item->delivered_date) ? 'disabled' : '' }}>
                                                                 <i class="ri-pencil-line"></i>
                                                             </a>
                                                         </li>

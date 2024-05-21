@@ -16,7 +16,6 @@ class Buyer extends Model
         'name',
         'email',
         'password',
-        'birthday',
         'zip_code',
         'city',
         'building',

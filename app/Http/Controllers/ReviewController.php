@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
@@ -18,22 +19,21 @@ class ReviewController extends Controller
 
     public function store(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $id = $request->product_id;
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:255',
             'product_id' => 'required|integer',
         ]);
+        $product = Product::find($request->product_id);
+        $id = $request->product_id;
     
         $review = new Review();
         $review->user_id = Auth::user()->id;
         $review->product_id = $request->product_id;
+        $review->seller_id = $product->seller_id;
         $review->stars_rated = $request->rating;
-        $review->comment = $request->input('comment');
-        
-    
-        // Save the review to the database
+        $review->comment = $request->comment;
+        $review->status = 1;
         $saved = $review->save();
     
         if ($saved) {

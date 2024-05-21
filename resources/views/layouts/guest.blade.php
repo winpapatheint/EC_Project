@@ -397,7 +397,6 @@
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
 
-
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">
                                                     <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0" href="javascript:void(0)" data-bs-toggle="dropdown">
@@ -406,18 +405,26 @@
 
                                                     <div class="dropdown-menu dropdown-menu-2">
                                                         @foreach ($specialCorner as $category)
-                                                            <div class="row">
-                                                                @foreach ($category->subCategoryTitle as $subCategoryTitle)
-                                                                    <div class="dropdown-column col-xl-3">
-                                                                        <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
-                                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                                            <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
-                                                                                {{ $subCategory->sub_category_name }}
-                                                                            </a>
-                                                                        @endforeach
+                                                            @foreach ($category->subCategoryTitle as $index => $subCategoryTitle)
+                                                                @if ($index % 3 == 0)
+                                                                    @if ($index > 1)
+                                                                        <div class="row" style="margin-top: 10px;">
+                                                                    @else
+                                                                        <div class="row">
+                                                                    @endif
+                                                                @endif
+                                                                <div class="dropdown-column col-xl-3">
+                                                                    <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
+                                                                    @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                                        <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
+                                                                            {{ $subCategory->sub_category_name }}
+                                                                        </a>
+                                                                    @endforeach
+                                                                </div>
+                                                                @if ($index % 3 == 2 || $loop->last)
                                                                     </div>
-                                                                @endforeach
-                                                            </div>
+                                                                @endif
+                                                            @endforeach
                                                         @endforeach
                                                     </div>
                                                 </li>
@@ -979,13 +986,42 @@
     <!-- Cookie Bar Box End -->
 
     <!-- Deal Box Modal Start -->
+    @php
+        if (Auth::check()) {
+            $buyer = DB::table('buyers')
+                        ->where('user_id', Auth::user()->id)
+                        ->first();
+            if ($buyer) {
+                // $todayDate = Carbon::today()->toDateString();
+                $todayDate = date('Y-m-d');
+
+                // Perform the query to get today's deals
+                $deal = DB::table('products')
+                            ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
+                            ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
+                            ->select('products.*')
+                            ->where('order_details.buyer_id', $buyer->id)
+                            ->whereDate('order_details.created_at', $todayDate)
+                            ->orderBy('orders.order_code', 'desc')
+                            ->get();
+            } else {
+                $deal = collect();
+            }
+        } else {
+            $deal = collect();
+        }
+    @endphp
     <div class="modal fade theme-modal deal-modal" id="deal-box" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
+                        @if ($deal->count() > 0)
                         <h5 class="modal-title w-100" id="deal_today">Deal Today</h5>
-                        <p class="mt-1 text-content">Recommended deals for you.</p>
+                        <p class="mt-1 text-content">Your ordered items for today.</p>
+                        @else
+                        <p class="mt-1 text-content">Today, no order yet.</p>
+                        @endif
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
@@ -1004,8 +1040,14 @@
 
                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $list->id]) }}" class="deal-contain">
                                         <h5>{{ $list->product_name }}</h5>
-                                        <h6>¥{{ $list->selling_price }} <del>¥{{ $list->original_price }}</del>
-                                        <span>{{ $list->product_size}}</span></h6>
+                                        @if ($list->discount_percent != 0)
+                                        <h6>¥{{ number_format($list->selling_price, '0','',',') }}<del>¥{{ number_format($list->original_price, '0','',',') }}</del></h6>
+                                        @else
+                                        <h6>¥{{ number_format($list->selling_price, '0','',',') }}</h6>
+                                        @endif
+                                        @if ($list->estimate_date)
+                                        <span>Estimated Waiting Time : {{ $list->estimate_date}} {{ $list->estimate_date > 1 ? 'days' : 'day' }}</span>
+                                        @endif
                                     </a>
                                 </div>
                             </li>

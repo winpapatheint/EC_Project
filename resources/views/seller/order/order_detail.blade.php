@@ -12,13 +12,6 @@
                             <div>
                                 <h5>Order ID: {{ $order->order->order_code }}</h5>
                             </div>
-                            {{-- <div class="card-order-section">
-                                <ul>
-                                    <li>{{ $order->created_at }}</li>
-                                    <li>{{ $order->qty }}</li>
-                                    <li>{{ $order->total_amount }}</li>
-                                </ul>
-                            </div> --}}
                         </div>
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">

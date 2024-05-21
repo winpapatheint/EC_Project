@@ -56,8 +56,9 @@ class OrderDetail extends Model
         return $this->belongsTo(Buyer::class,'buyer_id');
     }
 
-    function prefecture() {
-        return $this->belongsTo(Prefecture::class,'prefecture_id');
+    public function prefecture()
+    {
+        return $this->belongsTo(Prefecture::class, 'prefecture_id');
     }
 
     function seller() {

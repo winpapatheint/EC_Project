@@ -20,6 +20,7 @@ class BuyerAddress extends Model
         'phone',
         'place',
         'default',
+        'main_address',
         'created_at',
         'updated_at',
     ];

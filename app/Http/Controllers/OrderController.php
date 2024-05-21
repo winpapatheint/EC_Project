@@ -17,20 +17,41 @@ class OrderController extends Controller
 {
     public function sellerAllOrder()
     {
-        $limit=10;
+        $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::with('order')->where('seller_id', $id)->where('status', '!=', 'Cancel')->latest()->paginate($limit);
+
+        $order = OrderDetail::with('order')
+            ->where('seller_id', $id)
+            ->where('status', '!=', 'Cancel')
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
+
         $ttl = $order->total();
-        $ttlpage = (ceil($ttl / $limit));
-        return view('seller.order.order_all',compact('order','ttl','ttlpage'));
+        $ttlpage = ceil($ttl / $limit);
+
+        return view('seller.order.order_all', compact('order', 'ttl', 'ttlpage'));
     }
+
 
     public function sellerDetailOrder($id)
     {
         $sellerId = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::where('seller_id',$sellerId)->first();
-        return view('seller.order.order_detail',compact('order'));
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+            ->join('products', 'products.id', 'order_details.product_id')
+            ->join('users', 'orders.seller_id', '=', 'users.id')
+            ->with('prefecture')
+            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
+            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
+            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
+            ->where('users.id', $sellerId)
+            ->where('orders.id', $id)
+            ->get();
+        dd($orderDetails);
+        return view('seller.order.order_detail', compact('orderDetails'));
     }
+
 
     public function updateOrderStatus(Request $request)
     {

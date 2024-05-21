@@ -124,7 +124,7 @@
                                                 <td colspan="9">No data available</td>
                                             </tr>
                                         @else
-                                            @foreach ($transfer as $key => $item )
+                                            {{-- @foreach ($transfer as $key => $item )
                                                 <tr>
                                                     <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
@@ -133,12 +133,12 @@
                                                     <td>Asia 食材</td>
                                                     <td>{{ $item->id }}</td>
                                                     <td>{{ $item->product->product_code }}</td>
-                                                    <td>{{ $item->product->product_name }}</td>
+                                                    <td>{{ strlen($item->product->product_name) > 20 ? substr($item->product->product_name, 0, 20) . '...' : $item->product->product_name }}</td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>￥{{ $item->price }}</td>
                                                     <td>￥{{ $item->amount }}</td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach --}}
                                         @endif
                                     </tbody>
                                 </table>
@@ -146,7 +146,8 @@
                         </div>
                     </div>
                 </div>
-                {{ $transfer->links() }}
+                <!--pagination -->
+                @include('components.pagination')
             </div>
             <!-- Booking history  end-->
         </div>

@@ -96,7 +96,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Title</th>
-                                                            <th>Name</th>
+                                                            <th>Receiver</th>
                                                             <th>Reason</th>
                                                             <th>Date</th>
                                                             <th></th>
@@ -111,7 +111,7 @@
                                                         @foreach ($sent as $item)
                                                             <tr>
                                                                 <td>{{ $item->subject }}</td>
-                                                                <td>Me</td>
+                                                                <td>{{ $item->name }}</td>
                                                                 <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>

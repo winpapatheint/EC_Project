@@ -197,7 +197,7 @@ class SellerController extends Controller
             $help->img = $filename;
         }
 
-        $help->name = Auth::user()->name;
+        $help->name ='admin';
         $help->help_id = Auth::user()->id;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;

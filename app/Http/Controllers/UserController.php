@@ -236,17 +236,6 @@ class UserController extends Controller
                     ->where('order_details.buyer_id', $buyer->id)
                     ->orderBy('orders.order_code', 'desc')
                     ->paginate($limit);
-        // $orders = DB::table('order_details')
-        //             ->join('buyers', 'order_details.buyer_id', 'buyers.id')
-        //             ->leftjoin('orders','order_details.order_id','orders.id')
-        //             ->where('buyers.user_id', Auth::user()->id)
-        //             ->select('order_details.*', 'order_details.id as order_id', 'orders.*')
-        //             ->paginate($limit);
-        // $processes = [];
-        // foreach ($orders as $order) {
-        //     $checkid = $order->order_id;
-        //     $processes[$checkid] = Process::where('order_id', $checkid)->latest()->first();
-        // }
 
         $ttl = $orders->total();
         $ttlpage = (ceil($ttl / $limit));

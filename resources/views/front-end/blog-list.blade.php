@@ -95,7 +95,7 @@
                                                     <a href="{{ url('/blogdetail/'.$list->id ) }}">
                                                         <h5 class="recent-name">{{ $list->title }}</h5>
                                                     </a>
-                                                    <h6>{{ date('Y/m/d', strtotime($blog->created_at)) }}</h6>
+                                                    <h6>{{ date('Y/m/d', strtotime($list->created_at)) }}</h6>
                                                 </div>
                                             </div>
                                             @endforeach

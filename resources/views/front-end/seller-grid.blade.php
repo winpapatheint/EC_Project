@@ -28,9 +28,11 @@
     <section class="section-b-space seller-grid-section">
         <div class="container-fluid-lg">
             <div class="row g-4">
+                @if($lists->count() < 1)
+                        <h1 class="text-center">No Shop Available</h1>
+                @endif
                 @foreach($lists as $shop => $seller)
                 <div class="col-xxl-4 col-md-6">
-
                     <a href="{{ url("/shopleftsidebar/".$seller->user_id ) }}" class="seller-grid-box">
                         <div class="grid-contain">
                             <div class="seller-contact-details">

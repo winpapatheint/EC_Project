@@ -43,7 +43,7 @@ class AdminController extends Controller
 {
     public function welcome()
     {
-        //coupon to be inactive for the end date
+        // coupon to be inactive for the end date
         $couponAll = Coupon::where('enddate', '<=', Carbon::now()->startOfDay())->get();
         foreach ($couponAll as $couponInactive)
         {
@@ -66,6 +66,7 @@ class AdminController extends Controller
                 $product->save();
             }
         }
+        // end coupon to be inactive for the end date
 
         $categories = Category::all();
 
@@ -90,7 +91,9 @@ class AdminController extends Controller
         $productsGroupedByDiscount = [];
 
         foreach ($mostDiscountPercentages as $discountPercent) {
-            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)->pluck('id')
+            $productsGroupedByDiscount[$discountPercent] = Product::where('discount_percent', $discountPercent)
+            ->where('status', 1)
+            ->pluck('id')
             ->toArray();
         }
 
@@ -107,6 +110,7 @@ class AdminController extends Controller
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
             ->whereMonth('order_details.created_at', '=', Carbon::now()->month)
+            ->where('products.status', 1)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->get();
@@ -117,6 +121,7 @@ class AdminController extends Controller
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
             ->whereBetween('order_details.created_at', [$startDate, $endDate])
+            ->where('products.status', 1)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
             ->take(4)
@@ -125,21 +130,25 @@ class AdminController extends Controller
         $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
-            ->where('categories.category_name', 'Seafood')->pluck('products.id')
+            ->where('categories.category_name', 'Seafood')
+            ->where('products.status', 1)->pluck('products.id')
             ->toArray();
 
         $vegetable = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
-            ->where('categories.category_name', 'Vegetable')->pluck('products.id')
+            ->where('categories.category_name', 'Vegetable')
+            ->where('products.status', 1)->pluck('products.id')
             ->toArray();
 
         $meatHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('discount_percent', 50)
             ->where('categories.category_name', 'Meat')
+            ->where('products.status', 1)
             ->pluck('products.id')->toArray();
 
         $vegetableHalfDiscount = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('discount_percent', 50)
             ->where('categories.category_name', 'Vegetable')
+            ->where('products.status', 1)
             ->pluck('products.id')->toArray();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
@@ -694,7 +703,7 @@ class AdminController extends Controller
                 ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
                 ->orderBy('products.created_at', 'desc');
 
-        $lists = $query->paginate($limit);
+        $lists = $query->with('Seller')->paginate($limit);
         $lists = $query->orderBy('products.created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
@@ -1234,7 +1243,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('category_id',$id)
+        $shoplist = $query->where('category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1254,6 +1263,7 @@ class AdminController extends Controller
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.category_id', $id)
+                                    ->where('products.status', '=', '1')
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1387,6 +1397,7 @@ class AdminController extends Controller
         }
 
         $shoplist = $query->where('sub_category_id',$id)
+                        ->where('products.status', '=', '1')
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1406,6 +1417,7 @@ class AdminController extends Controller
                                     )
                                     ->join('products', 'products.id', '=', 'reviews.product_id')
                                     ->where('products.sub_category_id', $id)
+                                    ->where('products.status', '=', '1')
                                     ->groupBy('product_id')
                                     ->get()
                                     ->groupBy('average_rating')
@@ -1670,6 +1682,7 @@ class AdminController extends Controller
         $shop = Seller::find($request->shop_id);
         $shop->status = $request->status;
         $shop->save();
+        Product::where('seller_id', $shop->user_id)->update(['status' => $request->status]);
         return redirect()->back();
     }
     public function indexcouponstatus(Request $request)
@@ -1731,7 +1744,8 @@ class AdminController extends Controller
     {
         $limit = 12;
 
-        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')->paginate($limit);
+        $lists = Seller::with('user')->with('user.products')->with('user.products.reviews')
+                    ->where('status', 1)->paginate($limit);
 
         $ratingWithProductCount = [];
         foreach ($lists as $shop =>$seller) {

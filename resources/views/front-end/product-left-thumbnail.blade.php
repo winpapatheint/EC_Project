@@ -26,6 +26,9 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Product Left Sidebar Start -->
+    @if (!$product)
+        <h1 class="text-center">Product Not Found</h1>
+    @else
     <section class="product-section">
         <div class="container-fluid-lg">
             <div class="row">
@@ -840,5 +843,6 @@
     <!-- Review Modal End -->
             <!-- Bg overlay Start -->
 </div>
+    @endif
     <!-- Bg overlay End -->
 </x-guest-layout>

@@ -194,6 +194,8 @@ class ShowProductController extends Controller
         $ratingWithProductCount = Review::select(
                                                 DB::raw('CAST(FLOOR(AVG(stars_rated)) AS UNSIGNED) AS `average_rating`')
                                             )
+                                            ->join('products', 'products.id', '=', 'reviews.product_id')
+                                            ->where('products.status', '=', '1')
                                             ->groupBy('product_id')
                                             ->get()
                                             ->groupBy('average_rating')
@@ -210,6 +212,7 @@ class ShowProductController extends Controller
                                             ->first();
 
         $mostDiscountPercentages = Product::select('discount_percent')
+                                            ->where('status', '=', '1')
                                             ->distinct()
                                             ->orderBy('discount_percent', 'desc')
                                             ->take(3)
@@ -220,38 +223,45 @@ class ShowProductController extends Controller
     }
     public function ShowProductleftThumbnail($id)
     {
-        $product = Product::with('user')->with('user.seller')->find($id);
-        $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
-        $reviews = Review::where('product_id', $id)->get();
-        $reviewAll = Review::all();
-        $productOrdered = OrderDetail::where('product_id', $id)->get();
-        $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
-        ->groupBy('product_id')
-        ->orderByDesc('frequency')
-        ->limit(3)
-        ->get();
-        $relatedProducts = Product::where('category_id', $product->category_id)->get();
-        $ratingWithProductCount = [];
-        $ratingWith = 0;
-        $productCount = 0;
-        $productStarReview = 0;
-        $ratingProject = Product::with('reviews')->where('seller_id', $product->seller_id)->get();
-        if ($ratingProject->count() > 0) {
-            foreach ($ratingProject as $key => $rating) {
-                if($rating->reviews->isNotEmpty()) {
-                    foreach ($rating->reviews as $review) {
-                        $ratingWith += $review->stars_rated;
-                        $productCount++;
+        $product = Product::with('user')->with('user.seller')->where('status', 1)->find($id);
+        if($product)
+        {
+            $multiImages = DB::table('multi_imgs')->where('product_id', $id)->get();
+            $reviews = Review::where('product_id', $id)->where('status', 1)->get();
+            $reviewAll = Review::where('status', 1)->get();
+            $productOrdered = OrderDetail::where('product_id', $id)->get();
+            $topProducts = OrderDetail::select('product_id', DB::raw('COUNT(*) as frequency'))
+                                    ->groupBy('product_id')
+                                    ->orderByDesc('frequency')
+                                    ->limit(3)
+                                    ->get();
+            $relatedProducts = Product::where('category_id', $product->category_id)->get();
+            $ratingWithProductCount = [];
+            $ratingWith = 0;
+            $productCount = 0;
+            $productStarReview = 0;
+            $ratingProject = Product::with('reviews')->where('seller_id', $product->seller_id)->get();
+            if ($ratingProject->count() > 0) {
+                foreach ($ratingProject as $key => $rating) {
+                    if($rating->reviews->isNotEmpty()) {
+                        foreach ($rating->reviews as $review) {
+                            $ratingWith += $review->stars_rated;
+                            $productCount++;
+                        }
+                        $productStarReview += $ratingWith / $rating->reviews->count();
+                        $ratingWith = 0;
                     }
-                    $productStarReview += $ratingWith / $rating->reviews->count();
-                    $ratingWith = 0;
                 }
+                $ratingWithProductCount[0] = floor($productStarReview / $ratingProject->count());
+                $ratingWithProductCount[1] = $productCount;
             }
-            $ratingWithProductCount[0] = floor($productStarReview / $ratingProject->count());
-            $ratingWithProductCount[1] = $productCount;
+            return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 
+            'ratingWithProductCount', 'multiImages', 'relatedProducts', 'reviewAll'));
         }
-        return view('front-end.product-left-thumbnail',compact('product','reviews', 'productOrdered', 'topProducts', 'id', 
-        'ratingWithProductCount', 'multiImages', 'relatedProducts', 'reviewAll'));
+        else{
+            return view('front-end.product-left-thumbnail',compact('product'));
+        }
+        
     }
 
     public function ShowDiscountProductList()
@@ -382,6 +392,7 @@ class ShowProductController extends Controller
                                             )
                                             ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
                                             ->whereIn('products.id', $ids)
+                                            ->where('products.status', '=', '1')
                                             ->groupBy('product_id')
                                             ->get()
                                             ->groupBy('average_rating')
@@ -430,10 +441,10 @@ class ShowProductController extends Controller
 
             if($topic == 'new-arrivals')
             {
-                $products = $query->with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')
+                $products = $query->with('Category')->whereDate('created_at', Carbon::today())->where('products.status', '=', '1')
                 ->paginate($limit, ['*'], 'page', $page);
 
-                $filterForProduct = Product::with('Category')->whereDate('created_at', Carbon::today())->where('status', '=', '1')->get();
+                $filterForProduct = Product::with('Category')->whereDate('created_at', Carbon::today())->where('products.status', '=', '1')->get();
             }
 
                 $categoryIds = $filterForProduct->pluck('Category.id')->unique()->toArray();
@@ -453,6 +464,7 @@ class ShowProductController extends Controller
                             ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
                             ->whereIn('products.category_id', $categoryIds)
                             ->whereIn('products.id', $productIds)
+                            ->where('products.status', '=', '1')
                             ->groupBy('product_id')
                             ->get()
                             ->groupBy('average_rating')
@@ -636,6 +648,7 @@ class ShowProductController extends Controller
                     ->leftjoin('products', 'reviews.product_id', '=', 'products.id')
                     ->whereIn('products.category_id', $categoryIds)
                     ->whereIn('products.id', $productIds)
+                    ->where('products.status', '=', '1')
                     ->groupBy('product_id')
                     ->get()
                     ->groupBy('average_rating')
@@ -763,7 +776,8 @@ class ShowProductController extends Controller
             });
         }
 
-        $products = $query->with('Category')->get();
+        $products = $query->with('Category')
+            ->where('products.status', '=', '1')->get();
         $reviews = Review::all();
         return view('front-end.search',compact('products', 'reviews'));
        

@@ -862,6 +862,7 @@ class AdminController extends Controller
         }
 
         $shoplist = $query->where('products.seller_id',$id)
+                          ->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();

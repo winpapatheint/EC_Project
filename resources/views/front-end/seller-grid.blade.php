@@ -74,10 +74,16 @@
                                         </ul>
                                         <span>({{ $ratingWithProductCount[$shop][1] }} <?php echo ($ratingWithProductCount[$shop][1] > 1) ? 'Reviews' : 'Review'; ?>)</span>
                                     </div>
-                                    @if ($seller->user->products->count() > 1)
-                                    <span class="product-label">{{ $seller->user->products->count() }} Products</span>
+                                    @php $shopProductCount = 0; @endphp
+                                    @foreach ($seller->user->products as $product)
+                                        @if ($product->status == 1)
+                                            @php $shopProductCount++; @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($shopProductCount > 1)
+                                    <span class="product-label">{{ $shopProductCount }} Products</span>
                                     @else
-                                    <span class="product-label">{{ $seller->user->products->count() }} Product</span>
+                                    <span class="product-label">{{ $shopProductCount }} Product</span>
                                     @endif
                                 </div>
 

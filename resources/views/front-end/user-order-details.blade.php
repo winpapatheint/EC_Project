@@ -76,12 +76,12 @@
                                     DashBoard</a>
                             </li>
                             <li class="nav-item active" role="presentation">
-                                <a class="nav-link" id="pills-order-tab" 
+                                <a class="nav-link" id="pills-order-tab"
                                     style="font-size: 14px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="delivery-detail" 
+                                <a class="nav-link" id="delivery-detail"
                                     type="button" style="font-size: 14px; text-align: center;" href="{{route ('user_deivery_status')}}"><i data-feather="box"></i>
                                     Delivery Status</a>
                             </li>
@@ -110,7 +110,7 @@
                     <!-- Orders Details Start -->
                         <div class="page-body">
                 <!-- tracking table start -->
-                
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-12">
@@ -140,7 +140,7 @@
                                         <div class="card-order-section">
                                             <h5 style="color: var(--theme-color);">{{ date('Y/m/d', strtotime($orders->order_created_at)) }}</h5>
                                             <h5>Items: <span style="color: var(--theme-color);">{{ $orders->total_qty }}</span></h5>
-                                            <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>   
+                                            <h5>Total: <span style="color: var(--theme-color);">¥ {{ number_format($orders->total_amount , 0, '.', ',') }}</span></h5>
                                         </div>
                                     </div>
                                     <br>
@@ -159,7 +159,7 @@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
-                                                        
+
                                                         @foreach($orderDetails as $index => $order)
                                                         <tbody>
                                                             <tr class="table-order">
@@ -184,7 +184,7 @@
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
                                                                 </td>
                                                                 <td>
-                                                                <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;" 
+                                                                <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
                                                                     href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
                                                                 </td>
                                                             </tr>

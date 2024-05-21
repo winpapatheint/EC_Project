@@ -3,6 +3,15 @@
 <!-- tracking section start -->
 <div class="page-body">
     <!-- tracking table start -->
+    @if($orderDetails->isNotEmpty())
+        @php
+            $orders = $orderDetails->first();
+            $subTotalAmount = $orders->sub_total_amount;
+            $totalAmount = $orders->total_amount;
+            $couponDiscountAmount = $orders->coupon_discount_amout;
+            $shippingFee = $orders->shipping_fee;
+        @endphp
+    @endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
@@ -10,12 +19,20 @@
                     <div class="card-body">
                         <div class="title-header title-header-block package-card">
                             <div>
-                                <h5>Order ID: {{ $order->order->order_code }}</h5>
+                                <h5>Order ID: {{ $orders->order_code }}</h5>
                             </div>
                         </div>
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">
                                 <div class="col-xl-8">
+                                    @php
+                                        $price = 0;
+                                        $shippingFee = 0;
+                                        $couponDiscountAmount = 0;
+                                        $subTotalAmount  = 0;
+                                        $totalAmount = 0;
+                                        $orders = 0;
+                                    @endphp
                                     <div class="table-responsive table-details">
                                         <table class="table cart-table table-borderless">
                                             <thead>
@@ -25,26 +42,37 @@
                                                 </tr>
                                             </thead>
 
+                                            @if($orderDetails->isNotEmpty())
+                                                @php
+                                                    $orders = $orderDetails->first();
+                                                    $subTotalAmount = $orders->sub_total_amount;
+                                                    $totalAmount = $orders->total_amount;
+                                                    $couponDiscountAmount = $orders->coupon_discount_amout;
+                                                    $shippingFee = $orders->shipping_fee;
+                                                @endphp
+                                            @endif
                                             <tbody>
-                                                <tr class="table-order">
-                                                    <td>
-                                                        <a href="javascript:void(0)">
-                                                            <img width="80" src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}">
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <p>Product Name</p>
-                                                        <h5>{{ $order['product']['product_name'] }}</h5>
-                                                    </td>
-                                                    <td>
-                                                        <p>Quantity</p>
-                                                        <h5>{{ $order->qty }}</h5>
-                                                    </td>
-                                                    <td>
-                                                        <p>Price</p>
-                                                        <h5>¥{{ number_format($order['product']['selling_price']) }}</h5>
-                                                    </td>
-                                                </tr>
+                                                @foreach($orderDetails as $index => $order)
+                                                    <tr class="table-order">
+                                                        <td>
+                                                            <a href="javascript:void(0)">
+                                                                <img width="80" src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}">
+                                                            </a>
+                                                        </td>
+                                                        <td style="width:90%">
+                                                            <p>Product Name</p>
+                                                            <h5>{{ $order->product_name }}</h5>
+                                                        </td>
+                                                        <td>
+                                                            <p>Quantity</p>
+                                                            <h5>{{ $order->qty }}</h5>
+                                                        </td>
+                                                        <td>
+                                                            <p>Price</p>
+                                                            <h5>¥{{ number_format($order->selling_price) }}</h5>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
 
                                             <tfoot>
@@ -53,7 +81,7 @@
                                                         <h5>Subtotal :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($price = $order['product']['selling_price'] * $order->qty) }}</h4>
+                                                        <h4>¥{{ number_format($subTotalAmount) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -62,7 +90,16 @@
                                                         <h5>Shipping :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($deli = $order['product']['delivery_price']) }}</h4>
+                                                        <h4>¥{{ number_format($shippingFee) }}</h4>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="table-order">
+                                                    <td colspan="3">
+                                                        <h5>Coupon Discounted :</h5>
+                                                    </td>
+                                                    <td>
+                                                        <h4>¥{{ number_format($couponDiscountAmount) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -71,7 +108,7 @@
                                                         <h5>Commission</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>{{ $com = $order['product']['commission'] }}%</h4>
+                                                        <h4>{{ $commission = $order['product']['commission'] }}%</h4>
                                                     </td>
                                                 </tr>
 
@@ -80,7 +117,7 @@
                                                         <h4 class="theme-color fw-bold">Total Price :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($total = ($price - ($price * ($com / 100)))+ $deli) }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($totalAmount - ($totalAmount * $commission)) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -93,16 +130,18 @@
                                         <div class="row g-4">
                                             <h4>summery</h4>
                                             <ul class="order-details">
-                                                <li>Order ID: {{ $order->order->order_code }}</li>
-                                                <li>Order Date: {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d H:i') }}</li>
-                                                <li>Order Total: ¥{{ number_format($total) }}</li>
+                                                <li>Order ID: {{ $orders->order_code }}</li>
+                                                <li>Order Date: {{ \Carbon\Carbon::parse($orders->order_created_at)->format('Y/m/d H:i') }}</li>
+                                                <li>Order Total: ¥{{ number_format($totalAmount) }}</li>
                                             </ul>
 
-                                            <h4>shipping address</h4>
+                                            <h4>Shipping address</h4>
                                             <ul class="order-details">
-                                                <li>{{ $order->prefecture->name }}</li>
-                                                <li>{{ $order->city }}{{ $order->chome }}</li>
-                                                <li>{{ $order->building }} {{ $order->room }}</li>
+                                                <li>{{ $order->order_details_name }}</li><br>
+                                                <li>{{ $order->post_code }}</li><br>
+                                                <li>{{ $order->prefecture->name }},{{ $order->city }}</li>
+                                                <li>{{ $order->chome }},{{ $order->building }} {{ $order->room_no }}</li>
+                                                <li>{{ $order->order_details_phone }}</li>
                                             </ul>
 
                                             <div class="delivery-sec">

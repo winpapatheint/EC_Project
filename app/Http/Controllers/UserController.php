@@ -107,7 +107,7 @@ class UserController extends Controller
                 if (Auth::check()) {
                     $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
                         ->where('user_id', $user->id)->where('buyer_addresses.main_address', 1)->first();
-                        
+
                     $profile = route('user_profile');
 
                     $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
@@ -119,7 +119,7 @@ class UserController extends Controller
                         if (!isset($countForPending[$orderDetail->order_id])) {
                             $countForPending[$orderDetail->order_id] = 1;
                         }
-                    
+
                         if (is_null($orderDetail->delivered_date)) {
                             $countForPending[$orderDetail->order_id] = 0;
                         }
@@ -176,7 +176,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $auth = Auth::user()->id;
-        
+
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
             ->join('products', 'products.id', 'order_details.product_id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
@@ -197,7 +197,7 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
                                     ->select('order_details.*', 'products.*','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
-                                            'order_details.chome as cus_chome','order_details.building as cus_building', 
+                                            'order_details.chome as cus_chome','order_details.building as cus_building',
                                             'order_details.room_no as cus_room', 'order_details.created_at as order_detail_created_at')
                                     ->leftjoin('products', 'order_details.product_id', 'products.id')
                                     ->where('order_details.id', $request->id)
@@ -594,15 +594,15 @@ class UserController extends Controller
                         'buyers.id as buyer_id',
                         'carts.product_id as product_id',
                         'products.*',
-                        DB::raw('CASE 
+                        DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                     WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                    ELSE NULL 
+                                    ELSE NULL
                                 END AS coupon_id'),
-                        DB::raw('CASE 
+                        DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                     WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                    ELSE NULL 
+                                    ELSE NULL
                                 END AS coupon_code')
                     )
                     ->get();
@@ -649,15 +649,15 @@ class UserController extends Controller
                         'buyers.id as buyer_id',
                         'carts.product_id as product_id',
                         'products.*',
-                        DB::raw('CASE 
+                        DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                     WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                    ELSE NULL 
+                                    ELSE NULL
                                 END AS coupon_id'),
-                        DB::raw('CASE 
+                        DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                     WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                    ELSE NULL 
+                                    ELSE NULL
                                 END AS coupon_code')
                     )
                     ->get();
@@ -729,15 +729,15 @@ class UserController extends Controller
                                 'buyers.id as buyer_id',
                                 'carts.product_id as product_id',
                                 'products.*',
-                                DB::raw('CASE 
+                                DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                             WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                            ELSE NULL 
+                                            ELSE NULL
                                         END AS coupon_id'),
-                                DB::raw('CASE 
+                                DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                             WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                            ELSE NULL 
+                                            ELSE NULL
                                         END AS coupon_code')
                             )
                             ->get();
@@ -746,13 +746,13 @@ class UserController extends Controller
             foreach($cartLists as $key => $cartItem){
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
-    
+
                 $shopName = DB::table('sellers')
                             ->where('sellers.user_id', $sellerID)
                             ->select('sellers.shop_name as shopname')
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
-    
+
                 $sellerID = $cartItem->seller_id;
                 if (!isset($maxDeliveryPrices[$sellerID])) {
                     $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
@@ -775,9 +775,9 @@ class UserController extends Controller
             'message' => 'Quantity updated successfully.',
             'redirect_url' => route('show_carts', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'))
         ]);
-        
+
         // return response()->json(['message' => 'Cart item added successfully']);
-        
+
     }
 
     //Product Cupon
@@ -799,15 +799,15 @@ class UserController extends Controller
                                 'buyers.id as buyer_id',
                                 'carts.product_id as product_id',
                                 'products.*',
-                                DB::raw('CASE 
+                                DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                             WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                            ELSE NULL 
+                                            ELSE NULL
                                         END AS coupon_id'),
-                                DB::raw('CASE 
+                                DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                             WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                            ELSE NULL 
+                                            ELSE NULL
                                         END AS coupon_code')
                             )
                             ->get();
@@ -841,7 +841,7 @@ class UserController extends Controller
         ->where('coupon_code', $couponcode)
         ->where('status', 1)
         ->first();
-        if ($couponcheck) 
+        if ($couponcheck)
         {
             $discount = $couponcheck->discount_amount;
         }
@@ -850,7 +850,7 @@ class UserController extends Controller
             $couponapplycheck = 1;
             return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
         }
-        else 
+        else
         {
             $couponusedtime = $couponcheck->valid_count;
             $couponusedcount = DB::table('coupon_details')
@@ -866,7 +866,7 @@ class UserController extends Controller
                 DB::table('coupons')
                     ->where('id', $couponcheck->id)
                     ->update(['status' => 0]);
-                
+
                 $couponapplycheck = 1;
                 return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
             }
@@ -880,13 +880,13 @@ class UserController extends Controller
                                     ->where('carts.buyer_id', $buyerid)
                                     ->where('sellers.coupon_id', $couponcheck->id)
                                     ->get();
-            
+
                 if($sellercouponcheck->count() > 0)
                 {
                     $totalSubtotal = 0;
                     foreach($cartLists as $product)
                     {
-                        $totalSubtotal += $product->selling_price * $product->quantity; 
+                        $totalSubtotal += $product->selling_price * $product->quantity;
                     }
                     if($totalSubtotal < $couponcheck->mini_amount)
                     {
@@ -909,7 +909,7 @@ class UserController extends Controller
                         $totalSubtotal = 0;
                         foreach($cartLists as $product)
                         {
-                            $totalSubtotal += $product->selling_price * $product->quantity; 
+                            $totalSubtotal += $product->selling_price * $product->quantity;
                         }
                         if($totalSubtotal < $couponcheck->mini_amount)
                         {
@@ -933,7 +933,7 @@ class UserController extends Controller
         $couponDiscount = $request->coupon_discount;
         $shippingFee = $request->shipping;
         $total1 = $request->total;
-        
+
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
                      ->where('buyers.user_id', Auth::user()->id)
@@ -1000,8 +1000,8 @@ class UserController extends Controller
             $payment = $request->payment;
 
             // return response()->json(['message' => $postcode.",".$city.",".$chome.",".$building.",".$room]);
-            
-            
+
+
             // Generate a unique order code
             //$id = IdGenerator::generate(['table' => 'orders', 'length' => 10, 'prefix' => date('yd')]);
 

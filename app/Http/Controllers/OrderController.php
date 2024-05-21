@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\PDF;
 use App\Models\OrderDetail;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -27,28 +28,31 @@ class OrderController extends Controller
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
-
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
 
         return view('seller.order.order_all', compact('order', 'ttl', 'ttlpage'));
     }
 
-
     public function sellerDetailOrder($id)
     {
         $sellerId = Auth::user()->created_by ?? Auth::id();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-            ->join('products', 'products.id', 'order_details.product_id')
-            ->join('users', 'orders.seller_id', '=', 'users.id')
-            ->with('prefecture')
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
-            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
-            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
-            ->where('users.id', $sellerId)
-            ->where('orders.id', $id)
-            ->get();
-        dd($orderDetails);
+                        ->join('products', 'products.id', 'order_details.product_id')
+                        ->with('prefecture')
+                        ->select(
+                            'orders.id as order_id',
+                            'order_details.id as order_detail_id',
+                            'products.id as product_id',
+                            'orders.*',
+                            'products.*',
+                            'products.selling_price as price',
+                            'order_details.*',
+                            'orders.created_at as order_created_at',
+                        )
+                        ->where('order_details.seller_id', $sellerId)
+                        ->where('order_details.order_id', $id)
+                        ->get();
         return view('seller.order.order_detail', compact('orderDetails'));
     }
 

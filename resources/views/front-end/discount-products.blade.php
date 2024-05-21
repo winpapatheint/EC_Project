@@ -651,12 +651,9 @@
                                     </li>
                                 </ul>
                                 <div class="modal-button">
-                                    <form method="GET" action="{{ route('show_carts', ['id' => $product->id]) }}" >
-                                        @csrf
-                                        <button onclick="location.href = 'cart.html';"
-                                            class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>Add
-                                            To Cart</button>
-                                    </form>
+                                    <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
+                                        class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>
+                                        Add To Cart</button>
 
                                     <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
                                         class="btn theme-bg-color view-button icon text-white fw-bold btn-md">

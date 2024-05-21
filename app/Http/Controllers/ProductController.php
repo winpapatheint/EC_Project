@@ -270,21 +270,33 @@ class ProductController extends Controller
 
     public function updateMultiImg(Request $request)
     {
-        $request->validate([
-            'multi_img.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $id = $request->product_id;
+        if ($request->has('multi_img')) {
+            foreach($request->multi_img as $id => $img) {
+                if ($img->isValid()) {
+                    $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+                    $img->move(public_path('upload/multiImg'), $filename);
 
-        foreach($request->multi_img as $id => $img) {
-            if ($img->isValid()) {
-                $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-                $img->move(public_path('upload/multiImg'), $filename);
-
-                MultiImg::where('id', $id)->update([
-                    'photo_name' => $filename,
-                    'updated_at' => now(),
-                ]);
+                    MultiImg::where('id', $id)->update([
+                        'photo_name' => $filename,
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
+
+        $newImg = $request->File('new_img');
+        if ($newImg->isValid()) {
+            $filename = time() . '_' . rand(100, 999) . '.' . $newImg->getClientOriginalExtension();
+            $newImg->move(public_path('upload/multiImg'), $filename);
+
+            MultiImg::create([
+                'product_id' => $id,
+                'photo_name' => $filename,
+                'created_at' => Carbon::now(),
+            ]);
+        }
+
         $msg = ('Image updated Successfully');
         return redirect('/productlist')->with('success', $msg);
     }

@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Process;
 use App\Models\Category;
 use App\Models\SubCategoryTitle;
@@ -3171,17 +3172,23 @@ public function noticeall(Request $request)
 
     public function admindashboard()
     {
-        $limit=5;
-        $transfer = Order::latest()->paginate($limit);
-        $orders = Order::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-                        ->whereYear('created_at', date('Y'))
-                        ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-                        ->pluck('count', 'month_name');
+        $limit=10;
+        $id = Auth::user()->created_by ?? Auth::id();
+        $revenue = OrderDetail::where('status', 'Delivered')->sum('amount');
+        $order = OrderDetail::get();
+        $pending = OrderDetail::where('status', 'Pending')->get();
+        $product = Product::get();
+        $transfer = OrderDetail::latest()->paginate($limit);
+        $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+                ->pluck('count', 'month_name');
+
         $ttl = $transfer->total();
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('admin.index',compact('labels', 'data','transfer','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()

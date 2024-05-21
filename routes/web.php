@@ -198,7 +198,13 @@ Route::get('/editblog/{blogid}', [AdminController::class, 'editblog']);
 //starthelp
 
 Route::get('/admin/indexhelp', [AdminController::class,'indexhelp'])->name('admin.indexhelp');
-Route::get('/admin/addhelp', function () {return view('admin.addhelp');})->name('admin.addhelp');
+Route::get('helpdetail/{helpid}', [AdminController::class, 'helpDetail']);
+Route::get('/admin/addhelp', [AdminController::class,'addhelp'])->name('admin.addhelp');
+Route::get('/admin/addnotice', [AdminController::class,'addnotice'])->name('admin.addnotice');
+Route::post('/admin/sendhelp', [AdminController::class, 'notice'])->name('notice');
+Route::post('/admin/sendall', [AdminController::class, 'noticeall'])->name('noticeall');
+Route::post('/admin/noticedelete', [AdminController::class, 'deleteNotice'])->name('noticedelete');
+Route::post('/admin/replyemail', [AdminController::class, 'storeReply'])->name('emailreply');
 //endhelp
 
 //startcategory

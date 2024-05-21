@@ -269,26 +269,23 @@
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
                                         <i class="ri-store-3-line"></i>
-                                        <span>Shop</span>
+                                        <span>Shops</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.product') }}">
                                         <i class="ri-store-3-line"></i>
-                                        <span>Product</span>
+                                        <span>Products</span>
                                     </a>
                                 </li>
-
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
                                         <i class="ri-store-3-line"></i>
-                                        <span>Category</span>
+                                        <span>Categories</span>
                                     </a>
                                 </li>
-
-
 
                                  <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.blog') }}">
@@ -297,6 +294,19 @@
                                     </a>
                                 </li>
 
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
+                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/Info.svg') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Top</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
+                                        <i class="ri-phone-line"></i>
+                                        <span>Coupon</span>
+                                    </a>
+                                </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
@@ -340,20 +350,6 @@
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Help</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Coupon</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Top</span>
                                     </a>
                                 </li>
 

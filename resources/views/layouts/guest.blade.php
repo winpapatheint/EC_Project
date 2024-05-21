@@ -397,7 +397,6 @@
                                                 <a class="nav-link " href="{{ route('shoplist') }}">Shop</a>
                                             </li>
 
-
                                             @if ($specialCorner->isNotEmpty())
                                                 <li class="nav-item dropdown dropdown-mega">
                                                     <a class="nav-link menu dropdown-toggle ps-xl-2 ps-0" href="javascript:void(0)" data-bs-toggle="dropdown">
@@ -406,18 +405,26 @@
 
                                                     <div class="dropdown-menu dropdown-menu-2">
                                                         @foreach ($specialCorner as $category)
-                                                            <div class="row">
-                                                                @foreach ($category->subCategoryTitle as $subCategoryTitle)
-                                                                    <div class="dropdown-column col-xl-3">
-                                                                        <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
-                                                                        @foreach ($subCategoryTitle->subCategory as $subCategory)
-                                                                            <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
-                                                                                {{ $subCategory->sub_category_name }}
-                                                                            </a>
-                                                                        @endforeach
+                                                            @foreach ($category->subCategoryTitle as $index => $subCategoryTitle)
+                                                                @if ($index % 3 == 0)
+                                                                    @if ($index > 1)
+                                                                        <div class="row" style="margin-top: 10px;">
+                                                                    @else
+                                                                        <div class="row">
+                                                                    @endif
+                                                                @endif
+                                                                <div class="dropdown-column col-xl-3">
+                                                                    <h5 class="dropdown-header">{{ $subCategoryTitle->sub_category_titlename }}</h5>
+                                                                    @foreach ($subCategoryTitle->subCategory as $subCategory)
+                                                                        <a class="dropdown-item" href="{{ url('/specialsubcategorysidebar/'.$subCategory->id)}}">
+                                                                            {{ $subCategory->sub_category_name }}
+                                                                        </a>
+                                                                    @endforeach
+                                                                </div>
+                                                                @if ($index % 3 == 2 || $loop->last)
                                                                     </div>
-                                                                @endforeach
-                                                            </div>
+                                                                @endif
+                                                            @endforeach
                                                         @endforeach
                                                     </div>
                                                 </li>
@@ -985,7 +992,8 @@
                         ->where('user_id', Auth::user()->id)
                         ->first();
             if ($buyer) {
-                $todayDate = Carbon::today()->toDateString();
+                // $todayDate = Carbon::today()->toDateString();
+                $todayDate = date('Y-m-d');
 
                 // Perform the query to get today's deals
                 $deal = DB::table('products')

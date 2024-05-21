@@ -164,8 +164,12 @@
                                                             <td><h6>¥ {{ number_format($order->amount , 0, '.', ',') }}</h6></td>
                                                             @php
                                                                 $status = "Pending";
-                                                                if ($order->delivered_date)
+                                                                if ($order->cancel_date) {
+                                                                    $status = "Cancelled";
+                                                                }
+                                                                elseif ($order->delivered_date){
                                                                     $status = "Delivered";
+                                                                }
                                                                 elseif ($order->shipped_date) {
                                                                     $status = "Shipping";
                                                                 }

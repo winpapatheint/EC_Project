@@ -205,7 +205,7 @@
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">{{ $address->zip_code}}</h6>
+                                                        <h6 class="text-content">{{ $address->post_code}}</h6>
                                                         <h6 class="text-content">{{ $address->prefecture->name}}</h6>
                                                         <h6 class="text-content">{{ $address->city}} {{ $address->chome}}</h6>
                                                         <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>

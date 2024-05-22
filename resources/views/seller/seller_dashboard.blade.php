@@ -111,7 +111,14 @@
                         </div>
                     </form>
                 </div>
+                @php
+                    use App\Models\SellerNotification;
 
+                    $notifications = SellerNotification::select('message', 'time')->get();
+                    $notiCount = $notifications->filter(function($notify) {
+                        return !empty($notify->time);
+                    })->count();
+                @endphp
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li>
@@ -122,39 +129,30 @@
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
-                                <span class="badge rounded-pill badge-theme">4</span>
+                                <span id="notification-badge" class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
                             </div>
-                            <ul class="notification-dropdown onhover-show-div">
-                                <li>
+                            <ul class="onhover-show-div" >
+                                <li style="display:block">
                                     <i class="ri-notification-line"></i>
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
-                                <li>
+                                @php
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd"];
+                                @endphp
+
+                                @foreach($notifications as $key => $notify)
+                                @if(!empty($notify->time))
+                                <li >
                                     <p>
-                                        <i class="fa fa-circle me-2 font-primary"></i>Delivery processing <span
-                                            class="pull-right">10 min.</span>
+
+                                        <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
+                                            class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
                                     </p>
                                 </li>
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-success"></i>Order Complete<span
-                                            class="pull-right">1 hr</span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-info"></i>Tickets Generated<span
-                                            class="pull-right">3 hr</span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-danger"></i>Delivery Complete<span
-                                            class="pull-right">6 hr</span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <a class="btn btn-primary" href="javascript:void(0)">Check all notification</a>
+                                @endif
+                                @endforeach
+                                <li style="display:block">
+                                    <a class="btn btn-primary mx-auto" href="javascript:void(0)" onclick="checkAllNotifications()">Check all notification</a>
                                 </li>
                             </ul>
                         </li>
@@ -377,6 +375,19 @@
 
     <!-- Theme js -->
     <script src="{{ asset('backend/assets/js/script.js') }}"></script>
+
+    <script>
+        function checkAllNotifications() {
+            var notificationCircles = document.querySelectorAll('.notification-circle');
+            notificationCircles.forEach(function(circle) {
+                circle.style.setProperty('color', '#ffffff', 'important');
+            });
+            var badge = document.getElementById('notification-badge');
+            if (badge) {
+                badge.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 
 </html>

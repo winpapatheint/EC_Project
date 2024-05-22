@@ -40,7 +40,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Title</th>
-                                                            <th>Name</th>
+                                                            <th>Sender</th>
+                                                            <th>Shop Name</th>
                                                             <th>Content</th>
                                                             <th>Date</th>
                                                             <th></th>
@@ -56,7 +57,8 @@
                                                         @foreach ($received as $item)
                                                             <tr>
                                                                 <td>{{ $item->subject }}</td>
-                                                                <td>{{ $item->name }}</td>
+                                                                <td>{{ $item->name }}<br>{{ $item->from }}</td>
+                                                                <td>{{ $item->shop_name }}</td>
                                                                 <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
@@ -73,8 +75,7 @@
                                                                             </a>
                                                                         </li>
                                                                         <li>
-                                                                            <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                                data-bs-target="#deleteModalToggle{{ $item->id }}">
+                                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deletereceiveModalToggle{{ $item->id }}">
                                                                                 <i class="ri-delete-bin-line"></i>
                                                                             </a>
                                                                         </li>
@@ -129,7 +130,7 @@
 
                                                                         </li>
                                                                         <li>
-                                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteModalToggle{{ $item->id }}">
+                                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deletenoticeModalToggle{{ $item->id }}">
                                                                                 <i class="ri-delete-bin-line"></i>
                                                                             </a>
                                                                         </li>
@@ -157,6 +158,7 @@
                                                         <tr>
                                                             <th>Title</th>
                                                             <th>Receiver</th>
+                                                            <th>Shop Name</th>
                                                             <th>Content</th>
                                                             <th>Date</th>
                                                             <th></th>
@@ -173,11 +175,12 @@
                                                                 <td>{{ $item->subject }}</td>
                                                                 <td>
                                                                     @if ($item->name == 'admin')
-                                                                        {{ $item->to }}
+                                                                    {{ $item->name }}<br>{{ $item->to }}
                                                                     @else
                                                                     {{ $item->name }}<br>{{ $item->to }}
                                                                     @endif
                                                                 </td>
+                                                                <td>{{ $item->shop_name }}</td>
                                                                 <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
@@ -323,6 +326,68 @@
 <!-- Delete Modal Box Start -->
 @foreach( $sent as $key => $item )
     <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>The data will be deleted permanently.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('noticedelete') }}">
+                        @csrf
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- Delete Modal Box End -->
+
+
+<!-- Delete Modal Box Start -->
+@foreach( $received as $key => $item )
+    <div class="modal fade theme-modal remove-coupon" id="deletereceiveModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>The data will be deleted permanently.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('noticedelete') }}">
+                        @csrf
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- Delete Modal Box End -->
+
+
+<!-- Delete Modal Box Start -->
+@foreach( $notice as $key => $item )
+    <div class="modal fade theme-modal remove-coupon" id="deletenoticeModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">

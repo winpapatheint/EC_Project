@@ -229,8 +229,21 @@
 
                         <div class="card">
                             <div class="card-body">
-                                <div class="card-header-2">
+                                <div class="title-header option-title d-sm-flex d-block">
                                     <h5>Multiple Image</h5>
+                                    <div class="right-options">
+                                        <ul>
+                                            @if(count($multiImgs) < 5)
+                                                <li>
+                                                    <a data-bs-toggle="modal" data-bs-target="#addImage" href="javascript:void(0)">
+                                                        <button class="align-items-center btn btn-theme d-flex">
+                                                            <i data-feather="plus-square"></i>Add New
+                                                        </button>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
                                 </div>
                                 <table class="table variation-table table-responsive-sm">
                                     <thead>
@@ -241,12 +254,12 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <form class="theme-form theme-form-2 mega-form" method="POST" action="{{ route('update.multiImg') }}" enctype="multipart/form-data">
+                                    <tbody id="imageTableBody">
+                                        <form class="theme-form theme-form-2 mega-form" method="POST" action="{{ route('update.multiImg') }}" enctype="multipart/form-data" id="imageForm">
                                             @csrf
                                             @foreach ($multiImgs as $key => $img)
                                                 <tr>
-                                                    <th>{{ $key+1 }}</th>
+                                                    <th>{{ $key + 1 }}</th>
                                                     <td><img src="{{ asset('upload/multiImg/'.$img->photo_name) }}" width="80"></td>
                                                     <td>
                                                         <input type="file" class="form-control" name="multi_img[{{ $img->id }}]" onchange="checkFile(this)">
@@ -291,6 +304,7 @@
                                 </table>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -298,6 +312,35 @@
     </div>
     <!-- New Product Add End -->
 
+<!-- Modal Start -->
+<div class="modal fade theme-modal remove-coupon" id="addImage" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Add Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('update.multiImg') }}" enctype="multipart/form-data" id="new-img-form">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $products->id }}">
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <input type="file" class="form-control" id="new_img" name="new_img" onchange="mainThamUrl(this)">
+                        <img src="" id="mainThmb">
+                        <span style="color:red" id="error-new_img"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="validateForm()">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
 
 <!-- Delete Modal Box Start -->
 @foreach ($multiImgs as $key => $img)
@@ -341,6 +384,36 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+</script>
+
+<script>
+    function validateForm() {
+    let isValid = true;
+    const new_img = document.getElementById('new_img').value.trim(); // Access the file input value
+    document.querySelectorAll('#new-img-form .error').forEach(el => el.textContent = '');
+    if (!new_img) { // Check if the file input is empty
+        isValid = false;
+        document.getElementById('error-new_img').textContent = 'Please add an image.';
+    }
+    if (isValid) {
+        document.getElementById('new-img-form').submit();
+    } else {
+        // Prevent form submission
+        event.preventDefault();
+    }
+}
+</script>
+
+<script>
+    function mainThamUrl(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('#mainThmb').attr('src', e.target.result).width(80).height(80);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 
 <script>

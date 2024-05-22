@@ -47,7 +47,7 @@
                                                 <td>
                                                     <ul>
                                                         <li>
-                                                            <a href="{{ route('detail.order',$item->id) }}">
+                                                            <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
                                                                 <i class="ri-eye-line"></i>
                                                             </a>
                                                         </li>

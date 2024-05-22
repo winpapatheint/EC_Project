@@ -249,7 +249,7 @@ Route::get('/admin/tracking/order', function () {return view('admin.order.order_
 //Seller
 Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');
 Route::get('/seller/register', [RegisterController::class, 'sellerRegister'])->name('seller.register');
-Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->middleware(['auth','verified','role:seller'])->name('seller.registered');
+Route::post('/seller/registered', [RegisterController::class, 'sellerRegistered'])->name('seller.registered');
 
 Route::get('/profile', [SellerController::class, 'profile'])->middleware(['auth','role:seller'])->name('seller.profile');
 Route::post('/profilestore', [SellerController::class, 'storeProfile'])->middleware(['auth','role:seller'])->name('store.profile');

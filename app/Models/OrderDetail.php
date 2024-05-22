@@ -28,6 +28,7 @@ class OrderDetail extends Model
         'building',
         'room_no',
         'amount',
+        'delivery_price',
         'invoice_no',
         'status',
         'processing_date',
@@ -44,7 +45,6 @@ class OrderDetail extends Model
         'updated_by',
         'created_at',
         'updated_at',
-
     ];
 
     public function product()

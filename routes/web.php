@@ -154,6 +154,7 @@ Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'dele
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 Route::get('shop/{shopid}', [AdminController::class, 'shopdetail']);
+Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail']);
 Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 

@@ -3491,4 +3491,8 @@ class AdminController extends Controller
         'discount','discountWithProductCount', 'sort', 'reviews', 'categories', 'categoryWithProductCount'));
     }
 
+    public function shopTransferDetail($id)
+    {
+        return view('admin.shoptransfer');
+    }
 }

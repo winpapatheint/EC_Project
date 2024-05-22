@@ -53,7 +53,7 @@
                                                         </li>
 
                                                         <li>
-                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}" {{ empty($item->delivered_date) ? 'disabled' : '' }}>
+                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}" {{ !empty($item->delivered_date) ? 'disabled' : '' }}>
                                                                 <i class="ri-pencil-line"></i>
                                                             </a>
                                                         </li>
@@ -104,11 +104,6 @@
         <div class="offcanvas-body">
             <div class="order-date">
                 <span>Ordered Date: {{ $item->created_at }}</span>
-                <form action="{{ route('order.cancel') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $item->id }}">
-                    <button type="submit" class="btn btn-light">Cancel Order</button>
-                </form>
             </div>
 
             <div class="accordion accordion-flush custome-accordion" id="accordionFlushExample">
@@ -147,8 +142,14 @@
                                 @elseif ($item->status === 'Shipped')
                                     <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Delivered">Delivered</button>
                                 @endif
+                            </form>
+
+                            <form action="{{ route('order.cancel') }}" method="GET">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $item->id }}">
                                 <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Cancel">Order Cancel</button>
                             </form>
+
                         </div>
                     </div>
                 </div>

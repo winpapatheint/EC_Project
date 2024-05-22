@@ -1,5 +1,11 @@
 @extends('seller.seller_dashboard')
 @section('seller')
+<style>
+    table td p {
+    margin: 0;
+    line-height: 1.5;
+}
+</style>
 <!-- tracking section start -->
 <div class="page-body">
     <!-- tracking table start -->
@@ -59,10 +65,20 @@
                                                                 <img width="80" src="{{ asset('upload/product_thambnail/'.$order->product-> product_thambnail) }}">
                                                             </a>
                                                         </td>
-                                                        <td style="width:90%">
+
+                                                        @php
+                                                            $comment = $order->product_name;
+                                                            $words = explode(' ', $comment);
+                                                            $lines = array_chunk($words, 3);
+                                                        @endphp
+
+                                                        <td>
                                                             <p>Product Name</p>
-                                                            <h5>{{ $order->product_name }}</h5>
+                                                            @foreach ($lines as $line)
+                                                                {{ implode(' ', $line) }}<br>
+                                                            @endforeach
                                                         </td>
+
                                                         <td>
                                                             <p>Quantity</p>
                                                             <h5>{{ $order->qty }}</h5>

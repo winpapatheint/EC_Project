@@ -22,7 +22,6 @@ class OrderController extends Controller
         $id = Auth::user()->created_by ?? Auth::id();
 
         $order = OrderDetail::with('order')
-            ->whereNull('cancel_date')
             ->where('seller_id', $id)
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
@@ -30,7 +29,6 @@ class OrderController extends Controller
             ->paginate($limit);
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
-
         return view('seller.order.order_all', compact('order', 'ttl', 'ttlpage'));
     }
 
@@ -97,14 +95,14 @@ class OrderController extends Controller
                         break;
                 }
             }
-            $item->updated_by = Auth::user()->name;
             $item->save();
-
-            $process = new Process();
-            $process->order_id = $item->id;
-            $process->{$status . '_date'} = now();
-            $process->save();
         }
+
+        $process = new Process();
+        $process->order_id = $order_id;
+        $process->{$status . '_date'} = now();
+        $process->updated_by = Auth::user()->name;
+        $process->save();
 
         $inquiry_email = 'info-test@asia-hd.com';
         $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
@@ -162,9 +160,25 @@ class OrderController extends Controller
 
     public function orderTracking($id)
     {
-        $order = OrderDetail::find($id);
         $process = Process::where('order_id',$id)->latest()->get();
-        return view('seller.order.order_tracking',compact('order','process'));
+        $sellerId = Auth::user()->created_by ?? Auth::id();
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+                        ->join('products', 'products.id', 'order_details.product_id')
+                        ->with('prefecture')
+                        ->select(
+                            'orders.id as order_id',
+                            'order_details.id as order_detail_id',
+                            'products.id as product_id',
+                            'orders.*',
+                            'products.*',
+                            'products.selling_price as price',
+                            'order_details.*',
+                            'orders.created_at as order_created_at',
+                        )
+                        ->where('order_details.seller_id', $sellerId)
+                        ->where('order_details.order_id', $id)
+                        ->get();
+        return view('seller.order.order_tracking',compact('orderDetails','process'));
     }
 
     public function generatePDF($id)

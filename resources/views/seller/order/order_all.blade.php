@@ -53,20 +53,26 @@
                                                         </li>
 
                                                         <li>
-                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}" {{ !empty($item->delivered_date) ? 'disabled' : '' }}>
+                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
                                                                 <i class="ri-pencil-line"></i>
                                                             </a>
                                                         </li>
 
                                                         <li>
-                                                            <a href="{{ route('invoice',$item->id) }}" >
+                                                            <a href="{{ route('invoice',$item->id) }}"
+                                                               @if($item->status === 'Cancel')
+                                                                   onclick="return false;"
+                                                               @endif>
                                                                 <i class="icon-cloud-down"></i>
                                                             </a>
                                                         </li>
 
                                                         <li>
                                                             <a class="btn btn-sm btn-solid text-white"
-                                                                href="{{ route('order.tracking',$item->id) }}">
+                                                                href="{{ route('order.tracking', $item->order_id)}}"
+                                                                @if($item->status === 'Cancel')
+                                                                   onclick="return false;"
+                                                               @endif>
                                                                 Tracking
                                                             </a>
                                                         </li>
@@ -96,7 +102,7 @@
     <div class="offcanvas offcanvas-end order-offcanvas" tabindex="-1" id="order-details{{ $item->id }}"
         aria-labelledby="offcanvasExampleLabel" aria-hidden="false">
         <div class="offcanvas-header">
-            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Order ID: {{ $item->id }}</h4>
+            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Order Code: {{ $item->order->order_code }}</h4>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
                 <i class="fas fa-times"></i>
             </button>

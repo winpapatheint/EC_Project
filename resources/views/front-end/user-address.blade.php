@@ -408,7 +408,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="remove-box">
-                            <p>Are you sure you want to save changes?</p>
+                            <p>This changes will be saved.</p>
                         </div>
                     </div>
                     <div class="modal-footer">

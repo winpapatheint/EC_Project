@@ -6,11 +6,10 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
 use App\Models\Order;
-use App\Models\seller;
+use App\Models\Seller;
 use App\Models\Payment;
 use App\Models\Process;
 use App\Models\Product;
-use App\Models\Transfer;
 use App\Models\Prefecture;
 use App\Models\OrderDetail;
 use App\Models\BuyerAddress;
@@ -1043,6 +1042,9 @@ class UserController extends Controller
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
                         'amount' => $productamounts[$key],
+                        'commission' => $orderedProduct->commission,
+                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                        'transfer_status' => 0,
                         'name' => $name,
                         'phone' => $phone,
                         'post_code' => $postcode,
@@ -1064,6 +1066,9 @@ class UserController extends Controller
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
                         'amount' => $productamounts[$key],
+                        'commission' => $orderedProduct->commission,
+                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                        'transfer_status' => 0,
                         'name' => $name,
                         'phone' => $phone,
                         'post_code' => $postcode,
@@ -1073,14 +1078,7 @@ class UserController extends Controller
                         'room_no' => $room,
                     ];
                 }
-                $orderDetail = OrderDetail::create($orderdetailsData);
-                Transfer::create([
-                    'order_detail_id' => $orderDetail->id,
-                    'seller_id' => $sellerId[$key],
-                    'commission' => $orderedProduct->commission,
-                    'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
-                    'status' => 1
-                ]);
+                OrderDetail::create($orderdetailsData);
 
                 $productForInStock = Product::find($product_id);
                 $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];

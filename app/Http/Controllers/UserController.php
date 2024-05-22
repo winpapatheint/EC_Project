@@ -1010,7 +1010,6 @@ class UserController extends Controller
 
             $order = Order::create([
                 'order_code' => $newOrderCode,
-                'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 'sub_total_amount' => $subTotalAmount,
@@ -1019,6 +1018,7 @@ class UserController extends Controller
                 'total_qty'=> $totalQty,
                 'payment_type'=> $payment,
             ]);
+
             Payment::create([
                 'order_id' => $order->id,
                 'seller_id' => (int)$sellerId,

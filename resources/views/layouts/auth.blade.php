@@ -182,50 +182,23 @@
 
                                 <div class="user-name-hide media-body">
                                     <span>{{ auth()->user()->name }}</span>
-                                    <p class="mb-0 font-roboto">{{ auth()->user()->role }}<i class="middle ri-arrow-down-s-line"></i></p>
                                 </div>
                             </div>
-
                             <ul class="profile-dropdown onhover-show-div">
-                                <li>
-                                    <a href="{{ route('admin.profile') }}">
-                                        <i data-feather="user"></i>
-                                        <span>Profile</span>
-                                    </a>
-                                </li><br>
-
-                                <li>
-                                    <form method="POST" action="{{ route('adminlogout') }}">
-                                        @csrf
-                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                            <i data-feather="log-out"></i>
-                                            <span>Log Out</span>
-                                        </a>
-                                    </form>
-                                </li>
-                            </ul>
-                            <ul class="profile-dropdown onhover-show-div">
-                               <div>
                                     <li>
                                         <a href="{{ route('admin.profile') }}">
                                             <i data-feather="user"></i>
                                                 <span>Profile</span>
                                         </a>
-                                    </li>
-                                </div>
-                                <div>
-                                <li>
-                                    <form method="POST" action="{{ route('adminlogout') }}">
-                                        @csrf
-                                        <a class="ticket-btn btn" style='padding: 0px 10px;' href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    </li><br>
+                                    <li>
+                                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                            href="javascript:void(0)">
                                             <i data-feather="log-out"></i>
-                                            <span>Log Out</span>
+                                            <span>Log out</span>
                                         </a>
-                                    </form>
-                                </li>
-                            </div>
+                                    </li>
                             </ul>
-
                         </li>
                     </ul>
                 </div>
@@ -402,25 +375,32 @@
         <!-- Page Body End -->
     </div>
     <!-- page-wrapper End-->
-
-    <!-- Modal Start -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
+    <!-- Logout modal start -->
+    <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
-                    <p>Are you sure you want to log out?</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="button-box">
-                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                    <div class="remove-box">
+                        <p>Are you sure you want to log out?</p>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('adminlogout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal End -->
+    <!-- Logout modal end -->
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>

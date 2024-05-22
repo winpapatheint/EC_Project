@@ -205,6 +205,7 @@ Route::get('/admin/addnotice', [AdminController::class,'addnotice'])->name('admi
 Route::post('/admin/sendhelp', [AdminController::class, 'notice'])->name('notice');
 Route::post('/admin/sendall', [AdminController::class, 'noticeall'])->name('noticeall');
 Route::post('/admin/noticedelete', [AdminController::class, 'deleteNotice'])->name('noticedelete');
+Route::post('/admin/reveivedelete', [AdminController::class, 'deleteReceive'])->name('receivedelete');
 Route::post('/admin/replyemail', [AdminController::class, 'storeReply'])->name('emailreply');
 //endhelp
 

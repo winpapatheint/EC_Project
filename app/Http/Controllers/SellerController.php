@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Subseller;
 use App\Models\Prefecture;
 use App\Models\OrderDetail;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -41,6 +42,7 @@ class SellerController extends Controller
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
+
         return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
     }
 
@@ -196,8 +198,9 @@ class SellerController extends Controller
             $img->move(public_path('upload/shop'), $filename);
             $help->img = $filename;
         }
-
-        $help->name ='admin';
+        $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
+        $help->name = Auth::user()->name;
+        $help->shop_name = $shopName;
         $help->help_id = Auth::user()->id;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;
@@ -213,7 +216,11 @@ class SellerController extends Controller
             $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
             $message->from(Auth::user()->email, Auth::user()->name);
         });
-
+        $notification = Notification::find(5);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
     }

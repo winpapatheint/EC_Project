@@ -13,6 +13,7 @@ use App\Models\SubCategoryTitle;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Help;
+use App\Models\SellerNotification;
 use App\Models\MultiImg;
 use App\Models\Coupon;
 use App\Models\Top;
@@ -701,8 +702,7 @@ class AdminController extends Controller
                 ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
                 ->orderBy('products.created_at', 'desc');
 
-        $lists = $query->with('Seller')->paginate($limit);
-        $lists = $query->orderBy('products.created_at', 'desc')->paginate($limit);
+        $lists = $query->with('Seller')->orderBy('products.created_at', 'desc')->paginate($limit);
 
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
@@ -1803,10 +1803,11 @@ class AdminController extends Controller
             $img->move(public_path('upload/shop'), $filename);
             $help->img = $filename;
         }
-
+        $shopName = Seller::where('user_id', $request->help_id)->value('shop_name');
         $check = Help::find($request->id);
         $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
         $help->name = 'admin';
+        $help->shop_name =   $shopName;
         $help->to =  $check->from;
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->subject;
@@ -2450,32 +2451,42 @@ class AdminController extends Controller
 
     public function editproduct($id)
     {
-        $brands = DB::table('brands')->orderBy('created_at', 'desc')->get();
-        $countries = DB::table('countries')->orderBy('created_at', 'desc')->get();
-        $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
-        $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
-        $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
-        $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
+        // $brands = DB::table('brands')->orderBy('created_at', 'desc')->get();
+        // $countries = DB::table('countries')->orderBy('created_at', 'desc')->get();
+        // $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
+        // $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
+        // $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
+        // $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
 
-        $product_coupon = DB::table('products as P')
-                    ->select('P.coupon_id','P.coupon_status')
-                    ->where('P.id',$id)
-                    ->orderBy('P.created_at', 'desc')->first();
+        // $product_coupon = DB::table('products as P')
+        //             ->select('P.coupon_id','P.coupon_status')
+        //             ->where('P.id',$id)
+        //             ->orderBy('P.created_at', 'desc')->first();
 
-        $couponlist = DB::table('coupons')
-                        ->select('coupons.id')
-                        ->where('id',$product_coupon->coupon_id)
-                        ->orderBy('created_at', 'desc')->first();
+        // $couponlist = DB::table('coupons')
+        //                 ->select('coupons.id')
+        //                 ->where('id',$product_coupon->coupon_id)
+        //                 ->orderBy('created_at', 'desc')->first();
 
 
+        // $multiImgs = MultiImg::where('product_id',$id)->get();
+        // $data = DB::table('products as P')
+        //         ->where('P.id',$id)
+        //         ->orderBy('P.created_at', 'desc')->first();
+
+        // $editmode = true;
+
+        // return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs','coupons','couponlist','product_coupon'));
+
+        $brands = Brand::latest()->get();
+        $countries = Country::latest()->get();
+        $categories = Category::latest()->get();
+        $subcategories = SubCategory::latest()->get();
+        $subcatitle = SubCategoryTitle::latest()->get();
+        $products = Product::findOrFail($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
-        $data = DB::table('products as P')
-                ->where('P.id',$id)
-                ->orderBy('P.created_at', 'desc')->first();
 
-        $editmode = true;
-
-        return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs','coupons','couponlist','product_coupon'));
+        return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
 
     }
 
@@ -2756,11 +2767,15 @@ class AdminController extends Controller
 
     public function notice(Request $request)
     {
+
         $sellername = DB::table('users')->select('name')->where('id',$request->selleremail)->first();
         $inquiry_email = DB::table('users')->select('email')->where('id',$request->selleremail)->first();
+        $shopName = Seller::where('user_id', $request->selleremail)->value('shop_name');
+
         $inquiry_emails =  $inquiry_email ->email;
         $help = new Help();
         $help->name =$sellername->name;
+        $help->shop_name =  $shopName;
         $help->help_id = $request->selleremail;
         $help->to = $inquiry_email->email;
         $help->from = 'info-test@asia-hd.com';
@@ -2784,6 +2799,11 @@ class AdminController extends Controller
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
             });
         }
+        $notification = SellerNotification::find(2);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
 
         return redirect('/admin/indexhelp')->with('success','Sending Email successfully');
     }
@@ -3063,51 +3083,59 @@ class AdminController extends Controller
 
         $adminAmount = $discountedPrice -  $sellerAmount;
 
-        $updval = array('product_code' => $request->productcode,
-                        'product_name' => $request->productname,
-                        'country_id' => $request->country,
-                        'brand_id' => $request->brand,
-                        'coupon_id' => $request->coupon,
-                        'category_id' => $request->category,
-                        'sub_category_title_id' => $request->subcattitle,
-                        'sub_category_id' => $request->subcategory,
-                        'product_tags' => $request->product_tags,
-                        'product_size' => $request->product_size,
-                        'product_color' => $request->product_color,
-                        'short_desc' => $request->short_desc,
-                        'long_desc' => $request->long_desc,
+        $datePrefix = date('ym');
+        $latestProduct = Product::where('product_code', 'like', $datePrefix . '%')->latest()->first();
+        $sequentialNumber = 1;
+        if ($latestProduct) {
+            $latestProductCode = $latestProduct->product_code;
+            $sequentialNumber = intval(substr($latestProductCode, strlen($datePrefix))) + 1;
+        }
+        $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT);
 
-                        'selling_price' => $request->selling_price,
-                        'discount_percent' => $request->discount_percent,
-                        'product_qty' => $request->product_qty,
-                        'estimate_date' => $request->estimate_date,
-                        'commission' => $request->commision,
-                        'com_price' => $adminAmount,
-                        'seller_amount' => $sellerAmount,
-                        'updated_at' => $time->format('Y-m-d H:i:s')
-                        );
+        $img = $request->file('product_thambnail');
+        $filename = time() . '.' . $img->getClientOriginalExtension();
+        $img->move(public_path('upload/product_thambnail'), $filename);
 
-                        if (!empty($request->product_thambnail)) {
-                            $imageName = time().'.'.$request->product_thambnail->extension();
-                            $request->product_thambnail->move(public_path('upload/product_thambnail/'), $imageName);
-                        } else {
-                            $imageName = '';
-                        }
+        $id = Auth::user()->created_by ?? Auth::id();
 
-            if (!empty($request->product_thambnail)) {
-                $updval['product_thambnail'] = $imageName;
-            }
-            if (!empty($request->status)) {
-                if($request->status === 'yes')
-                {
-                    $updval['coupon_status'] = 1;
-                }
-                else{
-                    $updval['coupon_status'] = 0;
-                }
-            }
+        $product_id = Product::insertGetId([
+            'product_code' => $newProductCode,
+            'brand_id' => $validatedData['brand_id'],
+            'country_id' => $validatedData['country_id'],
+            'category_id' => $validatedData['category_id'],
+            'sub_category_title_id' => $validatedData['sub_category_title_id'],
+            'sub_category_id' => $validatedData['sub_category_id'],
+            'seller_id' => $id,
+            'product_name' => $validatedData['product_name'],
+            'product_qty' => $validatedData['product_qty'],
+            'in_stock' => $validatedData['product_qty'],
+            'product_tags' => $validatedData['product_tags'],
+            'product_size' => $validatedData['product_size'],
+            'product_color' => $validatedData['product_color'],
+            'original_price' => $validatedData['original_price'],
+            'selling_price' => $request->calculated_selling_price,
+            'commission' => $request->commission,
+            'discount_percent' => $request->discount_percent ?? 0,
+            'short_desc' => $validatedData['short_desc'] ,
+            'long_desc' => $validatedData['long_desc'],
+            'care_instructions' => $validatedData['care_instructions'],
+            'product_thambnail' => $filename,
+            'status' => 1,
+            'estimate_date' => $validatedData['estimate_date'],
+            'delivery_price' => $validatedData['delivery_price'],
+            'created_at' => Carbon::now(),
+        ]);
 
-            DB::table('products')->where('id',$request->id)->update($updval);
+        $images = $request->file('images');
+        foreach ($images as $img) {
+            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
+            $img->move(public_path('upload/multiImg'), $filename);
+            MultiImg::create([
+                'product_id' => $product_id,
+                'photo_name' => $filename,
+                'created_at' => Carbon::now(),
+            ]);
+        }
 
             return redirect('/admin/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
     }

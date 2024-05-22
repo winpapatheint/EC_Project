@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <div class="title-header title-header-block package-card">
                             <div>
-                                <h5>Order ID:{{ $order->id }}</h5>
+                                <h5>Order Code:{{ $order->order_code }}</h5>
                             </div>
                             {{-- <div class="card-order-section">
                                 <ul>

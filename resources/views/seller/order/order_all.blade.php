@@ -72,7 +72,7 @@
                                                                 href="{{ route('order.tracking', $item->order_id)}}"
                                                                 @if($item->status === 'Cancel')
                                                                    onclick="return false;"
-                                                               @endif>
+                                                                @endif>
                                                                 Tracking
                                                             </a>
                                                         </li>

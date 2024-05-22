@@ -51,7 +51,7 @@
                                                     <td></td>
                                                     <td><h5>Product Name</h5></td>
                                                     <td><h5>Quantity</h5></td>
-                                                    <td><h5>Price</h5></td>
+                                                    <td><h5>Price(tax inc)</h5></td>
                                                     <td><h5>Commission</h5></td>
                                                 </tr>
                                                 @foreach($orderDetails as $index => $order)
@@ -94,7 +94,7 @@
                                             <tfoot>
                                                 <tr class="table-order">
                                                     <td colspan="4">
-                                                        <h5>Subtotal :</h5>
+                                                        <h5>Subtotal(tax inc) :</h5>
                                                     </td>
                                                     <td>
                                                         <h4>¥{{ number_format($subTotalAmount) }}</h4>
@@ -103,7 +103,7 @@
 
                                                 <tr class="table-order">
                                                     <td colspan="4">
-                                                        <h5>Shipping :</h5>
+                                                        <h5>Shipping(tax inc) :</h5>
                                                     </td>
                                                     <td>
                                                         <h4>¥{{ number_format($shippingFee) }}</h4>
@@ -112,16 +112,16 @@
 
                                                 <tr class="table-order">
                                                     <td colspan="4">
-                                                        <h5>Commission</h5>
+                                                        <h5>Commission(tax inc):</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>{{ $commission = $order['product']['commission'] }}%</h4>
+                                                        <h4>¥{{ $commission = $order['product']['commission'] }}</h4>
                                                     </td>
                                                 </tr>
 
                                                 <tr class="table-order">
                                                     <td colspan="4">
-                                                        <h4 class="theme-color fw-bold">Total Price :</h4>
+                                                        <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
                                                     </td>
                                                     <td>
                                                         <h4 class="theme-color fw-bold">¥{{ number_format($totalAmount) }}</h4>

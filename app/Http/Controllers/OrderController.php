@@ -22,8 +22,8 @@ class OrderController extends Controller
         $id = Auth::user()->created_by ?? Auth::id();
 
         $order = OrderDetail::with('order')
+            ->whereNull('cancel_date')
             ->where('seller_id', $id)
-            ->where('status', '!=', 'Cancel')
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc')
@@ -56,56 +56,55 @@ class OrderController extends Controller
         return view('seller.order.order_detail', compact('orderDetails'));
     }
 
-
     public function updateOrderStatus(Request $request)
     {
-        $id = $request->id;
+        $data = OrderDetail::find($request->id);
+        $order_id = $data->order_id;
         $status = $request->input('status');
-        $order = OrderDetail::find($id);
-        if(empty($order->confirmed_date))
-        {
-            $request->validate([
-                'expected_from' => 'required|string|max:255',
-                'expected_to' => 'required|string|max:255',
-            ]);
-            $order->expected_from = now();
-            $order->expected_to = now();
-            $order->confirmed_date = now();
-            $order->status = 'Confirmed';
-        }
-        else
-        {
-            switch ($status) {
-                case 'Processing':
-                    $order->processing_date = now();
-                    $order->status = 'Processing';
-                    break;
-                case 'Picked':
-                    $order->picked_date = now();
-                    $order->status = 'Picked';
-                    break;
-                case 'Shipped':
-                    $order->shipped_date = now();
-                    $order->status = 'Shipped';
-                    break;
-                case 'Delivered':
-                    $order->delivered_date = now();
-                    $order->status = 'Delivered';
-                    break;
-                default:
-                    $order->cancel_date = now();
-                    $order->status = 'Cancel';
-                    break;
-            }
-        }
-        $order->updated_by = Auth::user()->name;
-        $order->save();
+        $orderItems = OrderDetail::where('order_id', $order_id)->get();
 
-        $process = new Process();
-        $process->order_id = $id;
-        $process->{$status . '_date'} = now();
-        $process->created_at = now();
-        $process->save();
+        foreach($orderItems as $item) {
+            if (empty($item->confirmed_date)) {
+                $request->validate([
+                    'expected_from' => 'required|string|max:255',
+                    'expected_to' => 'required|string|max:255',
+                ]);
+                $item->expected_from = now();
+                $item->expected_to = now();
+                $item->confirmed_date = now();
+                $item->status = 'Confirmed';
+            } else {
+                switch ($status) {
+                    case 'Processing':
+                        $item->processing_date = now();
+                        $item->status = 'Processing';
+                        break;
+                    case 'Picked':
+                        $item->picked_date = now();
+                        $item->status = 'Picked';
+                        break;
+                    case 'Shipped':
+                        $item->shipped_date = now();
+                        $item->status = 'Shipped';
+                        break;
+                    case 'Delivered':
+                        $item->delivered_date = now();
+                        $item->status = 'Delivered';
+                        break;
+                    default:
+                        $item->cancel_date = now();
+                        $item->status = 'Cancel';
+                        break;
+                }
+            }
+            $item->updated_by = Auth::user()->name;
+            $item->save();
+
+            $process = new Process();
+            $process->order_id = $item->id;
+            $process->{$status . '_date'} = now();
+            $process->save();
+        }
 
         $inquiry_email = 'info-test@asia-hd.com';
         $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
@@ -155,7 +154,7 @@ class OrderController extends Controller
 
         $order = OrderDetail::find($request->id);
         $order->cancelled_reason = $request->cancelled_reason;
-        $order->updated_at = now();
+        $order->cancel_date = now();
         $order->save();
 
         return redirect('/orderlist');

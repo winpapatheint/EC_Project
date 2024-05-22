@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
-use App\Models\BuyerAddress;
-use App\Models\BuyerPayment;
-use App\Models\Payment;
-use App\Models\OrderDetail;
 use App\Models\Order;
+use App\Models\seller;
+use App\Models\Payment;
 use App\Models\Process;
 use App\Models\Product;
-use App\Models\Cart;
-use App\Models\CouponDetail;
-use App\Models\seller;
+use App\Models\Transfer;
 use App\Models\Prefecture;
+use App\Models\OrderDetail;
+use App\Models\BuyerAddress;
+use App\Models\BuyerPayment;
+use App\Models\CouponDetail;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Redirect;
 
 
 class UserController extends Controller
@@ -591,8 +593,8 @@ class UserController extends Controller
                                     ELSE NULL
                                 END AS coupon_id'),
                         DB::raw('CASE
-                                    WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
-                                    WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
+                                    WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id AND status = 1)
+                                    WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id AND status = 1)
                                     ELSE NULL
                                 END AS coupon_code')
                     )
@@ -623,6 +625,7 @@ class UserController extends Controller
         $couponapplycheck = 0;
         return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck' ,'shippingFee'));
     }
+
     public function removeCart($id)
     {
         $cartItem = DB::table('carts')
@@ -963,6 +966,7 @@ class UserController extends Controller
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
+        DB::beginTransaction();
         try {
             $productIds = $request->productid;
             $buyerId = $request->buyerid;
@@ -1025,6 +1029,7 @@ class UserController extends Controller
                 ]);
 
             foreach ($productIds as $key => $product_id) {
+                $orderedProduct = Product::where('id', $product_id)->first();
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
                         'order_id' => $order->id,
@@ -1035,6 +1040,8 @@ class UserController extends Controller
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
+                        'price' => $orderedProduct->selling_price,
+                        'delivery_price' => $orderedProduct->delivery_price,
                         'amount' => $productamounts[$key],
                         'name' => $name,
                         'phone' => $phone,
@@ -1054,6 +1061,8 @@ class UserController extends Controller
                         'color' => $colors[$key],
                         'size' => $sizes[$key],
                         'qty' => $quantities[$key],
+                        'price' => $orderedProduct->selling_price,
+                        'delivery_price' => $orderedProduct->delivery_price,
                         'amount' => $productamounts[$key],
                         'name' => $name,
                         'phone' => $phone,
@@ -1064,7 +1073,14 @@ class UserController extends Controller
                         'room_no' => $room,
                     ];
                 }
-                OrderDetail::create($orderdetailsData);
+                $orderDetail = OrderDetail::create($orderdetailsData);
+                Transfer::create([
+                    'order_detail_id' => $orderDetail->id,
+                    'seller_id' => $sellerId[$key],
+                    'commission' => $orderedProduct->commission,
+                    'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                    'status' => 1
+                ]);
 
                 $productForInStock = Product::find($product_id);
                 $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];
@@ -1073,11 +1089,14 @@ class UserController extends Controller
             $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
                     ->delete();
 
+            DB::commit();
             return response()->json(['message' => 'Your order has been successfully placed.']);
 
         } catch (\Exception $e) {
             // Log any exceptions for debugging
-            \Log::error($e->getMessage());
+            DB::rollBack();
+            // Log the exception for debugging
+            Log::error('Order placement failed: '.$e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }

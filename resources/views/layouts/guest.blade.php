@@ -273,39 +273,47 @@
                                             @endif
                                         </div>
                                     </li>
-                                    <li class="right-side onhover-dropdown">
-                                        <div class="delivery-login-box">
-                                            <div class="delivery-icon">
-                                                <i data-feather="user"></i>
-                                            </div>
-                                            <div class="delivery-detail">
-                                                <h6>Hello,</h6>
-                                                <h5>My Account</h5>
-                                            </div>
-                                        </div>
+                                    <li class="profile-nav onhover-dropdown pe-0 me-0">
                                         @if(empty(Auth::user()))
-                                        <div class="onhover-div onhover-div-login">
-                                            <ul class="user-box-name">
-                                                <li class="product-box-contain">
-                                                    <a href="{{ route('login') }}">Log In</a>
-                                                </li>
-                                                <li class="product-box-contain">
-                                                    <a href="{{route ('user_register')}}">Buyer Register</a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
+                                            <div class="delivery-login-box">
+                                                <div class="delivery-icon">
+                                                    <i data-feather="user"></i>
+                                                </div>
+                                            </div>
+                                            <div class="onhover-div onhover-div-login">
+                                                <ul class="user-box-name">
+                                                    <li class="product-box-contain">
+                                                        <a href="{{ route('login') }}">Log In</a>
+                                                    </li>
+                                                    <li class="product-box-contain">
+                                                        <a href="{{route ('user_register')}}">Buyer Register</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         @else
-                                        <div class="onhover-div onhover-div-login">
-                                            <ul class="user-box-name">
-                                                <li class="product-box-contain">
-                                                    <form method="POST" action="{{ route('adminlogout') }}">
-                                                    @csrf
-                                                        <a class="nav-link" id="pills-profile-tab" style="font-size: 12px; text-align: center;" href="route('adminlogout')" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            <div class="media profile-media">
+                                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('backend/assets/images/users/4.jpg') }}" 
+                                                class="user-profile rounded-circle" width="30px" height="30px">
+                
+                                                <div class="user-name-hide media-body">
+                                                    @if(strlen(auth()->user()->name) > 5)
+                                                    <span>{!! substr(auth()->user()->name, 0, 5) !!}</span>
+                                                    @else
+                                                        {!! nl2br(e(auth()->user()->name)) !!}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="onhover-div onhover-div-login">
+                                                <ul class="profile-dropdown onhover-show-div">
+                                                    <li>
+                                                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                            href="javascript:void(0)">
+                                                            <i data-feather="log-out"></i>
+                                                            <span style="margin-left: 10px;">Log out</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         @endif
                                     </li>
                                 </ul>
@@ -1114,6 +1122,34 @@
         </div>
     </div>
     <!-- Tap to top and theme setting button end -->
+    <!-- Logout modal start -->
+    <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>Are you sure you want to log out?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('adminlogout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-animation btn-md fw-bold" 
+                            style="background: #0da487; !important;">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" 
+                        style="background: #ff6b6b;">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Logout modal end -->
 
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>

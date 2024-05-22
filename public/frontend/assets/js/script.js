@@ -189,7 +189,7 @@ $(document).ready(function () {
    08. User Dashboard Left Sidebar Show Js
    ==========================*/
 $(".left-dashboard-show").click(function () {
-    $(".bg-overlay, .dashboard-left-sidebar").addClass("show");
+    $(".dashboard-left-sidebar").addClass("show");
 });
 $(".close-button, .bg-overlay, .user-nav-pills .nav-item .nav-link").click(function () {
     $(".bg-overlay, .dashboard-left-sidebar").removeClass("show");

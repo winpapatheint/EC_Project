@@ -154,6 +154,7 @@ Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'dele
 Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
 Route::get('product/{productid}', [AdminController::class, 'productdetail']);
 Route::get('shop/{shopid}', [AdminController::class, 'shopdetail']);
+Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail']);
 Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
 
@@ -204,6 +205,7 @@ Route::get('/admin/addnotice', [AdminController::class,'addnotice'])->name('admi
 Route::post('/admin/sendhelp', [AdminController::class, 'notice'])->name('notice');
 Route::post('/admin/sendall', [AdminController::class, 'noticeall'])->name('noticeall');
 Route::post('/admin/noticedelete', [AdminController::class, 'deleteNotice'])->name('noticedelete');
+Route::post('/admin/reveivedelete', [AdminController::class, 'deleteReceive'])->name('receivedelete');
 Route::post('/admin/replyemail', [AdminController::class, 'storeReply'])->name('emailreply');
 //endhelp
 

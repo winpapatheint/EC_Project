@@ -12,9 +12,9 @@ class OrderDetail extends Model
         'id',
         'order_id',
         'buyer_id',
-        'prefecture_id',
-        'product_id',
         'seller_id',
+        'product_id',
+        'prefecture_id',
         'color',
         'size',
         'qty',
@@ -28,6 +28,11 @@ class OrderDetail extends Model
         'building',
         'room_no',
         'amount',
+        'delivery_price',
+        'commission',
+        'commission_amount',
+        'transfer_status',
+        'transfered_at',
         'invoice_no',
         'status',
         'processing_date',
@@ -44,7 +49,6 @@ class OrderDetail extends Model
         'updated_by',
         'created_at',
         'updated_at',
-
     ];
 
     public function product()

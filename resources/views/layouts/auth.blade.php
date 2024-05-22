@@ -151,7 +151,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)
@@ -214,7 +214,7 @@
                 <div>
                     <div class="logo-wrapper logo-wrapper-center">
                         <a href="{{route('admin.dashboard')}}" data-bs-original-title="" title="">
-                            <img class="img-fluid for-white" src="{{ asset('backend/assets/images/logo/full-white.png') }}" alt="logo">
+                            <img class="img-fluid for-white" src="{{ asset('images/logos/logo-h4.png') }}" alt="logo">
                         </a>
                         <div class="back-btn">
                             <i class="fa fa-angle-left"></i>
@@ -322,7 +322,7 @@
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-phone-line"></i>
-                                        <span>Help</span>
+                                        <span>Contact</span>
                                     </a>
                                 </li>
 

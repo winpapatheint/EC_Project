@@ -166,7 +166,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 @endforeach
                                 </tbody>
                             </table>
@@ -240,9 +239,15 @@
                                         @endif
                                         <h4 class="price theme-color">¥ {{ number_format($Total , 0, '.', ',') }}</h4>
                                     </li>
-                                    
-                                </ul>              
-                                
+                                </ul>
+                                @foreach ($cartLists as $cartlist)
+                                    <input type="hidden" name="product[]" value="{{ $cartlist->product_id }}">
+                                    <input type="hidden" name="inStock[]" value="{{ $cartlist->in_stock }}">
+                                @endforeach
+                                @foreach ($maxDeliveryPrices as $key => $maxDeli)
+                                    <input type="hidden" name="shop[]" value="{{ $key }}">
+                                    <input type="hidden" name="maxDeli[]" value="{{ $maxDeli }}">
+                                @endforeach
                                     <input type="hidden" name="subTotal" value="{{ $subTotal }}">
                                     <input type="hidden" name="shipping" value="{{ $shippingFee }}">
                                     <input type="hidden" name="coupon_discount" value="{{ $discount }}">

@@ -267,6 +267,8 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     var Newsubtotalamount = <?php echo json_encode($subTotal ); ?>;
     var Newshippingfee = <?php echo json_encode($shippingFee ); ?>;
     var Newcoupondiscount = <?php echo json_encode($couponDiscount ); ?>;
+    var NewshopIds = <?php echo json_encode($shop ); ?>;
+    var NewMaxDelis = <?php echo json_encode($maxDeli ); ?>;
 
     $.ajax({
     url: '{{ route("payment_completed") }}',
@@ -288,6 +290,8 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
         shippingfee: Newshippingfee,
         coupondiscountamount: Newcoupondiscount,
         buyeraddressid : Newbuyeraddressid,
+        shopIds : NewshopIds,
+        maxDelis : NewMaxDelis,
         payment: "PayPal"
     },
     async : false,

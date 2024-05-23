@@ -29,6 +29,7 @@ class OrderDetail extends Model
         'room_no',
         'amount',
         'delivery_price',
+        'used_delivery_price',
         'commission',
         'commission_amount',
         'transfer_status',

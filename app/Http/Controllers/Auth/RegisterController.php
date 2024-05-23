@@ -77,7 +77,8 @@ class RegisterController extends Controller
             'building' => $validatedData['building'],
             'room' => $validatedData['room'],
             'url' => $request->url,
-            'status' => '1'
+            'commission' => 0,
+            'status' => 1
         ]);
 
         event(new Registered($seller));

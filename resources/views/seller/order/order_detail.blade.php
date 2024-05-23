@@ -85,7 +85,13 @@
                                                         </td>
 
                                                         <td>
-                                                            <h6>{{ $order->commission }}%</h6>
+                                                            <h6>
+                                                                @if($order->commission == NULL)
+                                                                    0%
+                                                                @else
+                                                                    {{ $order->commission }}%
+                                                                @endif
+                                                            </h6>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -115,7 +121,13 @@
                                                         <h5>Commission(tax inc):</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ $commission = $order['product']['commission'] }}</h4>
+                                                        <h4>
+                                                            @if($order->commission == NULL)
+                                                                ¥0
+                                                            @else
+                                                                ¥{{ $commission = $order['product']['commission'] }}
+                                                            @endif
+                                                        </h4>
                                                     </td>
                                                 </tr>
 

@@ -1,31 +1,33 @@
-<x-auth-layout>
-<!-- Order section Start -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@extends('seller.seller_dashboard')
+@section('seller')
+
+<!-- Section start -->
 <div class="page-body">
-    <!-- Table Start -->
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
+                    <!-- Table Start -->
                     <div class="card-body">
                         <div class="title-header option-title">
                             <h5>Order List</h5>
                         </div>
                         <div>
                             <div class="table-responsive">
-                                <table class="table all-package order-table theme-table" id="table_id">
+                                <table class="table all-package order-table theme-table dataTable no-footer"
+                                    id="table_id">
+
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Date</th>
-                                            <th>Order Image</th>
-                                            <th>Order ID</th>
-                                            <th>Payment Method</th>
+                                            <th>Order Code</th>
                                             <th>Delivery Status</th>
                                             <th>Amount</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         @if ($order->isEmpty())
                                             <tr>
@@ -34,51 +36,43 @@
                                         @else
                                         @foreach($order as $key => $item)
                                             <tr>
-                                                <td>{{ $key+1 }}</td>
-                                                <td data-label="登録日">{{ date('Y/m/d', strtotime($item->created_at)) }}<br>{{ date('H:i', strtotime($item->created_at)) }}</td>
-                                                <td>
-                                                    <a class="d-block">
-                                                        <span class="order-image">
-                                                            <img width="100" src="{{ asset('upload/product_thambnail/'.$item-> product_thambnail) }}">
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                                <td>{{ $item->id }}</td>
-                                                <td>{{ $item->payment_type }}</td>
-                                                <td class="@if($item->status == 'pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
+                                                <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                <td>{{ $item->order->order_code }}</td>
+                                                <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
                                                     <span>{{ $item->status }}</span>
                                                 </td>
-                                                <td>{{ $item->amount }}</td>
+                                                <td>¥{{ number_format($item->amount) }}</td>
                                                 <td>
                                                     <ul>
                                                         <li>
-                                                            <a href="{{ route('orderdetail',$item->id) }}">
+                                                            <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
                                                                 <i class="ri-eye-line"></i>
                                                             </a>
                                                         </li>
 
-                                                        <!-- <li>
+                                                        <li>
                                                             <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
                                                                 <i class="ri-pencil-line"></i>
-                                                            </a>
-                                                        </li> -->
-
-                                                        <li>
-                                                             <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModalToggle{{ $item->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
                                                             </a>
                                                         </li>
 
                                                         <li>
-                                                            <a href="javascript:void(0)" >
+                                                            <a href="{{ route('invoice',$item->id) }}"
+                                                               @if($item->status === 'Cancel')
+                                                                   onclick="return false;"
+                                                               @endif>
                                                                 <i class="icon-cloud-down"></i>
                                                             </a>
                                                         </li>
 
                                                         <li>
                                                             <a class="btn btn-sm btn-solid text-white"
-                                                                href="{{ route('ordertracking',$item->id) }}">
+                                                                href="{{ route('order.tracking', $item->order_id)}}"
+                                                                @if($item->status === 'Cancel')
+                                                                   onclick="return false;"
+                                                                @endif>
                                                                 Tracking
                                                             </a>
                                                         </li>
@@ -92,50 +86,23 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Table End -->
                 </div>
             </div>
-            {{ $order->links() }}
+        <!--pagination -->
+        @include('components.pagination')
         </div>
     </div>
-    <!-- Table End -->
-<!-- Order section End -->
-
-<!-- Delete Modal Box Start -->
-@foreach( $order as $key => $item )
-    <div class="modal fade theme-modal remove-coupon" id="deleteModalToggle{{ $item->id }}" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="remove-box">
-                        <p>The data will be deleted permanently.</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" action="{{ route('deleteorderlist') }}">
-                        @csrf
-                            <input type="hidden" name="id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
-                    </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-@endforeach
-<!-- Delete Modal Box End -->
+    <!-- Container-fluid Ends-->
+</div>
+<!-- Section End -->
 
 <!-- Offcanvas Box Start -->
 @foreach( $order as $key => $item )
     <div class="offcanvas offcanvas-end order-offcanvas" tabindex="-1" id="order-details{{ $item->id }}"
         aria-labelledby="offcanvasExampleLabel" aria-hidden="false">
         <div class="offcanvas-header">
-            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Order ID: {{ $item->id }}</h4>
+            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Order Code: {{ $item->order->order_code }}</h4>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
                 <i class="fas fa-times"></i>
             </button>
@@ -143,11 +110,6 @@
         <div class="offcanvas-body">
             <div class="order-date">
                 <span>Ordered Date: {{ $item->created_at }}</span>
-                <form action="{{ route('order.cancel') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $item->id }}">
-                    <button type="submit" class="btn btn-light">Cancel Order</button>
-                </form>
             </div>
 
             <div class="accordion accordion-flush custome-accordion" id="accordionFlushExample">
@@ -164,7 +126,7 @@
                             <form action="{{ route('order.status') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                @if($item->status === 'pending')
+                                @if($item->status === 'Pending')
                                     <h6>Choose which date will be delivered this order</h6>
                                     <p>Between :</p>
                                     <input type="date" name="expected_from" class="form-control">
@@ -176,18 +138,24 @@
                                     @error('expected_to')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="confirmed">Confirmed</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Confirmed">Confirmed</button>
                                 @elseif ($item->status === 'Confirmed')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="processing">Processing</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Processing">Processing</button>
                                 @elseif ($item->status === 'Processing')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="picked">Pick up</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Picked">Pick up</button>
                                 @elseif ($item->status === 'Picked')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="shipped">Shipping</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Shipped">Shipping</button>
                                 @elseif ($item->status === 'Shipped')
-                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="delivered">Delivered</button>
+                                    <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Delivered">Delivered</button>
                                 @endif
-                                <button type="submit" class="btn btn-outline-primary w-100" name="status" value="cancel">Order Cancel</button>
                             </form>
+
+                            <form action="{{ route('order.cancel') }}" method="GET">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Cancel">Order Cancel</button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -254,4 +222,4 @@ $(document).ready(function() {
 });
 </script>
 
-</x-auth-layout>
+@endsection

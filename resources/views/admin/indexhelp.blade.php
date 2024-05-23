@@ -109,7 +109,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if ($sent->isEmpty())
+                                                        @if ($notice->isEmpty())
                                                             <tr>
                                                                 <td colspan="9">No data available</td>
                                                             </tr>
@@ -117,7 +117,7 @@
                                                         @foreach ($notice as $item)
                                                             <tr>
                                                                 <td>{{ $item->subject }}</td>
-                                                                <td>All</td>
+                                                                <td>All Seller</td>
                                                                 <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                                     {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>

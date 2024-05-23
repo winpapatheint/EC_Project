@@ -147,6 +147,9 @@ route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq'
 Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
 Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->name('admin.all.shop');
 route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->name('updatecoupon');
+route::post('/admin/updatecommission',[AdminController::class,'updatecommission'])->name('updatecommission');
+
+route::post('/admin/deletecommission',[AdminController::class,'deletecommission'])->name('deletecommission');
 route::post('/admin/updateproductcoupon',[AdminController::class,'updateproductcoupon'])->name('updateproductcoupon');
 Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
 Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');

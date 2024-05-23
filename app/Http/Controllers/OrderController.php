@@ -138,10 +138,26 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request)
     {
-        $order_id = $request->id;
-        $id = Auth::user()->created_by ?? Auth::id();
-        $order = OrderDetail::where('seller_id',$id)->find($order_id);
-        return view('seller.order.order_cancel',compact('order'));
+        $data = OrderDetail::find($request->id);
+        $order_id = $data->order_id;
+        $sellerId = Auth::user()->created_by ?? Auth::id();
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+                        ->join('products', 'products.id', 'order_details.product_id')
+                        ->with('prefecture')
+                        ->select(
+                            'orders.id as order_id',
+                            'order_details.id as order_detail_id',
+                            'products.id as product_id',
+                            'orders.*',
+                            'products.*',
+                            'products.selling_price as price',
+                            'order_details.*',
+                            'orders.created_at as order_created_at',
+                        )
+                        ->where('order_details.seller_id', $sellerId)
+                        ->where('order_details.order_id', $order_id)
+                        ->get();
+        return view('seller.order.order_cancel',compact('orderDetails'));
     }
 
     public function cancelOrderReason(Request $request)

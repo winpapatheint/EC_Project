@@ -27,6 +27,7 @@ class Seller extends Model
         'building',
         'room',
         'url',
+        'commission'
     ];
 
     public function user()

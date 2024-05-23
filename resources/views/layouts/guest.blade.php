@@ -296,10 +296,10 @@
                                                 class="user-profile rounded-circle" width="30px" height="30px">
                 
                                                 <div class="user-name-hide media-body">
-                                                    @if(strlen(auth()->user()->name) > 5)
-                                                    <span>{!! substr(auth()->user()->name, 0, 5) !!}</span>
+                                                    @if(mb_strlen(Auth::user()->name) > 5)
+                                                    <span>{!! substr(Auth::user()->name, 0, 5) !!}</span>
                                                     @else
-                                                        {!! nl2br(e(auth()->user()->name)) !!}
+                                                        {!! nl2br(e(Auth::user()->name)) !!}
                                                     @endif
                                                 </div>
                                             </div>

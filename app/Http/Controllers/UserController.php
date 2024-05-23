@@ -6,11 +6,10 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
 use App\Models\Order;
-use App\Models\seller;
+use App\Models\Seller;
 use App\Models\Payment;
 use App\Models\Process;
 use App\Models\Product;
-use App\Models\Transfer;
 use App\Models\Prefecture;
 use App\Models\OrderDetail;
 use App\Models\BuyerAddress;
@@ -623,7 +622,7 @@ class UserController extends Controller
 
         $discount = 0;
         $couponapplycheck = 0;
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck' ,'shippingFee'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck' ,'shippingFee', 'maxDeliveryPrices'));
     }
 
     public function removeCart($id)
@@ -685,7 +684,7 @@ class UserController extends Controller
                 ->pluck('coupons.discount_amount');
                 $discount = 0;
         $couponapplycheck = 0;
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
 
     }
     public function removeCartProduct($id)
@@ -842,7 +841,7 @@ class UserController extends Controller
 
         if(empty($couponcheck)){
             $couponapplycheck = 1;
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
+            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
         }
         else
         {
@@ -862,7 +861,7 @@ class UserController extends Controller
                     ->update(['status' => 0]);
 
                 $couponapplycheck = 1;
-                return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
+                return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
             }
             else
             {
@@ -886,7 +885,7 @@ class UserController extends Controller
                     {
                         $couponapplycheck = $couponcheck->mini_amount;
                     }
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
+                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
                 }
                 else
                 {
@@ -909,24 +908,33 @@ class UserController extends Controller
                         {
                             $couponapplycheck = $couponcheck->mini_amount;
                         }
-                        return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
+                        return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
                     }
                     $couponapplycheck = 1;
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee'));
+                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
 
                 }
             }
         }
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
     }
     //Product Checkout
     public function showCheckout(Request $request)
     {
+        // for the instock check
+        // $checkInstockProducts = Product::whereIn('id', $request->product)->get();
+        // foreach($checkInstockProducts as $key => $checkInstockProduct)
+        // {
+        //     if ($checkInstockProduct->product_qty != $request->inStock[$key])
+        //     {}
+        // }
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $subTotal = $request->subTotal;
         $couponDiscount = $request->coupon_discount;
         $shippingFee = $request->shipping;
         $total1 = $request->total;
+        $shop = $request->shop;
+        $maxDeli = $request->maxDeli;
 
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -958,7 +966,7 @@ class UserController extends Controller
                 $cartItem->shop_name = $shopName->shopname;
             }
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1', 'shop', 'maxDeli'));
 
     }
     //Purchase
@@ -993,6 +1001,8 @@ class UserController extends Controller
             $building = $buyerAddressFirst->building;
             $room = $buyerAddressFirst->room_no;
             $payment = $request->payment;
+            $shopIds = $request->shopIds;
+            $maxDelis = $request->maxDelis;
 
             // return response()->json(['message' => $postcode.",".$city.",".$chome.",".$building.",".$room]);
 
@@ -1011,7 +1021,6 @@ class UserController extends Controller
 
             $order = Order::create([
                 'order_code' => $newOrderCode,
-                'seller_id' => (int)$sellerId,
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 'sub_total_amount' => $subTotalAmount,
@@ -1020,6 +1029,7 @@ class UserController extends Controller
                 'total_qty'=> $totalQty,
                 'payment_type'=> $payment,
             ]);
+
             Payment::create([
                 'order_id' => $order->id,
                 'seller_id' => (int)$sellerId,
@@ -1027,9 +1037,22 @@ class UserController extends Controller
                 'total_amount' => $totalAmount,
                 'payment_method' => $payment
                 ]);
-
+            
             foreach ($productIds as $key => $product_id) {
                 $orderedProduct = Product::where('id', $product_id)->first();
+                $usedDeliStatus = 0;
+                foreach ($shopIds as $shopKey => $shopId)
+                {
+                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey])
+                    {
+                        $usedDeliStatus = 1;
+                        unset($shopIds[$shopKey]);
+                        unset($maxDelis[$shopKey]);
+                        $shopIds = array_values($shopIds);
+                        $maxDelis = array_values($maxDelis);
+                        break;
+                    }
+                }
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
                         'order_id' => $order->id,
@@ -1042,7 +1065,11 @@ class UserController extends Controller
                         'qty' => $quantities[$key],
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
+                        'used_delivery_price' => $usedDeliStatus,
                         'amount' => $productamounts[$key],
+                        'commission' => $orderedProduct->commission,
+                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                        'transfer_status' => 0,
                         'name' => $name,
                         'phone' => $phone,
                         'post_code' => $postcode,
@@ -1063,7 +1090,11 @@ class UserController extends Controller
                         'qty' => $quantities[$key],
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
+                        'used_delivery_price' => $usedDeliStatus,
                         'amount' => $productamounts[$key],
+                        'commission' => $orderedProduct->commission,
+                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                        'transfer_status' => 0,
                         'name' => $name,
                         'phone' => $phone,
                         'post_code' => $postcode,
@@ -1073,14 +1104,7 @@ class UserController extends Controller
                         'room_no' => $room,
                     ];
                 }
-                $orderDetail = OrderDetail::create($orderdetailsData);
-                Transfer::create([
-                    'order_detail_id' => $orderDetail->id,
-                    'seller_id' => $sellerId[$key],
-                    'commission' => $orderedProduct->commission,
-                    'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
-                    'status' => 1
-                ]);
+                OrderDetail::create($orderdetailsData);
 
                 $productForInStock = Product::find($product_id);
                 $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];

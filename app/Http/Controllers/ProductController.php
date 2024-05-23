@@ -25,13 +25,29 @@ class ProductController extends Controller
 {
     public function allProduct()
     {
-        $limit=10;
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $products = Product::where('seller_id',$id)->latest()->paginate($limit);
+
+        $productsQuery = Product::where('seller_id', $id);
+
+        if ($search) {
+            $productsQuery->where(function($query) use ($search) {
+                $query->where('product_name', 'like', '%' . $search . '%')
+                    ->orWhere('product_code', 'like', '%' . $search . '%');
+            });
+        }
+
+        $products = $productsQuery->latest()->paginate($limit);
 
         $ttl = $products->total();
-        $ttlpage = (ceil($ttl / $limit));
-        return view('seller.product.product_all', compact('products','ttl','ttlpage'));
+        $ttlpage = ceil($ttl / $limit);
+
+        return view('seller.product.product_all', compact('products', 'ttl', 'ttlpage', 'search'));
     }
 
 

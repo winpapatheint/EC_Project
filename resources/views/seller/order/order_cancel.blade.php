@@ -11,10 +11,14 @@
                         @if($orderDetails->isNotEmpty())
                             @php
                                 $orders = $orderDetails->first();
-                                $subTotalAmount = $orders->sub_total_amount;
-                                $totalAmount = $orders->total_amount;
-                                $couponDiscountAmount = $orders->coupon_discount_amout;
-                                $shippingFee = $orders->shipping_fee;
+                                $totalCommission = 0;
+                                $subTotalAmount = 0;
+                                $deliveryPrice =0;
+                                foreach ($orderDetails as $order) {
+                                    if ($order->used_delivery_price == 1) {
+                                        $deliveryPrice = $order->delivery_price;
+                                    }
+                                }
                             @endphp
                         @endif
                         <div class="title-header title-header-block package-card">
@@ -33,13 +37,6 @@
                                                     <th class="text-end" colspan="3"></th>
                                                 </tr>
                                             </thead>
-
-                                            @if($orderDetails->isNotEmpty())
-                                                @php
-                                                    $orders = $orderDetails->first();
-                                                    $subTotalAmount = $orderDetails->sum('amount');
-                                                @endphp
-                                            @endif
                                             <tbody>
                                                 <tr>
                                                     <td></td>
@@ -82,6 +79,10 @@
                                                             <h6>{{ $order->commission }}%</h6>
                                                         </td>
                                                     </tr>
+                                                    @php
+                                                        $totalCommission += $order->commission_amount;
+                                                        $subTotalAmount += $order->amount;
+                                                    @endphp
                                                 @endforeach
                                             </tbody>
 
@@ -100,7 +101,7 @@
                                                         <h5>Shipping(tax inc) :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($shippingFee) }}</h4>
+                                                        <h4>¥{{ number_format($deliveryPrice) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -109,7 +110,7 @@
                                                         <h5>Commission(tax inc):</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ $commission = $order['product']['commission'] }}</h4>
+                                                        <h4>- ¥{{ number_format($totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -118,7 +119,7 @@
                                                         <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($totalAmount) }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($subTotalAmount-$totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>

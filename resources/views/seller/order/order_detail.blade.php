@@ -12,10 +12,14 @@
     @if($orderDetails->isNotEmpty())
         @php
             $orders = $orderDetails->first();
-            $subTotalAmount = $orders->sub_total_amount;
-            $totalAmount = $orders->total_amount;
-            $couponDiscountAmount = $orders->coupon_discount_amout;
-            $shippingFee = $orders->shipping_fee;
+            $totalCommission = 0;
+            $subTotalAmount = 0;
+            $deliveryPrice =0;
+            foreach ($orderDetails as $order) {
+                if ($order->used_delivery_price == 1) {
+                    $deliveryPrice = $order->delivery_price;
+                }
+            }
         @endphp
     @endif
     <div class="container-fluid">
@@ -39,13 +43,6 @@
                                                     <th class="text-end" colspan="3"></th>
                                                 </tr>
                                             </thead>
-
-                                            @if($orderDetails->isNotEmpty())
-                                                @php
-                                                    $orders = $orderDetails->first();
-                                                    $subTotalAmount = $orderDetails->sum('amount');
-                                                @endphp
-                                            @endif
                                             <tbody>
                                                 <tr>
                                                     <td></td>
@@ -85,15 +82,13 @@
                                                         </td>
 
                                                         <td>
-                                                            <h6>
-                                                                @if($order->commission == NULL)
-                                                                    0%
-                                                                @else
-                                                                    {{ $order->commission }}%
-                                                                @endif
-                                                            </h6>
+                                                            <h6>{{ $order->commission }}%</h6>
                                                         </td>
                                                     </tr>
+                                                    @php
+                                                        $totalCommission += $order->commission_amount;
+                                                        $subTotalAmount += $order->amount;
+                                                    @endphp
                                                 @endforeach
                                             </tbody>
 
@@ -112,7 +107,7 @@
                                                         <h5>Shipping(tax inc) :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($shippingFee) }}</h4>
+                                                        <h4>¥{{ number_format($deliveryPrice) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -121,13 +116,7 @@
                                                         <h5>Commission(tax inc):</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>
-                                                            @if($order->commission == NULL)
-                                                                ¥0
-                                                            @else
-                                                                ¥{{ $commission = $order['product']['commission'] }}
-                                                            @endif
-                                                        </h4>
+                                                        <h4>- ¥{{ number_format($totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
 
@@ -136,7 +125,7 @@
                                                         <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($totalAmount) }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($subTotalAmount-$totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -151,7 +140,7 @@
                                             <ul class="order-details">
                                                 <li>Order Code: {{ $orders->order_code }}</li>
                                                 <li>Order Date: {{ \Carbon\Carbon::parse($orders->order_created_at)->format('Y/m/d H:i') }}</li>
-                                                <li>Order Total: ¥{{ number_format($totalAmount) }}</li>
+                                                <li>Order Total: ¥{{ number_format($subTotalAmount-$totalCommission) }}</li>
                                             </ul>
 
                                             <h4>Shipping address</h4>

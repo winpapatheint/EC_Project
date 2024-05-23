@@ -19,6 +19,9 @@ use App\Models\Coupon;
 use App\Models\Top;
 use App\Models\NewsLetter;
 use App\Models\Customer;
+use App\Models\Brand;
+use App\Models\Country;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -737,7 +740,7 @@ class AdminController extends Controller
                     ->with('user.products.reviews')
                     ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
                     ->leftJoin('users', 'sellers.user_id', '=', 'users.id') // Join users table with condition
-                    ->select('sellers.*', 'coupons.*','sellers.status', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id') // Select all columns from the sellers table
+                    ->select('sellers.*', 'coupons.*','sellers.status', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id','sellers.commission') // Select all columns from the sellers table
                     ->latest('sellers.created_at') // Specify the table for ordering
                     ->paginate($limit);
 
@@ -2224,6 +2227,19 @@ class AdminController extends Controller
         return redirect('/admin/all/blog')->with('success','Deleted Successfully.');
 
     }
+    public function deletecommission(Request $request)
+    {
+        Seller::where('id', $request->id)->update(['commission' => 0]);
+        $seller = Seller::where('id', $request->id)->select('user_id')->first();
+        $products = Product::where('id',$seller->user_id)->get();
+        foreach($products as $item)
+        {
+            $item->update(['commission' => 0]);
+        }
+        return redirect('/admin/shoplist')->with('success','Deleted Successfully.');
+
+    }
+
 
     public function deletenewsletter(Request $request)
     {
@@ -2280,6 +2296,44 @@ class AdminController extends Controller
         DB::table('sellers')->where('id',$request->id)->update($updval);
 
         return redirect('/admin/shoplist')->with('success','coupon added');
+
+    }
+
+    public function  updatecommission(Request $request)
+    {
+        // $request->validate([
+        //     'commission' => 'required|numeric',
+        //     'commissionid' => 'required|integer',
+        // ]);
+
+        // Retrieve the input values
+        $commission = $request->input('commission');
+
+        $commissionId = $request->input('commissionid');
+
+        // Process the data (e.g., update the database)
+        $item = Seller::find($commissionId);
+
+        if ($item) {
+            $item->commission = $commission;
+            $item->save();
+        }
+
+        $products = Product::where('id',$item->user_id)->get();
+        foreach($products as $item)
+        {
+            $item->commission =   $commission ;
+            $item->commission_status =   0 ;
+            $item->save();
+        }
+        // $time = new DateTime();
+        // $updval = array( 'commission' => $request->commission,
+        //                 'updated_at' => $time->format('Y-m-d H:i:s')
+        //                 );
+
+        // DB::table('sellers')->where('id',$request->id)->update($updval);
+
+        return redirect('/admin/shoplist')->with('success','commission added');
 
     }
     public function  updateproductcoupon(Request $request)
@@ -2486,7 +2540,7 @@ class AdminController extends Controller
         $products = Product::findOrFail($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
 
-        return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
+        return view('admin.editproduct',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
 
     }
 
@@ -2890,6 +2944,7 @@ class AdminController extends Controller
         $help = new Help();
         $help->name = $seller->name;
         $help->to = $seller->email;
+        $help->noshow =1;
         $help->help_id =  $seller->id;
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->title;
@@ -2904,6 +2959,7 @@ class AdminController extends Controller
         $help->subject = $request->title;
         $help->body = $request->message;
         $help->created_at = Carbon::now();
+        $help->noshow =1;
         $help->save();
 
         // Check if the request is from 'notice'
@@ -3067,78 +3123,78 @@ class AdminController extends Controller
             }
         }
 
-    public function storeproduct(Request $request)
-    {
-        $time = new DateTime();
+        public function storeproduct(Request $request)
+        {
+            $time = new DateTime();
 
-        //commision calculate
-        $originalPrice = $request->selling_price;
-        $discountPercentage = $request->discount_percent;
-        $discountAmount = ($originalPrice * $discountPercentage) / 100;
-        $discountedPrice = $originalPrice - $discountAmount;
+            //commision calculate
+            $originalPrice = $request->selling_price;
+            $discountPercentage = $request->discount_percent;
+            $discountAmount = ($originalPrice * $discountPercentage) / 100;
+            $discountedPrice = $originalPrice - $discountAmount;
 
-        $commisonPrice = $request->commision;
-        $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
-        $sellerAmount = $discountedPrice - $commisonAmount;
+            $commisonPrice = $request->commision;
+            $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
+            $sellerAmount = $discountedPrice - $commisonAmount;
 
-        $adminAmount = $discountedPrice -  $sellerAmount;
+            $adminAmount = $discountedPrice -  $sellerAmount;
 
-        $datePrefix = date('ym');
-        $latestProduct = Product::where('product_code', 'like', $datePrefix . '%')->latest()->first();
-        $sequentialNumber = 1;
-        if ($latestProduct) {
-            $latestProductCode = $latestProduct->product_code;
-            $sequentialNumber = intval(substr($latestProductCode, strlen($datePrefix))) + 1;
-        }
-        $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT);
-
-        $img = $request->file('product_thambnail');
-        $filename = time() . '.' . $img->getClientOriginalExtension();
-        $img->move(public_path('upload/product_thambnail'), $filename);
-
-        $id = Auth::user()->created_by ?? Auth::id();
-
-        $product_id = Product::insertGetId([
-            'product_code' => $newProductCode,
-            'brand_id' => $validatedData['brand_id'],
-            'country_id' => $validatedData['country_id'],
-            'category_id' => $validatedData['category_id'],
-            'sub_category_title_id' => $validatedData['sub_category_title_id'],
-            'sub_category_id' => $validatedData['sub_category_id'],
-            'seller_id' => $id,
-            'product_name' => $validatedData['product_name'],
-            'product_qty' => $validatedData['product_qty'],
-            'in_stock' => $validatedData['product_qty'],
-            'product_tags' => $validatedData['product_tags'],
-            'product_size' => $validatedData['product_size'],
-            'product_color' => $validatedData['product_color'],
-            'original_price' => $validatedData['original_price'],
-            'selling_price' => $request->calculated_selling_price,
-            'commission' => $request->commission,
-            'discount_percent' => $request->discount_percent ?? 0,
-            'short_desc' => $validatedData['short_desc'] ,
-            'long_desc' => $validatedData['long_desc'],
-            'care_instructions' => $validatedData['care_instructions'],
-            'product_thambnail' => $filename,
-            'status' => 1,
-            'estimate_date' => $validatedData['estimate_date'],
-            'delivery_price' => $validatedData['delivery_price'],
-            'created_at' => Carbon::now(),
-        ]);
-
-        $images = $request->file('images');
-        foreach ($images as $img) {
-            $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('upload/multiImg'), $filename);
-            MultiImg::create([
-                'product_id' => $product_id,
-                'photo_name' => $filename,
-                'created_at' => Carbon::now(),
+            $product = Product::find($request->id);
+            $old_img = $request->old_img;
+            $request->validate([
+                'category_id' => 'required|exists:categories,id',
+                'sub_category_title_id' => 'present|exists:sub_category_titles,id',
+                'sub_category_id' => 'present|exists:sub_categories,id',
+                'product_name' => 'required|string|max:255',
+                'product_qty' => 'required|numeric',
+                'product_tags' => 'required|string|max:255',
+                'product_size' => 'required|string|max:255',
+                'product_color' => 'required|string|max:255',
+                'original_price' => 'required|numeric',
+                'short_desc' => 'required|string|max:255',
+                'long_desc' => 'required|string|max:255',
+                'estimate_date' => 'required|string|max:255',
             ]);
-        }
 
+            if($request->hasFile('product_thambnail')) {
+                if(File::exists($old_img)) {
+                    File::delete($old_img);
+                }
+                $img = $request->file('product_thambnail');
+                $filename = time() . '.' . $img->getClientOriginalExtension();
+                $img->move(public_path('upload/product_thambnail'), $filename);
+            } else {
+                $filename = $old_img;
+            }
+            $product->brand_id = $request->brand_id;
+            $product->country_id = $request->country_id;
+            $product->category_id= $request->category_id;
+            $product->sub_category_id= $request->sub_category_id;
+            $product->sub_category_title_id= $request->sub_category_title_id;
+            $product->product_name= $request->product_name;
+            $product->product_qty= $request->product_qty;
+            $product->in_stock= $request->product_qty;
+            $product->product_tags= $request->product_tags;
+            $product->product_size= $request->product_size;
+            $product->product_color= $request->product_color;
+            $product->original_price= $request->original_price;
+            $product->discount_percent= $request->discount_percent ?? 0;
+            $product->selling_price = $request->calculated_selling_price;
+            $product->short_desc= $request->short_desc;
+            $product->long_desc= $request->long_desc;
+            $product->care_instructions= $request->care_instructions;
+            $product->product_thambnail= $filename;
+            $product->estimate_date= $request->estimate_date;
+            $product->status= 1;
+            $product->delivery_price= $request->delivery_price;
+            $product->commission = $request->commision;
+            $product->commission_status = 1;
+            $product->updated_by = Auth::user()->id;
+            $product->updated_at= Carbon::now();
+            $product->update();
             return redirect('/admin/product')->with('success','「'.$request->title.'」'.__('auth.doneedit'));
     }
+
 
     public function storecategory(Request $request)
      {
@@ -3200,20 +3256,29 @@ class AdminController extends Controller
 
     public function indexorderlist()
     {
-        $validated = request()->validate([
-            'mainSearch' => 'string|nullable',
-        ]);
-        $mainSearch = $validated['mainSearch'] ?? null;
-        $query = Order::query();
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->where('order_id', 'like', '%' . $mainSearch . '%')
-                      ->where('total_amount', 'like', '%' . $mainSearch . '%')
-                      ->where('confirmed_date', 'like', '%' . $mainSearch . '%');
-            });
-        }
-        $order = Order::latest()->paginate(10);
-        return view('admin.order.indexorderlist',compact('order'));
+        // $validated = request()->validate([
+        //     'mainSearch' => 'string|nullable',
+        // ]);
+        // $mainSearch = $validated['mainSearch'] ?? null;
+        // $query = Order::query();
+        // if ($mainSearch != null) {
+        //     $query->where(function ($query) use ($mainSearch) {
+        //         $query->where('order_id', 'like', '%' . $mainSearch . '%')
+        //               ->where('total_amount', 'like', '%' . $mainSearch . '%')
+        //               ->where('confirmed_date', 'like', '%' . $mainSearch . '%');
+        //     });
+        // }
+        $limit = 10;
+        $order = OrderDetail::with('order')
+
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
+        $ttl = $order->total();
+        $ttlpage = ceil($ttl / $limit);
+
+        return view('admin.order.indexorderlist', compact('order', 'ttl', 'ttlpage'));
 
     }
 
@@ -3258,7 +3323,7 @@ class AdminController extends Controller
         $email = 'info-test@asia-hd.com';
         $received = Help::where('to',$email)->latest()->paginate(10);
 
-        $sent = Help::where('from',$email)->latest()->paginate(10);
+        $sent = Help::where('from', $email)->where('name', 'all')->latest()->paginate(10);
 
         $notice = Help::where('from', $email)->where('to', 'all')->latest()->paginate(10);
 

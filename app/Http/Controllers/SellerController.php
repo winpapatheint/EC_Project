@@ -252,12 +252,14 @@ class SellerController extends Controller
             $img->move(public_path('upload/shop'), $filename);
             $help->img = $filename;
         }
+        $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
 
         $check = Help::find($request->id);
         $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
         $help->name = Auth::user()->name;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;
+        $help->shop_name = $shopName;
         $help->subject = $request->subject;
         $help->body = $validatedData['body'];
         $help->updated_at = Carbon::now();

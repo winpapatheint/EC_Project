@@ -166,26 +166,27 @@
 <!-- Section End -->
 
 <!-- Modal Start -->
-@foreach ($review as $key => $item)
-    <div class="modal fade" id="editReview{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
+@foreach($review as $key => $item)
+    <div class="modal fade theme-modal remove-coupon" id="editReview{{ $item->id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
-                    <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
-                    @if(isset($item->id))
+                <div class="modal-header d-block">
+                    <h4 class="modal-title w-100" id="exampleModalLabel22">Edit Review</h4>
+                </div>
+                @if(isset($item->id))
+                    <div class="modal-body">
                         <form action="{{ route('review.update')}}" method="POST">
                             <input type="hidden" name="review_id" value="{{ $item->id }}">
                             @csrf
                             <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            <div class="button-box">
-                                <button type="submit" class="btn btn--yes btn-primary">Update</button>
-                                <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
-                            </div>
                         </form>
-                    @endif
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="submit" class="btn btn-animation">Update</button>
+                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

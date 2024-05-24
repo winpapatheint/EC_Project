@@ -20,21 +20,41 @@
                                             <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
                                                 data-bs-target="#description" type="button" role="tab"><i class="icon-cloud-down">Inbox</i></button>
                                         </li>
-
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="info-tab" data-bs-toggle="tab"
                                                 data-bs-target="#info" type="button" role="tab"><i class="icon-cloud-up">Sent</i></button>
                                         </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="notice-tab" data-bs-toggle="tab"
+                                                data-bs-target="#notice" type="button" role="tab"><i class="icon-cloud-up">Notice</i></button>
+                                        </li>
+                                    </ul>
+                                    {{-- <ul class="nav nav-tabs custom-nav right-options" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                                                data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">
+                                                <i class="icon-cloud-down">Inbox</i>
+                                            </button>
+                                        </li>
 
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="info-tab" data-bs-toggle="tab"
-                                                data-bs-target="#notice" type="button" role="tab"><i class="icon-cloud-up">Notice</i></button>
+                                                data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="false">
+                                                <i class="icon-cloud-up">Sent</i>
+                                            </button>
                                         </li>
 
-                                    </ul>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="notice-tab" data-bs-toggle="tab"
+                                                data-bs-target="#notice" type="button" role="tab" aria-controls="notice" aria-selected="false">
+                                                <i class="icon-cloud-up">Notice</i>
+                                            </button>
+                                        </li>
+                                    </ul> --}}
 
                                     <div class="tab-content custom-tab" id="myTabContent">
                                         <div class="tab-pane fade show active" id="description" role="tabpanel">
+                                            <!-- Content for Description tab -->
                                             <div class="table-responsive category-table">
                                                 <table class="table all-package theme-table" id="table_id">
                                                     <thead>
@@ -53,41 +73,42 @@
                                                                 <td colspan="9">No data available</td>
                                                             </tr>
                                                         @else
-
-                                                        @foreach ($received as $item)
-                                                            <tr>
-                                                                <td>{{ $item->subject }}</td>
-                                                                <td>{{ $item->name }}<br>{{ $item->from }}</td>
-                                                                <td>{{ $item->shop_name }}</td>
-                                                                <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                                <td>
-                                                                    <ul>
-                                                                        <li>
-                                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#replyReceiveModal{{ $item->id }}">
-                                                                                <i class="fa-solid fa-reply"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="{{ route('help.detail',$item->id) }}">
-                                                                                <i class="ri-eye-line"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deletereceiveModalToggle{{ $item->id }}">
-                                                                                <i class="ri-delete-bin-line"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
+                                                            @foreach ($received as $item)
+                                                                <tr>
+                                                                    <td>{{ $item->subject }}</td>
+                                                                    <td>{{ $item->name }}<br>{{ $item->from }}</td>
+                                                                    <td>{{ $item->shop_name }}</td>
+                                                                    <td>{{ strlen($item->body) > 50 ? substr($item->body, 0, 50) . '...' : $item->body }}</td>
+                                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                                    <td>
+                                                                        <ul>
+                                                                            <li>
+                                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#replyReceiveModal{{ $item->id }}">
+                                                                                    <i class="fa-solid fa-reply"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="{{ route('help.detail',$item->id) }}">
+                                                                                    <i class="ri-eye-line"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deletereceiveModalToggle{{ $item->id }}">
+                                                                                    <i class="ri-delete-bin-line"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                         @endif
                                                     </tbody>
                                                 </table>
                                             </div>
+                                             @include('components.pagination')
                                         </div>
+
 
                                         <div class="tab-pane fade" id="notice" role="tabpanel">
                                             <div class="right-options" style="text-align:right;margin-bottom:20px">
@@ -142,6 +163,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            @include('components.noticepagination')
                                         </div>
 
                                         <div class="tab-pane fade" id="info" role="tabpanel">
@@ -205,6 +227,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            @include('components.sendpagination')
                                         </div>
                                     </div>
                                 </div>
@@ -414,4 +437,45 @@
     </div>
 @endforeach
 <!-- Delete Modal Box End -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var descriptionTab = document.getElementById('description-tab');
+        var infoTab = document.getElementById('info-tab');
+        var noticeTab = document.getElementById('notice-tab');
+        var infoPane = document.getElementById('info');
+        var noticePane = document.getElementById('notice');
+        var descriptionPane = document.getElementById('description');
+
+        function toggleTabs(activeTab) {
+        if (activeTab === 'description') {
+            descriptionPane.style.display = 'block';
+            infoPane.style.display = 'none';
+            noticePane.style.display = 'none';
+        } else if (activeTab === 'info') {
+            descriptionPane.style.display = 'none';
+            infoPane.style.display = 'block';
+            noticePane.style.display = 'none';
+        } else if (activeTab === 'notice') {
+            descriptionPane.style.display = 'none';
+            infoPane.style.display = 'none';
+            noticePane.style.display = 'block';
+        }
+    }
+
+    // Initially hide the other tabs
+    toggleTabs('description');
+
+    descriptionTab.addEventListener('click', function() {
+        toggleTabs('description'); // Show only the description tab content
+    });
+
+    infoTab.addEventListener('click', function() {
+        toggleTabs('info'); // Show only the info tab content
+    });
+
+    noticeTab.addEventListener('click', function() {
+        toggleTabs('notice'); // Show only the notice tab content
+    });
+});
+    </script>
 </x-auth-layout>

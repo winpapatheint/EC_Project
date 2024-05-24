@@ -1,5 +1,5 @@
 
-@if ($ttlpage > 0)
+@if ($sent_ttlpage > 0)
 <!-- Pagination -->
 {{-- <div style="bottom:28px"> --}}
 <div style="bottom:28px">
@@ -15,8 +15,8 @@
 
             if($page<3){
                 $k=0;
-            }elseif($page>($ttlpage-2)){
-                $k=$ttlpage-5;
+            }elseif($page>($sent_ttlpage-2)){
+                $k=$sent_ttlpage-5;
             }else{
                 $k=($page-3);
             };
@@ -30,14 +30,14 @@
 
             <!-- {{ $k }} -->
             @for ($i = ($k)+1; $i <= (($k)+6); $i++)
-                @if($i<=$ttlpage)
+                @if($i<=$sent_ttlpage)
                     @if($i < (($k)+6))
                     <li class="page-item @if($_GET['page'] == $i) active @endif"><a id="nextLink" class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $i]) }}">{{$i}}</a></li>
                     @endif
                 @endif
             @endfor
 
-            <li @if($_GET['page'] == $ttlpage) style="display: none" @endif class="page-item"><a id="nextLink" class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $npage]) }}"> <i class="fa-solid fa-angles-right"></i></a></li>
+            <li @if($_GET['page'] == $sent_ttlpage) style="display: none" @endif class="page-item"><a id="nextLink" class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $npage]) }}"> <i class="fa-solid fa-angles-right"></i></a></li>
 
         </ul>
      </nav>

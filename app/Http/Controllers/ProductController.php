@@ -33,10 +33,9 @@ class ProductController extends Controller
         $search = $validated['search'] ?? null;
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-
         $productsQuery = Product::where('seller_id', $id);
 
-        if ($search) {
+        if ($search !== null) {
             $productsQuery->where(function($query) use ($search) {
                 $query->where('product_name', 'like', '%' . $search . '%')
                     ->orWhere('product_code', 'like', '%' . $search . '%');
@@ -340,7 +339,7 @@ class ProductController extends Controller
     {
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $review = Review::where('seller_id',$id)->latest()->paginate($limit);
+        $review = Review::where('user_id',$id)->latest()->paginate($limit);
 
         $ttl = $review->total();
         $ttlpage = (ceil($ttl / $limit));

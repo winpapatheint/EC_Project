@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Process;
-use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\PDF as PDF;
 use App\Models\OrderDetail;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -197,14 +197,42 @@ class OrderController extends Controller
         return view('seller.order.order_tracking',compact('orderDetails','process'));
     }
 
+    // public function generatePDF($id)
+    // {
+    //     $data = OrderDetail::with('seller')->find($id);
+    //     $pdf = PDF::loadView('seller.order.invoice', compact('data'))->setPaper('a4')->setOption([
+    //         'tempDir' => public_path(),
+    //         'chroot' => public_path(),
+    //     ]);
+    //     return $pdf->download('invoice.pdf');
+    // }
+
     public function generatePDF($id)
     {
-        $data = Order::find($id);
-        $pdf = PDF::loadView('seller.order.invoice',compact('data'))->setPaper('a4')->setOption([
-            'tempDir' => public_path(),
-            'chroot' => public_path(),
-        ]);
-        return $pdf->download('invoice.pdf');
-    }
+        $data = OrderDetail::with('seller')->find($id);
 
+        $html = view('seller.order.invoice', compact('data'))->render();
+
+        $htmlFilePath = public_path('temp_invoice.html');
+        file_put_contents($htmlFilePath, $html);
+
+        $pdfFilePath = public_path('invoice.pdf');
+        $wkhtmltopdfPath = '/usr/local/bin/wkhtmltopdf';
+
+        $command = escapeshellcmd("$wkhtmltopdfPath $htmlFilePath $pdfFilePath");
+        exec($command . ' 2>&1', $output, $return_var);
+
+        if ($return_var !== 0) {
+            return response()->json([
+                'error' => 'PDF generation failed',
+                'details' => $output
+            ], 500);
+        }
+
+        if (!file_exists($pdfFilePath)) {
+            return response()->json(['error' => 'PDF file does not exist'], 500);
+        }
+
+        return response()->download($pdfFilePath)->deleteFileAfterSend(true);
+    }
 }

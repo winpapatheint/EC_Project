@@ -37,6 +37,7 @@
                                             <th>Current Qty</th>
                                             <th>Price</th>
                                             <th>Discount</th>
+                                            <th>Commission</th>
                                             <th>Status</th>
                                             <th>Option</th>
                                         </tr>
@@ -71,6 +72,8 @@
                                                 <p>{{ $item->discount_percent }}%</p>
                                                 @endif
                                             </td>
+
+                                            <td>{{ $item->commission }}%</td>
 
                                             <td>
                                                 <label class="switch">

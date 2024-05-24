@@ -33,6 +33,8 @@ class Product extends Model
         'com_price',
         'seller_amount',
         'status',
+        'coupon_status',
+        'coupon_id',
         'estimate_date',
         'updated_name',
     ];

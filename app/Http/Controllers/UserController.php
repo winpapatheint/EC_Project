@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Role;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
@@ -865,9 +866,6 @@ class UserController extends Controller
             }
             else
             {
-                // $sellercouponcheck = DB::table('sellers')
-                //                     ->where('coupon_id', $couponcheck->id)
-                //                     ->first();
                 $sellercouponcheck = Cart::leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
                                     ->leftJoin('products', 'carts.product_id', '=', 'products.id')
                                     ->where('carts.buyer_id', $buyerid)
@@ -889,10 +887,6 @@ class UserController extends Controller
                 }
                 else
                 {
-                    // $productcouponcheck = DB::table('products')
-                    //                 ->where('Coupon_id', $couponcheck->id)
-                    //                 ->where('buyer_id', $buyerid)
-                    //                 ->first();
                     $productcouponcheck = Cart::leftJoin('products', 'products.id', '=', 'carts.product_id')
                                     ->where('carts.buyer_id', $buyerid)
                                     ->where('products.coupon_id', $couponcheck->id)
@@ -921,13 +915,31 @@ class UserController extends Controller
     //Product Checkout
     public function showCheckout(Request $request)
     {
+        // for the updated cart check
+        $realCart = Cart::leftjoin('buyers', 'buyers.id', 'carts.buyer_id')
+                    ->where('buyers.user_id', Auth::user()->id)->get();
+        if($realCart->count() != count($request->product))
+        {
+            $refreshCart = 'Updated your cart. Please try again!';
+            return redirect()->back()->with(compact('refreshCart'));
+        }
+
         // for the instock check
-        // $checkInstockProducts = Product::whereIn('id', $request->product)->get();
-        // foreach($checkInstockProducts as $key => $checkInstockProduct)
-        // {
-        //     if ($checkInstockProduct->product_qty != $request->inStock[$key])
-        //     {}
-        // }
+        $instockCheck = [];
+        foreach ($request->product as $key => $prod)
+        {
+            $checkInstockProduct = Product::where('id', $prod)->first();
+            if ($checkInstockProduct->in_stock < $request->quantity[$key])
+            {
+                $instockCheck[] = $checkInstockProduct->id;
+            }
+        }
+        if ($instockCheck) 
+        {
+            $refreshCart = 'Please adjust your order quantity!';
+            return redirect()->back()->with(compact('refreshCart', 'instockCheck'));
+        }
+
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $subTotal = $request->subTotal;
         $couponDiscount = $request->coupon_discount;

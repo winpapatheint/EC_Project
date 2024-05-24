@@ -67,3 +67,8 @@
     height: 70px;
     margin-right: 5px;
 }
+.table-order td, .table-order th {
+    text-align: center;
+    vertical-align: middle;
+}
+

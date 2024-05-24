@@ -1,21 +1,20 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-<style>
-    table td p {
-    margin: 0;
-    line-height: 1.5;
-}
-</style>
+
 <!-- tracking section start -->
 <div class="page-body">
     <!-- tracking table start -->
     @if($orderDetails->isNotEmpty())
         @php
             $orders = $orderDetails->first();
-            $subTotalAmount = $orders->sub_total_amount;
-            $totalAmount = $orders->total_amount;
-            $couponDiscountAmount = $orders->coupon_discount_amout;
-            $shippingFee = $orders->shipping_fee;
+            $totalCommission = 0;
+            $subTotalAmount = 0;
+            $deliveryPrice =0;
+            foreach ($orderDetails as $order) {
+                if ($order->used_delivery_price == 1) {
+                    $deliveryPrice = $order->delivery_price;
+                }
+            }
         @endphp
     @endif
     <div class="container-fluid">
@@ -30,7 +29,7 @@
                         </div>
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">
-                                <div class="col-xl-8">
+
                                     <div class="table-responsive table-details">
                                         <table class="table cart-table table-borderless">
                                             <thead>
@@ -39,20 +38,14 @@
                                                     <th class="text-end" colspan="3"></th>
                                                 </tr>
                                             </thead>
-
-                                            @if($orderDetails->isNotEmpty())
-                                                @php
-                                                    $orders = $orderDetails->first();
-                                                    $subTotalAmount = $orderDetails->sum('amount');
-                                                @endphp
-                                            @endif
                                             <tbody>
-                                                <tr>
+                                                <tr class="table-order">
                                                     <td></td>
                                                     <td><h5>Product Name</h5></td>
                                                     <td><h5>Quantity</h5></td>
                                                     <td><h5>Price(tax inc)</h5></td>
                                                     <td><h5>Commission</h5></td>
+                                                    <td><h5>Option</h5></td>
                                                 </tr>
                                                 @foreach($orderDetails as $index => $order)
                                                     <tr class="table-order">
@@ -65,7 +58,7 @@
                                                         @php
                                                             $comment = $order->product_name;
                                                             $words = explode(' ', $comment);
-                                                            $lines = array_chunk($words,3);
+                                                            $lines = array_chunk($words,13);
                                                         @endphp
 
                                                         <td style="width: 100%;">
@@ -87,13 +80,21 @@
                                                         <td>
                                                             <h6>{{ $order->commission }}%</h6>
                                                         </td>
+
+                                                        <td>
+                                                            <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimModal">Cancel</button>
+                                                        </td>
                                                     </tr>
+                                                    @php
+                                                        $totalCommission += $order->commission_amount;
+                                                        $subTotalAmount += $order->amount;
+                                                    @endphp
                                                 @endforeach
                                             </tbody>
 
                                             <tfoot>
                                                 <tr class="table-order">
-                                                    <td colspan="4">
+                                                    <td colspan="5">
                                                         <h5>Subtotal(tax inc) :</h5>
                                                     </td>
                                                     <td>
@@ -102,63 +103,70 @@
                                                 </tr>
 
                                                 <tr class="table-order">
-                                                    <td colspan="4">
+                                                    <td colspan="5">
                                                         <h5>Shipping(tax inc) :</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ number_format($shippingFee) }}</h4>
+                                                        <h4>¥{{ number_format($deliveryPrice) }}</h4>
                                                     </td>
                                                 </tr>
 
                                                 <tr class="table-order">
-                                                    <td colspan="4">
+                                                    <td colspan="5">
                                                         <h5>Commission(tax inc):</h5>
                                                     </td>
                                                     <td>
-                                                        <h4>¥{{ $commission = $order['product']['commission'] }}</h4>
+                                                        <h4>- ¥{{ number_format($totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
 
                                                 <tr class="table-order">
-                                                    <td colspan="4">
+                                                    <td colspan="5">
                                                         <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
                                                     </td>
                                                     <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($totalAmount) }}</h4>
+                                                        <h4 class="theme-color fw-bold">¥{{ number_format($subTotalAmount-$totalCommission) }}</h4>
                                                     </td>
                                                 </tr>
                                             </tfoot>
                                         </table>
-                                    </div>
+
                                 </div>
 
-                                <div class="col-xl-4">
+                                <div class="container">
                                     <div class="order-success">
-                                        <div class="row g-4">
-                                            <h4>summery</h4>
-                                            <ul class="order-details">
-                                                <li>Order Code: {{ $orders->order_code }}</li>
-                                                <li>Order Date: {{ \Carbon\Carbon::parse($orders->order_created_at)->format('Y/m/d H:i') }}</li>
-                                                <li>Order Total: ¥{{ number_format($totalAmount) }}</li>
-                                            </ul>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h4>Summary</h4>
+                                                <ul class="order-details">
+                                                    <li>Order Code: {{ $orders->order_code }}</li>
+                                                    <li>Order Date: {{ \Carbon\Carbon::parse($orders->order_created_at)->format('Y/m/d H:i') }}</li>
+                                                    <li>Order Total: ¥{{ number_format($subTotalAmount-$totalCommission) }}</li>
+                                                </ul>
+                                            </div>
 
-                                            <h4>Shipping address</h4>
-                                            <ul class="order-details">
-                                                <li>{{ $order->order_details_name }}</li><br>
-                                                <li>{{ $order->post_code }}</li><br>
-                                                <li>{{ $order->prefecture->name }},{{ $order->city }}</li>
-                                                <li>{{ $order->chome }},{{ $order->building }} {{ $order->room_no }}</li>
-                                                <li>{{ $order->order_details_phone }}</li>
-                                            </ul>
+                                            <div class="col-md-4">
+                                                <h4>Shipping Address</h4>
+                                                <ul class="order-details">
+                                                    <li>{{ $order->order_details_name }}</li><br>
+                                                    <li>〒{{ $order->post_code }}</li><br>
+                                                    <li>{{ $order->prefecture->name }}, {{ $order->city }}</li>
+                                                    <li>{{ $order->chome }}, {{ $order->building }} {{ $order->room_no }}</li>
+                                                    <li>{{ $order->order_details_phone }}</li>
+                                                </ul>
+                                            </div>
 
-                                            <div class="delivery-sec">
-                                                <h3>Expected date of delivery: </h3>
-                                                <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
-                                                <a href="{{ route('order.tracking',$order->id) }}">Track order</a>
+                                            <div class="col-md-4">
+                                                <h4>Expected date of delivery</h4>
+                                                <ul class="order-details">
+                                                    <li>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }} - {{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</li><br>
+                                                    <li><a href="{{ route('order.tracking', $order->id) }}">Track order</a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         <!-- section end -->

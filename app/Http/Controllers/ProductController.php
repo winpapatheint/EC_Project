@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\MultiImg;
 use App\Models\SubCategory;
 use App\Models\Notification;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use App\Models\SubCategoryTitle;
 use Illuminate\Support\Facades\DB;
@@ -32,10 +33,9 @@ class ProductController extends Controller
         $search = $validated['search'] ?? null;
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-
         $productsQuery = Product::where('seller_id', $id);
 
-        if ($search) {
+        if ($search !== null) {
             $productsQuery->where(function($query) use ($search) {
                 $query->where('product_name', 'like', '%' . $search . '%')
                     ->orWhere('product_code', 'like', '%' . $search . '%');
@@ -118,7 +118,8 @@ class ProductController extends Controller
         $img->move(public_path('upload/product_thambnail'), $filename);
 
         $id = Auth::user()->created_by ?? Auth::id();
-
+        $sellerData = Seller::where('user_id',$id)->get();
+        $commission = $sellerData->commission;
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
             'brand_id' => $validatedData['brand_id'],
@@ -140,6 +141,7 @@ class ProductController extends Controller
             'long_desc' => $validatedData['long_desc'],
             'care_instructions' => $validatedData['care_instructions'],
             'product_thambnail' => $filename,
+            'commission' => $commission,
             'status' => 1,
             'estimate_date' => $validatedData['estimate_date'],
             'delivery_price' => $validatedData['delivery_price'],
@@ -337,7 +339,7 @@ class ProductController extends Controller
     {
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $review = Review::where('seller_id',$id)->latest()->paginate($limit);
+        $review = Review::where('user_id',$id)->latest()->paginate($limit);
 
         $ttl = $review->total();
         $ttlpage = (ceil($ttl / $limit));

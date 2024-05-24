@@ -1,12 +1,4 @@
 <x-auth-layout>
-    @php
-
-        $revenue = App\Models\Order::sum('total_amount');
-        $order = \App\Models\Order::count();
-        $product = App\Models\Product::count();
-        $pending = \App\Models\OrderDetail::where('status', 'Pending')->get();
-
-    @endphp
     <!-- index body start -->
      <div class="page-body">
         <div class="container-fluid">
@@ -18,7 +10,7 @@
                             <div class="media align-items-center static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Revenue</span>
-                                    <h4 class="mb-0 counter">¥{{ $revenue }}</h4>
+                                    <h4 class="mb-0 counter">¥{{number_format($revenue) }}</h4>
                                 </div>
                                 <div class="align-self-center text-center">
                                     <i class="ri-database-2-line"></i>
@@ -34,7 +26,7 @@
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Total Orders</span>
-                                    <h4 class="mb-0 counter">{{ $order }}</h4>
+                                    <h4 class="mb-0 counter">{{ $orderCount }}</h4>
                                 </div>
                                 <div class="align-self-center text-center">
                                     <i class="ri-shopping-bag-3-line"></i>
@@ -70,7 +62,7 @@
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
                                     <span class="m-0">Pending Orders</span>
-                                    <h4 class="mb-0 counter">{{ count($pending) }}</h4>
+                                    <h4 class="mb-0 counter">{{ $pending }}</h4>
                                 </div>
 
                                 <div class="align-self-center text-center">
@@ -115,30 +107,35 @@
                                                 <th>No</th>
                                                 <th>Date</th>
                                                 <th>Transfer Id</th>
-                                                <th>Name</th>
-                                                <th>Order Id</th>
-                                                <th>Product Id</th>
-                                                <th>Product Name</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
+                                                <th>Seller Name</th>
+                                                <th>Products</th>
+                                                <th>Order details</th>
+                                                <th>Commission</th>
+                                                <th>Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($transfer as $key => $item )
+                                            @if ($transfer->isEmpty())
+                                            <tr>
+                                                <td colspan="9">No data available</td>
+                                            </tr>
+                                        @else
+                                            {{-- @foreach ($transfer as $key => $item )
                                                 <tr>
-                                                    <td>{{ $key+1 }}</td>
-                                                    <td>{{ $item->created_at }}</td>
-                                                    <td>{{ $item->transaction_id }}</td>
+                                                    <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                    <td>Bank</td>
                                                     <td>Asia 食材</td>
                                                     <td>{{ $item->id }}</td>
-                                                    <td>{{ $item->product_id }}</td>
-                                                    <td>{{ $item->product }}</td>
+                                                    <td>{{ $item->product->product_code }}</td>
+                                                    <td>{{ strlen($item->product->product_name) > 20 ? substr($item->product->product_name, 0, 20) . '...' : $item->product->product_name }}</td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>￥{{ $item->price }}</td>
-                                                    <td>￥{{ $item->total_amount }}</td>
+                                                    <td>￥{{ $item->amount }}</td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach --}}
+                                        @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -156,7 +153,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
 
           var labels =  @json($labels);
           var users =  @json($data);
@@ -182,5 +179,38 @@
             config
           );
 
-    </script>
+    </script> --}}
+    <script>
+
+    // Define labels for each month
+const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Sample data for demonstration
+const salesData = [1000, 1500, 1200, 1800, 2000, 2200, 2500, 2300, 2400, 2100, 1900, 1600];
+
+// Render the chart
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Sales',
+            data: salesData,
+            backgroundColor: '#0da487',
+              borderColor: '#0da487',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+
+});
+
+</script>
     </x-auth-layout>

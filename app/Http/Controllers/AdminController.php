@@ -1935,48 +1935,32 @@ class AdminController extends Controller
 
     public function storefaq(Request $request)
     {
-
-// print_r($request->all());die;
-
-
-        $request->validate(['title' => 'required|string|max:255',
-                            'que' => 'required|string|max:255',
-                            'ans' => 'required|string|max:600',
-                            ],
-            [
-                'que.required' => '質問を入力してください',
-                'ans.required' => '答えを入力してください',
-                'phone.regex' => '有効な電話番号を入力してください',
-                'place.regex' => '有効な住所を入力してください',
-            ]);
-
         $time = new DateTime();
 
         if (empty($request->id)) {
 
             DB::table('faqs')->insert([
                 'title' => $request->title,
-                'ans' => $request->ans,
-                'que' => $request->que,
+                'ans' => $request->content_desc,
+                'que' => $request->content_ansdesc,
                 'created_by' => Auth::user()->id,
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
             ]);
 
-            // print_r(json_decode($faqord, true));die;
+            $msg = trans('Register Successfully', [ 'name' => $request->title ]);
+            return redirect('/admin/faq')->with('success', $msg );
 
-            return redirect('/admin/faq')->with('success','「'.$request->title.'」登録されました。');
         } else {
 
             $updval = array('title' => $request->title,
-                            'ans' => $request->ans,
-                            'que' => $request->que,
+                            'ans' => $request->content_desc,
+                            'que' => $request->content_ansdesc,
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
             DB::table('faqs')->where('id',$request->id)->update($updval);
-
-            return redirect('/admin/faq')->with('success','「'.$request->title.'」更新されました。');
+            return redirect('admin/faq')->with('success','「'.$request->title.'」'.__('Updated Successfully.'));
 
         }
 
@@ -3273,11 +3257,8 @@ class AdminController extends Controller
         //     });
         // }
         $limit = 10;
-       $order = OrderDetail::groupBy('order_id')
-            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-            ->orderByDesc('created_at')
-            ->paginate($limit);
-dd(    $order);
+
+        $order = OrderDetail::latest()->paginate($limit);
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
 
@@ -3287,12 +3268,18 @@ dd(    $order);
 
     public function admindashboard()
     {
+        $currentDate = Carbon::now();
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $revenue = OrderDetail::where('status', 'Delivered')->sum('amount');
-        $order = OrderDetail::get();
-        $pending = OrderDetail::where('status', 'Pending')->get();
-        $product = Product::get();
+        $revenue = OrderDetail::where('status', 'Delivered')
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereYear('created_at', $currentDate->year)
+                        ->sum('amount');
+
+        $orderCount = OrderDetail::count();
+        $pending = OrderDetail::where('status', 'Pending')->count();
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $product = Product::whereDate('created_at','<=',$currentDate)->count();
         $transfer = OrderDetail::latest()->paginate($limit);
         $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
@@ -3303,7 +3290,7 @@ dd(    $order);
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('admin.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer','revenue','orderCount','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()

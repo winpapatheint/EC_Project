@@ -1,7 +1,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-@extends('seller.seller_dashboard')
-@section('seller')
-
+<x-auth-layout>
+<style>
+    .disabled-blue {
+    color: #0b6d59 !important;
+}
+</style>
 <!-- Section start -->
 <div class="page-body">
     <div class="container-fluid">
@@ -153,9 +156,8 @@
                             <form action="{{ route('order.cancel') }}" method="GET">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                <button type="submit" class="btn btn-outline-primary w-100" name="status" value="Cancel">Order Cancel</button>
+                                <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -222,4 +224,14 @@ $(document).ready(function() {
 });
 </script>
 
-@endsection
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('a.disabled').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+        });
+    });
+});
+</script>
+
+</x-auth-layout>

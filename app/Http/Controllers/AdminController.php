@@ -702,7 +702,7 @@ class AdminController extends Controller
             });
         }
         $query->leftjoin('coupons', 'products.coupon_id', '=', 'coupons.id')
-                ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
+                ->select('products.*', 'coupons.enddate', 'coupon_code as coupon_code') // Adjust the select statement as necessary
                 ->orderBy('products.created_at', 'desc');
 
         $lists = $query->with('Seller')->orderBy('products.created_at', 'desc')->paginate($limit);
@@ -2285,15 +2285,24 @@ class AdminController extends Controller
         return redirect('/admin/all/product')->with('success','削除されました。');
 
     }
+
+    // update coupon for shop
     public function  updatecoupon(Request $request)
     {
         $time = new DateTime();
-        $updval = array( 'coupon_id' => $request->couponid,
-                         'coupon_status' => 1,
-                        'updated_at' => $time->format('Y-m-d H:i:s')
-                        );
 
-        DB::table('sellers')->where('id',$request->id)->update($updval);
+        $seller = Seller::find($request->id);
+        $seller->update([
+            'coupon_status' => 1,
+            'coupon_id' => $request->couponid,
+            'updated_at' => $time->format('Y-m-d H:i:s'),
+        ]);
+
+        $products = Product::where('seller_id', $seller->user_id)->where('coupon_status', 0)->get();
+        foreach ($products as $product)
+        {
+            $product->update(['coupon_id' => $request->couponid]);
+        }
 
         return redirect('/admin/shoplist')->with('success','coupon added');
 
@@ -2336,6 +2345,8 @@ class AdminController extends Controller
         return redirect('/admin/shoplist')->with('success','commission added');
 
     }
+
+    // update coupon for product
     public function  updateproductcoupon(Request $request)
     {
         $time = new DateTime();
@@ -3388,25 +3399,30 @@ class AdminController extends Controller
         return redirect()->route('admin.all.product',compact('lists','ttlpage','ttl', 'subCatTitle'));
     }
 
+    // remove coupon from product
     public function removeCoupon(Request $request)
     {
         $product = Product::find($request->id);
-        $seller = Seller::find($product->user_id);
-        if ($product) {
-            $product->coupon_id = null;
-            $product->coupon_status = 0;
-            $product->save();
-
-            if ($seller) {
-                $seller->coupon_id = null;
-                $seller->coupon_status = 0;
-                $seller->save();
-            }
+        $seller = Seller::where('user_id', $product->seller_id)->first();
+        if ($seller->coupon_status == 1)
+        {
+            $product->update([
+                'coupon_id' => $seller->coupon_id,
+                'coupon_status' => 0,
+            ]);
+        }
+        else
+        {
+            $product->update([
+                'coupon_id' => null,
+                'coupon_status' => 0,
+            ]);
         }
 
         return redirect('/admin/product');
     }
 
+    // remove coupon from shop
     public function removeFromShop($id)
     {
         $seller = Seller::find($id);
@@ -3418,13 +3434,11 @@ class AdminController extends Controller
             $seller->save();
 
             // Fetch all products of the seller
-            $products = Product::where('seller_id', $seller->user_id)->get();
+            $products = Product::where('seller_id', $seller->user_id)->where('coupon_status', 0)->get();
 
             // Update coupon information for each product
             foreach ($products as $product) {
-                $product->coupon_id = null;
-                $product->coupon_status = 0;
-                $product->save();
+                $product->update(['coupon_id' => null]);
             }
         }
 

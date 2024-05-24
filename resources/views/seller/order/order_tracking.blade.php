@@ -37,9 +37,19 @@
                                                                 </a>
                                                             </td>
 
+                                                            @php
+                                                                $comment = $order->product_name;
+                                                                $words = explode(' ', $comment);
+                                                                $lines = array_chunk($words,13);
+                                                            @endphp
+
                                                             <td style="width: 100%;">
                                                                 <p>Product Name</p>
-                                                                <h5>{{ $order->product_name }}</h5>
+                                                                <h5>
+                                                                    @foreach ($lines as $line)
+                                                                    {{ implode(' ', $line) }}<br>
+                                                                @endforeach
+                                                                </h5>
                                                             </td>
 
                                                             <td>

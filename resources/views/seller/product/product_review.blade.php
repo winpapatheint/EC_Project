@@ -26,7 +26,7 @@
                                             <th>Rating</th>
                                             <th>Comment</th>
                                             <th>Status</th>
-                                            <th>Published</th>
+                                            <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -132,7 +132,7 @@
                                             <td>
                                                 <ul>
                                                     <li>
-                                                        <a class="sidebar-link sidebar-title link-nav" data-bs-toggle="modal" data-bs-target="#editReview"
+                                                        <a class="sidebar-link sidebar-title link-nav" data-bs-toggle="modal" data-bs-target="#editReview{{ $item->id }}"
                                                             href="javascript:void(0)">
                                                             <i class="ri-pencil-line"></i>
                                                         </a>
@@ -166,28 +166,30 @@
 <!-- Section End -->
 
 <!-- Modal Start -->
-<div class="modal fade" id="editReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
-                @if(isset($item->id))
-                    <form action="{{ route('review.update')}}" method="POST">
-                        <input type="hidden" name="review_id" value="{{ $item->id }}">
-                        @csrf
-                        <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="button-box">
-                            <button type="submit" class="btn btn--yes btn-primary">Update</button>
-                            <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                @endif
+@foreach ($review as $key => $item)
+    <div class="modal fade" id="editReview{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
+                    @if(isset($item->id))
+                        <form action="{{ route('review.update')}}" method="POST">
+                            <input type="hidden" name="review_id" value="{{ $item->id }}">
+                            @csrf
+                            <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="button-box">
+                                <button type="submit" class="btn btn--yes btn-primary">Update</button>
+                                <button type="button" class="btn btn--no" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endforeach
 <!-- Modal End -->
 
 <!-- Delete Modal Box Start -->

@@ -157,7 +157,7 @@
                             <form action="{{ route('order.cancel') }}" method="GET">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' ? 'disabled' : '' }}>Order Cancel</button>
+                                <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
                             </form>
                         </div>
                     </div>

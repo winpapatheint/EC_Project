@@ -62,24 +62,24 @@
         <tr>
             <td valign="top">
                 <h2 style="color: green; font-size: 26px;"><strong>Asian Food Museum</strong></h2>
-                {{-- <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="web-logo nav-logo img-fluid blur-up lazyload" alt=""> --}}
+                <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="web-logo nav-logo img-fluid blur-up lazyload" alt="">
             </td>
             <td align="right">
-                <pre class="font jp-text">
+                <p class="font jp-text">
                   <strong>Seller:</strong> {{ $data->first()->seller->shop_name }} <br>
                   <strong>Email:</strong> {{ Auth::user()->email }} <br>
                   <strong>Phone:</strong> {{ $data->first()->seller->phone }} <br>
                   〒{{ formatZipCode($data->first()->seller->zip_code) }} <br>
                    {{ $data->first()->seller->prefecture->name }} {{ $data->first()->seller->city }} {{ $data->first()->seller->chome }} <br>
                    {{ $data->first()->seller->building }} {{ $data->first()->seller->room }} <br>
-                </pre>
+                </p>
             </td>
         </tr>
     </table>
 
     <table width="100%" style="background:white; padding:2px;"></table>
 
-    <table width="100%" style="background: #F7F7F7; padding:0 5 0 5px;" class="font">
+    <table width="100%" style="background: #F7F7F7; padding:0 20px 0 20px;">
         <tr>
             <td>
                 <p class="font jp-text" style="margin-left: 20px;">
@@ -91,7 +91,7 @@
                    {{ $data->first()->seller->building }} {{ $data->first()->seller->room }} <br>
                 </p>
             </td>
-            <td style="text-align: right;">
+            <td align="right">
                 <h3><span style="color: green;">Order Code:</span>{{ $data->first()->order->order_code }}</h3>
                 Order Date: {{ date('Y/m/d', strtotime($data->first()->created_at)) }} <br>
                 Payment Type : {{ $data->first()->order->payment_type }}

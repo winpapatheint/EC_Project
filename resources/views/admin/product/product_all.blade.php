@@ -68,7 +68,7 @@
                                                     <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
 
                                                     <td class="col-sm-9">
-                                                        @if($list->coupon_id)
+                                                        @if($list->coupon_status == 1)
                                                             <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#removeCoupon{{ $list->id }}"
@@ -342,7 +342,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="remove-box">
-                            <p>This coupon code will be deleted?</p>
+                            <p>This coupon code will be removed from this item.</p>
                         </div>
                     </div>
 

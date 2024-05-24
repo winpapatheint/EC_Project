@@ -191,13 +191,13 @@ class SellerController extends Controller
         ]);
 
         $help = new Help();
-        if($request->hasFile('image'))
-        {
-            $img = $request->file('image');
-            $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('upload/shop'), $filename);
-            $help->img = $filename;
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
         }
+
         $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
         $help->name = Auth::user()->name;
         $help->shop_name = $shopName;
@@ -206,6 +206,7 @@ class SellerController extends Controller
         $help->from = Auth::user()->email;
         $help->subject = $validatedData['subject'];
         $help->body = $validatedData['body'];
+        $help->img =   $imageName;
         $help->created_at = Carbon::now();
         $help->save();
 

@@ -81,6 +81,13 @@
     </div>
     <!-- Loader End -->
 
+    @php
+        if (!empty(Auth::user()) && (Auth::user()->role != 'buyer'))
+        {
+            Auth::logout();
+        }
+    @endphp
+
     <!-- Header Start -->
     <header class="pb-md-4 pb-0">
         <div class="header-top">
@@ -244,7 +251,7 @@
                                                                 </div>
                                                                 <div class="drop-contain">
                                                                     <h5>Total</h5>
-                                                                   
+
                                                                     <h6>¥{{ number_format($cart->quantity * $cart->selling_price , 0, '.', ',') }}</h6>
                                                                     <button class="close-button close_button" data-product-id="{{ $cart->product_id }}">
                                                                         <i class="fa-solid fa-xmark"></i>
@@ -292,9 +299,9 @@
                                             </div>
                                         @else
                                             <div class="media profile-media">
-                                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('backend/assets/images/users/4.jpg') }}" 
+                                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('backend/assets/images/users/4.jpg') }}"
                                                 class="user-profile rounded-circle" width="30px" height="30px">
-                
+
                                                 <div class="user-name-hide media-body">
                                                     @if(mb_strlen(Auth::user()->name) > 5)
                                                     <span>{!! substr(Auth::user()->name, 0, 5) !!}</span>
@@ -1140,10 +1147,10 @@
                 <div class="modal-footer">
                     <form method="POST" action="{{ route('adminlogout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-animation btn-md fw-bold" 
+                        <button type="submit" class="btn btn-animation btn-md fw-bold"
                             style="background: #0da487; !important;">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" 
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
                         style="background: #ff6b6b;">No</button>
                 </div>
             </div>

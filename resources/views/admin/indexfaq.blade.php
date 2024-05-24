@@ -10,6 +10,7 @@
 
     <div class="page-body">
         <div class="container-fluid">
+            @include('components.messagebox')
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card card-table">
@@ -45,7 +46,7 @@
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="タイトル">{{ $list->title }}</td>
                                                     <td data-label="タイトル">{!! $list->que !!}</td>
-                                                    <td data-label="タイトル">{{ $list->ans }}</td>
+                                                    <td data-label="タイトル">{!! $list->ans !!}</td>
                                                     <td>
                                                         <ul>
                                                             <li>
@@ -91,8 +92,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="remove-box">
-                                    <p>The permission for the use/group, preview is inherited from the object, object will create a
-                                        new permission for this object</p>
+                                    <p>FAQ data will be deleted?</p>
                                 </div>
                             </div>
 
@@ -102,7 +102,7 @@
                                         <input type="hidden" name="id" value="{{ $list->id }}">
                                             <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                                                 data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
                                 </form>
                             </div>
                         </div>

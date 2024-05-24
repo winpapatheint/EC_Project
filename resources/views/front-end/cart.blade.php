@@ -24,6 +24,12 @@
     <!-- Breadcrumb Section End -->
     <!-- Cart Section Start -->
     <section class="cart-section section-b-space">
+        @if(session()->has('refreshCart'))
+            <div class="alert alert-warning alert-block">
+                <strong>{{ session('refreshCart') }}</strong>
+            </div>
+        @endif
+
         <div class="container-fluid" style="margin-left: 10px;">
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-9">
@@ -97,10 +103,29 @@
                                                             <i class="fa fa-minus ms-0"></i>
                                                         </button>
 
-                                                        <input class="form-control input-number qty-input" type="text" 
-                                                        name="quantity" value="{{ $cartlist->quantity }}" 
-                                                        data-cart-id="{{ $cartlist->cart_id }}" 
-                                                        data-in-stock="{{ $cartlist->in_stock }}">
+        
+                                                        
+                                                        @if(session()->has('instockCheck'))
+                                                            @php
+                                                                $instockCheck = session()->get('instockCheck', []);
+                                                            @endphp
+                                                            @if (in_array($cartlist->id, $instockCheck))
+                                                                <input class="form-control input-number qty-input" style="color: red;"
+                                                                type="text" name="quantity" value="{{ $cartlist->quantity }}" 
+                                                                data-cart-id="{{ $cartlist->cart_id }}" 
+                                                                data-in-stock="{{ $cartlist->in_stock }}">
+                                                            @else
+                                                                <input class="form-control input-number qty-input" 
+                                                                type="text" name="quantity" value="{{ $cartlist->quantity }}" 
+                                                                data-cart-id="{{ $cartlist->cart_id }}" 
+                                                                data-in-stock="{{ $cartlist->in_stock }}">
+                                                            @endif
+                                                        @else
+                                                            <input class="form-control input-number qty-input" 
+                                                            type="text" name="quantity" value="{{ $cartlist->quantity }}" 
+                                                            data-cart-id="{{ $cartlist->cart_id }}" 
+                                                            data-in-stock="{{ $cartlist->in_stock }}">
+                                                        @endif
 
                                                         <button type="button" class="btn qty-right-plus" data-type="" data-field="">
                                                             <i class="fa fa-plus ms-0"></i>
@@ -180,12 +205,12 @@
                                 <h3>Cart Total</h3>
                             </div>
                             @if ($couponapplycheck == 1)
-                            <div class="alert alert-success alert-block" id="alert-success">
+                            <div class="alert alert-warning alert-block" id="alert-warning">
                                 <strong>Invalid Coupon Code</strong>
                             </div>
                             @elseif ($couponapplycheck != null)
-                            <div class="alert alert-success alert-block" id="alert-success">
-                                <strong>Buy at least ¥{{ number_format($couponapplycheck, 0, '', ',') }}</strong>
+                            <div class="alert alert-warning alert-block" id="alert-warning">
+                                <strong>To use this coupon, minimum order is ¥{{ number_format($couponapplycheck, 0, '', ',') }}</strong>
                             </div>
                             @endif
                             <div class="summery-contain" id="ts-form">
@@ -243,6 +268,7 @@
                                 @foreach ($cartLists as $cartlist)
                                     <input type="hidden" name="product[]" value="{{ $cartlist->product_id }}">
                                     <input type="hidden" name="inStock[]" value="{{ $cartlist->in_stock }}">
+                                    <input type="hidden" name="quantity[]" value="{{ $cartlist->quantity }}">
                                 @endforeach
                                 @foreach ($maxDeliveryPrices as $key => $maxDeli)
                                     <input type="hidden" name="shop[]" value="{{ $key }}">

@@ -702,7 +702,7 @@ class AdminController extends Controller
             });
         }
         $query->leftjoin('coupons', 'products.coupon_id', '=', 'coupons.id')
-                ->select('products.*', 'coupons.enddate', 'coupons.status as coupon_status','coupon_code as coupon_code') // Adjust the select statement as necessary
+                ->select('products.*', 'coupons.enddate', 'coupon_code as coupon_code') // Adjust the select statement as necessary
                 ->orderBy('products.created_at', 'desc');
 
         $lists = $query->with('Seller')->orderBy('products.created_at', 'desc')->paginate($limit);
@@ -1889,7 +1889,6 @@ class AdminController extends Controller
 
     public function storeblog(Request $request)
     {
-
        if (!empty($request->image)) {
            $imageName = time().'.'.$request->image->extension();
            $request->image->move(public_path('images'), $imageName);
@@ -1936,48 +1935,32 @@ class AdminController extends Controller
 
     public function storefaq(Request $request)
     {
-
-// print_r($request->all());die;
-
-
-        $request->validate(['title' => 'required|string|max:255',
-                            'que' => 'required|string|max:255',
-                            'ans' => 'required|string|max:600',
-                            ],
-            [
-                'que.required' => '質問を入力してください',
-                'ans.required' => '答えを入力してください',
-                'phone.regex' => '有効な電話番号を入力してください',
-                'place.regex' => '有効な住所を入力してください',
-            ]);
-
         $time = new DateTime();
 
         if (empty($request->id)) {
 
             DB::table('faqs')->insert([
                 'title' => $request->title,
-                'ans' => $request->ans,
-                'que' => $request->que,
+                'ans' => $request->content_desc,
+                'que' => $request->content_ansdesc,
                 'created_by' => Auth::user()->id,
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
             ]);
 
-            // print_r(json_decode($faqord, true));die;
+            $msg = trans('Register Successfully', [ 'name' => $request->title ]);
+            return redirect('/admin/faq')->with('success', $msg );
 
-            return redirect('/admin/faq')->with('success','「'.$request->title.'」登録されました。');
         } else {
 
             $updval = array('title' => $request->title,
-                            'ans' => $request->ans,
-                            'que' => $request->que,
+                            'ans' => $request->content_desc,
+                            'que' => $request->content_ansdesc,
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
             DB::table('faqs')->where('id',$request->id)->update($updval);
-
-            return redirect('/admin/faq')->with('success','「'.$request->title.'」更新されました。');
+            return redirect('admin/faq')->with('success','「'.$request->title.'」'.__('Updated Successfully.'));
 
         }
 
@@ -2285,15 +2268,24 @@ class AdminController extends Controller
         return redirect('/admin/all/product')->with('success','削除されました。');
 
     }
+
+    // update coupon for shop
     public function  updatecoupon(Request $request)
     {
         $time = new DateTime();
-        $updval = array( 'coupon_id' => $request->couponid,
-                         'coupon_status' => 1,
-                        'updated_at' => $time->format('Y-m-d H:i:s')
-                        );
 
-        DB::table('sellers')->where('id',$request->id)->update($updval);
+        $seller = Seller::find($request->id);
+        $seller->update([
+            'coupon_status' => 1,
+            'coupon_id' => $request->couponid,
+            'updated_at' => $time->format('Y-m-d H:i:s'),
+        ]);
+
+        $products = Product::where('seller_id', $seller->user_id)->where('coupon_status', 0)->get();
+        foreach ($products as $product)
+        {
+            $product->update(['coupon_id' => $request->couponid]);
+        }
 
         return redirect('/admin/shoplist')->with('success','coupon added');
 
@@ -2318,8 +2310,10 @@ class AdminController extends Controller
             $item->commission = $commission;
             $item->save();
         }
+        $products = Product::where('user_id', $item->user_id)
+                        ->where('commission_status', '<>', 1)
+                        ->get();
 
-        $products = Product::where('id',$item->user_id)->get();
         foreach($products as $item)
         {
             $item->commission =   $commission ;
@@ -2336,6 +2330,8 @@ class AdminController extends Controller
         return redirect('/admin/shoplist')->with('success','commission added');
 
     }
+
+    // update coupon for product
     public function  updateproductcoupon(Request $request)
     {
         $time = new DateTime();
@@ -2821,10 +2817,16 @@ class AdminController extends Controller
 
     public function notice(Request $request)
     {
-
         $sellername = DB::table('users')->select('name')->where('id',$request->selleremail)->first();
         $inquiry_email = DB::table('users')->select('email')->where('id',$request->selleremail)->first();
         $shopName = Seller::where('user_id', $request->selleremail)->value('shop_name');
+
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
+        }
 
         $inquiry_emails =  $inquiry_email ->email;
         $help = new Help();
@@ -2835,6 +2837,7 @@ class AdminController extends Controller
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->title;
         $help->body =  $request->message;
+        $help->img = $imageName;
         $help->created_at = Carbon::now();
         $help->save();
         $data = array('title' => $request->title);
@@ -2934,61 +2937,46 @@ class AdminController extends Controller
 
     public function noticeall(Request $request)
     {
+
         $sellers = DB::table('users')
         ->where('role', 'seller')
         ->select('name', 'email','id')
         ->get();
+
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
+        }
 
         // Create Help records for each seller
         foreach ($sellers as $seller) {
         $help = new Help();
         $help->name = $seller->name;
         $help->to = $seller->email;
-        $help->noshow =1;
+        $help->noshow = 1;
         $help->help_id =  $seller->id;
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->title;
         $help->body = $request->message;
+        $help->img =  $imageName;
         $help->created_at = Carbon::now();
         $help->save();
         }
         $help = new Help();
         $help->name = 'all';
         $help->to = 'all';
+        $help->noshow = 1;
         $help->from = 'info-test@asia-hd.com';
         $help->subject = $request->title;
         $help->body = $request->message;
+        $help->img =  $imageName;
         $help->created_at = Carbon::now();
-        $help->noshow =1;
         $help->save();
 
-        // Check if the request is from 'notice'
-        if ($request->from == 'notice') {
-            // Fetch all seller emails
-            $sellerEmails = DB::table('users')->where('role', 'seller')->pluck('email')->toArray();
-            $sender_email = 'info-test@asia-hd.com';
-            $data = ['title' => $request->title];
+        return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
 
-            if (!empty($sellerEmails)) {
-                // Send email to all sellers
-                Mail::send([], $data, function ($message) use ($request, $sellerEmails, $sender_email) {
-                    $message->to($sellerEmails);
-                    $message->subject($request->title . 'からの質問');
-                    $message->from($sender_email, $request->title);
-                    $message->setBody("We received the following notice message from the official e-commerce website.
-                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                        \r\nName：　" . $request->title . "
-                        \r\nEmail：　" .  $sender_email . "
-                        \r\n
-                        \r\nMessage：　
-                        \r\n" . $request->message . "
-                        \r\n
-                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-            }
-
-            return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
-        }
     }
 
    public function storetop(Request $request)
@@ -3269,12 +3257,8 @@ class AdminController extends Controller
         //     });
         // }
         $limit = 10;
-        $order = OrderDetail::with('order')
 
-            ->groupBy('order_id')
-            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
+        $order = OrderDetail::latest()->paginate($limit);
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
 
@@ -3284,12 +3268,18 @@ class AdminController extends Controller
 
     public function admindashboard()
     {
+        $currentDate = Carbon::now();
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $revenue = OrderDetail::where('status', 'Delivered')->sum('amount');
-        $order = OrderDetail::get();
-        $pending = OrderDetail::where('status', 'Pending')->get();
-        $product = Product::get();
+        $revenue = OrderDetail::where('status', 'Delivered')
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereYear('created_at', $currentDate->year)
+                        ->sum('amount');
+
+        $orderCount = OrderDetail::count();
+        $pending = OrderDetail::where('status', 'Pending')->count();
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $product = Product::whereDate('created_at','<=',$currentDate)->count();
         $transfer = OrderDetail::latest()->paginate($limit);
         $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
@@ -3300,7 +3290,7 @@ class AdminController extends Controller
         $ttlpage = (ceil($ttl / $limit));
         $labels = $orders->keys();
         $data = $orders->values();
-        return view('admin.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer','revenue','orderCount','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()
@@ -3326,8 +3316,16 @@ class AdminController extends Controller
         $sent = Help::where('from', $email)->where('name', 'all')->latest()->paginate(10);
 
         $notice = Help::where('from', $email)->where('to', 'all')->latest()->paginate(10);
+        $ttl = $received->total();
+        $ttlpage = (ceil($ttl / $limit));
 
-        return view('admin.indexhelp',compact('received','sent','notice'));
+        $sent_ttl = $sent->total();
+        $sent_ttlpage = (ceil($sent_ttl / $limit));
+
+        $notice_ttl = $sent->total();
+        $notice_ttlpage = (ceil($notice_ttl / $limit));
+
+        return view('admin.indexhelp',compact('received','sent','notice','ttl','ttlpage','sent_ttl','sent_ttlpage','notice_ttl','notice_ttlpage'));
 
     }
 
@@ -3388,25 +3386,30 @@ class AdminController extends Controller
         return redirect()->route('admin.all.product',compact('lists','ttlpage','ttl', 'subCatTitle'));
     }
 
+    // remove coupon from product
     public function removeCoupon(Request $request)
     {
         $product = Product::find($request->id);
-        $seller = Seller::find($product->user_id);
-        if ($product) {
-            $product->coupon_id = null;
-            $product->coupon_status = 0;
-            $product->save();
-
-            if ($seller) {
-                $seller->coupon_id = null;
-                $seller->coupon_status = 0;
-                $seller->save();
-            }
+        $seller = Seller::where('user_id', $product->seller_id)->first();
+        if ($seller->coupon_status == 1)
+        {
+            $product->update([
+                'coupon_id' => $seller->coupon_id,
+                'coupon_status' => 0,
+            ]);
+        }
+        else
+        {
+            $product->update([
+                'coupon_id' => null,
+                'coupon_status' => 0,
+            ]);
         }
 
         return redirect('/admin/product');
     }
 
+    // remove coupon from shop
     public function removeFromShop($id)
     {
         $seller = Seller::find($id);
@@ -3418,13 +3421,11 @@ class AdminController extends Controller
             $seller->save();
 
             // Fetch all products of the seller
-            $products = Product::where('seller_id', $seller->user_id)->get();
+            $products = Product::where('seller_id', $seller->user_id)->where('coupon_status', 0)->get();
 
             // Update coupon information for each product
             foreach ($products as $product) {
-                $product->coupon_id = null;
-                $product->coupon_status = 0;
-                $product->save();
+                $product->update(['coupon_id' => null]);
             }
         }
 

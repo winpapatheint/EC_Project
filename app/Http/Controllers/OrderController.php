@@ -254,7 +254,10 @@ class OrderController extends Controller
 
     public function generatePDF($id)
     {
-        $data = OrderDetail::with('seller')->find($id);
+        $orderdetail = OrderDetail::find($id);
+        $data = OrderDetail::with('seller')->with('seller.prefecture')->with('buyer')->with('order')
+                ->with('prefecture')->with('product')->where('order_id', $orderdetail->order_id)
+                ->where('seller_id', $orderdetail->seller_id)->where('status', '!=', 'Cancel')->get();
 
         $html = view('seller.order.invoice', compact('data'))->render();
 

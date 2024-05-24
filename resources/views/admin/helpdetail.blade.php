@@ -26,15 +26,6 @@
                                                     </div>
                                                 </div>
 
-                                                @if (!empty($start->img))
-                                                    <div class="mb-4 row align-items-center">
-                                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
-                                                        <div class="col-md-9 col-lg-10">
-                                                            <img width="100" src="{{ asset('upload/shop/'.$start->img) }}">
-                                                        </div>
-                                                    </div>
-                                                @endif
-
                                                 <div class="row align-items-center">
                                                     <label
                                                         class="col-lg-2 col-md-3 col-form-label form-label-title">
@@ -47,6 +38,14 @@
                                                     <div class="col-md-9 col-lg-10">
                                                         <p>{{ $start->body }}</p>
                                                     </div>
+                                                    @if (!empty($start->img))
+                                                    <div class="mb-4 row align-items-center image-container">
+                                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Images</label>
+                                                        <div class="col-md-9 col-lg-10">
+                                                            <img width="100" src="{{ asset('images/'.$start->img) }}">
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 </div>
                                             </div>
 
@@ -147,5 +146,15 @@
     </div>
     @endforeach
 @endif
+
+<style>
+    .image-container img {
+        transition: transform 0.3s ease;
+    }
+
+    .image-container:hover img {
+        transform: scale(1.5); /* Increase the size to 110% */
+    }
+</style>
 <!-- Reply Modal End-->
 </x-auth-layout>

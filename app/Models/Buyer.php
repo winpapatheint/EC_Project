@@ -32,4 +32,9 @@ class Buyer extends Model
     {
         return $this->hasMany(Wishlist::class);
     }
+
+    public function buyerAddresses()
+    {
+        return $this->hasMany(BuyerAddress::class);
+    }
 }

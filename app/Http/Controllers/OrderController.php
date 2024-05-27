@@ -18,39 +18,80 @@ class OrderController extends Controller
 {
     public function sellerAllOrder()
     {
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
 
-        $order = OrderDetail::with('order')
+        $orderQuery = OrderDetail::with('order')
             ->where('seller_id', $id)
+            ->where('status', '!=', 'Cancel')
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
+            ->orderBy('created_at', 'desc');
+
+        if ($search) {
+            $orderQuery->where(function($query) use ($search) {
+                $query->where('order_id', 'LIKE', "%{$search}%")
+                    ->orWhereHas('order', function($q) use ($search) {
+                        $q->where('order_code', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $order = $orderQuery->paginate($limit);
+        $cancelledOrderQuery = OrderDetail::with('order')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select('order_details.*', 'products.*')
+            ->where('order_details.seller_id', $id)
+            ->where('order_details.status', 'Cancel')
+            ->orderBy('order_details.created_at', 'desc');
+
+        if ($search) {
+            $cancelledOrderQuery->where(function($query) use ($search) {
+                $query->where('order_id', 'LIKE', "%{$search}%")
+                    ->orWhereHas('order', function($q) use ($search) {
+                        $q->where('order_code', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhere('products.product_name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $cancelledOrder = $cancelledOrderQuery->paginate($limit);
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
-        return view('seller.order.order_all', compact('order', 'ttl', 'ttlpage'));
+        $cancelttl = $cancelledOrder->total();
+        $cancelttlPage = ceil($cancelttl / $limit);
+
+        return view('seller.order.order_all', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
     }
+
+
 
     public function sellerDetailOrder($id)
     {
         $sellerId = Auth::user()->created_by ?? Auth::id();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-                        ->join('products', 'products.id', 'order_details.product_id')
-                        ->with('prefecture')
-                        ->select(
-                            'orders.id as order_id',
-                            'order_details.id as order_detail_id',
-                            'products.id as product_id',
-                            'orders.*',
-                            'products.*',
-                            'products.selling_price as price',
-                            'order_details.*',
-                            'orders.created_at as order_created_at',
-                        )
-                        ->where('order_details.seller_id', $sellerId)
-                        ->where('order_details.order_id', $id)
-                        ->get();
+                ->join('products', 'products.id', 'order_details.product_id')
+                ->with('prefecture')
+                ->select(
+                    'orders.id as order_id',
+                    'order_details.id as order_detail_id',
+                    'products.id as product_id',
+                    'orders.*',
+                    'products.*',
+                    'products.selling_price as price',
+                    'order_details.*',
+                    'orders.created_at as order_created_at',
+                )
+                ->where('order_details.seller_id', $sellerId)
+                ->where('order_details.order_id', $id)
+                ->where('order_details.status', '!=', 'Cancel')
+                ->get();
+
         return view('seller.order.order_detail', compact('orderDetails'));
     }
 
@@ -162,16 +203,17 @@ class OrderController extends Controller
 
     public function cancelOrderReason(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'cancelled_reason' => 'required|string|max:255',
         ]);
-
         $order = OrderDetail::find($request->id);
-        $order->cancelled_reason = $request->cancelled_reason;
+        $order->status = 'Cancel';
+        $order->cancelled_reason = $validatedData['cancelled_reason'];
         $order->cancel_date = now();
         $order->save();
 
-        return redirect('/orderlist');
+        $msg = ('Order cancelled Successfully');
+        return redirect('/orderlist')->with('success', $msg);
     }
 
     public function orderTracking($id)
@@ -179,21 +221,24 @@ class OrderController extends Controller
         $process = Process::where('order_id',$id)->latest()->get();
         $sellerId = Auth::user()->created_by ?? Auth::id();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-                        ->join('products', 'products.id', 'order_details.product_id')
-                        ->with('prefecture')
-                        ->select(
-                            'orders.id as order_id',
-                            'order_details.id as order_detail_id',
-                            'products.id as product_id',
-                            'orders.*',
-                            'products.*',
-                            'products.selling_price as price',
-                            'order_details.*',
-                            'orders.created_at as order_created_at',
-                        )
-                        ->where('order_details.seller_id', $sellerId)
-                        ->where('order_details.order_id', $id)
-                        ->get();
+                    ->join('products', 'products.id', 'order_details.product_id')
+                    ->join('buyers', 'orders.buyer_id', 'buyers.id')  // Join the buyers table
+                    ->with('prefecture')
+                    ->select(
+                        'orders.id as order_id',
+                        'order_details.id as order_detail_id',
+                        'products.id as product_id',
+                        'orders.*',
+                        'products.*',
+                        'products.selling_price as price',
+                        'order_details.*',
+                        'orders.created_at as order_created_at',
+                        'buyers.name as buyer_name'  // Select the buyer's name
+                    )
+                    ->where('order_details.seller_id', $sellerId)
+                    ->where('order_details.order_id', $id)
+                    ->get();
+
         return view('seller.order.order_tracking',compact('orderDetails','process'));
     }
 

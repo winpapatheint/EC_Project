@@ -458,9 +458,9 @@
         if (!post_code) {
             isValid = false;
             document.getElementById('error-post_code').textContent = 'Please provide your post code.';
-        } else if (post_code.length > 255) {
+        } else if (post_code.length !== 7 || !/^\d{7}$/.test(post_code)) {
             isValid = false;
-            document.getElementById('error-post_code').textContent = 'The post code must not exceed 255 characters.';
+            document.getElementById('error-post_code').textContent = 'Please provide a valid 7-digit post code.';
         }
     
         if (!prefectures) {

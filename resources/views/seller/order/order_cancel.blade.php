@@ -28,24 +28,25 @@
                         </div>
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">
-                                <div class="col-xl-8">
-                                    <div class="table-responsive table-details">
-                                        <table class="table cart-table table-borderless">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">Items</th>
-                                                    <th class="text-end" colspan="3"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td><h5>Product Name</h5></td>
-                                                    <td><h5>Quantity</h5></td>
-                                                    <td><h5>Price(tax inc)</h5></td>
-                                                    <td><h5>Commission</h5></td>
-                                                </tr>
-                                                @foreach($orderDetails as $index => $order)
+                                <div class="table-responsive table-details">
+                                    <table class="table cart-table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3">Items</th>
+                                                <th class="text-end" colspan="3"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-order">
+                                                <td></td>
+                                                <td><h5>Product Name</h5></td>
+                                                <td><h5>Quantity</h5></td>
+                                                <td><h5>Price(tax inc)</h5></td>
+                                                <td><h5>Commission</h5></td>
+                                                <td><h5>Option</h5></td>
+                                            </tr>
+                                            @foreach($orderDetails as $index => $order)
+                                                @if($order->status != 'Cancel')
                                                     <tr class="table-order">
                                                         <td>
                                                             <a href="javascript:void(0)">
@@ -56,7 +57,7 @@
                                                         @php
                                                             $comment = $order->product_name;
                                                             $words = explode(' ', $comment);
-                                                            $lines = array_chunk($words,3);
+                                                            $lines = array_chunk($words,5);
                                                         @endphp
 
                                                         <td style="width: 100%;">
@@ -78,70 +79,57 @@
                                                         <td>
                                                             <h6>{{ $order->commission }}%</h6>
                                                         </td>
+
+                                                        <td>
+                                                            <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#cancelOrder{{ $order->id }}">Cancel</button>
+                                                        </td>
                                                     </tr>
                                                     @php
                                                         $totalCommission += $order->commission_amount;
                                                         $subTotalAmount += $order->amount;
                                                     @endphp
-                                                @endforeach
-                                            </tbody>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
 
-                                            <tfoot>
-                                                <tr class="table-order">
-                                                    <td colspan="4">
-                                                        <h5>Subtotal(tax inc) :</h5>
-                                                    </td>
-                                                    <td>
-                                                        <h4>¥{{ number_format($subTotalAmount) }}</h4>
-                                                    </td>
-                                                </tr>
+                                        <tfoot>
+                                            <tr class="table-order">
+                                                <td colspan="5">
+                                                    <h5>Subtotal(tax inc) :</h5>
+                                                </td>
+                                                <td>
+                                                    <h4>¥{{ number_format($subTotalAmount) }}</h4>
+                                                </td>
+                                            </tr>
 
-                                                <tr class="table-order">
-                                                    <td colspan="4">
-                                                        <h5>Shipping(tax inc) :</h5>
-                                                    </td>
-                                                    <td>
-                                                        <h4>¥{{ number_format($deliveryPrice) }}</h4>
-                                                    </td>
-                                                </tr>
+                                            <tr class="table-order">
+                                                <td colspan="5">
+                                                    <h5>Shipping(tax inc) :</h5>
+                                                </td>
+                                                <td>
+                                                    <h4>¥{{ number_format($deliveryPrice) }}</h4>
+                                                </td>
+                                            </tr>
 
-                                                <tr class="table-order">
-                                                    <td colspan="4">
-                                                        <h5>Commission(tax inc):</h5>
-                                                    </td>
-                                                    <td>
-                                                        <h4>- ¥{{ number_format($totalCommission) }}</h4>
-                                                    </td>
-                                                </tr>
+                                            <tr class="table-order">
+                                                <td colspan="5">
+                                                    <h5>Commission(tax inc):</h5>
+                                                </td>
+                                                <td>
+                                                    <h4>- ¥{{ number_format($totalCommission) }}</h4>
+                                                </td>
+                                            </tr>
 
-                                                <tr class="table-order">
-                                                    <td colspan="4">
-                                                        <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
-                                                    </td>
-                                                    <td>
-                                                        <h4 class="theme-color fw-bold">¥{{ number_format($subTotalAmount-$totalCommission) }}</h4>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-4">
-                                    <div class="order-success">
-                                        <div class="row g-4">
-                                            <form action="{{ route('order.cancel.reason') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $order->id }}">
-                                                <div>
-                                                    <h3>Order Cancellation</h3>
-                                                </div>
-                                                <h5>Reason for order cancellation:</h5>
-                                                <textarea name="cancelled_reason" class="form-control mt-3" rows="10" placeholder="Type why cancellation of this order..."></textarea>
-                                                <button type="submit" class="btn btn-animation w-100 mt-3">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div>
+                                            <tr class="table-order">
+                                                <td colspan="5">
+                                                    <h4 class="theme-color fw-bold">Total Price(tax inc) :</h4>
+                                                </td>
+                                                <td>
+                                                    <h4 class="theme-color fw-bold">¥{{ number_format($subTotalAmount-$totalCommission) }}</h4>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -154,4 +142,37 @@
     <!-- tracking table end -->
 </div>
 <!-- tracking section End -->
+
+<!-- Cancel Order Modal Start -->
+@foreach($orderDetails as $index => $order)
+    <div class="modal fade theme-modal remove-coupon" id="cancelOrder{{ $order->id }}" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h4 class="modal-title w-100" id="exampleModalLabel22">Order Cancel</h4>
+                </div>
+                <form action="{{ route('order.cancel.reason')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $order->id }}">
+                    <div class="modal-body">
+                        <p>Reason for order cancel:</p>
+                        <textarea class="form-control" name="cancelled_reason" rows="10"></textarea>
+                        <p style="display:none" class="cancelled_reason error text-danger"></p>
+                        @if (!empty($error['cancelled_reason']))
+                            @foreach ($error['cancelled_reason'] as  $key => $value)
+                                <p class="cancelled_reason error text-danger">{{ $value }}</p>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="submit" class="btn btn-animation">Confirm</button>
+                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endforeach
+<!-- Cancel Order Modal End -->
 @endsection

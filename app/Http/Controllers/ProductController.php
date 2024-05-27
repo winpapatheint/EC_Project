@@ -337,14 +337,29 @@ class ProductController extends Controller
 
     public function review()
     {
-        $limit=10;
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $review = Review::where('user_id',$id)->latest()->paginate($limit);
+        $query = Review::where('user_id', $id);
+
+        if ($search) {
+            $query->whereHas('product', function($q) use ($search) {
+                $q->where('product_name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $review = $query->latest()->paginate($limit);
 
         $ttl = $review->total();
-        $ttlpage = (ceil($ttl / $limit));
-        return view('seller.product.product_review',compact('review','ttl','ttlpage'));
+        $ttlpage = ceil($ttl / $limit);
+
+        return view('seller.product.product_review', compact('review', 'ttl', 'ttlpage'));
     }
+
 
     public function changeRtStatus(Request $request)
     {

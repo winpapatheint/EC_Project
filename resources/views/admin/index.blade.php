@@ -107,11 +107,12 @@
                                                 <th>No</th>
                                                 <th>Date</th>
                                                 <th>Transfer Id</th>
-                                                <th>Seller Name</th>
-                                                <th>Products</th>
+                                                <th>Shop</th>
                                                 <th>Order details</th>
-                                                <th>Commission</th>
+                                                <th>Paid</th>
+                                                <th>Commission<br>(%)</th>
                                                 <th>Amount</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -120,21 +121,30 @@
                                                 <td colspan="9">No data available</td>
                                             </tr>
                                         @else
-                                            {{-- @foreach ($transfer as $key => $item )
+                                            @foreach ($transfer as $key => $item )
                                                 <tr>
                                                     <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                    <td>Bank</td>
-                                                    <td>Asia 食材</td>
-                                                    <td>{{ $item->id }}</td>
-                                                    <td>{{ $item->product->product_code }}</td>
-                                                    <td>{{ strlen($item->product->product_name) > 20 ? substr($item->product->product_name, 0, 20) . '...' : $item->product->product_name }}</td>
-                                                    <td>{{ $item->qty }}</td>
-                                                    <td>￥{{ $item->price }}</td>
-                                                    <td>￥{{ $item->amount }}</td>
+
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m') }}
+                                                      </td>
+                                                    <td></td>
+                                                    <td>{{$item->shop_name}}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{{$item->commission}}</td>
+                                                    <td></td>
+                                                    <td class="col-sm-9">
+                                                        <label class="switch" style="margin-top: 8px;">
+                                                            <input data-width="100" data-id=""
+                                                            class="toggle-class" type="checkbox"
+                                                            data-offstyle="outline-secondary" data-toggle="toggle"
+                                                            data-on="Active" data-off="InActive"
+
+                                                          >
+                                                        </label>
+                                                    </td>
                                                 </tr>
-                                            @endforeach --}}
+                                            @endforeach
                                         @endif
                                         </tbody>
                                     </table>
@@ -153,64 +163,35 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- <script type="text/javascript">
-
-          var labels =  @json($labels);
-          var users =  @json($data);
-
-          const data = {
-            labels: labels,
-            datasets: [{
-              label: 'Sale',
-              backgroundColor: '#0da487',
-              borderColor: '#0da487',
-              data: users,
-            }]
-          };
-
-          const config = {
-            type: 'line',
-            data: data,
-            options: {}
-          };
-
-          const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-          );
-
-    </script> --}}
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Define labels and data passed from the backend
+            const labels = @json($labels);
+            const data = @json($data);
 
-    // Define labels for each month
-const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-// Sample data for demonstration
-const salesData = [1000, 1500, 1200, 1800, 2000, 2200, 2500, 2300, 2400, 2100, 1900, 1600];
-
-// Render the chart
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Sales',
-            data: salesData,
-            backgroundColor: '#0da487',
-              borderColor: '#0da487',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-
-});
-
-</script>
+            // Render the chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales',
+                        data: data,
+                        backgroundColor: 'rgba(13, 164, 135, 0.2)',
+                        borderColor: '#0da487',
+                        borderWidth: 1,
+                        borderDash: [5, 5] // Display dashed line for each data point
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
     </x-auth-layout>

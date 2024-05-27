@@ -1,5 +1,4 @@
-@extends('seller.seller_dashboard')
-@section('seller')
+<x-auth-layout>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .table>:not(caption)>*>*
@@ -140,4 +139,5 @@
                 </div>
             </div>
         <!-- Delete Modal Box End -->
-@endsection
+
+</x-auth-layout>

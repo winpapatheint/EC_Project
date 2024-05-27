@@ -2210,16 +2210,16 @@ class AdminController extends Controller
         return redirect('/admin/all/blog')->with('success','Deleted Successfully.');
 
     }
+
+    // reset product commission
     public function deletecommission(Request $request)
     {
-        Seller::where('id', $request->id)->update(['commission' => 0]);
-        $seller = Seller::where('id', $request->id)->select('user_id')->first();
-        $products = Product::where('id',$seller->user_id)->get();
-        foreach($products as $item)
-        {
-            $item->update(['commission' => 0]);
-        }
-        return redirect('/admin/shoplist')->with('success','Deleted Successfully.');
+        $item = Product::find($request->id);
+        $shop = Seller::where('user_id', $item->seller_id)->first();
+        $item->commission_status = 0;
+        $item->commission = $shop->commission;
+        $item->save();
+        return redirect('/admin/product')->with('success','Deleted Successfully.');
 
     }
 
@@ -2310,9 +2310,12 @@ class AdminController extends Controller
             $item->commission = $commission;
             $item->save();
         }
-        $products = Product::where('user_id', $item->user_id)
-                        ->where('commission_status', '<>', 1)
-                        ->get();
+        $products = Product::where('seller_id', $item->user_id)
+                    ->where(function($query) {
+                        $query->where('commission_status', '!=', 1)
+                              ->orWhereNull('commission_status');
+                    })
+                    ->get();
 
         foreach($products as $item)
         {
@@ -2328,6 +2331,26 @@ class AdminController extends Controller
         // DB::table('sellers')->where('id',$request->id)->update($updval);
 
         return redirect('/admin/shoplist')->with('success','commission added');
+
+    }
+
+    public function  updateproductcommission(Request $request)
+    {
+        // Retrieve the input values
+        $commission = $request->input('commission');
+
+        $commissionId = $request->input('commissionid');
+
+        // Process the data (e.g., update the database)
+        $item = Product::find($commissionId);
+
+        if ($item) {
+            $item->commission = $commission;
+            $item->commission_status = 1;
+            $item->save();
+        }
+
+        return redirect('/admin/product')->with('success','commission added');
 
     }
 
@@ -2530,7 +2553,7 @@ class AdminController extends Controller
 
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
-        $categories = Category::latest()->get();
+        $categories = Category::latest()->where('category_name', '!=', 'Special Corner')->get();
         $subcategories = SubCategory::latest()->get();
         $subcatitle = SubCategoryTitle::latest()->get();
         $products = Product::findOrFail($id);
@@ -3121,11 +3144,10 @@ class AdminController extends Controller
             $discountAmount = ($originalPrice * $discountPercentage) / 100;
             $discountedPrice = $originalPrice - $discountAmount;
 
-            $commisonPrice = $request->commision;
-            $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
-            $sellerAmount = $discountedPrice - $commisonAmount;
-
-            $adminAmount = $discountedPrice -  $sellerAmount;
+            // $commisonPrice = $request->commision;
+            // $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
+            // $sellerAmount = $discountedPrice - $commisonAmount;
+            // $adminAmount = $discountedPrice -  $sellerAmount;
 
             $product = Product::find($request->id);
             $old_img = $request->old_img;
@@ -3175,8 +3197,8 @@ class AdminController extends Controller
             $product->estimate_date= $request->estimate_date;
             $product->status= 1;
             $product->delivery_price= $request->delivery_price;
-            $product->commission = $request->commision;
-            $product->commission_status = 1;
+            // $product->commission = $request->commision;
+            // $product->commission_status = 1;
             $product->updated_by = Auth::user()->id;
             $product->updated_at= Carbon::now();
             $product->update();

@@ -3398,9 +3398,9 @@ class AdminController extends Controller
 
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $data = array_fill(0, 12, 0);
-        // Populate the data array with counts from the database
+
         foreach ($orders as $order) {
-            $monthIndex = $order->month_number - 1; // Convert month_number to array index
+            $monthIndex = $order->month_number - 1;
             $data[$monthIndex] = $order->count;
         }
 

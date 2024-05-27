@@ -9,6 +9,7 @@
                         <div class="custome-1-bg b-r-4 card-body">
                             <div class="media align-items-center static-top-widget">
                                 <div class="media-body p-0">
+                                    <h7>This month</h7><br>
                                     <span class="m-0">Total Revenue</span>
                                     <h4 class="mb-0 counter">¥{{number_format($revenue) }}</h4>
                                 </div>
@@ -25,6 +26,7 @@
                         <div class="custome-2-bg b-r-4 card-body">
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
+                                    <h7>This month</h7><br>
                                     <span class="m-0">Total Orders</span>
                                     <h4 class="mb-0 counter">{{ $orderCount }}</h4>
                                 </div>
@@ -41,7 +43,7 @@
                         <div class="custome-3-bg b-r-4 card-body">
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
-                                    <span class="m-0">Total Products</span>
+                                    <span class="m-0">All Products</span>
                                     <h4 class="mb-0 counter">{{ $product }}
                                         <a href="{{ route('add.product') }}" class="badge badge-light-secondary grow">
                                             ADD NEW</a>

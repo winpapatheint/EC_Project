@@ -220,11 +220,13 @@
                                 @endif
                             </form>
 
-                            <form action="{{ route('order.cancel') }}" method="GET">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $item->id }}">
-                                <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
-                            </form>
+                            @if($item->status === 'Pending')
+                                <form action="{{ route('order.cancel') }}" method="GET">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

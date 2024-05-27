@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Help;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Reply;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Subseller;
@@ -14,12 +18,9 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Mail;
-use DateTime;
 use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller

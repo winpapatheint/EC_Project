@@ -37,19 +37,10 @@
                                                                 </a>
                                                             </td>
 
-                                                            @php
-                                                                $comment = $order->product_name;
-                                                                $words = explode(' ', $comment);
-                                                                $lines = array_chunk($words,13);
-                                                            @endphp
-
                                                             <td style="width: 100%;">
-                                                                <p>Product Name</p>
-                                                                <h5>
-                                                                    @foreach ($lines as $line)
-                                                                    {{ implode(' ', $line) }}<br>
-                                                                @endforeach
-                                                                </h5>
+                                                                <h6>
+                                                                    {!! preg_replace('/(.{1,30})\s+?/', '$1<br>', $order->product_name) !!}
+                                                                </h6>
                                                             </td>
 
                                                             <td>

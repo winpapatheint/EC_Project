@@ -150,11 +150,36 @@ class SellerController extends Controller
 
     public function help()
     {
-        $email = Auth::user()->email;
-        $received = Help::where('to',$email)->latest()->paginate(10);
-        $sent = Help::where('from',$email)->latest()->paginate(10);
-        return view('seller.help.help',compact('received','sent'));
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $userEmail = Auth::user()->email;
+        $receivedQuery = Help::where('to', $userEmail)->latest();
+        $sentQuery = Help::where('from', $userEmail)->latest();
+        if ($search) {
+            $receivedQuery->where(function($q) use ($search) {
+                $q->where('to', 'LIKE', "%{$search}%")
+                ->orWhere('from', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->orWhere('body', 'LIKE', "%{$search}%");
+            });
+
+            $sentQuery->where(function($q) use ($search) {
+                $q->where('to', 'LIKE', "%{$search}%")
+                ->orWhere('from', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->orWhere('body', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $received = $receivedQuery->paginate(10);
+        $sent = $sentQuery->paginate(10);
+
+        return view('seller.help.help', compact('received', 'sent'));
     }
+
 
 
 
@@ -296,10 +321,25 @@ class SellerController extends Controller
 
     public function allSubseller()
     {
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
         $id = Auth::user()->id;
-        $subseller =  User::where('created_by',$id)->latest()->get();
-        return view('seller.subseller.subseller_all',compact('subseller'));
+        $query =  User::where('created_by', $id);
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $subseller = $query->latest()->get();
+        return view('seller.subseller.subseller_all', compact('subseller'));
     }
+
 
 
     public function addSubseller()

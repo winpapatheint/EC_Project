@@ -133,16 +133,11 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                         {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>{{ $item->order->order_code }}</td>
-                                                    <td>{{ $item->product->product_code }}</td>
-                                                    @php
-                                                        $comment = $item->product->product_name;
-                                                            $words = explode(' ', $comment);
-                                                            $lines = array_chunk($words,3);
-                                                    @endphp
+                                                    <td><a href="{{ route('detail.product',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
                                                     <td>
-                                                        @foreach ($lines as $line)
-                                                            {{ implode(' ', $line) }}<br>
-                                                        @endforeach
+                                                        <h6>
+                                                            {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
+                                                        </h6>
                                                     </td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>¥{{ number_format($item->amount) }}</td>

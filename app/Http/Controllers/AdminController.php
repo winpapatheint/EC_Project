@@ -14,6 +14,7 @@ use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Help;
 use App\Models\SellerNotification;
+use App\Models\Notification;
 use App\Models\MultiImg;
 use App\Models\Coupon;
 use App\Models\Top;
@@ -2210,16 +2211,16 @@ class AdminController extends Controller
         return redirect('/admin/all/blog')->with('success','Deleted Successfully.');
 
     }
+
+    // reset product commission
     public function deletecommission(Request $request)
     {
-        Seller::where('id', $request->id)->update(['commission' => 0]);
-        $seller = Seller::where('id', $request->id)->select('user_id')->first();
-        $products = Product::where('id',$seller->user_id)->get();
-        foreach($products as $item)
-        {
-            $item->update(['commission' => 0]);
-        }
-        return redirect('/admin/shoplist')->with('success','Deleted Successfully.');
+        $item = Product::find($request->id);
+        $shop = Seller::where('user_id', $item->seller_id)->first();
+        $item->commission_status = 0;
+        $item->commission = $shop->commission;
+        $item->save();
+        return redirect('/admin/product')->with('success','Deleted Successfully.');
 
     }
 
@@ -2310,9 +2311,12 @@ class AdminController extends Controller
             $item->commission = $commission;
             $item->save();
         }
-        $products = Product::where('user_id', $item->user_id)
-                        ->where('commission_status', '<>', 1)
-                        ->get();
+        $products = Product::where('seller_id', $item->user_id)
+                    ->where(function($query) {
+                        $query->where('commission_status', '!=', 1)
+                              ->orWhereNull('commission_status');
+                    })
+                    ->get();
 
         foreach($products as $item)
         {
@@ -2328,6 +2332,26 @@ class AdminController extends Controller
         // DB::table('sellers')->where('id',$request->id)->update($updval);
 
         return redirect('/admin/shoplist')->with('success','commission added');
+
+    }
+
+    public function  updateproductcommission(Request $request)
+    {
+        // Retrieve the input values
+        $commission = $request->input('commission');
+
+        $commissionId = $request->input('commissionid');
+
+        // Process the data (e.g., update the database)
+        $item = Product::find($commissionId);
+
+        if ($item) {
+            $item->commission = $commission;
+            $item->commission_status = 1;
+            $item->save();
+        }
+
+        return redirect('/admin/product')->with('success','commission added');
 
     }
 
@@ -2530,7 +2554,7 @@ class AdminController extends Controller
 
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
-        $categories = Category::latest()->get();
+        $categories = Category::latest()->where('category_name', '!=', 'Special Corner')->get();
         $subcategories = SubCategory::latest()->get();
         $subcatitle = SubCategoryTitle::latest()->get();
         $products = Product::findOrFail($id);
@@ -2728,21 +2752,50 @@ class AdminController extends Controller
 
             if (!empty($request->email)) {
                 $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
                     $message->from($request->email,$request->name);
-                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    $message->setBody("We received the following inquiry from the official e-commerce website.
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\n名前：　".$request->name."
-                    \r\n"."メールアドレス：　".$request->email."
+                    \r\nName：　".$request->name."
+                    \r\n"."Email：　".$request->email."
                     \r\n
-                    \r\n"."お問い合わせ内容：　
+                    \r\n"."Message：　
                     \r\n".$request->message."
                     \r\n
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
                 });
             }
 
-            return redirect('/faq#ts-form')->with('success','お問い合わせ内容が正常に送信されました。');
+            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
+
+            $inquiry_email = 'info-test@asia-hd.com';
+            $data = array('title' => $request->title);
+
+            if (!empty(  $adminMails)) {
+                foreach ($adminMails as $email) {
+                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
+                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+                        $message->from($request->email,$request->name);
+                        $message->setBody("We received the following inquiry from the official e-commerce website.
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                            \r\nName：　" . $request->title . "
+                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\n
+                            \r\nMessage：　
+                            \r\n" . $request->message . "
+                            \r\n
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                    });
+                }
+            }
+
+            $notification = Notification::find(6);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+
+            return redirect('/faq#ts-form')->with('success','Your inquiry has been successfully sent');
 
 
         }
@@ -2762,14 +2815,14 @@ class AdminController extends Controller
             if (!empty($request->email)) {
                 $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
 
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
                     $message->from($request->email,$request->name);
-                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    $message->setBody("We received the following inquiry from the official e-commerce website
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\n名前：　".$request->name."
-                    \r\n"."メールアドレス：　".$request->email."
+                    \r\nName：　".$request->name."
+                    \r\n"."Email：　".$request->email."
                     \r\n
-                    \r\n"."お問い合わせ内容：　
+                    \r\n"."Message：　
                     \r\n".$request->message."
                     \r\n
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
@@ -2777,7 +2830,35 @@ class AdminController extends Controller
                 });
             }
 
-            return redirect('/contact#contact-form')->with('success','お問い合わせ内容が正常に送信されました。');
+            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
+
+            $inquiry_email = 'info-test@asia-hd.com';
+            $data = array('title' => $request->title);
+
+            if (!empty(  $adminMails)) {
+                foreach ($adminMails as $email) {
+                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
+                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+                        $message->from($request->email,$request->name);
+                        $message->setBody("We received the following inquiry from the official e-commerce website.
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                            \r\nName：　" . $request->title . "
+                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\n
+                            \r\nMessage：　
+                            \r\n" . $request->message . "
+                            \r\n
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                    });
+                }
+            }
+
+            $notification = Notification::find(8);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+            return redirect('/contact#contact-form')->with('success','Your inquiry has been successfully sent');
 
         }
         else if( $request->from == 'privacy')
@@ -2795,14 +2876,14 @@ class AdminController extends Controller
             if (!empty($request->email)) {
                 $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
 
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'からの質問');
+                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
                     $message->from($request->email,$request->name);
-                    $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
+                    $message->setBody("We received the following inquiry from the official e-commerce website
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\n名前：　".$request->name."
-                    \r\n"."メールアドレス：　".$request->email."
+                    \r\nName：　".$request->name."
+                    \r\n"."Email：　：　".$request->email."
                     \r\n
-                    \r\n"."お問い合わせ内容：　
+                    \r\n"."Message：　
                     \r\n".$request->message."
                     \r\n
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
@@ -2810,7 +2891,36 @@ class AdminController extends Controller
                 });
             }
 
-            return redirect('/privacy-policy#privacy-form')->with('success','お問い合わせ内容が正常に送信されました。');
+            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
+
+            $inquiry_email = 'info-test@asia-hd.com';
+            $data = array('title' => $request->title);
+
+            if (!empty(  $adminMails)) {
+                foreach ($adminMails as $email) {
+                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
+                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+                        $message->from($request->email,$request->name);
+                        $message->setBody("We received the following inquiry from the official e-commerce website.
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                            \r\nName：　" . $request->title . "
+                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\n
+                            \r\nMessage：　
+                            \r\n" . $request->message . "
+                            \r\n
+                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                    });
+                }
+            }
+
+            $notification = Notification::find(7);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+
+            return redirect('/privacy-policy#privacy-form')->with('success','Your inquiry has been successfully sent');
 
         }
     }
@@ -3121,11 +3231,10 @@ class AdminController extends Controller
             $discountAmount = ($originalPrice * $discountPercentage) / 100;
             $discountedPrice = $originalPrice - $discountAmount;
 
-            $commisonPrice = $request->commision;
-            $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
-            $sellerAmount = $discountedPrice - $commisonAmount;
-
-            $adminAmount = $discountedPrice -  $sellerAmount;
+            // $commisonPrice = $request->commision;
+            // $commisonAmount = ($discountedPrice * $commisonPrice) / 100;
+            // $sellerAmount = $discountedPrice - $commisonAmount;
+            // $adminAmount = $discountedPrice -  $sellerAmount;
 
             $product = Product::find($request->id);
             $old_img = $request->old_img;
@@ -3175,8 +3284,8 @@ class AdminController extends Controller
             $product->estimate_date= $request->estimate_date;
             $product->status= 1;
             $product->delivery_price= $request->delivery_price;
-            $product->commission = $request->commision;
-            $product->commission_status = 1;
+            // $product->commission = $request->commision;
+            // $product->commission_status = 1;
             $product->updated_by = Auth::user()->id;
             $product->updated_at= Carbon::now();
             $product->update();
@@ -3280,16 +3389,35 @@ class AdminController extends Controller
         $pending = OrderDetail::where('status', 'Pending')->count();
         $currentDate = Carbon::now()->format('Y-m-d');
         $product = Product::whereDate('created_at','<=',$currentDate)->count();
-        $transfer = OrderDetail::latest()->paginate($limit);
-        $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-                ->whereYear('created_at', date('Y'))
-                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-                ->pluck('count', 'month_name');
+        $transfers = OrderDetail::latest()->paginate($limit);
+        $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
+                        ->whereYear('created_at', date('Y'))
+                        ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
+                        ->orderBy(DB::raw("MONTH(created_at)"))
+                        ->get();
+
+        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $data = array_fill(0, 12, 0);
+        // Populate the data array with counts from the database
+        foreach ($orders as $order) {
+            $monthIndex = $order->month_number - 1; // Convert month_number to array index
+            $data[$monthIndex] = $order->count;
+        }
+
+        $transfer = Seller::join('products', 'sellers.user_id', '=', 'products.seller_id')
+                        ->select(
+                            'sellers.id',
+                            'sellers.shop_name',
+                            'sellers.commission',
+                            DB::raw('SUM(products.seller_amount) as total_seller_amount')
+                        )
+                        ->orderBy('sellers.created_at', 'desc')
+                        ->groupBy('sellers.id', 'sellers.shop_name', 'sellers.commission')
+                        ->paginate($limit);
 
         $ttl = $transfer->total();
         $ttlpage = (ceil($ttl / $limit));
-        $labels = $orders->keys();
-        $data = $orders->values();
+
         return view('admin.index',compact('labels', 'data','transfer','revenue','orderCount','pending','product','ttl','ttlpage'));
     }
 

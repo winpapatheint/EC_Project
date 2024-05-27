@@ -197,13 +197,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 row align-items-center">
+                                    {{-- <div class="mb-4 row align-items-center">
                                         <label class="col-sm-3 form-label-title">Commision(%)</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="commision" type="number" id="commision"
                                             placeholder="0-100" min="1" max="100" value="{{ $products->commission ?? '' }}">
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <button type="button" class="btn btn-animation" data-bs-toggle="modal" data-bs-target="#confirmModal">Update</button>
 
@@ -224,7 +224,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                                                        data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -463,7 +464,6 @@
     }
 </script>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var selectedSubcategoryTitleId = '{{ $products->sub_category_title_id }}';
@@ -492,8 +492,6 @@
         subcategorySelect.dispatchEvent(event);
     });
 </script>
-
-
 
 <script>
     const originalPriceInput = document.getElementById('original_price');

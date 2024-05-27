@@ -25,9 +25,9 @@
                                                 <th style="min-width: 150px">Shop Image</th>
                                                 <th  style="min-width: 150px">Shop Name</th>
                                                 <th  style="min-width: 150px">Commission(%)</th>
+                                                <th  style="min-width: 150px">Commission</th>
                                                 <th  style="min-width: 150px" >Coupon Code</th>
                                                 <th  style="min-width: 100px">Coupon</th>
-                                                <th  style="min-width: 150px">Commission</th>
                                                 <th style="min-width:  100px">Status</th>
                                                 <th  style="min-width: 100px">Option</th>
                                             </tr>
@@ -43,7 +43,16 @@
                                                     <td data-label="氏名"><a
                                                       href="{{ url('/shoptakeremote/'.rand ( 10000 , 99999 ).$list->user_id ) }}"
                                                       >{{ $list->shop_name }}</a></td>
-                                                      <td data-label="" >{{ $list->commission }}</td>
+                                                    <td data-label="" >{{ $list->commission }}%</td>
+                                                    <td class="col-sm-9">
+
+                                                        <button class="btn w-50 theme-bg-color" style = "margin-left: 50px;"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#commissionModal{{ $list->id }}"
+                                                                onclick="">Commission
+                                                        </button>
+
+                                                    </td>
                                                     <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
 
                                                     <td class="col-sm-9">
@@ -61,15 +70,6 @@
                                                                     onclick="">Coupon
                                                             </button>
                                                         @endif
-                                                    </td>
-                                                    <td class="col-sm-9">
-
-                                                        <button class="btn w-50 theme-bg-color" style = "margin-left: 50px;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#commissionModal{{ $list->id }}"
-                                                                onclick="">Commission
-                                                        </button>
-
                                                     </td>
                                                     <td class="col-sm-9">
                                                         <label class="switch">
@@ -148,32 +148,26 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Select Commission</h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Enter Commission(%)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <form id="commission-form{{ $list->id }}" method="POST" action="{{ route('updatecommission') }}" style="display:flex;">
                 @csrf
-            <div class="modal-body">
-                <div class="form-group">
-                    <input type="number" class="form-control" id="commission{{ $list->id }}"  value="{{ old('commission') ?? $list->commission ?? '' }}"
-                     name="commission" placeholder="Enter commission">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="number" class="form-control" id="commission{{ $list->id }}"  value="{{ old('commission') ?? $list->commission ?? '' }}"
+                        name="commission" placeholder="Enter commission">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="modal-footer">
                     <input type="hidden" id="commission-id{{ $list->id }}" name="commissionid" value="{{ $list->id }}">
                     <input type="hidden" name="id" value="{{ $list->id }}">
                     <button type="submit" class="btn btn-animation btn-md fw-bold me-2">Save</button>
-                </form>
-                <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $list->id }}">
-                    <button type="submit" class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
-                </form>
-                    {{-- <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button> --}}
-
-            </div>
+                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

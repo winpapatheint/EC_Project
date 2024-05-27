@@ -97,7 +97,14 @@
                         </a>
                     </div>
                 </div>
-
+                @if (request()->is('admin/shoplist') || 
+                    request()->is('admin/product') || 
+                    request()->is('admin/category') || 
+                    request()->is('admin/all/blog') || 
+                    request()->is('admin/coupon') || 
+                    request()->is('admin/orderlist') || 
+                    request()->is('admin/review/product') ||
+                    request()->is('admin/all/users'))
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group">
@@ -108,7 +115,7 @@
                         </div>
                     </form>
                 </div>
-
+                @endif
                 {{-- <div class="accordion-item">
                     <div style="display: flex; align-items: center;">
                         <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
@@ -151,7 +158,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd","#a927f9","#6670bd","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)

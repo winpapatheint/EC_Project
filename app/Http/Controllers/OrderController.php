@@ -28,7 +28,6 @@ class OrderController extends Controller
 
         $orderQuery = OrderDetail::with('order')
             ->where('seller_id', $id)
-            ->where('status', '!=', 'Cancel')
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc');

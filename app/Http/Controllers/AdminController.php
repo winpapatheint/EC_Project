@@ -3392,7 +3392,6 @@ class AdminController extends Controller
             $limit = 10;
 
             $orderQuery = OrderDetail::with('order')
-                ->where('status', '!=', 'Cancel')
                 ->groupBy('order_id')
                 ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
                 ->orderBy('created_at', 'desc');

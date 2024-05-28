@@ -167,6 +167,7 @@
                                 <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
                                 <div class="user-name-hide media-body">
                                     <span>{{ Auth::user()->name }}</span>
+
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
@@ -278,10 +279,10 @@
                                     </a>
                                 </li>
 
-                             <li class="sidebar-list">
+                             <li class="sidebar-list" >
                                     <a class="sidebar-link sidebar-title link-nav" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     href="javascript:void(0)">
-                                        <i data-feather="log-out"></i>
+                                        <i data-feather="log-out" style="color: #fff"></i>
                                         <span>Log Out</span>
                                     </a>
                                 </li>
@@ -323,9 +324,9 @@
                 <div class="modal-footer">
                     <form method="POST" action="{{ route('adminlogout')}}">
                         @csrf
-                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                        <button type="submit" class="btn btn-animation">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

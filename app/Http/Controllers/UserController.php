@@ -15,6 +15,7 @@ use App\Models\Prefecture;
 use App\Models\OrderDetail;
 use App\Models\BuyerAddress;
 use App\Models\BuyerPayment;
+use App\Models\Coupon;
 use App\Models\CouponDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -777,141 +778,56 @@ class UserController extends Controller
     //Product Cupon
     public function applyCouponCode(Request $request)
     {
-        $user = DB::table('users')->where('id', Auth::user()->id)->first();
-        $buyerCoupon = Buyer::where('user_id', Auth::user()->id)->first();
-        $buyerid = $buyerCoupon->id;
-        $couponcode = $request->input('coupon');
-        $cartLists = DB::table('carts')
-                            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                            ->where('buyers.user_id', Auth::user()->id)
-                            ->select(
-                                'carts.*',
-                                'carts.id as cart_id',
-                                'buyers.*',
-                                'buyers.id as buyer_id',
-                                'carts.product_id as product_id',
-                                'products.*',
-                                DB::raw('CASE
-                                            WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
-                                            WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
-                                            ELSE NULL
-                                        END AS coupon_id'),
-                                DB::raw('CASE
-                                            WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
-                                            WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
-                                            ELSE NULL
-                                        END AS coupon_code')
-                            )
-                            ->get();
-
-        $maxDeliveryPrices = [];
-        foreach($cartLists as $key => $cartItem){
-            $productID = $cartItem->id;
-            $sellerID = $cartItem->seller_id;
-
-            $shopName = DB::table('sellers')
-                        ->where('sellers.user_id', $sellerID)
-                        ->select('sellers.shop_name as shopname')
-                        ->first();
-            $cartItem->shop_name = $shopName->shopname;
-
-            $sellerID = $cartItem->seller_id;
-            if (!isset($maxDeliveryPrices[$sellerID])) {
-                $maxDeliveryPrices[$sellerID] = $cartItem->delivery_price;
-            } else {
-                $maxDeliveryPrices[$sellerID] = max($maxDeliveryPrices[$sellerID], $cartItem->delivery_price);
-            }
-        }
-        $shippingFee = array_sum($maxDeliveryPrices);
-        if ($shippingFee >= 5000)
-            $shippingFee = 0;
-
-        $discount = 0;
-        $couponapplycheck = null;
-
-        $couponcheck = DB::table('coupons')
-        ->where('coupon_code', $couponcode)
-        ->where('status', 1)
-        ->first();
-        if ($couponcheck)
+        $coupon = Coupon::where('coupon_code', $request->coupon)
+                    ->where('status', 1)->first();
+        if (!$coupon)
         {
-            $discount = $couponcheck->discount_amount;
+            $refreshCart = 'Invalid Coupon Code. Please try again!';
+            return redirect()->back()->with(compact('refreshCart'));
         }
-
-        if(empty($couponcheck)){
-            $couponapplycheck = 1;
-            return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
-        }
-        else
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $cartLists = Cart::with('product')->with('buyer')->with('seller')
+                    ->where('buyer_id', $buyer->id)->get();
+        $cartSellerTotalAmount = [];
+        $couponUsedSeller = 0;
+        $couponUsedSellerName = "";
+        $couponUsedProduct = 0;
+        foreach ($cartLists as $cart)
         {
-            $couponusedtime = $couponcheck->valid_count;
-            $couponusedcount = DB::table('coupon_details')
-                                ->select(DB::raw("COUNT(coupon_id) as count"))
-                                ->where('coupon_id', $couponcheck->id)
-                                ->get()
-                                ->first()
-                                ->count;
-
-            if($couponusedtime <= $couponusedcount)
+            if ($cart->seller->coupon_status == 1 && $cart->seller->coupon_id == $coupon->id)
             {
-                // Update the Coupons.status to 0
-                DB::table('coupons')
-                    ->where('id', $couponcheck->id)
-                    ->update(['status' => 0]);
-
-                $couponapplycheck = 1;
-                return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
+                $couponUsedSeller = $cart->seller_id;
+                $couponUsedSellerName = $cart->seller->shop_name;
+            }
+            else if ($cart->product->coupon_status == 1 && $cart->product->coupon_id == $coupon->id)
+            {
+                $couponUsedProduct = $cart->product_id;
+            }
+            if (!isset($cartSellerTotalAmount[$cart->seller_id]))
+            {
+                $cartSellerTotalAmount[$cart->seller_id] = $cart->quantity * $cart->product->selling_price;
             }
             else
             {
-                $sellercouponcheck = Cart::leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                                    ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                                    ->where('carts.buyer_id', $buyerid)
-                                    ->where('sellers.coupon_id', $couponcheck->id)
-                                    ->get();
-
-                if($sellercouponcheck->count() > 0)
-                {
-                    $totalSubtotal = 0;
-                    foreach($cartLists as $product)
-                    {
-                        $totalSubtotal += $product->selling_price * $product->quantity;
-                    }
-                    if($totalSubtotal < $couponcheck->mini_amount)
-                    {
-                        $couponapplycheck = $couponcheck->mini_amount;
-                    }
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
-                }
-                else
-                {
-                    $productcouponcheck = Cart::leftJoin('products', 'products.id', '=', 'carts.product_id')
-                                    ->where('carts.buyer_id', $buyerid)
-                                    ->where('products.coupon_id', $couponcheck->id)
-                                    ->get();
-                    if($productcouponcheck->count() > 0)
-                    {
-                        $totalSubtotal = 0;
-                        foreach($cartLists as $product)
-                        {
-                            $totalSubtotal += $product->selling_price * $product->quantity;
-                        }
-                        if($totalSubtotal < $couponcheck->mini_amount)
-                        {
-                            $couponapplycheck = $couponcheck->mini_amount;
-                        }
-                        return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
-                    }
-                    $couponapplycheck = 1;
-                    return view('front-end.cart', compact('cartLists', 'discount','couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
-
-                }
+                $cartSellerTotalAmount[$cart->seller_id] += $cart->quantity * $cart->product->selling_price;
             }
         }
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
+        if ($couponUsedSeller == 0 && $couponUsedProduct == 0)
+        {
+            $refreshCart = 'Invalid Coupon Code. Please use the displayed coupon code!';
+            return redirect()->back()->with(compact('refreshCart'));
+        }
+        else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount)
+        {
+            $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥' 
+            . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
+            return redirect()->back()->with(compact('refreshCart'));
+        }
+        $discount = $coupon->discount_amount;
+        $couponId = $coupon->id;
+        return redirect()->back()->with(compact('discount', 'couponUsedSeller', 'couponUsedProduct', 'couponId'));
     }
+
     //Product Checkout
     public function showCheckout(Request $request)
     {
@@ -947,6 +863,15 @@ class UserController extends Controller
         $total1 = $request->total;
         $shop = $request->shop;
         $maxDeli = $request->maxDeli;
+        $couponUsedSellerId = 0;
+        $couponUsedProductId = 0;
+        $couponId = 0;
+        if(isset($request->coupon_used_seller_id))
+        $couponUsedSellerId = $request->coupon_used_seller_id;
+        if(isset($request->coupon_used_product_id))
+        $couponUsedProductId = $request->coupon_used_product_id;
+        if(isset($request->coupon_id))
+        $couponId = $request->coupon_id;
 
         $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
                      ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
@@ -978,7 +903,7 @@ class UserController extends Controller
                 $cartItem->shop_name = $shopName->shopname;
             }
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1', 'shop', 'maxDeli'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1', 'shop', 'maxDeli', 'couponUsedSellerId', 'couponUsedProductId', 'couponId'));
 
     }
     //Purchase
@@ -1015,6 +940,9 @@ class UserController extends Controller
             $payment = $request->payment;
             $shopIds = $request->shopIds;
             $maxDelis = $request->maxDelis;
+            $couponUsedSellerId = $request->couponUsedSellerId;
+            $couponUsedProductId = $request->couponUsedProductId;
+            $couponId = $request->couponId;
 
             // return response()->json(['message' => $postcode.",".$city.",".$chome.",".$building.",".$room]);
 
@@ -1037,10 +965,28 @@ class UserController extends Controller
                 'total_amount' => $totalAmount,
                 'sub_total_amount' => $subTotalAmount,
                 'coupon_discount_amout' => $couponDiscountAmount,
+                'coupon_used_seller_id' => $couponUsedSellerId,
+                'coupon_used_product_id' => $couponUsedProductId,
                 'shipping_fee' => $shippingFee,
                 'total_qty'=> $totalQty,
                 'payment_type'=> $payment,
             ]);
+
+            if ($couponId != 0)
+            {
+                CouponDetail::create([
+                    'buyer_id' => (int)$buyerId,
+                    'coupon_id' => $couponId,
+                    'order_id' => $order->id
+                ]);
+                $couponCheck = Coupon::where('id', $couponId)->first();
+                $couponDetailCheck = CouponDetail::where('coupon_id', $couponId)->get();
+                if ($couponDetailCheck->count() >= $couponCheck->valid_count)
+                {
+                    $couponCheck->status = 0;
+                    $couponCheck->save();
+                }
+            }
 
             Payment::create([
                 'order_id' => $order->id,
@@ -1053,6 +999,8 @@ class UserController extends Controller
             foreach ($productIds as $key => $product_id) {
                 $orderedProduct = Product::where('id', $product_id)->first();
                 $usedDeliStatus = 0;
+                $usedShopCouponStatus = 0;
+                $usedProductCouponStatus = 0;
                 foreach ($shopIds as $shopKey => $shopId)
                 {
                     if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey])
@@ -1065,6 +1013,10 @@ class UserController extends Controller
                         break;
                     }
                 }
+                if ($order->coupon_used_seller_id == $sellerId[$key])
+                    $usedShopCouponStatus = 1;
+                if ($order->coupon_used_product_id == (int)$product_id)
+                    $usedProductCouponStatus = 1;
                 if (isset($amount[$key]) && $amount[$key]) {
                     $orderdetailsData = [
                         'order_id' => $order->id,
@@ -1078,6 +1030,8 @@ class UserController extends Controller
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
                         'used_delivery_price' => $usedDeliStatus,
+                        'used_shop_coupon_status' => $usedShopCouponStatus,
+                        'used_product_coupon_status' => $usedProductCouponStatus,
                         'amount' => $productamounts[$key],
                         'commission' => $orderedProduct->commission,
                         'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
@@ -1103,6 +1057,8 @@ class UserController extends Controller
                         'price' => $orderedProduct->selling_price,
                         'delivery_price' => $orderedProduct->delivery_price,
                         'used_delivery_price' => $usedDeliStatus,
+                        'used_shop_coupon_status' => $usedShopCouponStatus,
+                        'used_product_coupon_status' => $usedProductCouponStatus,
                         'amount' => $productamounts[$key],
                         'commission' => $orderedProduct->commission,
                         'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),

@@ -58,7 +58,7 @@
                                                     <td class="col-sm-9">
                                                         <label class="switch">
                                                             @php
-                                                                $isExpired = \Carbon\Carbon::parse($list->enddate)->isPast();
+                                                                $isExpired = \Carbon\Carbon::parse($list->enddate)->startOfDay()->isPast();
                                                             @endphp
                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"

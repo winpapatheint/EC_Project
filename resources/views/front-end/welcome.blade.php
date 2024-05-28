@@ -477,6 +477,15 @@
                                                     {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
                                                     {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                                 </h5>
+                                                @if ($coupon->seller)
+                                                    @if ($coupon->seller->coupon_status == 1)
+                                                    <h4 class="lh-base fw-bold offer-text">Publisher : {{ $coupon->seller->shop_name }}</h4>
+                                                    @endif
+                                                @elseif ($coupon->product->first())
+                                                    @if ($coupon->product->first()->coupon_status == 1)
+                                                    <h4 class="lh-base fw-bold offer-text">Publisher : Asian Food Museum</h4>
+                                                    @endif
+                                                @endif
                                                 <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                             </div>
                                         </div>

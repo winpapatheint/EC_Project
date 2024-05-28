@@ -22,4 +22,14 @@ class Coupon extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

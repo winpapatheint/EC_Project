@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Transfer extends Model
 {
     use HasFactory;
+    protected $table='transfers';
     protected $fillable = [
         'id',
-        'order_detail_id',
+        'transfer_code',
         'seller_id',
+        'shop_name',
         'commission',
-        'commission_amount',
+        'seller_amount',
         'status',
+        'start_date',
+        'end_date',
         'transferred_at',
         'created_at',
         'updated_at',

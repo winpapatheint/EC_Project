@@ -17,6 +17,8 @@ class Order extends Model
         'total_amount',
         'sub_total_amount',
         'coupon_discount_amout',
+        'coupon_used_seller_id',
+        'coupon_used_product_id',
         'shipping_fee',
         'payment_type',
         'created_at',

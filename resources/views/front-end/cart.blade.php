@@ -204,7 +204,7 @@
                             <div class="summery-header">
                                 <h3>Cart Total</h3>
                             </div>
-                            @if ($couponapplycheck == 1)
+                            {{-- @if ($couponapplycheck == 1)
                             <div class="alert alert-warning alert-block" id="alert-warning">
                                 <strong>Invalid Coupon Code</strong>
                             </div>
@@ -212,7 +212,7 @@
                             <div class="alert alert-warning alert-block" id="alert-warning">
                                 <strong>To use this coupon, minimum order is ¥{{ number_format($couponapplycheck, 0, '', ',') }}</strong>
                             </div>
-                            @endif
+                            @endif --}}
                             <div class="summery-contain" id="ts-form">
                                     <div class="coupon-cart">
                                         {{-- <input type="hidden" name="buyer_id" value="{{ $cartlist->buyer_id }}"> --}}
@@ -232,7 +232,11 @@
                                     
                                     <li>
                                         <h4>Coupon Discount</h4>   
-                                        @if ($couponapplycheck != 1)  
+                                        {{-- @if ($couponapplycheck != 1)   --}}
+                                        @if (session()->has('discount'))
+                                        @php
+                                            $discount = session('discount');
+                                        @endphp
                                         <h4 class="price"> (-) ¥ {{ number_format($discount , 0, '.', ',') }}</h4>
                                         @else
                                         <h4 class="price"> (-) ¥ 0</h4>
@@ -274,6 +278,24 @@
                                     <input type="hidden" name="shop[]" value="{{ $key }}">
                                     <input type="hidden" name="maxDeli[]" value="{{ $maxDeli }}">
                                 @endforeach
+                                @if (session()->has('couponUsedSeller'))
+                                @php
+                                    $couponUsedSellerId = session('couponUsedSeller');
+                                @endphp
+                                    <input type="hidden" name="coupon_used_seller_id" value="{{ $couponUsedSellerId }}">
+                                @endif
+                                @if (session()->has('couponUsedProduct'))
+                                @php
+                                    $couponUsedProductId = session('couponUsedProduct');
+                                @endphp
+                                    <input type="hidden" name="coupon_used_product_id" value="{{ $couponUsedProductId }}">
+                                @endif
+                                @if (session()->has('couponId'))
+                                @php
+                                    $couponId = session('couponId');
+                                @endphp
+                                    <input type="hidden" name="coupon_id" value="{{ $couponId }}">
+                                @endif
                                     <input type="hidden" name="subTotal" value="{{ $subTotal }}">
                                     <input type="hidden" name="shipping" value="{{ $shippingFee }}">
                                     <input type="hidden" name="coupon_discount" value="{{ $discount }}">

@@ -17,6 +17,7 @@ use App\Models\SellerNotification;
 use App\Models\Notification;
 use App\Models\MultiImg;
 use App\Models\Coupon;
+use App\Models\Transfer;
 use App\Models\Top;
 use App\Models\NewsLetter;
 use App\Models\Customer;
@@ -50,7 +51,7 @@ class AdminController extends Controller
     public function welcome()
     {
         // coupon to be inactive for the end date
-        $couponAll = Coupon::where('enddate', '<=', Carbon::now()->startOfDay())->get();
+        $couponAll = Coupon::where('enddate', '<=', Carbon::now()->endOfDay())->get();
         foreach ($couponAll as $couponInactive)
         {
             $couponInactive->status = 0;
@@ -133,7 +134,7 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-        $coupons = Coupon::where('status', 1)->orderBy('enddate', 'asc')->get();
+        $coupons = Coupon::with('seller')->with('product')->where('status', 1)->orderBy('enddate', 'asc')->get();
 
         $seafood = Product::leftjoin('categories', 'categories.id', '=', 'products.category_id')
             ->where('categories.category_name', 'Seafood')
@@ -1688,24 +1689,79 @@ class AdminController extends Controller
         Product::where('seller_id', $shop->user_id)->update(['status' => $request->status]);
         return redirect()->back();
     }
+
+    public function indextransferstatus(Request $request)
+    {
+        $transfer = Transfer::find($request->transfer_id);
+        $transfer->status = $request->status;
+        $transfer->save();
+        return redirect()->back();
+    }
+
+    // Active and InActive Coupon Status
     public function indexcouponstatus(Request $request)
     {
         $coupon = Coupon::find($request->coupon_id);
         $coupon->status = $request->status;
         $coupon->save();
 
-        $shop = Seller::where('coupon_id',$request->coupon_id)->get();
-        foreach($shop as $status)
+        if ($request->status == 0)
         {
-            $status->coupon_status = $request->status;
-            $status->save();
+            $shop = Seller::where('coupon_id',$request->coupon_id)->get();
+            if ($shop)
+            {
+                foreach ($shop as $sh)
+                {
+                    $sh->coupon_status = 0;
+                    $sh->save();
+                }
+            }
+            $product = Product::where('coupon_id', $request->coupon_id)->get();
+            if ($product)
+            {
+                foreach ($product as $pr)
+                {
+                    if ($pr->coupon_status == 0)
+                    {
+                        $pr->coupon_id = null;
+                        $pr->save();
+                    }
+                    else
+                    {
+                        $pr->coupon_status = 0;
+                        $pr->save();
+                    }
+                }
+            }
         }
-
-        $product = Product::where('coupon_id',$request->coupon_id)->get();
-        foreach($product as $status)
+        else
         {
-            $status->coupon_status = $request->status;
-            $status->save();
+            $product = Product::where('coupon_id', $request->coupon_id)->get();
+            if ($product)
+            {
+                foreach ($product as $pr)
+                {
+                    {
+                        $pr->coupon_status = 1;
+                        $pr->save();
+                    }
+                }
+            }
+            $shop = Seller::where('coupon_id',$request->coupon_id)->get();
+            if ($shop)
+            {
+                foreach ($shop as $sh)
+                {
+                    $sh->coupon_status = 1;
+                    $sh->save();
+                    $shopProducts = Product::where('seller_id', $sh->user_id)->where('coupon_status', 0)->whereNull('coupon_id')->get();
+                    foreach($shopProducts as $shProd)
+                    {
+                        $shProd->coupon_id = $sh->coupon_id;
+                        $shProd->save();
+                    }
+                }
+            }
         }
 
         return redirect('/admin/profile')->back();
@@ -2525,33 +2581,6 @@ class AdminController extends Controller
 
     public function editproduct($id)
     {
-        // $brands = DB::table('brands')->orderBy('created_at', 'desc')->get();
-        // $countries = DB::table('countries')->orderBy('created_at', 'desc')->get();
-        // $categorylist = DB::table('categories')->orderBy('created_at', 'desc')->get();
-        // $subtitlelist = DB::table('sub_category_titles')->orderBy('created_at', 'desc')->get();
-        // $subcategorylist = DB::table('sub_categories')->orderBy('created_at', 'desc')->get();
-        // $coupons = DB::table('coupons')->orderBy('created_at', 'desc')->get();
-
-        // $product_coupon = DB::table('products as P')
-        //             ->select('P.coupon_id','P.coupon_status')
-        //             ->where('P.id',$id)
-        //             ->orderBy('P.created_at', 'desc')->first();
-
-        // $couponlist = DB::table('coupons')
-        //                 ->select('coupons.id')
-        //                 ->where('id',$product_coupon->coupon_id)
-        //                 ->orderBy('created_at', 'desc')->first();
-
-
-        // $multiImgs = MultiImg::where('product_id',$id)->get();
-        // $data = DB::table('products as P')
-        //         ->where('P.id',$id)
-        //         ->orderBy('P.created_at', 'desc')->first();
-
-        // $editmode = true;
-
-        // return view('admin.editproduct',compact('data','editmode','brands','countries','categorylist','subtitlelist','subcategorylist','multiImgs','coupons','couponlist','product_coupon'));
-
         $brands = Brand::latest()->get();
         $countries = Country::latest()->get();
         $categories = Category::latest()->where('category_name', '!=', 'Special Corner')->get();
@@ -3396,6 +3425,7 @@ class AdminController extends Controller
                         ->orderBy(DB::raw("MONTH(created_at)"))
                         ->get();
 
+
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $data = array_fill(0, 12, 0);
 
@@ -3404,21 +3434,52 @@ class AdminController extends Controller
             $data[$monthIndex] = $order->count;
         }
 
-        $transfer = Seller::join('products', 'sellers.user_id', '=', 'products.seller_id')
-                        ->select(
-                            'sellers.id',
-                            'sellers.shop_name',
-                            'sellers.commission',
-                            DB::raw('SUM(products.seller_amount) as total_seller_amount')
-                        )
-                        ->orderBy('sellers.created_at', 'desc')
-                        ->groupBy('sellers.id', 'sellers.shop_name', 'sellers.commission')
-                        ->paginate($limit);
 
-        $ttl = $transfer->total();
+       // $currentMonthEnd =  Carbon::now()->endOfMonth()->format('y/m/d');
+
+        $transfer = Seller::leftjoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id') // Join on sellers.id instead of sellers.user_id
+                            ->select(
+                                'sellers.id',
+                                'sellers.shop_name',
+                                'sellers.commission',
+                                DB::raw('(SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) * (1 - sellers.commission/100) as seller_amount'))
+                            ->where('sellers.commission', '!=', 0)
+                            ->orderBy('sellers.created_at', 'desc')
+                            ->groupBy( 'sellers.id', 'sellers.shop_name', 'sellers.commission')
+                            ->paginate($limit);
+
+        foreach ($transfer as $record) {
+            $datePrefix = date('ym');
+            $sequentialNumber = 1;
+            // Generate the new product code
+            $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT) . $record->id;
+
+            // Check if a record with the same transfer code already exists
+            $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
+            $currentMonthStart = Carbon::now()->startOfMonth()->format('y/m/d');
+            $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('y/m/d');
+
+            // If no matching record is found, create a new one
+            if (!$existingTransfer) {
+                Transfer::create([
+                    'seller_id' => $record->id,
+                    'shop_name' => $record->shop_name,
+                    'commission' => $record->commission,
+                    'seller_amount' => $record->seller_amount,
+                    'transfer_code' => $newProductCode,
+                    'start_date' => $currentMonthStart,
+                    'end_date' => $currentMonthEnd,
+                ]);
+            }
+
+            // Increment the sequential number for the next iteration
+            $sequentialNumber++;
+        }
+        $transfer_history = Transfer::latest()->where('status', 0)->paginate($limit);
+        $ttl = $transfer_history->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('admin.index',compact('labels', 'data','transfer','revenue','orderCount','pending','product','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer_history','revenue','orderCount','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()

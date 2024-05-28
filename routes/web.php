@@ -164,6 +164,7 @@ route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->na
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
 Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->name('shopstatus');
+Route::post('/transfer/status', [AdminController::class, 'indextransferstatus'])->name('transferstatus');
 Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
 route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');

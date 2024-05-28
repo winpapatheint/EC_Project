@@ -70,7 +70,11 @@
                                                         </button>
                                                         @endif
                                                     </td>
+                                                    @if($list->coupon_status == 1)
                                                     <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
+                                                    @else
+                                                    <td data-label="" >-</td>
+                                                    @endif
                                                     <td class="col-sm-9">
                                                         @if($list->coupon_status == 1)
                                                             <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"

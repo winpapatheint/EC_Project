@@ -269,6 +269,9 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     var Newcoupondiscount = <?php echo json_encode($couponDiscount ); ?>;
     var NewshopIds = <?php echo json_encode($shop ); ?>;
     var NewMaxDelis = <?php echo json_encode($maxDeli ); ?>;
+    var NewCouponUsedSellerId = <?php echo json_encode($couponUsedSellerId ); ?>;
+    var NewCouponUsedProductId = <?php echo json_encode($couponUsedProductId ); ?>;
+    var NewCouponId = <?php echo json_encode($couponId ); ?>;
 
     $.ajax({
     url: '{{ route("payment_completed") }}',
@@ -292,6 +295,9 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
         buyeraddressid : Newbuyeraddressid,
         shopIds : NewshopIds,
         maxDelis : NewMaxDelis,
+        couponUsedSellerId : NewCouponUsedSellerId,
+        couponUsedProductId : NewCouponUsedProductId,
+        couponId : NewCouponId,
         payment: "PayPal"
     },
     async : false,

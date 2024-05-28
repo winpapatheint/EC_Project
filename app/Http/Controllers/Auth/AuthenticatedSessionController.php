@@ -17,16 +17,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        if (!empty(Auth::user()->role)) {
-            return redirect('/'.Auth::user()->role);
-        }
+        $user = Auth::user();
 
-        if (!empty(Auth::user()->role)) {
-            if (Auth::user()->role == 'admin') {
+        if (!empty($user->role)) {
+            if ($user->role == 'admin') {
                 return redirect()->intended(RouteServiceProvider::ADMIN);
-            } else if (Auth::user()->role == 'seller') {
-            return redirect()->intended(RouteServiceProvider::SELLER);
-            } else if (Auth::user()->role == 'buyer') {
+            } else if ($user->role == 'seller' && $user->status == 1) {
+                return redirect()->intended(RouteServiceProvider::SELLER);
+            } else if ($user->role == 'buyer' && $user->status == 1) {
                 return redirect('/user');
             } else {
                 return redirect()->intended(RouteServiceProvider::HOME);
@@ -35,6 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         return view('auth.login');
     }
+
 
 
     /**
@@ -55,10 +54,10 @@ class AuthenticatedSessionController extends Controller
 
             return redirect('/admin');
         }
-        else if (Auth::user()->role == 'seller') {
+        else if (Auth::user()->role == 'seller' && Auth::user()->status == 1) {
 
            return redirect()->intended(RouteServiceProvider::SELLER);
-        } else if (Auth::user()->role == 'buyer') {
+        } else if (Auth::user()->role == 'buyer' && Auth::user()->status == 1) {
             $intendedUrlWithDomain = $request->session()->pull('url.intended');
             $intendedUrlComponents = parse_url($intendedUrlWithDomain);
             $intendedPath = $intendedUrlComponents['path'];

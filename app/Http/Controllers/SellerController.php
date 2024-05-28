@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Help;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Reply;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Subseller;
@@ -14,12 +18,9 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Mail;
-use DateTime;
 use Illuminate\Auth\Events\Registered;
 
 class SellerController extends Controller
@@ -150,11 +151,36 @@ class SellerController extends Controller
 
     public function help()
     {
-        $email = Auth::user()->email;
-        $received = Help::where('to',$email)->latest()->paginate(10);
-        $sent = Help::where('from',$email)->latest()->paginate(10);
-        return view('seller.help.help',compact('received','sent'));
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $userEmail = Auth::user()->email;
+        $receivedQuery = Help::where('to', $userEmail)->latest();
+        $sentQuery = Help::where('from', $userEmail)->latest();
+        if ($search) {
+            $receivedQuery->where(function($q) use ($search) {
+                $q->where('to', 'LIKE', "%{$search}%")
+                ->orWhere('from', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->orWhere('body', 'LIKE', "%{$search}%");
+            });
+
+            $sentQuery->where(function($q) use ($search) {
+                $q->where('to', 'LIKE', "%{$search}%")
+                ->orWhere('from', 'LIKE', "%{$search}%")
+                ->orWhere('subject', 'LIKE', "%{$search}%")
+                ->orWhere('body', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $received = $receivedQuery->paginate(10);
+        $sent = $sentQuery->paginate(10);
+
+        return view('seller.help.help', compact('received', 'sent'));
     }
+
 
 
 
@@ -296,10 +322,25 @@ class SellerController extends Controller
 
     public function allSubseller()
     {
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
         $id = Auth::user()->id;
-        $subseller =  User::where('created_by',$id)->latest()->get();
-        return view('seller.subseller.subseller_all',compact('subseller'));
+        $query =  User::where('created_by', $id);
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $subseller = $query->latest()->get();
+        return view('seller.subseller.subseller_all', compact('subseller'));
     }
+
 
 
     public function addSubseller()

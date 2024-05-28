@@ -10,7 +10,7 @@
             $totalCommission = 0;
             $subTotalAmount = 0;
             $deliveryPrice =0;
-            foreach ($orderDetails as $order) {
+            foreach ($orderDetails as $index => $order) {
                 if ($order->used_delivery_price == 1) {
                     $deliveryPrice = $order->delivery_price;
                 }
@@ -54,17 +54,9 @@
                                                             </a>
                                                         </td>
 
-                                                        @php
-                                                            $comment = $order->product_name;
-                                                            $words = explode(' ', $comment);
-                                                            $lines = array_chunk($words,5);
-                                                        @endphp
-
                                                         <td style="width: 100%;">
                                                             <h6>
-                                                                @foreach ($lines as $line)
-                                                                {{ implode(' ', $line) }}<br>
-                                                            @endforeach
+                                                                {!! preg_replace('/(.{1,30})\s+?/', '$1<br>', $order->product_name) !!}
                                                             </h6>
                                                         </td>
 
@@ -150,7 +142,7 @@
                                             <div class="delivery-sec">
                                                 <h3>Expected date of delivery: </h3>
                                                 <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
-                                                <a href="{{ route('order.tracking',$order->id) }}">Track order</a>
+                                                <a href="{{ route('order.tracking', $order->id)}}">Track order</a>
                                             </div>
                                         </div>
                                     </div>

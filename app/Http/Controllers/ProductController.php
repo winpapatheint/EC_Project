@@ -344,11 +344,16 @@ class ProductController extends Controller
         $search = $validated['search'] ?? null;
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
-        $query = Review::where('user_id', $id);
+        $query = Review::where('seller_id', $id);
 
         if ($search) {
-            $query->whereHas('product', function($q) use ($search) {
-                $q->where('product_name', 'LIKE', "%{$search}%");
+            $query->where(function($q) use ($search) {
+                $q->whereHas('product', function($q) use ($search) {
+                    $q->where('product_name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('user', function($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
             });
         }
 

@@ -41,7 +41,20 @@
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}  </td>
                                             <td>{{ $item->user->name }}</td>
-                                            <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
+
+                                            @php
+                                                $comment = $item->comment;
+                                                $product_name = $item->product->product_name;
+                                                $comment_lines = array_chunk(str_word_count($comment, 1), 4);
+                                                $product_name_lines = array_chunk(str_word_count($product_name, 1), 4);
+                                            @endphp
+
+                                            <td>
+                                                @foreach ($product_name_lines as $line)
+                                                    {{ implode(' ', $line) }}<br>
+                                                @endforeach
+                                            </td>
+
                                             @if ($item->stars_rated == NULL)
                                                 <td>
                                                     <ul class="rating">
@@ -112,17 +125,11 @@
                                                 </td>
                                             @endif
 
-                                            @php
-                                                $comment = $item->comment;
-                                                $lines = array_chunk(str_word_count($comment, 1), 20);
-                                            @endphp
-
                                             <td>
-                                                @foreach ($lines as $line)
+                                                @foreach ($comment_lines as $line)
                                                     {{ implode(' ', $line) }}<br>
                                                 @endforeach
                                             </td>
-
                                             <td>
                                                 <label class="switch">
                                                     <input data-width="80" data-id="{{$item->id}}" class="toggle-review" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $item->status ? 'checked' : '' }}>

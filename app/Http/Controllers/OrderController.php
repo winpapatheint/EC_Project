@@ -204,7 +204,7 @@ class OrderController extends Controller
     public function cancelOrderReason(Request $request)
     {
         $validatedData = $request->validate([
-            'cancelled_reason' => 'required|string|max:255',
+            'cancelled_reason' => 'present|string|max:255',
         ]);
         $order = OrderDetail::find($request->id);
         $order->status = 'Cancel';
@@ -222,7 +222,7 @@ class OrderController extends Controller
         $sellerId = Auth::user()->created_by ?? Auth::id();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
                     ->join('products', 'products.id', 'order_details.product_id')
-                    ->join('buyers', 'orders.buyer_id', 'buyers.id')  // Join the buyers table
+                    ->join('buyers', 'orders.buyer_id', 'buyers.id')
                     ->with('prefecture')
                     ->select(
                         'orders.id as order_id',
@@ -233,7 +233,7 @@ class OrderController extends Controller
                         'products.selling_price as price',
                         'order_details.*',
                         'orders.created_at as order_created_at',
-                        'buyers.name as buyer_name'  // Select the buyer's name
+                        'buyers.name as buyer_name'
                     )
                     ->where('order_details.seller_id', $sellerId)
                     ->where('order_details.order_id', $id)
@@ -242,15 +242,6 @@ class OrderController extends Controller
         return view('seller.order.order_tracking',compact('orderDetails','process'));
     }
 
-    // public function generatePDF($id)
-    // {
-    //     $data = OrderDetail::with('seller')->find($id);
-    //     $pdf = PDF::loadView('seller.order.invoice', compact('data'))->setPaper('a4')->setOption([
-    //         'tempDir' => public_path(),
-    //         'chroot' => public_path(),
-    //     ]);
-    //     return $pdf->download('invoice.pdf');
-    // }
 
     public function generatePDF($id)
     {

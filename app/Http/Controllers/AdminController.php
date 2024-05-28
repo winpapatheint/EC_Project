@@ -3778,4 +3778,9 @@ class AdminController extends Controller
     {
         return view('admin.shoptransfer');
     }
+
+    public function indextransferorderdetail($id)
+    {
+        $transfer = Transfer::find($id);dd($transfer);
+    }
 }

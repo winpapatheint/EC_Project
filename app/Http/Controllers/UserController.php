@@ -17,6 +17,7 @@ use App\Models\BuyerAddress;
 use App\Models\BuyerPayment;
 use App\Models\Coupon;
 use App\Models\CouponDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -785,47 +786,66 @@ class UserController extends Controller
             $refreshCart = 'Invalid Coupon Code. Please try again!';
             return redirect()->back()->with(compact('refreshCart'));
         }
-        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
-        $cartLists = Cart::with('product')->with('buyer')->with('seller')
-                    ->where('buyer_id', $buyer->id)->get();
-        $cartSellerTotalAmount = [];
-        $couponUsedSeller = 0;
-        $couponUsedSellerName = "";
-        $couponUsedProduct = 0;
-        foreach ($cartLists as $cart)
+        else
         {
-            if ($cart->seller->coupon_status == 1 && $cart->seller->coupon_id == $coupon->id)
+            $couponCountCheck = CouponDetail::where('coupon_id', $coupon->id)->count();
+            if ($couponCountCheck >= $coupon->valid_count)
             {
-                $couponUsedSeller = $cart->seller_id;
-                $couponUsedSellerName = $cart->seller->shop_name;
+                $refreshCart = "The coupon (" . $request->coupon . ") has reached its maximum usage limit.";
+                return redirect()->back()->with(compact('refreshCart'));
             }
-            else if ($cart->product->coupon_status == 1 && $cart->product->coupon_id == $coupon->id)
+            if ($coupon->startdate > Carbon::now()->startOfDay())
             {
-                $couponUsedProduct = $cart->product_id;
+                $refreshCart = "The coupon (" . $request->coupon . ") cannot be used until " . date('Y/m/d', strtotime($coupon->startdate)) . ".";
+                return redirect()->back()->with(compact('refreshCart'));
             }
-            if (!isset($cartSellerTotalAmount[$cart->seller_id]))
+            if ($coupon->enddate < Carbon::now()->endOfDay())
             {
-                $cartSellerTotalAmount[$cart->seller_id] = $cart->quantity * $cart->product->selling_price;
+                $refreshCart = "This coupon (" . $request->coupon . ") is already expired.";
+                return redirect()->back()->with(compact('refreshCart'));
             }
-            else
+            $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+            $cartLists = Cart::with('product')->with('buyer')->with('seller')
+                        ->where('buyer_id', $buyer->id)->get();
+            $cartSellerTotalAmount = [];
+            $couponUsedSeller = 0;
+            $couponUsedSellerName = "";
+            $couponUsedProduct = 0;
+            foreach ($cartLists as $cart)
             {
-                $cartSellerTotalAmount[$cart->seller_id] += $cart->quantity * $cart->product->selling_price;
+                if ($cart->seller->coupon_status == 1 && $cart->seller->coupon_id == $coupon->id)
+                {
+                    $couponUsedSeller = $cart->seller_id;
+                    $couponUsedSellerName = $cart->seller->shop_name;
+                }
+                else if ($cart->product->coupon_status == 1 && $cart->product->coupon_id == $coupon->id)
+                {
+                    $couponUsedProduct = $cart->product_id;
+                }
+                if (!isset($cartSellerTotalAmount[$cart->seller_id]))
+                {
+                    $cartSellerTotalAmount[$cart->seller_id] = $cart->quantity * $cart->product->selling_price;
+                }
+                else
+                {
+                    $cartSellerTotalAmount[$cart->seller_id] += $cart->quantity * $cart->product->selling_price;
+                }
             }
+            if ($couponUsedSeller == 0 && $couponUsedProduct == 0)
+            {
+                $refreshCart = 'Invalid Coupon Code. Please use the displayed coupon code!';
+                return redirect()->back()->with(compact('refreshCart'));
+            }
+            else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount)
+            {
+                $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥' 
+                . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
+                return redirect()->back()->with(compact('refreshCart'));
+            }
+            $discount = $coupon->discount_amount;
+            $couponId = $coupon->id;
+            return redirect()->back()->with(compact('discount', 'couponUsedSeller', 'couponUsedProduct', 'couponId'));
         }
-        if ($couponUsedSeller == 0 && $couponUsedProduct == 0)
-        {
-            $refreshCart = 'Invalid Coupon Code. Please use the displayed coupon code!';
-            return redirect()->back()->with(compact('refreshCart'));
-        }
-        else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount)
-        {
-            $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥' 
-            . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
-            return redirect()->back()->with(compact('refreshCart'));
-        }
-        $discount = $coupon->discount_amount;
-        $couponId = $coupon->id;
-        return redirect()->back()->with(compact('discount', 'couponUsedSeller', 'couponUsedProduct', 'couponId'));
     }
 
     //Product Checkout

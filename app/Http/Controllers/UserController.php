@@ -1001,6 +1001,8 @@ class UserController extends Controller
                 ]);
                 $couponCheck = Coupon::where('id', $couponId)->first();
                 $couponDetailCheck = CouponDetail::where('coupon_id', $couponId)->get();
+                $couponCheck->used_count = $couponDetailCheck->count();
+                $couponCheck->save();
                 if ($couponDetailCheck->count() >= $couponCheck->valid_count)
                 {
                     $couponCheck->status = 0;

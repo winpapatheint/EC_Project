@@ -3796,6 +3796,6 @@ class AdminController extends Controller
 
     public function indextransferorderdetail($id)
     {
-        $transfer = Transfer::find($id);dd($transfer);
+        $transfer = Transfer::find($id);
     }
 }

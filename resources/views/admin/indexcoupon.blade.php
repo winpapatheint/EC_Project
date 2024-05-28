@@ -31,12 +31,12 @@
                                                 <th  style="min-width: 70px">No</th>
                                                 <th style="min-width: 150px">Date</th>
                                                 <th style="min-width: 50px">Name</th>
-                                                <th style="min-width: 50px">Coupon_code</th>
-                                                <th style="min-width: 50px">Discount_amount</th>
-                                                <th style="min-width: 50px">Mini_amount</th>
-                                                <th style="min-width: 50px">Valid_amount</th>
-                                                <th style="min-width: 150px">Startdate</th>
-                                                <th style="min-width: 150px">Enddate</th>
+                                                <th style="min-width: 50px">Coupon Code</th>
+                                                <th style="min-width: 50px">Discount Amount</th>
+                                                <th style="min-width: 50px">Mini Amount</th>
+                                                <th style="min-width: 50px">Valid Count</th>
+                                                <th style="min-width: 150px">Start Date</th>
+                                                <th style="min-width: 150px">End Date</th>
                                                 <th style="min-width: 150px">Status</th>
                                                 <th>Option</th>
                                             </tr>
@@ -94,7 +94,6 @@
                 </div>
                     <!--pagination -->
                     @include('components.pagination')
-
             </div>
         </div>
         <!-- Container-fluid Ends-->
@@ -112,17 +111,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="remove-box">
-                            <p>Coupon data will be deleted?</p>
+                            <p>Coupon data will be deleted.</p>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <form method="POST" action="{{ route('deletecoupon') }}" style="display:flex;">
                             @csrf
-                                <input type="hidden" name="id" value="{{ $list->id }}">
-                                    <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
-                                        data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                            <input type="hidden" name="id" value="{{ $list->id }}">
+                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
+                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
                         </form>
                     </div>
                 </div>

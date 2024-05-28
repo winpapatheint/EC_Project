@@ -266,11 +266,22 @@
                                                             <li>Order Total: ¥ {{ number_format($totalAmount , 0, '.', ',') }}</li>
                                                         </ul>
 
+                                                        @php
+                                                            function formatZipCode($zipCode) {
+                                                                if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                                                                    return $zipCode;
+                                                                }
+                                                                if (preg_match('/^\d{7}$/', $zipCode)) {
+                                                                    return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                                                                }
+                                                                return $zipCode; // return as-is if not a standard 7 digit zip code
+                                                            }
+                                                        @endphp
                                                         <div class="payment-mode">
                                                             <h4>Shipping address</h4>
                                                             <ul class="order-details">
-                                                                <li>{{ $order->order_details_name }}</li><br>
-                                                                <li>{{ $order->post_code }}</li><br>
+                                                                <li><h5>{{ $order->order_details_name }}</h5></li><br>
+                                                                <li>〒{{ $order->post_code }}</li><br>
                                                                 <li>{{ $order->prefecture->name }}</li>
                                                                 <li>{{ $order->city }}</li>
                                                                 <li>{{ $order->chome }}</li>

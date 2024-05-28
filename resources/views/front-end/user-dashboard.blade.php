@@ -202,10 +202,21 @@
                                                 <h4>Default Address</h4>
                                             </div>
 
+                                            @php
+                                                function formatZipCode($zipCode) {
+                                                    if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                                                        return $zipCode;
+                                                    }
+                                                    if (preg_match('/^\d{7}$/', $zipCode)) {
+                                                        return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                                                    }
+                                                    return $zipCode; // return as-is if not a standard 7 digit zip code
+                                                }
+                                            @endphp
                                             <div class="row g-4">
                                                 <div class="col-xxl-6">
                                                     <div class="dashboard-detail">
-                                                        <h6 class="text-content">{{ $address->post_code}}</h6>
+                                                        <h6 class="text-content">〒{{ $address->post_code}}</h6>
                                                         <h6 class="text-content">{{ $address->prefecture->name}}</h6>
                                                         <h6 class="text-content">{{ $address->city}} {{ $address->chome}}</h6>
                                                         <h6 class="text-content">{{ $address->building}} {{ $address->room_no}}</h6>

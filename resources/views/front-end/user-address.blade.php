@@ -130,6 +130,17 @@
                                             data-bs-toggle="modal" data-bs-target="#add-address"><i data-feather="plus"
                                                 class="me-2"></i> Add New Address</button>
                                     </div>
+                                    @php
+                                        function formatZipCode($zipCode) {
+                                            if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                                                return $zipCode;
+                                            }
+                                            if (preg_match('/^\d{7}$/', $zipCode)) {
+                                                return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                                            }
+                                            return $zipCode; // return as-is if not a standard 7 digit zip code
+                                        }
+                                    @endphp
                                     <div class="row g-sm-4 g-3">
                                         @foreach($data as $item)
                                         <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6">
@@ -157,7 +168,7 @@
                                                             <tr>
                                                                 <td>Address:</td>
                                                                 <td>
-                                                                    <p>{{ $item->post_code }}</p>
+                                                                    <p>〒{{ formatZipCode($item->post_code) }}</p>
                                                                     <p>{{ $item->prefecture->name }}</p>
                                                                     <p>{{ $item->city }} {{ $item->chome }}</p>
                                                                     <p>{{ $item->building }} {{ $item->room_no }}</p>
@@ -182,7 +193,7 @@
                                                     <button class="btn btn-sm add-button w-100" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#removeProfile"
-                                                            onclick="showDeleteModal('{{ $item->id }}')" style = "background-color: #ff6b6b;">
+                                                            onclick="showDeleteModal('{{ $item->id }}')" style="background-color: #ff6b6b;">
                                                         <i data-feather="trash-2"></i> Remove
                                                     </button>
                                                     @endif

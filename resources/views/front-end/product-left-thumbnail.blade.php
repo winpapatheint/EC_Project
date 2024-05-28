@@ -481,12 +481,23 @@
                                 </div>
                             </div>
 
+                            @php
+                                function formatZipCode($zipCode) {
+                                    if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                                        return $zipCode;
+                                    }
+                                    if (preg_match('/^\d{7}$/', $zipCode)) {
+                                        return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                                    }
+                                    return $zipCode; // return as-is if not a standard 7 digit zip code
+                                }
+                            @endphp
                             <div class="vendor-list">
                                 <ul>
                                     <li>
                                         <div class="address-contact">
                                             <i data-feather="map-pin"></i>
-                                            <h5>Address: <span class="text-content">{{ $product->user->seller->zip_code }}</span><br>
+                                            <h5>Address: <span class="text-content">〒{{ formatZipCode($product->user->seller->zip_code) }}</span><br>
                                             <span class="text-content">{{ $product->user->seller->city }}</span>
                                             <span class="text-content">{{ $product->user->seller->chome }}</span>
                                             <span class="text-content">{{ $product->user->seller->building }}</span>

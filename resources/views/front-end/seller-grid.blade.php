@@ -26,6 +26,17 @@
 
     <!-- Grid Section Start -->
     <section class="section-b-space seller-grid-section">
+        @php
+            function formatZipCode($zipCode) {
+                if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                    return $zipCode;
+                }
+                if (preg_match('/^\d{7}$/', $zipCode)) {
+                    return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                }
+                return $zipCode; // return as-is if not a standard 7 digit zip code
+            }
+        @endphp
         <div class="container-fluid-lg">
             <div class="row g-4">
                 @if($lists->count() < 1)
@@ -42,7 +53,8 @@
                                     </div>
 
                                     <div class="contact-detail">
-                                        <h5>Address: <span> {{ $seller -> zip_code }} {{ $seller -> city }} {{ $seller -> chome }} {{ $seller -> building }} {{ $seller -> room }}</span></h5>
+                                        <h5>Address: <span> 〒{{ formatZipCode($seller->zip_code) }}</span>
+                                            <span> {{ $seller->city }} {{ $seller->chome }} {{ $seller->building }} {{ $seller->room }}</span></h5>
                                     </div>
                                 </div>
 

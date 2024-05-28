@@ -506,7 +506,7 @@
                                 <div class="product-footer">
                                     <div class="product-detail">
                                         <span class="span-name">{{ $list->category_name }}</span>
-                                        <a href=" {{ url('/product-left-thumbnail') }}">
+                                        <a href="{{ url('/product-left-thumbnail/' . $list->id) }}">
                                             <h5 class="name">{{ $list->product_name }}</h5>
                                         </a>
                                         <p class="text-content mt-1 mb-2 product-content">{{ $list->short_desc }}</p>

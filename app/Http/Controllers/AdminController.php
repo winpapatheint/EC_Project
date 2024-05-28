@@ -17,6 +17,7 @@ use App\Models\SellerNotification;
 use App\Models\Notification;
 use App\Models\MultiImg;
 use App\Models\Coupon;
+use App\Models\Transfer;
 use App\Models\Top;
 use App\Models\NewsLetter;
 use App\Models\Customer;
@@ -1686,6 +1687,14 @@ class AdminController extends Controller
         $shop->status = $request->status;
         $shop->save();
         Product::where('seller_id', $shop->user_id)->update(['status' => $request->status]);
+        return redirect()->back();
+    }
+
+    public function indextransferstatus(Request $request)
+    {
+        $transfer = Transfer::find($request->transfer_id);
+        $transfer->status = $request->status;
+        $transfer->save();
         return redirect()->back();
     }
 
@@ -3416,29 +3425,61 @@ class AdminController extends Controller
                         ->orderBy(DB::raw("MONTH(created_at)"))
                         ->get();
 
+
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $data = array_fill(0, 12, 0);
-        // Populate the data array with counts from the database
+
         foreach ($orders as $order) {
-            $monthIndex = $order->month_number - 1; // Convert month_number to array index
+            $monthIndex = $order->month_number - 1;
             $data[$monthIndex] = $order->count;
         }
 
-        $transfer = Seller::join('products', 'sellers.user_id', '=', 'products.seller_id')
-                        ->select(
-                            'sellers.id',
-                            'sellers.shop_name',
-                            'sellers.commission',
-                            DB::raw('SUM(products.seller_amount) as total_seller_amount')
-                        )
-                        ->orderBy('sellers.created_at', 'desc')
-                        ->groupBy('sellers.id', 'sellers.shop_name', 'sellers.commission')
-                        ->paginate($limit);
 
-        $ttl = $transfer->total();
+       // $currentMonthEnd =  Carbon::now()->endOfMonth()->format('y/m/d');
+
+        $transfer = Seller::leftjoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id') // Join on sellers.id instead of sellers.user_id
+                            ->select(
+                                'sellers.id',
+                                'sellers.shop_name',
+                                'sellers.commission',
+                                DB::raw('(SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) * (1 - sellers.commission/100) as seller_amount'))
+                            ->where('sellers.commission', '!=', 0)
+                            ->orderBy('sellers.created_at', 'desc')
+                            ->groupBy( 'sellers.id', 'sellers.shop_name', 'sellers.commission')
+                            ->paginate($limit);
+
+        foreach ($transfer as $record) {
+            $datePrefix = date('ym');
+            $sequentialNumber = 1;
+            // Generate the new product code
+            $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT) . $record->id;
+
+            // Check if a record with the same transfer code already exists
+            $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
+            $currentMonthStart = Carbon::now()->startOfMonth()->format('y/m/d');
+            $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('y/m/d');
+
+            // If no matching record is found, create a new one
+            if (!$existingTransfer) {
+                Transfer::create([
+                    'seller_id' => $record->id,
+                    'shop_name' => $record->shop_name,
+                    'commission' => $record->commission,
+                    'seller_amount' => $record->seller_amount,
+                    'transfer_code' => $newProductCode,
+                    'start_date' => $currentMonthStart,
+                    'end_date' => $currentMonthEnd,
+                ]);
+            }
+
+            // Increment the sequential number for the next iteration
+            $sequentialNumber++;
+        }
+        $transfer_history = Transfer::latest()->where('status', 0)->paginate($limit);
+        $ttl = $transfer_history->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('admin.index',compact('labels', 'data','transfer','revenue','orderCount','pending','product','ttl','ttlpage'));
+        return view('admin.index',compact('labels', 'data','transfer_history','revenue','orderCount','pending','product','ttl','ttlpage'));
     }
 
     public function indexhelp()

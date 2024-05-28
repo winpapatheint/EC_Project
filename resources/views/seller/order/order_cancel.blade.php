@@ -54,17 +54,9 @@
                                                             </a>
                                                         </td>
 
-                                                        @php
-                                                            $comment = $order->product_name;
-                                                            $words = explode(' ', $comment);
-                                                            $lines = array_chunk($words,5);
-                                                        @endphp
-
                                                         <td style="width: 100%;">
                                                             <h6>
-                                                                @foreach ($lines as $line)
-                                                                {{ implode(' ', $line) }}<br>
-                                                            @endforeach
+                                                                {!! preg_replace('/(.{1,40})\s+?/', '$1<br>', $order->product_name) !!}
                                                             </h6>
                                                         </td>
 
@@ -151,22 +143,17 @@
                 <div class="modal-header d-block">
                     <h4 class="modal-title w-100" id="exampleModalLabel22">Order Cancel</h4>
                 </div>
-                <form action="{{ route('order.cancel.reason')}}" method="POST">
+                <form action="{{ route('order.cancel.reason')}}" method="POST" id="cancelOrderForm{{ $order->id }}">
                     @csrf
                     <input type="hidden" name="id" value="{{ $order->id }}">
                     <div class="modal-body">
-                        <p>Reason for order cancel:</p>
-                        <textarea class="form-control" name="cancelled_reason" rows="10"></textarea>
-                        <p style="display:none" class="cancelled_reason error text-danger"></p>
-                        @if (!empty($error['cancelled_reason']))
-                            @foreach ($error['cancelled_reason'] as  $key => $value)
-                                <p class="cancelled_reason error text-danger">{{ $value }}</p>
-                            @endforeach
-                        @endif
+                        <p style="color: red;">Canceling this product will result in its cancellation.</p>
+                        <textarea class="form-control" name="cancelled_reason" rows="8"></textarea>
+                        <p style="display:none" class="cancelled_reason text text-danger"></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <button type="submit" class="btn btn-animation">Confirm</button>
+                        <button type="button" class="btn btn-animation" onclick="validateAndSubmitForm('{{ $order->id }}')">Confirm</button>
                         <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -175,4 +162,23 @@
     </div>
 @endforeach
 <!-- Cancel Order Modal End -->
+
+<script>
+    function validateAndSubmitForm(orderId) {
+        var form = document.getElementById('cancelOrderForm' + orderId);
+        var reasonField = form.querySelector('textarea[name="cancelled_reason"]');
+        var errorField = form.querySelector('.cancelled_reason.text');
+
+        if (!reasonField.value.trim()) {
+            errorField.textContent = 'Please provide a cancellation reason.';
+            errorField.style.display = 'block';
+        } else {
+            errorField.textContent = '';
+            errorField.style.display = 'none';
+            form.submit();
+        }
+    }
+</script>
+
+
 @endsection

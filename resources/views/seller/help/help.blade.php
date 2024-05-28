@@ -44,7 +44,7 @@
                                                         <tr>
                                                             <th>Title</th>
                                                             <th>Sender</th>
-                                                            <th>Reason</th>
+                                                            <th>Content</th>
                                                             <th>Date</th>
                                                             <th></th>
                                                         </tr>

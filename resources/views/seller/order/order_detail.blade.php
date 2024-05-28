@@ -160,30 +160,4 @@
 </div>
 <!-- tracking section End -->
 
-<!-- Cancel Order Modal Box Start -->
-@foreach($orderDetails as $index => $order)
-    <div class="modal fade theme-modal remove-coupon" id="cancelOrder{{ $order->id }}" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h4 class="modal-title w-100" id="exampleModalLabel22">Order Cancel</h4>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('order.cancel.reason')}}" method="POST">
-                        <input type="hidden" name="id" value="{{ $order->id }}">
-                        @csrf
-                        <p>Reason for order cancel:</p>
-                        <textarea class="form-control" name="comment" rows="10">{{ $order->comment }}</textarea>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <button type="submit" class="btn btn-animation">Confirm</button>
-                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-@endforeach
-<!-- Cancel Order Modal Box End -->
 @endsection

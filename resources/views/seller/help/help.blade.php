@@ -190,7 +190,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-animation">Reply</button>
-                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -242,7 +242,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-animation">Reply</button>
-                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -273,9 +273,9 @@
                     <form method="POST" action="{{ route('help.delete') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                            <button type="submit" class="btn btn-animation">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

@@ -101,6 +101,11 @@
                     </div>
                 </div>
 
+                @if (request()->is('productlist') ||
+                    request()->is('orderlist') ||
+                    request()->is('review') ||
+                    request()->is('help')
+                    )
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group">
@@ -111,6 +116,8 @@
                         </div>
                     </form>
                 </div>
+                @endif
+
                 @php
                     use App\Models\SellerNotification;
 

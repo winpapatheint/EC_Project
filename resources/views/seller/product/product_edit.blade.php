@@ -216,8 +216,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-animation" >Yes</button>
+                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -291,8 +291,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
-                                                                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                                <button type="submit" class="btn btn-animation" >Yes</button>
+                                                                <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -333,8 +333,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="validateForm()">Yes</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation" onclick="validateForm()">Yes</button>
+                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
             </form>
         </div>
@@ -362,9 +362,9 @@
                 <form method="POST" action="{{ route('delete.multiImg') }}">
                     @csrf
                         <input type="hidden" name="id" value="{{ $img->id }}">
-                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                        <button type="submit" class="btn btn-animation">Yes</button>
                 </form>
-                <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
         </div>
     </div>

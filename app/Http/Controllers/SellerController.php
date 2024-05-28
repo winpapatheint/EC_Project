@@ -30,7 +30,11 @@ class SellerController extends Controller
         $limit=10;
         $id = Auth::user()->created_by ?? Auth::id();
         $revenue = OrderDetail::where('seller_id', $id)->where('status', 'Delivered')->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->sum('amount');
-        $order = OrderDetail::where('seller_id', $id)->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->get();
+        $order = OrderDetail::where('seller_id', $id)
+                ->where('status', '!=', 'Cancel')
+                ->groupBy('order_id')
+                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id')
+                ->get();
         $pending = OrderDetail::where('seller_id', $id)->where('status', 'Pending')->get();
         $product = Product::where('seller_id', $id)->get();
         $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);

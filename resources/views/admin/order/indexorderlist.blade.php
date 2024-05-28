@@ -16,76 +16,130 @@
                         <div class="title-header option-title">
                             <h5>Order List</h5>
                         </div>
-                        <div>
-                            <div class="table-responsive">
-                                <table class="table all-package order-table theme-table dataTable no-footer"
-                                    id="table_id">
 
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Date</th>
-                                            <th>Order Code</th>
-                                            <th>Delivery Status</th>
-                                            <th>Amount</th>
-                                            <th>Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($order->isEmpty())
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-home-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-home"
+                                    type="button">List</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-profile"
+                                    type="button">Cancelled Order</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table all-package order-table theme-table dataTable no-footer"
+                                        id="table_id">
+                                        <thead>
                                             <tr>
-                                                <td colspan="9">No data available</td>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Order Code</th>
+                                                <th>Delivery Status</th>
+                                                <th>Amount</th>
+                                                <th>Option</th>
                                             </tr>
-                                        @else
-                                        @foreach($order as $key => $item)
+                                        </thead>
+                                        <tbody>
+                                            @if ($order->isEmpty())
+                                                <tr>
+                                                    <td colspan="9">No data available</td>
+                                                </tr>
+                                            @else
+                                            @foreach($order as $key => $item)
+                                                <tr>
+                                                    <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                    <td>{{ $item->order->order_code }}</td>
+                                                    <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
+                                                        <span>{{ $item->status }}</span>
+                                                    </td>
+                                                    <td>¥{{ number_format($item->amount) }}</td>
+                                                    <td>
+                                                        <ul>
+                                                            <li>
+                                                                <a href="{{ route('orderdetail',['id' => $item->order_id]) }}">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="{{ route('invoice',$item->id) }}"
+                                                                   @if($item->status === 'Cancel')
+                                                                       onclick="return false;"
+                                                                   @endif>
+                                                                    <i class="icon-cloud-down"></i>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a class="btn btn-sm btn-solid text-white"
+                                                                    href="{{ route('ordertracking', $item->order_id)}}"
+                                                                    @if($item->status === 'Cancel')
+                                                                       onclick="return false;"
+                                                                    @endif>
+                                                                    Tracking
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table all-package order-table theme-table dataTable no-footer"
+                                        id="table_id">
+                                        <thead>
                                             <tr>
-                                                <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                    {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                <td>{{ $item->order->order_code }}</td>
-                                                <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
-                                                    <span>{{ $item->status }}</span>
-                                                </td>
-                                                <td>¥{{ number_format($item->amount) }}</td>
-                                                <td>
-                                                    <ul>
-                                                        <li>
-                                                            <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
-                                                                <i class="ri-eye-line"></i>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
-                                                                <i class="ri-pencil-line"></i>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="{{ route('invoice',$item->id) }}"
-                                                               @if($item->status === 'Cancel')
-                                                                   onclick="return false;"
-                                                               @endif>
-                                                                <i class="icon-cloud-down"></i>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a class="btn btn-sm btn-solid text-white"
-                                                                href="{{ route('order.tracking', $item->order_id)}}"
-                                                                @if($item->status === 'Cancel')
-                                                                   onclick="return false;"
-                                                                @endif>
-                                                                Tracking
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Order Code</th>
+                                                <th>Product Code</th>
+                                                <th>Product Name</th>
+                                                <th>Quantity</th>
+                                                <th>Amount</th>
+                                                <th>Reason</th>
                                             </tr>
-                                        @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @if ($cancelledOrder->isEmpty())
+                                                <tr>
+                                                    <td colspan="9">No data available</td>
+                                                </tr>
+                                            @else
+                                            @foreach($cancelledOrder as $key => $item)
+                                                <tr>
+                                                    <td>{{ ($cancelttl+1) - ($cancelledOrder->firstItem() + $key) }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                    <td>{{ $item->order->order_code }}</td>
+                                                    <td><a href="{{ route('detail.product',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+                                                    <td>
+                                                        <h6>
+                                                            {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
+                                                        </h6>
+                                                    </td>
+                                                    <td>{{ $item->qty }}</td>
+                                                    <td>¥{{ number_format($item->amount) }}</td>
+                                                    <td>{{ $item->cancelled_reason }}</td>
+                                                </tr>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

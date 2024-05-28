@@ -981,19 +981,6 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
-    public function orderdetail($id)
-    {
-        $order = Order::find($id);
-        return view('admin.order.orderdetail',compact('order'));
-    }
-
-    public function orderTracking($id)
-    {
-        $order = Order::find($id);
-        $process = Process::where('order_id',$id)->latest()->get();
-        return view('admin.order.ordertracking',compact('order','process'));
-    }
-
 
     public function indexshop($id)
     {
@@ -3396,26 +3383,100 @@ class AdminController extends Controller
 
     public function indexorderlist()
     {
-        // $validated = request()->validate([
-        //     'mainSearch' => 'string|nullable',
-        // ]);
-        // $mainSearch = $validated['mainSearch'] ?? null;
-        // $query = Order::query();
-        // if ($mainSearch != null) {
-        //     $query->where(function ($query) use ($mainSearch) {
-        //         $query->where('order_id', 'like', '%' . $mainSearch . '%')
-        //               ->where('total_amount', 'like', '%' . $mainSearch . '%')
-        //               ->where('confirmed_date', 'like', '%' . $mainSearch . '%');
-        //     });
-        // }
-        $limit = 10;
+        {
+            $validated = request()->validate([
+                'search' => 'string|nullable',
+            ]);
 
-        $order = OrderDetail::latest()->paginate($limit);
-        $ttl = $order->total();
-        $ttlpage = ceil($ttl / $limit);
+            $search = $validated['search'] ?? null;
+            $limit = 10;
 
-        return view('admin.order.indexorderlist', compact('order', 'ttl', 'ttlpage'));
+            $orderQuery = OrderDetail::with('order')
+                ->groupBy('order_id')
+                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+                ->orderBy('created_at', 'desc');
 
+            if ($search) {
+                $orderQuery->where(function($query) use ($search) {
+                    $query->where('order_id', 'LIKE', "%{$search}%")
+                        ->orWhereHas('order', function($q) use ($search) {
+                            $q->where('order_code', 'LIKE', "%{$search}%");
+                        });
+                });
+            }
+
+            $order = $orderQuery->paginate($limit);
+            $cancelledOrderQuery = OrderDetail::with('order')
+                ->join('products', 'order_details.product_id', '=', 'products.id')
+                ->select('order_details.*', 'products.*')
+                ->where('order_details.status', 'Cancel')
+                ->orderBy('order_details.created_at', 'desc');
+
+            if ($search) {
+                $cancelledOrderQuery->where(function($query) use ($search) {
+                    $query->where('order_id', 'LIKE', "%{$search}%")
+                        ->orWhereHas('order', function($q) use ($search) {
+                            $q->where('order_code', 'LIKE', "%{$search}%");
+                        })
+                        ->orWhere('products.product_name', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $cancelledOrder = $cancelledOrderQuery->paginate($limit);
+            $ttl = $order->total();
+            $ttlpage = ceil($ttl / $limit);
+            $cancelttl = $cancelledOrder->total();
+            $cancelttlPage = ceil($cancelttl / $limit);
+
+            return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
+        }
+
+    }
+
+    public function orderdetail($id)
+    {
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+                ->join('products', 'products.id', 'order_details.product_id')
+                ->with('prefecture')
+                ->select(
+                    'orders.id as order_id',
+                    'order_details.id as order_detail_id',
+                    'products.id as product_id',
+                    'orders.*',
+                    'products.*',
+                    'products.selling_price as price',
+                    'order_details.*',
+                    'orders.created_at as order_created_at',
+                )
+                ->where('order_details.order_id', $id)
+                ->where('order_details.status', '!=', 'Cancel')
+                ->get();
+
+        return view('admin.order.orderdetail', compact('orderDetails'));
+    }
+
+    public function orderTracking($id)
+    {
+        $process = Process::where('order_id',$id)->latest()->get();
+        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+                    ->join('products', 'products.id', 'order_details.product_id')
+                    ->join('buyers', 'orders.buyer_id', 'buyers.id')
+                    ->with('prefecture')
+                    ->select(
+                        'orders.id as order_id',
+                        'order_details.id as order_detail_id',
+                        'products.id as product_id',
+                        'orders.*',
+                        'products.*',
+                        'products.selling_price as price',
+                        'order_details.*',
+                        'orders.created_at as order_created_at',
+                        'buyers.name as buyer_name'
+                    )
+                    ->where('order_details.order_id', $id)
+                    ->get();
+
+        return view('admin.order.ordertracking',compact('orderDetails','process'));
     }
 
     public function admindashboard()

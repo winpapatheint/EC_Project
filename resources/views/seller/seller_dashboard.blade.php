@@ -167,7 +167,6 @@
                                 <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
                                 <div class="user-name-hide media-body">
                                     <span>{{ Auth::user()->name }}</span>
-                                    {{-- <p class="mb-0 font-roboto">{{ Auth::user()->name }}<i class="middle ri-arrow-down-s-line"></i></p> --}}
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">

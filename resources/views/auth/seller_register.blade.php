@@ -36,51 +36,41 @@
                                 @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="shop_name" class="form-control" placeholder="Shop Name" value="{{ old('shop_name') }}">
+                                        <input type="text" id="shop_name" name="shop_name" class="form-control" placeholder="Shop Name" value="{{ old('shop_name') }}">
                                         <label>Shop Name</label>
-                                        @error('shop_name')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-shop_name"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="date" name="shop_establish" class="form-control" value="{{ old('shop_establish') }}">
+                                        <input type="date" id="shop_establish" name="shop_establish" class="form-control" value="{{ old('shop_establish') }}">
                                         <label>Established Year</label>
-                                        @error('shop_establish')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-shop_establish"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="file" name="shop_logo" class="form-control" value="{{ old('shop_logo') }}">
+                                        <input type="file" id="shop_logo" name="shop_logo" class="form-control" value="{{ old('shop_logo') }}">
                                         <label>Shop Logo</label>
-                                        @error('shop_logo')
-                                            <div class="text-danger">The shop logo {{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-shop_logo"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
+                                        <input type="number" id="phone" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
                                         <label>Phone</label>
-                                        @error('phone')
-                                            <div class="text-danger">The phone must be present</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-phone"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="number" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}">
+                                        <input type="number" id="zip_code" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}">
                                         <label>Zip Code</label>
-                                        @error('zip_code')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-zip_code"></span>
                                     </div>
                                 </div>
 
@@ -99,49 +89,39 @@
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('prefecture')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-prefecture"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" value="{{ old('city') }}">
+                                        <input type="text" id="city" name="city" class="form-control" placeholder="Narita-shi,Furugome" value="{{ old('city') }}">
                                         <label>City, Ward, Town</label>
-                                        @error('city')
-                                            <div class="text-danger">The city {{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-city"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="chome" class="form-control" placeholder="1-2-3" value="{{ old('chome') }}">
+                                        <input type="text" id="chome" name="chome" class="form-control" placeholder="1-2-3" value="{{ old('chome') }}">
                                         <label>Chome, Banchi, Go</label>
-                                        @error('chome')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-chome"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="building" class="form-control" placeholder="Example Building" value="{{ old('building') }}">
+                                        <input type="text" id="building" name="building" class="form-control" placeholder="Example Building" value="{{ old('building') }}">
                                         <label>Building / Apt / Company name</label>
-                                        @error('building')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-building"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="room" class="form-control" placeholder="101" value="{{ old('room') }}">
+                                        <input type="text" id="room" name="room" class="form-control" placeholder="101" value="{{ old('room') }}">
                                         <label>Unit / Room no.</label>
-                                        @error('room')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-room"></span>
                                     </div>
                                 </div>
 
@@ -149,21 +129,17 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_name" class="form-control" placeholder="Bank Name" value="{{ old('bank_name') }}">
+                                        <input type="text" id="bank_name" name="bank_name" class="form-control" placeholder="Bank Name" value="{{ old('bank_name') }}">
                                         <label>Bank Name</label>
-                                        @error('bank_name')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-bank_name"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_branch" class="form-control" placeholder="Branch Name" value="{{ old('bank_branch') }}">
+                                        <input type="text" id="bank_branch" name="bank_branch" class="form-control" placeholder="Branch Name" value="{{ old('bank_branch') }}">
                                         <label>Branch Name</label>
-                                        @error('bank_branch')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-bank_branch"></span>
                                     </div>
                                 </div>
 
@@ -175,29 +151,23 @@
                                             <option value="当座" {{ old('bank_acc_type') == '当座' ? 'selected' : '' }}>当座</option>
                                             <option value="貯蓄" {{ old('bank_acc_type') == '貯蓄' ? 'selected' : '' }}>貯蓄</option>
                                         </select>
-                                        @error('bank_acc_type')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-bank_acc_type"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
+                                        <input type="text" id="bank_acc_name" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
                                         <label>Bank Account Name</label>
-                                        @error('bank_acc_name')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-bank_acc_name"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="d" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
+                                        <input type="text" id="bank_acc_no" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
                                         <label>Bank Account Number</label>
-                                        @error('bank_acc_no')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-bank_acc_no"></span>
                                     </div>
                                 </div>
 
@@ -205,46 +175,38 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="user_name" class="form-control" placeholder="Name" value="{{ old('user_name') }}">
+                                        <input type="text" id="user_name" name="user_name" class="form-control" placeholder="Name" value="{{ old('user_name') }}">
                                         <label>Username</label>
-                                        @error('user_name')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-user_name"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
+                                        <input type="email" id="mail" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
                                         <label>Email Address</label>
-                                        @error('mail')
-                                                <div class="text-danger">The email {{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-mail"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" name="passwords" class="form-control" placeholder="Password" value="{{ old('passwords') }}">
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" value="{{ old('passwords') }}">
                                         <label>Password</label>
-                                        @error('passwords')
-                                                <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-password"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="password" name="confirmed" class="form-control" placeholder="Password" value="{{ old('confirmed') }}">
+                                        <input type="password" name="confirmed" class="form-control" placeholder="Confirm Password" value="{{ old('confirmed') }}">
                                         <label>Confirm Password</label>
-                                        @error('confirmed')
-                                            <div class="text-danger">The confirmed password does not match.</div>
-                                        @enderror
+                                        <span class="error" style="color:red" id="error-confirmed"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <button class="btn btn-animation theme-bg-color w-100" type="submit">Sign Up</button>
+                                    <button class="btn btn-animation theme-bg-color w-100" type="button" onclick="validateUserForm()">Sign Up</button>
                                 </div>
                             </form>
                         </div>
@@ -259,4 +221,184 @@
         </div>
     </section>
 
+    <script>
+        function validateUserForm() {
+            let isValid = true;
+
+            const shop_name = document.getElementById('shop_name').value.trim();console.log(shop_name);
+
+            const shop_establish = document.getElementById('shop_establish').value.trim();
+            const shop_logo = document.getElementById('shop_logo').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const zip_code = document.getElementById('zip_code').value.trim();
+            const prefecture = document.querySelector('select[name="prefecture"]').value;
+            const city = document.getElementById('city').value.trim();
+            const chome = document.getElementById('chome').value.trim();
+            const building = document.getElementById('building').value.trim();
+            const room = document.getElementById('room').value.trim();
+            const bank_name = document.getElementById('bank_name').value.trim();
+            const bank_branch = document.getElementById('bank_branch').value.trim();
+            const bank_acc_type = document.querySelector('select[name="bank_acc_type"]').value;
+            const bank_acc_name = document.getElementById('bank_acc_name').value.trim();
+            const bank_acc_no = document.getElementById('bank_acc_no').value.trim();
+            const user_name = document.getElementById('user_name').value.trim();
+            const mail = document.getElementById('mail').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmed = document.querySelector('input[name="confirmed"]').value.trim();
+
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            if (!shop_name) {
+                isValid = false;
+                document.getElementById('error-shop_name').textContent = 'Please provide your shop name.';
+            } else if (shop_name.length > 255) {
+                isValid = false;
+                document.getElementById('error-shop_name').textContent = 'Your shop name must not exceed 255 characters.';
+            }
+
+            if (!shop_establish) {
+                isValid = false;
+                document.getElementById('error-shop_establish').textContent = 'Please provide your shop established date.';
+            }
+
+            if (!shop_logo.value) {
+            isValid = false;
+            document.getElementById('error-shop_logo').textContent = 'Please provide your shop logo.';
+            } else if (shop_logo.files[0].size > 2 * 1024 * 1024) {
+                isValid = false;
+                document.getElementById('error-shop_logo').textContent = 'Your shop logo must not exceed 2MB.';
+            }
+
+            if (!phone) {
+                isValid = false;
+                document.getElementById('error-phone').textContent = 'Please provide your phone number.';
+            } else if (!/^\d+$/.test(phone)) {
+                isValid = false;
+                document.getElementById('error-phone').textContent = 'Please provide a valid phone number.(eg. 09077554361)';
+            }
+
+            if (!zip_code) {
+                isValid = false;
+                document.getElementById('error-zip_code').textContent = 'Please provide your zip code.';
+            } else if (zip_code.length !== 7 || !/^\d{7}$/.test(zip_code)) {
+                isValid = false;
+                document.getElementById('error-zip_code').textContent = 'Please provide a valid 7-digit zip code.';
+            }
+
+            if (!prefecture || prefecture === 'Choose Prefecture') {
+                isValid = false;
+                document.getElementById('error-prefecture').textContent = 'Please select a valid prefecture.';
+            }
+
+            if (!city) {
+                isValid = false;
+                document.getElementById('error-city').textContent = 'Please provide your city.';
+            } else if (city.length > 255) {
+                isValid = false;
+                document.getElementById('error-city').textContent = 'Your city must not exceed 255 characters.';
+            }
+
+            if (!chome) {
+                isValid = false;
+                document.getElementById('error-chome').textContent = 'Please provide your chome.';
+            } else if (chome.length > 255) {
+                isValid = false;
+                document.getElementById('error-chome').textContent = 'Your chome must not exceed 255 characters.';
+            }
+
+            if (!building) {
+                isValid = false;
+                document.getElementById('error-building').textContent = 'Please provide your building.';
+            } else if (building.length > 255) {
+                isValid = false;
+                document.getElementById('error-building').textContent = 'Your building must not exceed 255 characters.';
+            }
+
+            if (!room) {
+                isValid = false;
+                document.getElementById('error-room').textContent = 'Please provide your room number.';
+            } else if (room.length > 255) {
+                isValid = false;
+                document.getElementById('error-room').textContent = 'Your room number must not exceed 255 characters.';
+            }
+
+            if (!bank_name) {
+                isValid = false;
+                document.getElementById('error-bank_name').textContent = 'Please provide your name.';
+            } else if (bank_name.length > 255) {
+                isValid = false;
+                document.getElementById('error-bank_name').textContent = 'Your name must not exceed 255 characters.';
+            }
+
+            if (!bank_branch) {
+                isValid = false;
+                document.getElementById('error-bank_branch').textContent = 'Please provide your name.';
+            } else if (bank_branch.length > 255) {
+                isValid = false;
+                document.getElementById('error-bank_branch').textContent = 'Your name must not exceed 255 characters.';
+            }
+
+            if (!bank_acc_type || bank_acc_type === 'Choose bank account type') {
+                isValid = false;
+                document.getElementById('error-bank_acc_type').textContent = 'Please select a valid bank account.';
+            }
+
+            if (!bank_acc_name) {
+                isValid = false;
+                document.getElementById('error-bank_acc_name').textContent = 'Please provide your bank account name.';
+            } else if (user_name.length > 255) {
+                isValid = false;
+                document.getElementById('error-bank_acc_name').textContent = 'Your name must not exceed 255 characters.';
+            }
+
+            if (!bank_acc_no) {
+                isValid = false;
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide your zip code.';
+            } else if (!/^\d+$/.test(bank_acc_no)) {
+                isValid = false;
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide a valid 7-digit zip code.';
+            }
+
+            if (!user_name) {
+                isValid = false;
+                document.getElementById('error-user_name').textContent = 'Please provide your name.';
+            } else if (user_name.length > 255) {
+                isValid = false;
+                document.getElementById('error-user_name').textContent = 'Your name must not exceed 255 characters.';
+            }
+
+            if (!mail) {
+                isValid = false;
+                document.getElementById('error-mail').textContent = 'Please provide your email.';
+            } else if (!/\S+@\S+\.\S+/.test(mail)) {
+                isValid = false;
+                document.getElementById('error-mail').textContent = 'Please provide a valid email address.';
+            }
+
+            if (!password) {
+                isValid = false;
+                document.getElementById('error-password').textContent = 'Please provide your password.';
+            } else if (password.length < 8) {
+                isValid = false;
+                document.getElementById('error-password').textContent = 'Your password must be at least 8 characters long.';
+            }
+
+            if (password && !confirmed) {
+                isValid = false;
+                document.getElementById('error-confirmed').textContent = 'Please confirm your password.';
+            } else if (password !== confirmed) {
+                isValid = false;
+                document.getElementById('error-confirmed').textContent = 'Passwords do not match.';
+            }
+
+            if (isValid) {
+                document.querySelector('form').submit();
+            }
+        }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            validateUserForm();
+        });
+    </script>
 </x-guest-layout>

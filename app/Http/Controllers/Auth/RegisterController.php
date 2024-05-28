@@ -26,7 +26,7 @@ class RegisterController extends Controller
         $validatedData = $request->validate([
             'user_name' => 'present|string|max:255',
             'mail' => 'present|string|email|max:255|unique:users,email',
-            'passwords' => 'present|string|min:8',
+            'password' => 'present|string|min:8',
             'confirmed' => 'required|string|same:passwords',
             'bank_name' => 'present|string|max:255',
             'bank_acc_type' => 'present|string',
@@ -54,7 +54,7 @@ class RegisterController extends Controller
             'name' => $validatedData['user_name'],
             'email' => $validatedData['mail'],
             'role' => 'seller',
-            'password' => Hash::make($validatedData['passwords']),
+            'password' => Hash::make($validatedData['password']),
             'status' => 1,
         ]);
         event(new Registered($user));

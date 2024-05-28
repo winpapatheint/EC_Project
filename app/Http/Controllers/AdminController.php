@@ -3796,6 +3796,15 @@ class AdminController extends Controller
 
     public function indextransferorderdetail($id)
     {
+        $limit = 10;
         $transfer = Transfer::find($id);
-    }
+        $lists = OrderDetail::with('order')->with('buyer')->with('product')
+                ->where('seller_id', $transfer->seller_id)
+                ->whereBetween('created_at', [$transfer->start_date, $transfer->end_date])
+                ->paginate($limit);
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.transfer_order_detail',compact('lists','ttlpage','ttl'));
+}
 }

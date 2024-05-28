@@ -946,7 +946,7 @@ class UserController extends Controller
             $totalAmount = $request->totalamount;
             $subTotalAmount = $request->subtotalamount;
             $shippingFee = $request->shippingfee;
-            $couponDiscountAmount = $request->coupondiscountamount;
+            $couponDiscountAmount = $request->coupondiscountamount ?? 0;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
             $name = $buyerAddressFirst->name;
@@ -984,7 +984,7 @@ class UserController extends Controller
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 'sub_total_amount' => $subTotalAmount,
-                'coupon_discount_amout' => $couponDiscountAmount,
+                'coupon_discount_amount' => $couponDiscountAmount,
                 'coupon_used_seller_id' => $couponUsedSellerId,
                 'coupon_used_product_id' => $couponUsedProductId,
                 'shipping_fee' => $shippingFee,

@@ -402,7 +402,8 @@
                         @csrf
                         <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                        style="background: #6c757d;">No</button>
                 </div>
             </div>
         </div>

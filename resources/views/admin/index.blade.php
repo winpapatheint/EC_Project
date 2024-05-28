@@ -79,7 +79,7 @@
                     <div class="card o-hidden">
                         <div class="card-header border-0 pb-1">
                             <div class="card-header-title">
-                                <h4>Sales Graph</h4>
+                                <h4>Sales Graph&nbsp;<span>(2024年）</span></h4>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -106,43 +106,56 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Date</th>
-                                                <th>Transfer Id</th>
+                                                <th>Transfer Code</th>
                                                 <th>Shop</th>
                                                 <th>Order details</th>
-                                                <th>Paid</th>
+                                                <th>Pay Type</th>
                                                 <th>Commission<br>(%)</th>
                                                 <th>Amount</th>
+                                                <th>Adjustment</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($transfer->isEmpty())
+                                            @if ($transfer_history->isEmpty())
                                             <tr>
                                                 <td colspan="9">No data available</td>
                                             </tr>
                                         @else
-                                            @foreach ($transfer as $key => $item )
+                                            @foreach ($transfer_history as $key => $item )
                                                 <tr>
-                                                    <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
+                                                    <td>{{ ($ttl+1) - ($transfer_history->firstItem() + $key) }}</td>
 
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m') }}
+                                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('Y/m/d') }} ~ {{ \Carbon\Carbon::parse($item->end_date)->format('Y/m/d') }}
                                                       </td>
-                                                    <td></td>
+                                                    <td>{{$item->transfer_code}}</td>
                                                     <td>{{$item->shop_name}}</td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td>
+                                                        <ul>
+                                                            <li>
+                                                                <a href="">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                    <td>
+                                                        @if($item->status == 1)
+                                                            PayPal
+                                                        @else
+                                                            pending
+                                                        @endif
+                                                    </td>
                                                     <td>{{$item->commission}}</td>
+                                                    <td>¥{{number_format($item->seller_amount) }}</td>
                                                     <td></td>
                                                     <td class="col-sm-9">
-                                                        <label class="switch" style="margin-top: 8px;">
-                                                            <input data-width="100" data-id=""
-                                                            class="toggle-class" type="checkbox"
-                                                            data-offstyle="outline-secondary" data-toggle="toggle"
-                                                            data-on="Active" data-off="InActive"
-
-                                                          >
+                                                        <label class="switch">
+                                                            <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
+                                                            data-on="Paid" data-off="Unpaid"  {{ $item->status ? 'checked' : '' }}>
                                                         </label>
                                                     </td>
+
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -160,7 +173,31 @@
         <!-- Container-fluid Ends-->
     </div>
     <!-- index body end -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script>
+        $(function() {
+            $('.toggle-class').change(function() {
+
+                var status = $(this).prop('checked') ? 1 : 0;
+                var transfer_id = $(this).data('id');
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "{{ route('transferstatus') }}",
+                    data: {
+                        'status': status,
+                        'transfer_id': transfer_id,
+                        '_token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        alert('2');
+                        console.log(data.success);
+                    }
+                });
+            });
+        });
+        </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

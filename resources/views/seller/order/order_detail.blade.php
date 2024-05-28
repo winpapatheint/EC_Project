@@ -142,7 +142,7 @@
                                             <div class="delivery-sec">
                                                 <h3>Expected date of delivery: </h3>
                                                 <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
-                                                <a href="{{ route('order.tracking', $order->id)}}">Track order</a>
+                                                <a href="{{ route('order.tracking', $order->order_id)}}">Track order</a>
                                             </div>
                                         </div>
                                     </div>

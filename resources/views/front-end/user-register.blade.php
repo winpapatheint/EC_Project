@@ -226,7 +226,7 @@
                 document.getElementById('error-password').textContent = 'Your password must be at least 8 characters long.';
             }
     
-            if (!password_confirmation) {
+            if (password && !password_confirmation) {
                 isValid = false;
                 document.getElementById('error-confirmed-password').textContent = 'Please confirm your password.';
             } else if (password !== password_confirmation) {

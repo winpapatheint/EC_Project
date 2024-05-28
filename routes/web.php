@@ -106,68 +106,66 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 
 //Admin
 Route::get('/admin', [AdminController::class, 'admindashboard'])->middleware(['auth','role:admin'])->name('admin.dashboard');
-Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->name('admin.transferdetail');
+Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->middleware(['auth','role:admin'])->name('admin.transferdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
-Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->name('registercategory');
-Route::post('admin/registersubtitle', [AdminController::class, 'storesubtitle'])->name('registersubtitle');
-Route::post('admin/registersubcategory', [AdminController::class, 'storesubcategory'])->name('registersubcategory');
-
+Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->middleware(['auth','role:admin'])->name('registercategory');
+Route::post('admin/registersubtitle', [AdminController::class, 'storesubtitle'])->middleware(['auth','role:admin'])->name('registersubtitle');
+Route::post('admin/registersubcategory', [AdminController::class, 'storesubcategory'])->middleware(['auth','role:admin'])->name('registersubcategory');
 Route::get('/admin/users', function () {return view('back-end.users');});
 
 Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin']);
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
-Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->name('ss');
-Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->name('statusreview');
-Route::get('/admin/profile', function () {return view('admin.profile');})->name('admin.profile');
-Route::get('/admin/review/product', [AdminController::class,'indexreview'])->name('admin.product.review');
-Route::get('/admin/faq', [AdminController::class, 'indexfaq']);
-Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->name('admin.addcoupon');
-Route::get('/admin/coupon', [AdminController::class, 'indexcoupon']);
-
-Route::get('/admin/indexcustomer', [AdminController::class, 'indexcustomer']);
-Route::get('/editcustomer/{topid}', [AdminController::class, 'editcustomer']);
-Route::post('admin/registercustomer', [AdminController::class, 'storecustomer'])->name('registercustomer');
-
-Route::get('/admin/top', [AdminController::class, 'indextop']);
-Route::get('/admin/newsletter', [AdminController::class, 'indexnewsletter']);
-Route::get('/edittop/{topid}', [AdminController::class, 'edittop']);
-Route::post('admin/registertop', [AdminController::class, 'storetop'])->name('registertop');
-Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
-Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->name('registercoupon');
-Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon']);
-Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->name('admin.registerfaq');
-Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->name('registerfaq');
-Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq']);
-route::post('/deletefaq',[AdminController::class,'deletefaq'])->name('deletefaq');
+Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->middleware(['auth','role:admin'])->name('ss');
+Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->middleware(['auth','role:admin'])->name('statusreview');
+Route::get('/admin/profile', function () {return view('admin.profile');})->middleware(['auth','role:admin'])->name('admin.profile');
+Route::get('/admin/review/product', [AdminController::class,'indexreview'])->middleware(['auth','role:admin'])->name('admin.product.review');
+Route::get('/admin/faq', [AdminController::class, 'indexfaq'])->middleware(['auth','role:admin']);
+Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->middleware(['auth','role:admin'])->name('admin.addcoupon');
+Route::get('/admin/coupon', [AdminController::class, 'indexcoupon'])->middleware(['auth','role:admin']);
+Route::get('/admin/indexcustomer', [AdminController::class, 'indexcustomer'])->middleware(['auth','role:admin']);
+Route::get('/editcustomer/{topid}', [AdminController::class, 'editcustomer'])->middleware(['auth','role:admin']);
+Route::post('admin/registercustomer', [AdminController::class, 'storecustomer'])->middleware(['auth','role:admin'])->name('registercustomer');
+Route::get('/admin/top', [AdminController::class, 'indextop'])->middleware(['auth','role:admin']);
+Route::get('/admin/newsletter', [AdminController::class, 'indexnewsletter'])->middleware(['auth','role:admin']);
+Route::get('/edittop/{topid}', [AdminController::class, 'edittop'])->middleware(['auth','role:admin']);
+Route::post('admin/registertop', [AdminController::class, 'storetop'])->middleware(['auth','role:admin'])->name('registertop');
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon'])->middleware(['auth','role:admin']);
+Route::post('admin/registercoupon', [AdminController::class, 'storecoupon'])->middleware(['auth','role:admin'])->name('registercoupon');
+Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon'])->middleware(['auth','role:admin']);
+Route::get('/admin/registerfaq', function () {return view('admin.registerfaq');})->middleware(['auth','role:admin'])->name('admin.registerfaq');
+Route::post('admin/registerfaq', [AdminController::class, 'storefaq'])->middleware(['auth','role:admin'])->name('registerfaq');
+Route::get('/editfaq/{faqid}', [AdminController::class, 'editfaq'])->middleware(['auth','role:admin']);
+route::post('/deletefaq',[AdminController::class,'deletefaq'])->middleware(['auth','role:admin'])->name('deletefaq');
 //AdminProduct
-Route::get('/admin/product', [AdminController::class, 'indexproduct'])->name('admin.all.product');
-Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->name('admin.all.shop');
-route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->name('updatecoupon');
-route::post('/admin/updatecommission',[AdminController::class,'updatecommission'])->name('updatecommission');
-route::post('/admin/updateproductcommission',[AdminController::class,'updateproductcommission'])->name('updateproductcommission');
-
-route::post('/admin/deletecommission',[AdminController::class,'deletecommission'])->name('deletecommission');
-route::post('/admin/updateproductcoupon',[AdminController::class,'updateproductcoupon'])->name('updateproductcoupon');
-Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct']);
+Route::get('/admin/product', [AdminController::class, 'indexproduct'])->middleware(['auth','role:admin'])->name('admin.all.product');
+Route::get('/admin/shoplist', [AdminController::class, 'shoplist'])->middleware(['auth','role:admin'])->name('admin.all.shop');
+route::post('/admin/updatecoupon',[AdminController::class,'updatecoupon'])->middleware(['auth','role:admin'])->name('updatecoupon');
+route::post('/admin/updatecommission',[AdminController::class,'updatecommission'])->middleware(['auth','role:admin'])->name('updatecommission');
+route::post('/admin/updateadjust',[AdminController::class,'updateadjust'])->middleware(['auth','role:admin'])->name('updateadjust');
+route::post('/admin/updateproductcommission',[AdminController::class,'updateproductcommission'])->middleware(['auth','role:admin'])->name('updateproductcommission');
+route::post('/admin/deletecommission',[AdminController::class,'deletecommission'])->middleware(['auth','role:admin'])->name('deletecommission');
+route::post('/admin/updateproductcoupon',[AdminController::class,'updateproductcoupon'])->middleware(['auth','role:admin'])->name('updateproductcoupon');
+Route::get('/editproduct/{productid}', [AdminController::class, 'editproduct'])->middleware(['auth','role:admin']);
 Route::post('/admin/product/multiImg', [AdminController::class, 'updateMultiImg'])->middleware(['auth','role:admin'])->name('updatemultiImg');
 Route::get('/admin/product/multiImg/delete/{id}', [AdminController::class, 'deletemultiImg'])->middleware(['auth','role:admin'])->name('deletemultiImg');
-Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->name('storeproduct');
-Route::get('product/{productid}', [AdminController::class, 'productdetail']);
-Route::get('shop/{shopid}', [AdminController::class, 'shopdetail']);
-Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail']);
-Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail']);
-route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->name('deleteproduct');
+Route::post('admin/storeproduct', [AdminController::class, 'storeproduct'])->middleware(['auth','role:admin'])->name('storeproduct');
+Route::get('product/{productid}', [AdminController::class, 'productdetail'])->middleware(['auth','role:admin']);
+Route::get('shop/{shopid}', [AdminController::class, 'shopdetail'])->middleware(['auth','role:admin']);
+Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail'])->middleware(['auth','role:admin']);
+Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail'])->middleware(['auth','role:admin']);
+route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->middleware(['auth','role:admin'])->name('deleteproduct');
 
-Route::post('/product/status', [AdminController::class, 'indexstatus'])->name('tt');
-Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->name('shopstatus');
-Route::post('/transfer/status', [AdminController::class, 'indextransferstatus'])->name('transferstatus');
-Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->name('coupon');
-route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->name('deletecoupon');
-Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->name('subadminstataus');
+Route::post('/product/status', [AdminController::class, 'indexstatus'])->middleware(['auth','role:admin'])->name('tt');
+Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->middleware(['auth','role:admin'])->name('shopstatus');
+Route::post('/transfer/status', [AdminController::class, 'indextransferstatus'])->middleware(['auth','role:admin'])->name('transferstatus');
+Route::get('admin/transfer-order-details/{transferId}', [AdminController::class, 'indextransferorderdetail'])->name('transfer_order_detail');
+Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->middleware(['auth','role:admin'])->name('coupon');
+route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->middleware(['auth','role:admin'])->name('deletecoupon');
+Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->middleware(['auth','role:admin'])->name('subadminstataus');
 
 //startuser
 

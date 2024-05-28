@@ -2391,6 +2391,20 @@ class AdminController extends Controller
 
     }
 
+    public function  updateadjust(Request $request)
+    {
+        $adjust = $request->input('adjust');
+        $adjustId = $request->input('adjustId');
+        $item = Transfer::find( $adjustId);
+
+        if ($item) {
+            $item->adjust_amount = $adjust;
+            $item->save();
+        }
+        return redirect('/admin')->with('success','adjust added');
+
+    }
+
     public function  updateproductcommission(Request $request)
     {
         // Retrieve the input values
@@ -3442,7 +3456,7 @@ class AdminController extends Controller
                                 'sellers.id',
                                 'sellers.shop_name',
                                 'sellers.commission',
-                                DB::raw('(SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) * (1 - sellers.commission/100) as seller_amount'))
+                                DB::raw('FLOOR((SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) * (1 - sellers.commission/100)) as seller_amount'))
                             ->where('sellers.commission', '!=', 0)
                             ->orderBy('sellers.created_at', 'desc')
                             ->groupBy( 'sellers.id', 'sellers.shop_name', 'sellers.commission')
@@ -3457,7 +3471,7 @@ class AdminController extends Controller
             // Check if a record with the same transfer code already exists
             $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
             $currentMonthStart = Carbon::now()->startOfMonth()->format('y/m/d');
-            $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('y/m/d');
+            $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('y/m/d');
 
             // If no matching record is found, create a new one
             if (!$existingTransfer) {
@@ -3469,6 +3483,7 @@ class AdminController extends Controller
                     'transfer_code' => $newProductCode,
                     'start_date' => $currentMonthStart,
                     'end_date' => $currentMonthEnd,
+                    'status' => 0,
                 ]);
             }
 
@@ -3777,5 +3792,10 @@ class AdminController extends Controller
     public function shopTransferDetail($id)
     {
         return view('admin.shoptransfer');
+    }
+
+    public function indextransferorderdetail($id)
+    {
+        $transfer = Transfer::find($id);
     }
 }

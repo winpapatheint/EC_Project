@@ -16,6 +16,7 @@ class Transfer extends Model
         'shop_name',
         'commission',
         'seller_amount',
+        'adjust_amount',
         'status',
         'start_date',
         'end_date',

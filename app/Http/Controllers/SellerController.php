@@ -12,6 +12,7 @@ use App\Models\Reply;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Subseller;
+use App\Models\Transfer;
 use App\Models\Prefecture;
 use App\Models\OrderDetail;
 use App\Models\Notification;
@@ -37,18 +38,35 @@ class SellerController extends Controller
                 ->get();
         $pending = OrderDetail::where('seller_id', $id)->where('status', 'Pending')->get();
         $product = Product::where('seller_id', $id)->get();
-        $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);
+        // $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);
         $orders = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
                 ->whereYear('created_at', date('Y'))
                 ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
                 ->pluck('count', 'month_name');
 
-        $ttl = $transfer->total();
-        $ttlpage = (ceil($ttl / $limit));
-        $labels = $orders->keys();
-        $data = $orders->values();
+        $ordergraph = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
+                    ->whereYear('created_at', date('Y'))
+                    ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
+                    ->orderBy(DB::raw("MONTH(created_at)"))
+                    ->get();
 
-        return view('seller.index',compact('labels', 'data','transfer','revenue','order','pending','product','ttl','ttlpage'));
+        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $data = array_fill(0, 12, 0);
+
+        foreach ($ordergraph as $item) {
+            $monthIndex = $item->month_number - 1;
+            $data[$monthIndex] = $item->count;
+        }
+
+        $transfer_history = Transfer::latest()
+                                ->with('seller')
+                                ->where('seller_id',Auth::user()->id) // Eager load the seller relationship
+                                ->paginate($limit);
+
+        $ttl = $transfer_history->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('seller.index',compact('labels', 'data','transfer_history','revenue','order','pending','product','ttl','ttlpage'));
     }
 
 

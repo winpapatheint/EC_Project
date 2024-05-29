@@ -9,6 +9,7 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
+            @include('components.messagebox')
             <div class="col-sm-12">
                 <div class="card card-table">
                     <!-- Table Start -->
@@ -64,12 +65,25 @@
                                                     <td>
                                                         <ul>
                                                             <li>
+<<<<<<< HEAD
+                                                                <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
+=======
                                                                 <a href="{{ route('orderdetail',['id' => $item->order_id]) }}">
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
 
                                                             <li>
+<<<<<<< HEAD
+                                                                <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
+                                                                    <i class="ri-pencil-line"></i>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+=======
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                 <a href="{{ route('invoice',$item->id) }}"
                                                                    @if($item->status === 'Cancel')
                                                                        onclick="return false;"
@@ -80,7 +94,11 @@
 
                                                             <li>
                                                                 <a class="btn btn-sm btn-solid text-white"
+<<<<<<< HEAD
+                                                                    href="{{ route('order.tracking', $item->order_id)}}"
+=======
                                                                     href="{{ route('ordertracking', $item->order_id)}}"
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                     @if($item->status === 'Cancel')
                                                                        onclick="return false;"
                                                                     @endif>
@@ -125,7 +143,11 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                         {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>{{ $item->order->order_code }}</td>
+<<<<<<< HEAD
+                                                    <td><a href="{{ route('detailproduct',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+=======
                                                     <td><a href="{{ route('detail.product',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                     <td>
                                                         <h6>
                                                             {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
@@ -207,11 +229,13 @@
                                 @endif
                             </form>
 
-                            <form action="{{ route('order.cancel') }}" method="GET">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $item->id }}">
-                                <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
-                            </form>
+                            @if($item->status === 'Pending')
+                                <form action="{{ route('order.cancel') }}" method="GET">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <button type="submit" class="btn btn-outline-primary w-100 {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled-blue' : '' }}" name="status" value="Cancel" {{ $item->status === 'Cancel' || $item->status === 'Delivered' ? 'disabled' : '' }}>Order Cancel</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

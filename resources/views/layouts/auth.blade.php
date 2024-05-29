@@ -97,12 +97,12 @@
                         </a>
                     </div>
                 </div>
-                @if (request()->is('admin/shoplist') || 
-                    request()->is('admin/product') || 
-                    request()->is('admin/category') || 
-                    request()->is('admin/all/blog') || 
-                    request()->is('admin/coupon') || 
-                    request()->is('admin/orderlist') || 
+                @if (request()->is('admin/shoplist') ||
+                    request()->is('admin/product') ||
+                    request()->is('admin/category') ||
+                    request()->is('admin/all/blog') ||
+                    request()->is('admin/coupon') ||
+                    request()->is('admin/orderlist') ||
                     request()->is('admin/review/product') ||
                     request()->is('admin/all/users'))
                 <div class="search-box">
@@ -193,7 +193,7 @@
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
                                     <li>
-                                        <a href="{{ route('admin.profile') }}">
+                                        <a href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                             <i data-feather="user"></i>
                                                 <span>Profile</span>
                                         </a>

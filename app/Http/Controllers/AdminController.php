@@ -981,6 +981,33 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
+<<<<<<< HEAD
+    public function faqdetail($id)
+    {
+        $faq = DB::table('faqs')
+                ->select( 'faqs.*')
+                ->where('faqs.id',$id)->get();
+        $faq = $faq[0];
+
+        return view('admin.faqdetail',compact('faq'));
+    }
+
+
+    public function orderdetail($id)
+    {
+        $order = Order::find($id);
+        return view('admin.order.orderdetail',compact('order'));
+    }
+
+    public function orderTracking($id)
+    {
+        $order = Order::find($id);
+        $process = Process::where('order_id',$id)->latest()->get();
+        return view('admin.order.ordertracking',compact('order','process'));
+    }
+
+=======
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
 
     public function indexshop($id)
     {
@@ -1681,9 +1708,11 @@ class AdminController extends Controller
     {
         $transfer = Transfer::find($request->transfer_id);
         $transfer->status = $request->status;
+        $transfer->payment = $request->payment;
         $transfer->save();
         return redirect()->back();
     }
+
 
     // Active and InActive Coupon Status
     public function indexcouponstatus(Request $request)
@@ -1985,8 +2014,8 @@ class AdminController extends Controller
 
             DB::table('faqs')->insert([
                 'title' => $request->title,
-                'ans' => $request->content_desc,
-                'que' => $request->content_ansdesc,
+                'que' => $request->content_desc,
+                'ans' => $request->content_ansdesc,
                 'created_by' => Auth::user()->id,
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
@@ -1998,8 +2027,8 @@ class AdminController extends Controller
         } else {
 
             $updval = array('title' => $request->title,
-                            'ans' => $request->content_desc,
-                            'que' => $request->content_ansdesc,
+                            'que' => $request->content_desc,
+                            'ans' => $request->content_ansdesc,
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
@@ -3222,6 +3251,7 @@ class AdminController extends Controller
                     'discount_amount' => $request->disamount,
                     'mini_amount' => $request->miniamount,
                     'valid_count' => $request->validcount,
+                    'used_count' => 0,
                     'startdate' => $request->startdate,
                     'enddate' => $request->enddate,
                     'status' => '1',
@@ -3383,6 +3413,54 @@ class AdminController extends Controller
 
     public function indexorderlist()
     {
+<<<<<<< HEAD
+        $validated = request()->validate([
+            'search' => 'string|nullable',
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $limit = 10;
+
+        $orderQuery = OrderDetail::with('order')
+            ->where('status', '!=', 'Cancel')
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+            ->orderBy('created_at', 'desc');
+
+        if ($search) {
+            $orderQuery->where(function($query) use ($search) {
+                $query->where('order_id', 'LIKE', "%{$search}%")
+                    ->orWhereHas('order', function($q) use ($search) {
+                        $q->where('order_code', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $order = $orderQuery->paginate($limit);
+        $cancelledOrderQuery = OrderDetail::with('order')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select('order_details.*', 'products.*')
+            ->where('order_details.status', 'Cancel')
+            ->orderBy('order_details.created_at', 'desc');
+
+        if ($search) {
+            $cancelledOrderQuery->where(function($query) use ($search) {
+                $query->where('order_id', 'LIKE', "%{$search}%")
+                    ->orWhereHas('order', function($q) use ($search) {
+                        $q->where('order_code', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhere('products.product_name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $cancelledOrder = $cancelledOrderQuery->paginate($limit);
+        $ttl = $order->total();
+        $ttlpage = ceil($ttl / $limit);
+        $cancelttl = $cancelledOrder->total();
+        $cancelttlPage = ceil($cancelttl / $limit);
+
+        return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
+=======
         {
             $validated = request()->validate([
                 'search' => 'string|nullable',
@@ -3395,6 +3473,7 @@ class AdminController extends Controller
                 ->groupBy('order_id')
                 ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
                 ->orderBy('created_at', 'desc');
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
 
             if ($search) {
                 $orderQuery->where(function($query) use ($search) {
@@ -3500,7 +3579,6 @@ class AdminController extends Controller
                         ->orderBy(DB::raw("MONTH(created_at)"))
                         ->get();
 
-
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $data = array_fill(0, 12, 0);
 
@@ -3512,22 +3590,89 @@ class AdminController extends Controller
 
        // $currentMonthEnd =  Carbon::now()->endOfMonth()->format('y/m/d');
 
-        $transfer = Seller::leftjoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id') // Join on sellers.id instead of sellers.user_id
-                            ->select(
-                                'sellers.id',
-                                'sellers.shop_name',
-                                'sellers.commission',
-                                DB::raw('FLOOR((SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) * (1 - sellers.commission/100)) as seller_amount'))
-                            ->where('sellers.commission', '!=', 0)
-                            ->orderBy('sellers.created_at', 'desc')
-                            ->groupBy( 'sellers.id', 'sellers.shop_name', 'sellers.commission')
-                            ->paginate($limit);
+                            // $transfers = Seller::leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
+                            //                     ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
+                            //                     ->select(
+                            //                         'sellers.user_id as seller_id',
+                            //                         'sellers.shop_name',
+                            //                         'products.commission as product_commision',
+                            //                         'sellers.commission as seller_commission',
+                            //                         'products.id as product_id',
+                            //                     //     DB::raw('(SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as total_amount'),
+                            //                     //     DB::raw('(SUM(order_details.amount)  * (1 - products.commission/100) as seller_amount')+ SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END))
+                            //                     // )
+
+
+                            //                    DB::raw('(SUM(order_details.amount) * (1 - products.commission/100) +
+                            //                    SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount'))
+
+                            //                     ->where('products.commission', '!=', 0)
+                            //                     ->orderBy('sellers.created_at', 'desc')
+                            //                     ->groupBy('sellers.id', 'sellers.shop_name', 'products.commission', 'products.id','sellers.commission')
+                            //                     ->paginate($limit);
+
+                            // $transfers = (Seller::leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
+                            //                     ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
+                            //                     ->select(
+                            //                         'sellers.user_id as seller_id',
+                            //                         'sellers.shop_name',
+                            //                         'products.commission as product_commission',
+                            //                         'sellers.commission as seller_commission',
+                            //                         'products.id as product_id',
+                            //                         DB::raw('(SUM(order_details.amount) * (1 - products.commission/100) +
+                            //                             SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount')
+                            //                     )
+                            //                     ->where('products.commission', '!=', 0)
+
+                            //                     ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id', 'sellers.commission')
+                            //                     ->paginate($limit);)  as P lefjoin Seller::
+        $currentMonthStart = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('Y-m-d');
+        $nextMonthstartdate = Carbon::now()->endOfMonth()->addDays(1)->format('Y-m-d');
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $transfer = [];
+        $subquery = DB::table('sellers')
+                        ->select(
+                            'sellers.user_id as seller_id',
+                            'sellers.shop_name',
+                            'products.commission as product_commission',
+                            'products.id as product_id',
+                            DB::raw('(SUM(order_details.amount) * (1 - products.commission / 100) +
+                                        SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount')
+                        )
+                        ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
+                        ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
+                        ->where('products.commission', '!=', 0)
+
+                        ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$currentMonthStart, $currentMonthEnd])
+                        ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
+
+        if ( $currentDate === $currentMonthEnd) {
+            $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function($join) {
+                $join->on('P.seller_id', '=', 'sellers.user_id');
+            })
+            ->Bindings($subquery)
+            ->select('sellers.user_id','sellers.commission', DB::raw('MAX(sellers.shop_name) AS shop_name'),
+                DB::raw('SUM(P.seller_amount) AS total_seller_amount'))
+            ->groupBy('sellers.user_id','sellers.commission')
+            ->paginate($limit);
+        }
+        elseif ( $currentDate === $nextMonthstartdate) {
+            $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function($join) {
+                $join->on('P.seller_id', '=', 'sellers.user_id');
+            })
+            ->Bindings($subquery)
+            ->select('sellers.user_id','sellers.commission', DB::raw('MAX(sellers.shop_name) AS shop_name'),
+                DB::raw('SUM(P.seller_amount) AS total_seller_amount'))
+            ->groupBy('sellers.user_id','sellers.commission')
+            ->paginate($limit);
+        }
 
         foreach ($transfer as $record) {
             $datePrefix = date('ym');
             $sequentialNumber = 1;
             // Generate the new product code
-            $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT) . $record->id;
+            $newProductCode = $datePrefix . str_pad($sequentialNumber, 5, '0', STR_PAD_LEFT) . $record->user_id;
 
             // Check if a record with the same transfer code already exists
             $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
@@ -3537,25 +3682,34 @@ class AdminController extends Controller
             // If no matching record is found, create a new one
             if (!$existingTransfer) {
                 Transfer::create([
-                    'seller_id' => $record->id,
+                    'seller_id' => $record->user_id,
                     'shop_name' => $record->shop_name,
                     'commission' => $record->commission,
-                    'seller_amount' => $record->seller_amount,
+                    'seller_amount' => $record->total_seller_amount,
                     'transfer_code' => $newProductCode,
                     'start_date' => $currentMonthStart,
                     'end_date' => $currentMonthEnd,
                     'status' => 0,
+
                 ]);
             }
 
             // Increment the sequential number for the next iteration
             $sequentialNumber++;
         }
-        $transfer_history = Transfer::latest()->where('status', 0)->paginate($limit);
+        $transfer_history = Transfer::latest()->paginate($limit);
         $ttl = $transfer_history->total();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('admin.index',compact('labels', 'data','transfer_history','revenue','orderCount','pending','product','ttl','ttlpage'));
+    }
+
+
+    public function detailProduct($id)
+    {
+        $data = Product::find($id);
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        return view('admin.product_detail',compact('data','multiImgs'));
     }
 
     public function indexhelp()
@@ -3859,13 +4013,27 @@ class AdminController extends Controller
     {
         $limit = 10;
         $transfer = Transfer::find($id);
+<<<<<<< HEAD
+        $start_date = Carbon::parse($transfer->start_date)->format('Y/m/d');
+        $end_date = Carbon::parse($transfer->end_date)->format('Y/m/d');
+
+        $lists = OrderDetail::with('order')->with('buyer')->with('product')
+                ->where('seller_id', $transfer->seller_id)
+                ->whereBetween(DB::raw("DATE_FORMAT(created_at, '%Y/%m/%d')"), [$start_date, $end_date])
+=======
         $lists = OrderDetail::with('order')->with('buyer')->with('product')
                 ->where('seller_id', $transfer->seller_id)
                 ->whereBetween('created_at', [$transfer->start_date, $transfer->end_date])
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                 ->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('admin.transfer_order_detail',compact('lists','ttlpage','ttl'));
+<<<<<<< HEAD
+    }
+=======
 }
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
 }
+

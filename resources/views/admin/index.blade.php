@@ -1,4 +1,25 @@
 <x-auth-layout>
+    <style>
+        .custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f5f5f5;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #495057;
+}
+
+.custom-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+    </style>
     <!-- index body start -->
      <div class="page-body">
         <div class="container-fluid">
@@ -43,6 +64,7 @@
                         <div class="custome-3-bg b-r-4 card-body">
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
+                                    <h7>All</h7><br>
                                     <span class="m-0">All Products</span>
                                     <h4 class="mb-0 counter">{{ $product }}
                                         <a href="{{ route('add.product') }}" class="badge badge-light-secondary grow">
@@ -63,6 +85,7 @@
                         <div class="custome-4-bg b-r-4 card-body">
                             <div class="media static-top-widget">
                                 <div class="media-body p-0">
+                                    <h7>All</h7><br>
                                     <span class="m-0">Pending Orders</span>
                                     <h4 class="mb-0 counter">{{ $pending }}</h4>
                                 </div>
@@ -81,7 +104,7 @@
                     <div class="card o-hidden">
                         <div class="card-header border-0 pb-1">
                             <div class="card-header-title">
-                                <h4>Sales Graph&nbsp;<span>(2024年）</span></h4>
+                                <h4>Sales Graph&nbsp;<span>(2024Year）</span></h4>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -134,18 +157,23 @@
                                                     <td>{{$item->shop_name}}</td>
                                                     <td>
                                                         <ul>
-                                                            <li>
-                                                                <a href="">
+                                                            <li class="btn-icon">
+                                                                <a href="{{ route('transfer_order_detail', ['transferId' => $item->id]) }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                    <td>
-                                                        @if($item->status == 1)
-                                                            PayPal
+                                                    <td >
+                                                        @if($item->status==0)
+                                                        <select class="js-example-basic-single w-100 custom-select" name="payment" id="payment">
+                                                            <option  value="0">Select PayType</option>
+                                                            <option  value="PayPal" >PayPal</option>
+                                                            <option  value="Bank">Bank</option>
+
+                                                        </select>
                                                         @else
-                                                            PayPal
+                                                        {{ $item->payment }}
                                                         @endif
                                                     </td>
                                                     <td>{{$item->commission}}</td>
@@ -166,10 +194,17 @@
 
                                                     </td>
                                                     <td class="col-sm-9">
+                                                        @if($item->status==0)
                                                         <label class="switch">
                                                             <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
                                                             data-on="Paid" data-off="Unpaid"  {{ $item->status ? 'checked' : '' }}>
                                                         </label>
+                                                        @else
+                                                        <label class="switch">
+                                                            <input data-width="100" data-id="{{$item->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
+                                                            data-on="Paid" data-off="Unpaid"  {{ $item->status ? 'checked' : '' }} disabled>
+                                                        </label>
+                                                        @endif
                                                     </td>
 
                                                 </tr>
@@ -194,9 +229,10 @@
     <script>
         $(function() {
             $('.toggle-class').change(function() {
-
                 var status = $(this).prop('checked') ? 1 : 0;
                 var transfer_id = $(this).data('id');
+                var payment = $('#payment').val();
+                alert(payment);
                 $.ajax({
                     type: "POST",
                     dataType: "json",
@@ -204,6 +240,7 @@
                     data: {
                         'status': status,
                         'transfer_id': transfer_id,
+                        'payment': payment,
                         '_token': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
@@ -213,7 +250,8 @@
                 });
             });
         });
-        </script>
+    </script>
+
 
 @foreach ($transfer_history as $key => $item )
 <div class="modal fade theme-modal remove-commission" id="adjustModal{{ $item->id }}" aria-hidden="true" tabindex="-1">{{ $item->id }}

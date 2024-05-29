@@ -20,8 +20,14 @@ class Transfer extends Model
         'status',
         'start_date',
         'end_date',
+        'payment',
         'transferred_at',
         'created_at',
         'updated_at',
     ];
+
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class, 'user_id');
+    }
 }

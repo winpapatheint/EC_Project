@@ -98,6 +98,7 @@ Route::get('blogdetail/{blogid}', [AdminController::class, 'bloglistdetail']);
 Route::get('/contact', function () {return view('front-end.contact-us');});
 Route::post('contact', [AdminController::class, 'contact'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
+Route::get('faq/{faqid}', [AdminController::class, 'faqdetail']);
 Route::get('/privacy-policy', function () {return view('front-end.privacy-policy');});
 
 Route::get('/cart', function () {return view('front-end.cart');});
@@ -107,6 +108,8 @@ Route::get('/checkout', function () {return view('front-end.checkout');});
 //Admin
 Route::get('/admin', [AdminController::class, 'admindashboard'])->middleware(['auth','role:admin'])->name('admin.dashboard');
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->middleware(['auth','role:admin'])->name('admin.transferdetail');
+Route::get('admin/transfer-order-details/{transferId}', [AdminController::class, 'indextransferorderdetail'])->name('transfer_order_detail');
+Route::get('/trans_orderdetail/{id}/{startdate}/{enddate}', [AdminController::class, 'trans_orderdetail'])->middleware(['auth','role:admin'])->name('trans_orderdetail');
 Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
@@ -242,6 +245,7 @@ Route::get('/admin/edit/product', function () {return view('admin.product.produc
 
 //AdminOrder
 Route::get('/admin/orderlist', [AdminController::class, 'indexorderlist'])->name('orderlist');
+Route::get('admin/productdetail/{id}', [AdminController::class, 'detailProduct'])->middleware(['auth','role:admin'])->name('detailproduct');
 Route::get('/admin/orderdetail/{id}', [AdminController::class, 'orderdetail'])->name('orderdetail');
 Route::get('/admin/ordertracking/{id}', [AdminController::class, 'ordertracking'])->name('ordertracking');
 route::post('/admin/deleteorderlist',[AdminController::class,'deleteorderlist'])->name('deleteorderlist');

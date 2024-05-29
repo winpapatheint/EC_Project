@@ -83,7 +83,7 @@
                 <div class="card o-hidden">
                     <div class="card-header border-0 pb-1">
                         <div class="card-header-title">
-                            <h4>Sales Graph</h4>
+                            <h4>Sales Graph&nbsp;<span>(2024Year）</span></h4>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -110,45 +110,61 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Date</th>
-                                            <th>Transfer Id</th>
-                                            <th>Name</th>
-                                            <th>Order Id</th>
-                                            <th>Product Id</th>
-                                            <th>Product Name</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th>Total</th>
+                                            <th>Transfer Code</th>
+                                            <th>Shop</th>
+                                            <th>Order details</th>
+                                            <th>Pay Type</th>
+                                            <th>Commission<br>(%)</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($transfer->isEmpty())
+                                        @if ($transfer_history->isEmpty())
+                                        <tr>
+                                            <td colspan="9">No data available</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($transfer_history as $key => $item )
                                             <tr>
-                                                <td colspan="9">No data available</td>
+                                                <td>{{ ($ttl+1) - ($transfer_history->firstItem() + $key) }}</td>
+
+                                                <td>{{ \Carbon\Carbon::parse($item->start_date)->format('Y/m/d') }} ~ {{ \Carbon\Carbon::parse($item->end_date)->format('Y/m/d') }}
+                                                  </td>
+                                                <td>{{$item->transfer_code}}</td>
+                                                <td>{{$item->shop_name}}</td>
+                                                <td>
+                                                    <ul>
+                                                        <li class="btn-icon">
+                                                            <a href="{{ route('transfer_order_detail', ['transferId' => $item->id]) }}">
+                                                                <i class="ri-eye-line"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td >
+                                                   {{ $item->payment }}
+                                                </td>
+                                                <td>{{$item->commission}}</td>
+                                                <td>¥{{number_format($item->seller_amount) }}</td>
+
+                                                <td class="col-sm-9">
+                                                    @if($item->status == 1)
+                                                     Paid
+                                                    @else
+                                                    <span style="color:red">Unpaid</span>
+
+                                                    @endif
+                                                </td>
                                             </tr>
-                                        @else
-                                            {{-- @foreach ($transfer as $key => $item )
-                                                <tr>
-                                                    <td>{{ ($ttl+1) - ($transfer->firstItem() + $key) }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                    <td>Bank</td>
-                                                    <td>Asia 食材</td>
-                                                    <td>{{ $item->id }}</td>
-                                                    <td>{{ $item->product->product_code }}</td>
-                                                    <td>{{ strlen($item->product->product_name) > 20 ? substr($item->product->product_name, 0, 20) . '...' : $item->product->product_name }}</td>
-                                                    <td>{{ $item->qty }}</td>
-                                                    <td>￥{{ $item->price }}</td>
-                                                    <td>￥{{ $item->amount }}</td>
-                                                </tr>
-                                            @endforeach --}}
-                                        @endif
+                                        @endforeach
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--pagination -->
                 @include('components.pagination')
             </div>
             <!-- Booking history  end-->
@@ -160,31 +176,35 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Define labels and data passed from the backend
+            const labels = @json($labels);
+            const data = @json($data);
 
-      var labels =  @json($labels);
-      var users =  @json($data);
-
-      const data = {
-        labels: labels,
-        datasets: [{
-          label: 'Sale',
-          backgroundColor: '#0da487',
-          borderColor: '#0da487',
-          data: users,
-        }]
-      };
-
-      const config = {
-        type: 'line',
-        data: data,
-        options: {}
-      };
-
-      const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-      );
-
-</script>
+            // Render the chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales',
+                        data: data,
+                        backgroundColor: 'rgba(13, 164, 135, 0.2)',
+                        borderColor: '#0da487',
+                        borderWidth: 1,
+                        borderDash: [5, 5] // Display dashed line for each data point
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

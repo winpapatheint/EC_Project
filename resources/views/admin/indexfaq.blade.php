@@ -45,10 +45,29 @@
                                                     <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="タイトル">{{ $list->title }}</td>
-                                                    <td data-label="タイトル">{!! $list->que !!}</td>
-                                                    <td data-label="タイトル">{!! $list->ans !!}</td>
+
+                                                    <td data-label="タイトル">
+                                                        @if(strlen($list->que) > 50)
+                                                            {!! nl2br(substr($list->que, 0, 50)) . '<br>' . nl2br(substr($list->que, 50, 50)) . '...' !!}
+                                                        @else
+                                                            {!! $list->que!!}
+                                                        @endif
+                                                    </td>
+                                                    <td data-label="タイトル">
+                                                        @if(strlen($list->ans) > 50)
+                                                            {!! substr($list->ans, 0, 50) . '<br>' . substr($list->ans, 50, 50) . '...' !!}
+                                                        @else
+                                                            {!! nl2br(e($list->ans)) !!}
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <ul>
+                                                            <li>
+                                                                <a href="{{ url("/faq/".$list->id ) }}">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </a>
+                                                            </li>
+
                                                             <li>
                                                                 <a href='{{ url("/editfaq/".$list->id ) }}'>
                                                                     <i class="ri-pencil-line"></i>

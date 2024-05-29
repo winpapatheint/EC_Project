@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="input-box">
-                            <form method="POST" action="{{ route('seller.registered') }}" enctype="multipart/form-data" class="row g-4">
+                            <form method="POST" action="{{ route('seller.registered') }}" enctype="multipart/form-data" class="row g-4" id="sellerRegister">
                                 @csrf
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
@@ -212,12 +212,13 @@
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
                                                 <span>Terms and Privacy</span></label>
                                         </div>
+
                                     </div>
                                     <span class="error" style="color:red" id="error-flexCheckDefault"></span>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <button class="btn btn-animation theme-bg-color w-100" type="button" onclick="validateUserForm()">Sign Up</button>
+                                    <button class="btn btn-animation theme-bg-color w-100" type="submit" onclick="validateUserForm()">Sign Up</button>
                                 </div>
                             </form>
                         </div>
@@ -237,9 +238,10 @@
             let isValid = true;
 
             const shop_name = document.getElementById('shop_name').value.trim();console.log(shop_name);
-
             const shop_establish = document.getElementById('shop_establish').value.trim();
-            const shop_logo = document.getElementById('shop_logo').value.trim();
+            const shopLogoInput = document.getElementById('shop_logo');
+            const shopLogoError = document.getElementById('error-shop_logo');
+            const shopLogoFile = shopLogoInput.files[0];
             const phone = document.getElementById('phone').value.trim();
             const zip_code = document.getElementById('zip_code').value.trim();
             const prefecture = document.querySelector('select[name="prefecture"]').value;
@@ -273,12 +275,12 @@
                 document.getElementById('error-shop_establish').textContent = 'Please provide your shop established date.';
             }
 
-            if (!shop_logo.value) {
-            isValid = false;
-            document.getElementById('error-shop_logo').textContent = 'Please provide your shop logo.';
-            } else if (shop_logo.files[0].size > 2 * 1024 * 1024) {
+            if (!shopLogoFile) {
                 isValid = false;
-                document.getElementById('error-shop_logo').textContent = 'Your shop logo must not exceed 2MB.';
+                shopLogoError.textContent = 'Please provide your shop logo.';
+            } else if (shopLogoFile.size > 2 * 1024 * 1024) {
+                isValid = false;
+                shopLogoError.textContent = 'Your shop logo must not exceed 2MB.';
             }
 
             if (!phone) {
@@ -409,11 +411,11 @@
             }
 
             if (isValid) {
-                document.querySelector('form').submit();
+                document.getElementById('sellerRegister').submit();
             }
         }
 
-        document.querySelector('form').addEventListener('submit', function(event) {
+        document.getElementById('sellerRegister').addEventListener('submit', function(event) {
             event.preventDefault();
             validateUserForm();
         });

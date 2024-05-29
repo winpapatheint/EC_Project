@@ -205,6 +205,17 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6">
+                                    <div class="forgot-box">
+                                        <div class="form-check ps-0 m-0 remember-box">
+                                            <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault" required>
+                                            <label class="form-check-label" for="flexCheckDefault">I agree with
+                                                <span>Terms</span> and <span>Privacy</span></label>
+                                        </div>
+                                    </div>
+                                    <span class="error" style="color:red" id="error-flexCheckDefault"></span>
+                                </div>
+
                                 <div class="col-md-12">
                                     <button class="btn btn-animation theme-bg-color w-100" type="button" onclick="validateUserForm()">Sign Up</button>
                                 </div>
@@ -245,6 +256,7 @@
             const mail = document.getElementById('mail').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmed = document.querySelector('input[name="confirmed"]').value.trim();
+            const checkbox = document.getElementById('flexCheckDefault');
 
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
 
@@ -389,6 +401,11 @@
             } else if (password !== confirmed) {
                 isValid = false;
                 document.getElementById('error-confirmed').textContent = 'Passwords do not match.';
+            }
+
+            if (!checkbox.checked) {
+                isValid = false;
+                document.getElementById('error-flexCheckDefault').textContent = 'You must agree to the Terms and Privacy to sign up.';
             }
 
             if (isValid) {

@@ -688,7 +688,7 @@
                                     <a href="{{ url('/faq') }}" class="text-content">FAQ</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/term-and-condition') }}" class="text-content">Term and Condition</a>
+                                    <a href="{{ url('/term-and-condition') }}" class="text-content">Terms and Conditions</a>
                                 </li>
                             </ul>
                         </div>

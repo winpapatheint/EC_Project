@@ -981,7 +981,6 @@ class AdminController extends Controller
         return view('admin.blog.blog_detail',compact('blog'));
     }
 
-<<<<<<< HEAD
     public function faqdetail($id)
     {
         $faq = DB::table('faqs')
@@ -991,24 +990,6 @@ class AdminController extends Controller
 
         return view('admin.faqdetail',compact('faq'));
     }
-
-
-    public function orderdetail($id)
-    {
-        $order = Order::find($id);
-        return view('admin.order.orderdetail',compact('order'));
-    }
-
-    public function orderTracking($id)
-    {
-        $order = Order::find($id);
-        $process = Process::where('order_id',$id)->latest()->get();
-        return view('admin.order.ordertracking',compact('order','process'));
-    }
-
-=======
->>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
-
     public function indexshop($id)
     {
         $limit = 12;
@@ -3413,7 +3394,6 @@ class AdminController extends Controller
 
     public function indexorderlist()
     {
-<<<<<<< HEAD
         $validated = request()->validate([
             'search' => 'string|nullable',
         ]);
@@ -3460,20 +3440,6 @@ class AdminController extends Controller
         $cancelttlPage = ceil($cancelttl / $limit);
 
         return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
-=======
-        {
-            $validated = request()->validate([
-                'search' => 'string|nullable',
-            ]);
-
-            $search = $validated['search'] ?? null;
-            $limit = 10;
-
-            $orderQuery = OrderDetail::with('order')
-                ->groupBy('order_id')
-                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-                ->orderBy('created_at', 'desc');
->>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
 
             if ($search) {
                 $orderQuery->where(function($query) use ($search) {
@@ -3510,7 +3476,7 @@ class AdminController extends Controller
             return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
         }
 
-    }
+
 
     public function orderdetail($id)
     {
@@ -4013,27 +3979,17 @@ class AdminController extends Controller
     {
         $limit = 10;
         $transfer = Transfer::find($id);
-<<<<<<< HEAD
         $start_date = Carbon::parse($transfer->start_date)->format('Y/m/d');
         $end_date = Carbon::parse($transfer->end_date)->format('Y/m/d');
 
         $lists = OrderDetail::with('order')->with('buyer')->with('product')
                 ->where('seller_id', $transfer->seller_id)
                 ->whereBetween(DB::raw("DATE_FORMAT(created_at, '%Y/%m/%d')"), [$start_date, $end_date])
-=======
-        $lists = OrderDetail::with('order')->with('buyer')->with('product')
-                ->where('seller_id', $transfer->seller_id)
-                ->whereBetween('created_at', [$transfer->start_date, $transfer->end_date])
->>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                 ->paginate($limit);
         $ttl = $lists->total();
         $ttlpage = (ceil($ttl / $limit));
 
         return view('admin.transfer_order_detail',compact('lists','ttlpage','ttl'));
-<<<<<<< HEAD
-    }
-=======
 }
->>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
 }
 

@@ -302,7 +302,7 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     },
     async : false,
     success: function(response) {
-        window.location.href = "{{ route('show-product') }}";
+        window.location.href = "{{ route('order_success', '') }}" + "/" + response.orderId;
     },
     error: function(xhr, status, error) {
         var errorMessage = xhr.status + ': ' + xhr.statusText;

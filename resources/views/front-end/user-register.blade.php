@@ -164,6 +164,17 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6">
+                                    <div class="forgot-box">
+                                        <div class="form-check ps-0 m-0 remember-box">
+                                            <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault" required>
+                                            <label class="form-check-label" for="flexCheckDefault">I agree with
+                                                <a href="{{ url('buyer-term-and-condition') }}"><span>Terms and Privacy</span></label></a>
+                                        </div>
+                                    </div>
+                                    <span class="error" style="color:red" id="error-flexCheckDefault"></span>
+                                </div>
+
                                 <input type="hidden" name="role" value="buyer">
 
                                 <div class="col-md-12">
@@ -194,6 +205,7 @@
             const chome = document.querySelector('input[name="chome"]').value.trim();
             const building = document.querySelector('input[name="building"]').value.trim();
             const room = document.querySelector('input[name="room"]').value.trim();
+            const checkbox = document.getElementById('flexCheckDefault');
     
             // Clear previous error messages
             // document.querySelectorAll('.error').forEach(el => el.textContent = '');
@@ -285,6 +297,11 @@
             } else if (room.length > 255) {
                 isValid = false;
                 document.getElementById('error-room-no').textContent = 'Your room number must not exceed 255 characters.';
+            }
+
+            if (!checkbox.checked) {
+                isValid = false;
+                document.getElementById('error-flexCheckDefault').textContent = 'You must agree to the Terms and Privacy to sign up.';
             }
     
             if (isValid) {

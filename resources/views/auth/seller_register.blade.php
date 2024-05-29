@@ -210,7 +210,7 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault" required>
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <span>Terms and Privacy</span></label>
+                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></label></a>
                                         </div>
                                     </div>
                                     <span class="error" style="color:red" id="error-flexCheckDefault"></span>

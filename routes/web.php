@@ -101,6 +101,9 @@ Route::post('contact', [AdminController::class, 'contact'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
 Route::get('/privacy-policy', function () {return view('front-end.privacy-policy');});
 Route::get('/term-and-condition', function () {return view('front-end.term-and-condition');});
+Route::get('/term-and-condition', function () {return view('front-end.term-and-condition');});
+Route::get('/buyer-term-and-condition', function () {return view('front-end.buyer-term-and-condition');});
+Route::get('/seller-term-and-condition', function () {return view('front-end.seller-term-and-condition');});
 
 Route::get('/cart', function () {return view('front-end.cart');});
 

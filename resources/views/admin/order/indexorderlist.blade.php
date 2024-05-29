@@ -65,18 +65,25 @@
                                                     <td>
                                                         <ul>
                                                             <li>
+<<<<<<< HEAD
                                                                 <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
+=======
+                                                                <a href="{{ route('orderdetail',['id' => $item->order_id]) }}">
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>
 
                                                             <li>
+<<<<<<< HEAD
                                                                 <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>
 
                                                             <li>
+=======
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                 <a href="{{ route('invoice',$item->id) }}"
                                                                    @if($item->status === 'Cancel')
                                                                        onclick="return false;"
@@ -87,7 +94,11 @@
 
                                                             <li>
                                                                 <a class="btn btn-sm btn-solid text-white"
+<<<<<<< HEAD
                                                                     href="{{ route('order.tracking', $item->order_id)}}"
+=======
+                                                                    href="{{ route('ordertracking', $item->order_id)}}"
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                                     @if($item->status === 'Cancel')
                                                                        onclick="return false;"
                                                                     @endif>
@@ -132,7 +143,11 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                         {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>{{ $item->order->order_code }}</td>
+<<<<<<< HEAD
                                                     <td><a href="{{ route('detailproduct',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+=======
+                                                    <td><a href="{{ route('detail.product',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                     <td>
                                                         <h6>
                                                             {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}

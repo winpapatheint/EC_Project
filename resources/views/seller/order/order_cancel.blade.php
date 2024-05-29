@@ -154,7 +154,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <button type="button" class="btn btn-animation" onclick="validateAndSubmitForm('{{ $order->id }}')">Confirm</button>
-                        <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>

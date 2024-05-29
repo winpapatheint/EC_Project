@@ -141,7 +141,7 @@
                         @csrf
                         <button type="submit" class="btn btn-animation">Reply</button>
                     </form>
-                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

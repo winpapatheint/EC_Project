@@ -80,6 +80,7 @@ Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProdu
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
+Route::get('/order-success/{orderId}', [UserController::class, 'orderSuccess'])->name('order_success');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
 
@@ -100,6 +101,7 @@ Route::post('contact', [AdminController::class, 'contact'])->name('contact');
 Route::get('/faq', [AdminController::class, 'indexfaq']);
 Route::get('faq/{faqid}', [AdminController::class, 'faqdetail']);
 Route::get('/privacy-policy', function () {return view('front-end.privacy-policy');});
+Route::get('/term-and-condition', function () {return view('front-end.term-and-condition');});
 
 Route::get('/cart', function () {return view('front-end.cart');});
 
@@ -165,6 +167,7 @@ route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->mi
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->middleware(['auth','role:admin'])->name('tt');
 Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->middleware(['auth','role:admin'])->name('shopstatus');
 Route::post('/transfer/status', [AdminController::class, 'indextransferstatus'])->middleware(['auth','role:admin'])->name('transferstatus');
+Route::get('admin/transfer-order-details/{transferId}', [AdminController::class, 'indextransferorderdetail'])->name('transfer_order_detail');
 Route::post('admin/couponstatus', [AdminController::class, 'indexcouponstatus'])->middleware(['auth','role:admin'])->name('coupon');
 route::post('/admin/deletecoupon',[AdminController::class,'deletecoupon'])->middleware(['auth','role:admin'])->name('deletecoupon');
 Route::post('/admin/subadminstatus', [AdminController::class, 'indexsubadminstatus'])->middleware(['auth','role:admin'])->name('subadminstataus');

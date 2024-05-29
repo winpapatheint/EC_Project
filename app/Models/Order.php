@@ -16,7 +16,7 @@ class Order extends Model
         'total_qty',
         'total_amount',
         'sub_total_amount',
-        'coupon_discount_amout',
+        'coupon_discount_amount',
         'coupon_used_seller_id',
         'coupon_used_product_id',
         'shipping_fee',

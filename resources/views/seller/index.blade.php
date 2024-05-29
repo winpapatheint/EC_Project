@@ -45,7 +45,8 @@
                     <div class="custome-3-bg b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="media-body p-0">
-                                <span class="m-0">All Products</span>
+                                <h7>All</h7><br>
+                                <span class="m-0">Products</span>
                                 <h4 class="mb-0 counter">{{ count($product) }}
                                     <a href="{{ route('add.product') }}" class="badge badge-light-secondary grow">
                                         ADD NEW</a>
@@ -65,6 +66,7 @@
                     <div class="custome-4-bg b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="media-body p-0">
+                                <h7>All</h7><br>
                                 <span class="m-0">Pending Orders</span>
                                 <h4 class="mb-0 counter">{{ count($pending) }}</h4>
                             </div>

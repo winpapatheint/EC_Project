@@ -334,6 +334,8 @@
                     <div class="remove-box">
                         @php
                             $coupon = DB::table('coupons')->where('id', $cartlist->coupon_id)->first();
+                            $couponSeller = DB::table('sellers')->where('coupon_id', $coupon->id)->where('coupon_status', 1)->first();
+                            $couponProduct = DB::table('products')->where('coupon_id', $coupon->id)->where('coupon_status', 1)->first();
                         @endphp
                         <div class="banner-contain">
                             <img src="{{ asset('frontend/assets/images/homepage/coupon1.jpg') }}" class="bg-img blur-up lazyload" alt="">
@@ -348,6 +350,11 @@
                                         {{ date('Y/m/d', strtotime($coupon->startdate)) }} ~
                                         {{ date('Y/m/d', strtotime($coupon->enddate)) }}
                                     </h5>
+                                    @if ($couponSeller)
+                                        <h4 class="lh-base fw-bold offer-text">Publisher : {{ $couponSeller->shop_name }}</h4>
+                                    @elseif ($couponProduct)
+                                        <h4 class="lh-base fw-bold offer-text">Publisher : Asian Food Museum</h4>
+                                    @endif
                                     <h6 class="coupon-code">Use Code : {{ $coupon->coupon_code}}</h6>
                                 </div>
                             </div>

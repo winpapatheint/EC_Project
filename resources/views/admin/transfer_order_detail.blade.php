@@ -51,9 +51,15 @@
                                                 <th style="min-width: 50px">Buyer Name</th>
                                                 <th style="min-width: 50px">Product Name</th>
                                                 <th style="min-width: 50px">Quantity</th>
+<<<<<<< HEAD
                                                 <th style="min-width: 50px">Amount<br>(Tax Inc)</th>
                                                 <th style="min-width: 50px">Delivery Price<br>(Tax Inc)</th>
                                                 <th style="min-width: 50px">Coupon Discount<br>(Tax Inc)</th>
+=======
+                                                <th style="min-width: 50px">Amount</th>
+                                                <th style="min-width: 50px">Delivery Price</th>
+                                                <th style="min-width: 50px">Coupon Discount</th>
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                 <th style="min-width: 50px">Commission(%)</th>
                                             </tr>
                                         </thead>
@@ -63,7 +69,11 @@
                                                 $currentOrderCode = null;
                                                 $orderCodeCount = 0;
                                             @endphp
+<<<<<<< HEAD
 
+=======
+                                        
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                             @foreach($lists as $key => $list)
                                                 @php
                                                     if ($currentOrderCode !== $list->order->order_code) {
@@ -75,7 +85,11 @@
                                                         $orderCodeCount--;
                                                     }
                                                 @endphp
+<<<<<<< HEAD
 
+=======
+                                        
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                                 <tr>
                                                     <td class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     @if ($orderCodeCount == $lists->where('order.order_code', $list->order->order_code)->count())
@@ -89,6 +103,7 @@
                                                     <td>{{ $list->qty }}</td>
                                                     <td>¥{{ number_format($list->amount, 0, '', ',') }}</td>
                                                     @if ($list->used_delivery_price == 1)
+<<<<<<< HEAD
                                                         <td>¥{{ $list->delivery_price }}</td>
                                                     @else
                                                         <td>-</td>
@@ -98,6 +113,17 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+=======
+                                                        <td>{{ $list->delivery_price }}</td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
+                                                    <td>{{ $list->order->coupon_discount_amount }}</td>
+                                                    <td>{{ $list->product->commission }}%</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>                                        
+>>>>>>> 0001c6a7034f42ef933ce0a7498e0f52634b0a44
                                     </table>
                                 </div>
                             </div>

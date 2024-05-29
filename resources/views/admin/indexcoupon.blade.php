@@ -35,6 +35,7 @@
                                                 <th style="min-width: 50px">Discount Amount</th>
                                                 <th style="min-width: 50px">Mini Amount</th>
                                                 <th style="min-width: 50px">Valid Count</th>
+                                                <th style="min-width: 50px">Used Count</th>
                                                 <th style="min-width: 150px">Start Date</th>
                                                 <th style="min-width: 150px">End Date</th>
                                                 <th style="min-width: 150px">Status</th>
@@ -53,6 +54,7 @@
                                                     <td >{{ $list->discount_amount }}</td>
                                                     <td >{{ $list->mini_amount }}</td>
                                                     <td >{{ $list->valid_count }}</td>
+                                                    <td >{{ $list->used_count }}</td>
                                                     <td >{{ date('Y/m/d', strtotime($list->startdate)) }}<br>{{ date('H:i', strtotime($list->startdate)) }}</td>
                                                     <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
                                                     <td class="col-sm-9">

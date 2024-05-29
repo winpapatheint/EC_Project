@@ -159,6 +159,17 @@
                                 </div>
                             </div>
                         </div>
+                        @php
+                            function formatZipCode($zipCode) {
+                                if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
+                                    return $zipCode;
+                                }
+                                if (preg_match('/^\d{7}$/', $zipCode)) {
+                                    return substr($zipCode, 0, 3) . '-' . substr($zipCode, 3, 4);
+                                }
+                                return $zipCode; // return as-is if not a standard 7 digit zip code
+                            }
+                        @endphp
 
                         <div class="col-xl-4 col-sm-6">
                             <div class="order-details-contain">
@@ -168,7 +179,7 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">From</h5>
-                                    <h4>{{ $orderDetail->seller->zip_code }} </h4>
+                                    <h4>〒{{ formatZipCode($orderDetail->seller->zip_code) }} </h4>
                                     <h4>{{ $orderDetail->seller->prefecture->name }} </h4>
                                     <h4>{{ $orderDetail->seller->city }} {{ $orderDetail->seller->chome }} </h4>
                                     <h4>{{ $orderDetail->seller->building }} {{ $orderDetail->seller->room }}</h4>
@@ -184,7 +195,7 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Destination</h5>
-                                    <h4>{{ $orderDetail->cus_post_code }} </h4>
+                                    <h4>〒{{ formatZipCode($orderDetail->cus_post_code) }} </h4>
                                     <h4>{{ $orderDetail->prefecture->name }} </h4>
                                     <h4>{{ $orderDetail->cus_city }} {{ $orderDetail->cus_chome }} </h4>
                                     <h4>{{ $orderDetail->cus_building }} {{ $orderDetail->cus_room }}</h4>

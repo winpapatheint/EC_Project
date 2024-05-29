@@ -104,9 +104,9 @@
                     <form method="POST" action="{{ route('delete.subseller') }}">
                         @csrf
                             <input type="hidden" name="id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                            <button type="submit" class="btn btn-animation">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

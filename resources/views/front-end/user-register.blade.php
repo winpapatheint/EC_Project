@@ -42,7 +42,7 @@
                                 </div>
                             @endif
                             
-                            <form method="POST" action="{{ route('adduser') }}" class="row g-4" >
+                            <form method="POST" action="{{ route('adduser') }}" class="row g-4" id="userRegisterForm">
                                 @csrf
                                 
                                 <div class="col-md-6">
@@ -305,11 +305,11 @@
             }
     
             if (isValid) {
-                document.querySelector('form').submit();
+                document.getElementById('userRegisterForm').submit();
             }
         }
     
-        document.querySelector('form').addEventListener('submit', function(event) {
+        document.getElementById('userRegisterForm').addEventListener('submit', function(event) {
             event.preventDefault();
             validateUserForm();
         });

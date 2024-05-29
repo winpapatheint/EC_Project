@@ -794,12 +794,12 @@ class UserController extends Controller
                 $refreshCart = "The coupon (" . $request->coupon . ") has reached its maximum usage limit.";
                 return redirect()->back()->with(compact('refreshCart'));
             }
-            if ($coupon->startdate > Carbon::now()->startOfDay())
+            if ($coupon->startdate > Carbon::now()->endOfDay())
             {
                 $refreshCart = "The coupon (" . $request->coupon . ") cannot be used until " . date('Y/m/d', strtotime($coupon->startdate)) . ".";
                 return redirect()->back()->with(compact('refreshCart'));
             }
-            if ($coupon->enddate < Carbon::now()->endOfDay())
+            if ($coupon->enddate < Carbon::now()->startOfDay())
             {
                 $refreshCart = "This coupon (" . $request->coupon . ") is already expired.";
                 return redirect()->back()->with(compact('refreshCart'));
@@ -946,7 +946,7 @@ class UserController extends Controller
             $totalAmount = $request->totalamount;
             $subTotalAmount = $request->subtotalamount;
             $shippingFee = $request->shippingfee;
-            $couponDiscountAmount = $request->coupondiscountamount ?? 0;
+            $couponDiscountAmount = $request->coupondiscountamount;
             $buyerAddressId = $request->buyeraddressid;
             $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
             $name = $buyerAddressFirst->name;
@@ -1104,7 +1104,8 @@ class UserController extends Controller
                     ->delete();
 
             DB::commit();
-            return response()->json(['message' => 'Your order has been successfully placed.']);
+            return response()->json(['message' => 'Your order has been successfully placed.'
+                                    ,'orderId' => $order->id]);
 
         } catch (\Exception $e) {
             // Log any exceptions for debugging
@@ -1113,6 +1114,14 @@ class UserController extends Controller
             Log::error('Order placement failed: '.$e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
+    }
+
+    public function orderSuccess($id)
+    {
+        $order = Order::with('orderDetail')->with('orderDetail.buyer')->with('orderDetail.seller')->with('orderDetail.prefecture')
+                    ->with('orderDetail.product')
+                    ->where('id', $id)->first();
+        return view('front-end.order-success', compact('order'));
     }
         //Show Footer Tracking
     public function footertracking(Request $request)

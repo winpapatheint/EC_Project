@@ -80,6 +80,7 @@ Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProdu
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
+Route::get('/order-success/{orderId}', [UserController::class, 'orderSuccess'])->name('order_success');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
 

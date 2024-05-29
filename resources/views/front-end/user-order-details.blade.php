@@ -130,7 +130,7 @@
                                             $orders = $orderDetails->first();
                                             $subTotalAmount = $orders->sub_total_amount;
                                             $totalAmount = $orders->total_amount;
-                                            $couponDiscountAmount = $orders->coupon_discount_amout;
+                                            $couponDiscountAmount = $orders->coupon_discount_amount;
                                             $shippingFee = $orders->shipping_fee;
                                         @endphp
                                     @endif

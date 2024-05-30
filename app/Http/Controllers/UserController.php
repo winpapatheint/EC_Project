@@ -9,6 +9,7 @@ use App\Models\Buyer;
 use App\Models\Order;
 use App\Models\Seller;
 use App\Models\Payment;
+use App\Models\Notification;
 use App\Models\Process;
 use App\Models\Product;
 use App\Models\Prefecture;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Redirect;
+use Mail;
 
 
 class UserController extends Controller
@@ -42,19 +44,6 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'phone' => 'required|string|regex:/^\d+$/|max:255', // Ensures the phone number contains only digits
-            'zip_code' => 'required|digits:7', // Ensures exactly 7 digits
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-            'prefecture' => 'required|integer|exists:prefectures,id', // Ensures a valid prefecture ID
-        ]);
-
         DB::beginTransaction();
 
         try {
@@ -65,8 +54,6 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'status' => '1',
             ]);
-
-            event(new Registered($user));
 
             $buyer = Buyer::create([
                 'user_id' => $user->id,
@@ -89,45 +76,23 @@ class UserController extends Controller
                 'default' => 1,
                 'main_address' => 1
             ]);
-
-            event(new Registered($buyer));
-
             DB::commit();
 
+            event(new Registered($user));
+            event(new Registered($buyer));
+
             $email = $request->email;
-        $inquiry_email = 'info-test@asia-hd.com';
-        $user = User::where('id', $user->id)->select('email', 'name')->first();
-
-        $email = $user->email;
-        $name = $user->name;
-        $data = array('name'=>$name);
-        if (!empty($request->email)) {
-            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'Question form');
-                $message->from($email,$name);
-                $message->setBody("The following notification was received from the E-commerce official website.
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\Name".$name."
-                \r\n"."Email：　".$email."
-                \r\n
-                \r\n"."Notice：　
-                \r\n
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-            });
-        }
-
-        $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-        $inquiry_email = 'info-test@asia-hd.com';
-        $name = $user->name;
-        $data = array('name'=>$name);
-        if (!empty(  $adminMails)) {
-            foreach ($adminMails as $email) {
-                Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
-                    $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+            $name = $request->name;
+            $inquiry_email = 'info-test@asia-hd.com';
+            // $user = User::where('id', $user->id)->select('email', 'name')->first();
+            $data = array('name'=>$name);
+            if (!empty($request->email)) {
+                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                    $message->to($inquiry_email, 'Asian Food Museum ')->subject($name);
                     $message->from($email,$name);
-                    $message->setBody("The following notification was received from the E-commerce official website.
+                    $message->setBody("The following notification was received from the Asian Food Museum official website.
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\Name".$name."
+                    \r\n"."Name".$name."
                     \r\n"."Email：　".$email."
                     \r\n
                     \r\n"."Notice：　
@@ -135,14 +100,33 @@ class UserController extends Controller
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
                 });
             }
-        }
 
-        $notification = Notification::find(1);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
-            return view('auth.verify-email', compact('email'));
+            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
+            $inquiry_email = 'info-test@asia-hd.com';
+            if (!empty(  $adminMails)) {
+                foreach ($adminMails as $email) {
+                    Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
+                        $message->to($email, 'Asian Food Museum')->subject($name);
+                        $message->from($email,$name);
+                        $message->setBody("The following notification was received from the Asian Food Museum official website.
+                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                        \r\n"."Name".$name."
+                        \r\n"."Email：　".$email."
+                        \r\n
+                        \r\n"."Notice：　
+                        \r\n
+                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                    });
+                }
+            }
+
+            $notification = Notification::find(1);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $notification->update( $newval);
+
+            return view('auth.buyer-verify-email', compact('user'));
 
         } catch (\Exception $e) {
             DB::rollback();

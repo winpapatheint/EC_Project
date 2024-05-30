@@ -154,8 +154,8 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Shop Info</h5>
-                                    <h3>{{ $orderDetail->shop_name }}</h3>
-                                    <h5>{{ $orderDetail->phone }}</h5>
+                                    <h3>{{ $orderDetail->seller->shop_name }}</h3>
+                                    <h5>{{ $orderDetail->seller->phone }}</h5>
                                 </div>
                             </div>
                         </div>

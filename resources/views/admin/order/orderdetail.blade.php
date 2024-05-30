@@ -43,6 +43,7 @@
                                                     <td><h5>Quantity</h5></td>
                                                     <td><h5>Price(tax inc)</h5></td>
                                                     <td><h5>Commission</h5></td>
+                                                    <td><h5>Tracking</h5></td>
                                                 </tr>
                                                 @foreach($orderDetails as $index => $order)
                                                     <tr class="table-order">
@@ -68,6 +69,16 @@
 
                                                         <td>
                                                             <h6>{{ $order->commission }}%</h6>
+                                                        </td>
+
+                                                        <td>
+                                                            <a class="btn btn-sm btn-solid text-white"
+                                                                href="{{ route('ordertracking', $order->order_detail_id)}}"
+                                                                @if($order->status === 'Cancel')
+                                                                onclick="return false;"
+                                                                @endif>
+                                                                Tracking
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     @php

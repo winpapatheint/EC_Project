@@ -76,16 +76,16 @@
                                                                 </a>
                                                             </li>
 
-                                                            <li>
+                                                            {{-- <li>
                                                                 <a href="{{ route('invoice',$item->id) }}"
                                                                    @if($item->status === 'Cancel')
                                                                        onclick="return false;"
                                                                    @endif>
                                                                     <i class="icon-cloud-down"></i>
                                                                 </a>
-                                                            </li>
+                                                            </li> --}}
 
-                                                            <li>
+                                                            {{-- <li>
                                                                 <a class="btn btn-sm btn-solid text-white"
                                                                     href="{{ route('ordertracking', $item->order_id)}}"
                                                                     @if($item->status === 'Cancel')
@@ -93,7 +93,7 @@
                                                                     @endif>
                                                                     Tracking
                                                                 </a>
-                                                            </li>
+                                                            </li> --}}
                                                         </ul>
                                                     </td>
                                                 </tr>

@@ -153,9 +153,7 @@
                             </tr>
                         </thead>
                     </table>
-                    @php
-                        $user = DB::table('users')->where('email', $email)->first();
-                    @endphp
+
                     <table class="content-table" style="margin-top: 40px;" align="center" border="0" cellpadding="0"
                         cellspacing="0" width="100%">
                         <thead>
@@ -185,8 +183,8 @@
                                 <td style="display: block;">
                                     <form method="POST" action="{{ route('verification.send') }}">
                                     @csrf
-                                        <input type="hidden" name="email" value="{{ $email ?? ''}}">
-                                        <button class="btn btn-animation theme-bg-color mx-auto" type="submit"><i class="fa fa-sign-in" aria-hidden="true"></i> {{ __('auth.doresend') }}
+                                        <input type="hidden" name="email" value="{{ $user->email ?? ''}}">
+                                        <button class="password-button" type="submit">Resent Email
                                         </button>
                                     </form>
                                     {{-- <button class="password-button">Verify Email</button> --}}

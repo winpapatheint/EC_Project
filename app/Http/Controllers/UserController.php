@@ -126,7 +126,7 @@ class UserController extends Controller
             $notification->update( $newval);
             DB::commit();
 
-            return view('auth.verify-email', compact('email'));
+            return view('auth.buyer-verify-email', compact('user'));
 
         } catch (\Exception $e) {
             DB::rollback();

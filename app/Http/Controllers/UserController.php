@@ -55,8 +55,6 @@ class UserController extends Controller
                 'status' => '1',
             ]);
 
-            event(new Registered($user));
-
             $buyer = Buyer::create([
                 'user_id' => $user->id,
                 'name' => $request->name,
@@ -78,12 +76,15 @@ class UserController extends Controller
                 'default' => 1,
                 'main_address' => 1
             ]);
+            DB::commit();
 
+            event(new Registered($user));
             event(new Registered($buyer));
+
             $email = $request->email;
             $name = $request->name;
             $inquiry_email = 'info-test@asia-hd.com';
-            $user = User::where('id', $user->id)->select('email', 'name')->first();
+            // $user = User::where('id', $user->id)->select('email', 'name')->first();
             $data = array('name'=>$name);
             if (!empty($request->email)) {
                 $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
@@ -124,9 +125,8 @@ class UserController extends Controller
                             'created_at' => Carbon::now(),
                             );
             $notification->update( $newval);
-            DB::commit();
 
-            return view('auth.verify-email', compact('email'));
+            return view('auth.buyer-verify-email', compact('user'));
 
         } catch (\Exception $e) {
             DB::rollback();

@@ -23,14 +23,16 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-
+        $validatedData = $request->validate([
+            'mail' => 'present|string|email|max:255|unique:users,email',
+        ]);
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
             'name' => $request->user_name,
-            'email' => $request->mail,
+            'email' => $validatedData['mail'],
             'role' => 'seller',
             'password' => Hash::make($request->password),
             'status' => 1,

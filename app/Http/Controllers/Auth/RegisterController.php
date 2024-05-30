@@ -8,6 +8,7 @@ use App\Models\Prefecture;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -23,16 +24,16 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-        $validatedData = $request->validate([
-            'mail' => 'present|string|email|max:255|unique:users,email',
-        ]);
+        if (User::where('email', $request->mail)->exists()) {
+            return back()->withErrors(['mail' => 'Email already exists.'])->withInput();
+        }
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
             'name' => $request->user_name,
-            'email' => $validatedData['mail'],
+            'email' => $request->mail,
             'role' => 'seller',
             'password' => Hash::make($request->password),
             'status' => 1,

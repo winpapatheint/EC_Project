@@ -3502,7 +3502,6 @@ class AdminController extends Controller
 
     public function ordertracking($id)
     {
-        dd($id);
         $process = Process::where('order_id',$id)->latest()->get();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
                     ->join('products', 'products.id', 'order_details.product_id')

@@ -42,19 +42,6 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'phone' => 'required|string|regex:/^\d+$/|max:255', // Ensures the phone number contains only digits
-            'zip_code' => 'required|digits:7', // Ensures exactly 7 digits
-            'city' => 'required|string|max:255',
-            'chome' => 'required|string|max:255',
-            'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
-            'prefecture' => 'required|integer|exists:prefectures,id', // Ensures a valid prefecture ID
-        ]);
-
         DB::beginTransaction();
 
         try {

@@ -3500,7 +3500,7 @@ class AdminController extends Controller
         return view('admin.order.orderdetail', compact('orderDetails'));
     }
 
-    public function orderTracking($id)
+    public function ordertracking($id)
     {
         $process = Process::where('order_id',$id)->latest()->get();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')

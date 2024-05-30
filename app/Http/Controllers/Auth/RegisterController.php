@@ -23,59 +23,37 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-        $validatedData = $request->validate([
-            'user_name' => 'present|string|max:255',
-            'mail' => 'present|string|email|max:255|unique:users,email',
-            'password' => 'present|string|min:8',
-            'confirmed' => 'required|string|same:passwords',
-            'bank_name' => 'present|string|max:255',
-            'bank_acc_type' => 'present|string',
-            'bank_branch' => 'present|string|max:255',
-            'bank_acc_no' => 'present|string|max:255',
-            'bank_acc_name' => 'present|string|max:255',
-            'shop_name' => 'present|string|max:255',
-            'shop_logo' => 'present|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'shop_establish' => 'present|string|max:255',
-            'phone' => 'present|string|max:255',
-            'zip_code' => 'present|string|max:255',
-            'prefecture' => 'required|exists:prefectures,id',
-            'city' => 'present|string|max:255',
-            'chome' => 'present|string|max:255',
-            'building' => 'present|string|max:255',
-            'room' => 'present|string|max:255',
-
-        ]);
 
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
-            'name' => $validatedData['user_name'],
-            'email' => $validatedData['mail'],
+            'name' => $request->user_name,
+            'email' => $request->mail,
             'role' => 'seller',
-            'password' => Hash::make($validatedData['password']),
+            'password' => Hash::make($request->password),
             'status' => 1,
         ]);
         event(new Registered($user));
 
         $seller = Seller::create([
             'user_id' => $user->id,
-            'prefecture_id' => $validatedData['prefecture'],
-            'bank_name' => $validatedData['bank_name'],
-            'bank_branch' =>$validatedData['bank_branch'],
-            'bank_acc_type' => $validatedData['bank_acc_type'],
-            'bank_acc_no' => $validatedData['bank_acc_no'],
-            'bank_acc_name' => $validatedData['bank_acc_name'],
-            'shop_name' => $validatedData['shop_name'],
+            'prefecture_id' => $request->prefecture,
+            'bank_name' => $request->bank_name,
+            'bank_branch' =>$request->bank_branch,
+            'bank_acc_type' => $request->bank_acc_type,
+            'bank_acc_no' => $request->bank_acc_no,
+            'bank_acc_name' => $request->bank_acc_name,
+            'shop_name' => $request->shop_name,
             'shop_logo' => $filename,
-            'shop_establish' => $validatedData['shop_establish'],
-            'phone' => $validatedData['phone'],
-            'zip_code' => $validatedData['zip_code'],
-            'city' => $validatedData['city'],
-            'chome' => $validatedData['chome'],
-            'building' => $validatedData['building'],
-            'room' => $validatedData['room'],
+            'shop_establish' => $request->shop_establish,
+            'phone' => $request->phone,
+            'zip_code' => $request->zip_code,
+            'city' => $request->city,
+            'chome' => $request->chome,
+            'building' => $request->building,
+            'room' => $request->room,
             'url' => $request->url,
             'commission' => 0,
             'status' => 1

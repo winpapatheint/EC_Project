@@ -391,6 +391,7 @@ class SellerController extends Controller
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
             'email_verified_at' => $time->format('Y-m-d H:i:s'),
+            'status' => 1,
         ]);
 
         $subseller = Subseller::create([

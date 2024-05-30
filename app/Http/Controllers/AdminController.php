@@ -3502,26 +3502,34 @@ class AdminController extends Controller
 
     public function ordertracking($id)
     {
-        $process = Process::where('order_id',$id)->latest()->get();
-        $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-                    ->join('products', 'products.id', 'order_details.product_id')
-                    ->join('buyers', 'orders.buyer_id', 'buyers.id')
-                    ->with('prefecture')
-                    ->select(
-                        'orders.id as order_id',
-                        'order_details.id as order_detail_id',
-                        'products.id as product_id',
-                        'orders.*',
-                        'products.*',
-                        'products.selling_price as price',
-                        'order_details.*',
-                        'orders.created_at as order_created_at',
-                        'buyers.name as buyer_name'
-                    )
-                    ->where('order_details.order_id', $id)
-                    ->get();
+        // $process = Process::where('order_id',$id)->latest()->get();
+        // $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
+        //             ->join('products', 'products.id', 'order_details.product_id')
+        //             ->join('buyers', 'orders.buyer_id', 'buyers.id')
+        //             ->with('prefecture')
+        //             ->select(
+        //                 'orders.id as order_id',
+        //                 'order_details.id as order_detail_id',
+        //                 'products.id as product_id',
+        //                 'orders.*',
+        //                 'products.*',
+        //                 'products.selling_price as price',
+        //                 'order_details.*',
+        //                 'orders.created_at as order_created_at',
+        //                 'buyers.name as buyer_name'
+        //             )
+        //             ->where('order_details.order_id', $id)
+        //             ->get();
 
-        return view('admin.order.ordertracking',compact('orderDetails','process'));
+        // return view('admin.order.ordertracking',compact('orderDetails','process'));
+        $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
+                                    ->select('order_details.*', 'products.*','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
+                                            'order_details.chome as cus_chome','order_details.building as cus_building',
+                                            'order_details.room_no as cus_room', 'order_details.created_at as order_detail_created_at')
+                                    ->leftjoin('products', 'order_details.product_id', 'products.id')
+                                    ->where('order_details.id', $id)
+                                    ->first();
+        return view('admin.order.ordertracking',compact('orderDetail'));
     }
 
     public function admindashboard()

@@ -24,7 +24,6 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-
     <!-- Blog Section Start -->
     <section class="blog-section section-b-space">
         <div class="container-fluid-lg">
@@ -35,7 +34,7 @@
                             @foreach( $blogs as $key => $blog )
                             <div class="blog-box blog-list wow fadeInUp">
                                 <div class="blog-image">
-                                    <img src="{{ asset('images/'.$blog->image ) }}" class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('images/'.$blog->image ) }}" class="blur-up lazyload" alt="" style="width: 280px; height: 250px;">
                                 </div>
 
                                 <div class="blog-contain blog-contain-2">

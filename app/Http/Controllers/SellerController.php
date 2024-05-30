@@ -233,10 +233,10 @@ class SellerController extends Controller
 
     public function storeHelp(Request $request)
     {
-        $validatedData = $request->validate([
-            'subject' => 'present|string|max:255',
-            'body' => 'present|string|max:255',
-        ]);
+        // $validatedData = $request->validate([
+        //     'subject' => 'present|string|max:255',
+        //     'body' => 'present|string|max:255',
+        // ]);
 
         $help = new Help();
         if (!empty($request->image)) {
@@ -252,8 +252,8 @@ class SellerController extends Controller
         $help->help_id = Auth::user()->id;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;
-        $help->subject = $validatedData['subject'];
-        $help->body = $validatedData['body'];
+        $help->subject = $request->title;
+        $help->body =  $request->message;
         $help->img =   $imageName;
         $help->created_at = Carbon::now();
         $help->save();

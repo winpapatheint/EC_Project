@@ -3502,7 +3502,6 @@ class AdminController extends Controller
 
     public function ordertracking($id)
     {
-        dd($id);
         $process = Process::where('order_id',$id)->latest()->get();
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
                     ->join('products', 'products.id', 'order_details.product_id')
@@ -3699,7 +3698,7 @@ class AdminController extends Controller
         $email = 'info-test@asia-hd.com';
         $received = Help::where('to',$email)->latest()->paginate(10);
 
-        $sent = Help::where('from', $email)->where('name', 'all')->latest()->paginate(10);
+        $sent = Help::where('from', $email)->where('noshow', null)->latest()->paginate(10);
 
         $notice = Help::where('from', $email)->where('to', 'all')->latest()->paginate(10);
         $ttl = $received->total();

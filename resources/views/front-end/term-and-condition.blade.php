@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb-contain">
-                        <h2>Term and Condition</h2>
+                        <h2>Terms and Conditions</h2>
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Term and Condition</li>
+                                <li class="breadcrumb-item active">Terms and Conditions</li>
                             </ol>
                         </nav>
                     </div>
@@ -25,31 +25,30 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
     <!-- Faq Section Start -->
     <section class="contact-box-section faq-box-contain section-b-space">
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card card-table">
+                    <div class="">
                         {{-- English --}}
-                        <div class="card-body" id="EnglishVersion">
+                        <div class="product-section-box" id="EnglishVersion">
                             <div class="row">
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <div class="title-header option-title">
-                                        <h5 id="terms-title">Terms and Conditions</h5>
+                                        <h2 id="terms-title">Terms and Conditions</h2>
                                     </div>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-3" style="display: flex; justify-content: flex-end;">
                                     <div class="title-header option-title" id="japaneseBtnDiv">
-                                        <button class="align-items-center btn btn-theme d-flex" id="japaneseBtn">
+                                        <button class="align-items-center btn btn-theme d-flex" id="japaneseBtn" style="background-color: #0da487; color: #fff;">
                                             日本語で確認する
                                         </button>
                                     </div>
                                 </div>
                             </div>
     
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <ul class="nav nav-tabs custom-nav" id="pills-tab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="pills-home-tab"
                                         data-bs-toggle="pill" data-bs-target="#pills-home"
@@ -62,7 +61,7 @@
                                 </li>
                             </ul>
     
-                            <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-content" id="pills-tabContent" style="margin-top: 10px;">
                                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
                                     <div class="faq-accordion">
                                     <div class="accordion" id="accordionExample">
@@ -593,6 +592,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <p style="color: var(--theme-color);margin-left: 15px;">
+                                                
+                                            </p>
+                                        </h2>
+                                        <div class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <p>
+                                                    End of Document<br>
+                                                    Enacted on May 1, 2024
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     </div>
                                 </div>
@@ -912,29 +926,45 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <p style="color: var(--theme-color);margin-left: 15px;">
+                                                
+                                            </p>
+                                        </h2>
+                                        <div class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <p>
+                                                    End of Document<br>
+                                                    Enacted on May 1, 2024
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {{-- Japanese --}}
-                        <div class="card-body" id="JapaneseVersion" style="display:none;">
+                        <div class="product-section-box" id="JapaneseVersion" style="display:none;">
                             <div class="row">
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <div class="title-header option-title">
-                                        <h5 id="terms-title-jp">利用規約</h5>
+                                        <h2 id="terms-title-jp">利用規約</h2>
                                     </div>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-3" style="display: flex; justify-content: flex-end;">
                                     <div class="title-header option-title" id="englishBtnDiv">
-                                        <button class="align-items-center btn btn-theme d-flex" id="englishBtn">
+                                        <button class="align-items-center btn btn-theme d-flex" id="englishBtn" style="background-color: #0da487; color: #fff;">
                                             Check in English
                                         </button>
                                     </div>
                                 </div>
+                                
                             </div>
     
-                            <ul class="nav nav-pills mb-3" id="pills-tab-jp" role="tablist">
+                            <ul class="nav nav-tabs custom-nav" id="pills-tab-jp" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="pills-home-tab-jp"
                                         data-bs-toggle="pill" data-bs-target="#pills-home-jp"
@@ -947,7 +977,7 @@
                                 </li>
                             </ul>
     
-                            <div class="tab-content" id="pills-tabContent-jp">
+                            <div class="tab-content" id="pills-tabContent-jp" style="margin-top: 10px;">
                                 <div class="tab-pane fade show active" id="pills-home-jp" role="tabpanel">
                                     <div class="faq-accordion">
                                     <div class="accordion" id="accordionExample">
@@ -1422,6 +1452,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <p style="color: var(--theme-color);margin-left: 15px;">
+                                                
+                                            </p>
+                                        </h2>
+                                        <div class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <p>
+                                                    以上<br>
+                                                    2024 年 5月 1日 制定
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     </div>
                                 </div>
@@ -1729,6 +1774,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <p style="color: var(--theme-color);margin-left: 15px;">
+                                                
+                                            </p>
+                                        </h2>
+                                        <div class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <p>
+                                                    以上<br>
+                                                    2024 年 5月 1日 制定
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     </div>
                                 </div>
@@ -1755,5 +1815,3 @@
     <!-- Faq Section End -->
 
 </x-guest-layout>
-
-

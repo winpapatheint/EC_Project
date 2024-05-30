@@ -82,6 +82,53 @@ class UserController extends Controller
             DB::commit();
 
             $email = $request->email;
+        $inquiry_email = 'info-test@asia-hd.com';
+        $user = User::where('id', $user->id)->select('email', 'name')->first();
+
+        $email = $user->email;
+        $name = $user->name;
+        $data = array('name'=>$name);
+        if (!empty($request->email)) {
+            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'Question form');
+                $message->from($email,$name);
+                $message->setBody("The following notification was received from the E-commerce official website.
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                \r\Name".$name."
+                \r\n"."Email：　".$email."
+                \r\n
+                \r\n"."Notice：　
+                \r\n
+                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            });
+        }
+
+        $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
+        $inquiry_email = 'info-test@asia-hd.com';
+        $name = $user->name;
+        $data = array('name'=>$name);
+        if (!empty(  $adminMails)) {
+            foreach ($adminMails as $email) {
+                Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
+                    $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+                    $message->from($email,$name);
+                    $message->setBody("The following notification was received from the E-commerce official website.
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\Name".$name."
+                    \r\n"."Email：　".$email."
+                    \r\n
+                    \r\n"."Notice：　
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+            }
+        }
+
+        $notification = Notification::find(1);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
             return view('auth.verify-email', compact('email'));
 
         } catch (\Exception $e) {
@@ -825,7 +872,7 @@ class UserController extends Controller
             }
             else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount)
             {
-                $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥' 
+                $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥'
                 . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
                 return redirect()->back()->with(compact('refreshCart'));
             }
@@ -857,7 +904,7 @@ class UserController extends Controller
                 $instockCheck[] = $checkInstockProduct->id;
             }
         }
-        if ($instockCheck) 
+        if ($instockCheck)
         {
             $refreshCart = 'Please adjust your order quantity!';
             return redirect()->back()->with(compact('refreshCart', 'instockCheck'));
@@ -1004,7 +1051,7 @@ class UserController extends Controller
                 'total_amount' => $totalAmount,
                 'payment_method' => $payment
                 ]);
-            
+
             foreach ($productIds as $key => $product_id) {
                 $orderedProduct = Product::where('id', $product_id)->first();
                 $usedDeliStatus = 0;

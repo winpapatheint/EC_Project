@@ -157,9 +157,9 @@
                                                 <div class="modal-body">
                                                     <div class="remove-box">
                                                         @if (!$editmode)
-                                                        <p>Coupon data will be added?</p>
+                                                        <p>Coupon data will be added.</p>
                                                         @else
-                                                        <p>Coupon data will be updated?</p>
+                                                        <p>Coupon data will be updated.</p>
                                                         @endif
                                                     </div>
                                                 </div>

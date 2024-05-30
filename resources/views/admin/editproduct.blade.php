@@ -219,7 +219,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p>The data will be updated permanently.</p>
+                                                        <p>Product will be updated.</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

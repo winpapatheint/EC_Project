@@ -23,14 +23,16 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-
+        $validatedData = $request->validate([
+            'mail' => 'present|string|email|max:255|unique:users,email',
+        ]);
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
         $img->move(public_path('upload/shop'), $filename);
 
         $user = User::create([
             'name' => $request->user_name,
-            'email' => $request->mail,
+            'email' => $validatedData['mail'],
             'role' => 'seller',
             'password' => Hash::make($request->password),
             'status' => 1,
@@ -70,17 +72,38 @@ class RegisterController extends Controller
         $data = array('name'=>$name);
         if (!empty($request->email)) {
             $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'Question form');
                 $message->from($email,$name);
-                $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+                $message->setBody("The following notification was received from the E-commerce official website.
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\n名前：　".$name."
-                \r\n"."メールアドレス：　".$email."
+                \r\Name".$name."
+                \r\n"."Email：　".$email."
                 \r\n
-                \r\n"."通知のお知らせ：　
+                \r\n"."Notice：　
                 \r\n
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
             });
+        }
+
+        $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
+        $inquiry_email = 'info-test@asia-hd.com';
+        $name = $user->name;
+        $data = array('name'=>$name);
+        if (!empty(  $adminMails)) {
+            foreach ($adminMails as $email) {
+                Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
+                    $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
+                    $message->from($email,$name);
+                    $message->setBody("The following notification was received from the E-commerce official website.
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+                    \r\Name".$name."
+                    \r\n"."Email：　".$email."
+                    \r\n
+                    \r\n"."Notice：　
+                    \r\n
+                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+                });
+            }
         }
 
         $notification = Notification::find(1);

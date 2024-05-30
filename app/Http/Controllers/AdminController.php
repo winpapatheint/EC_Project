@@ -3698,7 +3698,7 @@ class AdminController extends Controller
         $email = 'info-test@asia-hd.com';
         $received = Help::where('to',$email)->latest()->paginate(10);
 
-        $sent = Help::where('from', $email)->where('name', 'all')->latest()->paginate(10);
+        $sent = Help::where('from', $email)->where('noshow', null)->latest()->paginate(10);
 
         $notice = Help::where('from', $email)->where('to', 'all')->latest()->paginate(10);
         $ttl = $received->total();

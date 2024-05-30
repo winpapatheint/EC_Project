@@ -208,7 +208,7 @@
                                 <div class="col-md-6">
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
-                                            <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault" required>
+                                            <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
                                                 <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></label></a>
                                         </div>

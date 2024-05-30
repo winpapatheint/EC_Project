@@ -116,7 +116,8 @@
                                         <input type="hidden" name="id" value="{{ $user->id }}">
                                             <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                                                 data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                            <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                        style="background: #6c757d;">No</button>
                                 </form>
                             </div>
                         </div>

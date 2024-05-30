@@ -104,7 +104,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p></p>
+                                                        <p>Blog will be updated.</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -115,7 +115,7 @@
                                                             Yes
                                                         @endif
                                                     </button>
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>

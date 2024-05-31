@@ -895,7 +895,7 @@
                 $deal = DB::table('products')
                             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
                             ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
-                            ->select('products.*')
+                            ->select('products.*', 'order_details.payment_approved')
                             ->where('order_details.buyer_id', $buyer->id)
                             ->whereDate('order_details.created_at', $todayDate)
                             ->orderBy('orders.order_code', 'desc')
@@ -941,8 +941,12 @@
                                         @else
                                         <h6>¥{{ number_format($list->selling_price, '0','',',') }}</h6>
                                         @endif
-                                        @if ($list->estimate_date)
-                                        <span>Estimated Waiting Time : {{ $list->estimate_date}} {{ $list->estimate_date > 1 ? 'days' : 'day' }}</span>
+                                        @if ($list->payment_approved == 0)
+                                            <span style="color: red">Payment transfer not yet!</span>
+                                        @else
+                                            @if ($list->estimate_date)
+                                            <span>Estimated Waiting Time : {{ $list->estimate_date}} {{ $list->estimate_date > 1 ? 'days' : 'day' }}</span>
+                                            @endif
                                         @endif
                                     </a>
                                 </div>

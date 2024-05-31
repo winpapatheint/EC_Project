@@ -80,6 +80,7 @@ Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProdu
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
+Route::post('/cash-payment', [UserController::class, 'cashPayment'])->name('cash_payment');
 Route::get('/order-success/{orderId}', [UserController::class, 'orderSuccess'])->name('order_success');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
@@ -166,6 +167,7 @@ Route::get('shop/{shopid}', [AdminController::class, 'shopdetail'])->middleware(
 Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail'])->middleware(['auth','role:admin']);
 Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail'])->middleware(['auth','role:admin']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->middleware(['auth','role:admin'])->name('deleteproduct');
+Route::post('/admin/cash-payment-received/{id}', [AdminController::class, 'cashPaymentReceived'])->name('cash_payment_received');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->middleware(['auth','role:admin'])->name('tt');
 Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->middleware(['auth','role:admin'])->name('shopstatus');

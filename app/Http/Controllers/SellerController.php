@@ -262,7 +262,7 @@ class SellerController extends Controller
         $email = Auth::user()->email;
         $name = Auth::user()->name;
         $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
-            $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
+            $message->to($inquiry_email, 'Asian Food Museum')->subject($name.'Question form');
             $message->from(Auth::user()->email, Auth::user()->name);
         });
         $notification = Notification::find(5);

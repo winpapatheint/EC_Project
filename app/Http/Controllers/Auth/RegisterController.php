@@ -112,6 +112,6 @@ class RegisterController extends Controller
                         'created_at' => Carbon::now(),
                         );
         $notification->update( $newval);
-        return view('auth.verify-email',compact('email'));
+        return view('auth.seller-verify-email',compact('user'));
     }
 }

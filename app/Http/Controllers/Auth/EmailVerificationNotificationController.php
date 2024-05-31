@@ -27,8 +27,12 @@ class EmailVerificationNotificationController extends Controller
 
             $user = User::where('email',$request->email)->first();
             $user->sendEmailVerificationNotification();
+
             if ($user->role == "buyer")
             return view('auth.buyer-verify-email', compact('user'));
+
+            if ($user->role == "seller")
+            return view('auth.seller-verify-email', compact('user'));
         }
 
         // print_r($request->user());

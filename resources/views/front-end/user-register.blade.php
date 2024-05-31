@@ -58,12 +58,12 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}">
                                         <label for="email">Email Address</label>
-                                        {{-- <span style="color:red">@error('email'){{ $message }} @enderror</span> --}}
+                                        @if($errors->has('email'))
+                                            <span class="error" style="color:red">{{ $errors->first('email') }}</span>
+                                        @endif
                                         <span class="error" style="color:red" id="error-email"></span>
                                     </div>
                                 </div>
-
-
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
@@ -102,7 +102,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7">
+                                        <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" max="7" value="{{ old('zip_code') }}">
                                         <label>Zip Code</label>
                                         {{-- <span style="color:red">@error('zip_code'){{ $message }}@enderror</span> --}}
                                         <span class="error" style="color:red" id="error-zip-code"></span>
@@ -111,10 +111,10 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <select class="form-control" name="prefecture">
+                                        <select class="form-control" name="prefecture" value="{{ old('prefecture') }}">
                                             <option>Choose Prefecture</option>
                                             @foreach ($prefecture as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                <option value="{{ $item->id }}" {{ old('prefecture') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                         {{-- @error('prefecture')
@@ -126,7 +126,7 @@
                                 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" >
+                                        <input type="text" name="city" class="form-control" placeholder="Narita-shi,Furugome" value="{{ old('city') }}">
                                         <label>City, Ward, Town</label>
                                         {{-- <span style="color:red">@error('city'){{ $message }}@enderror</span> --}}
                                         <span class="error" style="color:red" id="error-city"></span>
@@ -135,7 +135,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="chome" class="form-control" placeholder="1-2-3" >
+                                        <input type="text" name="chome" class="form-control" placeholder="1-2-3" value="{{ old('chome') }}">
                                         <label>Chome, Banchi, Go</label>
                                         {{-- <span style="color:red">@error('chome'){{ $message }}@enderror</span> --}}
                                         <span class="error" style="color:red" id="error-chome"></span>
@@ -144,7 +144,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="building" class="form-control" placeholder="Example Building" >
+                                        <input type="text" name="building" class="form-control" placeholder="Example Building" value="{{ old('building') }}">
                                         <label>Building / Apt / Company name</label>
                                         {{-- @error('building')
                                             <div class="text-danger">{{ $message }}</div>
@@ -155,7 +155,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" name="room" class="form-control" placeholder="101" >
+                                        <input type="text" name="room" class="form-control" placeholder="101" value="{{ old('room') }}">
                                         <label>Unit / Room no.</label>
                                         {{-- @error('room')
                                             <div class="text-danger">{{ $message }}</div>
@@ -206,11 +206,6 @@
             const building = document.querySelector('input[name="building"]').value.trim();
             const room = document.querySelector('input[name="room"]').value.trim();
             const checkbox = document.getElementById('flexCheckDefault');
-    
-            // Clear previous error messages
-            // document.querySelectorAll('.error').forEach(el => el.textContent = '');
-            // document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
-            // document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
 
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
     

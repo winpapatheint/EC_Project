@@ -167,9 +167,13 @@
                                 <td>
                                     <p
                                         style="font-size: 14px;font-weight: 600;width: 82%;margin: 8px auto 0;line-height: 1.5;color: #939393;font-family: 'Nunito Sans', sans-serif;">
-                                        We hope our product will lead you, like many other before you. to a place where
-                                        your ideas where your ideas can spark and grow and a place where you’ll find all
-                                        your inspiration needs. Before we get started, we’ll need to verify your email.
+                                        Be it a manufacturer, vendor or supplier, simply sell your products online on 
+                                        Asian Food Museum and become a top ecommerce player with minimum investment. 
+                                        Through a team of experts offering exclusive seller workshops, training, seller support 
+                                        and convenient seller portal, Asian Food Museum focuses on educating and empowering 
+                                        sellers across Japan. Selling on Asian Food Museum is easy and absolutely free. 
+                                        All you need is to register, list your catalogue and start selling your products. 
+                                        Before we get started, we’ll need to verify your email.
                                     </p>
                                 </td>
                             </tr>

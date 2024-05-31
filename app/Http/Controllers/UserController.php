@@ -45,6 +45,19 @@ class UserController extends Controller
     //for new user registration for login
     public function store(Request $request)
     {
+        // $emailExists = User::where('email', $request->email)->exists();
+        // if ($emailExists) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'errors' => [
+        //             'email' => 'This email address already exists.',
+        //         ],
+        //     ]);
+        // }
+        if (User::where('email', $request->email)->exists()) {
+            return back()->withErrors(['email' => 'Email already exists.'])->withInput();
+        }
+
         DB::beginTransaction();
 
         try {

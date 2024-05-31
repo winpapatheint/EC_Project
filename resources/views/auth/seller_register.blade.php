@@ -157,17 +157,17 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" id="bank_acc_name" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
-                                        <label>Bank Account Name</label>
-                                        <span class="error" style="color:red" id="error-bank_acc_name"></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-floating theme-form-floating">
                                         <input type="text" id="bank_acc_no" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
                                         <label>Bank Account Number</label>
                                         <span class="error" style="color:red" id="error-bank_acc_no"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" id="bank_acc_name" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
+                                        <label>Bank Account Name</label>
+                                        <span class="error" style="color:red" id="error-bank_acc_name"></span>
                                     </div>
                                 </div>
 

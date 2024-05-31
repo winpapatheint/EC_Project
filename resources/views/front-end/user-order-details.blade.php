@@ -144,6 +144,9 @@
                                         </div>
                                     </div>
                                     <br>
+                                    @if ($orderDetails->first()->payment_approved == 0)
+                                        <p style="color:red; font-size:12px;">* Please make the transfer for this order.</p>
+                                    @endif
                                     <div class="bg-inner cart-section order-details-table">
                                         <div class="row g-4">
                                             <div class="col-xl-8">
@@ -184,12 +187,14 @@
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
                                                                 </td>
                                                                 <td>
-                                                                    @if ($order->status != "Cancel")
-                                                                    <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
-                                                                        href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
-                                                                    @else
-                                                                    <button type="button" class="btn btn-sm" style="background-color: #ff6b6b; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
-                                                                        onclick="cancelReason({{ $order->order_detail_id }})">Canceled</button>
+                                                                    @if ($order->payment_approved == 1)
+                                                                        @if ($order->status != "Cancel")
+                                                                        <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
+                                                                            href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
+                                                                        @else
+                                                                        <button type="button" class="btn btn-sm" style="background-color: #ff6b6b; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
+                                                                            onclick="cancelReason({{ $order->order_detail_id }})">Canceled</button>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                             </tr>

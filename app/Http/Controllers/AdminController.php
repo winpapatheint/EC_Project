@@ -3998,6 +3998,36 @@ class AdminController extends Controller
         $ttlpage = (ceil($ttl / $limit));
 
         return view('admin.transfer_order_detail',compact('lists','ttlpage','ttl'));
-}
+    }
+
+    public function cashPaymentReceived($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $order = Order::find($id);
+
+            if (!$order) {
+                return redirect()->back()->with('error', 'Order not found.');
+            }
+
+            $order->payment_approved = 1;
+            $order->created_at = Carbon::now(); // Set created_at to current time
+            $order->save();
+
+            $orderDetails = OrderDetail::where('order_id', $id)->get();
+            foreach ($orderDetails as $orderDetail) {
+                $orderDetail->payment_approved = 1;
+                $orderDetail->created_at = Carbon::now();
+                $orderDetail->save();
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Payment approved successfully for the order code '. $order->order_code);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while approving the payment: ' . $e->getMessage());
+        }
+    }
 }
 

@@ -16,6 +16,7 @@ use App\Models\Prefecture;
 use App\Models\OrderDetail;
 use App\Models\BuyerAddress;
 use App\Models\BuyerPayment;
+use App\Models\CashBankAccount;
 use App\Models\Coupon;
 use App\Models\CouponDetail;
 use Carbon\Carbon;
@@ -995,6 +996,8 @@ class UserController extends Controller
             $couponUsedProductId = $request->couponUsedProductId;
             $couponId = $request->couponId;
 
+            $paymentApproved = ($payment === 'Cash') ? 0 : 1;
+
             // return response()->json(['message' => $postcode.",".$city.",".$chome.",".$building.",".$room]);
 
 
@@ -1021,6 +1024,7 @@ class UserController extends Controller
                 'shipping_fee' => $shippingFee,
                 'total_qty'=> $totalQty,
                 'payment_type'=> $payment,
+                'payment_approved'=> $paymentApproved,
             ]);
 
             if ($couponId != 0)
@@ -1070,7 +1074,7 @@ class UserController extends Controller
                     $usedShopCouponStatus = 1;
                 if ($order->coupon_used_product_id == (int)$product_id)
                     $usedProductCouponStatus = 1;
-                if (isset($amount[$key]) && $amount[$key]) {
+                
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
@@ -1085,6 +1089,7 @@ class UserController extends Controller
                         'used_delivery_price' => $usedDeliStatus,
                         'used_shop_coupon_status' => $usedShopCouponStatus,
                         'used_product_coupon_status' => $usedProductCouponStatus,
+                        'payment_approved' => $paymentApproved,
                         'amount' => $productamounts[$key],
                         'commission' => $orderedProduct->commission,
                         'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
@@ -1097,34 +1102,6 @@ class UserController extends Controller
                         'building' => $building,
                         'room_no' => $room,
                     ];
-                } else {
-                    $orderdetailsData = [
-                        'order_id' => $order->id,
-                        'buyer_id' => (int)$buyerId,
-                        'seller_id' => $sellerId[$key],
-                        'product_id' => (int)$product_id,
-                        'prefecture_id' => $prefectureId,
-                        'color' => $colors[$key],
-                        'size' => $sizes[$key],
-                        'qty' => $quantities[$key],
-                        'price' => $orderedProduct->selling_price,
-                        'delivery_price' => $orderedProduct->delivery_price,
-                        'used_delivery_price' => $usedDeliStatus,
-                        'used_shop_coupon_status' => $usedShopCouponStatus,
-                        'used_product_coupon_status' => $usedProductCouponStatus,
-                        'amount' => $productamounts[$key],
-                        'commission' => $orderedProduct->commission,
-                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
-                        'transfer_status' => 0,
-                        'name' => $name,
-                        'phone' => $phone,
-                        'post_code' => $postcode,
-                        'city' => $city,
-                        'chome' => $chome,
-                        'building' => $building,
-                        'room_no' => $room,
-                    ];
-                }
                 OrderDetail::create($orderdetailsData);
 
                 $productForInStock = Product::find($product_id);
@@ -1135,6 +1112,174 @@ class UserController extends Controller
                     ->delete();
 
             DB::commit();
+            return response()->json(['message' => 'Your order has been successfully placed.'
+                                    ,'orderId' => $order->id]);
+
+        } catch (\Exception $e) {
+            // Log any exceptions for debugging
+            DB::rollBack();
+            // Log the exception for debugging
+            Log::error('Order placement failed: '.$e->getMessage());
+            return response()->json(['message' => 'An error occurred'], 500);
+        }
+    }
+
+    public function cashPayment(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $productIds = $request->productid;
+            $buyerId = $request->buyerid;
+            $sellerId = $request->sellerid;
+            $colors = $request->color;
+            $sizes = $request->size;
+            $quantities = $request->quantity;
+            $productamounts = $request->productamount;
+            $totalQty = $request->totalqty;
+            $amount = $request->amount;
+            $amount1 = $request->amount1;
+            $totalAmount = $request->totalamount;
+            $subTotalAmount = $request->subtotalamount;
+            $shippingFee = $request->shippingfee;
+            $couponDiscountAmount = $request->coupondiscountamount;
+            $buyerAddressId = $request->buyeraddressid;
+            $buyerAddressFirst = BuyerAddress::find($buyerAddressId);
+            $name = $buyerAddressFirst->name;
+            $phone = $buyerAddressFirst->phone;
+            $prefectureId = $buyerAddressFirst->prefecture_id;
+            $postcode = $buyerAddressFirst->post_code;
+            $city = $buyerAddressFirst->city;
+            $chome = $buyerAddressFirst->chome;
+            $building = $buyerAddressFirst->building;
+            $room = $buyerAddressFirst->room_no;
+            $payment = $request->payment;
+            $shopIds = $request->shopIds;
+            $maxDelis = $request->maxDelis;
+            $couponUsedSellerId = $request->couponUsedSellerId;
+            $couponUsedProductId = $request->couponUsedProductId;
+            $couponId = $request->couponId;
+            $accountHolder= $request->accountHolder;
+
+            $paymentApproved = ($payment === 'Cash') ? 0 : 1;
+
+            $datePrefix = date('ym');
+            $latestOrder = Order::where('order_code', 'like', $datePrefix . '%')->latest()->first();
+            $sequentialNumber = 1;
+            if ($latestOrder) {
+                $latestOrderCode = $latestOrder->order_code;
+                $sequentialNumber = intval(substr($latestOrderCode, strlen($datePrefix))) + 1;
+            }
+            $newOrderCode = $datePrefix . str_pad($sequentialNumber, 6, '0', STR_PAD_LEFT);
+
+            $order = Order::create([
+                'order_code' => $newOrderCode,
+                'buyer_id' => (int)$buyerId,
+                'total_amount' => $totalAmount,
+                'sub_total_amount' => $subTotalAmount,
+                'coupon_discount_amount' => $couponDiscountAmount,
+                'coupon_used_seller_id' => $couponUsedSellerId,
+                'coupon_used_product_id' => $couponUsedProductId,
+                'shipping_fee' => $shippingFee,
+                'total_qty'=> $totalQty,
+                'payment_type'=> $payment,
+                'payment_approved'=> $paymentApproved,
+            ]);
+
+            CashBankAccount::create([
+                'order_id' => $order->id,
+                'account_holder' => $accountHolder,
+            ]);
+
+            if ($couponId != 0)
+            {
+                CouponDetail::create([
+                    'buyer_id' => (int)$buyerId,
+                    'coupon_id' => $couponId,
+                    'order_id' => $order->id
+                ]);
+                $couponCheck = Coupon::where('id', $couponId)->first();
+                $couponDetailCheck = CouponDetail::where('coupon_id', $couponId)->get();
+                $couponCheck->used_count = $couponDetailCheck->count();
+                $couponCheck->save();
+                if ($couponDetailCheck->count() >= $couponCheck->valid_count)
+                {
+                    $couponCheck->status = 0;
+                    $couponCheck->save();
+                }
+            }
+
+            Payment::create([
+                'order_id' => $order->id,
+                'seller_id' => (int)$sellerId,
+                'buyer_id' => (int)$buyerId,
+                'total_amount' => $totalAmount,
+                'payment_method' => $payment
+                ]);
+
+            foreach ($productIds as $key => $product_id) {
+                $orderedProduct = Product::where('id', $product_id)->first();
+                $usedDeliStatus = 0;
+                $usedShopCouponStatus = 0;
+                $usedProductCouponStatus = 0;
+                foreach ($shopIds as $shopKey => $shopId)
+                {
+                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey])
+                    {
+                        $usedDeliStatus = 1;
+                        unset($shopIds[$shopKey]);
+                        unset($maxDelis[$shopKey]);
+                        $shopIds = array_values($shopIds);
+                        $maxDelis = array_values($maxDelis);
+                        break;
+                    }
+                }
+                if ($order->coupon_used_seller_id == $sellerId[$key])
+                    $usedShopCouponStatus = 1;
+                if ($order->coupon_used_product_id == (int)$product_id)
+                    $usedProductCouponStatus = 1;
+                
+                    $orderdetailsData = [
+                        'order_id' => $order->id,
+                        'buyer_id' => (int)$buyerId,
+                        'seller_id' => $sellerId[$key],
+                        'product_id' => (int)$product_id,
+                        'prefecture_id' => $prefectureId,
+                        'color' => $colors[$key],
+                        'size' => $sizes[$key],
+                        'qty' => $quantities[$key],
+                        'price' => $orderedProduct->selling_price,
+                        'delivery_price' => $orderedProduct->delivery_price,
+                        'used_delivery_price' => $usedDeliStatus,
+                        'used_shop_coupon_status' => $usedShopCouponStatus,
+                        'used_product_coupon_status' => $usedProductCouponStatus,
+                        'payment_approved' => $paymentApproved,
+                        'amount' => $productamounts[$key],
+                        'commission' => $orderedProduct->commission,
+                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                        'transfer_status' => 0,
+                        'name' => $name,
+                        'phone' => $phone,
+                        'post_code' => $postcode,
+                        'city' => $city,
+                        'chome' => $chome,
+                        'building' => $building,
+                        'room_no' => $room,
+                    ];
+                OrderDetail::create($orderdetailsData);
+
+                $productForInStock = Product::find($product_id);
+                $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];
+                $productForInStock->save();
+            }
+            $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
+                    ->delete();
+            $orderedBuyer = Buyer::find($buyerId);
+            $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
+
+            DB::commit();
+            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $totalAmount, $accountHolder, $name));
+
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
 

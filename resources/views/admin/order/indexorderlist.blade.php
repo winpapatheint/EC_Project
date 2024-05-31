@@ -43,6 +43,7 @@
                                                 <th>Order Code</th>
                                                 <th>Delivery Status</th>
                                                 <th>Amount</th>
+                                                <th>Payment</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -62,6 +63,43 @@
                                                         <span>{{ $item->status }}</span>
                                                     </td>
                                                     <td>¥{{ number_format($item->amount) }}</td>
+                                                    @if ($item->order->payment_approved == 1)
+                                                        <td>{{ $item->order->payment_type }}</td>
+                                                    @else
+                                                        <td>
+                                                            <button class="btn btn-sm add-button w-50" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#paymentReceived{{ $item->order->id }}"
+                                                                    onclick="showDeleteModal('{{ $item->order->id }}')" style="background-color: #ff6b6b;margin-left: 35px;">Cash
+                                                            </button>
+                                                        </td>
+                                                        <!-- Received Payment Modal Start -->
+                                                        <div class="modal fade theme-modal remove-profile" id="paymentReceived{{ $item->order->id }}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-block text-center">
+                                                                        <h5 class="modal-title w-100" id="exampleModalLabel22">Confirm Payment Received</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="remove-box">
+                                                                            <p>Do you have received payment for this order?</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <form action="{{ route('cash_payment_received', ['id' => $item->order->id]) }}" method="POST">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                                        </form>
+                                                                        <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b">No</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Received Payment Modal End -->
+                                                    @endif
                                                     <td>
                                                         <ul>
                                                             <li>
@@ -229,7 +267,6 @@
     </div>
 @endforeach
 <!-- Offcanvas Box End -->
-
 
 <!-- Modal Start -->
 @foreach( $order as $key => $item )

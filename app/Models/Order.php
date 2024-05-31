@@ -12,7 +12,6 @@ class Order extends Model
         'id',
         'order_code',
         'buyer_id',
-        'payment_id',
         'total_qty',
         'total_amount',
         'sub_total_amount',
@@ -21,6 +20,7 @@ class Order extends Model
         'coupon_used_product_id',
         'shipping_fee',
         'payment_type',
+        'payment_approved',
         'created_at',
         'updated_at',
     ];

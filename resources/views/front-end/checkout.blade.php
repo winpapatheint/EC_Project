@@ -47,9 +47,9 @@
                                             <h4>Delivery Address</h4>
                                         </div>
                                         @if($buyerAddress->count() > 0)
-                                        @foreach($buyerAddress as $index => $buyeraddress)
                                         <div class="checkout-detail">
                                             <div class="row g-4">
+                                                @foreach($buyerAddress as $index => $buyeraddress)
                                                 <div class="col-xxl-6 col-lg-12 col-md-6">
                                                     <div class="delivery-address-box">
                                                         <div>
@@ -86,9 +86,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endforeach
                                             </div>
                                         </div>
-                                        @endforeach
                                         @endif
                                     </div>
                                 </li>
@@ -107,8 +107,47 @@
 
                                         <div class="row" style="margin-bottom: 50px;" id="paypaldiv">
                                             <div class="col-lg-8 mx-auto">
-                                                <div class="text-center">
-                                                    <div id="paypal-button-container"></div>
+                                                <div class="product-section-box">
+                                                    <ul class="nav nav-tabs custom-nav" id="pills-tab" role="tablist">
+                                                        <li class="nav-item" role="presentation">
+                                                            <button class="nav-link active" id="pills-home-tab"
+                                                                data-bs-toggle="pill" data-bs-target="#pills-home"
+                                                                type="button" role="tab">Cash</button>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <button class="nav-link" id="pills-profile-tab"
+                                                                data-bs-toggle="pill" data-bs-target="#pills-profile"
+                                                                type="button" role="tab">Pay Pal</button>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content" id="pills-tabContent" style="margin-top: 10px;">
+                                                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                                                            <div class="review-title-2">
+                                                                <h4 class="fw-bold" style="margin-bottom: 10px;">Our Bank Information</h4>
+                                                                <p>Bank Name: Mizuho Bank</p>
+                                                                <p>Bank Code: 1234</p>
+                                                                <p>Branch Code: 123</p>
+                                                                <p>Account Number: 12345678</p>
+                                                                <p>Account Holder: Jhon</p>
+
+                                                                <h4 class="fw-bold" style="margin-bottom: 10px;">Enter Your Bank Account Name</h4>
+                                                                <p style="color:red; font-size:12px;">* Please be careful to enter the correct bank account holder name. 
+                                                                    This name will be used to verify payment transfers to confirm whether the payment has been made.</p>
+                                                                <div class="form-floating theme-form-floating">
+                                                                    <input type="text" class="form-control" name="account-holder" id="account-holder" placeholder="Account Holder">
+                                                                    <label for="account-holder">Account Holder</label>
+                                                                    <span class="error" style="color:red" id="error-account-holder"></span>
+                                                                </div>
+                                                                <button class="btn" type="button" id="btnPayWithCash"
+                                                                    data-bs-toggle="modal" onclick="payWithCash()">
+                                                                    Pay With Cash</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                                                            <div id="paypal-button-container"></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,7 +291,7 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
+function purchasepaymentdone(total1, callback) {
     var Newproductid = <?php echo json_encode($productIds ); ?>; 
     var Newbuyerid = <?php echo json_encode($buyerId ); ?>; 
     var Newsellerid = <?php echo json_encode($sellerIds ); ?>; 
@@ -312,5 +351,82 @@ function purchasepaymentdone(total1, callback) {console.log(Newbuyeraddressid);
     }
 });
 }
+</script>
+<script>
+    function payWithCash() {
+        let isValid = true;
+        const accountHolder = document.getElementById('account-holder').value.trim();
+
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+        if (!accountHolder) {
+            isValid = false;
+            document.getElementById('error-account-holder').textContent = 'Please provide your account holder.';
+        } else if (accountHolder.length > 255) {
+            isValid = false;
+            document.getElementById('error-account-holder').textContent = 'Your account holder must not exceed 255 characters.';
+        }
+
+        if (isValid) {
+            var Newproductid = <?php echo json_encode($productIds); ?>; 
+            var Newbuyerid = <?php echo json_encode($buyerId); ?>; 
+            var Newsellerid = <?php echo json_encode($sellerIds); ?>; 
+            var Newcolor = <?php echo json_encode($productColors); ?>; 
+            var Newsize = <?php echo json_encode($productSizes); ?>; 
+            var Newquantity = <?php echo json_encode($productQuantities); ?>;
+            var Newproductamount = <?php echo json_encode($productAmounts); ?>;
+            var Newtotalqty = <?php echo json_encode($totalqty); ?>;
+            var Newamount = <?php echo json_encode($amount); ?>;
+            var Newamount1 = <?php echo json_encode($amount1); ?>;
+            var Newtotalamount = <?php echo json_encode($total1); ?>;
+            var Newsubtotalamount = <?php echo json_encode($subTotal); ?>;
+            var Newshippingfee = <?php echo json_encode($shippingFee); ?>;
+            var Newcoupondiscount = <?php echo json_encode($couponDiscount); ?>;
+            var NewshopIds = <?php echo json_encode($shop); ?>;
+            var NewMaxDelis = <?php echo json_encode($maxDeli); ?>;
+            var NewCouponUsedSellerId = <?php echo json_encode($couponUsedSellerId); ?>;
+            var NewCouponUsedProductId = <?php echo json_encode($couponUsedProductId); ?>;
+            var NewCouponId = <?php echo json_encode($couponId); ?>;
+
+            $.ajax({
+                url: '{{ route("cash_payment") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    productid: Newproductid,
+                    buyerid: Newbuyerid,
+                    sellerid: Newsellerid,
+                    color: Newcolor,
+                    size: Newsize,
+                    quantity: Newquantity,
+                    productamount: Newproductamount,
+                    totalqty: Newtotalqty,
+                    amount: Newamount,
+                    amount1: Newamount1,
+                    totalamount: Newtotalamount,
+                    subtotalamount: Newsubtotalamount,
+                    shippingfee: Newshippingfee,
+                    coupondiscountamount: Newcoupondiscount,
+                    buyeraddressid : Newbuyeraddressid,
+                    shopIds : NewshopIds,
+                    maxDelis : NewMaxDelis,
+                    couponUsedSellerId : NewCouponUsedSellerId,
+                    couponUsedProductId : NewCouponUsedProductId,
+                    couponId : NewCouponId,
+                    payment: "Cash",
+                    accountHolder: accountHolder
+                },
+                async: false,
+                success: function(response) {
+                    window.location.href = "{{ route('order_success', '') }}" + "/" + response.orderId;
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText;
+                    alert('Error - ' + errorMessage);
+                    console.error('Error: ' + errorMessage + ' error: ' + response);
+                }
+            });
+        }
+    }
 </script>
 </x-guest-layout>

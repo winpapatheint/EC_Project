@@ -192,7 +192,7 @@
                                                     @if ($item->main_address != 1)
                                                     <button class="btn btn-sm add-button w-100" 
                                                             data-bs-toggle="modal" 
-                                                            data-bs-target="#removeProfile"
+                                                            data-bs-target="#removeProfile{{ $item->id }}"
                                                             onclick="showDeleteModal('{{ $item->id }}')" style="background-color: #ff6b6b;">
                                                         <i data-feather="trash-2"></i> Remove
                                                     </button>
@@ -433,7 +433,7 @@
     <!-- Edit Address Modal Box End -->
     <!-- Remove Address Modal Start -->
     @foreach($data as $item)
-    <div class="modal fade theme-modal remove-profile" id="removeProfile" tabindex="-1" aria-hidden="true">
+    <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
@@ -453,7 +453,7 @@
                         @method('DELETE')
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

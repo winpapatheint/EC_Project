@@ -32,6 +32,7 @@ class OrderDetail extends Model
         'used_delivery_price',
         'used_shop_coupon_status',
         'used_product_coupon_status',
+        'payment_approved',
         'commission',
         'commission_amount',
         'transfer_status',

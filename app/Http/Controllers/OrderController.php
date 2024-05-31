@@ -27,10 +27,12 @@ class OrderController extends Controller
         $id = Auth::user()->created_by ?? Auth::id();
 
         $orderQuery = OrderDetail::with('order')
-            ->where('seller_id', $id)
-            ->groupBy('order_id')
-            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-            ->orderBy('created_at', 'desc');
+                ->where('seller_id', $id)
+                ->where('payment_approved', 1)
+                ->groupBy('order_id')
+                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
         if ($search) {
             $orderQuery->where(function($query) use ($search) {
@@ -45,6 +47,7 @@ class OrderController extends Controller
         $cancelledOrderQuery = OrderDetail::with('order')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select('order_details.*', 'products.*')
+            ->where('payment_approved', 1)
             ->where('order_details.seller_id', $id)
             ->where('order_details.status', 'Cancel')
             ->orderBy('order_details.created_at', 'desc');

@@ -15,6 +15,7 @@ class CashBankAccount extends Model
 
     protected $fillable = [
         'order_id',
-        'account_holder',
+        'transfer_person_name',
+        'transfer_date',
     ];
 }

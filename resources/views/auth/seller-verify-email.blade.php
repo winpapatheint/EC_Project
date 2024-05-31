@@ -173,7 +173,8 @@
                                         and convenient seller portal, Asian Food Museum focuses on educating and empowering 
                                         sellers across Japan. Selling on Asian Food Museum is easy and absolutely free. 
                                         All you need is to register, list your catalogue and start selling your products. 
-                                        Before we get started, we’ll need to verify your email.
+                                        Before we get started, we’ll need to verify your email.<br>
+                                        <span style="color: red">If you don't receive the email, please check your spam or junk folder.</span>
                                     </p>
                                 </td>
                             </tr>
@@ -204,7 +205,7 @@
                                     <p
                                         style="font-size: 14px; font-weight: 600; width: 82%; margin: 0 auto; line-height: 1.5; color: #939393; font-family: 'Nunito Sans', sans-serif;">
                                         If you have any question, please email us at <span
-                                            class="theme-color">info@asia-hd.com</span>, call <span
+                                            class="theme-color">info@asia-food.site</span>, call <span
                                             class="theme-color">(+81) 03-3981-5090</span> or vixit our <span
                                             class="theme-color"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></span> 
                                             You can also chat with a real live human

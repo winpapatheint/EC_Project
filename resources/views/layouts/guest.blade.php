@@ -606,7 +606,7 @@
                                     </li>
                                     <li>
                                         <i data-feather="mail"></i>
-                                        <a href="javascript:void(0)">support@asia-hd.com</a>
+                                        <a href="javascript:void(0)">support@asia-food.site</a>
                                     </li>
                                 </ul>
                             </div>
@@ -716,7 +716,7 @@
                                         <i data-feather="mail"></i>
                                         <div class="contact-number">
                                             <h6 class="text-content">Email Address :</h6>
-                                            <h5>info@asia-hd.com</h5>
+                                            <h5>info@asia-food.site</h5>
                                         </div>
                                     </div>
                                 </li>

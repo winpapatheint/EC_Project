@@ -26,13 +26,13 @@ class OrderController extends Controller
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
 
+        // Fetching orders
         $orderQuery = OrderDetail::with('order')
-                ->where('seller_id', $id)
-                ->where('payment_approved', 1)
-                ->groupBy('order_id')
-                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            ->where('seller_id', $id)
+            ->where('payment_approved', 1)
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
+            ->orderBy('created_at', 'desc');
 
         if ($search) {
             $orderQuery->where(function($query) use ($search) {
@@ -44,12 +44,14 @@ class OrderController extends Controller
         }
 
         $order = $orderQuery->paginate($limit);
+
+        // Fetching cancelled orders
         $cancelledOrderQuery = OrderDetail::with('order')
             ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->select('order_details.*', 'products.*')
-            ->where('payment_approved', 1)
+            ->select('order_details.*', 'products.product_name')
             ->where('order_details.seller_id', $id)
             ->where('order_details.status', 'Cancel')
+            ->where('payment_approved', 1)
             ->orderBy('order_details.created_at', 'desc');
 
         if ($search) {
@@ -63,6 +65,7 @@ class OrderController extends Controller
         }
 
         $cancelledOrder = $cancelledOrderQuery->paginate($limit);
+
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
         $cancelttl = $cancelledOrder->total();
@@ -70,7 +73,6 @@ class OrderController extends Controller
 
         return view('seller.order.order_all', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
     }
-
 
 
     public function sellerDetailOrder($id)

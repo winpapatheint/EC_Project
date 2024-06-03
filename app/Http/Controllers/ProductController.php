@@ -190,14 +190,14 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'sub_category_title_id' => 'present|exists:sub_category_titles,id',
             'sub_category_id' => 'present|exists:sub_categories,id',
-            'product_name' => 'required|string|max:255',
+            'product_name' => 'required|string',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
             'original_price' => 'required|numeric',
-            'short_desc' => 'required|string|max:255',
-            'long_desc' => 'required|string|max:255',
+            'short_desc' => 'required|string',
+            'long_desc' => 'required|string',
             'estimate_date' => 'required|string|max:255',
         ]);
 
@@ -227,8 +227,8 @@ class ProductController extends Controller
         $product->discount_percent= $request->discount_percent ?? 0;
         $product->selling_price = $request->calculated_selling_price;
         $product->short_desc= $request->short_desc;
-        $product->long_desc= $request->content_long_desc;
-        $product->care_instructions= $request->content_care_instructions;
+        $product->long_desc= $request->long_desc;
+        $product->care_instructions= $request->care_instructions;
         $product->product_thambnail= $filename;
         $product->estimate_date= $request->estimate_date;
         $product->status= 1;

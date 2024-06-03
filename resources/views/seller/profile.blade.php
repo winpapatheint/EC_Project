@@ -13,27 +13,24 @@
                         <div class="title-header option-title">
                             <h5>Profile</h5>
                         </div>
-                        <form method="POST" action="{{ route('store.profile') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
+                        <form method="POST" action="{{ route('store.profile') }}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form" id="storeProfile">
                             @csrf
                             <input type="hidden" name="old_img" value="{{ $user->user_photo }}">
-                            @if (session('flash_message'))
-                                <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                    {{ session('flash_message') }}
-                                </div>
-                            @endif
 
                             <div class="row">
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-2 mb-0">Username</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="text" name="name" value="{{ $user->name }}">
+                                        <p class="error" style="color:red" id="error-name"></p>
                                     </div>
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-2 mb-0">Email</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="email" name="email" value="{{ $user->email }}" >
+                                        <input class="form-control" type="text" name="email" value="{{ $user->email }}" >
+                                        <p class="error" style="color:red" id="error-email"></p>
                                     </div>
                                 </div>
 
@@ -41,9 +38,7 @@
                                     <label class="form-label-title col-sm-2 mb-0">Password</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="password" name="password" value="{{ $user->password}}">
-                                        @error('password')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <p class="error" style="color:red" id="error-password"></p>
                                     </div>
                                 </div>
 
@@ -52,6 +47,7 @@
                                         Password</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="password" name="confirmed" value="{{ $user->password }}">
+                                        <p class="error" style="color:red" id="error-confirmed"></p>
                                     </div>
                                 </div>
 
@@ -74,31 +70,7 @@
                                 </div>
 
                                 <div class="d-grid gap-2 d-md-block">
-                                    <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimBox_{{ $user->id }}">Update Profile</button>
-
-                                    <!-- Confirm Modal Box -->
-                                    <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $user->id }}" aria-hidden="true" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header d-block text-center">
-                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="remove-box">
-                                                        <p>The data will be added permanently.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-animation" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Confirm Modal Box End-->
+                                    <button type="submit" class="btn btn-animation btn-submit" onclick="submitForm()">Update Profile</button>
                                 </div>
                             </div>
                         </form>
@@ -112,11 +84,6 @@
                         </div>
                         <form method="POST" action="{{ route('update.shop')}}" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
                             @csrf
-                            @if (session('flash_message'))
-                                <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                    {{ session('flash_message') }}
-                                </div>
-                            @endif
                             <input type="hidden" name="old_img" value="{{ $data->shop_logo }}">
                             <input type="hidden" name="seller_id" value="{{ $data->id }}">
                             <div class="row">
@@ -279,6 +246,60 @@
     </div>
 </div>
 <!-- Settings Section End -->
+
+<script>
+    function submitForm() {
+        let isValid = true;
+
+        const user_name = document.querySelector('input[name="name"]').value.trim();
+        const email = document.querySelector('input[name="email"]').value.trim();
+        const password = document.querySelector('input[name="password"]').value.trim();
+        const confirmed = document.querySelector('input[name="confirmed"]').value.trim();
+
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+        if (!user_name) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Please provide your name.';
+        } else if (user_name.length > 255) {
+            isValid = false;
+            document.getElementById('error-name').textContent = 'Your name must not exceed 255 characters.';
+        }
+
+        if (!email) {
+            isValid = false;
+            document.getElementById('error-email').textContent = 'Please provide your email.';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            isValid = false;
+            document.getElementById('error-email').textContent = 'Please provide a valid email address.';
+        }
+
+        if (!password) {
+            isValid = false;
+            document.getElementById('error-password').textContent = 'Please provide your password.';
+        } else if (password.length < 8) {
+            isValid = false;
+            document.getElementById('error-password').textContent = 'Your password must be at least 8 characters long.';
+        }
+
+        if (password && !confirmed) {
+            isValid = false;
+            document.getElementById('error-confirmed').textContent = 'Please confirm your password.';
+        } else if (password !== confirmed) {
+            isValid = false;
+            document.getElementById('error-confirmed').textContent = 'Passwords do not match.';
+        }
+
+        if (isValid) {
+            document.getElementById('storeProfile').submit();
+        }
+    }
+
+    document.getElementById('storeProfile').addEventListener('submit', function(event) {
+        event.preventDefault();
+        validateUserForm();
+    });
+</script>
 
 <script>
     function mainThamUrl(input){

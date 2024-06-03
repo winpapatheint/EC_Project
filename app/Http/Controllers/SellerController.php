@@ -87,12 +87,6 @@ class SellerController extends Controller
         $id = Auth::user()->id;
         $data = User::find($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'required|string|min:8',
-        ]);
-
         $img = $request->file('photo');
         if ($img) {
             $filename = time() . '.' . $img->getClientOriginalExtension();

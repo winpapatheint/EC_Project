@@ -1994,9 +1994,12 @@ class AdminController extends Controller
         if (empty($request->id)) {
 
             DB::table('faqs')->insert([
-                'title' => $request->title,
+                'title' => $request->title_eng,
+                'jptitle' => $request->title_jpg,
                 'que' => $request->content_desc,
+                'jpque' => $request->jpcontent_desc,
                 'ans' => $request->content_ansdesc,
+                'jpans' => $request->jpcontent_ansdesc,
                 'created_by' => Auth::user()->id,
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
@@ -2008,8 +2011,11 @@ class AdminController extends Controller
         } else {
 
             $updval = array('title' => $request->title,
+                            'jptitle' => $request->title_jpg,
                             'que' => $request->content_desc,
+                            'jpque' => $request->jpcontent_desc,
                             'ans' => $request->content_ansdesc,
+                            'jpans' => $request->jpcontent_ansdesc,
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 

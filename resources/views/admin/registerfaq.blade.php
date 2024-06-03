@@ -34,23 +34,33 @@
                                         @endif
 
                                         <div class="mb-4 row  align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">FAQ Name</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control" type="text" placeholder="" name="title" id="title"
-                                                    value="{{ old('title') ?? $faq->title ?? '' }}">
-                                                <p style="display:none" class="title error text-danger"></p>
-                                                    @if (!empty($error['title']))
-                                                        @foreach ($error['title'] as  $key => $value)
-                                                            <p class="title error text-danger">{{ $value }}</p>
-                                                        @endforeach
-                                                    @endif
+
+                                            <label class="form-label-title col-sm-3 mb-0">FAQ Title</label>
+
+                                            <div class="col-md-9 g-4">
+                                                <input class="form-control" type="text" placeholder="Eng" name="title_eng" id="title_eng" value="{{ old('title_eng') ?? $faq->title ?? '' }}">
+                                                <p style="display:none" class="title_eng error text-danger"></p>
+                                                @if (!empty($error['title_eng']))
+                                                    @foreach ($error['title_eng'] as  $key => $value)
+                                                        <p class="title_eng error text-danger">{{ $value }}</p>
+                                                    @endforeach
+                                                @endif <br>
+
+                                                <input class="form-control" type="text" placeholder="Japan" name="title_japan" id="title_japan" value="{{ old('title_japan') ?? $faq->title ?? '' }}">
+                                                <p style="display:none" class="title_japan error text-danger"></p>
+                                                @if (!empty($error['title_japan']))
+                                                    @foreach ($error['title_japan'] as  $key => $value)
+                                                        <p class="title_japan error text-danger">{{ $value }}</p>
+                                                    @endforeach
+                                                @endif
                                             </div>
+
                                         </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Question</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" name="content" id="content" value="{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}</textarea>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control"  placeholder="Eng" name="content" id="content" value="{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}</textarea>
                                             <input type="hidden" name="content_desc" id="content_desc" value="{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}">
                                             <p style="display:none" class="content_desc error text-danger"></p>
                                             @if (!empty($error['content_desc']))
@@ -58,18 +68,36 @@
                                                     <p class="content_desc error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
+                                            <br>
+                                            <textarea class="form-control" placeholder="Japan" name="jpcontent" id="jpcontent" value="{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}</textarea>
+                                            <input type="hidden" name="jpcontent_desc" id="jpcontent_desc" value="{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}">
+                                            <p style="display:none" class="jpcontent_desc error text-danger"></p>
+                                            @if (!empty($error['jpcontent_desc']))
+                                                @foreach ($error['jpcontent_desc'] as  $key => $value)
+                                                    <p class="jpcontent_desc error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Answer</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" name="ans" id="ans" value="{!! str_replace("<p />","&#013;",old('ans') ?? $faq->ans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->ans ?? '')  !!}</textarea>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control" placeholder="Eng" name="ans" id="ans" value="{!! str_replace("<p />","&#013;",old('ans') ?? $faq->ans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->ans ?? '')  !!}</textarea>
                                             <input type="hidden" name="content_ansdesc" id="content_ansdesc" value="{!! str_replace("<p />","&#013;",old('ans') ?? $faq->ans ?? '')  !!}">
                                             <p style="display:none" class="content_ansdesc error text-danger"></p>
                                             @if (!empty($error['content_ansdesc']))
                                                 @foreach ($error['content_ansdesc'] as  $key => $value)
                                                     <p class="content_ansdesc error text-danger">{{ $value }}</p>
+                                                @endforeach
+                                            @endif
+                                            <br>
+                                            <textarea class="form-control" placeholder="Japan" name="jpans" id="jpans" value="{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}</textarea>
+                                            <input type="hidden" name="jpcontent_ansdesc" id="jpcontent_ansdesc" value="{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}">
+                                            <p style="display:none" class="jpcontent_ansdesc error text-danger"></p>
+                                            @if (!empty($error['jpcontent_ansdesc']))
+                                                @foreach ($error['jpcontent_ansdesc'] as  $key => $value)
+                                                    <p class="jpcontent_ansdesc error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -156,11 +184,35 @@
             });
 
             ClassicEditor
+            .create(document.querySelector('#jpcontent'))
+            .then(editor => {
+                editor.model.document.on('change:data', () => {
+                    var editorData = editor.getData();
+                    document.querySelector('#jpcontent_desc').value = editorData;
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+            ClassicEditor
             .create(document.querySelector('#ans'))
             .then(editor => {
                 editor.model.document.on('change:data', () => {
                     var editorData = editor.getData();
                     document.querySelector('#content_ansdesc').value = editorData;
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+            ClassicEditor
+            .create(document.querySelector('#jpans'))
+            .then(editor => {
+                editor.model.document.on('change:data', () => {
+                    var editorData = editor.getData();
+                    document.querySelector('#jpcontent_ansdesc').value = editorData;
                 });
             })
             .catch(error => {
@@ -215,10 +267,15 @@
         // var imageSrc = $.trim($("#image").val());
         // var imageSrcs = $.trim($("#preview-image-before-upload").attr('src'));
 
-if ($.trim($("#title").val()) === "" || $.trim($("#content_desc").val()) === "" || $.trim($("#content_ansdesc").val()) === "" ) {
-    if ($.trim($("#title").val()) === "") {
-        $('.error.title').text('Title is required');
-        $('.error.title').show();
+if ($.trim($("#title_eng").val()) === "" || $.trim($("#title_japan").val()) === "" || $.trim($("#content_desc").val()) === ""  || $.trim($("#jpcontent_desc").val()) === "" || $.trim($("#content_ansdesc").val()) === "" || $.trim($("#jpcontent_ansdesc").val()) === "") {
+    if ($.trim($("#title_eng").val()) === "") {
+        $('.error.title_eng').text('Title is required');
+        $('.error.title_eng').show();
+    }
+
+    if ($.trim($("#title_japan").val()) === "") {
+        $('.error.title_japan').text('Title is required');
+        $('.error.title_japan').show();
     }
 
     if ($.trim($("#content_desc").val()) === "") {
@@ -226,9 +283,19 @@ if ($.trim($("#title").val()) === "" || $.trim($("#content_desc").val()) === "" 
         $('.error.content_desc').show();
     }
 
+    if ($.trim($("#jpcontent_desc").val()) === "") {
+        $('.error.jpcontent_desc').text('Question is required');
+        $('.error.jpcontent_desc').show();
+    }
+
     if ($.trim($("#content_ansdesc").val()) === "") {
         $('.error.content_ansdesc').text('Answer is required');
         $('.error.content_ansdesc').show();
+    }
+
+    if ($.trim($("#jpcontent_ansdesc").val()) === "") {
+        $('.error.jpcontent_ansdesc').text('Answer is required');
+        $('.error.jpcontent_ansdesc').show();
     }
 
     return false;

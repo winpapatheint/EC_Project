@@ -7,9 +7,9 @@
 @endslot
 
 <h3 style="text-align: center">Welcome to Asian Food Museum!</h3>
-<p>Thank you for registering  in Asian Food Museum!</p>
+<p style="text-align: center">Thank you for registering  in Asian Food Museum!</p>
 <br>
-<p>Please click the button below to verify your account.</p>
+<p style="text-align: center">Please click the button below to verify your account.</p>
 {{-- Body --}}
 {{ $slot }}
 <div class="theme-logo">

@@ -185,7 +185,9 @@
                                     <div class="form-floating theme-form-floating">
                                         <input type="email" id="mail" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
                                         <label>Email Address</label>
-                                        <span class="error" style="color:red" id="error-mail"></span>
+                                        @if($errors->has('mail'))
+                                            <span class="error" style="color:red">{{ $errors->first('mail') }}</span>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -420,4 +422,5 @@
             validateUserForm();
         });
     </script>
+
 </x-guest-layout>

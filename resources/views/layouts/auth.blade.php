@@ -248,8 +248,8 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Shops</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/shop.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Shops</span>
                                     </a>
                                 </li>
 
@@ -262,8 +262,15 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Categories</span>
+                                        <img style="width:22px;color:white"  src="{{ asset('backend/assets/images/icon/category.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Categories</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
+                                        <i class="ri-archive-line"></i>
+                                        <span>Orders</span>
                                     </a>
                                 </li>
 
@@ -276,22 +283,15 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
-                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/Info.svg') }}" alt="logo">
+                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/top.png') }}" alt="logo">
                                         &nbsp;  &nbsp;<span>Top</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Coupon</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
-                                        <i class="ri-archive-line"></i>
-                                        <span>Orders</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Coupon</span>
                                     </a>
                                 </li>
 
@@ -319,31 +319,38 @@
                                 @endif
 
                                 <li class="sidebar-list">
+                                   <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.bank_account') }}">
+                                       <i class="ri-file-user-line"></i>
+                                       <span>Bank Account</span>
+                                   </a>
+                               </li>
+
+                                <li class="sidebar-list">
 
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/faq') }}">
-                                        <i class="ri-admin-line"></i>
-                                        <span>FAQ</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/faq.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>FAQ</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Contact</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/help.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Contact</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
-                                        <i class="ri-admin-line"></i>
-                                        <span>Customer</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/customer.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Customer</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
-                                        <i class="ri-archive-line"></i>
-                                        <span>NewsLetter</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>NewsLetter</span>
                                     </a>
                                 </li>
 

@@ -404,7 +404,8 @@ class SellerController extends Controller
             'phone' => $request->input('phone'),
         ]);
 
-        return redirect('/subsellerlist');
+        $msg = ('Data added successfully');
+        return redirect('/subsellerlist')->with('success', $msg);
     }
 
 

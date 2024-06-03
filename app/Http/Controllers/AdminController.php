@@ -36,6 +36,7 @@ use Mail;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Models\BankAccount;
 use App\Models\Blog;
 use App\Models\Faq;
 use Illuminate\Support\Facades\File;
@@ -4035,7 +4036,54 @@ class AdminController extends Controller
 
     function indexbankaccount()
     {
-        
+        $limit = 10;
+        $bankAccs = BankAccount::paginate($limit);
+        $ttl = $bankAccs->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.bank_account',compact('bankAccs','ttlpage','ttl'));
+    }
+
+    function addBankAccount(Request $request)
+    {
+        $bankAcc = BankAccount::create([
+            'bank_name' => $request->bank_name,
+            'branch_name' => $request->bank_branch,
+            'account_type' => $request->bank_acc_type,
+            'account_number' => $request->bank_acc_no,
+            'account_name' => $request->bank_acc_name,
+        ]);
+
+        return redirect()->route('admin.bank_account');
+    }
+
+    function forEditBankAccount($id)
+    {
+        $bankAcc = BankAccount::find($id);
+
+        return view('admin.edit_bank_account',compact('bankAcc'));
+    }
+
+    function editBankAccount(Request $request)
+    {
+        $bankAcc = BankAccount::find($request->id);
+        if($bankAcc)
+        {
+            $bankAcc->bank_name = $request->bank_name;
+            $bankAcc->branch_name = $request->bank_branch;
+            $bankAcc->account_type = $request->bank_acc_type;
+            $bankAcc->account_number = $request->bank_acc_no;
+            $bankAcc->account_name = $request->bank_acc_name;
+            $bankAcc->save();
+        }
+
+        return redirect()->route('admin.bank_account');
+    }
+
+    public function deleteBankAccount(Request $request)
+    {
+        $data = BankAccount::findOrFail($request->id)->delete();
+        return redirect()->route('admin.bank_account')->with('success','Deleted Successfully.');
     }
 }
 

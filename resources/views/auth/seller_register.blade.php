@@ -214,7 +214,7 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <span>Terms and Privacy</span>
+                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></a>
                                             </label>
                                         </div>
                                     </div>
@@ -364,7 +364,7 @@
             if (!bank_acc_name) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Please provide your bank account name.';
-            } else if (user_name.length > 255) {
+            } else if (bank_acc_name.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Your name must not exceed 255 characters.';
             }

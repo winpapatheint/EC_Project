@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\Role;
+use App\Models\BankAccount;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
@@ -958,8 +959,11 @@ class UserController extends Controller
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
             }
+        
+        $bankAccounts = BankAccount::all();
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount','shippingFee','total1', 'shop', 'maxDeli', 'couponUsedSellerId', 'couponUsedProductId', 'couponId'));
+            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount',
+            'shippingFee','total1', 'shop', 'maxDeli', 'couponUsedSellerId', 'couponUsedProductId', 'couponId', 'bankAccounts'));
 
     }
     //Purchase
@@ -1162,6 +1166,7 @@ class UserController extends Controller
             $couponUsedSellerId = $request->couponUsedSellerId;
             $couponUsedProductId = $request->couponUsedProductId;
             $couponId = $request->couponId;
+            $bankAccountId = $request->bankAccount;
             $transferPersonName= $request->transferPersonName;
             $transferDate= $request->transferDate;
 
@@ -1194,6 +1199,7 @@ class UserController extends Controller
                 'order_id' => $order->id,
                 'transfer_person_name' => $transferPersonName,
                 'transfer_date' => $transferDate,
+                'bank_account_id' => $bankAccountId
             ]);
 
             if ($couponId != 0)
@@ -1282,9 +1288,10 @@ class UserController extends Controller
             $orderedBuyer = Buyer::find($buyerId);
             $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
                             ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
+            $bankInfo = BankAccount::find($bankAccountId);
 
             DB::commit();
-            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $totalAmount, $transferPersonName, $transferDate, $name));
+            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);

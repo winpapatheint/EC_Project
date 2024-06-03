@@ -187,6 +187,8 @@
                                         <label>Email Address</label>
                                         @if($errors->has('mail'))
                                             <span class="error" style="color:red">{{ $errors->first('mail') }}</span>
+                                        @else
+                                            <span class="error" style="color:red" id="error-mail"></span>
                                         @endif
                                     </div>
                                 </div>
@@ -212,9 +214,9 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></label></a>
+                                                <span>Terms and Privacy</span>
+                                            </label>
                                         </div>
-
                                     </div>
                                     <span class="error" style="color:red" id="error-flexCheckDefault"></span>
                                 </div>

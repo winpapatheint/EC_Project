@@ -35,12 +35,6 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $products->id }}">
                                     <input type="hidden" name="old_img" value="{{ $products->product_thambnail }}">
-                                    @if (session('flash_message'))
-                                        <div class="flash_message bg-gradient-success text-center py-3 my-0">
-                                            {{ session('flash_message') }}
-                                        </div>
-                                    @endif
-
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">

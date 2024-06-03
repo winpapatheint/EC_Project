@@ -26,10 +26,10 @@ class OrderController extends Controller
         $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
 
-        // Fetching orders
         $orderQuery = OrderDetail::with('order')
             ->where('seller_id', $id)
             ->where('payment_approved', 1)
+            ->where('status', '!=','Cancel')
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc');

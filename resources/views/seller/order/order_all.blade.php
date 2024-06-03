@@ -103,6 +103,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                             </div>
 
                             <div class="tab-pane fade" id="pills-profile" role="tabpanel">
@@ -148,14 +149,14 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                     <!-- Table End -->
                 </div>
             </div>
-        <!--pagination -->
-        @include('components.pagination')
+
         </div>
     </div>
     <!-- Container-fluid Ends-->

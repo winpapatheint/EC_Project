@@ -113,10 +113,13 @@ class AdminController extends Controller
 
         $reviews = Review::all();
 
+        $startMonth = Carbon::now()->startOfMonth()->subMonth()->startOfMonth();
+        $endMonth = Carbon::now()->endOfMonth();
+
         $bestSellerProducts = DB::table('products')
             ->select('products.*', DB::raw('COUNT(order_details.id) as total_orders'))
             ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
-            ->whereMonth('order_details.created_at', '=', Carbon::now()->month)
+            ->whereBetween('order_details.created_at', [$startMonth, $endMonth])
             ->where('products.status', 1)
             ->groupBy('products.id')
             ->orderByDesc('total_orders')
@@ -4028,6 +4031,11 @@ class AdminController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'An error occurred while approving the payment: ' . $e->getMessage());
         }
+    }
+
+    function indexbankaccount()
+    {
+        
     }
 }
 

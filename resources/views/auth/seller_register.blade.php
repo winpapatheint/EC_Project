@@ -214,7 +214,7 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <span>Terms and Privacy</span>
+                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></a>
                                             </label>
                                         </div>
                                     </div>

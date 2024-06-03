@@ -110,12 +110,12 @@
         <p>Branch Code: 123</p>
         <p>Account Number: 12345678</p>
         <p>Account Holder: Jhon</p>
-        <p>If you don't transfer the amount within 3 days, your order will be cancelled.</p>
+        <p>If you don't transfer the amount at {{ $transferDate }}, your order will be cancelled.</p>
         <p>Please make sure the following your bank account name for the transfer process:</p>
-        <p>Account Holder: {{ $accountHolder }}</p>
+        <p>Account Holder: {{ $transferPersonName }}</p>
         <p>Thank you for shopping with us.</p>
         <div class="footer">
-            <p>If you have any questions, please contact us at info@asia-hd.com.</p>
+            <p>If you have any questions, please contact us at info@asian-food.site.</p>
         </div>
     </div>
 </body>

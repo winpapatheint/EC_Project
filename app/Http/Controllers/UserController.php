@@ -1162,7 +1162,8 @@ class UserController extends Controller
             $couponUsedSellerId = $request->couponUsedSellerId;
             $couponUsedProductId = $request->couponUsedProductId;
             $couponId = $request->couponId;
-            $accountHolder= $request->accountHolder;
+            $transferPersonName= $request->transferPersonName;
+            $transferDate= $request->transferDate;
 
             $paymentApproved = ($payment === 'Cash') ? 0 : 1;
 
@@ -1191,7 +1192,8 @@ class UserController extends Controller
 
             CashBankAccount::create([
                 'order_id' => $order->id,
-                'account_holder' => $accountHolder,
+                'transfer_person_name' => $transferPersonName,
+                'transfer_date' => $transferDate,
             ]);
 
             if ($couponId != 0)
@@ -1282,7 +1284,7 @@ class UserController extends Controller
                             ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
 
             DB::commit();
-            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $totalAmount, $accountHolder, $name));
+            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $totalAmount, $transferPersonName, $transferDate, $name));
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);

@@ -13,11 +13,8 @@ class OrderConfirmation extends Mailable
 
     public $orderDetails;
     public $totalAmount;
-    public $bankName;
-    public $bankCode;
-    public $branchCode;
-    public $accountNumber;
-    public $accountHolder;
+    public $transferPersonName;
+    public $transferDate;
     public $name;
 
     /**
@@ -25,11 +22,12 @@ class OrderConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct($orderDetails, $totalAmount, $accountHolder, $name)
+    public function __construct($orderDetails, $totalAmount, $transferPersonName, $transferDate, $name)
     {
         $this->orderDetails = $orderDetails;
         $this->totalAmount = $totalAmount;
-        $this->accountHolder = $accountHolder;
+        $this->transferPersonName = $transferPersonName;
+        $this->transferDate = $transferDate;
         $this->name = $name;
     }
 

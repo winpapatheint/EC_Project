@@ -17,5 +17,6 @@ class CashBankAccount extends Model
         'order_id',
         'transfer_person_name',
         'transfer_date',
+        'bank_account_id'
     ];
 }

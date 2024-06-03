@@ -83,9 +83,16 @@
                                                                             <i class="fa-solid fa-xmark"></i>
                                                                         </button>
                                                                     </div>
+                                                                    @php
+                                                                    $bankInfo = DB::table('cash_bank_accounts')->leftjoin('bank_accounts', 'cash_bank_accounts.bank_account_id', 'bank_accounts.id')
+                                                                                ->where('order_id',$item->order->id)->first();
+                                                                    @endphp
                                                                     <div class="modal-body">
                                                                         <div class="remove-box">
                                                                             <p>Do you have received payment for this order?</p>
+                                                                            <p>Check at your <span style="color:#ff6b6b;">{{ $bankInfo->bank_name }}</span> account 
+                                                                                with account number <span style="color:#ff6b6b;">({{ $bankInfo->account_number}})</span></p>
+                                                                            <p>Transfer person is <span style="color:#ff6b6b;">{{ $bankInfo->transfer_person_name }}</span></p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">

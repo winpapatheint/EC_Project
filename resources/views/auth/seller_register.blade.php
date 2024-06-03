@@ -362,7 +362,7 @@
             if (!bank_acc_name) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Please provide your bank account name.';
-            } else if (user_name.length > 255) {
+            } else if (bank_acc_name.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Your name must not exceed 255 characters.';
             }

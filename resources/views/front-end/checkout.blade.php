@@ -121,38 +121,64 @@
                                                     <div class="tab-content" id="pills-tabContent" style="margin-top: 10px;">
                                                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
                                                             <div class="review-title-2">
-                                                                
-                                                                <table class="table table-borderless">
-                                                                    <thead style="background-color: rgb(215, 215, 215);">
-                                                                        <tr>
-                                                                            <th colspan="2">
-                                                                                <h4 class="fw-bold">Our Bank Information</h4>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody style="background-color: rgb(245, 245, 245);">
-                                                                        <tr class="table-order">
-                                                                            <td><p>Bank Name</p></td>
-                                                                            <td><p>Mizuho Bank</p></td>
-                                                                        </tr>
-                                                                        <tr class="table-order">
-                                                                            <td><p>Bank Code</p></td>
-                                                                            <td><p>1234</p></td>
-                                                                        </tr>
-                                                                        <tr class="table-order">
-                                                                            <td><p>Branch Code</p></td>
-                                                                            <td><p>123</p></td>
-                                                                        </tr>
-                                                                        <tr class="table-order">
-                                                                            <td><p>Account Number</p></td>
-                                                                            <td><p>12345678</p></td>
-                                                                        </tr>
-                                                                        <tr class="table-order">
-                                                                            <td><p>Account Holder</p></td>
-                                                                            <td><p>Jhon</p></td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
+                                                                <div class="slider-1 product-wrapper no-arrow" style="margin-bottom: 10px;">
+                                                                    @if ($bankAccounts->count() > 0)
+                                                                        @foreach($bankAccounts as $key => $bankAccount)
+                                                                            <div class="address-box">
+                                                                                <div class="row" style="background-color: rgb(215, 215, 215);height: 50px;">
+                                                                                    <div class="col-md-1">
+                                                                                        <div class="form-check">
+                                                                                                <input class="form-check-input" type="radio" name="selected_bank_account" style="margin-top: 18px;"
+                                                                                                value="{{ $bankAccount->id }}" id="bank_account_{{ $bankAccount->id }}" {{ $key === 0 ? 'checked' : '' }}>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-11">    
+                                                                                            <label style="margin-top: 15px;"><h4 class="fw-bold">
+                                                                                                Choose the payment for
+                                                                                                {{ $bankAccount->bank_name }} bank!</h4></label>
+                                                                                    </div>
+                                                                                    <span class="error" style="color:red" id="error-selected_bank_account"></span>
+                                                                                </div>
+                                                                                <div class="table-responsive address-table">
+                                                                                    <table class="table">
+                                                                                        <tbody style="background-color: rgb(245, 245, 245);">
+                                                                                            <tr>
+                                                                                                <td>Bank Name:</td>
+                                                                                                <td>
+                                                                                                    <p>{{ $bankAccount->bank_name }}</p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Branch Name:</td>
+                                                                                                <td>
+                                                                                                    <p>{{ $bankAccount->branch_name }}</p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Account Type:</td>
+                                                                                                <td>
+                                                                                                    <p>{{ $bankAccount->account_type }}</p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Account Number:</td>
+                                                                                                <td>
+                                                                                                    <p>{{ $bankAccount->account_number }}</p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Account Name:</td>
+                                                                                                <td>
+                                                                                                    <p>{{ $bankAccount->account_name }}</p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    </div>
 
                                                                 <h4 class="fw-bold" style="margin-bottom: 10px;">Enter Your Bank Account Name</h4>
                                                                 <p style="color:red; font-size:12px;">* Please be careful to enter the correct transfer person name. 
@@ -388,6 +414,8 @@
     <script>
         document.getElementById('btnPayWithCash').addEventListener('click', function() {
             let isValid = true;
+
+            const selectedBankAccount = document.querySelector('input[name="selected_bank_account"]:checked').value;
             const transferPersonName = document.getElementById('transfer-person-name').value.trim();
             const transferDateInput = document.getElementById('transfer-date');
             const transferDate = new Date(transferDateInput.value);
@@ -397,6 +425,11 @@
             next7Days.setDate(today.getDate() + 7);
 
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            if (!selectedBankAccount) {
+                isValid = false;
+                document.getElementById('error-selected_bank_account').textContent = 'Please select the bank account you want to transfer.';
+            }
 
             if (!transferPersonName) {
                 isValid = false;
@@ -464,6 +497,7 @@
                         couponUsedProductId : NewCouponUsedProductId,
                         couponId : NewCouponId,
                         payment: "Cash",
+                        bankAccount: selectedBankAccount,
                         transferPersonName: transferPersonName,
                         transferDate: transferDateInput.value.trim()
                     },

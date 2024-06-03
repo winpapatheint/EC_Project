@@ -101,7 +101,6 @@ class ProductController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'estimate_date' => 'present|string|max:255',
             'delivery_price' => 'present|string|max:255',
-            'delivery_price' => 'present|string|max:255',
         ]);
 
         $datePrefix = date('ym');
@@ -118,8 +117,8 @@ class ProductController extends Controller
         $img->move(public_path('upload/product_thambnail'), $filename);
 
         $id = Auth::user()->created_by ?? Auth::id();
-        $sellerData = Seller::where('user_id',$id)->get();
-        $commission = $sellerData->commission;
+        $sellerData = Seller::where('user_id', $id)->first();
+        $commission = $sellerData->commission ?? 0;
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
             'brand_id' => $validatedData['brand_id'],

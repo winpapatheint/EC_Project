@@ -164,6 +164,7 @@
 
 <!-- Offcanvas Box Start -->
 @foreach( $order as $key => $item )
+@if(isset($item->id))
     <div class="offcanvas offcanvas-end order-offcanvas" tabindex="-1" id="order-details{{ $item->id }}"
         aria-labelledby="offcanvasExampleLabel" aria-hidden="false">
         <div class="offcanvas-header">
@@ -228,6 +229,7 @@
             </div>
         </div>
     </div>
+@endif
 @endforeach
 <!-- Offcanvas Box End -->
 

@@ -59,13 +59,12 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-2 mb-0">Confirm
-                                            Password</label>
+                                        <label class="form-label-title col-sm-2 mb-0">Confirm Password</label>
                                         <div class="col-sm-10">
                                             <input type="password" name="confirmed" class="form-control" value="{{ old('confirmed') }}" id="confirmed">
                                             <p style="display:none" class="confirmed error text-danger"></p>
                                             @if (!empty($error['confirmed']))
-                                                @foreach ($error['confirmed'] as  $key => $value)
+                                                @foreach ($error['confirmed'] as $key => $value)
                                                     <p class="confirmed error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
@@ -119,29 +118,49 @@
 
 <script>
     $('.btn-submit').click(function() {
-      $('.error').hide()
+        $('.error').hide();
 
-      if ($.trim($("#user_name").val()) === "" || $.trim($("#mail").val()) === ""  || $.trim($("#passwords").val()) === "") {
+        let userName = $.trim($("#user_name").val());
+        let email = $.trim($("#mail").val());
+        let password = $.trim($("#passwords").val());
+        let confirmedPassword = $.trim($("#confirmed").val());
 
-         if ($.trim($("#user_name").val()) === "") {
-              $('.error.user_name').text('Name must be present')
-              $('.error.user_name').show()
-         }
+        let isValid = true;
 
-         if ($.trim($("#mail").val()) === "") {
-              $('.error.mail').text('Email must be present')
-              $('.error.mail').show()
-         }
+        if (userName === "") {
+            $('.error.user_name').text('Name must be present');
+            $('.error.user_name').show();
+            isValid = false;
+        }
 
-         if ($.trim($("#passwords").val()) === "") {
-              $('.error.passwords').text('Password must be present')
-              $('.error.passwords').show()
-         }
+        if (email === "") {
+            $('.error.mail').text('Email must be present');
+            $('.error.mail').show();
+            isValid = false;
+        }
 
-         return false;
-      } else {
-        $('#confirmModal').modal('show');
-      }
+        if (password === "") {
+            $('.error.passwords').text('Password must be present');
+            $('.error.passwords').show();
+            isValid = false;
+        }
+
+        if (confirmedPassword === "") {
+            $('.error.confirmed').text('Confirmed password must be present');
+            $('.error.confirmed').show();
+            isValid = false;
+        } else if (password !== confirmedPassword) {
+            $('.error.confirmed').text('Passwords do not match');
+            $('.error.confirmed').show();
+            isValid = false;
+        }
+
+        if (isValid) {
+            $('#confirmModal').modal('show');
+        }
+
+        return false;
     });
 </script>
+
 @endsection

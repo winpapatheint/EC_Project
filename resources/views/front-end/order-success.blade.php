@@ -237,18 +237,36 @@
 
                                 <td style="text-align: left;padding-left: 32px;width: 50%;">
                                     <div class="title title-2" style="text-align: left;">
-                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">Thanks For your
-                                            Order</h2>
+                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">
+                                            Thanks for your order</h2>
                                         <p
                                             style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
-                                            If you have any
-                                            questions, Call Us (+81) 03-3981-5090 or Contact Us (info@asia-hd.com).</p>
+                                            If you have any questions, 
+                                            Call Us (+81) 03-3981-5090 or Contact Us (info@asian-food.site).</p>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
+                    @if ($order->payment_approved == 0)
+                    <table class="dilivery-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+                        style="margin: 25px 27px;padding: 20px 32px;width: fit-content; background-color:
+                        #f7f7f7;">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left;padding-left: 32px;width: 100%;">
+                                    <div class="title title-2" style="text-align: left;">
+                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">For your reminder!</h2>
+                                        <p
+                                            style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
+                                            We have send the email to you with detail order and bank informations. <br>
+                                        Please check your email!</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @endif
                     <table class="shipping-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
                         style="padding: 0 27px;">
                         <thead>

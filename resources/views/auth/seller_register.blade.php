@@ -157,17 +157,17 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="text" id="bank_acc_name" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
-                                        <label>Bank Account Name</label>
-                                        <span class="error" style="color:red" id="error-bank_acc_name"></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-floating theme-form-floating">
                                         <input type="text" id="bank_acc_no" name="bank_acc_no" class="form-control" placeholder="Bank Account Number" value="{{ old('bank_acc_no') }}">
                                         <label>Bank Account Number</label>
                                         <span class="error" style="color:red" id="error-bank_acc_no"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input type="text" id="bank_acc_name" name="bank_acc_name" class="form-control" placeholder="Bank Account Name" value="{{ old('bank_acc_name') }}">
+                                        <label>Bank Account Name</label>
+                                        <span class="error" style="color:red" id="error-bank_acc_name"></span>
                                     </div>
                                 </div>
 
@@ -187,6 +187,8 @@
                                         <label>Email Address</label>
                                         @if($errors->has('mail'))
                                             <span class="error" style="color:red">{{ $errors->first('mail') }}</span>
+                                        @else
+                                            <span class="error" style="color:red" id="error-mail"></span>
                                         @endif
                                     </div>
                                 </div>
@@ -212,9 +214,9 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></label></a>
+                                                <span>Terms and Privacy</span>
+                                            </label>
                                         </div>
-
                                     </div>
                                     <span class="error" style="color:red" id="error-flexCheckDefault"></span>
                                 </div>

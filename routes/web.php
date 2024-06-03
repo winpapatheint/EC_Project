@@ -80,6 +80,7 @@ Route::get('/remove-cart-product/{id}', [UserController::class, 'removeCartProdu
 Route::post('/user/checkout', [UserController::class, 'showCheckout'])->name('checkout');
 Route::get('/cupon', [UserController::class, 'applyCouponCode'])->name('apply_coupon_code');
 Route::post('/payment', [UserController::class, 'paymentCompleted'])->name('payment_completed');
+Route::post('/cash-payment', [UserController::class, 'cashPayment'])->name('cash_payment');
 Route::get('/order-success/{orderId}', [UserController::class, 'orderSuccess'])->name('order_success');
 
 Route::get('/product-circle', function () {return view('front-end.product-circle');});
@@ -126,6 +127,7 @@ Route::get('/admin/users', function () {return view('back-end.users');});
 Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin']);
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
+Route::get('admin/bank-account', [AdminController::class, 'indexbankaccount'])->middleware(['auth','role:admin'])->name('admin.bank_account');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->middleware(['auth','role:admin'])->name('ss');
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->middleware(['auth','role:admin'])->name('statusreview');
@@ -166,6 +168,7 @@ Route::get('shop/{shopid}', [AdminController::class, 'shopdetail'])->middleware(
 Route::get('shoptransfer/{shopid}', [AdminController::class, 'shopTransferDetail'])->middleware(['auth','role:admin']);
 Route::get('coupon/{couponid}', [AdminController::class, 'coupondetail'])->middleware(['auth','role:admin']);
 route::post('/admin/deleteproduct',[AdminController::class,'deleteproduct'])->middleware(['auth','role:admin'])->name('deleteproduct');
+Route::post('/admin/cash-payment-received/{id}', [AdminController::class, 'cashPaymentReceived'])->name('cash_payment_received');
 
 Route::post('/product/status', [AdminController::class, 'indexstatus'])->middleware(['auth','role:admin'])->name('tt');
 Route::post('/shop/status', [AdminController::class, 'indexshopstatus'])->middleware(['auth','role:admin'])->name('shopstatus');

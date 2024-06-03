@@ -33,6 +33,7 @@ class SellerController extends Controller
         $revenue = OrderDetail::where('seller_id', $id)->where('status', 'Delivered')->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->sum('amount');
         $order = OrderDetail::where('seller_id', $id)
                 ->where('status', '!=', 'Cancel')
+                ->where('payment_approved', 1)
                 ->groupBy('order_id')
                 ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id')
                 ->get();
@@ -403,23 +404,16 @@ class SellerController extends Controller
             'phone' => $request->input('phone'),
         ]);
 
-        return redirect('/subsellerlist');
+        $msg = ('Data added successfully');
+        return redirect('/subsellerlist')->with('success', $msg);
     }
 
 
     public function deleteSubseller(Request $request)
     {
         $id = $request->id;
-
-        User::whereExists(function ($query) use ($id) {
-            $query->select(DB::raw(1))
-                ->from('subsellers')
-                ->whereColumn('subsellers.email', 'users.email')
-                ->where('subsellers.id', $id);
-        })->delete();
-
-        Subseller::findOrFail($id)->delete();
-
+        User::where('id',$id)->delete();
+        Subseller::where('id',$id)->delete();
         $msg = ('Subseller deleted successfully');
         return back()->with('success', $msg);
     }

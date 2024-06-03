@@ -25,6 +25,10 @@
                                 <h5>Order Code: {{ $orders->order_code }}</h5>
                             </div>
                         </div>
+
+                        @if ($orderDetails->first()->payment_approved == 0)
+                            <p style="color:red; font-size:12px;">* Payment for this order didn't received yet!</p>
+                        @endif
                         <div class="bg-inner cart-section order-details-table">
                             <div class="row g-4">
                                 <div class="col-xl-8">
@@ -43,7 +47,9 @@
                                                     <td><h5>Quantity</h5></td>
                                                     <td><h5>Price(tax inc)</h5></td>
                                                     <td><h5>Commission</h5></td>
+                                                    @if($orderDetails->first()->payment_approved == 1)
                                                     <td><h5>Tracking</h5></td>
+                                                    @endif
                                                 </tr>
                                                 @foreach($orderDetails as $index => $order)
                                                     <tr class="table-order">
@@ -70,16 +76,17 @@
                                                         <td>
                                                             <h6>{{ $order->commission }}%</h6>
                                                         </td>
-
-                                                        <td>
-                                                            <a class="btn btn-sm btn-solid text-white"
-                                                                href="{{ route('ordertracking', $order->order_detail_id)}}"
-                                                                @if($order->status === 'Cancel')
-                                                                onclick="return false;"
-                                                                @endif>
-                                                                Tracking
-                                                            </a>
-                                                        </td>
+                                                        @if($order->payment_approved == 1)
+                                                            <td>
+                                                                <a class="btn btn-sm btn-solid text-white"
+                                                                    href="{{ route('ordertracking', $order->order_detail_id)}}"
+                                                                    @if($order->status === 'Cancel')
+                                                                    onclick="return false;"
+                                                                    @endif>
+                                                                    Tracking
+                                                                </a>
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     @php
                                                         $totalCommission += $order->commission_amount;
@@ -151,7 +158,6 @@
                                             <div class="delivery-sec">
                                                 <h3>Expected date of delivery: </h3>
                                                 <span>{{ \Carbon\Carbon::parse($order->expected_from)->format('Y/m/d') }}-{{ \Carbon\Carbon::parse($order->expected_to)->format('Y/m/d') }}</span>
-                                                <a href="{{ route('ordertracking', $order->order_id)}}">Track order</a>
                                             </div>
                                         </div>
                                     </div>

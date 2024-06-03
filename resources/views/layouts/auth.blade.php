@@ -274,6 +274,13 @@
                                     </a>
                                 </li>
 
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
+                                        <i class="ri-archive-line"></i>
+                                        <span>Orders</span>
+                                    </a>
+                                </li>
+
                                  <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.blog') }}">
                                         <i class="ri-newspaper-line"></i>
@@ -290,8 +297,13 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
+<<<<<<< HEAD
                                         <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo">
                                         &nbsp;  &nbsp;<span>Coupon</span>
+=======
+                                        <i class="ri-phone-line"></i>
+                                        <span>Coupon</span>
+>>>>>>> 3510427a4223a6971425e8c70fdcb8b8a3507c5f
                                     </a>
                                 </li>
 

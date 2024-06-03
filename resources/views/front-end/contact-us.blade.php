@@ -69,7 +69,7 @@
                                                 </div>
 
                                                 <div class="contact-detail-contain">
-                                                    <p>support@asia-food.site</p>
+                                                    <p>support@asian-food.site</p>
                                                 </div>
                                             </div>
                                         </div>

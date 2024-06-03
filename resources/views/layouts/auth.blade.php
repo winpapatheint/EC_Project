@@ -267,6 +267,13 @@
                                     </a>
                                 </li>
 
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
+                                        <i class="ri-archive-line"></i>
+                                        <span>Orders</span>
+                                    </a>
+                                </li>
+
                                  <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.blog') }}">
                                         <i class="ri-newspaper-line"></i>
@@ -285,13 +292,6 @@
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
                                         <i class="ri-phone-line"></i>
                                         <span>Coupon</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
-                                        <i class="ri-archive-line"></i>
-                                        <span>Orders</span>
                                     </a>
                                 </li>
 
@@ -317,6 +317,13 @@
                                     </a>
                                 </li>
                                 @endif
+
+                                <li class="sidebar-list">
+                                   <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.bank_account') }}">
+                                       <i class="ri-file-user-line"></i>
+                                       <span>Bank Account</span>
+                                   </a>
+                               </li>
 
                                 <li class="sidebar-list">
 

@@ -127,6 +127,7 @@ Route::get('/admin/users', function () {return view('back-end.users');});
 Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin']);
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
+Route::get('admin/bank-account', [AdminController::class, 'indexbankaccount'])->middleware(['auth','role:admin'])->name('admin.bank_account');
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->middleware(['auth','role:admin'])->name('ss');
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->middleware(['auth','role:admin'])->name('statusreview');

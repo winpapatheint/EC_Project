@@ -242,7 +242,7 @@
                                         <p
                                             style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
                                             If you have any questions, 
-                                            Call Us (+81) 03-3981-5090 or Contact Us (info@asia-food.site).</p>
+                                            Call Us (+81) 03-3981-5090 or Contact Us (info@asian-food.site).</p>
                                     </div>
                                 </td>
                             </tr>

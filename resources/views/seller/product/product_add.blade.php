@@ -136,7 +136,7 @@
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="long_desc" id="long_desc">{{ old('content_long_desc') }}</textarea>
                                             <input type="hidden" name="content" id="content_long_desc">
-                                            <p class="error" style="color:red" id="error-long_desc"></p>
+                                            <p class="error" style="color:red" id="error-content_long_desc"></p>
                                         </div>
                                     </div>
 
@@ -145,7 +145,7 @@
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('content_care_instructions') }}</textarea>
                                             <input type="hidden" name="content" id="content_care_instructions">
-                                            <p class="error" style="color:red" id="error-care_instructions"></p>
+                                            <p class="error" style="color:red" id="error-content_care_instructions"></p>
                                         </div>
                                     </div>
 
@@ -458,8 +458,8 @@
         const product_size = document.getElementById('product_size').value.trim();
         const product_color = document.getElementById('product_color').value.trim();
         const short_desc = document.getElementById('short_desc').value.trim();
-        const long_desc = document.getElementById('long_desc').value.trim();
-        const care_instructions = document.getElementById('care_instructions').value.trim();
+        const long_desc = document.getElementById('content_long_desc').value.trim();
+        const care_instructions = document.getElementById('content_care_instructions').value.trim();
         const productImage = document.getElementById('formFile').files[0];
         const productImages = document.getElementById('multiImg').files[0];
         const original_price = document.getElementById('original_price').value.trim();
@@ -536,18 +536,18 @@
 
         if (!long_desc) {
             isValid = false;
-            document.getElementById('error-long_desc').textContent = 'Please provide long description.';
-        } else if (long_desc.length > 2000) {
+            document.getElementById('error-content_long_desc').textContent = 'Please provide long description.';
+        } else if (short_desc.length > 2000) {
             isValid = false;
-            document.getElementById('error-long_desc').textContent = 'Long description must not exceed 2000 characters.';
+            document.getElementById('error-short_desc').textContent = 'Short description must not exceed 400 characters.';
         }
 
         if (!care_instructions) {
             isValid = false;
-            document.getElementById('error-care_instructions').textContent = 'Please provide care instructions.';
-        } else if (care_instructions.length > 1200) {
+            document.getElementById('error-content_care_instructions').textContent = 'Please provide care instructions.';
+        } else if (short_desc.length > 1200) {
             isValid = false;
-            document.getElementById('error-care_instructions').textContent = 'Care instructions must not exceed 1200 characters.';
+            document.getElementById('error-short_desc').textContent = 'Short description must not exceed 400 characters.';
         }
 
         if (!productImage) {

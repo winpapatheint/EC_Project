@@ -187,9 +187,9 @@
                                             <textarea class="form-control" name="long_desc" id="long_desc">{{ old('content_long_desc') }}</textarea>
                                             <input type="hidden" name="content" id="content_long_desc">
                                             <p style="display:none" class="content_long_desc error text-danger"></p>
-                                            @if (!empty($error['content_long_desc']))
-                                                @foreach ($error['content_long_desc'] as  $key => $value)
-                                                    <p class="content_long_desc error text-danger">{{ $value }}</p>
+                                            @if (!empty($error['long_desc']))
+                                                @foreach ($error['long_desc'] as  $key => $value)
+                                                    <p class="long_desc error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -200,10 +200,10 @@
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('content_care_instructions') }}</textarea>
                                             <input type="hidden" name="content" id="content_care_instructions">
-                                            <p style="display:none" class="content_care_instructions error text-danger"></p>
-                                            @if (!empty($error['content_care_instructions']))
-                                                @foreach ($error['content_care_instructions'] as  $key => $value)
-                                                    <p class="content_care_instructions error text-danger">{{ $value }}</p>
+                                            <p style="display:none" class="care_instructions error text-danger"></p>
+                                            @if (!empty($error['care_instructions']))
+                                                @foreach ($error['care_instructions'] as  $key => $value)
+                                                    <p class="care_instructions error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -432,38 +432,38 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('category').addEventListener('change', function() {
-        var categoryId = this.value;
-        var subcategorySelect = document.getElementById('subcategory');
-        if (subcategorySelect) {
-            subcategorySelect.innerHTML = '<option value="">Choose SubCategoryTitle</option>';
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('category').addEventListener('change', function() {
+            var categoryId = this.value;
+            var subcategorySelect = document.getElementById('subcategory');
+            if (subcategorySelect) {
+                subcategorySelect.innerHTML = '<option value="">Choose SubCategoryTitle</option>';
 
-            if (!categoryId) {return;}
+                if (!categoryId) {return;}
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var subcategories = JSON.parse(xhr.responseText);
-                        subcategories.forEach(function(subcategory) {
-                            var option = document.createElement('option');
-                            option.value = subcategory.id;
-                            option.textContent = subcategory.sub_category_titlename;
-                            subcategorySelect.appendChild(option);
-                        });
-                    } else {
-                        console.error('Failed to fetch subcategories');
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var subcategories = JSON.parse(xhr.responseText);
+                            subcategories.forEach(function(subcategory) {
+                                var option = document.createElement('option');
+                                option.value = subcategory.id;
+                                option.textContent = subcategory.sub_category_titlename;
+                                subcategorySelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('Failed to fetch subcategories');
+                        }
                     }
-                }
-            };
-            xhr.open('GET', '/get-subtitle/' + categoryId);
-            xhr.send();
-        } else {
-            console.error('Subcategory select element not found');
-        }
+                };
+                xhr.open('GET', '/get-subtitle/' + categoryId);
+                xhr.send();
+            } else {
+                console.error('Subcategory select element not found');
+            }
+        });
     });
-});
 </script>
 
 <script>

@@ -289,7 +289,7 @@
 
             if (!phone) {
                 isValid = false;
-                document.getElementById('error-phone').textContent = 'Please provide your phone number.';
+                document.getElementById('error-phone').textContent = 'Please provide your shop phone number.';
             } else if (!/^\d+$/.test(phone)) {
                 isValid = false;
                 document.getElementById('error-phone').textContent = 'Please provide a valid phone number.(eg. 09077554361)';
@@ -342,7 +342,7 @@
 
             if (!bank_name) {
                 isValid = false;
-                document.getElementById('error-bank_name').textContent = 'Please provide your name.';
+                document.getElementById('error-bank_name').textContent = 'Please provide your bank name.';
             } else if (bank_name.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_name').textContent = 'Your name must not exceed 255 characters.';
@@ -350,7 +350,7 @@
 
             if (!bank_branch) {
                 isValid = false;
-                document.getElementById('error-bank_branch').textContent = 'Please provide your name.';
+                document.getElementById('error-bank_branch').textContent = 'Please provide your bank branch.';
             } else if (bank_branch.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_branch').textContent = 'Your name must not exceed 255 characters.';
@@ -358,7 +358,7 @@
 
             if (!bank_acc_type || bank_acc_type === 'Choose bank account type') {
                 isValid = false;
-                document.getElementById('error-bank_acc_type').textContent = 'Please select a valid bank account.';
+                document.getElementById('error-bank_acc_type').textContent = 'Please select a valid bank account type.';
             }
 
             if (!bank_acc_name) {
@@ -371,10 +371,10 @@
 
             if (!bank_acc_no) {
                 isValid = false;
-                document.getElementById('error-bank_acc_no').textContent = 'Please provide your zip code.';
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide your bank account number.';
             } else if (!/^\d+$/.test(bank_acc_no)) {
                 isValid = false;
-                document.getElementById('error-bank_acc_no').textContent = 'Please provide a valid 7-digit zip code.';
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide a valid digit.';
             }
 
             if (!user_name) {

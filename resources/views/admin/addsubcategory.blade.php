@@ -412,14 +412,14 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header d-block text-center">
-                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p>SubCategory will be added?</p>
+                                                        <p>SubCategory will be added.</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -430,7 +430,8 @@
                                                             Yes
                                                         @endif
                                                     </button>
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>

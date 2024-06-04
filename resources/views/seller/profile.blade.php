@@ -70,7 +70,32 @@
                                 </div>
 
                                 <div class="d-grid gap-2 d-md-block">
-                                    <button type="submit" class="btn btn-animation btn-submit" onclick="submitForm()">Update Profile</button>
+                                    <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimBox_{{ $user->id }}">Update Profile</button>
+
+                                    <!-- Confirm Modal Box -->
+                                    <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $user->id }}" aria-hidden="true" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-block text-center">
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="remove-box">
+                                                        <p>The data will be added permanently.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-animation" >Yes</button>
+                                                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Confirm Modal Box End-->
                                 </div>
                             </div>
                         </form>
@@ -228,7 +253,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
-                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -331,9 +331,9 @@
                 <div class="modal-footer">
                     <form method="POST" action="{{ route('adminlogout')}}">
                         @csrf
-                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <button type="submit" class="btn btn-animation btn-primary">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-cancel" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>

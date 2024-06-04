@@ -167,7 +167,7 @@
                                     </tr>
                                     <!-- Confirm Modal Box Start -->
                                     <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $cartlist->cart_id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header d-block text-center">
                                                     <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
@@ -324,7 +324,7 @@
     @foreach($cartLists as $cartlist)
     @if($cartlist->coupon_id)
     <div class="modal fade theme-modal remove-profile" id="viewCoupon{{ $cartlist->coupon_id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
                     <button type="button" class="btn-close" data-bs-dismiss="modal">

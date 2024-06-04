@@ -215,7 +215,7 @@
 
     <!-- Add Address Modal Box Start -->
     <div class="modal fade theme-modal" id="add-address" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add a new address</h5>
@@ -300,7 +300,7 @@
     </div>
     <!-- Confirm Add Address Modal Start -->
     <div class="modal fade theme-modal remove-profile" id="confirmToAdd" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content" style="background-color: #f5f5f5;">
                 <div class="modal-header d-block text-center">
                     <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
@@ -326,7 +326,7 @@
     <!-- Edit Address Modal Box Start -->
     @foreach($data as $item)
         <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Edit address</h5>
@@ -410,7 +410,7 @@
         </div>
         <!-- Confirmation Modal for Edit -->
         <div class="modal fade theme-modal remove-profile" id="confirmEdit{{ $item->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
                 <div class="modal-content" style="background-color: #f5f5f5;">
                     <div class="modal-header d-block text-center">
                         <h5 class="modal-title w-100" id="exampleModalLabel{{ $item->id }}">Are You Sure?</h5>
@@ -436,7 +436,7 @@
     <!-- Remove Address Modal Start -->
     @foreach($data as $item)
     <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
                     <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>

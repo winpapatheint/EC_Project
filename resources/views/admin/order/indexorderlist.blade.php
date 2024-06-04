@@ -75,7 +75,7 @@
                                                         </td>
                                                         <!-- Received Payment Modal Start -->
                                                         <div class="modal fade theme-modal remove-profile" id="paymentReceived{{ $item->order->id }}" tabindex="-1" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                            <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header d-block text-center">
                                                                         <h5 class="modal-title w-100" id="exampleModalLabel22">Confirm Payment Received</h5>

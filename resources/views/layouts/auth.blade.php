@@ -86,14 +86,14 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="{{route('admin.dashboard')}}">
-                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
+                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" alt="logo">
 
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="{{route('admin.dashboard')}}">
-                            <img src="{{ asset('backend/assets/images/logo/1.png') }}" class="img-fluid" alt="">
+                            <img src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
                 </div>
@@ -107,46 +107,17 @@
                     request()->is('admin/all/users'))
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
-                            <button class="btn" type="submit" id="button-addon2">
+                        <div class="input-group" style="display: flex; align-items: center;">
+                            <input type="search" class="form-control" name="mainSearch" placeholder="" style="height: 40px; border-radius: 5px 0 0 5px;">
+                            <button class="btn" type="submit" id="button-addon2" style="background-color: #ffa53b; border-color: #ffa53b; height: 40px; border-radius: 0 5px 5px 0;">
                                 <i data-feather="search"></i>
                             </button>
                         </div>
                     </form>
                 </div>
                 @endif
-                {{-- <div class="accordion-item">
-                    <div style="display: flex; align-items: center;">
-                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                        id="search" name="search" value=""
-                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
-                        style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
-                    </div>
-                </div> --}}
-
-                {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
-                    <div class="form-group w-100">
-                        <div class="">
-                            <div class="u-posRelative">
-                                <input class="form-control form-control-sm mr-sm-2 demo-input Typeahead-input form-control-plaintext w-100" type="search" placeholder="Search" aria-label="Search" id="search"
-                                name="search" value=""
-                               style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                <i class="close-search" data-feather="x"></i>
-
-                            </div>
-                            <div class="Typeahead-menu"></div>
-                        </div>
-                    </div>
-                </form> --}}
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
-                        <li>
-                            <span class="header-search">
-                                <i class="ri-search-line"></i>
-                            </span>
-                        </li>
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
@@ -391,7 +362,7 @@
     <!-- page-wrapper End-->
     <!-- Logout modal start -->
     <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
                     <h5 class="modal-title w-100" id="exampleModalLabel">Logging Out</h5>

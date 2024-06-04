@@ -76,7 +76,7 @@ class AdminController extends Controller
         }
         // end coupon to be inactive for the end date
 
-        $categories = Category::all();
+        $categories = Category::where('category_name', '!=', 'Special Corner')->get();
 
         $blogs = DB::table('blogs')
                     ->select( 'U.name as authorby', 'blogs.*')

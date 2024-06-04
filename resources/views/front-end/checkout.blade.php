@@ -115,7 +115,7 @@
                                                         <li class="nav-item" role="presentation">
                                                             <button class="nav-link" id="pills-profile-tab"
                                                                 data-bs-toggle="pill" data-bs-target="#pills-profile"
-                                                                type="button" role="tab">Paypal/Credit</button>
+                                                                type="button" role="tab">PayPal/Credit</button>
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent" style="margin-top: 10px;">
@@ -125,20 +125,23 @@
                                                                     @if ($bankAccounts->count() > 0)
                                                                         @foreach($bankAccounts as $key => $bankAccount)
                                                                             <div class="address-box">
-                                                                                <div class="row" style="background-color: rgb(215, 215, 215);height: 50px;">
-                                                                                    <div class="col-md-1">
+                                                                                <div class="row" style="background-color: rgb(215, 215, 215); height: 50px; display: flex; align-items: center;">
+                                                                                    <div class="col-md-1 d-flex align-items-center justify-content-center">
                                                                                         <div class="form-check">
-                                                                                                <input class="form-check-input" type="radio" name="selected_bank_account" style="margin-top: 18px;"
-                                                                                                value="{{ $bankAccount->id }}" id="bank_account_{{ $bankAccount->id }}" {{ $key === 0 ? 'checked' : '' }}>
+                                                                                            <input class="form-check-input" type="radio" name="selected_bank_account" 
+                                                                                                   value="{{ $bankAccount->id }}" id="bank_account_{{ $bankAccount->id }}" 
+                                                                                                   {{ $key === 0 ? 'checked' : '' }}>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-md-11">    
-                                                                                            <label style="margin-top: 15px;"><h4 class="fw-bold">
-                                                                                                Choose the payment for
-                                                                                                {{ $bankAccount->bank_name }} bank!</h4></label>
+                                                                                    <div class="col-md-11 d-flex align-items-center">
+                                                                                        <label>
+                                                                                            <h4 class="fw-bold">
+                                                                                                Choose the payment for {{ $bankAccount->bank_name }} bank!
+                                                                                            </h4>
+                                                                                        </label>
                                                                                     </div>
                                                                                     <span class="error" style="color:red" id="error-selected_bank_account"></span>
-                                                                                </div>
+                                                                                </div>                                                                                
                                                                                 <div class="table-responsive address-table">
                                                                                     <table class="table">
                                                                                         <tbody style="background-color: rgb(245, 245, 245);">
@@ -193,7 +196,8 @@
                                                                     <label for="transfer-date">Transfer Date</label>
                                                                     <span class="error" style="color:red" id="error-transfer-date"></span>
                                                                 </div>
-                                                                <button class="btn" type="button" id="btnPayWithCash">
+                                                                <button class="btn" type="button" id="btnPayWithCash"
+                                                                style="layout: vertical;background-color:#009cde;color:#fff;shape:rect;label:paywithcash;height:50; font-size: 20px;font-family: Arial, sans-serif;">
                                                                     Pay With Cash
                                                                 </button>
                                                             </div>

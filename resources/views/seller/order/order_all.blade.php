@@ -20,23 +20,25 @@
                         </div>
 
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            @php $activeTab = request()->query('tab', 'list'); @endphp
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-home-tab"
-                                    data-bs-toggle="pill" data-bs-target="#pills-home"
-                                    type="button">List</button>
+                                <a class="nav-link @if($activeTab == 'list') active @endif" id="pills-home-tab"
+                                    href="{{ request()->fullUrlWithQuery(['tab' => 'list', 'page' => 1]) }}">
+                                    List
+                                </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-profile-tab"
-                                    data-bs-toggle="pill" data-bs-target="#pills-profile"
-                                    type="button">Cancelled Order</button>
+                                <a class="nav-link @if($activeTab == 'cancelled') active @endif" id="pills-profile-tab"
+                                    href="{{ request()->fullUrlWithQuery(['tab' => 'cancelled', 'page' => 1]) }}">
+                                    Cancelled Order
+                                </a>
                             </li>
                         </ul>
 
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                            <div class="tab-pane fade @if($activeTab == 'list') show active @endif" id="pills-home" role="tabpanel">
                                 <div class="table-responsive">
-                                    <table class="table all-package order-table theme-table dataTable no-footer"
-                                        id="table_id">
+                                    <table class="table all-package order-table theme-table dataTable no-footer" id="table_id">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -53,62 +55,54 @@
                                                     <td colspan="9">No data available</td>
                                                 </tr>
                                             @else
-                                            @foreach($order as $key => $item)
-                                                <tr>
-                                                    <td>{{ ($ttl+1) - ($order->firstItem() + $key) }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                    <td>{{ $item->order->order_code }}</td>
-                                                    <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
-                                                        <span>{{ $item->status }}</span>
-                                                    </td>
-                                                    <td>¥{{ number_format($item->amount) }}</td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ route('detail.order',['id' => $item->order_id]) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
+                                                @foreach($order as $key => $item)
+                                                    <tr>
+                                                        <td>{{ ($ttl + 1) - ($order->firstItem() + $key) }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                        <td>{{ $item->order->order_code }}</td>
+                                                        <td class="@if($item->status == 'Pending') status-danger @elseif(!empty($item->delivered_date)) order-success @else order-pending @endif">
+                                                            <span>{{ $item->status }}</span>
+                                                        </td>
+                                                        <td>¥{{ number_format($item->amount) }}</td>
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ route('detail.order', ['id' => $item->order_id]) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
 
-                                                            <li>
-                                                                <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
+                                                                <li>
+                                                                    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#order-details{{ $item->id }}">
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                </li>
 
-                                                            <li>
-                                                                <a href="{{ route('invoice',$item->id) }}"
-                                                                   @if($item->status === 'Cancel')
-                                                                       onclick="return false;"
-                                                                   @endif>
-                                                                    <i class="icon-cloud-down"></i>
-                                                                </a>
-                                                            </li>
+                                                                <li>
+                                                                    <a href="{{ route('invoice', $item->id) }}" @if($item->status === 'Cancel') onclick="return false;" @endif>
+                                                                        <i class="icon-cloud-down"></i>
+                                                                    </a>
+                                                                </li>
 
-                                                            <li>
-                                                                <a class="btn btn-sm btn-solid text-white"
-                                                                    href="{{ route('order.tracking', $item->order_id)}}"
-                                                                    @if($item->status === 'Cancel')
-                                                                       onclick="return false;"
-                                                                    @endif>
-                                                                    Tracking
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                                <li>
+                                                                    <a class="btn btn-sm btn-solid text-white" href="{{ route('order.tracking', $item->order_id) }}" @if($item->status === 'Cancel') onclick="return false;" @endif>
+                                                                        Tracking
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @endif
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                            <div class="tab-pane fade @if($activeTab == 'cancelled') show active @endif" id="pills-profile" role="tabpanel">
                                 <div class="table-responsive">
-                                    <table class="table all-package order-table theme-table dataTable no-footer"
-                                        id="table_id">
+                                    <table class="table all-package order-table theme-table dataTable no-footer" id="table_id">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -127,29 +121,28 @@
                                                     <td colspan="9">No data available</td>
                                                 </tr>
                                             @else
-                                            @foreach($cancelledOrder as $key => $item)
-                                                <tr>
-                                                    <td>{{ ($cancelttl+1) - ($cancelledOrder->firstItem() + $key) }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                                    <td>{{ $item->order->order_code }}</td>
-                                                    <td><a href="{{ route('detail.product',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
-                                                    <td>
-                                                        <h6>
-                                                            {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
-                                                        </h6>
-                                                    </td>
-                                                    <td>{{ $item->qty }}</td>
-                                                    <td>¥{{ number_format($item->amount) }}</td>
-                                                    <td>{{ $item->cancelled_reason }}</td>
-                                                </tr>
-                                            @endforeach
+                                                @foreach($cancelledOrder as $key => $item)
+                                                    <tr>
+                                                        <td>{{ ($cancelttl + 1) - ($cancelledOrder->firstItem() + $key) }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                                        <td>{{ $item->order->order_code }}</td>
+                                                        <td><a href="{{ route('detail.product', $item->product->id) }}">{{ $item->product->product_code }}</a></td>
+                                                        <td>
+                                                            <h6>{!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}</h6>
+                                                        </td>
+                                                        <td>{{ $item->qty }}</td>
+                                                        <td>¥{{ number_format($item->amount) }}</td>
+                                                        <td>{{ $item->cancelled_reason }}</td>
+                                                    </tr>
+                                                @endforeach
                                             @endif
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <!-- Table End -->
                 </div>
@@ -260,6 +253,21 @@
     </div>
 @endforeach
 <!-- Modal End -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var activeTab = urlParams.get('tab');
+        if (activeTab) {
+            var tabLink = document.querySelector(`[href*="tab=${activeTab}"]`);
+            if (tabLink) {
+                var tabTrigger = new bootstrap.Tab(tabLink);
+                tabTrigger.show();
+            }
+        }
+    });
+</script>
+
 
 <script>
 $(document).ready(function() {

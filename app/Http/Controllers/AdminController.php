@@ -213,7 +213,7 @@ class AdminController extends Controller
             // 'agerange' => 'required|not_in:0',
             'phone' => ['required', 'regex:/^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/'],
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'address' => 'required|string|max:255',
 
         ];
@@ -960,18 +960,24 @@ class AdminController extends Controller
 
     public function indexsubcategory()
     {
+
         $limit = 10;
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
         $mainSearch = $validated['mainSearch'] ?? null;
-
         $query = SubCategoryTitle::query();
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->orWhere('sub_category_titlename', 'like', '%' . $mainSearch . '%');
-            });
-        }
+            if ($mainSearch != null) {
+                $query->where(function ($query) use ($mainSearch) {
+                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                });
+                // ->orWhereHas('user', function ($query) use ($mainSearch) {
+                //     $query->where('name', 'like', '%' . $mainSearch . '%');
+                // })
+                // ->orWhereHas('product', function ($query) use ($mainSearch) {
+                //     $query->where('product_name', 'like', '%' . $mainSearch . '%');
+                // });
+            }
 
         $lists = DB::table('categories')
                     ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
@@ -4058,9 +4064,6 @@ class AdminController extends Controller
 
     function indexbankaccount()
     {
-<<<<<<< HEAD
-
-=======
         $limit = 10;
         $bankAccs = BankAccount::paginate($limit);
         $ttl = $bankAccs->total();
@@ -4109,7 +4112,6 @@ class AdminController extends Controller
     {
         $data = BankAccount::findOrFail($request->id)->delete();
         return redirect()->route('admin.bank_account')->with('success','Deleted Successfully.');
->>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
     }
 }
 

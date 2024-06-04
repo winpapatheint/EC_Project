@@ -88,22 +88,14 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="{{route('admin.dashboard')}}">
-<<<<<<< HEAD
-                            <img class="img-fluid main-logo" src="{{ asset('images/logos/logo-h4.png') }}" alt="logo">
-=======
                             <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" alt="logo">
->>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
 
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="{{route('admin.dashboard')}}">
-<<<<<<< HEAD
-                            <img src="{{ asset('images/logos/logo-h4.png') }}" class="img-fluid" alt="">
-=======
                             <img src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" class="img-fluid" alt="">
->>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                         </a>
                     </div>
                 </div>
@@ -128,10 +120,6 @@
                     </form>
                 </div>
                 @endif
-<<<<<<< HEAD
-
-=======
->>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">

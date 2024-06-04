@@ -126,7 +126,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="short_desc" id="short_desc" rows="5">{{ old('short_desc') }}</textarea>
+                                            <textarea class="form-control" name="short_desc" id="short_desc" rows="5" placeholder="Use control+shift+V to paste within this text area.">{{ old('short_desc') }}</textarea>
                                             <p class="error" style="color:red" id="error-short_desc"></p>
                                         </div>
                                     </div>
@@ -134,7 +134,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long_desc" id="long_desc">{{ old('content_long_desc') }}</textarea>
+                                            <textarea class="form-control" name="long_desc" id="long_desc" placeholder="Use control+shift+V to paste within this text area.">{{ old('content_long_desc') }}</textarea>
                                             <input type="hidden" name="content" id="content_long_desc">
                                             <p class="error" style="color:red" id="error-content_long_desc"></p>
                                         </div>
@@ -143,7 +143,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('content_care_instructions') }}</textarea>
+                                            <textarea class="form-control" name="care_instructions" id="care_instructions" placeholder="Use control+shift+V to paste within this text area.">{{ old('content_care_instructions') }}</textarea>
                                             <input type="hidden" name="content" id="content_care_instructions">
                                             <p class="error" style="color:red" id="error-content_care_instructions"></p>
                                         </div>
@@ -257,6 +257,172 @@
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+    $('.btn-submit').click(function() {
+    $('.error').hide();
+
+    let product_name = $.trim($("#product_name").val());
+    let country_id = $.trim($("#country_id").val());
+    let brand_id = $.trim($("#brand_id").val());
+    let category_id = $.trim($("#category").val());
+    let sub_category_title_id = $.trim($("#subcategory").val());
+    let sub_category_id = $.trim($("#subname").val());
+    let product_tags = $.trim($("#product_tags").val());
+    let product_size = $.trim($("#product_size").val());
+    let product_color = $.trim($("#product_color").val());
+    let short_desc = $.trim($("#short_desc").val());
+    let long_desc = $.trim($("#content_long_desc").val());
+    let care_instructions = $.trim($("#content_care_instructions").val());
+    let productImage = $("#formFile")[0].files[0];
+    let productImages = $("#multiImg")[0].files;
+    let original_price = $.trim($("#original_price").val());
+    let product_qty = $.trim($("#product_qty").val());
+    let estimate_date = $.trim($("#estimate_date").val());
+    let delivery_price = $.trim($("#delivery_price").val());
+
+    let isValid = true;
+
+    if (!product_name) {
+        $('#error-product_name').text('Please provide product name.').show();
+        isValid = false;
+    } else if (product_name.length > 255) {
+        $('#error-product_name').text('Product name must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!country_id || country_id === 'Choose country') {
+        $('#error-country_id').text('Please select a valid country.').show();
+        isValid = false;
+    }
+
+    if (!brand_id || brand_id === 'Choose brand') {
+        $('#error-brand_id').text('Please select a valid brand.').show();
+        isValid = false;
+    }
+
+    if (!category_id || category_id === 'Choose Category') {
+        $('#error-category_id').text('Please select a valid category.').show();
+        isValid = false;
+    }
+
+    if (!sub_category_title_id) {
+        $('#error-sub_category_title_id').text('Please select a valid subcategory title.').show();
+        isValid = false;
+    }
+
+    if (!sub_category_id) {
+        $('#error-sub_category_id').text('Please select a valid subcategory.').show();
+        isValid = false;
+    }
+
+    if (!product_tags) {
+        $('#error-product_tags').text('Please provide product tags.').show();
+        isValid = false;
+    } else if (product_tags.length > 255) {
+        $('#error-product_tags').text('Product tags must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!product_size) {
+        $('#error-product_size').text('Please provide product size.').show();
+        isValid = false;
+    } else if (product_size.length > 255) {
+        $('#error-product_size').text('Product size must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!product_color) {
+        $('#error-product_color').text('Please provide product color.').show();
+        isValid = false;
+    } else if (product_color.length > 255) {
+        $('#error-product_color').text('Product color must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!short_desc) {
+        $('#error-short_desc').text('Please provide short description.').show();
+        isValid = false;
+    } else if (short_desc.length > 400) {
+        $('#error-short_desc').text('Short description must not exceed 400 characters.').show();
+        isValid = false;
+    }
+
+    if (!long_desc) {
+        $('#error-content_long_desc').text('Please provide long description.').show();
+        isValid = false;
+    } else if (long_desc.length > 2000) {
+        $('#error-content_long_desc').text('Long description must not exceed 2000 characters.').show();
+        isValid = false;
+    }
+
+    if (!care_instructions) {
+        $('#error-content_care_instructions').text('Please provide care instructions.').show();
+        isValid = false;
+    } else if (care_instructions.length > 1200) {
+        $('#error-content_care_instructions').text('Care instructions must not exceed 1200 characters.').show();
+        isValid = false;
+    }
+
+    if (!productImage) {
+        $('#error-product_thambnail').text('Please provide product image.').show();
+        isValid = false;
+    } else if (productImage.size > 2 * 1024 * 1024) {
+        $('#error-product_thambnail').text('Product image must not exceed 2MB.').show();
+        isValid = false;
+    }
+
+    if (productImages.length === 0) {
+        $('#error-images').text('Please provide multiple images.').show();
+        isValid = false;
+    } else {
+        for (let i = 0; i < productImages.length; i++) {
+            if (productImages[i].size > 2 * 1024 * 1024) {
+                $('#error-images').text('Each image must not exceed 2MB.').show();
+                isValid = false;
+                break;
+            }
+        }
+    }
+
+    if (!original_price) {
+        $('#error-original_price').text('Please provide product price.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(original_price)) {
+        $('#error-original_price').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (!product_qty) {
+        $('#error-product_qty').text('Please provide product quantity.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(product_qty)) {
+        $('#error-product_qty').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (!estimate_date) {
+        $('#error-estimate_date').text('Please provide delivery estimate date.').show();
+        isValid = false;
+    }
+
+    if (!delivery_price) {
+        $('#error-delivery_price').text('Please provide delivery price.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(delivery_price)) {
+        $('#error-delivery_price').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (isValid) {
+        $('#confirmModal').modal('show');
+    }
+
+    return false;
+});
+
+</script>
+
 <script>
     $.ajaxSetup({
         headers: {
@@ -469,165 +635,4 @@
     });
 </script>
 
-<script>
-    function validateUserForm() {
-        let isValid = true;
-
-        const product_name = document.getElementById('product_name').value.trim();
-        const country_id = document.querySelector('select[name="country_id"]').value;
-        const brand_id = document.querySelector('select[name="brand_id"]').value;
-        const category_id = document.querySelector('select[name="category_id"]').value;
-        const sub_category_title_id = document.querySelector('select[name="sub_category_title_id"]').value;
-        const sub_category_id = document.querySelector('select[name="sub_category_id"]').value;
-        const product_tags = document.getElementById('product_tags').value.trim();
-        const product_size = document.getElementById('product_size').value.trim();
-        const product_color = document.getElementById('product_color').value.trim();
-        const short_desc = document.getElementById('short_desc').value.trim();
-        const long_desc = document.getElementById('content_long_desc').value.trim();
-        const care_instructions = document.getElementById('content_care_instructions').value.trim();
-        const productImage = document.getElementById('formFile').files[0];
-        const productImages = document.getElementById('multiImg').files[0];
-        const original_price = document.getElementById('original_price').value.trim();
-        const product_qty = document.getElementById('product_qty').value.trim();
-        const estimate_date = document.getElementById('estimate_date').value.trim();
-        const delivery_price = document.getElementById('delivery_price').value.trim();
-
-        document.querySelectorAll('.error').forEach(el => el.textContent = '');
-
-        if (!product_name) {
-            isValid = false;
-            document.getElementById('error-product_name').textContent = 'Please provide product name.';
-        } else if (product_name.length > 255) {
-            isValid = false;
-            document.getElementById('error-product_name').textContent = 'Product name must not exceed 255 characters.';
-        }
-
-        if (!country_id || country_id === 'Choose country') {
-            isValid = false;
-            document.getElementById('error-country_id').textContent = 'Please select a valid country.';
-        }
-
-        if (!brand_id || brand_id === 'Choose brand') {
-            isValid = false;
-            document.getElementById('error-brand_id').textContent = 'Please select a valid brand.';
-        }
-
-        if (!category_id || category_id === 'Choose Category') {
-            isValid = false;
-            document.getElementById('error-category_id').textContent = 'Please select a valid category.';
-        }
-
-        if (!sub_category_title_id || sub_category_title_id === 'Choose SubCategoryTitle') {
-            isValid = false;
-            document.getElementById('error-sub_category_title_id').textContent = 'Please select a valid subcategory title.';
-        }
-
-        if (!sub_category_id || sub_category_id === 'Choose SubCategory') {
-            isValid = false;
-            document.getElementById('error-sub_category_id').textContent = 'Please select a valid subcategory.';
-        }
-
-        if (!product_tags) {
-            isValid = false;
-            document.getElementById('error-product_tags').textContent = 'Please provide product tags.';
-        } else if (product_tags.length > 255) {
-            isValid = false;
-            document.getElementById('error-product_tags').textContent = 'Product tags must not exceed 255 characters.';
-        }
-
-        if (!product_size) {
-            isValid = false;
-            document.getElementById('error-product_size').textContent = 'Please provide product size.';
-        } else if (product_size.length > 255) {
-            isValid = false;
-            document.getElementById('error-product_size').textContent = 'Product size must not exceed 255 characters.';
-        }
-
-        if (!product_color) {
-            isValid = false;
-            document.getElementById('error-product_color').textContent = 'Please provide product color.';
-        } else if (product_color.length > 255) {
-            isValid = false;
-            document.getElementById('error-product_color').textContent = 'Product color must not exceed 255 characters.';
-        }
-
-        if (!short_desc) {
-            isValid = false;
-            document.getElementById('error-short_desc').textContent = 'Please provide short description.';
-        } else if (short_desc.length > 400) {
-            isValid = false;
-            document.getElementById('error-short_desc').textContent = 'Short description must not exceed 400 characters.';
-        }
-
-        if (!long_desc) {
-            isValid = false;
-            document.getElementById('error-content_long_desc').textContent = 'Please provide long description.';
-        } else if (short_desc.length > 2000) {
-            isValid = false;
-            document.getElementById('error-short_desc').textContent = 'Short description must not exceed 400 characters.';
-        }
-
-        if (!care_instructions) {
-            isValid = false;
-            document.getElementById('error-content_care_instructions').textContent = 'Please provide care instructions.';
-        } else if (short_desc.length > 1200) {
-            isValid = false;
-            document.getElementById('error-short_desc').textContent = 'Short description must not exceed 400 characters.';
-        }
-
-        if (!productImage) {
-            isValid = false;
-            document.getElementById('error-product_thambnail').textContent = 'Please provide product image.';
-        } else if (productImage.size > 2 * 1024 * 1024) {
-            isValid = false;
-            document.getElementById('error-product_thambnail').textContent = 'Product image must not exceed 2MB.';
-        }
-
-        if (!productImages) {
-            isValid = false;
-            document.getElementById('error-images').textContent = 'Please provide multiple product images.';
-        } else if (productImages.size > 2 * 1024 * 1024) {
-            isValid = false;
-            document.getElementById('error-images').textContent = 'Product images must not exceed 2MB.';
-        }
-
-        if (!original_price) {
-            isValid = false;
-            document.getElementById('error-original_price').textContent = 'Please provide original price.';
-        } else if (!/^\d+$/.test(original_price)) {
-            isValid = false;
-            document.getElementById('error-original_price').textContent = 'Please provide a valid digit.';
-        }
-
-        if (!product_qty) {
-            isValid = false;
-            document.getElementById('error-product_qty').textContent = 'Please provide product quantity.';
-        } else if (!/^\d+$/.test(product_qty)) {
-            isValid = false;
-            document.getElementById('error-product_qty').textContent = 'Please provide a valid digit.';
-        }
-
-        if (!estimate_date) {
-            isValid = false;
-            document.getElementById('error-estimate_date').textContent = 'Please provide delivery estimate date.';
-        }
-
-        if (!delivery_price) {
-            isValid = false;
-            document.getElementById('error-delivery_price').textContent = 'Please provide delivery price.';
-        } else if (!/^\d+$/.test(delivery_price)) {
-            isValid = false;
-            document.getElementById('error-delivery_price').textContent = 'Please provide a valid digit.';
-        }
-
-        if (isValid) {
-            document.getElementById('sellerRegister').submit();
-        }
-    }
-
-    document.getElementById('sellerRegister').addEventListener('submit', function(event) {
-        event.preventDefault();
-        validateUserForm();
-    });
-</script>
 @endsection

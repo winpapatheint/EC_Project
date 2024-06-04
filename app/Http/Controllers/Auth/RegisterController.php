@@ -61,50 +61,23 @@ class RegisterController extends Controller
             'commission' => 0,
             'status' => 0
         ]);
-
         event(new Registered($seller));
 
-        $email = $request->email;
         $inquiry_email = 'info-test@asia-hd.com';
-        $user = User::where('id', $user->id)->select('email', 'name')->first();
-
-        $email = $user->email;
-        $name = $user->name;
         $data = array('name'=>$name);
         if (!empty($request->email)) {
-            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'Question form');
-                $message->from($email,$name);
+            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+                $message->to($inquiry_email, 'Ecommerce ')->subject($request->user_name);
+                $message->from($request->mail,$request->user_name);
                 $message->setBody("The following notification was received from the E-commerce official website.
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\Name".$name."
-                \r\n"."Email：　".$email."
+                \r\n"."Name：　".$request->user_name."
+                \r\n"."Email：　".$request->mail."
                 \r\n
                 \r\n"."Notice：　
                 \r\n
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
             });
-        }
-
-        $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-        $inquiry_email = 'info-test@asia-hd.com';
-        $name = $user->name;
-        $data = array('name'=>$name);
-        if (!empty(  $adminMails)) {
-            foreach ($adminMails as $email) {
-                Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
-                    $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
-                    $message->from($email,$name);
-                    $message->setBody("The following notification was received from the E-commerce official website.
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\Name".$name."
-                    \r\n"."Email：　".$email."
-                    \r\n
-                    \r\n"."Notice：　
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-            }
         }
 
         $notification = Notification::find(1);

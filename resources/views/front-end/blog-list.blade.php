@@ -14,7 +14,7 @@
                                         <i class="fa-solid fa-house"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Blog List</li>
+                                <li class="breadcrumb-item active">Blog</li>
                             </ol>
                         </nav>
                     </div>

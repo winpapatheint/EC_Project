@@ -29,7 +29,32 @@
     <section class="blog-section section-b-space">
         <div class="container-fluid-lg">
             <div class="row g-4">
+<<<<<<< HEAD
+                <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="blog-box blog-list wow fadeInUp">
+                                <div class="blog-image">
+                                    <img src="{{ asset('images/'.$blog->image ) }}" class="blur-up lazyload" alt="">
+                                </div>
+
+                                <div class="blog-contain blog-contain-2">
+                                    <div class="blog-label">
+                                        <span class="time"><i data-feather="clock"></i> <span> {{ date('Y/m/d', strtotime($blog->created_at)) }} </span></span>
+                                        <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
+                                    </div>
+
+                                </div>
+                                <p>{{ $blog->content }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-xl-4 col-lg-5 d-lg-block d-none">
+=======
                 <div class="col-xxl-3 col-xl-4 col-lg-5">
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                     <div class="left-sidebar-box wow fadeInUp">
                     <form id="searchForm" action="/news" method="GET">
                         <div class="accordion-item">
@@ -89,16 +114,53 @@
                                     </div>
                                 </li>
 
+<<<<<<< HEAD
+                {{-- <div class="col-xxl-9 col-xl-8 col-lg-7 ratio_50">
+                    <div class="blog-detail-image rounded-3 mb-4">
+                        <img src="{{ asset('images/'.$blog->image ) }}" class="bg-img blur-up lazyload" alt="">
+                        <div class="blog-image-contain">
+                            <h2>Agriculture Conference Harvest 2022 in Paris</h2>
+                            <div class="blog-label">
+                                <span class="time"><i data-feather="clock"></i> <span> {{ date('Y/m/d', strtotime($blog->created_at)) }} </span></span>
+                                <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
+                            </div>
+                            <ul class="contain-comment-list">
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="user"></i>
+                                        <span>Caroline</span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="calendar"></i>
+                                        <span>April 19, 2022</span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="message-square"></i>
+                                        <span>82 Comment</span>
+=======
                                 <li>
                                     <div class="user-list">
                                         <i data-feather="calendar"></i>
                                         <span>{{ date('Y/m/d', strtotime($blog->created_at)) }}</span>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
+<<<<<<< HEAD
+                    <div class="blog-detail-contain">
+                        <p><span class="first">S</span> {!! $blog->content !!}</p>
+                    </div>
+                </div> --}}
+=======
                     @php
                         $content = $blog->content;
                         $content = str_replace(['<p>', '</p>'], '', $content);
@@ -128,6 +190,7 @@
                         <p>&emsp;&emsp;{{ $secondHalf }}</p>
                     </div>
                 </div>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
             </div>
         </div>
     </section>

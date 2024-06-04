@@ -213,7 +213,7 @@ class AdminController extends Controller
             // 'agerange' => 'required|not_in:0',
             'phone' => ['required', 'regex:/^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/'],
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'address' => 'required|string|max:255',
 
         ];
@@ -580,7 +580,7 @@ class AdminController extends Controller
         // $hcompanies = array();
         // print_r($lists);die;
 
-        return view('admin.blog.blog',compact('lists','ttlpage','ttl'));
+        return view('admin.blog.blog',compact('lists','ttlpage','ttl', 'mainSearch'));
     }
 
 
@@ -668,15 +668,17 @@ class AdminController extends Controller
         ]);
         $mainSearch = $validated['mainSearch'] ?? null;
         $query = Review::query();
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->where('comment', 'like', '%' . $mainSearch . '%')
-                ->where('created_at', 'like', '%' . $mainSearch . '%');
-            })
-            ->orWhereHas('user', function ($query) use ($mainSearch) {
-                $query->where('name', 'like', '%' . $mainSearch . '%');
-            });
-        }
+            if ($mainSearch != null) {
+                $query->where(function ($query) use ($mainSearch) {
+                    $query->where('comment', 'like', '%' . $mainSearch . '%');
+                })
+                ->orWhereHas('user', function ($query) use ($mainSearch) {
+                    $query->where('name', 'like', '%' . $mainSearch . '%');
+                })
+                ->orWhereHas('product', function ($query) use ($mainSearch) {
+                    $query->where('product_name', 'like', '%' . $mainSearch . '%');
+                });
+            }
 
         $lists = $query->leftjoin('users', 'users.id', '=', 'reviews.user_id')
                         ->leftjoin('products','products.id', '=', 'reviews.product_id')
@@ -725,12 +727,25 @@ class AdminController extends Controller
         // $hcompanies = array();
         // print_r($lists);die;
 
-        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle','coupons'));
+        return view('admin.product.product_all',compact('lists','ttlpage','ttl', 'subCatTitle','coupons','mainSearch'));
     }
 
     public function shoplist()
     {
         $limit = 10;
+        $validated = request()->validate([
+            'mainSearch' => 'string|nullable',
+        ]);
+        $mainSearch = $validated['mainSearch'] ?? null;
+        $query = Seller::query();
+            if ($mainSearch != null) {
+                $query->where(function ($query) use ($mainSearch) {
+                    $query->where('shop_name', 'like', '%' . $mainSearch . '%')
+                          ->orWhereHas('coupons', function ($query) use ($mainSearch) {
+                              $query->where('coupon_code', 'like', '%' . $mainSearch . '%');
+                          });
+                });
+            }
 
         //Identify expired coupons
         $expiredCoupons = DB::table('coupons')
@@ -945,18 +960,24 @@ class AdminController extends Controller
 
     public function indexsubcategory()
     {
+
         $limit = 10;
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
         $mainSearch = $validated['mainSearch'] ?? null;
-
         $query = SubCategoryTitle::query();
-        if ($mainSearch != null) {
-            $query->where(function ($query) use ($mainSearch) {
-                $query->orWhere('sub_category_titlename', 'like', '%' . $mainSearch . '%');
-            });
-        }
+            if ($mainSearch != null) {
+                $query->where(function ($query) use ($mainSearch) {
+                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
+                });
+                // ->orWhereHas('user', function ($query) use ($mainSearch) {
+                //     $query->where('name', 'like', '%' . $mainSearch . '%');
+                // })
+                // ->orWhereHas('product', function ($query) use ($mainSearch) {
+                //     $query->where('product_name', 'like', '%' . $mainSearch . '%');
+                // });
+            }
 
         $lists = DB::table('categories')
                     ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
@@ -1998,9 +2019,12 @@ class AdminController extends Controller
         if (empty($request->id)) {
 
             DB::table('faqs')->insert([
-                'title' => $request->title,
-                'que' => $request->content_desc,
+                'title' => $request->title_eng,
+                'jptitle' => $request->title_japan,
+                'que' => $request->content,
+                'jpque' => $request->jpcontent_desc,
                 'ans' => $request->content_ansdesc,
+                'jpans' => $request->jpcontent_ansdesc,
                 'created_by' => Auth::user()->id,
                 'created_at' => $time->format('Y-m-d H:i:s'),
                 'updated_at' => $time->format('Y-m-d H:i:s')
@@ -2011,14 +2035,17 @@ class AdminController extends Controller
 
         } else {
 
-            $updval = array('title' => $request->title,
-                            'que' => $request->content_desc,
+            $updval = array('title' => $request->title_eng,
+                            'jptitle' => $request->title_japan,
+                            'que' => $request->content,
+                            'jpque' => $request->jpcontent_desc,
                             'ans' => $request->content_ansdesc,
+                            'jpans' => $request->jpcontent_ansdesc,
                             'updated_at' => $time->format('Y-m-d H:i:s')
                             );
 
             DB::table('faqs')->where('id',$request->id)->update($updval);
-            return redirect('admin/faq')->with('success','「'.$request->title.'」'.__('Updated Successfully.'));
+            return redirect('admin/faq') ->with('success',__('FAQ Updated Successfully'));
 
         }
 
@@ -2040,14 +2067,15 @@ class AdminController extends Controller
                 ->orWhere('created_at', 'like', '%' . $mainSearch . '%');
             });
         }
-        $lists = $query->orderBy('created_at', 'desc')->paginate($limit);
-        $ttl = $lists->total();
+        $faqlists = $query->orderBy('created_at', 'desc')->paginate($limit);
+        $ttl = $faqlists->total();
         $ttlpage = (ceil($ttl / $limit));
+        $lists = $query->orderBy('created_at', 'desc')->paginate(999);
 
         // print_r(Auth::user()->role);die;
         if (Auth::check()){
             if (Auth::user()->role == 'admin') {
-                return view('admin.indexfaq',compact('lists','ttlpage','ttl'));
+                return view('admin.indexfaq',compact('faqlists','ttlpage','ttl'));
             }
         }
 

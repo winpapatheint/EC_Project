@@ -4,34 +4,33 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
         content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
         content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
     <title>Asian food museum</title>
 
     <!-- Google font -->
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
+
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 
     <!-- Template css -->
-    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
-    <!-- Linear Icon css -->
-    <link rel="stylesheet" href="{{ asset('backend/assets/css/linearicon.css') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
@@ -60,17 +59,20 @@
 
     <!-- vector map css  -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/vector-map.css') }}">
+
     <!-- slick slider css-->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/vendors/slick.css') }}">
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    {{-- <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
 
 </head>
+
 <body>
     <!-- tap on top start -->
     <div class="tap-top">
@@ -97,10 +99,12 @@
                         </a>
                     </div>
                 </div>
+
                 @if (request()->is('admin/shoplist') ||
                     request()->is('admin/product') ||
                     request()->is('admin/category') ||
                     request()->is('admin/all/blog') ||
+                    request()->is('admin/indexfaq') ||
                     request()->is('admin/coupon') ||
                     request()->is('admin/orderlist') ||
                     request()->is('admin/review/product') ||
@@ -219,8 +223,8 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Shops</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/shop.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Shops</span>
                                     </a>
                                 </li>
 
@@ -233,8 +237,8 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
-                                        <i class="ri-store-3-line"></i>
-                                        <span>Categories</span>
+                                        <img style="width:22px;color:white"  src="{{ asset('backend/assets/images/icon/category.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Categories</span>
                                     </a>
                                 </li>
 
@@ -254,15 +258,15 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
-                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/Info.svg') }}" alt="logo">
+                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/top.png') }}" alt="logo">
                                         &nbsp;  &nbsp;<span>Top</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Coupon</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Coupon</span>
                                     </a>
                                 </li>
 
@@ -299,29 +303,29 @@
                                 <li class="sidebar-list">
 
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/faq') }}">
-                                        <i class="ri-admin-line"></i>
-                                        <span>FAQ</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/faq.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>FAQ</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Contact</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/help.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Contact</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
-                                        <i class="ri-admin-line"></i>
-                                        <span>Customer</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/customer.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>Customer</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
-                                        <i class="ri-archive-line"></i>
-                                        <span>NewsLetter</span>
+                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo">
+                                        &nbsp;  &nbsp;<span>NewsLetter</span>
                                     </a>
                                 </li>
 
@@ -357,17 +361,22 @@
             <!-- footer End-->
 
         </div>
-        <!-- Page Body End -->
+        <!-- Page Body End-->
     </div>
     <!-- page-wrapper End-->
+<<<<<<< HEAD
+
+    <div class="modal fade theme-modal remove-coupon" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+=======
     <!-- Logout modal start -->
     <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel">Logging Out</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -376,17 +385,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form method="POST" action="{{ route('adminlogout') }}">
+                    <form method="POST" action="{{ route('adminlogout')}}">
                         @csrf
-                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
-                        style="background: #6c757d;">No</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Logout modal end -->
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -431,7 +438,6 @@
 
     <!-- Theme js -->
     <script src="{{ asset('backend/assets/js/script.js') }}"></script>
-
     <script>
         // Assuming you have some JavaScript code to handle deletion
         document.querySelector('.delete-icon').addEventListener('click', function() {

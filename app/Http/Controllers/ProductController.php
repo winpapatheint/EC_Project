@@ -153,7 +153,7 @@ class ProductController extends Controller
                 \r\n名前：　".$name."
                 \r\n"."メールアドレス：　".$email."
                 \r\n
-                \r\n"."通知のお知らせ：　
+                \r\n"."通知のお知らせ：
                 \r\n
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
             });
@@ -199,7 +199,8 @@ class ProductController extends Controller
             'original_price' => 'required|numeric',
             'short_desc' => 'required|string',
             'long_desc' => 'required|string',
-            'estimate_date' => 'required|string|max:255',
+            'care_instructions' => 'required|string',
+            'estimate_date' => 'required|string',
         ]);
 
         if($request->hasFile('product_thambnail')) {

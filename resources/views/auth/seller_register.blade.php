@@ -187,9 +187,8 @@
                                         <label>Email Address</label>
                                         @if($errors->has('email'))
                                             <span class="error" style="color:red">{{ $errors->first('email') }}</span>
-                                        @else
-                                            <span class="error" style="color:red" id="error-email"></span>
                                         @endif
+                                            <span class="error" style="color:red" id="error-email"></span>
                                     </div>
                                 </div>
 

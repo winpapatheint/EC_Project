@@ -45,7 +45,6 @@ class OrderController extends Controller
 
         $order = $orderQuery->paginate($limit);
 
-        // Fetching cancelled orders
         $cancelledOrderQuery = OrderDetail::with('order')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select('order_details.*', 'products.product_name')

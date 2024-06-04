@@ -154,8 +154,7 @@
                     <!-- Table End -->
                 </div>
             </div>
-        <!--pagination -->
-        @include('components.pagination')
+            @include('components.pagination')
         </div>
     </div>
     <!-- Container-fluid Ends-->

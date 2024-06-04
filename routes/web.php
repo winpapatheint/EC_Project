@@ -128,6 +128,12 @@ Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middlew
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('admin/bank-account', [AdminController::class, 'indexbankaccount'])->middleware(['auth','role:admin'])->name('admin.bank_account');
+Route::get('/admin/add-bank-account', function () {return view('admin.add_bank_account');});
+Route::post('/admin/add-bank-account', [AdminController::class, 'addBankAccount'])->name('admin.add_bank_account');
+Route::get('/admin/edit-bank-account/{id}', [AdminController::class, 'forEditBankAccount']);
+Route::post('/admin/edit-bank-account', [AdminController::class, 'editBankAccount'])->name('admin.edit_bank_account');
+Route::post('/admin/delete-bank-account', [AdminController::class, 'deleteBankAccount'])->name('admin.delete_bank_account');
+
 Route::get('/subcategory', function () {return view('back-end.subcategory');});
 Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->middleware(['auth','role:admin'])->name('ss');
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->middleware(['auth','role:admin'])->name('statusreview');

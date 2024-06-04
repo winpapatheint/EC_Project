@@ -32,6 +32,7 @@
         <div class="container-fluid-lg">
 
             <div class="row g-lg-5 g-3">
+<<<<<<< HEAD
 
                 <div class="col-lg-6" id="EnglishVersion">
                     <div class="title-header option-title" id="japaneseBtnDiv" >
@@ -59,10 +60,30 @@
                                                 class="accordion-collapse collapse show"
                                                 aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
+=======
+                <div class="col-lg-6">
+                    <div class="faq-accordion">
+                        <div class="accordion" id="accordionExample">
+                            @foreach( $lists as $key => $list )
+                                @if ($loop->first)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                {!! $list->que !!}
+                                                <i class="fa-solid fa-angle-down"></i>
+                                            </button>
+                                        </h2>
+                                        <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                            class="accordion-collapse collapse show"
+                                            aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p>{!! $list->ans !!}</p>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
 
-                                                </div>
                                             </div>
                                         </div>
+<<<<<<< HEAD
                                     @else
 
                                         <div class="accordion-item">
@@ -80,11 +101,28 @@
                                                 <div class="accordion-body">
                                                     <p>{!! $list->ans !!}</p>
                                                 </div>
+=======
+                                    </div>
+                                @else
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                {!! $list->que !!}
+                                                <i class="fa-solid fa-angle-down"></i>
+                                            </button>
+                                        </h2>
+                                        <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                            class="accordion-collapse collapse"
+                                            aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p>{!! $list->ans !!}</p>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
-                            </div>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>

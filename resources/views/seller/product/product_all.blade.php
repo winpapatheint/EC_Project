@@ -59,7 +59,7 @@
                                                 </div>
                                             </td>
 
-                                            <td>{{ strlen($item->product_name) > 20 ? substr($item->product_name, 0, 20) . '...' : $item->product_name }}</td>
+                                            <td>{{ mb_strlen($item->product_name) > 20 ? mb_substr($item->product_name, 0, 20) . '...' : $item->product_name }}</td>
 
                                             <td>{{ $item->product_qty }}</td>
 
@@ -128,7 +128,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
@@ -144,7 +144,8 @@
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-animation">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>

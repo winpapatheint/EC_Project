@@ -12,6 +12,7 @@ class OrderConfirmation extends Mailable
     use Queueable, SerializesModels;
 
     public $orderDetails;
+    public $bankInfo;
     public $totalAmount;
     public $transferPersonName;
     public $transferDate;
@@ -22,9 +23,10 @@ class OrderConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct($orderDetails, $totalAmount, $transferPersonName, $transferDate, $name)
+    public function __construct($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name)
     {
         $this->orderDetails = $orderDetails;
+        $this->bankInfo = $bankInfo;
         $this->totalAmount = $totalAmount;
         $this->transferPersonName = $transferPersonName;
         $this->transferDate = $transferDate;

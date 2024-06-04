@@ -28,6 +28,7 @@ class Product extends Model
         'discount_percent',
         'short_desc',
         'long_desc',
+        'care_instructions',
         'product_thambnail',
         'commission',
         'com_price',

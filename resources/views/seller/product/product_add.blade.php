@@ -15,18 +15,13 @@
                                     <h5>Product Information</h5>
                                 </div>
 
-                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="tagsForm">
+                                <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="sellerRegister">
                                     @csrf
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" placeholder="Product Name" value="{{ old('product_name') }}" id="product_name">
-                                            <p style="display:none" class="product_name error text-danger"></p>
-                                            @if (!empty($error['product_name']))
-                                                @foreach ($error['product_name'] as  $key => $value)
-                                                    <p class="product_name error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-product_name"></p>
                                         </div>
                                     </div>
 
@@ -40,12 +35,7 @@
                                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                 @endforeach
                                             </select>
-                                            <p style="display:none" class="country_id error text-danger"></p>
-                                            @if (!empty($error['country_id']))
-                                                @foreach ($error['country_id'] as  $key => $value)
-                                                    <p class="country_id error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-country_id"></p>
                                         </div>
                                     </div>
 
@@ -65,12 +55,7 @@
                                                     </button>
                                                 </a>
                                             </div>
-                                            <p style="display:none" class="brand_id error text-danger"></p>
-                                            @if (!empty($error['brand_id']))
-                                                @foreach ($error['brand_id'] as  $key => $value)
-                                                    <p class="brand_id error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-brand_id"></p>
                                         </div>
                                     </div>
 
@@ -88,12 +73,7 @@
                                                     @endif
                                                 @endforeach
                                             </select>
-                                            <p style="display:none" class="category error text-danger"></p>
-                                            @if (!empty($error['category']))
-                                                @foreach ($error['category'] as  $key => $value)
-                                                    <p class="category error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-category_id"></p>
                                         </div>
                                     </div>
 
@@ -104,12 +84,7 @@
                                             <select class="js-example-basic-single w-100 get_sub" name="sub_category_title_id" id="subcategory">
 
                                             </select>
-                                            <p style="display:none" class="subcategory error text-danger"></p>
-                                            @if (!empty($error['subcategory']))
-                                                @foreach ($error['subcategory'] as  $key => $value)
-                                                    <p class="subcategory error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-sub_category_title_id"></p>
                                         </div>
                                     </div>
 
@@ -120,12 +95,7 @@
                                             <select class="js-example-basic-single w-100" name="sub_category_id" id="subname">
 
                                             </select>
-                                            <p style="display:none" class="subname error text-danger"></p>
-                                            @if (!empty($error['subname']))
-                                                @foreach ($error['subname'] as  $key => $value)
-                                                    <p class="subname error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-sub_category_id"></p>
                                         </div>
                                     </div>
 
@@ -133,12 +103,7 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
                                             <input type="text" name="product_tags" class="form-control" data-role="tagsinput" id="product_tags" value="New product,New" placeholder="Type tag & hit enter" value="{{ old('product_tags') }}">
-                                            <p style="display:none" class="product_tags error text-danger"></p>
-                                            @if (!empty($error['product_tags']))
-                                                @foreach ($error['product_tags'] as  $key => $value)
-                                                    <p class="product_tags error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-product_tags"></p>
                                         </div>
                                     </div>
 
@@ -146,12 +111,7 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Size</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter" value="{{ old('product_size') }}" id="product_size">
-                                            <p style="display:none" class="product_size error text-danger"></p>
-                                            @if (!empty($error['product_size']))
-                                                @foreach ($error['product_size'] as  $key => $value)
-                                                    <p class="product_size error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-product_size"></p>
                                         </div>
                                     </div>
 
@@ -159,53 +119,33 @@
                                         <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter" value="{{ old('product_color') }}" id="product_color">
-                                            <p style="display:none" class="product_color error text-danger"></p>
-                                            @if (!empty($error['product_color']))
-                                                @foreach ($error['product_color'] as  $key => $value)
-                                                    <p class="product_color error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-product_color"></p>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Short Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="short_desc" id="short_desc">{{ old('short_desc') }}</textarea>
-                                            <p style="display:none" class="short_desc error text-danger"></p>
-                                            @if (!empty($error['short_desc']))
-                                                @foreach ($error['short_desc'] as  $key => $value)
-                                                    <p class="short_desc error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <textarea class="form-control" name="short_desc" id="short_desc" rows="5" placeholder="Use control+shift+V to paste within this text area.">{{ old('short_desc') }}</textarea>
+                                            <p class="error" style="color:red" id="error-short_desc"></p>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Long Description</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="long_desc" id="long_desc">{{ old('content_long_desc') }}</textarea>
+                                            <textarea class="form-control" name="long_desc" id="long_desc" placeholder="Use control+shift+V to paste within this text area.">{{ old('content_long_desc') }}</textarea>
                                             <input type="hidden" name="content" id="content_long_desc">
-                                            <p style="display:none" class="content_long_desc error text-danger"></p>
-                                            @if (!empty($error['content_long_desc']))
-                                                @foreach ($error['content_long_desc'] as  $key => $value)
-                                                    <p class="content_long_desc error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-content_long_desc"></p>
                                         </div>
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Care Instructions</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="care_instructions" id="care_instructions">{{ old('content_care_instructions') }}</textarea>
+                                            <textarea class="form-control" name="care_instructions" id="care_instructions" placeholder="Use control+shift+V to paste within this text area.">{{ old('content_care_instructions') }}</textarea>
                                             <input type="hidden" name="content" id="content_care_instructions">
-                                            <p style="display:none" class="content_care_instructions error text-danger"></p>
-                                            @if (!empty($error['content_care_instructions']))
-                                                @foreach ($error['content_care_instructions'] as  $key => $value)
-                                                    <p class="content_care_instructions error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-content_care_instructions"></p>
                                         </div>
                                     </div>
 
@@ -214,13 +154,7 @@
                                         <div class="col-sm-9">
                                             <input type="file" class="form-control" name="product_thambnail" id="formFile" onchange="mainThamUrl(this)" value="{{ old('product_thambnail') }}">
                                             <img src="" id="mainThmb">
-                                            <p style="display:none" class="product_thambnail error text-danger"></p>
-                                            @if (!empty($error['product_thambnail']))
-                                                @foreach ($error['product_thambnail'] as  $key => $value)
-                                                    <p class="product_thambnail error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
-
+                                            <p class="error" style="color:red" id="error-product_thambnail"></p>
                                         </div>
                                     </div>
 
@@ -235,13 +169,7 @@
                                                     <i data-feather="plus-square"></i>
                                                 </button>
                                             </div>
-
-                                            <p style="display:none" class="images error text-danger"></p>
-                                            @if (!empty($error['images']))
-                                                @foreach ($error['images'] as  $key => $value)
-                                                    <p class="images error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-images"></p>
                                         </div>
                                     </div>
 
@@ -249,12 +177,7 @@
                                         <label class="col-sm-3 form-label-title">Original Price(tax inc)</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="original_price" id="original_price" type="number" placeholder="0" min="1" value="{{ old('original_price') }}">
-                                            <p style="display:none" class="original_price error text-danger"></p>
-                                            @if (!empty($error['original_price']))
-                                                @foreach ($error['original_price'] as  $key => $value)
-                                                    <p class="original_price error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-original_price"></p>
                                         </div>
                                     </div>
 
@@ -273,12 +196,7 @@
                                         <label class="col-sm-3 form-label-title">Product Quantity</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_qty" type="number" placeholder="0" min="1" value="{{ old('product_qty') }}" id="product_qty">
-                                            <p style="display:none" class="product_qty error text-danger"></p>
-                                            @if (!empty($error['product_qty']))
-                                                @foreach ($error['product_qty'] as  $key => $value)
-                                                    <p class="product_qty error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-product_qty"></p>
                                         </div>
                                     </div>
 
@@ -286,12 +204,7 @@
                                         <label class="col-sm-3 form-label-title">Estimated Date</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="estimate_date" type="number" placeholder="0" min="1" value="{{ old('estimate_date') }}" id="estimate_date">
-                                            <p style="display:none" class="estimate_date error text-danger"></p>
-                                            @if (!empty($error['estimate_date']))
-                                                @foreach ($error['estimate_date'] as  $key => $value)
-                                                    <p class="estimate_date error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-estimate_date"></p>
                                         </div>
                                     </div>
 
@@ -299,12 +212,7 @@
                                         <label class="col-sm-3 form-label-title">Delivery Price(tax inc)</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="delivery_price" type="number" placeholder="400" min="1" value="{{ old('delivery_price') }}" id="delivery_price">
-                                            <p style="display:none" class="delivery_price error text-danger"></p>
-                                            @if (!empty($error['delivery_price']))
-                                                @foreach ($error['delivery_price'] as  $key => $value)
-                                                    <p class="delivery_price error text-danger">{{ $value }}</p>
-                                                @endforeach
-                                            @endif
+                                            <p class="error" style="color:red" id="error-delivery_price"></p>
                                         </div>
                                     </div>
 
@@ -327,7 +235,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-animation" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,6 +257,172 @@
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+    $('.btn-submit').click(function() {
+    $('.error').hide();
+
+    let product_name = $.trim($("#product_name").val());
+    let country_id = $.trim($("#country_id").val());
+    let brand_id = $.trim($("#brand_id").val());
+    let category_id = $.trim($("#category").val());
+    let sub_category_title_id = $.trim($("#subcategory").val());
+    let sub_category_id = $.trim($("#subname").val());
+    let product_tags = $.trim($("#product_tags").val());
+    let product_size = $.trim($("#product_size").val());
+    let product_color = $.trim($("#product_color").val());
+    let short_desc = $.trim($("#short_desc").val());
+    let long_desc = $.trim($("#content_long_desc").val());
+    let care_instructions = $.trim($("#content_care_instructions").val());
+    let productImage = $("#formFile")[0].files[0];
+    let productImages = $("#multiImg")[0].files;
+    let original_price = $.trim($("#original_price").val());
+    let product_qty = $.trim($("#product_qty").val());
+    let estimate_date = $.trim($("#estimate_date").val());
+    let delivery_price = $.trim($("#delivery_price").val());
+
+    let isValid = true;
+
+    if (!product_name) {
+        $('#error-product_name').text('Please provide product name.').show();
+        isValid = false;
+    } else if (product_name.length > 255) {
+        $('#error-product_name').text('Product name must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!country_id || country_id === 'Choose country') {
+        $('#error-country_id').text('Please select a valid country.').show();
+        isValid = false;
+    }
+
+    if (!brand_id || brand_id === 'Choose brand') {
+        $('#error-brand_id').text('Please select a valid brand.').show();
+        isValid = false;
+    }
+
+    if (!category_id || category_id === 'Choose Category') {
+        $('#error-category_id').text('Please select a valid category.').show();
+        isValid = false;
+    }
+
+    if (!sub_category_title_id) {
+        $('#error-sub_category_title_id').text('Please select a valid subcategory title.').show();
+        isValid = false;
+    }
+
+    if (!sub_category_id) {
+        $('#error-sub_category_id').text('Please select a valid subcategory.').show();
+        isValid = false;
+    }
+
+    if (!product_tags) {
+        $('#error-product_tags').text('Please provide product tags.').show();
+        isValid = false;
+    } else if (product_tags.length > 255) {
+        $('#error-product_tags').text('Product tags must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!product_size) {
+        $('#error-product_size').text('Please provide product size.').show();
+        isValid = false;
+    } else if (product_size.length > 255) {
+        $('#error-product_size').text('Product size must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!product_color) {
+        $('#error-product_color').text('Please provide product color.').show();
+        isValid = false;
+    } else if (product_color.length > 255) {
+        $('#error-product_color').text('Product color must not exceed 255 characters.').show();
+        isValid = false;
+    }
+
+    if (!short_desc) {
+        $('#error-short_desc').text('Please provide short description.').show();
+        isValid = false;
+    } else if (short_desc.length > 400) {
+        $('#error-short_desc').text('Short description must not exceed 400 characters.').show();
+        isValid = false;
+    }
+
+    if (!long_desc) {
+        $('#error-content_long_desc').text('Please provide long description.').show();
+        isValid = false;
+    } else if (long_desc.length > 2000) {
+        $('#error-content_long_desc').text('Long description must not exceed 2000 characters.').show();
+        isValid = false;
+    }
+
+    if (!care_instructions) {
+        $('#error-content_care_instructions').text('Please provide care instructions.').show();
+        isValid = false;
+    } else if (care_instructions.length > 1200) {
+        $('#error-content_care_instructions').text('Care instructions must not exceed 1200 characters.').show();
+        isValid = false;
+    }
+
+    if (!productImage) {
+        $('#error-product_thambnail').text('Please provide product image.').show();
+        isValid = false;
+    } else if (productImage.size > 2 * 1024 * 1024) {
+        $('#error-product_thambnail').text('Product image must not exceed 2MB.').show();
+        isValid = false;
+    }
+
+    if (productImages.length === 0) {
+        $('#error-images').text('Please provide multiple images.').show();
+        isValid = false;
+    } else {
+        for (let i = 0; i < productImages.length; i++) {
+            if (productImages[i].size > 2 * 1024 * 1024) {
+                $('#error-images').text('Each image must not exceed 2MB.').show();
+                isValid = false;
+                break;
+            }
+        }
+    }
+
+    if (!original_price) {
+        $('#error-original_price').text('Please provide product price.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(original_price)) {
+        $('#error-original_price').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (!product_qty) {
+        $('#error-product_qty').text('Please provide product quantity.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(product_qty)) {
+        $('#error-product_qty').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (!estimate_date) {
+        $('#error-estimate_date').text('Please provide delivery estimate date.').show();
+        isValid = false;
+    }
+
+    if (!delivery_price) {
+        $('#error-delivery_price').text('Please provide delivery price.').show();
+        isValid = false;
+    } else if (!/^\d+$/.test(delivery_price)) {
+        $('#error-delivery_price').text('Please provide a valid digit.').show();
+        isValid = false;
+    }
+
+    if (isValid) {
+        $('#confirmModal').modal('show');
+    }
+
+    return false;
+});
+
+</script>
+
 <script>
     $.ajaxSetup({
         headers: {
@@ -418,7 +493,6 @@
     });
 </script>
 
-
 <script>
     function mainThamUrl(input){
         if(input.files && input.files[0]){
@@ -432,38 +506,38 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('category').addEventListener('change', function() {
-        var categoryId = this.value;
-        var subcategorySelect = document.getElementById('subcategory');
-        if (subcategorySelect) {
-            subcategorySelect.innerHTML = '<option value="">Choose SubCategoryTitle</option>';
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('category').addEventListener('change', function() {
+            var categoryId = this.value;
+            var subcategorySelect = document.getElementById('subcategory');
+            if (subcategorySelect) {
+                subcategorySelect.innerHTML = '<option value="">Choose SubCategoryTitle</option>';
 
-            if (!categoryId) {return;}
+                if (!categoryId) {return;}
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var subcategories = JSON.parse(xhr.responseText);
-                        subcategories.forEach(function(subcategory) {
-                            var option = document.createElement('option');
-                            option.value = subcategory.id;
-                            option.textContent = subcategory.sub_category_titlename;
-                            subcategorySelect.appendChild(option);
-                        });
-                    } else {
-                        console.error('Failed to fetch subcategories');
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var subcategories = JSON.parse(xhr.responseText);
+                            subcategories.forEach(function(subcategory) {
+                                var option = document.createElement('option');
+                                option.value = subcategory.id;
+                                option.textContent = subcategory.sub_category_titlename;
+                                subcategorySelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('Failed to fetch subcategories');
+                        }
                     }
-                }
-            };
-            xhr.open('GET', '/get-subtitle/' + categoryId);
-            xhr.send();
-        } else {
-            console.error('Subcategory select element not found');
-        }
+                };
+                xhr.open('GET', '/get-subtitle/' + categoryId);
+                xhr.send();
+            } else {
+                console.error('Subcategory select element not found');
+            }
+        });
     });
-});
 </script>
 
 <script>
@@ -561,106 +635,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
-<script>
-    $('.btn-submit').click(function() {
-      $('.error').hide()
-
-      if ($.trim($("#product_name").val()) === "" || $.trim($("#country_id").val()) === ""  || $.trim($("#brand_id").val()) === ""  || $.trim($("#category").val()) === ""  || $.trim($("#subcategory").val()) === ""  || $.trim($("#subname").val()) === ""  || $.trim($("#product_tags").val()) === ""  || $.trim($("#product_size").val()) === ""  || $.trim($("#product_color").val()) === ""  || $.trim($("#short_desc").val()) === ""  || $.trim($("#content_long_desc").val()) === ""  || $.trim($("#content_care_instructions").val()) === ""  || $.trim($("#formFile").val()) === ""  || $.trim($("#multiImg").val()) === ""  || $.trim($("#original_price").val()) === ""  || $.trim($("#product_qty").val()) === ""  || $.trim($("#estimate_date").val()) === ""  || $.trim($("#delivery_price").val()) === "") {
-
-         if ($.trim($("#product_name").val()) === "") {
-              $('.error.product_name').text('Product Name must be present')
-              $('.error.product_name').show()
-         }
-
-         if ($.trim($("#country_id").val()) === "Choose country") {
-              $('.error.country_id').text('Choose a country name')
-              $('.error.country_id').show()
-         }
-
-         if ($.trim($("#brand_id").val()) === "Choose brand") {
-              $('.error.brand_id').text('Choose a brand name')
-              $('.error.brand_id').show()
-         }
-
-         if ($.trim($("#category").val()) === "Choose Category") {
-              $('.error.category').text('Choose a category name')
-              $('.error.category').show()
-         }
-
-         if ($.trim($("#subcategory").val()) === "") {
-              $('.error.subcategory').text('Choose a title')
-              $('.error.subcategory').show()
-         }
-
-         if ($.trim($("#subname").val()) === "") {
-              $('.error.subname').text('Choose a subcategory')
-              $('.error.subname').show()
-         }
-
-         if ($.trim($("#product_tags").val()) === "") {
-              $('.error.product_tags').text('Product tags must be present')
-              $('.error.product_tags').show()
-         }
-
-         if ($.trim($("#product_size").val()) === "") {
-              $('.error.product_size').text('Product size must be present')
-              $('.error.product_size').show()
-         }
-
-         if ($.trim($("#product_color").val()) === "") {
-              $('.error.product_color').text('Product color must be present')
-              $('.error.product_color').show()
-         }
-
-         if ($.trim($("#short_desc").val()) === "") {
-              $('.error.short_desc').text('Short description must be present')
-              $('.error.short_desc').show()
-         }
-
-         if ($.trim($("#content_long_desc").val()) === "") {
-              $('.error.content_long_desc').text('Long description must be present')
-              $('.error.content_long_desc').show()
-         }
-
-         if ($.trim($("#content_care_instructions").val()) === "") {
-              $('.error.content_care_instructions').text('Care instructions must be present')
-              $('.error.content_care_instructions').show()
-         }
-
-         if ($.trim($("#formFile").val()) === "") {
-              $('.error.formFile').text('Product thambnail must be present')
-              $('.error.formFile').show()
-         }
-
-         if ($.trim($("#multiImg").val()) === "") {
-              $('.error.multiImg').text('Multiple images must be present')
-              $('.error.multiImg').show()
-         }
-
-         if ($.trim($("#original_price").val()) === "") {
-              $('.error.original_price').text('Original price must be present')
-              $('.error.original_price').show()
-         }
-
-         if ($.trim($("#product_qty").val()) === "") {
-              $('.error.product_qty').text('Product quantity must be present')
-              $('.error.product_qty').show()
-         }
-
-         if ($.trim($("#estimate_date").val()) === "") {
-              $('.error.estimate_date').text('Estimate date must be present')
-              $('.error.estimate_date').show()
-         }
-
-         if ($.trim($("#delivery_price").val()) === "") {
-              $('.error.delivery_price').text('Delivery price must be present')
-              $('.error.delivery_price').show()
-         }
-
-         return false;
-      } else {
-        $('#confirmModal').modal('show');
-      }
-    });
-</script>
 @endsection

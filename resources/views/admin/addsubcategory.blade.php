@@ -83,14 +83,14 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="{{route('admin.dashboard')}}">
-                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
-                            <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
+                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" alt="logo">
+                            <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" alt="logo">
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="{{route('admin.dashboard')}}">
-                            <img src="{{ asset('backend/assets/images/logo/1.png') }}" class="img-fluid" alt="">
+                            <img src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
                 </div>
@@ -412,14 +412,14 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header d-block text-center">
-                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="remove-box">
-                                                        <p>SubCategory will be added?</p>
+                                                        <p>SubCategory will be added.</p>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -430,7 +430,8 @@
                                                             Yes
                                                         @endif
                                                     </button>
-                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>

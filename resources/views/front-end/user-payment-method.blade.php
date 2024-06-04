@@ -338,7 +338,7 @@
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -354,7 +354,8 @@
                         @method('DELETE')
                         <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>

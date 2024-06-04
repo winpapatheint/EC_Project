@@ -260,7 +260,9 @@
                                         <p
                                             style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
                                             We have send the email to you with detail order and bank informations. <br>
-                                        Please check your email!</p>
+                                            Please check your email!<br>
+                                            <span style="color: red">If you don't receive the email, please check your spam or junk folder.</span>
+                                        </p>
                                     </div>
                                 </td>
                             </tr>

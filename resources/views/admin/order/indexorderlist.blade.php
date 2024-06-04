@@ -75,7 +75,7 @@
                                                         </td>
                                                         <!-- Received Payment Modal Start -->
                                                         <div class="modal fade theme-modal remove-profile" id="paymentReceived{{ $item->order->id }}" tabindex="-1" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                            <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header d-block text-center">
                                                                         <h5 class="modal-title w-100" id="exampleModalLabel22">Confirm Payment Received</h5>
@@ -83,17 +83,25 @@
                                                                             <i class="fa-solid fa-xmark"></i>
                                                                         </button>
                                                                     </div>
+                                                                    @php
+                                                                    $bankInfo = DB::table('cash_bank_accounts')->leftjoin('bank_accounts', 'cash_bank_accounts.bank_account_id', 'bank_accounts.id')
+                                                                                ->where('order_id',$item->order->id)->first();
+                                                                    @endphp
                                                                     <div class="modal-body">
                                                                         <div class="remove-box">
                                                                             <p>Do you have received payment for this order?</p>
+                                                                            <p>Check at your <span style="color:#ff6b6b;">{{ $bankInfo->bank_name }}</span> account 
+                                                                                with account number <span style="color:#ff6b6b;">({{ $bankInfo->account_number}})</span></p>
+                                                                            <p>Transfer person is <span style="color:#ff6b6b;">{{ $bankInfo->transfer_person_name }}</span></p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <form action="{{ route('cash_payment_received', ['id' => $item->order->id]) }}" method="POST">
                                                                             @csrf
-                                                                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                                            <button type="submit" class="btn btn-animation theme-bg-color btn-md fw-bold text-light">Yes</button>
                                                                         </form>
-                                                                        <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b">No</button>
+                                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

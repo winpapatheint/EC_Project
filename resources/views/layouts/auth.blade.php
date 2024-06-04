@@ -88,14 +88,22 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="{{route('admin.dashboard')}}">
+<<<<<<< HEAD
                             <img class="img-fluid main-logo" src="{{ asset('images/logos/logo-h4.png') }}" alt="logo">
+=======
+                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" alt="logo">
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
 
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="{{route('admin.dashboard')}}">
+<<<<<<< HEAD
                             <img src="{{ asset('images/logos/logo-h4.png') }}" class="img-fluid" alt="">
+=======
+                            <img src="{{ asset('backend/assets/images/logo/logo-h4.png') }}" class="img-fluid" alt="">
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                         </a>
                     </div>
                 </div>
@@ -111,23 +119,21 @@
                     request()->is('admin/all/users'))
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
-                            <button class="btn" type="submit" id="button-addon2">
+                        <div class="input-group" style="display: flex; align-items: center;">
+                            <input type="search" class="form-control" name="mainSearch" placeholder="" style="height: 40px; border-radius: 5px 0 0 5px;">
+                            <button class="btn" type="submit" id="button-addon2" style="background-color: #ffa53b; border-color: #ffa53b; height: 40px; border-radius: 0 5px 5px 0;">
                                 <i data-feather="search"></i>
                             </button>
                         </div>
                     </form>
                 </div>
                 @endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
-                        <li>
-                            <span class="header-search">
-                                <i class="ri-search-line"></i>
-                            </span>
-                        </li>
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>
@@ -370,8 +376,13 @@
         <!-- Page Body End-->
     </div>
     <!-- page-wrapper End-->
+<<<<<<< HEAD
 
     <div class="modal fade theme-modal remove-coupon" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+=======
+    <!-- Logout modal start -->
+    <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">

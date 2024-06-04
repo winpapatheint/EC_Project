@@ -689,7 +689,7 @@
         @endphp
     @endif
      <div class="modal fade theme-modal view-modal" id="view-product{{ $relproduct->id }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header p-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal">

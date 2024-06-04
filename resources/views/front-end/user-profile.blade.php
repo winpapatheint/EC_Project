@@ -223,7 +223,7 @@
     <!-- User Dashboard Section End -->
     <!-- Edit Profile Modal Box Start -->
     <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
@@ -315,7 +315,7 @@
     </div>
     <!-- Confirmation Modal for Profile Edit -->
     <div class="modal fade theme-modal remove-profile" id="confirmEditProfile" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content" style="background-color: #f5f5f5;"> <!-- Light gray with a little smaller width -->
                 <div class="modal-header d-block text-center">
                     <h5 class="modal-title w-100" id="exampleModalLabelEditProfile">Are You Sure?</h5>
@@ -330,7 +330,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYes">Yes</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>
@@ -339,7 +340,7 @@
 
     <!-- Change Password Start -->
     <div class="modal fade theme-modal" id="editPassword" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel8">Edit Password</h5>
@@ -390,7 +391,7 @@
     </div>
     <!-- Confirm Add Address Modal Start -->
     <div class="modal fade theme-modal remove-profile" id="confirmToEditPassword" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down" style="max-width: 400px;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content" style="background-color: #f5f5f5;">
                 <div class="modal-header d-block text-center">
                     <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
@@ -405,7 +406,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYesForPassword">Yes</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>

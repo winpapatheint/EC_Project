@@ -202,7 +202,7 @@
                                                         <!-- Confirmation Modal for Edit -->
                                                         @if ($order->status == "Cancel")
                                                         <div class="modal fade theme-modal remove-profile" id="showCancelReason{{ $order->order_detail_id }}" tabindex="-1" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                            <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header d-block text-center">
                                                                         <h5 class="modal-title w-100" id="exampleModalLabel{{ $order->order_detail_id }}">Cancelled Reason</h5>

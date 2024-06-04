@@ -82,27 +82,6 @@ class ProductController extends Controller
 
     public function storeProduct(Request $request)
     {
-        $validatedData = $request->validate([
-            'brand_id' => 'required|exists:brands,id',
-            'country_id' => 'required|exists:countries,id',
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_title_id' => 'present|exists:sub_category_titles,id',
-            'sub_category_id' => 'present|exists:sub_categories,id',
-            'product_name' => 'present|string|max:255',
-            'product_qty' => 'present|string|max:255',
-            'product_tags' => 'present|string|max:255',
-            'product_size' => 'present|string|max:255',
-            'product_color' => 'present|string|max:255',
-            'original_price' => 'present|string|max:255',
-            'short_desc' => 'present|string|max:255',
-            'long_desc' => 'present|string|max:255',
-            'care_instructions' => 'present|string|max:255',
-            'product_thambnail' => 'present|image|mimes:jpeg,png,jpg,gif',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'estimate_date' => 'present|string|max:255',
-            'delivery_price' => 'present|string|max:255',
-        ]);
-
         $datePrefix = date('ym');
         $latestProduct = Product::where('product_code', 'like', $datePrefix . '%')->latest()->first();
         $sequentialNumber = 1;
@@ -119,31 +98,32 @@ class ProductController extends Controller
         $id = Auth::user()->created_by ?? Auth::id();
         $sellerData = Seller::where('user_id', $id)->first();
         $commission = $sellerData->commission ?? 0;
+        $status = $sellerData->status ?? 0;
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
-            'brand_id' => $validatedData['brand_id'],
-            'country_id' => $validatedData['country_id'],
-            'category_id' => $validatedData['category_id'],
-            'sub_category_title_id' => $validatedData['sub_category_title_id'],
-            'sub_category_id' => $validatedData['sub_category_id'],
+            'brand_id' => $request->brand_id,
+            'country_id' => $request->country_id,
+            'category_id' => $request->category_id,
+            'sub_category_title_id' => $request->sub_category_title_id,
+            'sub_category_id' => $request->sub_category_id,
             'seller_id' => $id,
-            'product_name' => $validatedData['product_name'],
-            'product_qty' => $validatedData['product_qty'],
-            'in_stock' => $validatedData['product_qty'],
-            'product_tags' => $validatedData['product_tags'],
-            'product_size' => $validatedData['product_size'],
-            'product_color' => $validatedData['product_color'],
-            'original_price' => $validatedData['original_price'],
+            'product_name' => $request->product_name,
+            'product_qty' => $request->product_qty,
+            'in_stock' => $request->product_qty,
+            'product_tags' => $request->product_tags,
+            'product_size' => $request->product_size,
+            'product_color' => $request->product_color,
+            'original_price' => $request->original_price,
             'selling_price' => $request->calculated_selling_price,
             'discount_percent' => $request->discount_percent ?? 0,
-            'short_desc' => $validatedData['short_desc'] ,
-            'long_desc' => $validatedData['long_desc'],
-            'care_instructions' => $validatedData['care_instructions'],
+            'short_desc' => $request->short_desc,
+            'long_desc' => $request->long_desc,
+            'care_instructions' => $request->care_instructions,
             'product_thambnail' => $filename,
             'commission' => $commission,
-            'status' => 1,
-            'estimate_date' => $validatedData['estimate_date'],
-            'delivery_price' => $validatedData['delivery_price'],
+            'status' => $status,
+            'estimate_date' => $request->estimate_date,
+            'delivery_price' => $request->delivery_price,
             'created_at' => Carbon::now(),
         ]);
 
@@ -173,7 +153,11 @@ class ProductController extends Controller
                 \r\n"."Name".$name."
                 \r\n"."Email：　".$email."
                 \r\n
+<<<<<<< HEAD
                 \r\n"."Notice：　
+=======
+                \r\n"."通知のお知らせ：
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                 \r\n
                 \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
             });
@@ -229,15 +213,16 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'sub_category_title_id' => 'present|exists:sub_category_titles,id',
             'sub_category_id' => 'present|exists:sub_categories,id',
-            'product_name' => 'required|string|max:255',
+            'product_name' => 'required|string',
             'product_qty' => 'required|numeric',
             'product_tags' => 'required|string|max:255',
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
             'original_price' => 'required|numeric',
-            'short_desc' => 'required|string|max:255',
-            'long_desc' => 'required|string|max:255',
-            'estimate_date' => 'required|string|max:255',
+            'short_desc' => 'required|string',
+            'long_desc' => 'required|string',
+            'care_instructions' => 'required|string',
+            'estimate_date' => 'required|string',
         ]);
 
         if($request->hasFile('product_thambnail')) {
@@ -270,7 +255,7 @@ class ProductController extends Controller
         $product->care_instructions= $request->care_instructions;
         $product->product_thambnail= $filename;
         $product->estimate_date= $request->estimate_date;
-        $product->status= 1;
+        // $product->status= 1;
         $product->delivery_price= $request->delivery_price;
         $product->updated_by = Auth::user()->id;
         $product->updated_at= Carbon::now();

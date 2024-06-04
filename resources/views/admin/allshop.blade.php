@@ -137,8 +137,8 @@
                         <input type="hidden" name="id" value="{{ $list->id }}">
                         <button type="submit" class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                             data-bs-toggle="modal" data-bs-dismiss="modal" >Yes</button>
-
-                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
+                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                     </form>
                 </div>
             </div>
@@ -168,7 +168,8 @@
                     <input type="hidden" id="commission-id{{ $list->id }}" name="commissionid" value="{{ $list->id }}">
                     <input type="hidden" name="id" value="{{ $list->id }}">
                     <button type="submit" class="btn btn-animation btn-md fw-bold me-2">Save</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">Cancel</button>
                 </div>
             </form>
         </div>
@@ -183,14 +184,14 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header d-block text-center">
-                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fas fa-times"></i>
                                 </button>
                         </div>
                         <div class="modal-body">
                             <div class="remove-box">
-                                <p>This product will be deleted?</p>
+                                <p>This product will be deleted.</p>
                             </div>
                         </div>
 
@@ -200,7 +201,8 @@
                                     <input type="hidden" name="id" value="{{ $list->id }}">
                                         <button type="submit"class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2"
                                             data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
+                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                             </form>
                         </div>
                     </div>
@@ -264,19 +266,19 @@
         </script>
 
 
-@foreach($lists as $item)
+    @foreach($lists as $item)
        <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
-           <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+           <div class="modal-dialog modal-dialog-centered">
                <div class="modal-content">
                    <div class="modal-header d-block text-center">
-                       <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                       <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                        <button type="button" class="btn-close" data-bs-dismiss="modal">
                            <i class="fa-solid fa-xmark"></i>
                        </button>
                    </div>
                    <div class="modal-body">
                        <div class="remove-box">
-                           <p>Remove this coupon from Shop?</p>
+                           <p>Remove this coupon from Shop.</p>
                        </div>
                    </div>
                    <div class="modal-footer">
@@ -285,7 +287,8 @@
                            @method('DELETE')
                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
                        </form>
-                       <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                       <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                       style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                    </div>
                </div>
            </div>

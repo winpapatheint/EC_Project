@@ -105,14 +105,14 @@
             </tbody>
         </table>
         <p>Please transfer the total amount of {{ $totalAmount }} to the following bank account:</p>
-        <p>Bank Name: Mizuho Bank</p>
-        <p>Bank Code: 1234</p>
-        <p>Branch Code: 123</p>
-        <p>Account Number: 12345678</p>
-        <p>Account Holder: Jhon</p>
+        <p>Bank Name: {{ $bankInfo->bank_name }}</p>
+        <p>Branch Name: {{ $bankInfo->branch_name }}</p>
+        <p>Account Type: {{ $bankInfo->account_type }}</p>
+        <p>Account Number: {{ $bankInfo->account_number }}</p>
+        <p>Account Name: {{ $bankInfo->account_name }}</p>
         <p>If you don't transfer the amount at {{ $transferDate }}, your order will be cancelled.</p>
-        <p>Please make sure the following your bank account name for the transfer process:</p>
-        <p>Account Holder: {{ $transferPersonName }}</p>
+        <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
+        <p>Transfer Person Name: {{ $transferPersonName }}</p>
         <p>Thank you for shopping with us.</p>
         <div class="footer">
             <p>If you have any questions, please contact us at info@asian-food.site.</p>

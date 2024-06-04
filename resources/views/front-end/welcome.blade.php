@@ -184,7 +184,6 @@
                                 <h3>Category</h3>
                                 <ul>
                                     @foreach($categories as $list)
-                                    @if ($list->category_name != "Special Corner")
                                     <li>
 
                                         <div class="category-list">
@@ -195,7 +194,6 @@
                                             </h5>
                                         </div>
                                     </li>
-                                    @endif
                                     @endforeach
                                 </ul>
 
@@ -620,7 +618,7 @@
                                         <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                     </svg>
                                 </span>
-                                <p>A virtual assistant collects the products from your list</p>
+                                <p>Indulge in Perfection, Taste the Best.</p>
                             </div>
                         </div>
 
@@ -679,13 +677,13 @@
 
 
                         <div class="title section-t-space">
-                            <h2>Featured Blog</h2>
+                            <h2>Blog</h2>
                             <span class="title-leaf">
                                 <svg class="icon-width">
                                     <use xlink:href="{{ asset('frontend/assets/svg/leaf.svg#leaf') }}"></use>
                                 </svg>
                             </span>
-                            <p>A virtual assistant collects the products from your list</p>
+                            <p>Savoring Life's Flavors, One Bite at a Time.</p>
                         </div>
 
                         <div class="slider-3-blog ratio_65 no-arrow product-wrapper">

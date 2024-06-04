@@ -183,13 +183,12 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" id="mail" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
+                                        <input type="text" id="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
                                         <label>Email Address</label>
-                                        @if($errors->has('mail'))
-                                            <span class="error" style="color:red">{{ $errors->first('mail') }}</span>
-                                        @else
-                                            <span class="error" style="color:red" id="error-mail"></span>
+                                        @if($errors->has('email'))
+                                            <span class="error" style="color:red">{{ $errors->first('email') }}</span>
                                         @endif
+                                            <span class="error" style="color:red" id="error-email"></span>
                                     </div>
                                 </div>
 
@@ -214,7 +213,7 @@
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox" id="flexCheckDefault">
                                             <label class="form-check-label" for="flexCheckDefault">I agree with
-                                                <span>Terms and Privacy</span>
+                                                <a href="{{ url('/seller-term-and-condition') }}"><span>Terms and Privacy</span></a>
                                             </label>
                                         </div>
                                     </div>
@@ -259,7 +258,7 @@
             const bank_acc_name = document.getElementById('bank_acc_name').value.trim();
             const bank_acc_no = document.getElementById('bank_acc_no').value.trim();
             const user_name = document.getElementById('user_name').value.trim();
-            const mail = document.getElementById('mail').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmed = document.querySelector('input[name="confirmed"]').value.trim();
             const checkbox = document.getElementById('flexCheckDefault');
@@ -289,7 +288,7 @@
 
             if (!phone) {
                 isValid = false;
-                document.getElementById('error-phone').textContent = 'Please provide your phone number.';
+                document.getElementById('error-phone').textContent = 'Please provide your shop phone number.';
             } else if (!/^\d+$/.test(phone)) {
                 isValid = false;
                 document.getElementById('error-phone').textContent = 'Please provide a valid phone number.(eg. 09077554361)';
@@ -342,7 +341,7 @@
 
             if (!bank_name) {
                 isValid = false;
-                document.getElementById('error-bank_name').textContent = 'Please provide your name.';
+                document.getElementById('error-bank_name').textContent = 'Please provide your bank name.';
             } else if (bank_name.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_name').textContent = 'Your name must not exceed 255 characters.';
@@ -350,7 +349,7 @@
 
             if (!bank_branch) {
                 isValid = false;
-                document.getElementById('error-bank_branch').textContent = 'Please provide your name.';
+                document.getElementById('error-bank_branch').textContent = 'Please provide your branch name.';
             } else if (bank_branch.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_branch').textContent = 'Your name must not exceed 255 characters.';
@@ -364,17 +363,17 @@
             if (!bank_acc_name) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Please provide your bank account name.';
-            } else if (user_name.length > 255) {
+            } else if (bank_acc_name.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_acc_name').textContent = 'Your name must not exceed 255 characters.';
             }
 
             if (!bank_acc_no) {
                 isValid = false;
-                document.getElementById('error-bank_acc_no').textContent = 'Please provide your zip code.';
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide your bank account number.';
             } else if (!/^\d+$/.test(bank_acc_no)) {
                 isValid = false;
-                document.getElementById('error-bank_acc_no').textContent = 'Please provide a valid 7-digit zip code.';
+                document.getElementById('error-bank_acc_no').textContent = 'Please provide a valid digit.';
             }
 
             if (!user_name) {
@@ -385,12 +384,12 @@
                 document.getElementById('error-user_name').textContent = 'Your name must not exceed 255 characters.';
             }
 
-            if (!mail) {
+            if (!email) {
                 isValid = false;
-                document.getElementById('error-mail').textContent = 'Please provide your email.';
-            } else if (!/\S+@\S+\.\S+/.test(mail)) {
+                document.getElementById('error-email').textContent = 'Please provide your email.';
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
                 isValid = false;
-                document.getElementById('error-mail').textContent = 'Please provide a valid email address.';
+                document.getElementById('error-email').textContent = 'Please provide a valid email address.';
             }
 
             if (!password) {

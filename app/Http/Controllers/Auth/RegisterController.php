@@ -24,8 +24,8 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-        if (User::where('email', $request->mail)->exists()) {
-            return back()->withErrors(['mail' => 'Email already exists.'])->withInput();
+        if (User::where('email', $request->email)->exists()) {
+            return back()->withErrors(['email' => 'Email already exists.'])->withInput();
         }
         $img = $request->file('shop_logo');
         $filename = time() . '.' . $img->getClientOriginalExtension();
@@ -33,7 +33,7 @@ class RegisterController extends Controller
 
         $user = User::create([
             'name' => $request->user_name,
-            'email' => $request->mail,
+            'email' => $request->email,
             'role' => 'seller',
             'password' => Hash::make($request->password),
             'status' => 1,
@@ -59,7 +59,7 @@ class RegisterController extends Controller
             'room' => $request->room,
             'url' => $request->url,
             'commission' => 0,
-            'status' => 1
+            'status' => 0
         ]);
         event(new Registered($seller));
 

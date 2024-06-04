@@ -98,7 +98,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-animation" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -137,10 +138,18 @@
             $('.error.mail').text('Email must be present');
             $('.error.mail').show();
             isValid = false;
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            $('.error.mail').text('Please provide a valid email address.');
+            $('.error.mail').show();
+            isValid = false;
         }
 
         if (password === "") {
             $('.error.passwords').text('Password must be present');
+            $('.error.passwords').show();
+            isValid = false;
+        } else if (password.length < 8) {
+            $('.error.passwords').text('Your password must be at least 8 characters long.');
             $('.error.passwords').show();
             isValid = false;
         }
@@ -150,7 +159,7 @@
             $('.error.confirmed').show();
             isValid = false;
         } else if (password !== confirmedPassword) {
-            $('.error.confirmed').text('Passwords do not match');
+            $('.error.confirmed').text('Password do not match');
             $('.error.confirmed').show();
             isValid = false;
         }

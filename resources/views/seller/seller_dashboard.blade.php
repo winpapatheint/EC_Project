@@ -90,7 +90,7 @@
                     <div class="logo-wrapper">
                         <a href="{{ route('seller.dashboard') }}">
                             <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
-                            <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo/1-white.png') }}" alt="logo">
+                            <img class="img-fluid white-logo" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
                         </a>
                     </div>
                     <div class="toggle-sidebar">
@@ -108,9 +108,9 @@
                     )
                 <div class="search-box">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="search" placeholder="I'm searching for...">
-                            <button class="btn" type="submit" id="button-addon2">
+                        <div class="input-group" style="display: flex; align-items: center;">
+                            <input type="search" class="form-control" name="search" placeholder="" style="height: 40px; border-radius: 5px 0 0 5px;">
+                            <button class="btn" type="submit" id="button-addon2" style="background-color: #ffa53b; border-color: #ffa53b; height: 40px; border-radius: 0 5px 5px 0;">
                                 <i data-feather="search"></i>
                             </button>
                         </div>
@@ -128,11 +128,6 @@
                 @endphp
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
-                        <li>
-                            <span class="header-search">
-                                <i class="ri-search-line"></i>
-                            </span>
-                        </li>
                         <li class="onhover-dropdown">
                             <div class="notification-box">
                                 <i class="ri-notification-line"></i>

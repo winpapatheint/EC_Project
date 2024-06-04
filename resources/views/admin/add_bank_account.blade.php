@@ -78,6 +78,30 @@
         </div>
     </div>
     <!-- New Product Add End -->
+    <!-- Confirm Add Address Modal Start -->
+    <div class="modal fade theme-modal remove-profile" id="confirmToAdd" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content" style="background-color: #f5f5f5;">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>This bank account will be added.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYes">Yes</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirm Add Address Modal End -->
 </div>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
@@ -142,7 +166,13 @@
         }
 
         if (isValid) {
-            document.getElementById('addBankAccount').submit();
+            // document.getElementById('addBankAccount').submit();
+
+            const confirmModal = new bootstrap.Modal(document.getElementById('confirmToAdd'));
+            confirmModal.show();
+            document.getElementById('confirmYes').addEventListener('click', function() {
+                document.getElementById('addBankAccount').submit();
+            });
         }
     }
 

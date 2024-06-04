@@ -320,7 +320,7 @@
         <!-- Edit Special Modal Box Start -->
         @foreach($lists as $item)
             <div class="modal fade theme-modal" id="editAddress{{ $item->id }}" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Add To Special Corner</h5>
@@ -379,7 +379,7 @@
         <!-- Remove Address Modal Start -->
         @foreach($lists as $item)
             <div class="modal fade theme-modal remove-profile" id="removeProfile{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header d-block text-center">
                             <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>

@@ -28,14 +28,24 @@
 
     <!-- Contact Box Section Start -->
     <section class="contact-box-section faq-box-contain section-b-space">
+
         <div class="container-fluid-lg">
+
             <div class="row g-lg-5 g-3">
-                <div class="col-lg-6">
+
+                <div class="col-lg-6" id="EnglishVersion">
+                    <div class="title-header option-title" id="japaneseBtnDiv" >
+                        <button class="align-items-center btn btn-theme d-flex" id="japaneseBtn" style="background-color: #0da487; color: #fff;">
+                            日本語で確認する
+                        </button>
+                    </div>
+                    <br>
                     <div class="left-sidebar-box">
                         <div class="faq-accordion">
                             <div class="accordion" id="accordionExample">
                                 @foreach( $lists as $key => $list )
                                     @if ($loop->first)
+
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -49,12 +59,12 @@
                                                 class="accordion-collapse collapse show"
                                                 aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    <p>{!! $list->ans !!}</p>
 
                                                 </div>
                                             </div>
                                         </div>
                                     @else
+
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -73,6 +83,82 @@
                                             </div>
                                         </div>
                                     @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" id="JapaneseVersion" style="display:none">
+
+                    <div class="title-header option-title" id="englishBtnDiv">
+                        <button class="align-items-center btn btn-theme d-flex" id="englishBtn" style="background-color: #0da487; color: #fff;">
+                            Check in English
+                        </button>
+                    </div>
+                    <br>
+                    <div class="left-sidebar-box">
+                        <div class="faq-accordion">
+                            <div class="accordion" id="accordionExample">
+                                @foreach( $lists as $key => $list )
+
+                                    @if ($loop->first)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                                    aria-expanded="true" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                    {!! $list->jpque ?? '' !!}
+                                                    <i class="fa-solid fa-angle-down"></i>
+                                                </button>
+                                            </h2>
+                                            <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                                class="accordion-collapse collapse "
+                                                aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <p>{!! $list->jpans  ?? '' !!}</p>
+                                                    <i class="fa-solid fa-angle-up"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                                    aria-expanded="false" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                    {!! $list->jpque !!}
+                                                    {{-- <i class="fa-solid fa-angle-down"></i> --}}
+                                                </button>
+                                            </h2>
+                                            <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                                class="collapse"
+                                                aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <p>{!! $list->jpans !!}</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    {{-- <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                                aria-expanded="true" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                {!! $list->jpque ?? '' !!}
+                                                <i class="fa-solid fa-angle-up"></i>
+                                            </button>
+                                        </h2>
+                                        <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                            class="accordion-collapse collapse show"
+                                            aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p>{!! $list->jpans  ?? '' !!}</p>
+
+                                            </div>
+                                        </div>
+                                    </div> --}}
                                 @endforeach
                             </div>
                         </div>
@@ -168,6 +254,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </section>
     <!-- Contact Box Section End -->
@@ -184,6 +272,20 @@
         </div>
     </section>
     <!-- Map Section End -->
+    <script src="frontend/assets/js/feather/feather.min.js"></script>
+    <script src="frontend/assets/js/feather/feather-icon.js"></script>
+    <script>
+        document.getElementById('japaneseBtn').addEventListener('click', function() {
+            document.getElementById('EnglishVersion').style.display = 'none';
+            document.getElementById('JapaneseVersion').style.display = 'block';
+        });
+
+        document.getElementById('englishBtn').addEventListener('click', function() {
+            document.getElementById('JapaneseVersion').style.display = 'none';
+            document.getElementById('EnglishVersion').style.display = 'block';
+
+        });
+    </script>
 
 </x-guest-layout>
 

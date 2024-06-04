@@ -38,37 +38,43 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $lists as $key => $list )
-
+                                            @if ($lists->isEmpty())
                                                 <tr>
-                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
-                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="タイトル">{{ $list->title }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 50px;"></td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ url("/blog/".$list->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href='{{ url("/editblog/".$list->id ) }}'>
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteConfirmModal{{ $list->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                    <td colspan="9">No data available</td>
                                                 </tr>
-                                            @endforeach
+                                            @else
+                                                @foreach( $lists as $key => $list )
+
+                                                    <tr>
+                                                        <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                        <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                        <td data-label="タイトル">{{ $list->title }}</td>
+                                                        <td data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->image)   ) }}" alt="thumb" style="width: 50px;"></td>
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ url("/blog/".$list->id ) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href='{{ url("/editblog/".$list->id ) }}'>
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

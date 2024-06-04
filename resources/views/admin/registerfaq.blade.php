@@ -9,6 +9,13 @@
             display:flex;
         }
     </style>
+    <style>
+        input.title::placeholder {
+            font-weight: 500 !important;
+            font-size: 12px !important;
+        }
+    </style>
+
 
     @php $error = $errors->toArray(); if(!isset($editmode)){$editmode = false;} if(!isset($editother)){$editother = false;}
     @endphp
@@ -38,7 +45,7 @@
                                             <label class="form-label-title col-sm-3 mb-0">FAQ Title</label>
 
                                             <div class="col-md-9 g-4">
-                                                <input class="form-control" type="text" placeholder="Eng" name="title_eng" id="title_eng" value="{{ old('title_eng') ?? $faq->title ?? '' }}">
+                                                <input class="form-control title" type="text" placeholder="Use control+shift+V to paste within this text area.(Eng)" name="title_eng" id="title_eng" value="{{ old('title_eng') ?? $faq->title ?? '' }}">
                                                 <p style="display:none" class="title_eng error text-danger"></p>
                                                 @if (!empty($error['title_eng']))
                                                     @foreach ($error['title_eng'] as  $key => $value)
@@ -46,7 +53,7 @@
                                                     @endforeach
                                                 @endif <br>
 
-                                                <input class="form-control" type="text" placeholder="Japan" name="title_japan" id="title_japan" value="{{ old('title_japan') ?? $faq->title ?? '' }}">
+                                                <input class="form-control title" type="text" placeholder="このテキストエリア内で貼り付けるときは、control+shift+Vを使用してください。(Jpn)" name="title_japan" id="title_japan" value="{{ old('title_japan') ?? $faq->jptitle ?? '' }}">
                                                 <p style="display:none" class="title_japan error text-danger"></p>
                                                 @if (!empty($error['title_japan']))
                                                     @foreach ($error['title_japan'] as  $key => $value)
@@ -60,8 +67,8 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Question</label>
                                         <div class="col-md-9">
-                                            <textarea class="form-control"  placeholder="Eng" name="content" id="content" value="{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}</textarea>
-                                            <input type="hidden" name="content_desc" id="content_desc" value="{!! str_replace("<p />","&#013;",old('content') ?? $faq->que ?? '')  !!}">
+                                            <textarea class="form-control"  placeholder="Use control+shift+V to paste within this text area.(Eng)" name="content" id="content" >{!! old('content') ?? $faq->que ?? ''  !!}</textarea>
+
                                             <p style="display:none" class="content_desc error text-danger"></p>
                                             @if (!empty($error['content_desc']))
                                                 @foreach ($error['content_desc'] as  $key => $value)
@@ -69,7 +76,7 @@
                                                 @endforeach
                                             @endif
                                             <br>
-                                            <textarea class="form-control" placeholder="Japan" name="jpcontent" id="jpcontent" value="{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}</textarea>
+                                            <textarea class="form-control" placeholder="このテキストエリア内で貼り付けるときは、control+shift+Vを使用してください。(Jpn)" name="jpcontent" id="jpcontent" value="{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}"  >{!! old('jpcontent') ?? $faq->jpque ?? ''  !!}</textarea>
                                             <input type="hidden" name="jpcontent_desc" id="jpcontent_desc" value="{!! str_replace("<p />","&#013;",old('jpcontent') ?? $faq->jpque ?? '')  !!}">
                                             <p style="display:none" class="jpcontent_desc error text-danger"></p>
                                             @if (!empty($error['jpcontent_desc']))
@@ -83,8 +90,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Answer</label>
                                         <div class="col-md-9">
-                                            <textarea class="form-control" placeholder="Eng" name="ans" id="ans" value="{!! str_replace("<p />","&#013;",old('ans') ?? $faq->ans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $faq->ans ?? '')  !!}</textarea>
-                                            <input type="hidden" name="content_ansdesc" id="content_ansdesc" value="{!! str_replace("<p />","&#013;",old('ans') ?? $faq->ans ?? '')  !!}">
+                                            <textarea class="form-control" placeholder="Use control+shift+V to paste within this text area.(Eng)" name="content_ansdesc"  id="content_ansdesc">{!! old('content_ansdesc') ?? $faq->ans ?? ''  !!}</textarea>
                                             <p style="display:none" class="content_ansdesc error text-danger"></p>
                                             @if (!empty($error['content_ansdesc']))
                                                 @foreach ($error['content_ansdesc'] as  $key => $value)
@@ -92,7 +98,7 @@
                                                 @endforeach
                                             @endif
                                             <br>
-                                            <textarea class="form-control" placeholder="Japan" name="jpans" id="jpans" value="{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}</textarea>
+                                            <textarea class="form-control" placeholder="このテキストエリア内で貼り付けるときは、control+shift+Vを使用してください。(Jpn)" name="jpans" id="jpans" value="{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}</textarea>
                                             <input type="hidden" name="jpcontent_ansdesc" id="jpcontent_ansdesc" value="{!! str_replace("<p />","&#013;",old('jpans') ?? $faq->jpans ?? '')  !!}">
                                             <p style="display:none" class="jpcontent_ansdesc error text-danger"></p>
                                             @if (!empty($error['jpcontent_ansdesc']))
@@ -128,7 +134,7 @@
                                                         @if (!$editmode)
                                                         <p>FAQ data will be added?</p>
                                                         @else
-                                                        <p>FAQ data will be updated?</p>
+                                                        <p>FAQ data will be updated.</p>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -176,7 +182,7 @@
             .then(editor => {
                 editor.model.document.on('change:data', () => {
                     var editorData = editor.getData();
-                    document.querySelector('#content_desc').value = editorData;
+                    document.querySelector('#content').value = editorData;
                 });
             })
             .catch(error => {
@@ -196,7 +202,7 @@
             });
 
             ClassicEditor
-            .create(document.querySelector('#ans'))
+            .create(document.querySelector('#content_ansdesc'))
             .then(editor => {
                 editor.model.document.on('change:data', () => {
                     var editorData = editor.getData();
@@ -267,7 +273,7 @@
         // var imageSrc = $.trim($("#image").val());
         // var imageSrcs = $.trim($("#preview-image-before-upload").attr('src'));
 
-if ($.trim($("#title_eng").val()) === "" || $.trim($("#title_japan").val()) === "" || $.trim($("#content_desc").val()) === ""  || $.trim($("#jpcontent_desc").val()) === "" || $.trim($("#content_ansdesc").val()) === "" || $.trim($("#jpcontent_ansdesc").val()) === "") {
+if ($.trim($("#title_eng").val()) === "" || $.trim($("#title_japan").val()) === "" || $.trim($("#content").val()) === ""  || $.trim($("#jpcontent_desc").val()) === "" || $.trim($("#content_ansdesc").val()) === "" || $.trim($("#jpcontent_ansdesc").val()) === "") {
     if ($.trim($("#title_eng").val()) === "") {
         $('.error.title_eng').text('Title is required');
         $('.error.title_eng').show();
@@ -278,9 +284,9 @@ if ($.trim($("#title_eng").val()) === "" || $.trim($("#title_japan").val()) === 
         $('.error.title_japan').show();
     }
 
-    if ($.trim($("#content_desc").val()) === "") {
-        $('.error.content_desc').text('Question is required');
-        $('.error.content_desc').show();
+    if ($.trim($("#content").val()) === "") {
+        $('.error.content').text('Question is required');
+        $('.error.content').show();
     }
 
     if ($.trim($("#jpcontent_desc").val()) === "") {

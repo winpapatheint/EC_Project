@@ -42,15 +42,15 @@
                                         <span class="time"><i data-feather="clock"></i> <span> {{ date('Y/m/d', strtotime($blog->created_at)) }} </span></span>
                                         <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
                                     </div>
-                                    <p>{!! $blog->content !!}</p>
 
                                 </div>
+                                <p>{{ $blog->content }}</p>
+
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-xxl-3 col-xl-4 col-lg-5 order-lg-1">
+                <div class="col-xxl-3 col-xl-4 col-lg-5 d-lg-block d-none">
                     <div class="left-sidebar-box wow fadeInUp">
                     <form id="searchForm" action="/news" method="GET">
                         <div class="accordion-item">
@@ -98,6 +98,44 @@
                     </div>
                 </div>
 
+                {{-- <div class="col-xxl-9 col-xl-8 col-lg-7 ratio_50">
+                    <div class="blog-detail-image rounded-3 mb-4">
+                        <img src="{{ asset('images/'.$blog->image ) }}" class="bg-img blur-up lazyload" alt="">
+                        <div class="blog-image-contain">
+                            <h2>Agriculture Conference Harvest 2022 in Paris</h2>
+                            <div class="blog-label">
+                                <span class="time"><i data-feather="clock"></i> <span> {{ date('Y/m/d', strtotime($blog->created_at)) }} </span></span>
+                                <span class="super"><i data-feather="user"></i> <span>{{ $blog->authorby }}</span></span>
+                            </div>
+                            <ul class="contain-comment-list">
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="user"></i>
+                                        <span>Caroline</span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="calendar"></i>
+                                        <span>April 19, 2022</span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="user-list">
+                                        <i data-feather="message-square"></i>
+                                        <span>82 Comment</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="blog-detail-contain">
+                        <p><span class="first">S</span> {!! $blog->content !!}</p>
+                    </div>
+                </div> --}}
             </div>
         </div>
     </section>

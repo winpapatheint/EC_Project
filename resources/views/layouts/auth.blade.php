@@ -4,34 +4,33 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
         content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
         content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
     <title>Asian food museum</title>
 
     <!-- Google font -->
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
+
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 
     <!-- Template css -->
-    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
-    <!-- Linear Icon css -->
-    <link rel="stylesheet" href="{{ asset('backend/assets/css/linearicon.css') }}">
+    <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <!-- remixicon css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/remixicon.css') }}">
@@ -60,17 +59,20 @@
 
     <!-- vector map css  -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/vector-map.css') }}">
+
     <!-- slick slider css-->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/vendors/slick.css') }}">
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    {{-- <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/custom-css.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
 
 </head>
+
 <body>
     <!-- tap on top start -->
     <div class="tap-top">
@@ -86,21 +88,23 @@
                 <div class="header-logo-wrapper p-0">
                     <div class="logo-wrapper">
                         <a href="{{route('admin.dashboard')}}">
-                            <img class="img-fluid main-logo" src="{{ asset('backend/assets/images/logo/1.png') }}" alt="logo">
+                            <img class="img-fluid main-logo" src="{{ asset('images/logos/logo-h4.png') }}" alt="logo">
 
                         </a>
                     </div>
                     <div class="toggle-sidebar">
                         <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
                         <a href="{{route('admin.dashboard')}}">
-                            <img src="{{ asset('backend/assets/images/logo/1.png') }}" class="img-fluid" alt="">
+                            <img src="{{ asset('images/logos/logo-h4.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
                 </div>
+
                 @if (request()->is('admin/shoplist') ||
                     request()->is('admin/product') ||
                     request()->is('admin/category') ||
                     request()->is('admin/all/blog') ||
+                    request()->is('admin/indexfaq') ||
                     request()->is('admin/coupon') ||
                     request()->is('admin/orderlist') ||
                     request()->is('admin/review/product') ||
@@ -116,30 +120,7 @@
                     </form>
                 </div>
                 @endif
-                {{-- <div class="accordion-item">
-                    <div style="display: flex; align-items: center;">
-                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                        id="search" name="search" value=""
-                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
-                        style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
-                    </div>
-                </div> --}}
 
-                {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
-                    <div class="form-group w-100">
-                        <div class="">
-                            <div class="u-posRelative">
-                                <input class="form-control form-control-sm mr-sm-2 demo-input Typeahead-input form-control-plaintext w-100" type="search" placeholder="Search" aria-label="Search" id="search"
-                                name="search" value=""
-                               style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                <i class="close-search" data-feather="x"></i>
-
-                            </div>
-                            <div class="Typeahead-menu"></div>
-                        </div>
-                    </div>
-                </form> --}}
                 <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li>
@@ -274,13 +255,6 @@
                                     </a>
                                 </li>
 
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
-                                        <i class="ri-archive-line"></i>
-                                        <span>Orders</span>
-                                    </a>
-                                </li>
-
                                  <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.blog') }}">
                                         <i class="ri-newspaper-line"></i>
@@ -297,13 +271,8 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-<<<<<<< HEAD
                                         <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo">
                                         &nbsp;  &nbsp;<span>Coupon</span>
-=======
-                                        <i class="ri-phone-line"></i>
-                                        <span>Coupon</span>
->>>>>>> 3510427a4223a6971425e8c70fdcb8b8a3507c5f
                                     </a>
                                 </li>
 
@@ -398,17 +367,17 @@
             <!-- footer End-->
 
         </div>
-        <!-- Page Body End -->
+        <!-- Page Body End-->
     </div>
     <!-- page-wrapper End-->
-    <!-- Logout modal start -->
-    <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+
+    <div class="modal fade theme-modal remove-coupon" id="staticBackdrop" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel">Logging Out</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -417,17 +386,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form method="POST" action="{{ route('adminlogout') }}">
+                    <form method="POST" action="{{ route('adminlogout')}}">
                         @csrf
-                        <button type="submit" class="btn btn-animation btn-md fw-bold">Yes</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
                     </form>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
-                        style="background: #6c757d;">No</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Logout modal end -->
 
     <!-- latest js -->
     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -472,7 +439,6 @@
 
     <!-- Theme js -->
     <script src="{{ asset('backend/assets/js/script.js') }}"></script>
-
     <script>
         // Assuming you have some JavaScript code to handle deletion
         document.querySelector('.delete-icon').addEventListener('click', function() {

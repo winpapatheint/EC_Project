@@ -39,10 +39,10 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $lists as $key => $list )
+                                            @foreach( $faqlists as $key => $list )
 
                                                 <tr>
-                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td data-label="登録日" class="text-center">{{ ($ttl+1) - ($faqlists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="タイトル">{{ $list->title }}</td>
 
@@ -57,7 +57,7 @@
                                                         @if(strlen($list->ans) > 50)
                                                             {!! substr($list->ans, 0, 50) . '<br>' . substr($list->ans, 50, 50) . '...' !!}
                                                         @else
-                                                            {!! nl2br(e($list->ans)) !!}
+                                                            {!! $list->ans !!}
                                                         @endif
                                                     </td>
                                                     <td>
@@ -99,7 +99,7 @@
         <!-- Container-fluid Ends-->
     </div>
         <!-- Delete Modal Box Start -->
-            @foreach( $lists as $key => $list )
+            @foreach( $faqlists as $key => $list )
                 <div class="modal fade theme-modal remove-coupon" id="deleteConfirmModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">

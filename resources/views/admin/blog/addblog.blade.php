@@ -50,7 +50,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Content</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" name="content" id="content" value="{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}</textarea>
+                                            <textarea class="form-control" placeholder="Use control+shift+V to paste within this text area." name="content" id="content" value="{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}"  >{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}</textarea>
                                             <input type="hidden" name="content_desc" id="content_desc" value="{!! str_replace("<p />","&#013;",old('content') ?? $data->content ?? '')  !!}">
                                             <p style="display:none" class="content_desc error text-danger"></p>
                                             @if (!empty($error['content_desc']))

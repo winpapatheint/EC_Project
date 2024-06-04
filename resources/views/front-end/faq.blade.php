@@ -31,50 +31,46 @@
         <div class="container-fluid-lg">
             <div class="row g-lg-5 g-3">
                 <div class="col-lg-6">
-                    <div class="left-sidebar-box">
-                        <div class="faq-accordion">
-                            <div class="accordion" id="accordionExample">
-                                @foreach( $lists as $key => $list )
-                                    @if ($loop->first)
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
-                                                    aria-expanded="true" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                                    {!! $list->que !!}
-                                                    <i class="fa-solid fa-angle-down"></i>
-                                                </button>
-                                            </h2>
-                                            <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
-                                                class="accordion-collapse collapse show"
-                                                aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    <p>{!! $list->ans !!}</p>
+                    <div class="faq-accordion">
+                        <div class="accordion" id="accordionExample">
+                            @foreach( $lists as $key => $list )
+                                @if ($loop->first)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                {!! $list->que !!}
+                                                <i class="fa-solid fa-angle-down"></i>
+                                            </button>
+                                        </h2>
+                                        <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                            class="accordion-collapse collapse show"
+                                            aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p>{!! $list->ans !!}</p>
 
-                                                </div>
                                             </div>
                                         </div>
-                                    @else
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
-                                                    aria-expanded="false" aria-controls="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
-                                                    {!! $list->que !!}
-                                                    <i class="fa-solid fa-angle-up"></i>
-                                                </button>
-                                            </h2>
-                                            <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
-                                                class="collapse"
-                                                aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    <p>{!! $list->ans !!}</p>
-                                                </div>
+                                    </div>
+                                @else
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}">
+                                                {!! $list->que !!}
+                                                <i class="fa-solid fa-angle-down"></i>
+                                            </button>
+                                        </h2>
+                                        <div  id="collapse{{ (count($lists)+1) - ($lists->firstItem() + $key) }}"
+                                            class="accordion-collapse collapse"
+                                            aria-labelledby="heading{{ (count($lists)+1) - ($lists->firstItem() + $key) }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p>{!! $list->ans !!}</p>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
-                            </div>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>

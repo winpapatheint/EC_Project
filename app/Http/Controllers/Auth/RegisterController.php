@@ -24,7 +24,7 @@ class RegisterController extends Controller
 
     public function SellerRegistered(Request $request)
     {
-        if (User::where('email', $request->mail)->exists()) {
+        if (User::where('email', $request->email)->exists()) {
             return back()->withErrors(['mail' => 'Email already exists.'])->withInput();
         }
         $img = $request->file('shop_logo');
@@ -33,7 +33,7 @@ class RegisterController extends Controller
 
         $user = User::create([
             'name' => $request->user_name,
-            'email' => $request->mail,
+            'email' => $request->email,
             'role' => 'seller',
             'password' => Hash::make($request->password),
             'status' => 1,

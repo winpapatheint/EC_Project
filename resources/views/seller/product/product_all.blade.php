@@ -59,7 +59,7 @@
                                                 </div>
                                             </td>
 
-                                            <td>{{ strlen($item->product_name) > 20 ? substr($item->product_name, 0, 20) . '...' : $item->product_name }}</td>
+                                            <td>{{ mb_strlen($item->product_name) > 20 ? mb_substr($item->product_name, 0, 20) . '...' : $item->product_name }}</td>
 
                                             <td>{{ $item->product_qty }}</td>
 

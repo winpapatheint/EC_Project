@@ -183,12 +183,12 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating theme-form-floating">
-                                        <input type="email" id="mail" name="mail" class="form-control" placeholder="Email Address" value="{{ old('mail') }}">
+                                        <input type="text" id="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}">
                                         <label>Email Address</label>
-                                        @if($errors->has('mail'))
-                                            <span class="error" style="color:red">{{ $errors->first('mail') }}</span>
+                                        @if($errors->has('email'))
+                                            <span class="error" style="color:red">{{ $errors->first('email') }}</span>
                                         @else
-                                            <span class="error" style="color:red" id="error-mail"></span>
+                                            <span class="error" style="color:red" id="error-email"></span>
                                         @endif
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@
             const bank_acc_name = document.getElementById('bank_acc_name').value.trim();
             const bank_acc_no = document.getElementById('bank_acc_no').value.trim();
             const user_name = document.getElementById('user_name').value.trim();
-            const mail = document.getElementById('mail').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmed = document.querySelector('input[name="confirmed"]').value.trim();
             const checkbox = document.getElementById('flexCheckDefault');
@@ -350,7 +350,7 @@
 
             if (!bank_branch) {
                 isValid = false;
-                document.getElementById('error-bank_branch').textContent = 'Please provide your bank branch.';
+                document.getElementById('error-bank_branch').textContent = 'Please provide your branch name.';
             } else if (bank_branch.length > 255) {
                 isValid = false;
                 document.getElementById('error-bank_branch').textContent = 'Your name must not exceed 255 characters.';
@@ -358,7 +358,7 @@
 
             if (!bank_acc_type || bank_acc_type === 'Choose bank account type') {
                 isValid = false;
-                document.getElementById('error-bank_acc_type').textContent = 'Please select a valid bank account type.';
+                document.getElementById('error-bank_acc_type').textContent = 'Please select a valid bank account.';
             }
 
             if (!bank_acc_name) {
@@ -385,12 +385,12 @@
                 document.getElementById('error-user_name').textContent = 'Your name must not exceed 255 characters.';
             }
 
-            if (!mail) {
+            if (!email) {
                 isValid = false;
-                document.getElementById('error-mail').textContent = 'Please provide your email.';
-            } else if (!/\S+@\S+\.\S+/.test(mail)) {
+                document.getElementById('error-email').textContent = 'Please provide your email.';
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
                 isValid = false;
-                document.getElementById('error-mail').textContent = 'Please provide a valid email address.';
+                document.getElementById('error-email').textContent = 'Please provide a valid email address.';
             }
 
             if (!password) {

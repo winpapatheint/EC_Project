@@ -93,7 +93,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-animation" >Yes</button>
-                                                    <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal"
+                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,7 +262,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-animation btn-md fw-bold" >Yes</button>
-                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                     </div>
                                                 </div>
                                             </div>

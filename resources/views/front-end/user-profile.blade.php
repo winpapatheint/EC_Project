@@ -330,7 +330,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYes">Yes</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>
@@ -405,7 +406,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light" id="confirmYesForPassword">Yes</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                 </div>
             </div>
         </div>

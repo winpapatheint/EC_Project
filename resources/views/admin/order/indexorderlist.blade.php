@@ -98,9 +98,10 @@
                                                                     <div class="modal-footer">
                                                                         <form action="{{ route('cash_payment_received', ['id' => $item->order->id]) }}" method="POST">
                                                                             @csrf
-                                                                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                                            <button type="submit" class="btn btn-animation theme-bg-color btn-md fw-bold text-light">Yes</button>
                                                                         </form>
-                                                                        <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b">No</button>
+                                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
+                                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

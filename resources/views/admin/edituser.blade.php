@@ -148,14 +148,14 @@
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                                             <i class="fas fa-times"></i>
                                                                         </button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="remove-box">
-                                                                        <p>Are you sure your admin profile?</p>
+                                                                        <p>This changes will be updated.</p>
                                                                     </div>
                                                                 </div>
 
@@ -169,7 +169,7 @@
                                                                         @endif
                                                                     </button>
                                                                     <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal"
-                                                                    style="background: #6c757d;">No</button>
+                                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                                 </div>
 
                                                             </div>

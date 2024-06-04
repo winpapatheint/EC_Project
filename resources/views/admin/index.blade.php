@@ -275,7 +275,8 @@
                     <input type="hidden" id="adjustId{{ $item->id }}" name="adjustId" value="{{ $item->id }}">
 
                     <button type="submit" class="btn btn-animation btn-md fw-bold me-2">Save</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal"
+                    style="background-color: #ff6b6b;border-color: #ff6b6b;">Cancel</button>
                 </div>
             </form>
         </div>

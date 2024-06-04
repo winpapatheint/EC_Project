@@ -98,6 +98,7 @@ class ProductController extends Controller
         $id = Auth::user()->created_by ?? Auth::id();
         $sellerData = Seller::where('user_id', $id)->first();
         $commission = $sellerData->commission ?? 0;
+        $status = $sellerData->status ?? 0;
         $product_id = Product::insertGetId([
             'product_code' => $newProductCode,
             'brand_id' => $request->brand_id,
@@ -120,7 +121,7 @@ class ProductController extends Controller
             'care_instructions' => $request->care_instructions,
             'product_thambnail' => $filename,
             'commission' => $commission,
-            'status' => 1,
+            'status' => $status,
             'estimate_date' => $request->estimate_date,
             'delivery_price' => $request->delivery_price,
             'created_at' => Carbon::now(),
@@ -231,7 +232,7 @@ class ProductController extends Controller
         $product->care_instructions= $request->care_instructions;
         $product->product_thambnail= $filename;
         $product->estimate_date= $request->estimate_date;
-        $product->status= 1;
+        // $product->status= 1;
         $product->delivery_price= $request->delivery_price;
         $product->updated_by = Auth::user()->id;
         $product->updated_at= Carbon::now();

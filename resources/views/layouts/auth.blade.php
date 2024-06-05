@@ -477,13 +477,8 @@
         <!-- Page Body End-->
     </div>
     <!-- page-wrapper End-->
-<<<<<<< HEAD
-
-    <div class="modal fade theme-modal remove-coupon" id="staticBackdrop" aria-hidden="true" tabindex="-1">
-=======
     <!-- Logout modal start -->
     <div class="modal fade theme-modal remove-profile" id="staticBackdrop" aria-hidden="true" tabindex="-1">
->>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block text-center">

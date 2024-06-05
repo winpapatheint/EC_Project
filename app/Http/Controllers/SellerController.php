@@ -205,13 +205,12 @@ class SellerController extends Controller
         $getId = Help::find($id);
         $helpId = $getId->help_id;
         if ($helpId) {
-            $start = Help::find($helpId);
+            $start = DB::table('helps')->where('id',$id)->first();
             $reply = Help::where('help_id', $helpId)->get();
         } else {
             $start = $getId;
             $reply = null;
         }
-
         return view('seller.help.help_detail', compact('start', 'reply'));
 
     }
@@ -231,7 +230,7 @@ class SellerController extends Controller
         //     'subject' => 'present|string|max:255',
         //     'body' => 'present|string|max:255',
         // ]);
-
+dd($request->input('body'));
         $help = new Help();
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
@@ -239,7 +238,6 @@ class SellerController extends Controller
         } else {
             $imageName = '';
         }
-
         $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
         $help->name = Auth::user()->name;
         $help->shop_name = $shopName;
@@ -283,22 +281,21 @@ class SellerController extends Controller
 
     public function storeReply(Request $request)
     {
-        $validatedData = $request->validate([
-            'body' => 'present|string|max:255',
-        ]);
-
-        $help = new Help();
-        if($request->hasFile('image'))
-        {
-            $img = $request->file('image');
-            $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('upload/shop'), $filename);
-            $help->img = $filename;
-        }
+        // $validatedData = $request->validate([
+        //     'body' => 'present|string|max:255',
+        // ]);
+         $help = new Help();
+        // if($request->hasFile('image'))
+        // {
+        //     $img = $request->file('image');
+        //     $filename = time() . '.' . $img->getClientOriginalExtension();
+        //     $img->move(public_path('upload/shop'), $filename);
+        //     $help->img = $filename;
+        // }
         $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
-
-        $check = Help::find($request->id);
-        $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
+        $check = Help::find($request->replyId);
+        dd($request->id);
+        $help->help_id = $check->help_id;
         $help->name = Auth::user()->name;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;

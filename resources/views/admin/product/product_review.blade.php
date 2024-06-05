@@ -34,89 +34,95 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach( $lists as $key => $list )
-                                        <tr>
-                                            <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
-                                            <td data-label="登録日">{{ date('Y/m/d', strtotime($list->reviewdate)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                            <td>{{ $list->name }}</td>
-                                            <td>{{ $list->product_name }}</td>
-                                            @if ($list->stars_rated == NULL)
+                                        @if ($lists->isEmpty())
+                                            <tr>
+                                                <td colspan="9">No data available</td>
+                                            </tr>
+                                        @else
+                                            @foreach( $lists as $key => $list )
+                                            <tr>
+                                                <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</th>
+                                                <td data-label="登録日">{{ date('Y/m/d', strtotime($list->reviewdate)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                <td>{{ $list->name }}</td>
+                                                <td>{{ $list->product_name }}</td>
+                                                @if ($list->stars_rated == NULL)
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                No Rating
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @elseif($list->stars_rated == 1)
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @elseif($list->stars_rated == 2)
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @elseif($list->stars_rated == 3)
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star"></i>
+                                                                <i class="fas fa-star"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @elseif($list->stars_rated == 4)
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                                <i class="fas fa-star theme-color"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                @endif
+                                                <td>{{ $list->comment }}</td>
                                                 <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            No Rating
-                                                        </li>
-                                                    </ul>
+                                                    <label class="switch">
+                                                        <input data-width="80" data-id="{{$list->id}}" class="toggle-review" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status =='1' ? 'checked' : '' }}>
+                                                    </label>
                                                 </td>
-                                            @elseif($list->stars_rated == 1)
-                                                <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            @elseif($list->stars_rated == 2)
-                                                <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            @elseif($list->stars_rated == 3)
-                                                <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            @elseif($list->stars_rated == 4)
-                                                <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            @else
-                                                <td>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            @endif
-                                            <td>{{ $list->comment }}</td>
-                                            <td>
-                                                <label class="switch">
-                                                    <input data-width="80" data-id="{{$list->id}}" class="toggle-review" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active" data-off="InActive"  {{ $list->status =='1' ? 'checked' : '' }}>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                            </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

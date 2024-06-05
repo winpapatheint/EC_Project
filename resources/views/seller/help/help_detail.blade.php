@@ -108,37 +108,34 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('review.update')}}" method="POST">
-                        <input type="hidden" name="review_id" value="{{ $item->id }}">
-                        @csrf
-                        <div class="mb-2 row align-items-center">
-                            <label
-                                class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
-                            <div class="col-md-9 col-lg-10">
-                                <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
-                                <img src="" id="mainThmb">
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center">
-                            <label
-                                class="col-lg-2 col-md-3 col-form-label form-label-title">Body
-                                </label>
-                            <div class="col-md-9 col-lg-10">
-                                <textarea class="form-control" name="body" id="" rows="8"></textarea>
-                                <p style="display:none" class="body error text-danger"></p>
-                                @if (!empty($error['body']))
-                                    @foreach ($error['body'] as  $key => $value)
-                                        <p class="body error text-danger">{{ $value }}</p>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
                     <form method="POST" action="{{ route('reply.sent') }}">
                         @csrf
+                    <div class="mb-2 row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                            <img src="" id="mainThmb">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title">Body
+                            </label>
+                        <div class="col-md-9 col-lg-10">
+                            <textarea class="form-control" name="body" id="body" rows="8"></textarea>
+                            <p style="display:none" class="body error text-danger"></p>
+                            @if (!empty($error['body']))
+                                @foreach ($error['body'] as  $key => $value)
+                                    <p class="body error text-danger">{{ $value }}</p>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
                         <button type="submit" class="btn btn-animation">Reply</button>
                     </form>
                     <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>

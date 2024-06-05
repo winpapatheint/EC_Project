@@ -85,72 +85,70 @@
                                                             </button>
                                                         @else
 
-                                                            <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
-                                                                onclick="">Coupon
-                                                            </button>
-                                                        @endif
-                                                    </td>
-                                                    <td class="col-sm-9">
-                                                        @if($list->special_sub_category_id)
-                                                            <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#removeProfile{{ $list->id }}"
-                                                                onclick="showDeleteModal('{{ $list->id }}')"
-                                                                >Remove
-                                                            </button>
-                                                        @else
-
-                                                            <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
+                                                                <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#editAddress{{ $list->id }}"
-                                                                    onclick="">Add
-                                                            </button>
-                                                        @endif
-                                                    </td>
-                                                    <td class="col-sm-9">
-                                                        <label class="switch" style="margin-top: 8px;">
-                                                            <input data-width="100" data-id="{{$list->id}}"
-                                                            class="toggle-class" type="checkbox"
-                                                            data-offstyle="outline-secondary" data-toggle="toggle"
-                                                            data-on="Active" data-off="InActive"
-                                                            {{ $list->status ? 'checked' : '' }}
-                                                            {{ $list->Seller->status == 0 ? 'disabled' : '' }}>
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ url("/product/".$list->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href='{{ url("/editproduct/".$list->id ) }}'>
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteConfirmModal{{ $list->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                {{-- Edit Product Commission Start --}}
-                                                <div class="modal fade theme-modal remove-commission" id="commissionModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header d-block text-center">
-                                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Enter Commission(%)</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i class="fas fa-times"></i>
+                                                                    data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
+                                                                    onclick="">Coupon
                                                                 </button>
+                                                            @endif
+                                                        </td>
+                                                        <td class="col-sm-9">
+                                                            @if($list->special_sub_category_id)
+                                                                <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#removeProfile{{ $list->id }}"
+                                                                    onclick="showDeleteModal('{{ $list->id }}')"
+                                                                    >Remove
+                                                                </button>
+                                                            @else
+
+                                                                <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#editAddress{{ $list->id }}"
+                                                                        onclick="">Add
+                                                                </button>
+                                                            @endif
+                                                        </td>
+                                                        <td class="col-sm-9">
+                                                            <label class="switch" style="margin-top: 8px;">
+                                                                <input data-width="100" data-id="{{$list->id}}"
+                                                                class="toggle-class" type="checkbox"
+                                                                data-offstyle="outline-secondary" data-toggle="toggle"
+                                                                data-on="Active" data-off="InActive"
+                                                                {{ $list->status ? 'checked' : '' }}
+                                                                {{ $list->Seller->status == 0 ? 'disabled' : '' }}>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ url("/product/".$list->id ) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href='{{ url("/editproduct/".$list->id ) }}'>
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    {{-- Edit Product Commission Start --}}
+                                                    <div class="modal fade theme-modal remove-commission" id="commissionModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header d-block text-center">
+                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Enter Commission(%)</h5>
+=======
                                                             </div>
                                                             <form id="commission-form{{ $list->id }}" method="POST" action="{{ route('updateproductcommission') }}" style="display:flex;">
                                                                 @csrf
@@ -179,32 +177,79 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header d-block text-center">
                                                                 <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fas fa-times"></i>
                                                                     </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="remove-box">
-                                                                    <p>This product's commission will be reset according to the shop.</p>
                                                                 </div>
-                                                            </div>
-                                        
-                                                            <div class="modal-footer">
-                                                                <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
+                                                                <form id="commission-form{{ $list->id }}" method="POST" action="{{ route('updateproductcommission') }}" style="display:flex;">
                                                                     @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="form-group">
+                                                                        <input type="number" class="form-control" id="commission{{ $list->id }}"  value="{{ old('commission') ?? $list->commission ?? '' }}"
+                                                                        name="commission" placeholder="Enter commission">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                        <input type="hidden" id="commission-id{{ $list->id }}" name="commissionid" value="{{ $list->id }}">
                                                                         <input type="hidden" name="id" value="{{ $list->id }}">
+<<<<<<< HEAD
+                                                                        <button type="submit" class="btn btn-animation btn-md fw-bold me-2">Save</button>
+                                                                    </form>
+                                                                    <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
+                                                                    {{-- <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id" value="{{ $list->id }}">
+                                                                        <button type="submit" class="btn btn-animation btn-md fw-bold me-2" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" style="background-color: #ff6b6b;">Cancel</button>
+                                                                    </form> --}}
+                                                                        {{-- <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button> --}}
+
+                                                                </div>
+=======
                                                                         <button type="submit"class="btn btn-animation btn-md fw-bold me-2" 
                                                                             data-bs-target="#exampleModalToggle2"
                                                                             data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
                                                                         <button type="button" class="btn btn-animation btn-md fw-bold" 
                                                                             data-bs-dismiss="modal" style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                                 </form>
+>>>>>>> e6144a9385037373f84952f326ba8c465ce9a3fd
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                {{-- Reser Product Commission End --}}
-                                            @endforeach
+                                                    {{-- Edit Product Commission End --}}
+                                                    {{-- Reser Product Commission Start --}}
+                                                    <div class="modal fade theme-modal remove-commission" id="removeCommission{{ $list->id }}" aria-hidden="true" tabindex="-1">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header d-block text-center">
+                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="remove-box">
+                                                                        <p>This product's commission will be reset according to the shop.</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
+                                                                        @csrf
+                                                                            <input type="hidden" name="id" value="{{ $list->id }}">
+                                                                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
+                                                                                data-bs-target="#exampleModalToggle2"
+                                                                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                                                                            <button type="button" class="btn btn-animation btn-md fw-bold"
+                                                                                data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{-- Reser Product Commission End --}}
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

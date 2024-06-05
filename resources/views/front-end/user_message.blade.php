@@ -114,7 +114,7 @@
                                     type="button" role="tab" style="font-size: 14px; text-align: center; display: flex; align-items: center;" href="{{route ('user_message')}}"><i data-feather="mail"></i>
                                     Message
                                     <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;">
-                                        <b>{{ $noti > 0 ? $noti : 0 }}</b>
+                                        <b>{{ $noti > 0 ? 'new' : '' }}</b>
                                     </span>
                                 </a>
                             </li>
@@ -196,7 +196,7 @@
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            <p><strong>Your order has been {{ $userNoti->title }}.</strong></p>
+                                                            <p><strong>Your order has been {{ $userNoti->title == 'Cancel' ? 'Cancelled' : $userNoti->title }}.</strong></p>
                                                         </div>
                                                         <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: flex-end; margin-left: auto;">
                                                             {{ date('Y/m/d H:i', strtotime($userNoti->created_at)) }}
@@ -219,11 +219,25 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
+                                                                @if($userNoti->title == 'Confirmed')
                                                                 <span>
                                                                     Your order has been {{ $userNoti->title }} by {{ $userNoti->orderDetail->seller->shop_name }}. It is
                                                                     expected to be delivered between {{ date('Y/m/d', strtotime($userNoti->orderDetail->expected_from)) }} 
                                                                     and {{ date('Y/m/d', strtotime($userNoti->orderDetail->expected_to)) }}.
                                                                 </span>
+                                                                @elseif($userNoti->title == 'Delivered')
+                                                                <span>
+                                                                    Your order has been {{ $userNoti->title }} by {{ $userNoti->orderDetail->seller->shop_name }} 
+                                                                    at {{ date('Y/m/d H:i', strtotime($userNoti->orderDetail->delivered_date)) }}. If you have not received it,
+                                                                    please contact us.
+                                                                </span>
+                                                                @elseif($userNoti->title == 'Cancel')
+                                                                <span>
+                                                                    Your order has been Cancelled by {{ $userNoti->orderDetail->seller->shop_name }}.
+                                                                    We will notify the refund process soon.<br>
+                                                                    Cancelled Reason : {{ $userNoti->orderDetail->cancelled_reason }}
+                                                                </span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: space-between; margin-left: auto;">

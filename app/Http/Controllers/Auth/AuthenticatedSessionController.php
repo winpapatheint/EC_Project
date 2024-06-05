@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -46,6 +47,13 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $loginUser = User::where('email', $request->email)->first();
+        if(!$loginUser)
+        {
+            return back()->with('error', 'Incorrect!')->with('incorrect', 'Email or password is incorrect!');
+        }
+        if (!Hash::check($request->password, $loginUser->password)) {
+            return back()->with('error', 'Incorrect!')->with('incorrect', 'Email or password is incorrect!');
+        }
 
         if($loginUser->email_verified_at == null)
         {

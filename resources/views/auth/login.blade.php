@@ -55,6 +55,9 @@
                                                     <p class="email error text-danger">{{ $value }}</p>
                                                 @endforeach
                                             @endif
+                                            @if(session('incorrect'))
+                                                <span class="error" style="color:red">{{ session('incorrect') }}</span>
+                                            @endif
                                         </div>
                                     </div>
                             

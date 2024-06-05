@@ -130,11 +130,6 @@ class OrderController extends Controller
                     case 'Picked':
                         $item->picked_date = now();
                         $item->status = 'Picked';
-                        UserNotification::create([
-                            'order_detail_id' => $item->id,
-                            'buyer_id' => $item->buyer_id,
-                            'title' => 'Picked'
-                        ]);
                         break;
                     case 'Shipped':
                         $item->shipped_date = now();
@@ -235,6 +230,11 @@ class OrderController extends Controller
         $order->cancelled_reason = $validatedData['cancelled_reason'];
         $order->cancel_date = now();
         $order->save();
+        UserNotification::create([
+            'order_detail_id' => $order->id,
+            'buyer_id' => $order->buyer_id,
+            'title' => 'Cancel'
+        ]);
 
         $msg = ('Order cancelled Successfully');
         return redirect('/orderlist')->with('success', $msg);

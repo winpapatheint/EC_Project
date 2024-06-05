@@ -72,7 +72,18 @@
                                                 <div class="product-detail" style="width: 100px;">
                                                     <ul>
                                                         <li class="text-content">
-                                                            <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
+                                                            @if(session()->has('statusCheck'))
+                                                                @php
+                                                                    $statusCheck = session()->get('statusCheck', []);
+                                                                @endphp
+                                                                @if (in_array($cartlist->id, $statusCheck))
+                                                                <span style="color:#ff6b6b;">{{ $cartlist->product_name }}</span>
+                                                                @else
+                                                                <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
+                                                                @endif
+                                                            @else
+                                                                <a href=" {{ url('/product-left-thumbnail/' . $cartlist->product_id) }} ">{{ $cartlist->product_name }}</a>
+                                                            @endif
                                                         </li>
                                                         <li class="text-content"><span class="text-title">In
                                                                 Stock:</span>{{ $cartlist->in_stock }}

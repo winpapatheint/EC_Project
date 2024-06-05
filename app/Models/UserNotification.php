@@ -14,4 +14,14 @@ class UserNotification extends Model
         'buyer_id',
         'title',
     ];
+
+    public function orderDetail()
+    {
+        return $this->belongsTo(OrderDetail::class);
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(Buyer::class);
+    }
 }

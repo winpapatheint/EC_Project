@@ -105,11 +105,17 @@
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            @php
+                                $buyer = DB::table('buyers')->where('user_id', $user->id)->first();
+                                $noti = DB::table('user_notifications')->where('buyer_id', $buyer->id)->count();
+                            @endphp
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center; display: flex; align-items: center;" href="{{route ('user_message')}}"><i data-feather="mail"></i>
                                     Message
-                                    <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;"><b>5</b></span>
+                                    <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;">
+                                        <b>{{ $noti > 0 ? $noti : 0 }}</b>
+                                    </span>
                                 </a>
                             </li>
                             
@@ -136,22 +142,128 @@
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="profile-detail dashboard-bg-box">
-                                            <div class="profile-name-detail">
-                                                <div class="col-md-10">
-                                                    <div class="d-sm-flex align-items-center d-block">
-                                                        <h3>Here is Noti</h3>
+                                    {{-- @include('components.messagebox') --}}
+                                    <div class="row" style="margin-bottom: 5px;">
+                                        @if ($userNotis->count() > 0)
+                                        <div class="col-md-10">
+                                            @include('components.messagebox')
+                                        </div>
+                                        <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: flex-end; margin-left: auto;">
+                                            <button id="clearAllNotifications" class="btn btn-danger" style="background-color: #caece1;display: flex; align-items: center; padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+                                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#removeNotiAll" style="color: var(--theme-color); text-decoration: none; display: flex; align-items: center;">
+                                                    <i class="ri-delete-bin-line" style="margin-right: 5px;"></i> Clear All
+                                                </a>
+                                            </button>
+                                            <!-- Remove Noti Modal Start -->
+                                            <div class="modal fade theme-modal remove-profile" id="removeNotiAll" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header d-block text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                                <i class="fa-solid fa-xmark"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="remove-box">
+                                                                <p>This will delete all of your messages.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="{{ route('remove_message_all', ['id' => $buyer->id]) }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal"
+                                                            style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2" style="display: flex; align-items: center; justify-content: space-between;margin-left: auto;">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile"><i class="ri-delete-bin-line"></i></a>
+                                            </div>
+                                            <!-- Remove Noti Modal End -->
+                                        </div>
+                                        @else
+                                        <div class="col-md-12 text-center">
+                                            <h3>There is no message in your message box!</h3>
+                                        </div>
+                                        @endif
+                                    </div>
+
+                                    @foreach($userNotis as $key => $userNoti)
+                                    <div class="row">
+                                        <div class="profile-detail dashboard-bg-box" style="margin-bottom: 5px;">
+                                            <div class="profile-name-detail">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <p><strong>Your order has been {{ $userNoti->title }}.</strong></p>
+                                                        </div>
+                                                        <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: flex-end; margin-left: auto;">
+                                                            {{ date('Y/m/d H:i', strtotime($userNoti->created_at)) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <div class="row">
+                                                                <div class="col-md-1">
+                                                                    <img src="{{ asset('upload/product_thambnail/'.$userNoti->orderDetail->product->product_thambnail) }}"
+                                                                    class="img-fluid blur-up lazyload" alt="" style="width: 40px;height: 40px;">
+                                                                </div>
+                                                                <div class="col-md-11">
+                                                                    <div class="row">
+                                                                        <h4>{{ $userNoti->orderDetail->product->product_name }}</h4>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <p>{{ $userNoti->orderDetail->qty }} {{ $userNoti->orderDetail->qty == 1 ? 'item' : 'items' }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span>
+                                                                    Your order has been {{ $userNoti->title }} by {{ $userNoti->orderDetail->seller->shop_name }}. It is
+                                                                    expected to be delivered between {{ date('Y/m/d', strtotime($userNoti->orderDetail->expected_from)) }} 
+                                                                    and {{ date('Y/m/d', strtotime($userNoti->orderDetail->expected_to)) }}.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: space-between; margin-left: auto;">
+                                                            <a href="javascript:void(0)" data-bs-toggle="modal" 
+                                                            data-bs-target="#removeNoti{{ $userNoti->id }}">
+                                                                <i class="ri-delete-bin-line"></i></a>
+                                                        </div>
+                                                        <!-- Remove Noti Modal Start -->
+                                                        <div class="modal fade theme-modal remove-profile" id="removeNoti{{ $userNoti->id }}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-block text-center">
+                                                                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="remove-box">
+                                                                            <p>You will not see this message no more in your message box.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <form action="{{ route('remove_message', ['id' => $userNoti->id]) }}" method="POST">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                                        </form>
+                                                                        <button type="button" class="btn btn-md fw-bold" data-bs-dismiss="modal"
+                                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Remove Noti Modal End -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                    
+                                    @endforeach
                                 </div>      
                             </div>
                         </div>  

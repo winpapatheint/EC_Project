@@ -76,7 +76,7 @@
                                     DashBoard</a>
                             </li>
                             <li class="nav-item active" role="presentation">
-                                <a class="nav-link" id="pills-order-tab"
+                                <a class="nav-link active" id="pills-order-tab"
                                     style="font-size: 14px; text-align: center;" href="{{route ('user_order')}}"><i
                                         data-feather="shopping-bag"></i>Orders</a>
                             </li>
@@ -99,6 +99,19 @@
                                 <a class="nav-link" id="pills-profile-tab"
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
+                            </li>
+                            @php
+                                $buyer = DB::table('buyers')->where('user_id', $user->id)->first();
+                                $noti = DB::table('user_notifications')->where('buyer_id', $buyer->id)->count();
+                            @endphp
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-profile-tab"
+                                    type="button" role="tab" style="font-size: 14px; text-align: center; display: flex; align-items: center;" href="{{route ('user_message')}}"><i data-feather="mail"></i>
+                                    Message
+                                    <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;">
+                                        <b>{{ $noti > 0 ? $noti : 0 }}</b>
+                                    </span>
+                                </a>
                             </li>
                         </ul>
                     </div>

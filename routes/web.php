@@ -61,6 +61,8 @@ Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile']
 Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
 Route::get('/user/message', [UserController::class, 'showMessage'])->name('user_message');
+Route::post('/user/message/{id}', [UserController::class, 'removeMessage'])->name('remove_message');
+Route::post('/user/message-all/{id}', [UserController::class, 'removeMessageAll'])->name('remove_message_all');
 
 Route::get('search', [ShowProductController::class, 'footerSearch'])->name('footer_search');
 Route::get('ordertracking', [UserController::class, 'footertracking'])->name('footer_tracking');

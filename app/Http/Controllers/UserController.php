@@ -1384,4 +1384,10 @@ class UserController extends Controller
         // return response()->json(['success' => 'Successfully set default address']);
         return response()->json(['success' => 'Successfully set default address']);
     }
+
+    public function showMessage()
+    {
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        return view('front-end.user_message', compact('user'));
+    }
 }

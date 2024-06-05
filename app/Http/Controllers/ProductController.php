@@ -215,7 +215,7 @@ class ProductController extends Controller
         }
         $product->brand_id = $request->brand_id;
         $product->country_id = $request->country_id;
-        $product->seller_id = Auth::user()->id;
+        // $product->seller_id = Auth::user()->id;
         $product->category_id= $request->category_id;
         $product->sub_category_id= $request->sub_category_id;
         $product->sub_category_title_id= $request->sub_category_title_id;

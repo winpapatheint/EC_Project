@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
+        content="Asian Food Museum admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
-        content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
+        content="admin template, Asian Food Museum admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{ asset('backend/assets/images/logo-food.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/logos_foods.png') }}" type="image/x-icon">
@@ -71,7 +71,121 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
-
+    <style>
+        /* Base style for search box */
+        .search-box1 {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 auto;
+        }
+        
+        .input-group1 {
+            display: flex;
+            align-items: center;
+        }
+        
+        input.form-control1 {
+            height: 40px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            flex: 1;
+        }
+        
+        button.btn1 {
+            height: 40px;
+            border-radius: 0 5px 5px 0;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Extra small devices (phones, less than 576px) */
+        @media (max-width: 575.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 14px;
+            }
+        
+            button.btn1 {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+        }
+        
+        /* Small devices (phones, 576px and up) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 14px;
+            }
+        
+            button.btn1 {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+        }
+        
+        /* Medium devices (tablets, 768px and up) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 16px;
+            }
+        
+            button.btn1 {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+        }
+        
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .search-box1 {
+                width: 400px;
+            }
+        
+            input.form-control1 {
+                font-size: 16px;
+            }
+        
+            button.btn1 {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+        }
+        
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {
+            .search-box1 {
+                width: 500px;
+            }
+        
+            input.form-control1 {
+                font-size: 18px;
+            }
+        
+            button.btn1 {
+                font-size: 18px;
+                padding: 0 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -106,11 +220,11 @@
                     request()->is('review') ||
                     request()->is('help')
                     )
-                <div class="search-box">
+                <div class="search-box1">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
-                        <div class="input-group" style="display: flex; align-items: center;">
-                            <input type="search" class="form-control" name="search" placeholder="" style="height: 40px; border-radius: 5px 0 0 5px;">
-                            <button class="btn" type="submit" id="button-addon2" style="background-color: #ffa53b; border-color: #ffa53b; height: 40px; border-radius: 0 5px 5px 0;">
+                        <div class="input-group1">
+                            <input type="search" class="form-control1" name="search" placeholder="">
+                            <button class="btn1 theme-bg-color" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
                             </button>
                         </div>
@@ -126,7 +240,7 @@
                         return !empty($notify->time);
                     })->count();
                 @endphp
-                <div class="nav-right col-6 pull-right right-header p-0">
+                <div class="nav-right col-4 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">
                             <div class="notification-box">

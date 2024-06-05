@@ -105,6 +105,14 @@
                                     type="button" role="tab" style="font-size: 14px; text-align: center;" href="{{route ('user_profile')}}"><i data-feather="user"></i>
                                     Profile</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-profile-tab"
+                                    type="button" role="tab" style="font-size: 14px; text-align: center; display: flex; align-items: center;" href="{{route ('user_message')}}"><i data-feather="mail"></i>
+                                    Message
+                                    <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;"><b>5</b></span>
+                                </a>
+                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -582,4 +590,3 @@
         }
     }
 </script>
-    

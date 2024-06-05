@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
-        content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
+        content="Asian Food Museum admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords"
-        content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
+        content="admin template, Asian Food Museum admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
     <title>Asian food museum</title>
@@ -24,9 +24,7 @@
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
-
-
-
+        
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
 
@@ -69,9 +67,123 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/input-tags/css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/bootstrap_toggle/bootstrap-toggle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/toastr/toastr.css') }}">
-
+    <style>
+        /* Base style for search box */
+        .search-box1 {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 auto;
+        }
+        
+        .input-group1 {
+            display: flex;
+            align-items: center;
+        }
+        
+        input.form-control1 {
+            height: 40px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            flex: 1;
+        }
+        
+        button.btn1 {
+            height: 40px;
+            border-radius: 0 5px 5px 0;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Extra small devices (phones, less than 576px) */
+        @media (max-width: 575.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 14px;
+            }
+        
+            button.btn1 {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+        }
+        
+        /* Small devices (phones, 576px and up) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 14px;
+            }
+        
+            button.btn1 {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+        }
+        
+        /* Medium devices (tablets, 768px and up) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .search-box1 {
+                width: 100%;
+            }
+        
+            input.form-control1 {
+                font-size: 16px;
+            }
+        
+            button.btn1 {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+        }
+        
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .search-box1 {
+                width: 400px;
+            }
+        
+            input.form-control1 {
+                font-size: 16px;
+            }
+        
+            button.btn1 {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+        }
+        
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {
+            .search-box1 {
+                width: 500px;
+            }
+        
+            input.form-control1 {
+                font-size: 18px;
+            }
+        
+            button.btn1 {
+                font-size: 18px;
+                padding: 0 20px;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-effect">
     <!-- tap on top start -->
     <div class="tap-top">
         <span class="lnr lnr-chevron-up"></span>
@@ -105,18 +217,18 @@
                     request()->is('admin/orderlist') ||
                     request()->is('admin/review/product') ||
                     request()->is('admin/all/users'))
-                <div class="search-box">
+                <div class="search-box1">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
-                        <div class="input-group" style="display: flex; align-items: center;">
-                            <input type="search" class="form-control" name="mainSearch" placeholder="" style="height: 40px; border-radius: 5px 0 0 5px;">
-                            <button class="btn" type="submit" id="button-addon2" style="background-color: #ffa53b; border-color: #ffa53b; height: 40px; border-radius: 0 5px 5px 0;">
+                        <div class="input-group1">
+                            <input type="search" class="form-control1" name="mainSearch" placeholder="">
+                            <button class="btn1 theme-bg-color" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
                             </button>
                         </div>
                     </form>
                 </div>
                 @endif
-                <div class="nav-right col-6 pull-right right-header p-0">
+                <div class="nav-right col-4 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">
                             <div class="notification-box">
@@ -136,7 +248,6 @@
                                 @if(!empty($notify->time))
                                 <li >
                                     <p>
-
                                         <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
                                             class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
                                     </p>
@@ -163,19 +274,19 @@
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
-                                    <li>
-                                        <a href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
-                                            <i data-feather="user"></i>
-                                                <span>Profile</span>
-                                        </a>
-                                    </li><br>
-                                    <li>
-                                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                            href="javascript:void(0)">
-                                            <i data-feather="log-out"></i>
-                                            <span>Log out</span>
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
+                                        <i data-feather="user"></i>
+                                            <span>Profile</span>
+                                    </a>
+                                </li><br>
+                                <li>
+                                    <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                        href="javascript:void(0)">
+                                        <i data-feather="log-out"></i>
+                                        <span>Log out</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

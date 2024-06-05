@@ -44,8 +44,8 @@
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
                                                     <td style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
-                                                        @if(strlen($list->product_name) > 30)
-                                                            {!! substr($list->product_name, 0, 30) . '<br>' . substr($list->product_name, 30, 30) . '...' !!}
+                                                        @if(mb_strlen($list->product_name) > 30)
+                                                            {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
                                                         @else
                                                             {!! nl2br(e($list->product_name)) !!}
                                                         @endif

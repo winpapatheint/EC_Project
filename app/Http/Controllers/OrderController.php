@@ -9,6 +9,7 @@ use App\Models\Process;
 use Barryvdh\DomPDF\Facade\PDF as PDF;
 use App\Models\OrderDetail;
 use App\Models\Notification;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -115,6 +116,11 @@ class OrderController extends Controller
                 $item->expected_to = now();
                 $item->confirmed_date = now();
                 $item->status = 'Confirmed';
+                UserNotification::create([
+                    'order_detail_id' => $item->id,
+                    'buyer_id' => $item->buyer_id,
+                    'title' => 'Confirmed'
+                ]);
             } else {
                 switch ($status) {
                     case 'Processing':
@@ -124,6 +130,11 @@ class OrderController extends Controller
                     case 'Picked':
                         $item->picked_date = now();
                         $item->status = 'Picked';
+                        UserNotification::create([
+                            'order_detail_id' => $item->id,
+                            'buyer_id' => $item->buyer_id,
+                            'title' => 'Picked'
+                        ]);
                         break;
                     case 'Shipped':
                         $item->shipped_date = now();
@@ -132,10 +143,20 @@ class OrderController extends Controller
                     case 'Delivered':
                         $item->delivered_date = now();
                         $item->status = 'Delivered';
+                        UserNotification::create([
+                            'order_detail_id' => $item->id,
+                            'buyer_id' => $item->buyer_id,
+                            'title' => 'Delivered'
+                        ]);
                         break;
                     default:
                         $item->cancel_date = now();
                         $item->status = 'Cancel';
+                        UserNotification::create([
+                            'order_detail_id' => $item->id,
+                            'buyer_id' => $item->buyer_id,
+                            'title' => 'Cancel'
+                        ]);
                         break;
                 }
             }

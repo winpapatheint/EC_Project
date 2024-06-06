@@ -114,7 +114,7 @@
                                     type="button" role="tab" style="font-size: 14px; text-align: center; display: flex; align-items: center;" href="{{route ('user_message')}}"><i data-feather="mail"></i>
                                     Message
                                     <span id="notification-badge" class="badge rounded-pill badge-theme" style="color: #ff6b6b; font-size: 12px; margin-left: auto;">
-                                        <b>{{ $noti > 0 ? 'new' : '' }}</b>
+                                        <b></b>
                                     </span>
                                 </a>
                             </li>
@@ -280,7 +280,8 @@
                                     @endforeach
                                 </div>      
                             </div>
-                        </div>  
+                        </div>
+                        @include('components.pagination')
                     </div>  
                 </div>
                 <!-- User Profile View End -->

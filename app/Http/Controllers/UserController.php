@@ -1401,11 +1401,17 @@ class UserController extends Controller
 
     public function showMessage()
     {
+        $limit = 5;
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $buyer = Buyer::where('user_id', $user->id)->first();
         $userNotis = UserNotification::with('orderDetail')->with('orderDetail.product')->with('orderDetail.order')
-                    ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->get();
-        return view('front-end.user_message', compact('user', 'userNotis'));
+                    ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->orderBy('id', 'DESC')->paginate($limit);
+                    
+        // to be seen
+        UserNotification::where('buyer_id', $buyer->id)->update(['seen' => 1]);
+        $ttl = $userNotis->total();
+        $ttlpage = ceil($ttl / $limit);
+        return view('front-end.user_message', compact('user', 'userNotis', 'ttl', 'ttlpage'));
     }
 
     public function removeMessage($id)

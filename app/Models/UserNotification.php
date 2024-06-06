@@ -13,6 +13,7 @@ class UserNotification extends Model
         'order_detail_id',
         'buyer_id',
         'title',
+        'seen',
     ];
 
     public function orderDetail()

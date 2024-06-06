@@ -119,7 +119,8 @@ class OrderController extends Controller
                 UserNotification::create([
                     'order_detail_id' => $item->id,
                     'buyer_id' => $item->buyer_id,
-                    'title' => 'Confirmed'
+                    'title' => 'Confirmed',
+                    'seen' => 0,
                 ]);
             } else {
                 switch ($status) {
@@ -141,7 +142,8 @@ class OrderController extends Controller
                         UserNotification::create([
                             'order_detail_id' => $item->id,
                             'buyer_id' => $item->buyer_id,
-                            'title' => 'Delivered'
+                            'title' => 'Delivered',
+                            'seen' => 0,
                         ]);
                         break;
                     default:
@@ -150,7 +152,8 @@ class OrderController extends Controller
                         UserNotification::create([
                             'order_detail_id' => $item->id,
                             'buyer_id' => $item->buyer_id,
-                            'title' => 'Cancel'
+                            'title' => 'Cancel',
+                            'seen' => 0,
                         ]);
                         break;
                 }
@@ -233,7 +236,8 @@ class OrderController extends Controller
         UserNotification::create([
             'order_detail_id' => $order->id,
             'buyer_id' => $order->buyer_id,
-            'title' => 'Cancel'
+            'title' => 'Cancel',
+            'seen' => 0,
         ]);
 
         $msg = ('Order cancelled Successfully');

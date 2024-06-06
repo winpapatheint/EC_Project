@@ -107,7 +107,7 @@
                             </li>
                             @php
                                 $buyer = DB::table('buyers')->where('user_id', $user->id)->first();
-                                $noti = DB::table('user_notifications')->where('buyer_id', $buyer->id)->count();
+                                $noti = DB::table('user_notifications')->where('buyer_id', $buyer->id)->where('seen', 0)->count();
                             @endphp
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="pills-profile-tab"

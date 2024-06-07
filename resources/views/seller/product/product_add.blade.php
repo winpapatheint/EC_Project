@@ -419,8 +419,7 @@
     }
 
     return false;
-});
-
+    });
 </script>
 
 <script>

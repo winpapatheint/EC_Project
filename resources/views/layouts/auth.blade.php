@@ -27,7 +27,7 @@
         rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
-        
+
     <!-- Template css -->
 
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/style.css') }}">
@@ -80,12 +80,12 @@
             font-size: 16px;
             margin: 0 auto;
         }
-        
+
         .input-group1 {
             display: flex;
             align-items: center;
         }
-        
+
         input.form-control1 {
             height: 40px;
             border-radius: 5px 0 0 5px;
@@ -93,7 +93,7 @@
             padding: 0 10px;
             flex: 1;
         }
-        
+
         button.btn1 {
             height: 40px;
             border-radius: 0 5px 5px 0;
@@ -104,81 +104,81 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         /* Extra small devices (phones, less than 576px) */
         @media (max-width: 575.98px) {
             .search-box1 {
                 width: 100%;
             }
-        
+
             input.form-control1 {
                 font-size: 14px;
             }
-        
+
             button.btn1 {
                 font-size: 14px;
                 padding: 0 10px;
             }
         }
-        
+
         /* Small devices (phones, 576px and up) */
         @media (min-width: 576px) and (max-width: 767.98px) {
             .search-box1 {
                 width: 100%;
             }
-        
+
             input.form-control1 {
                 font-size: 14px;
             }
-        
+
             button.btn1 {
                 font-size: 14px;
                 padding: 0 10px;
             }
         }
-        
+
         /* Medium devices (tablets, 768px and up) */
         @media (min-width: 768px) and (max-width: 991.98px) {
             .search-box1 {
                 width: 100%;
             }
-        
+
             input.form-control1 {
                 font-size: 16px;
             }
-        
+
             button.btn1 {
                 font-size: 16px;
                 padding: 0 15px;
             }
         }
-        
+
         /* Large devices (desktops, 992px and up) */
         @media (min-width: 992px) and (max-width: 1199.98px) {
             .search-box1 {
                 width: 400px;
             }
-        
+
             input.form-control1 {
                 font-size: 16px;
             }
-        
+
             button.btn1 {
                 font-size: 16px;
                 padding: 0 15px;
             }
         }
-        
+
         /* Extra large devices (large desktops, 1200px and up) */
         @media (min-width: 1200px) {
             .search-box1 {
                 width: 500px;
             }
-        
+
             input.form-control1 {
                 font-size: 18px;
             }
-        
+
             button.btn1 {
                 font-size: 18px;
                 padding: 0 20px;
@@ -247,7 +247,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd","#a927f9","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd","#a927f9","#6670bd","#6670bd","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)

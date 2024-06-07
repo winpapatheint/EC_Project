@@ -545,7 +545,7 @@ class AdminController extends Controller
             ->orWhereHas('subCategoryTitle', function ($query) use ($mainSearch) {
                 $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
             })
-            ->orWhereHas('subCategory', function ($query) use ($mainSearch) {
+            ->orWhereHas('subCategoryTitle.subCategory', function ($query) use ($mainSearch) {
                 $query->where('sub_category_name', 'like', '%' . $mainSearch . '%');
             });
         }
@@ -756,12 +756,9 @@ class AdminController extends Controller
                             ->whereIn('coupon_id', $expiredCoupons)
                             ->update(['coupon_id' => null]);
 
-        $lists = Seller::with('user')
+        $lists = $query->with('user')
                     ->with('user.products')
                     ->with('user.products.reviews')
-                    ->leftJoin('coupons', 'sellers.coupon_id', '=', 'coupons.id')
-                    ->leftJoin('users', 'sellers.user_id', '=', 'users.id') // Join users table with condition
-                    ->select('sellers.*', 'coupons.*','sellers.status', 'sellers.id', 'sellers.coupon_id', 'sellers.created_at', 'sellers.shop_establish','users.role','sellers.user_id','sellers.commission') // Select all columns from the sellers table
                     ->latest('sellers.created_at') // Specify the table for ordering
                     ->paginate($limit);
 
@@ -965,22 +962,17 @@ class AdminController extends Controller
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
+        
         $mainSearch = $validated['mainSearch'] ?? null;
-        $query = SubCategoryTitle::query();
-            if ($mainSearch != null) {
-                $query->where(function ($query) use ($mainSearch) {
-                    $query->where('sub_category_titlename', 'like', '%' . $mainSearch . '%');
-                });
-                // ->orWhereHas('user', function ($query) use ($mainSearch) {
-                //     $query->where('name', 'like', '%' . $mainSearch . '%');
-                // })
-                // ->orWhereHas('product', function ($query) use ($mainSearch) {
-                //     $query->where('product_name', 'like', '%' . $mainSearch . '%');
-                // });
-            }
-
-        $lists = DB::table('categories')
-                    ->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
+        $query = Category::query();
+        if ($mainSearch != null) {
+            $query->where(function ($query) use ($mainSearch) {
+                $query->where('category_name', 'like', '%' . $mainSearch . '%')
+                ->orWhere('sub_category_titlename', 'like', '%' . $mainSearch . '%')
+                ->orWhere('sub_category_name', 'like', '%' . $mainSearch . '%');
+            });
+        }
+        $lists = $query->select('categories.id as categoryId', 'categories.category_name as category', 'Sb.id as subCatId', 'Sb.sub_category_name','S.id as subCatTitleId','S.sub_category_titlename')
                     ->leftJoin('sub_category_titles as S', function ($join) {
                         $join->on('categories.id', '=', 'S.category_id');
                     })
@@ -3427,10 +3419,10 @@ class AdminController extends Controller
     public function indexorderlist()
     {
         $validated = request()->validate([
-            'search' => 'string|nullable',
+            'mainSearch' => 'string|nullable',
         ]);
 
-        $search = $validated['search'] ?? null;
+        $mainSearch = $validated['mainSearch'] ?? null;
         $limit = 10;
 
         $orderQuery = OrderDetail::with('order')
@@ -3439,11 +3431,13 @@ class AdminController extends Controller
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc');
 
-        if ($search) {
-            $orderQuery->where(function($query) use ($search) {
-                $query->where('order_id', 'LIKE', "%{$search}%")
-                    ->orWhereHas('order', function($q) use ($search) {
-                        $q->where('order_code', 'LIKE', "%{$search}%");
+        if ($mainSearch) {
+            $orderQuery->where(function($orderQuery) use ($mainSearch) {
+                $orderQuery->where('order_id', 'LIKE', "%{$mainSearch}%")
+                    ->orWhere('status', 'LIKE', "%{$mainSearch}%")
+                    ->orWhereHas('order', function($orderQuery) use ($mainSearch) {
+                        $orderQuery->where('order_code', 'LIKE', "%{$mainSearch}%")
+                                ->orWhere('payment_type', 'LIKE', "%{$mainSearch}%");
                     });
             });
         }
@@ -3455,13 +3449,13 @@ class AdminController extends Controller
             ->where('order_details.status', 'Cancel')
             ->orderBy('order_details.created_at', 'desc');
 
-        if ($search) {
-            $cancelledOrderQuery->where(function($query) use ($search) {
-                $query->where('order_id', 'LIKE', "%{$search}%")
-                    ->orWhereHas('order', function($q) use ($search) {
-                        $q->where('order_code', 'LIKE', "%{$search}%");
+        if ($mainSearch) {
+            $cancelledOrderQuery->where(function($cancelledOrderQuery) use ($mainSearch) {
+                $cancelledOrderQuery->where('order_id', 'LIKE', "%{$mainSearch}%")
+                    ->orWhereHas('order', function($cancelledOrderQuery) use ($mainSearch) {
+                        $cancelledOrderQuery->where('order_code', 'LIKE', "%{$mainSearch}%");
                     })
-                    ->orWhere('products.product_name', 'LIKE', "%{$search}%");
+                    ->orWhere('products.product_name', 'LIKE', "%{$mainSearch}%");
             });
         }
 
@@ -3472,41 +3466,7 @@ class AdminController extends Controller
         $cancelttlPage = ceil($cancelttl / $limit);
 
         return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
-
-            if ($search) {
-                $orderQuery->where(function($query) use ($search) {
-                    $query->where('order_id', 'LIKE', "%{$search}%")
-                        ->orWhereHas('order', function($q) use ($search) {
-                            $q->where('order_code', 'LIKE', "%{$search}%");
-                        });
-                });
-            }
-
-            $order = $orderQuery->paginate($limit);
-            $cancelledOrderQuery = OrderDetail::with('order')
-                ->join('products', 'order_details.product_id', '=', 'products.id')
-                ->select('order_details.*', 'products.*')
-                ->where('order_details.status', 'Cancel')
-                ->orderBy('order_details.created_at', 'desc');
-
-            if ($search) {
-                $cancelledOrderQuery->where(function($query) use ($search) {
-                    $query->where('order_id', 'LIKE', "%{$search}%")
-                        ->orWhereHas('order', function($q) use ($search) {
-                            $q->where('order_code', 'LIKE', "%{$search}%");
-                        })
-                        ->orWhere('products.product_name', 'LIKE', "%{$search}%");
-                });
-            }
-
-            $cancelledOrder = $cancelledOrderQuery->paginate($limit);
-            $ttl = $order->total();
-            $ttlpage = ceil($ttl / $limit);
-            $cancelttl = $cancelledOrder->total();
-            $cancelttlPage = ceil($cancelttl / $limit);
-
-            return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
-        }
+    }
 
 
 

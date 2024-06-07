@@ -161,9 +161,12 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')
             ->where('products.status', 1)
             ->pluck('products.id')->toArray();
+        
+        $tops = Top::all();
 
-        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 'topSaveTodayProducts', 'reviews',
-         'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable', 'meatHalfDiscount', 'vegetableHalfDiscount','customers'));
+        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 
+        'topSaveTodayProducts', 'reviews', 'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable',
+        'meatHalfDiscount', 'vegetableHalfDiscount','customers', 'tops'));
     }
 
     public function news()

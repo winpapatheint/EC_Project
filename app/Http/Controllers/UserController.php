@@ -20,6 +20,7 @@ use App\Models\BuyerPayment;
 use App\Models\CashBankAccount;
 use App\Models\Coupon;
 use App\Models\CouponDetail;
+use App\Models\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -897,8 +898,9 @@ class UserController extends Controller
             return redirect()->back()->with(compact('refreshCart'));
         }
 
-        // for the instock check
+        // for the instock and status check
         $instockCheck = [];
+        $statusCheck = [];
         foreach ($request->product as $key => $prod)
         {
             $checkInstockProduct = Product::where('id', $prod)->first();
@@ -906,11 +908,23 @@ class UserController extends Controller
             {
                 $instockCheck[] = $checkInstockProduct->id;
             }
+            if($checkInstockProduct->status == 0)
+            {
+                $statusCheck[] = $checkInstockProduct->id;
+            }
         }
         if ($instockCheck)
         {
             $refreshCart = 'Please adjust your order quantity!';
             return redirect()->back()->with(compact('refreshCart', 'instockCheck'));
+        }
+        if ($statusCheck)
+        {
+            if(count($statusCheck) > 1)
+            $refreshCart = count($statusCheck) . ' products are not available now!';
+            else
+            $refreshCart = count($statusCheck) . ' product is not available now!';
+            return redirect()->back()->with(compact('refreshCart', 'statusCheck'));
         }
 
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
@@ -1383,5 +1397,37 @@ class UserController extends Controller
 
         // return response()->json(['success' => 'Successfully set default address']);
         return response()->json(['success' => 'Successfully set default address']);
+    }
+
+    public function showMessage()
+    {
+        $limit = 5;
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $buyer = Buyer::where('user_id', $user->id)->first();
+        $userNotis = UserNotification::with('orderDetail')->with('orderDetail.product')->with('orderDetail.order')
+                    ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->orderBy('id', 'DESC')->paginate($limit);
+                    
+        // to be seen
+        UserNotification::where('buyer_id', $buyer->id)->update(['seen' => 1]);
+        $ttl = $userNotis->total();
+        $ttlpage = ceil($ttl / $limit);
+        return view('front-end.user_message', compact('user', 'userNotis', 'ttl', 'ttlpage'));
+    }
+
+    public function removeMessage($id)
+    {
+        $message = UserNotification::find($id);
+        if ($message)
+        {
+            $message->delete();
+        }
+        return redirect()->back()->with('success', 'Message is deleted successfully!');
+    }
+
+    public function removeMessageAll($id)
+    {
+        $messages = UserNotification::where('buyer_id', $id);
+        $messages->delete();
+        return redirect()->back()->with('success', 'Messages are deleted successfully!');
     }
 }

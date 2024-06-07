@@ -9,6 +9,7 @@ use App\Models\Process;
 use Barryvdh\DomPDF\Facade\PDF as PDF;
 use App\Models\OrderDetail;
 use App\Models\Notification;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -115,6 +116,12 @@ class OrderController extends Controller
                 $item->expected_to = now();
                 $item->confirmed_date = now();
                 $item->status = 'Confirmed';
+                UserNotification::create([
+                    'order_detail_id' => $item->id,
+                    'buyer_id' => $item->buyer_id,
+                    'title' => 'Confirmed',
+                    'seen' => 0,
+                ]);
             } else {
                 switch ($status) {
                     case 'Processing':
@@ -132,10 +139,22 @@ class OrderController extends Controller
                     case 'Delivered':
                         $item->delivered_date = now();
                         $item->status = 'Delivered';
+                        UserNotification::create([
+                            'order_detail_id' => $item->id,
+                            'buyer_id' => $item->buyer_id,
+                            'title' => 'Delivered',
+                            'seen' => 0,
+                        ]);
                         break;
                     default:
                         $item->cancel_date = now();
                         $item->status = 'Cancel';
+                        UserNotification::create([
+                            'order_detail_id' => $item->id,
+                            'buyer_id' => $item->buyer_id,
+                            'title' => 'Cancel',
+                            'seen' => 0,
+                        ]);
                         break;
                 }
             }
@@ -214,6 +233,12 @@ class OrderController extends Controller
         $order->cancelled_reason = $validatedData['cancelled_reason'];
         $order->cancel_date = now();
         $order->save();
+        UserNotification::create([
+            'order_detail_id' => $order->id,
+            'buyer_id' => $order->buyer_id,
+            'title' => 'Cancel',
+            'seen' => 0,
+        ]);
 
         $msg = ('Order cancelled Successfully');
         return redirect('/orderlist')->with('success', $msg);

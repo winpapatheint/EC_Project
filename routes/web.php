@@ -60,6 +60,10 @@ Route::get('/user/profile', [UserController::class, 'showProfile'])->name('user_
 Route::post('/user/profile/edit-profile', [UserController::class, 'editProfile'])->name('edit_profile');
 Route::post('user/profile/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 
+Route::get('/user/message', [UserController::class, 'showMessage'])->name('user_message');
+Route::post('/user/message/{id}', [UserController::class, 'removeMessage'])->name('remove_message');
+Route::post('/user/message-all/{id}', [UserController::class, 'removeMessageAll'])->name('remove_message_all');
+
 Route::get('search', [ShowProductController::class, 'footerSearch'])->name('footer_search');
 Route::get('ordertracking', [UserController::class, 'footertracking'])->name('footer_tracking');
 
@@ -116,7 +120,7 @@ Route::get('/admin', [AdminController::class, 'admindashboard'])->middleware(['a
 Route::get('/admin/transferdetail', function () {return view('admin.transferdetail');})->middleware(['auth','role:admin'])->name('admin.transferdetail');
 Route::get('admin/transfer-order-details/{transferId}', [AdminController::class, 'indextransferorderdetail'])->name('transfer_order_detail');
 Route::get('/trans_orderdetail/{id}/{startdate}/{enddate}', [AdminController::class, 'trans_orderdetail'])->middleware(['auth','role:admin'])->name('trans_orderdetail');
-Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
+// Route::get('/admin/category', [AdminController::class, 'indexcategory'])->middleware(['auth', 'verified','role:admin']);
 Route::get('/admin/addcategory', function () {return view('back-end.addcategory');});
 
 Route::post('admin/registercategory', [AdminController::class, 'storecategory'])->middleware(['auth','role:admin'])->name('registercategory');

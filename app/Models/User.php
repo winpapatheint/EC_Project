@@ -125,5 +125,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
+    public function subSeller()
+    {
+        return $this->hasOne(Seller::class, 'user_id', 'created_by');
+    }
 
 }

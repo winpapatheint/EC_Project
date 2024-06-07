@@ -672,7 +672,7 @@
                                     <a href="{{route ('user_profile')}}" class="text-content">Your Account</a>
                                 </li>
                                 <li>
-                                    <a href="{{route ('footer_tracking') }}" class="text-content">Track Order</a>
+                                    <a href="{{route ('user_order')}}" class="text-content">Track Order</a>
                                 </li>
                                 @endif
                                 <li>

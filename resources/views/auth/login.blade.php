@@ -24,8 +24,6 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-
-
     @php $subtitle=__('auth.userlogin'); @endphp
 
     <section class="log-in-section background-image-2 section-b-space">
@@ -33,6 +31,7 @@
             <div class="row">
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div class="log-in-box">
+                        @include('components.messagebox')
                         <div class="log-in-title">
                             <h3 style="text-wrap">Welcome to Asian Food Museum </h3>
                             <h5>Log In Your Account</h5>
@@ -55,6 +54,9 @@
                                                 @foreach ($error['email'] as  $key => $value)
                                                     <p class="email error text-danger">{{ $value }}</p>
                                                 @endforeach
+                                            @endif
+                                            @if(session('incorrect'))
+                                                <span class="error" style="color:red">{{ session('incorrect') }}</span>
                                             @endif
                                         </div>
                                     </div>

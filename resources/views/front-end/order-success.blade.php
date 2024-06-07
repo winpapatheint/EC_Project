@@ -161,13 +161,6 @@
                             <tr>
                                 <td>
                                     <div class="title title-2 text-center">
-                                        {{-- <h2 style="font-size: 20px;font-weight: 700;margin: 24px 0 0;">Thanks For your
-                                            Order
-                                        </h2> --}}
-                                        {{-- <p
-                                            style="font-size: 14px;margin: 5px auto 0;line-height: 1.5;color: #939393;font-weight: 500;width: 70%;">
-                                            You'll receive an email when your items are shipped. if you have any
-                                            questions, Call Us (+81) 03-3981-5090.</p> --}}
                                             <div class="container-fluid-lg">
                                                 <ul class="navbar-nav">
                                                     <li class="nav-item dropdown">
@@ -294,7 +287,13 @@
                                                 <td
                                                     style="padding: 28px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
                                                     <ul class="product-detail">
-                                                        <li>{{ $orderDetail->product->product_name }}</li>
+                                                        <li>
+                                                        @if(mb_strlen($orderDetail->product->product_name) > 30)
+                                                            {!! mb_substr($orderDetail->product->product_name, 0, 30) . '<br>' . mb_substr($orderDetail->product->product_name, 30, 30) . '...' !!}
+                                                        @else
+                                                            {!! nl2br(e($orderDetail->product->product_name)) !!}
+                                                        @endif
+                                                        </li>
                                                         <li>Quantity: <span>{{ $orderDetail->qty }}</span></li>
                                                         <li>Price: <span>¥{{ number_format($orderDetail->price, 0, '', ',') }}</span></li>
                                                     </ul>

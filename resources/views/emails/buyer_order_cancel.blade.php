@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order {{ $orderItems->first()->status }}</title>
+    <title>Order Cancelled</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,10 +61,11 @@
 </head>
 <body>
     <div class="container">
-        <h2>Order {{ $orderItems->first()->status }}</h2>
-        <p>Dear {{ $orderItems->first()->buyer->name }},</p>
-        <p>Your order has been {{ $orderItems->first()->status }} by {{ $orderItems->first()->seller->shop_name }}. 
-            Here are the details:</p>
+        <h2>Order Cancelled</h2>
+        <p>Dear {{ $order->buyer->name }},</p>
+        <p>Your order has been cancelled by {{ $order->seller->shop_name }}. </p>
+        <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
+        <p>Here are the details:</p>
         <table>
             <thead>
                 <tr>
@@ -74,49 +75,22 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $amount = 0;
-                    $delivery_price = 0;
-                    $coupon_discount = 0;
-                @endphp
-                @foreach($orderItems as $detail)
                 <tr>
-                    <td>{{ $detail->product->product_name }}</td>
-                    <td>{{ $detail->qty }}</td>
-                    <td>{{ $detail->price }}</td>
+                    <td>{{ $order->product->product_name }}</td>
+                    <td>{{ $order->qty }}</td>
+                    <td>{{ $order->price }}</td>
                 </tr>
-                @php
-                    $amount += $detail->amount;
-                    if ($detail->used_delivery_price == 1) {
-                        $delivery_price = $detail->delivery_price;
-                    }
-                    if ($detail->used_shop_coupon_status == 1 || $detail->used_product_coupon_status == 1 ) {
-                        $coupon_discount = $detail->order->coupon_discount_amount;
-                    }
-                @endphp
-                @endforeach
             </tbody>
         </table>
         <table>
             <tbody>
                 <tr>
                     <td class="subtotal">Amount :</td>
-                    <td>¥{{ number_format($amount , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Shipping Fee :</td>
-                    <td>¥{{ number_format($delivery_price , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Coupon Discounted :</td>
-                    <td>¥{{ number_format($coupon_discount , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Total Price :</td>
-                    <td>¥{{ number_format((($amount + $delivery_price) - $coupon_discount) , 0, '.', ',') }}</td>
+                    <td>¥{{ number_format($order->amount , 0, '.', ',') }}</td>
                 </tr>
             </tbody>
         </table>
+        <p>We will notify the refund process soon.</p>
         
         <p>Thank you for shopping with us.</p>
         <div class="footer">

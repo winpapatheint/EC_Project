@@ -251,6 +251,12 @@ class OrderController extends Controller
             'title' => 'Cancel',
             'seen' => 0,
         ]);
+        
+        \Mail::to($order->buyer->email)->send(new \App\Mail\BuyerOrderCancel($order));
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            \Mail::to($admin->email)->send(new \App\Mail\AdminOrderCancel($order));
+        }
 
         $msg = ('Order cancelled Successfully');
         return redirect('/orderlist')->with('success', $msg);

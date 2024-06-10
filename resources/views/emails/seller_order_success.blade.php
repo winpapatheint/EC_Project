@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order {{ $orderItems->first()->status }}</title>
+    <title>Order Success</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,10 +61,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>Order {{ $orderItems->first()->status }}</h2>
-        <p>Dear Admin,</p>
-        <p>Order code {{ $orderItems->first()->order->order_code }} has been {{ $orderItems->first()->status }} by {{ $orderItems->first()->seller->shop_name }}. 
-            Here are the details:</p>
+        <h2>Order Success</h2>
+        <p>Dear {{ $seller->name }},</p>
+        <p>Order code {{ $orderDetails->first()->order->order_code }} has been successfully ordered. Here are the details:</p>
         <table>
             <thead>
                 <tr>
@@ -79,7 +78,7 @@
                     $delivery_price = 0;
                     $coupon_discount = 0;
                 @endphp
-                @foreach($orderItems as $detail)
+                @foreach($orderDetails as $detail)
                 <tr>
                     <td>{{ $detail->product->product_name }}</td>
                     <td>{{ $detail->qty }}</td>
@@ -117,10 +116,10 @@
                 </tr>
             </tbody>
         </table>
-        
-        <p>Asian Food Museum</p>
+
+        <p>Check and prepare to confirm the order.</p>
         <div class="footer">
-            <p>This mail was sent to all admins - Admin Team</p>
+            <p>If you have any questions, please contact us at info@asian-food.site.</p>
         </div>
     </div>
 </body>

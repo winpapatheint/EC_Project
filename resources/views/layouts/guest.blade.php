@@ -1008,18 +1008,36 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('.onhover-category-list').hover(function() {
-                var $hoverBox = $(this).find('.onhover-category-box');
-                var listItemHeight = $(this).outerHeight();
-                var offset = $(this).position();
-                
-                var topPosition = offset.top;
+            function isDesktopView() {
+                return window.matchMedia("(min-width: 769px)").matches;
+            }
     
-                $hoverBox.css({
-                    'top': topPosition,
-                    'left': '100%',
-                    'display': '-ms-flexbox'
-                });
+            function handleHover() {
+                if (isDesktopView()) {
+                    $('.onhover-category-list').hover(function() {
+                        var $hoverBox = $(this).find('.onhover-category-box');
+                        var offset = $(this).position(); // Get the position relative to the parent
+    
+                        // Calculate the top position of the hover box to match the list item
+                        var topPosition = offset.top;
+    
+                        $hoverBox.css({
+                            'top': topPosition,
+                            'left': '100%',
+                            'display': '-ms-flexbox'
+                        });
+                    });
+                } else {
+                    $('.onhover-category-list').off('mouseenter mouseleave');
+                }
+            }
+    
+            // Initial check
+            handleHover();
+    
+            // Re-check on window resize
+            $(window).resize(function() {
+                handleHover();
             });
         });
     </script>

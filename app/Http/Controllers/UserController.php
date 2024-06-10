@@ -584,6 +584,7 @@ class UserController extends Controller
         // Update the new password
         $user->password = Hash::make($request->newpassword);
         $user->save();
+        \Mail::to($user->email)->send(new \App\Mail\PasswordChanged($user));
 
         session()->flash('success', 'Password changed successfully.');
 

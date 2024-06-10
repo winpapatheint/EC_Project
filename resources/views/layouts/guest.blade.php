@@ -56,7 +56,6 @@
     }
 
     </style>
-
 </head>
 
 <body class="bg-effect">
@@ -348,8 +347,8 @@
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
-                            @foreach ($categories as $category)
                                 <ul class="category-list">
+                                @foreach ($categories as $category)
                                     <li class="onhover-category-list">
                                         <a href="javascript:void(0)" class="category-name">
                                             <img src="{{ asset('images/'.$category->category_icon) }}" alt="">
@@ -359,7 +358,7 @@
 
                                         <div class="onhover-category-box" style="height: fit-content;">
                                         @foreach ($category->subCategoryTitle as $subCategoryTitle)
-                                            <div class="list-1">
+                                            <div class="list-1" style="margin-left: 10px;margin-top: 10px;">
                                                 <div class="category-title-box">
                                                     <h5>{{ $subCategoryTitle->sub_category_titlename }}</h5>
                                                 </div>
@@ -374,8 +373,8 @@
                                         @endforeach
                                         </div>
                                     </li>
+                                @endforeach
                                 </ul>
-                            @endforeach
                             </div>
                         </div>
 
@@ -1003,6 +1002,23 @@
                     error: function(xhr, status, error) {
                         console.error('Error deleting cart item:', error);
                     }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.onhover-category-list').hover(function() {
+                var $hoverBox = $(this).find('.onhover-category-box');
+                var listItemHeight = $(this).outerHeight();
+                var offset = $(this).position();
+                
+                var topPosition = offset.top;
+    
+                $hoverBox.css({
+                    'top': topPosition,
+                    'left': '100%',
+                    'display': '-ms-flexbox'
                 });
             });
         });

@@ -20,17 +20,22 @@
                     <div class="col-xl-8 ratio_65">
                         <div class="home-contain h-100">
                             <div class="h-100">
-                                <img src="{{ asset('frontend/assets/images/homepage/11.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                                <img src="{{ asset('frontend/assets/images/homepage/' . $tops[0]->image) }}" class="bg-img blur-up lazyload" alt="">
                             </div>
                                 <div class="home-detail p-center-left w-75">
                                     <div>
 
-                                        <h6>Exclusive offer <span>30% OFF</span></h6>
+                                        <h6>Exclusive offer <span>{{ $tops[0]->discount }} OFF</span></h6>
 
-                                        <h1 class="text-uppercase">Stay home & delivered your <span class="daily">Daily
-                                            Needs</span></h1>
-                                        <p class="w-75 d-none d-sm-block">Vegetables contain many vitamins and minerals that are
-                                            good for your health.</p>
+                                        <h1 class="text-uppercase">
+                                            {{ $tops[0]->phaseone }}
+                                            <span class="daily">
+                                            {{ $tops[0]->phasetwo}}
+                                            </span>
+                                        </h1>
+                                        <p class="w-75 d-none d-sm-block">
+                                            {{ $tops[0]->phasethree }}
+                                        </p>
                                     @if ($productsGroupedByDiscount[30] != null)
                                         <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[30]]) }}';"
                                             class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now
@@ -45,16 +50,16 @@
                         <div class="row g-4">
                                 <div class="col-xl-12 col-md-6">
                                     <div class="home-contain">
-                                        <img src="{{ asset('frontend/assets/images/homepage/12.jpg') }}"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[1]->image) }}"
                                             class="bg-img blur-up lazyload" alt="">
                                         <div class="home-detail p-center-left home-p-sm w-75">
                                             <div>
 
-                                                <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
+                                                <h2 class="mt-0 text-danger">{{ $tops[1]->discount }} <span class="discount text-title">OFF</span>
                                                 </h2>
 
-                                                <h3 class="theme-color">Nut Collection</h3>
-                                                <p class="w-75">We deliver organic vegetables & fruits</p>
+                                                <h3 class="theme-color">{{ $tops[1]->phaseone }}</h3>
+                                                <p class="w-75">{{ $tops[1]->phasetwo }}</p>
                                             @if ($productsGroupedByDiscount[45] != null)
                                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[45]]) }}"
                                                     class="shop-button">Shop Now
@@ -67,14 +72,14 @@
 
                                 <div class="col-xl-12 col-md-6">
                                     <div class="home-contain">
-                                        <img src="{{ asset('frontend/assets/images/homepage/13.jpg') }}" class="bg-img blur-up lazyload"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[2]->image) }}" class="bg-img blur-up lazyload"
                                             alt="">
                                         <div class="home-detail p-center-left home-p-sm w-75">
                                             <div>
-                                                <h2 class="mt-0 text-danger">50% <span class="discount text-title">OFF</span>
+                                                <h2 class="mt-0 text-danger">{{ $tops[2]->discount }} <span class="discount text-title">OFF</span>
                                                 </h2>
-                                                <h3 class="theme-color">Nut Collection</h3>
-                                                <p class="w-75">We deliver organic vegetables & fruits</p>
+                                                <h3 class="theme-color">{{ $tops[2]->phaseone }}</h3>
+                                                <p class="w-75">{{ $tops[2]->phasetwo }}</p>
                                             @if ($productsGroupedByDiscount[50] != null)
                                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[50]]) }}" class="shop-button">Shop Now <i
                                                         class="fa-solid fa-right-long"></i></a>
@@ -96,14 +101,14 @@
                 <div class="banner-slider">
                     <div>
                         <div class="banner-contain hover-effect">
-                            <img src={{ asset('frontend/assets/images/homepage/egg.jpg') }} class="bg-img blur-up lazyload" alt="">
+                            <img src={{ asset('frontend/assets/images/homepage/' . $tops[3]->image ) }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
 
-                                    <h6 class="text-danger">5% OFF</h6>
+                                    <h6 class="text-danger">{{ $tops[3]->discount }} OFF</h6>
 
-                                    <h5>Hot Deals on New Items</h5>
-                                    <h6 class="text-content">Daily Essentials Eggs & Dairy</h6>
+                                    <h5>{{ $tops[3]->phaseone }}</h5>
+                                    <h6 class="text-content">{{ $tops[4]->phasetwo }}</h6>
                                 </div>
                                 @if ($productsGroupedByDiscount[5] != null)
                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[5]]) }}" class="banner-button text-white">Shop Now <i
@@ -115,14 +120,14 @@
 
                     <div>
                         <div class="banner-contain hover-effect">
-                            <img src={{ asset('frontend/assets/images/homepage/vegetable.jpg') }} class="bg-img blur-up lazyload" alt="">
+                            <img src={{ asset('frontend/assets/images/homepage/' . $tops[4]->image) }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
 
-                                    <h6 class="text-danger">10% OFF</h6>
+                                    <h6 class="text-danger">{{ $tops[4]->discount }} OFF</h6>
 
-                                    <h5>Buy More & Save More</h5>
-                                    <h6 class="text-content">Fresh Vegetables</h6>
+                                    <h5>{{ $tops[4]->phaseone }}</h5>
+                                    <h6 class="text-content">{{ $tops[4]->phasetwo }}</h6>
                                 </div>
                                 @if ($productsGroupedByDiscount[10] != null)
                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[10]]) }}" class="banner-button text-white">Shop Now
@@ -134,14 +139,14 @@
 
                     <div>
                         <div class="banner-contain hover-effect">
-                            <img src={{ asset('frontend/assets/images/homepage/meat.jpg') }} class="bg-img blur-up lazyload" alt="">
+                            <img src={{ asset('frontend/assets/images/homepage/' . $tops[5]->image ) }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
 
-                                    <h6 class="text-danger">15% OFF</h6>
+                                    <h6 class="text-danger">{{ $tops[5]->discount }} OFF</h6>
 
-                                    <h5>Organic Meat Prepared</h5>
-                                    <h6 class="text-content">Delivered to Your Home</h6>
+                                    <h5>{{ $tops[5]->phaseone }}</h5>
+                                    <h6 class="text-content">{{ $tops[5]->phasetwo }}</h6>
                                 </div>
                                 @if ($productsGroupedByDiscount[15] != null)
                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[15]]) }}" class="banner-button text-white">Shop Now <i
@@ -153,14 +158,13 @@
 
                     <div>
                         <div class="banner-contain hover-effect">
-                            <img src={{ asset('frontend/assets/images/homepage/snack.jpg')  }} class="bg-img blur-up lazyload" alt="">
+                            <img src={{ asset('frontend/assets/images/homepage/' . $tops[6]->image )  }} class="bg-img blur-up lazyload" alt="">
                             <div class="banner-details">
                                 <div class="banner-box">
+                                    <h6 class="text-danger">{{ $tops[6]->discount }} OFF</h6>
 
-                                    <h6 class="text-danger">20% OFF</h6>
-
-                                    <h5>Buy More & Save More</h5>
-                                    <h6 class="text-content">Nuts & Snacks</h6>
+                                    <h5>{{ $tops[6]->phaseone }}</h5>
+                                    <h6 class="text-content">{{ $tops[6]->phasetwo }}</h6>
                                 </div>
                                 @if ($productsGroupedByDiscount[20] != null)
                                 <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-button text-white">Shop Now <i
@@ -224,16 +228,17 @@
 
                             <div class="ratio_156 section-t-space">
                                 <div class="home-contain hover-effect">
-                                    <img src="{{ asset('frontend/assets/images/homepage/freshproduct.jpg')}}" class="bg-img blur-up lazyload"
+                                    <img src="{{ asset('frontend/assets/images/homepage/' . $tops[7]->image )}}" class="bg-img blur-up lazyload"
                                         alt="">
                                     <div class="home-detail p-top-left home-p-medium">
                                         <div>
 
-                                            <h6 class="text-yellow home-banner">Seafood</h6>
+                                            <h6 class="text-yellow home-banner">{{ $tops[7]->discount }}</h6>
 
                                             <h3 class="text-uppercase fw-normal"><span
-                                                    class="theme-color fw-bold">Freshes</span> Products</h3>
-                                            <h3 class="fw-light">every hour</h3>
+                                                    class="theme-color fw-bold">{{ $tops[7]->phaseone }}</span> 
+                                                    {{ $tops[7]->phasetwo }}</h3>
+                                            <h3 class="fw-light">{{ $tops[7]->phasethree }}</h3>
                                         @if($seafood != null)
                                             <button onclick="window.open('{{ route('show-discount-product', ['ids' => $seafood]) }}', '_blank');"
                                                     class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
@@ -246,15 +251,15 @@
 
                             <div class="ratio_medium section-t-space">
                                 <div class="home-contain hover-effect">
-                                    <img src="{{ asset('frontend/assets/images/homepage/organic.jpg')}}" class="img-fluid blur-up lazyload"
+                                    <img src="{{ asset('frontend/assets/images/homepage/' . $tops[8]->image)}}" class="img-fluid blur-up lazyload"
                                         alt="">
                                     <div class="home-detail p-top-left home-p-medium">
                                         <div>
-                                            <h4 class="text-yellow text-exo home-banner">Organic</h4>
-                                            <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">fresh</h2>
-                                            <h2 class="text-uppercase fw-normal text-title">Vegetables</h2>
+                                            <h4 class="text-yellow text-exo home-banner">{{ $tops[8]->discount }}</h4>
+                                            <h2 class="text-uppercase fw-normal mb-0 text-russo theme-color">{{ $tops[8]->discount }}</h2>
+                                            <h2 class="text-uppercase fw-normal text-title">{{ $tops[8]->discount }}</h2>
                                         @if($vegetableHalfDiscount != null)
-                                            <p class="mb-3">Super Offer to 50% Off</p>
+                                            <p class="mb-3">Super Offer to {{ $tops[8]->discount }} Off</p>
                                             <button onclick="window.open('{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}', '_blank');"
                                                     class="btn btn-animation btn-md mend-auto">Shop Now <i class="fa-solid fa-arrow-right icon"></i>
                                             </button>
@@ -337,44 +342,6 @@
                                 </span>
                                 <p>Don't miss this opportunity at a special discount just for this week.</p>
                             </div>
-                            {{-- <div class="timing-box">
-                                <div class="timing">
-                                    <i data-feather="clock"></i>
-                                    <h6 class="name">Expires in :</h6>
-                                    <div class="time" id="clockdiv-1">
-                                        <ul>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="days">
-                                                        <h6></h6>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="hours">
-                                                        <h6></h6>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="minutes">
-                                                        <h6></h6>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="counter">
-                                                    <div class="seconds">
-                                                        <h6></h6>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="timing-box">
                                 <div class="timing">
                                     <i data-feather="clock"></i>
@@ -523,14 +490,14 @@
                             <div class="row g-md-4 g-3">
                                 <div class="col-md-6">
                                     <div class="banner-contain hover-effect">
-                                        <img src="{{ asset('frontend/assets/images/homepage/freshmeat.jpg') }}" class="bg-img blur-up lazyload"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[9]->image) }}" class="bg-img blur-up lazyload"
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
 
                                                 <h3 class="text-exo">50% offer</h3>
 
-                                                <h4 class="text-russo fw-normal theme-color mb-2">Fresh MEAT</h4>
+                                                <h4 class="text-russo fw-normal theme-color mb-2">{{ $tops[9]->phaseone }}</h4>
                                             @if($meatHalfDiscount != null)
                                                 <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $meatHalfDiscount]) }}';"
                                                     class="btn btn-animation btn-sm mend-auto">Shop Now <i
@@ -543,14 +510,14 @@
 
                                 <div class="col-md-6">
                                     <div class="banner-contain hover-effect">
-                                        <img src="{{ asset('frontend/assets/images/homepage/freshvegetable.jpg') }}" class="bg-img blur-up lazyload"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[10]->image ) }}" class="bg-img blur-up lazyload"
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
 
                                                 <h3 class="text-exo">50% offer</h3>
 
-                                                <h4 class="text-russo fw-normal theme-color mb-2">Fresh Vegetable</h4>
+                                                <h4 class="text-russo fw-normal theme-color mb-2">{{ $tops[10]->phaseone }}</h4>
                                             @if($vegetableHalfDiscount != null)
                                                 <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetableHalfDiscount]) }}';"
                                                     class="btn btn-animation btn-sm mend-auto">Shop Now <i
@@ -567,17 +534,18 @@
                             <div class="row g-md-4 g-3">
                                 <div class="col-xxl-8 col-xl-12 col-md-7">
                                     <div class="banner-contain hover-effect">
-                                        <img src="{{ asset('frontend/assets/images/homepage/juice.jpg')}}" class="bg-img blur-up lazyload"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[11]->image )}}" class="bg-img blur-up lazyload"
                                             alt="">
                                         <div class="banner-details p-center-left p-4">
                                             <div>
 
-                                                <h2 class="text-kaushan fw-normal text-danger">25% Off</h2>
+                                                <h2 class="text-kaushan fw-normal text-danger">{{ $tops[11]->discount }} Off</h2>
 
-                                                <h2 class="text-kaushan fw-normal theme-color">Get Ready To</h2>
-                                                <h3 class="mt-2 mb-3">TAKE ON THE DAY!</h3>
-                                                <p class="text-content banner-text">In publishing and graphic design, Lorem
-                                                    ipsum is a placeholder text commonly used to demonstrate.</p>
+                                                <h2 class="text-kaushan fw-normal theme-color">{{ $tops[11]->phaseone }}</h2>
+                                                <h3 class="mt-2 mb-3">{{ $tops[11]->phasetwo }}</h3>
+                                                <p class="text-content banner-text">
+                                                    {{ $tops[11]->phasethree }}
+                                                </p>
                                             @if ($productsGroupedByDiscount[25] != null)
                                                 <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[25]]) }}';"
                                                     class="btn btn-animation btn-sm mend-auto">Shop Now <i
@@ -589,15 +557,15 @@
                                 </div>
 
                                 <div class="col-xxl-4 col-xl-12 col-md-5">
-                                        <img src="{{ asset('frontend/assets/images/homepage/summerproduct.jpg')}}" class="bg-img blur-up lazyload"
+                                        <img src="{{ asset('frontend/assets/images/homepage/' . $tops[12]->image )}}" class="bg-img blur-up lazyload"
                                             alt="">
                                 @if ($productsGroupedByDiscount[20] != null)
                                     <a href="{{ route('show-discount-product', ['ids' => $productsGroupedByDiscount[20]]) }}" class="banner-contain hover-effect h-100">
                                         <div class="banner-details p-center-left p-4 h-100">
                                             <div>
                                                 <h2 class="text-kaushan fw-normal text-danger">20% Off</h2>
-                                                <h3 class="mt-2 mb-2 theme-color">SUMMRY</h3>
-                                                <h3 class="fw-normal product-name text-title">Product</h3>
+                                                <h3 class="mt-2 mb-2 theme-color">{{ $tops[12]->phaseone }}</h3>
+                                                <h3 class="fw-normal product-name text-title">{{ $tops[12]->phasetwo }}</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -643,7 +611,13 @@
                                             <div class="offer-detail">
                                                 <div>
                                                     <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}" class="text-title">
-                                                        <h6 class="name">{{ $product->product_name }}</h6>
+                                                        <h6 class="name">
+                                                            @if(mb_strlen($product->product_name) > 30)
+                                                                {!! mb_substr($product->product_name, 0, 30) . '<br>' . mb_substr($product->product_name, 30, 30) . '...' !!}
+                                                            @else
+                                                                {!! nl2br(e($product->product_name)) !!}
+                                                            @endif
+                                                        </h6>
                                                     </a>
                                                     <span>{{ $product->product_size }}</span>
                                                     <h6 class="price theme-color">¥{{ number_format($product->selling_price, 0, '.', ',') }}</h6>
@@ -660,11 +634,11 @@
 
                         <div class="section-t-space">
                             <div class="banner-contain hover-effect">
-                                <img src="{{ asset('frontend/assets/images/homepage/summer.jpg') }}" class="bg-img blur-up lazyload" alt="">
+                                <img src="{{ asset('frontend/assets/images/homepage/' . $tops[13]->image ) }}" class="bg-img blur-up lazyload" alt="">
                                 <div class="banner-details p-center banner-b-space w-100 text-center">
                                     <div>
-                                        <h6 class="ls-expanded theme-color mb-sm-3 mb-1">SUMMER</h6>
-                                        <h2 class="banner-title">VEGETABLE</h2>
+                                        <h6 class="ls-expanded theme-color mb-sm-3 mb-1">{{ $tops[13]->phaseone }}</h6>
+                                        <h2 class="banner-title">{{ $tops[13]->phasetwo }}</h2>
                                     @if($vegetable != null)
                                         <button onclick="location.href = '{{ route('show-discount-product', ['ids' => $vegetable]) }}';"
                                             class="btn btn-animation btn-sm mx-auto mt-sm-3 mt-2">Shop Now <i

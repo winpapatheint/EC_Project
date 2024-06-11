@@ -22,9 +22,14 @@
                 }
             @endphp
 
+            <li @if($page < 3) style="display: none" @endif class="page-item">
+                <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => 1, 'tab' => $activeTab]) }}">
+                    <i class="fa-solid fa-angles-left"></i>
+                </a>
+            </li>
             <li @if($page < 2) style="display: none" @endif class="page-item">
                 <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $ppage, 'tab' => $activeTab]) }}">
-                    <i class="fa-solid fa-angles-left"></i>
+                    <i class="fa-solid fa-angle-left"></i>
                 </a>
             </li>
 
@@ -40,6 +45,11 @@
 
             <li @if($page == $ttlpage) style="display: none" @endif class="page-item">
                 <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $npage, 'tab' => $activeTab]) }}">
+                    <i class="fa-solid fa-angle-right"></i>
+                </a>
+            </li>
+            <li @if($page == $ttlpage || $page + 1 == $ttlpage) style="display: none" @endif class="page-item">
+                <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $ttlpage, 'tab' => $activeTab]) }}">
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
             </li>

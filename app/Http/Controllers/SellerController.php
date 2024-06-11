@@ -160,7 +160,7 @@ class SellerController extends Controller
         $seller->update();
 
         $msg = ('Data updated successfully');
-        return redirect('/seller')->with('success', $msg);
+        return redirect('/profile')->with('success', $msg);
     }
 
 

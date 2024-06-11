@@ -161,10 +161,16 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')
             ->where('products.status', 1)
             ->pluck('products.id')->toArray();
+        
+        $tops = Top::all();
 
+<<<<<<< HEAD
         $tops = Top::all();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount',
+=======
+        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 
+>>>>>>> c898bdd93729570534a0b00a52576d8653b14c87
         'topSaveTodayProducts', 'reviews', 'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable',
         'meatHalfDiscount', 'vegetableHalfDiscount','customers', 'tops'));
     }
@@ -965,7 +971,11 @@ class AdminController extends Controller
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> c898bdd93729570534a0b00a52576d8653b14c87
         $mainSearch = $validated['mainSearch'] ?? null;
         $query = Category::query();
         if ($mainSearch != null) {

@@ -29,7 +29,7 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-2 mb-0">Email</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" name="email" value="{{ $user->email }}" >
+                                        <input class="form-control" type="text" name="email" value="{{ $user->email }}">
                                         <p class="error" style="color:red" id="error-email"></p>
                                     </div>
                                 </div>
@@ -37,14 +37,13 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-2 mb-0">Password</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="password" name="password" value="{{ $user->password}}">
+                                        <input class="form-control" type="password" name="password" value="{{ $user->password }}">
                                         <p class="error" style="color:red" id="error-password"></p>
                                     </div>
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
-                                    <label class="form-label-title col-sm-2 mb-0">Confirm
-                                        Password</label>
+                                    <label class="form-label-title col-sm-2 mb-0">Confirm Password</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="password" name="confirmed" value="{{ $user->password }}">
                                         <p class="error" style="color:red" id="error-confirmed"></p>
@@ -52,8 +51,7 @@
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
-                                    <label
-                                        class="form-label-title col-sm-2 mb-0">Photo</label>
+                                    <label class="form-label-title col-sm-2 mb-0">Photo</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="file" id="formFile" name="photo" onchange="mainThamUrl(this)">
                                         <img src="" id="mainThmb">
@@ -62,8 +60,7 @@
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
-                                    <label class="form-label-title col-sm-2 mb-0">Phone
-                                        Number</label>
+                                    <label class="form-label-title col-sm-2 mb-0">Phone Number</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" type="text" name="phone" value="{{ $user->phone }}">
                                     </div>
@@ -71,33 +68,32 @@
 
                                 <div class="d-grid gap-2 d-md-block">
                                     <button type="button" class="btn btn-animation btn-submit" data-bs-toggle="modal" data-bs-target="#confrimBox_{{ $user->id }}">Update Profile</button>
-
-                                    <!-- Confirm Modal Box -->
-                                    <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $user->id }}" aria-hidden="true" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header d-block text-center">
-                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="remove-box">
-                                                        <p>The data will be added permanently.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-animation" >Yes</button>
-                                                    <button type="button" class="btn btn-animation" data-bs-dismiss="modal"
-                                                    style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Confirm Modal Box End-->
                                 </div>
                             </div>
+
+                            <!-- Confirm Modal Box -->
+                            <div class="modal fade theme-modal remove-coupon" id="confrimBox_{{ $user->id }}" aria-hidden="true" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header d-block text-center">
+                                            <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="remove-box">
+                                                <p>The data will be added permanently.</p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-animation" id="confirmSubmit">Yes</button>
+                                            <button type="button" class="btn btn-animation" data-bs-dismiss="modal" style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Confirm Modal Box End-->
                         </form>
                     </div>
                 </div>
@@ -274,7 +270,19 @@
 <!-- Settings Section End -->
 
 <script>
-    function submitForm() {
+    document.querySelector('.btn-submit').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (validateUserForm()) {
+            const confirmModal = new bootstrap.Modal(document.getElementById('confrimBox_{{ $user->id }}'));
+            confirmModal.show();
+        }
+    });
+
+    document.getElementById('confirmSubmit').addEventListener('click', function() {
+        document.getElementById('storeProfile').submit();
+    });
+
+    function validateUserForm() {
         let isValid = true;
 
         const user_name = document.querySelector('input[name="name"]').value.trim();
@@ -316,15 +324,8 @@
             document.getElementById('error-confirmed').textContent = 'Passwords do not match.';
         }
 
-        if (isValid) {
-            document.getElementById('storeProfile').submit();
-        }
+        return isValid;
     }
-
-    document.getElementById('storeProfile').addEventListener('submit', function(event) {
-        event.preventDefault();
-        validateUserForm();
-    });
 </script>
 
 <script>

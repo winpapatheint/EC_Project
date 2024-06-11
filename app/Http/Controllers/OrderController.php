@@ -104,7 +104,9 @@ class OrderController extends Controller
         $data = OrderDetail::find($request->id);
         $order_id = $data->order_id;
         $status = $request->input('status');
-        $orderItems = OrderDetail::where('order_id', $order_id)->get();
+        $orderItems = OrderDetail::where('order_id', $order_id)->where('seller_id', Auth::user()->id)
+                    ->with('product')->with('buyer')->with('seller')->with('order')->get();
+        $mailSendStatus = 0;
 
         foreach($orderItems as $item) {
             if (empty($item->confirmed_date)) {
@@ -122,6 +124,7 @@ class OrderController extends Controller
                     'title' => 'Confirmed',
                     'seen' => 0,
                 ]);
+                $mailSendStatus = 1;
             } else {
                 switch ($status) {
                     case 'Processing':
@@ -145,6 +148,7 @@ class OrderController extends Controller
                             'title' => 'Delivered',
                             'seen' => 0,
                         ]);
+                        $mailSendStatus = 1;
                         break;
                     default:
                         $item->cancel_date = now();
@@ -155,6 +159,7 @@ class OrderController extends Controller
                             'title' => 'Cancel',
                             'seen' => 0,
                         ]);
+                        $mailSendStatus = 1;
                         break;
                 }
             }
@@ -166,27 +171,34 @@ class OrderController extends Controller
         $process->{$status . '_date'} = now();
         $process->updated_by = Auth::user()->name;
         $process->save();
-
-        $inquiry_email = 'info-test@asia-hd.com';
-        $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
-
-        $email = $user->email;
-        $name = $user->name;
-        $data = array('name'=>$name);
-        if (!empty($request->email)) {
-            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
-                $message->from($email,$name);
-                $message->setBody("E commerce 公式サイトから、以下の通知がありました。
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\n名前：　".$name."
-                \r\n"."メールアドレス：　".$email."
-                \r\n
-                \r\n"."通知のお知らせ：　
-                \r\n
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-            });
+        if ($mailSendStatus == 1) {
+            \Mail::to($orderItems->first()->buyer->email)->send(new \App\Mail\BuyerOrderTracking($orderItems));
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderTracking($orderItems));
+            }
         }
+
+        // $inquiry_email = 'info-test@asia-hd.com';
+        // $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
+
+        // $email = $user->email;
+        // $name = $user->name;
+        // $data = array('name'=>$name);
+        // if (!empty($request->email)) {
+        //     $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
+        //         $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
+        //         $message->from($email,$name);
+        //         $message->setBody("E commerce 公式サイトから、以下の通知がありました。
+        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+        //         \r\n名前：　".$name."
+        //         \r\n"."メールアドレス：　".$email."
+        //         \r\n
+        //         \r\n"."通知のお知らせ：　
+        //         \r\n
+        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+        //     });
+        // }
 
         $notification = Notification::find(4);
         $newval = array('time' => Carbon::now(),
@@ -239,6 +251,12 @@ class OrderController extends Controller
             'title' => 'Cancel',
             'seen' => 0,
         ]);
+        
+        \Mail::to($order->buyer->email)->send(new \App\Mail\BuyerOrderCancel($order));
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            \Mail::to($admin->email)->send(new \App\Mail\AdminOrderCancel($order));
+        }
 
         $msg = ('Order cancelled Successfully');
         return redirect('/orderlist')->with('success', $msg);

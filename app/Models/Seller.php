@@ -46,6 +46,8 @@ class Seller extends Model
         return $this->hasMany(Product::class);
     }
 
-
-
+    public function coupons()
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id');
+    }
 }

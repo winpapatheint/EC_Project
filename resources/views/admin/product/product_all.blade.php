@@ -44,11 +44,13 @@
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
                                                     <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
                                                     <td style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
-                                                        @if(mb_strlen($list->product_name) > 30)
-                                                            {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
-                                                        @else
-                                                            {!! nl2br(e($list->product_name)) !!}
-                                                        @endif
+                                                        <a href="{{ url("/product/".$list->id ) }}">
+                                                            @if(mb_strlen($list->product_name) > 30)
+                                                                {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
+                                                            @else
+                                                                {!! nl2br(e($list->product_name)) !!}
+                                                            @endif
+                                                        </a>
                                                     </td>
                                                     <td data-label="">{{ $list->product_qty }}</td>
                                                     <td data-label="">¥{{ number_format($list->selling_price, 0, '', ',') }}</td>
@@ -164,7 +166,7 @@
                                                                 </form>
                                                                 <button type="button" class="btn btn-animation btn-md fw-bold me-2"  data-bs-dismiss="modal"
                                                                 style="background-color: #ff6b6b;border-color: #ff6b6b;">Cancel</button>
-                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -191,10 +193,10 @@
                                                                 <div class="modal-footer">
                                                                         <input type="hidden" id="commission-id{{ $list->id }}" name="commissionid" value="{{ $list->id }}">
                                                                         <input type="hidden" name="id" value="{{ $list->id }}">
-                                                                        <button type="submit"class="btn btn-animation btn-md fw-bold me-2" 
+                                                                        <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
                                                                             data-bs-target="#exampleModalToggle2"
                                                                             data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                                                        <button type="button" class="btn btn-animation btn-md fw-bold" 
+                                                                        <button type="button" class="btn btn-animation btn-md fw-bold"
                                                                             data-bs-dismiss="modal" style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
                                                                 </form>
                                                             </div>

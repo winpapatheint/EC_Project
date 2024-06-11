@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Seller;
 use App\Models\Payment;
 use App\Models\Notification;
+use App\Models\SellerNotification;
 use App\Models\Process;
 use App\Models\Product;
 use App\Models\Prefecture;
@@ -1158,9 +1159,21 @@ class UserController extends Controller
                 }
                 \Mail::to($seller->email)->send(new \App\Mail\SellerOrderSuccess($orderDetails, $seller));
             }
+
+            $admin_notification = Notification::find(4);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $admin_notification->update( $newval);
+
+            $seller_notification = SellerNotification::find(1);
+            $orderval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $seller_notification->update( $orderval);
+
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
-
         } catch (\Exception $e) {
             // Log any exceptions for debugging
             DB::rollBack();
@@ -1330,6 +1343,18 @@ class UserController extends Controller
 
             DB::commit();
             \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+
+            $admin_notification = Notification::find(4);
+            $newval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $admin_notification->update( $newval);
+
+            $seller_notification = SellerNotification::find(1);
+            $orderval = array('time' => Carbon::now(),
+                            'created_at' => Carbon::now(),
+                            );
+            $seller_notification->update( $orderval);
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);

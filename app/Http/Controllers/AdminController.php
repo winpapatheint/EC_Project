@@ -161,16 +161,12 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')
             ->where('products.status', 1)
             ->pluck('products.id')->toArray();
-        
+
         $tops = Top::all();
 
-<<<<<<< HEAD
         $tops = Top::all();
 
         return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount',
-=======
-        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 
->>>>>>> c898bdd93729570534a0b00a52576d8653b14c87
         'topSaveTodayProducts', 'reviews', 'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable',
         'meatHalfDiscount', 'vegetableHalfDiscount','customers', 'tops'));
     }
@@ -971,11 +967,6 @@ class AdminController extends Controller
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> c898bdd93729570534a0b00a52576d8653b14c87
         $mainSearch = $validated['mainSearch'] ?? null;
         $query = Category::query();
         if ($mainSearch != null) {
@@ -1507,17 +1498,10 @@ class AdminController extends Controller
 
     public function productdetail($id)
     {
-        $products = DB::table('products')
-                    ->select( 'products.*','brands.*')
-                    ->join('brands', function ($join) {
-                        $join->on('brands.id', '=', 'products.brand_id');
-                    })
-                    ->where('products.id',$id)->get();
+        $data = Product::find($id);
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        return view('admin.product.product_detail',compact('data','multiImgs'));
 
-        // print_r($blog[0]->created_at);die;
-        $product = $products[0];
-
-        return view('admin.product.product_detail',compact('product'));
     }
 
     public function shopdetail($id)
@@ -2853,10 +2837,10 @@ class AdminController extends Controller
                     Mail::send([], $data, function ($message) use ($request, $adminMails) {
                         $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
                         $message->from($request->email,$request->name);
-                        $message->setBody("We received the following inquiry from the official e-commerce website.
+                        $message->setBody("We received the following inquiry from the official new style life website.
                             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
                             \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\nEmail：　" .  $request->email . "
                             \r\n
                             \r\nMessage：　
                             \r\n" . $request->message . "

@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\Role;
-use App\Models\BankAccount;
+use Mail;
+use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Buyer;
 use App\Models\Order;
+use App\Models\Coupon;
 use App\Models\Seller;
 use App\Models\Payment;
-use App\Models\Notification;
-use App\Models\SellerNotification;
 use App\Models\Process;
 use App\Models\Product;
 use App\Models\Prefecture;
+use App\Models\BankAccount;
 use App\Models\OrderDetail;
 use App\Models\BuyerAddress;
 use App\Models\BuyerPayment;
-use App\Models\CashBankAccount;
-use App\Models\Coupon;
 use App\Models\CouponDetail;
-use App\Models\UserNotification;
-use Carbon\Carbon;
+use App\Models\Notification;
+use App\Models\SellerNotification;
 use Illuminate\Http\Request;
+use App\Http\Middleware\Role;
 use Illuminate\Http\Response;
+use App\Models\CashBankAccount;
+use App\Models\UserNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Redirect;
-use Mail;
 
 
 class UserController extends Controller
@@ -96,14 +96,14 @@ class UserController extends Controller
             $data = array('name'=>$name);
             if (!empty($request->email)) {
                 $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                    $message->to($inquiry_email, 'Asian Food Museum ')->subject($name);
+                    $message->to($inquiry_email, 'New Style Life ')->subject($name);
                     $message->from($email,$name);
-                    $message->setBody("The following notification was received from the Asian Food Museum official website.
+                    $message->setBody("The following notification was received from the New Style Life official website.
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
                     \r\n"."Name".$name."
                     \r\n"."Email：　".$email."
                     \r\n
-                    \r\n"."Notice：　
+                    \r\n"."Notice：
                     \r\n
                     \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
                 });
@@ -114,14 +114,14 @@ class UserController extends Controller
             if (!empty(  $adminMails)) {
                 foreach ($adminMails as $email) {
                     Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
-                        $message->to($email, 'Asian Food Museum')->subject($name);
+                        $message->to($email, 'New Style Life')->subject($name);
                         $message->from($email,$name);
-                        $message->setBody("The following notification was received from the Asian Food Museum official website.
+                        $message->setBody("The following notification was received from the New Style Life official website.
                         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
                         \r\n"."Name".$name."
                         \r\n"."Email：　".$email."
                         \r\n
-                        \r\n"."Notice：　
+                        \r\n"."Notice：
                         \r\n
                         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
                     });
@@ -900,9 +900,8 @@ class UserController extends Controller
             return redirect()->back()->with(compact('refreshCart'));
         }
 
-        // for the instock and status check
+        // for the instock check
         $instockCheck = [];
-        $statusCheck = [];
         foreach ($request->product as $key => $prod)
         {
             $checkInstockProduct = Product::where('id', $prod)->first();
@@ -910,23 +909,11 @@ class UserController extends Controller
             {
                 $instockCheck[] = $checkInstockProduct->id;
             }
-            if($checkInstockProduct->status == 0)
-            {
-                $statusCheck[] = $checkInstockProduct->id;
-            }
         }
         if ($instockCheck)
         {
             $refreshCart = 'Please adjust your order quantity!';
             return redirect()->back()->with(compact('refreshCart', 'instockCheck'));
-        }
-        if ($statusCheck)
-        {
-            if(count($statusCheck) > 1)
-            $refreshCart = count($statusCheck) . ' products are not available now!';
-            else
-            $refreshCart = count($statusCheck) . ' product is not available now!';
-            return redirect()->back()->with(compact('refreshCart', 'statusCheck'));
         }
 
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
@@ -1134,11 +1121,10 @@ class UserController extends Controller
             }
             $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
                     ->delete();
-            $orderedBuyer = Buyer::find($buyerId);
-            $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
-                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
 
             DB::commit();
+            $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 \Mail::to($admin->email)->send(new \App\Mail\AdminOrderSuccess($orderDetails));
@@ -1174,6 +1160,7 @@ class UserController extends Controller
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
+
         } catch (\Exception $e) {
             // Log any exceptions for debugging
             DB::rollBack();
@@ -1343,6 +1330,11 @@ class UserController extends Controller
 
             DB::commit();
             \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+            }
 
             $admin_notification = Notification::find(4);
             $newval = array('time' => Carbon::now(),

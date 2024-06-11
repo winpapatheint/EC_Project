@@ -104,7 +104,7 @@ class OrderController extends Controller
         $data = OrderDetail::find($request->id);
         $order_id = $data->order_id;
         $status = $request->input('status');
-        $orderItems = OrderDetail::where('order_id', $order_id)->where('seller_id', Auth::user()->id)
+        $orderItems = OrderDetail::where('order_id', $order_id)->where('seller_id', Auth::user()->id)->where('status', '!=','Cancel')
                     ->with('product')->with('buyer')->with('seller')->with('order')->get();
         $mailSendStatus = 0;
 
@@ -178,27 +178,6 @@ class OrderController extends Controller
                 \Mail::to($admin->email)->send(new \App\Mail\AdminOrderTracking($orderItems));
             }
         }
-
-        // $inquiry_email = 'info-test@asia-hd.com';
-        // $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
-
-        // $email = $user->email;
-        // $name = $user->name;
-        // $data = array('name'=>$name);
-        // if (!empty($request->email)) {
-        //     $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-        //         $message->to($inquiry_email, 'Ecommerce ')->subject($name.'からの質問');
-        //         $message->from($email,$name);
-        //         $message->setBody("E commerce 公式サイトから、以下の通知がありました。
-        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-        //         \r\n名前：　".$name."
-        //         \r\n"."メールアドレス：　".$email."
-        //         \r\n
-        //         \r\n"."通知のお知らせ：　
-        //         \r\n
-        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-        //     });
-        // }
 
         $notification = Notification::find(4);
         $newval = array('time' => Carbon::now(),

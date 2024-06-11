@@ -584,6 +584,7 @@ class UserController extends Controller
         // Update the new password
         $user->password = Hash::make($request->newpassword);
         $user->save();
+        \Mail::to($user->email)->send(new \App\Mail\PasswordChanged($user));
 
         session()->flash('success', 'Password changed successfully.');
 
@@ -973,7 +974,7 @@ class UserController extends Controller
                             ->first();
                 $cartItem->shop_name = $shopName->shopname;
             }
-        
+
         $bankAccounts = BankAccount::all();
 
             return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount',
@@ -1096,7 +1097,7 @@ class UserController extends Controller
                     $usedShopCouponStatus = 1;
                 if ($order->coupon_used_product_id == (int)$product_id)
                     $usedProductCouponStatus = 1;
-                
+
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
@@ -1132,8 +1133,31 @@ class UserController extends Controller
             }
             $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
                     ->delete();
+            $orderedBuyer = Buyer::find($buyerId);
+            $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
 
             DB::commit();
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderSuccess($orderDetails));
+            }
+
+            $sellerIds = $orderDetails->pluck('seller_id')->unique();
+            $sellers = User::whereIn('id', $sellerIds)->orWhereIn('created_by', $sellerIds)->get();
+            foreach ($sellers as $seller) {
+                if ($seller->created_by) {
+                    $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                                    ->where('buyer_id', $buyerId)->where('order_id', $order->id)
+                                    ->where('seller_id', $seller->created_by)->get();
+                }
+                else {
+                    $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                                    ->where('buyer_id', $buyerId)->where('order_id', $order->id)
+                                    ->where('seller_id', $seller->id)->get();
+                }
+                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderSuccess($orderDetails, $seller));
+            }
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
 
@@ -1263,7 +1287,7 @@ class UserController extends Controller
                     $usedShopCouponStatus = 1;
                 if ($order->coupon_used_product_id == (int)$product_id)
                     $usedProductCouponStatus = 1;
-                
+
                     $orderdetailsData = [
                         'order_id' => $order->id,
                         'buyer_id' => (int)$buyerId,
@@ -1406,7 +1430,7 @@ class UserController extends Controller
         $buyer = Buyer::where('user_id', $user->id)->first();
         $userNotis = UserNotification::with('orderDetail')->with('orderDetail.product')->with('orderDetail.order')
                     ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->orderBy('id', 'DESC')->paginate($limit);
-                    
+
         // to be seen
         UserNotification::where('buyer_id', $buyer->id)->update(['seen' => 1]);
         $ttl = $userNotis->total();

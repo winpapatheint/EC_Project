@@ -1331,6 +1331,11 @@ class UserController extends Controller
             DB::commit();
             \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
 
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+            }
+
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
 

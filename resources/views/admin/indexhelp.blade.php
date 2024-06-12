@@ -209,7 +209,7 @@
                                                                 <td>
                                                                     <ul>
                                                                         <li>
-                                                                            <a href='{{ url("/helpdetail/".$item->id ) }}'>
+                                                                            <a href='{{ url("/helpdetails/".$item->id ) }}'>
                                                                                 <i class="ri-eye-line"></i>
                                                                             </a>
 

@@ -230,7 +230,6 @@ class SellerController extends Controller
         //     'subject' => 'present|string|max:255',
         //     'body' => 'present|string|max:255',
         // ]);
-dd($request->input('body'));
         $help = new Help();
         if (!empty($request->image)) {
             $imageName = time().'.'.$request->image->extension();
@@ -242,21 +241,22 @@ dd($request->input('body'));
         $help->name = Auth::user()->name;
         $help->shop_name = $shopName;
         $help->help_id = Auth::user()->id;
-        $help->to = 'info-test@asia-hd.com';
+        $help->to = 'admin@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->subject = $request->title;
         $help->body =  $request->message;
         $help->img =   $imageName;
         $help->created_at = Carbon::now();
         $help->save();
+        $helpDate = Carbon::now()->format('M d, Y');
+        $adminemail = 'admin@asia-hd.com';
+        $data = ['title' => $request->title,
+                'content' => $request->message,
+                'imgName' => $imageName,
+                'helpDate' => $helpDate,
+                'selleremail' => Auth::user()->email];
+        \Mail::to($adminemail)->send(new \App\Mail\AdminContact($data));
 
-        $inquiry_email = 'info-test@asia-hd.com';
-        $email = Auth::user()->email;
-        $name = Auth::user()->name;
-        $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
-            $message->to($inquiry_email, 'Asian Food Museum')->subject($name.'Question form');
-            $message->from(Auth::user()->email, Auth::user()->name);
-        });
         $notification = Notification::find(5);
         $newval = array('time' => Carbon::now(),
                         'created_at' => Carbon::now(),
@@ -265,7 +265,6 @@ dd($request->input('body'));
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
     }
-
 
     public function reply($id)
     {
@@ -285,34 +284,45 @@ dd($request->input('body'));
         //     'body' => 'present|string|max:255',
         // ]);
          $help = new Help();
-        // if($request->hasFile('image'))
-        // {
-        //     $img = $request->file('image');
-        //     $filename = time() . '.' . $img->getClientOriginalExtension();
-        //     $img->move(public_path('upload/shop'), $filename);
-        //     $help->img = $filename;
-        // }
+
+         if (!empty($request->image)) {
+            $img = $request->image;
+            $imageName = time().'.'.$img->extension();
+            $request->image->move(public_path('images'), $imageName);
+
+         }
+         else {
+            $imageName = '';
+        }
+
         $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
-        $check = Help::find($request->replyId);
-        dd($request->id);
+        $check = Help::find($request->id);
         $help->help_id = $check->help_id;
         $help->name = Auth::user()->name;
         $help->to = 'info-test@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->shop_name = $shopName;
         $help->subject = $request->subject;
-        $help->body = $validatedData['body'];
+        $help->body = $request->body;
+        $help->img = $imageName;
         $help->updated_at = Carbon::now();
         $help->save();
 
-        $inquiry_email = 'info-test@asia-hd.com';
-        $email = Auth::user()->email;
-        $name = Auth::user()->name;
-        $mail = Mail::send('seller.help.helpEmail', ['name' => $name, 'email' => $email, 'title' => $request->title, 'reason' => $request->reason], function($message) use ($name, $inquiry_email) {
-            $message->to($inquiry_email, 'Ecommerce')->subject($name.'からの質問');
-            $message->from(Auth::user()->email, Auth::user()->name);
-        });
+        $helpDate = Carbon::now()->format('M d, Y');
+        $adminemail = 'admin@asia-hd.com';
+        $data = ['title' => $request->subject,
+                'content' => $request->body,
+                'imgName' => $imageName,
+                'helpDate' => $helpDate,
 
+                'selleremail' => Auth::user()->email];
+        \Mail::to($adminemail)->send(new \App\Mail\AdminContact($data));
+
+        $notification = Notification::find(5);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
     }

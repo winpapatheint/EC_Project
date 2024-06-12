@@ -161,7 +161,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('reply.sent') }}" class="theme-form theme-form-2 mega-form" >
+                <form method="POST" action="{{ route('reply.sent') }}" class="theme-form theme-form-2 mega-form" enctype="multipart/form-data" >
                     @csrf
                     <input type="hidden" name="id" value="{{ $item->id}}">
                     <input type="hidden" name="subject" value="{{ $item->subject}}">
@@ -169,7 +169,7 @@
                         <label
                             class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                         <div class="col-md-9 col-lg-10">
-                            <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                            <input class="form-control" type="file" id="image" name="image" onchange="validateImage(this)">
                             <img src="" id="mainThmb">
                         </div>
                     </div>
@@ -282,5 +282,25 @@
         </div>
     </div>
 @endforeach
+
+<script>
+    function validateImage(input) {
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if (!allowedExtensions.exec(input.value)) {
+            // alert('Invalid file type. Only images (JPG, JPEG, PNG, GIF) are allowed.');
+            document.getElementById('error-image').textContent = 'Invalid file type. Only images (JPG, JPEG, PNG, GIF) are allowed.';
+            input.value = '';
+            return false;
+        } else {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('mainThmb').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+    </script>
 <!-- Delete Modal Box End -->
 @endsection

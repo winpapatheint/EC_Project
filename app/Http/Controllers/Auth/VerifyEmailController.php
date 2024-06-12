@@ -43,10 +43,23 @@ class VerifyEmailController extends Controller
 
             if (Auth::user()->role == 'admin') {
                 return redirect()->intended(RouteServiceProvider::ADMIN);
+
             } else if (Auth::user()->role == 'seller') {
-            return redirect('/seller');
+                $admins = User::where('role', 'admin')->get();
+                foreach ($admins as $admin) {
+                    \Mail::to($admin->email)->send(new \App\Mail\AdminNewMemberRegistration($user, $admin));
+                }
+                \Mail::to(Auth::user()->email)->send(new \App\Mail\SellerRegistration($user));
+                return redirect('/seller');
+
             } else if (Auth::user()->role == 'buyer') {
+                $admins = User::where('role', 'admin')->get();
+                foreach ($admins as $admin) {
+                    \Mail::to($admin->email)->send(new \App\Mail\AdminNewMemberRegistration($user, $admin));
+                }
+                \Mail::to(Auth::user()->email)->send(new \App\Mail\BuyerRegistration($user));
                 return redirect('/user');
+
             } else {
                 return redirect()->intended(RouteServiceProvider::HOME);
             }

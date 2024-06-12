@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Cancelled</title>
+    <title>New Order Received</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,51 +76,57 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Your order has been <strong>cancelled</strong> by {{ $order->seller->shop_name }}!
+                <strong>Received</strong> an order from a customer with Order code 
+                <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $order->buyer->name }},</h2>
-            <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
+            <h2>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
                 <thead>
                     <tr>
                         <th>Product</th>
+                        <th>Shop</th>
                         <th>Quantity</th>
                         <th>Price(tax inc)</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($orderDetails as $detail)
                     <tr>
-                        <td>{{ $order->product->product_name }}</td>
-                        <td>{{ $order->qty }}</td>
-                        <td>{{ $order->price }}</td>
+                        <td>{{ $detail->product->product_name }}</td>
+                        <td>{{ $detail->seller->shop_name }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>{{ $detail->price }}</td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
             <table>
                 <tbody>
                     <tr>
-                        <td class="subtotal">Amount :</td>
-                        <td>¥{{ number_format($order->amount , 0, '.', ',') }}</td>
+                        <td class="subtotal">Subtotal :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->sub_total_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Shipping Fee :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->shipping_fee , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Coupon Discounted :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->coupon_discount_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Total Price :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->total_amount , 0, '.', ',') }}</td>
                     </tr>
                 </tbody>
             </table>
-            <p>We will notify the refund process soon.</p>
-            
-            <p>Thank you for shopping with us.</p>
         </div>
         <div class="footer">
-            <p>Thank You,</p>
+            <p>Admin Team,</p>
             <p>Asian Food Museum</p>
-            <p>Email: info@asian-food.site</p>
-            <p>Phone: (+81) 03-3981-5090</p>
             <p><a href="https://asian-food.site/">https://asian-food.site/</a></p>
-            <p>〒171-0014<br>
-                Room 502, Wada Building<br>
-               4-27-5 Ikebukuro, Toshima-ku<br>
-               Tokyo, Japan.
-            </p>
         </div>
     </div>
 </body>

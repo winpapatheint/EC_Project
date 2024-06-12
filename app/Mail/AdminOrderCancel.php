@@ -11,15 +11,17 @@ class AdminOrderCancel extends Mailable
 {
     use Queueable, SerializesModels;
     public $order;
+    public $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order, $admin)
     {
         $this->order = $order;
+        $this->admin = $admin;
     }
 
     /**

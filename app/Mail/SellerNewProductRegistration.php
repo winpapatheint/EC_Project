@@ -7,21 +7,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AdminOrderTracking extends Mailable
+class SellerNewProductRegistration extends Mailable
 {
     use Queueable, SerializesModels;
-    public $orderItems;
-    public $admin;
+    public $sellerData;
+    public $product;
+    public $seller;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($orderItems, $admin)
+    public function __construct($sellerData, $product, $seller)
     {
-        $this->orderItems = $orderItems;
-        $this->admin = $admin;
+        $this->sellerData = $sellerData;
+        $this->product = $product;
+        $this->seller = $seller;
     }
 
     /**
@@ -31,6 +33,6 @@ class AdminOrderTracking extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.admin_order_tracking');
+        return $this->view('emails.seller_new_product_registration');
     }
 }

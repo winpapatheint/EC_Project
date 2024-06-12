@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Cancelled</title>
+    <title>Registration Successful</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,24 +40,6 @@
         strong {
             font-size: 18px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-        .subtotal {
-            font-weight: bold;
-        }
         .footer {
             text-align: right;
             margin-top: 40px;
@@ -76,39 +58,25 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Your order has been <strong>cancelled</strong> by {{ $order->seller->shop_name }}!
+                Your <strong>registration</strong> process has been <strong>successfully completed</strong>!
             </p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $order->buyer->name }},</h2>
-            <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
-            <p>Here are the key details regarding order:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price(tax inc)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ $order->product->product_name }}</td>
-                        <td>{{ $order->qty }}</td>
-                        <td>{{ $order->price }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <tbody>
-                    <tr>
-                        <td class="subtotal">Amount :</td>
-                        <td>¥{{ number_format($order->amount , 0, '.', ',') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>We will notify the refund process soon.</p>
-            
-            <p>Thank you for shopping with us.</p>
+            <h2>Dear {{ $user->name }},</h2>
+            <p>Welcome to our Asian Food Museum.</p>
+            <p>Your registration is now confirmed, and you are officially a part of our valued partner. We are look forward to start together.</p>
+            <p>Here are the key details regarding your registration:</p>
+            <ul>
+                <li><p>Name: {{ $user->name }}</p></li>
+                <li><p>Email: {{ $user->email }}</p></li>
+            </ul>
+            <p>Please take a moment to review the information provided above. If there are any discrepancies or if you have
+                any questions, don't hesitate to reach out to us at <strong>info@asian-food.site</strong>.</p>
+            <p>As a registered member, you now have access to our services/benefits. We encourage you to take full 
+                advantage of these offerings to enhance your experience with us.</p>
+            <p>We will be in touch with further details regarding the commencement of the Asian Food Museum and any 
+                additional requirements. In the meantime, if you require any assistance or support, feel free to contact 
+                our team.</p>
+            <p>Once again, congratulations on completing your registration!</p>
         </div>
         <div class="footer">
             <p>Thank You,</p>

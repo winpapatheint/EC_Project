@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Cancelled</title>
+    <title>Cash Order</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,38 +76,61 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Your order has been <strong>cancelled</strong> by {{ $order->seller->shop_name }}!
+                Your <strong>Cash Order</strong> have been successfully placed with order code 
+                <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $order->buyer->name }},</h2>
-            <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
+            <h2>Dear {{ $orderDetails->first()->buyer->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
                 <thead>
                     <tr>
                         <th>Product</th>
+                        <th>Shop</th>
                         <th>Quantity</th>
                         <th>Price(tax inc)</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($orderDetails as $detail)
                     <tr>
-                        <td>{{ $order->product->product_name }}</td>
-                        <td>{{ $order->qty }}</td>
-                        <td>{{ $order->price }}</td>
+                        <td>{{ $detail->product->product_name }}</td>
+                        <td>{{ $detail->seller->shop_name }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>{{ $detail->price }}</td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
             <table>
                 <tbody>
                     <tr>
-                        <td class="subtotal">Amount :</td>
-                        <td>¥{{ number_format($order->amount , 0, '.', ',') }}</td>
+                        <td class="subtotal">Subtotal :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->sub_total_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Shipping Fee :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->shipping_fee , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Coupon Discounted :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->coupon_discount_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Total Price :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->total_amount , 0, '.', ',') }}</td>
                     </tr>
                 </tbody>
             </table>
-            <p>We will notify the refund process soon.</p>
-            
+            <p>Please transfer the total amount of {{ $totalAmount }} to the following bank account:</p>
+            <p>Bank Name: {{ $bankInfo->bank_name }}</p>
+            <p>Branch Name: {{ $bankInfo->branch_name }}</p>
+            <p>Account Type: {{ $bankInfo->account_type }}</p>
+            <p>Account Number: {{ $bankInfo->account_number }}</p>
+            <p>Account Name: {{ $bankInfo->account_name }}</p>
+            <p>If you don't transfer the amount at {{ $transferDate }}, your order will be cancelled.</p>
+            <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
+            <p>Transfer Person Name: {{ $transferPersonName }}</p>
             <p>Thank you for shopping with us.</p>
         </div>
         <div class="footer">

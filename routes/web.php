@@ -289,10 +289,6 @@ Route::get('/helpdetail/{id}', [SellerController::class, 'detailHelp'])->middlew
 Route::post('/helpdelete', [SellerController::class, 'deleteHelp'])->middleware(['auth','role:seller'])->name('help.delete');
 Route::get('/reply/{id}', [SellerController::class, 'reply'])->middleware(['auth','role:seller'])->name('reply');
 Route::post('/reply/sent', [SellerController::class, 'storeReply'])->middleware(['auth','role:seller'])->name('reply.sent');
-
-
-//Brand
-Route::get('/brandadd', [BrandController::class, 'addBrand'])->middleware(['auth','role:seller'])->name('add.brand');
 Route::post('/brandstore', [BrandController::class, 'storeBrand'])->middleware(['auth','role:seller'])->name('store.brand');
 
 //SellerProduct

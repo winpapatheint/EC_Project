@@ -414,7 +414,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="remove-box">
-                        <p>Change your password.</p>
+                        <p>Your password will be changed.</p>
                     </div>
                 </div>
                 <div class="modal-footer">

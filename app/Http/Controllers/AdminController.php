@@ -837,7 +837,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1067,7 +1067,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1119,7 +1119,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('category_id',$id)
+        $shoplist = $query->where('category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1212,7 +1212,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1365,7 +1365,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -3876,7 +3876,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -3928,7 +3928,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('special_sub_category_id',$id)
+        $shoplist = $query->where('special_sub_category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();

@@ -38,6 +38,7 @@ use DateTime;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Models\BankAccount;
 use App\Models\Blog;
+use App\Models\Buyer;
 use App\Models\Faq;
 use Illuminate\Support\Facades\File;
     /**
@@ -161,10 +162,12 @@ class AdminController extends Controller
             ->where('categories.category_name', 'Vegetable')
             ->where('products.status', 1)
             ->pluck('products.id')->toArray();
-        
+
         $tops = Top::all();
 
-        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount', 
+        $tops = Top::all();
+
+        return view('front-end.welcome',compact('blogs','categories','maxStarsRatedRow', 'productsGroupedByDiscount',
         'topSaveTodayProducts', 'reviews', 'bestSellerProducts', 'trendingProducts', 'coupons', 'seafood', 'vegetable',
         'meatHalfDiscount', 'vegetableHalfDiscount','customers', 'tops'));
     }
@@ -965,7 +968,6 @@ class AdminController extends Controller
         $validated = request()->validate([
             'mainSearch' => 'string|nullable',
         ]);
-        
         $mainSearch = $validated['mainSearch'] ?? null;
         $query = Category::query();
         if ($mainSearch != null) {
@@ -1497,17 +1499,10 @@ class AdminController extends Controller
 
     public function productdetail($id)
     {
-        $products = DB::table('products')
-                    ->select( 'products.*','brands.*')
-                    ->join('brands', function ($join) {
-                        $join->on('brands.id', '=', 'products.brand_id');
-                    })
-                    ->where('products.id',$id)->get();
+        $data = Product::find($id);
+        $multiImgs = MultiImg::where('product_id',$id)->get();
+        return view('admin.product.product_detail',compact('data','multiImgs'));
 
-        // print_r($blog[0]->created_at);die;
-        $product = $products[0];
-
-        return view('admin.product.product_detail',compact('product'));
     }
 
     public function shopdetail($id)
@@ -2843,10 +2838,10 @@ class AdminController extends Controller
                     Mail::send([], $data, function ($message) use ($request, $adminMails) {
                         $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
                         $message->from($request->email,$request->name);
-                        $message->setBody("We received the following inquiry from the official e-commerce website.
+                        $message->setBody("We received the following inquiry from the official new style life website.
                             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
                             \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $inquiry_email . "
+                            \r\nEmail：　" .  $request->email . "
                             \r\n
                             \r\nMessage：　
                             \r\n" . $request->message . "
@@ -4007,7 +4002,7 @@ class AdminController extends Controller
             }
 
             $order->payment_approved = 1;
-            $order->created_at = Carbon::now(); // Set created_at to current time
+            $order->created_at = Carbon::now();
             $order->save();
 
             $orderDetails = OrderDetail::where('order_id', $id)->get();
@@ -4018,6 +4013,33 @@ class AdminController extends Controller
             }
 
             DB::commit();
+            // mail sent to buyer
+            $orderedBuyer = Buyer::where('id', $order->buyer_id)->first();
+            \Mail::to($orderedBuyer->email)->send(new \App\Mail\BuyerCashOrderSuccess($orderDetails, $orderedBuyer));
+
+            // mail sent to seller
+            $sellerIds = $orderDetails->pluck('seller_id')->unique();
+            $sellers = User::whereIn('id', $sellerIds)->orWhereIn('created_by', $sellerIds)->get();
+            foreach ($sellers as $seller) {
+                if ($seller->created_by) {
+                    $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                                    ->where('buyer_id', $order->buyer_id)->where('order_id', $order->id)
+                                    ->where('seller_id', $seller->created_by)->get();
+                }
+                else {
+                    $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
+                                    ->where('buyer_id', $order->buyer_id)->where('order_id', $order->id)
+                                    ->where('seller_id', $seller->id)->get();
+                }
+                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderSuccess($orderDetails, $seller));
+            }
+
+            // mail sent to admin
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderSuccess($orderDetails));
+            }
+
             return redirect()->back()->with('success', 'Payment approved successfully for the order code '. $order->order_code);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -4077,4 +4099,3 @@ class AdminController extends Controller
         return redirect()->route('admin.bank_account')->with('success','Deleted Successfully.');
     }
 }
-

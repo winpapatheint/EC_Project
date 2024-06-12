@@ -302,7 +302,7 @@ dd($request->input('body'));
         $help->from = Auth::user()->email;
         $help->shop_name = $shopName;
         $help->subject = $request->subject;
-        $help->body = $validatedData['body'];
+        $help->body = $request->body;
         $help->updated_at = Carbon::now();
         $help->save();
 

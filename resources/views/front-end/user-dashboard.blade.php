@@ -251,11 +251,11 @@
             // Get the selected file
             const fileInput = document.getElementById('user_profile_upload_input');
             const file = fileInput.files[0];
-            
+
             // Create a FormData object and append the file to it
             const formData = new FormData();
             formData.append('user_profile', file);
-            
+
             // Send an AJAX request to the user_profile_upload route
             $.ajax({
                 url: '/user-profile-upload',
@@ -326,4 +326,3 @@
     });
 });
 </script>
-

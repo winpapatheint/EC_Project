@@ -203,7 +203,12 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-2 mb-0">Bank Account Type</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" name="bank_acc_type" value="{{ $data->bank_acc_type }}" @if(!empty(Auth::user()->created_by)) readonly @endif>
+                                        <select class="form-control" name="bank_acc_type" id="bank_acc_type" @if(!empty(Auth::user()->created_by)) readonly @endif>
+                                            <option value="">Choose Bank Account Type</option>
+                                            <option value="普通" {{ old('bank_acc_type', $data->bank_acc_type) == '普通' ? 'selected' : '' }}>普通</option>
+                                            <option value="当座" {{ old('bank_acc_type', $data->bank_acc_type) == '当座' ? 'selected' : '' }}>当座</option>
+                                            <option value="貯蓄" {{ old('bank_acc_type', $data->bank_acc_type) == '貯蓄' ? 'selected' : '' }}>貯蓄</option>
+                                        </select>
                                     </div>
                                 </div>
 

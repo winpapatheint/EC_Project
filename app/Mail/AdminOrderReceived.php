@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AdminOrderTracking extends Mailable
+class AdminOrderReceived extends Mailable
 {
     use Queueable, SerializesModels;
-    public $orderItems;
+    public $orderDetails;
     public $admin;
 
     /**
@@ -18,9 +18,9 @@ class AdminOrderTracking extends Mailable
      *
      * @return void
      */
-    public function __construct($orderItems, $admin)
+    public function __construct($orderDetails, $admin)
     {
-        $this->orderItems = $orderItems;
+        $this->orderDetails = $orderDetails;
         $this->admin = $admin;
     }
 
@@ -31,6 +31,6 @@ class AdminOrderTracking extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.admin_order_tracking');
+        return $this->view('emails.admin_order_received');
     }
 }

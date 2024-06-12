@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Changed</title>
+    @if ($user->role == 'buyer')
+    <title>New Buyer Registration Successful</title>
+    @elseif ($user->role == 'seller')
+    <title>New Seller Registration Successful</title>
+    @endif
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,27 +61,25 @@
             <img src="{{ $message->embed(public_path('images/logos/MailHeader_AFM.png')) }}" alt="Asian Food Museum Logo">
         </div>
         <div class="content">
-            <p style="text-align: center;">
-                Your password have been <strong>changed</strong>!
-            </p>
+            @if ($user->role == 'buyer')
+            <p style="text-align: center;">Buyer 
+            @elseif ($user->role == 'seller')
+            <p style="text-align: center;">Seller 
+            @endif
+            <strong>registration</strong> process has been <strong>successfully completed!</strong></p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $user->name }},</h2>
-            <p>We wanted to let you know that your password has been successfully changed.</p>
-            <p>If you did not make this change or if you believe an unauthorized person has accessed your account, 
-                please contact our support team immediately.</p>
-            <p>Thank you for keeping your account secure.</p>
+            <h2>Dear {{ $admin->name }},</h2>
+            <p>Here are the key details regarding registration:</p>
+            <ul>
+                <li><p>Type: {{ $user->role == 'buyer' ? 'Buyer' : 'Seller' }}</p></li>
+                <li><p>Name: {{ $user->name }}</p></li>
+                <li><p>Email: {{ $user->email }}</p></li>
+            </ul>
         </div>
         <div class="footer">
-            <p>Thank You,</p>
+            <p>Admin Team,</p>
             <p>Asian Food Museum</p>
-            <p>Email: info@asian-food.site</p>
-            <p>Phone: (+81) 03-3981-5090</p>
             <p><a href="https://asian-food.site/">https://asian-food.site/</a></p>
-            <p>〒171-0014<br>
-                Room 502, Wada Building<br>
-               4-27-5 Ikebukuro, Toshima-ku<br>
-               Tokyo, Japan.
-            </p>
         </div>
     </div>
 </body>

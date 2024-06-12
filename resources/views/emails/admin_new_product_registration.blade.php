@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Cancelled</title>
+    <title>New Product Registration Successful</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,9 +55,6 @@
         th {
             background-color: #f2f2f2;
         }
-        .subtotal {
-            font-weight: bold;
-        }
         .footer {
             text-align: right;
             margin-top: 40px;
@@ -76,51 +73,47 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Your order has been <strong>cancelled</strong> by {{ $order->seller->shop_name }}!
+                Product <strong>registration</strong> process by <strong>{{ $seller->shop_name }}</strong> has been 
+                <strong>successfully completed!</strong>
             </p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $order->buyer->name }},</h2>
-            <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
-            <p>Here are the key details regarding order:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price(tax inc)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ $order->product->product_name }}</td>
-                        <td>{{ $order->qty }}</td>
-                        <td>{{ $order->price }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2>Dear {{ $admin->name }},</h2>
+            <p>Here are the key details regarding registration:</p>
+            <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt="" 
+                style="width: 60px; height: 60px;">
             <table>
                 <tbody>
                     <tr>
-                        <td class="subtotal">Amount :</td>
-                        <td>¥{{ number_format($order->amount , 0, '.', ',') }}</td>
+                        <td>Product</td>
+                        <td>{{ $product->product_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Shop</td>
+                        <td>{{ $sellerData->shop_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Quantity</td>
+                        <td>{{ $product->product_qty }}</td>
+                    </tr>
+                    <tr>
+                        <td>Price(tax inc)</td>
+                        <td>{{ $product->selling_price }}</td>
+                    </tr>
+                    <tr>
+                        <td>Discount(%)</td>
+                        <td>{{ $product->discount_percent }}</td>
+                    </tr>
+                    <tr>
+                        <td>Delivery Price</td>
+                        <td>{{ $product->delivery_price }}</td>
                     </tr>
                 </tbody>
             </table>
-            <p>We will notify the refund process soon.</p>
-            
-            <p>Thank you for shopping with us.</p>
         </div>
         <div class="footer">
-            <p>Thank You,</p>
+            <p>Admin Team,</p>
             <p>Asian Food Museum</p>
-            <p>Email: info@asian-food.site</p>
-            <p>Phone: (+81) 03-3981-5090</p>
             <p><a href="https://asian-food.site/">https://asian-food.site/</a></p>
-            <p>〒171-0014<br>
-                Room 502, Wada Building<br>
-               4-27-5 Ikebukuro, Toshima-ku<br>
-               Tokyo, Japan.
-            </p>
         </div>
     </div>
 </body>

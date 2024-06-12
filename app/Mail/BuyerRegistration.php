@@ -7,21 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SellerOrderSuccess extends Mailable
+class BuyerRegistration extends Mailable
 {
     use Queueable, SerializesModels;
-    public $orderDetails;
-    public $seller;
+    public $user;
+    public $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($orderDetails, $seller)
+    public function __construct($user)
     {
-        $this->orderDetails = $orderDetails;
-        $this->seller = $seller;
+        $this->user = $user;
     }
 
     /**
@@ -31,6 +30,6 @@ class SellerOrderSuccess extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.seller_order_success');
+        return $this->view('emails.buyer_registration');
     }
 }

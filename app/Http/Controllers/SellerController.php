@@ -96,6 +96,7 @@ class SellerController extends Controller
 
         $data->name = $request->name;
         $data->email = $request->email;
+        $data->phone = $request->phone;
 
         if ($request->password !== $data->password) {
             $data->password = Hash::make($request->password);

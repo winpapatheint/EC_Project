@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AdminOrderConfirmation extends Mailable
+class AdminCashOrderConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
     public $orderDetails;
@@ -16,13 +16,14 @@ class AdminOrderConfirmation extends Mailable
     public $transferPersonName;
     public $transferDate;
     public $name;
+    public $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name)
+    public function __construct($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name, $admin)
     {
         $this->orderDetails = $orderDetails;
         $this->bankInfo = $bankInfo;
@@ -30,6 +31,7 @@ class AdminOrderConfirmation extends Mailable
         $this->transferPersonName = $transferPersonName;
         $this->transferDate = $transferDate;
         $this->name = $name;
+        $this->admin = $admin;
     }
 
     /**
@@ -39,6 +41,6 @@ class AdminOrderConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.admin_order_confirmation');
+        return $this->view('emails.admin_cash_order_confirmation');
     }
 }

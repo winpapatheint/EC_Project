@@ -49,11 +49,9 @@
                                                         <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href="{{ route('add.brand') }}">
-                                                    <button type="button" class="btn btn-light" >
-                                                        <i data-feather="plus-square"></i>
-                                                    </button>
-                                                </a>
+                                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                                                    <i data-feather="plus-square"></i>
+                                                </button>
                                             </div>
                                             <p class="error" style="color:red" id="error-brand_id"></p>
                                         </div>
@@ -253,10 +251,82 @@
     <!-- New Product Add End -->
 </div>
 
+<!-- Add Brand Modal Box -->
+<div class="modal fade theme-modal remove-coupon" id="addBrandModal" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Add new brand</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('store.brand') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Name:</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" id="brand_name" type="text" name="brand_name">
+                            <p class="error" style="color:red" id="error-brand_name"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Icon:</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" id="brand_icon" type="file" name="brand_icon" onchange="showBrand(this)">
+                            <img src="" id="showIcon">
+                            <p class="error" style="color:red" id="error-brand_icon"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-animation btn-brand">Yes</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                                style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Brand Modal Box End-->
+
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+    $('.btn-brand').click(function() {
+        $('.error').hide();
+
+        let brand_name = $.trim($("#brand_name").val());
+        let brand_icon = $("#brand_icon")[0].files[0];
+
+        let isValid = true;
+
+        if (!brand_name) {
+            $('#error-brand_name').text('Please provide brand name.').show();
+            isValid = false;
+        } else if (brand_name.length > 255) {
+            $('#error-brand_name').text('Brand name must not exceed 255 characters.').show();
+            isValid = false;
+        }
+
+        if (!brand_icon) {
+            $('#error-brand_icon').text('Please provide brand image.').show();
+            isValid = false;
+        } else if (brand_icon.size > 2 * 1024 * 1024) {
+            $('#error-brand_icon').text('Brand image must not exceed 2MB.').show();
+            isValid = false;
+        }
+
+        if (isValid) {
+            $(this).closest('form').submit();
+        }
+
+        return false;
+    });
+</script>
 
 <script>
     $('.btn-submit').click(function() {

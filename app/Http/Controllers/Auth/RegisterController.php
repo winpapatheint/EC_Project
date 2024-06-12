@@ -63,23 +63,6 @@ class RegisterController extends Controller
         ]);
         event(new Registered($seller));
 
-        $inquiry_email = 'info-test@asia-hd.com';
-        $data = array('name'=>$name);
-        if (!empty($request->email)) {
-            $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-                $message->to($inquiry_email, 'Ecommerce ')->subject($request->user_name);
-                $message->from($request->mail,$request->user_name);
-                $message->setBody("The following notification was received from the E-commerce official website.
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\n"."Name：　".$request->user_name."
-                \r\n"."Email：　".$request->mail."
-                \r\n
-                \r\n"."Notice：　
-                \r\n
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-            });
-        }
-
         $notification = Notification::find(1);
         $newval = array('time' => Carbon::now(),
                         'created_at' => Carbon::now(),

@@ -175,7 +175,7 @@ class OrderController extends Controller
             \Mail::to($orderItems->first()->buyer->email)->send(new \App\Mail\BuyerOrderTracking($orderItems));
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
-                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderTracking($orderItems));
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderTracking($orderItems , $admin));
             }
         }
 
@@ -234,7 +234,7 @@ class OrderController extends Controller
         \Mail::to($order->buyer->email)->send(new \App\Mail\BuyerOrderCancel($order));
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin) {
-            \Mail::to($admin->email)->send(new \App\Mail\AdminOrderCancel($order));
+            \Mail::to($admin->email)->send(new \App\Mail\AdminOrderCancel($order, $admin));
         }
 
         $msg = ('Order cancelled Successfully');

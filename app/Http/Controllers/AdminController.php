@@ -837,7 +837,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1067,7 +1067,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1119,7 +1119,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('category_id',$id)
+        $shoplist = $query->where('category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();
@@ -1212,7 +1212,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -1365,7 +1365,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -2989,8 +2989,8 @@ class AdminController extends Controller
 
     public function notice(Request $request)
     {
-        $sellername = DB::table('users')->select('name')->where('id',$request->selleremail)->first();
-        $inquiry_email = DB::table('users')->select('email')->where('id',$request->selleremail)->first();
+        $seller_name = DB::table('users')->select('name')->where('id',$request->selleremail)->first();
+        $seller_email = DB::table('users')->select('email')->where('id',$request->selleremail)->first();
         $shopName = Seller::where('user_id', $request->selleremail)->value('shop_name');
 
         if (!empty($request->image)) {
@@ -3000,34 +3000,28 @@ class AdminController extends Controller
             $imageName = '';
         }
 
-        $inquiry_emails =  $inquiry_email ->email;
+        $seller_email =  $seller_email ->email;
         $help = new Help();
-        $help->name =$sellername->name;
+        $help->name =$seller_name->name;
         $help->shop_name =  $shopName;
         $help->help_id = $request->selleremail;
-        $help->to = $inquiry_email->email;
-        $help->from = 'info-test@asia-hd.com';
+        $help->to = $seller_email;
+        $help->from = 'admin@asia-hd.com';
         $help->subject = $request->title;
         $help->body =  $request->message;
         $help->img = $imageName;
         $help->created_at = Carbon::now();
         $help->save();
-        $data = array('title' => $request->title);
-        if (!empty($request->selleremail)) {
-            $mail = Mail::send([], $data, function($message) use ($request,$inquiry_emails ) {
-                $message->to($inquiry_emails, 'Ecommerce ')->subject($request->name.'からの質問');
-                $message->from('info-test@asia-hd.com','admin');
-                $message->setBody("E commerce 公式サイトから、以下の問い合わせがありました。
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                \r\n名前：　".$request->name."
-                \r\n"."メールアドレス：　".$request->email."
-                \r\n
-                \r\n"."お問い合わせ内容：　
-                \r\n".$request->message."
-                \r\n
-                \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-            });
-        }
+        $adminemail =  'admin@asia-hd.com';
+        $helpDate = Carbon::now()->format('M d, Y');
+
+        $data = ['title' => $request->title,
+                'content' => $request->message,
+                'imgName' => $imageName,
+                'helpDate' => $helpDate,
+                'adminemail' => $adminemail,
+            'sellername' => $seller_name->name];
+        \Mail::to($seller_email)->send(new \App\Mail\SellerContact($data));
         $notification = SellerNotification::find(2);
         $newval = array('time' => Carbon::now(),
                         'created_at' => Carbon::now(),
@@ -3146,6 +3140,12 @@ class AdminController extends Controller
         $help->img =  $imageName;
         $help->created_at = Carbon::now();
         $help->save();
+
+        $notification = SellerNotification::find(2);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
 
         return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
 
@@ -3693,7 +3693,7 @@ class AdminController extends Controller
             });
         }
 
-        $email = 'info-test@asia-hd.com';
+        $email = 'admin@asia-hd.com';
         $received = Help::where('to',$email)->latest()->paginate(10);
 
         $sent = Help::where('from', $email)->where('noshow', null)->latest()->paginate(10);
@@ -3876,7 +3876,7 @@ class AdminController extends Controller
                 }
             }
             if (!empty($matchedProductIds)) {
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
             else {
                 $query->where('id', null);
@@ -3928,7 +3928,7 @@ class AdminController extends Controller
                 break;
         }
 
-        $shoplist = $query->where('special_sub_category_id',$id)
+        $shoplist = $query->where('special_sub_category_id',$id)->where('products.status', 1)
                           ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $shoplist->total();

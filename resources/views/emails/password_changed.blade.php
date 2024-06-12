@@ -1,57 +1,83 @@
-<!-- resources/views/emails/password_changed.blade.php -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Changed</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
             margin: 0;
             padding: 0;
+            color: #333;
         }
         .container {
-            width: 100%;
-            max-width: 600px;
+            width: 80%;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
         }
         .header {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 10px 0;
             text-align: center;
+            padding: 10px 0;
+        }
+        .header img {
+            max-width: 100%;
+            height: auto;
         }
         .content {
-            padding: 20px;
+            margin: 20px 0;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .content h2 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        strong {
+            font-size: 18px;
         }
         .footer {
-            text-align: center;
-            margin-top: 20px;
+            text-align: right;
+            margin-top: 40px;
+        }
+        .footer p {
+            font-size: 14px;
             color: #777;
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Password Changed</h1>
+            <img src="{{ $message->embed(public_path('images/logos/MailHeader_AFM.png')) }}" alt="Asian Food Museum Logo">
         </div>
         <div class="content">
-            <p>Dear {{ $user->name }},</p>
+            <p style="text-align: center;">
+                Your password have been <strong>changed</strong>!
+            </p>
+            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <h2>Dear {{ $user->name }},</h2>
             <p>We wanted to let you know that your password has been successfully changed.</p>
             <p>If you did not make this change or if you believe an unauthorized person has accessed your account, 
                 please contact our support team immediately.</p>
             <p>Thank you for keeping your account secure.</p>
-            <p>Best regards,</p>
-            <p>Asian Food Museum</p>
         </div>
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Asian Food Museum. All rights reserved.</p>
+            <p>Thank You,</p>
+            <p>Asian Food Museum</p>
+            <p>Email: info@asian-food.site</p>
+            <p>Phone: (+81) 03-3981-5090</p>
+            <p><a href="https://asian-food.site/">https://asian-food.site/</a></p>
+            <p>〒171-0014<br>
+                Room 502, Wada Building<br>
+               4-27-5 Ikebukuro, Toshima-ku<br>
+               Tokyo, Japan.
+            </p>
         </div>
     </div>
 </body>

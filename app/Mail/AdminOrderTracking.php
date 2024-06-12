@@ -11,15 +11,17 @@ class AdminOrderTracking extends Mailable
 {
     use Queueable, SerializesModels;
     public $orderItems;
+    public $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($orderItems)
+    public function __construct($orderItems, $admin)
     {
         $this->orderItems = $orderItems;
+        $this->admin = $admin;
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderConfirmation extends Mailable
+class BuyerCashOrderConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -40,6 +40,6 @@ class OrderConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order_confirmation');
+        return $this->view('emails.buyer_cash_order_confirmation');
     }
 }

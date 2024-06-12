@@ -3,31 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success</title>
+    <title>Cash Order</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
             margin: 0;
             padding: 0;
+            color: #333;
         }
-
         .container {
-            max-width: 600px;
-            margin: 20px auto;
+            width: 80%;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
         }
-
-        h2 {
-            color: #555;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
+        .header {
+            text-align: center;
+            padding: 10px 0;
         }
-
+        .header img {
+            max-width: 100%;
+            height: auto;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .content h2 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        strong {
+            font-size: 18px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -43,71 +55,87 @@
         th {
             background-color: #f2f2f2;
         }
-
         .subtotal {
             font-weight: bold;
         }
-
-        p {
-            margin-bottom: 10px;
-        }
-
         .footer {
-            margin-top: 20px;
-            border-top: 2px solid #ddd;
-            padding-top: 10px;
+            text-align: right;
+            margin-top: 40px;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #777;
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Order Success</h2>
-        <p>Dear {{ $orderedBuyer->name }},</p>
-        <p>Order code {{ $orderDetails->first()->order->order_code }} has been successfully ordered. Here are the details:</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Shop</th>
-                    <th>Quantity</th>
-                    <th>Price(tax inc)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($orderDetails as $detail)
-                <tr>
-                    <td>{{ $detail->product->product_name }}</td>
-                    <td>{{ $detail->seller->shop_name }}</td>
-                    <td>{{ $detail->qty }}</td>
-                    <td>{{ $detail->price }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-                <tr>
-                    <td class="subtotal">Subtotal :</td>
-                    <td>¥{{ number_format($orderDetails->first()->order->sub_total_amount , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Shipping Fee :</td>
-                    <td>¥{{ number_format($orderDetails->first()->order->shipping_fee , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Coupon Discounted :</td>
-                    <td>¥{{ number_format($orderDetails->first()->order->coupon_discount_amount , 0, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td class="subtotal">Total Price :</td>
-                    <td>¥{{ number_format($orderDetails->first()->order->total_amount , 0, '.', ',') }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p>Thank you for shopping with us.</p>
+        <div class="header">
+            <img src="{{ $message->embed(public_path('images/logos/MailHeader_AFM.png')) }}" alt="Asian Food Museum Logo">
+        </div>
+        <div class="content">
+            <p style="text-align: center;">
+                Order code <strong>{{ $orderDetails->first()->order->order_code }}</strong> has been successfully 
+                <strong>ordered</strong>!
+            </p>
+            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <h2>Dear {{ $orderedBuyer->name }},</h2>
+            <p>Here are the key details regarding order:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Shop</th>
+                        <th>Quantity</th>
+                        <th>Price(tax inc)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($orderDetails as $detail)
+                    <tr>
+                        <td>{{ $detail->product->product_name }}</td>
+                        <td>{{ $detail->seller->shop_name }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>{{ $detail->price }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="subtotal">Subtotal :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->sub_total_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Shipping Fee :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->shipping_fee , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Coupon Discounted :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->coupon_discount_amount , 0, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="subtotal">Total Price :</td>
+                        <td>¥{{ number_format($orderDetails->first()->order->total_amount , 0, '.', ',') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <p>Thank you for shopping with us.</p>
+        </div>
         <div class="footer">
-            <p>If you have any questions, please contact us at info@asian-food.site.</p>
+            <p>Thank You,</p>
+            <p>Asian Food Museum</p>
+            <p>Email: info@asian-food.site</p>
+            <p>Phone: (+81) 03-3981-5090</p>
+            <p><a href="https://asian-food.site/">https://asian-food.site/</a></p>
+            <p>〒171-0014<br>
+                Room 502, Wada Building<br>
+               4-27-5 Ikebukuro, Toshima-ku<br>
+               Tokyo, Japan.
+            </p>
         </div>
     </div>
 </body>

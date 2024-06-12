@@ -128,7 +128,7 @@ class ShowProductController extends Controller
                         $matchedProductIds[] = $rated->product_id;
                     }
                 }
-                $query->whereIn('id', $matchedProductIds);
+                $query->whereIn('products.id', $matchedProductIds);
             }
 
             if (!empty($discount)) {
@@ -326,7 +326,7 @@ class ShowProductController extends Controller
                     $matchedProductIds[] = $rated->product_id;
                 }
             }
-            $query->whereIn('id', $matchedProductIds);
+            $query->whereIn('products.id', $matchedProductIds);
         }
 
         if (!empty($discount)) {
@@ -554,7 +554,7 @@ class ShowProductController extends Controller
                     $matchedProductIds[] = $rated->product_id;
                 }
             }
-            $query->whereIn('id', $matchedProductIds);
+            $query->whereIn('products.id', $matchedProductIds);
         }
 
         if (!empty($discount)) {

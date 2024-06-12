@@ -89,45 +89,6 @@ class UserController extends Controller
             event(new Registered($user));
             event(new Registered($buyer));
 
-            $email = $request->email;
-            $name = $request->name;
-            $inquiry_email = 'info-test@asia-hd.com';
-            // $user = User::where('id', $user->id)->select('email', 'name')->first();
-            $data = array('name'=>$name);
-            if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-                    $message->to($inquiry_email, 'New Style Life ')->subject($name);
-                    $message->from($email,$name);
-                    $message->setBody("The following notification was received from the New Style Life official website.
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\n"."Name".$name."
-                    \r\n"."Email：　".$email."
-                    \r\n
-                    \r\n"."Notice：
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-            }
-
-            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-            $inquiry_email = 'info-test@asia-hd.com';
-            if (!empty(  $adminMails)) {
-                foreach ($adminMails as $email) {
-                    Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
-                        $message->to($email, 'New Style Life')->subject($name);
-                        $message->from($email,$name);
-                        $message->setBody("The following notification was received from the New Style Life official website.
-                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                        \r\n"."Name".$name."
-                        \r\n"."Email：　".$email."
-                        \r\n
-                        \r\n"."Notice：
-                        \r\n
-                        \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                    });
-                }
-            }
-
             $notification = Notification::find(1);
             $newval = array('time' => Carbon::now(),
                             'created_at' => Carbon::now(),
@@ -1127,7 +1088,7 @@ class UserController extends Controller
                             ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
-                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderSuccess($orderDetails));
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderReceived($orderDetails, $admin));
             }
 
             $sellerIds = $orderDetails->pluck('seller_id')->unique();
@@ -1143,7 +1104,7 @@ class UserController extends Controller
                                     ->where('buyer_id', $buyerId)->where('order_id', $order->id)
                                     ->where('seller_id', $seller->id)->get();
                 }
-                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderSuccess($orderDetails, $seller));
+                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderReceived($orderDetails, $seller));
             }
 
             $admin_notification = Notification::find(4);
@@ -1329,11 +1290,11 @@ class UserController extends Controller
             $bankInfo = BankAccount::find($bankAccountId);
 
             DB::commit();
-            \Mail::to($orderedBuyer->email)->send(new \App\Mail\OrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+            \Mail::to($orderedBuyer->email)->send(new \App\Mail\BuyerCashOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
 
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
-                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name));
+                \Mail::to($admin->email)->send(new \App\Mail\AdminCashOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name, $admin));
             }
 
             $admin_notification = Notification::find(4);

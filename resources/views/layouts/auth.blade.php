@@ -12,6 +12,7 @@
     <meta name="author" content="pixelstrap">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
     <title>Asian food museum</title>
 
     <!-- Google font -->
@@ -317,6 +318,13 @@
                         <div class="toggle-sidebar">
                             <i class="ri-apps-line status_toggle middle sidebar-toggle"></i>
                         </div>
+                    </div>
+                    <div class="logo-icon-wrapper">
+                        <a href="{{ route('admin.dashboard') }}">
+                            <img class="img-fluid main-logo main-white" src="{{ asset('backend/assets/images/logo-food.png') }}" alt="logo">
+                            <img class="img-fluid main-logo main-dark" src="{{ asset('backend/assets/images/logo/logo-white.png') }}"
+                                alt="logo">
+                        </a>
                     </div>
                     <nav class="sidebar-main">
                         <div class="left-arrow" id="left-arrow">

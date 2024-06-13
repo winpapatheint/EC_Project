@@ -73,7 +73,7 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Product <strong>registration</strong> process by <strong>{{ $seller->shop_name }}</strong> has been 
+                Product <strong>registration</strong> process by <strong>{{ $admin->shop_name }}</strong> has been 
                 <strong>successfully completed!</strong>
             </p>
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>

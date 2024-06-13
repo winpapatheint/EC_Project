@@ -336,22 +336,24 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/shop.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Shops</span>
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/shop.png') }}" alt="logo"> --}}
+                                        <i class="ri-store-3-line"></i>
+                                        <span>Shops</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.product') }}">
-                                        <i class="ri-store-3-line"></i>
+                                        <i class="ri-product-hunt-line"></i>
                                         <span>Products</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
-                                        <img style="width:22px;color:white"  src="{{ asset('backend/assets/images/icon/category.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Categories</span>
+                                        {{-- <img style="width:22px;color:white"  src="{{ asset('backend/assets/images/icon/category.png') }}" alt="logo"> --}}
+                                        <i class="ri-list-check-2"></i>
+                                        <span>Categories</span>
                                     </a>
                                 </li>
 
@@ -371,15 +373,17 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
-                                        <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/top.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Top</span>
+                                        {{-- <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/top.png') }}" alt="logo"> --}}
+                                        <i class="ri-list-settings-line"></i>
+                                        <span>Top</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Coupon</span>
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo"> --}}
+                                        <i class="ri-coupon-3-line"></i>
+                                        <span>Coupon</span>
                                     </a>
                                 </li>
 
@@ -416,35 +420,39 @@
                                 <li class="sidebar-list">
 
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/faq') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/faq.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>FAQ</span>
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/faq.png') }}" alt="logo"> --}}
+                                        <i class="ri-question-answer-line"></i>
+                                        <span>FAQ</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/help.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Contact</span>
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/help.png') }}" alt="logo"> --}}
+                                        <i class="ri-mail-line"></i>
+                                        <span>Contact</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/customer.png') }}" alt="logo">
-                                        &nbsp;  &nbsp;<span>Customer</span>
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/customer.png') }}" alt="logo"> --}}
+                                        <i class="ri-customer-service-2-line"></i>
+                                        <span>Customer</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
-                                        <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo">
+                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo"> --}}
+                                        <i class="ri-profile-line"></i>
                                         &nbsp;  &nbsp;<span>NewsLetter</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
-                                        <i class="ri-profile-line"></i>
+                                        <i class="ri-user-3-line"></i>
                                         <span>Profile</span>
                                     </a>
                                </li>

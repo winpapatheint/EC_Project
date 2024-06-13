@@ -63,7 +63,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -80,7 +80,7 @@
                 <strong>{{ $orderItems->first()->status }} </strong>
                 by {{ $orderItems->first()->seller->shop_name }}!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>

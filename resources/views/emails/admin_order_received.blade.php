@@ -79,7 +79,7 @@
                 <strong>Received</strong> an order from a customer with Order code 
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>

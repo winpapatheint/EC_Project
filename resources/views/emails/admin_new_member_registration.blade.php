@@ -49,7 +49,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -67,7 +67,7 @@
             <p style="text-align: center;">Seller 
             @endif
             <strong>registration</strong> process has been <strong>successfully completed!</strong></p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding registration:</p>
             <ul>

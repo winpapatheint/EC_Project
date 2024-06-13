@@ -60,7 +60,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -73,10 +73,10 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Product <strong>registration</strong> process by <strong>{{ $seller->shop_name }}</strong> has been 
+                Product <strong>adding</strong> by <strong>{{ $sellerData->shop_name }}</strong> has been 
                 <strong>successfully completed</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $seller->name }},</h2>
             <p>Here are the key details regarding registration:</p>
             <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt="" 

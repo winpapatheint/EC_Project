@@ -63,7 +63,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -78,7 +78,7 @@
             <p style="text-align: center;">
                 Your order has been <strong>cancelled</strong> by {{ $order->seller->shop_name }}!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $order->buyer->name }},</h2>
             <p>Cancelled Reason : {{ $order->cancelled_reason }}</p>
             <p>Here are the key details regarding order:</p>

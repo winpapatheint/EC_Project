@@ -1,29 +1,28 @@
 @component('mail::layout')
-{{-- Header --}}
-@slot('header')
-@component('mail::header', ['url' => config('app.url')])
-{{ config('app.name') }}
-@endcomponent
-@endslot
 
 <h3 style="text-align: center">Welcome to Asian Food Museum!</h3>
-<p style="text-align: center">Thank you for registering  in Asian Food Museum!</p>
 <br>
-<p style="text-align: center">Please click the button below to verify your account.</p>
+<p style="text-align: center">Thank you for registering in Asian Food Museum!</p>
+
+<p style="text-align: center">Please click the button below</p>
 {{-- Body --}}
 {{ $slot }}
-<div class="theme-logo">
-    <a href="/">
-        <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="blur-up lazyload" alt="">
-    </a>
-</div>
+<p style="text-align: right; font-size: 15px; color: #777; margin: 0;">Asian Food Museum</p>
+<p style="text-align: right; font-size: 15px; color: #777; margin: 0;">Email: info@asian-food.site</p>
+<p style="text-align: right; font-size: 15px; color: #777; margin: 0;">Phone: (+81) 03-3981-5090</p>
+<p style="text-align: right; font-size: 15px; color: #777; margin: 0;"><a href="https://asian-food.site/">https://asian-food.site/</a></p>
+<p style="text-align: right; font-size: 15px; color: #777; margin: 0;">〒171-0014<br>
+    Room 502, Wada Building<br>
+   4-27-5 Ikebukuro, Toshima-ku<br>
+   Tokyo, Japan.
+</p>
 {{-- Subcopy --}}
 @isset($subcopy)
 @slot('subcopy')
 @component('mail::subcopy')
 {{ $subcopy }}
 @endcomponent
-Feel free to adjust the design elements and text to better fit your website's branding and style.
+
 @endslot
 @endisset
 

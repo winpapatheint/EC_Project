@@ -63,7 +63,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -79,9 +79,9 @@
                 <strong>Cash Order</strong> have been successfully placed with order code 
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $admin->name }},</h2>
-            <p>Here are the key details regarding order:</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here are the key details regarding order:</p>
             <table>
                 <thead>
                     <tr>
@@ -122,13 +122,13 @@
                     </tr>
                 </tbody>
             </table>
-            <p>The total amount of {{ $totalAmount }} will be transfer to the following bank account at {{ $transferDate }} :</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The total amount of {{ $totalAmount }} will be transfer to the following bank account at {{ $transferDate }} :</p>
             <p>Bank Name: {{ $bankInfo->bank_name }}</p>
             <p>Branch Name: {{ $bankInfo->branch_name }}</p>
             <p>Account Type: {{ $bankInfo->account_type }}</p>
             <p>Account Number: {{ $bankInfo->account_number }}</p>
             <p>Account Name: {{ $bankInfo->account_name }}</p>
-            <p>If you don't received the amount at {{ $transferDate }}, cancel the order.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you don't received the amount at {{ $transferDate }}, cancel the order.</p>
             <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
             <p>Transfer Person Name: {{ $transferPersonName }}</p>
         </div>

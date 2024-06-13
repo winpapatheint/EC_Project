@@ -79,7 +79,7 @@
                 Your <strong>Cash Order</strong> have been successfully placed with order code 
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $orderDetails->first()->buyer->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
@@ -97,7 +97,7 @@
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->seller->shop_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -122,13 +122,13 @@
                     </tr>
                 </tbody>
             </table>
-            <p>Please transfer the total amount of {{ $totalAmount }} to the following bank account:</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please transfer the total amount of ¥{{ number_format($totalAmount, 0, '', ',') }} to the following bank account:</p>
             <p>Bank Name: {{ $bankInfo->bank_name }}</p>
             <p>Branch Name: {{ $bankInfo->branch_name }}</p>
             <p>Account Type: {{ $bankInfo->account_type }}</p>
             <p>Account Number: {{ $bankInfo->account_number }}</p>
             <p>Account Name: {{ $bankInfo->account_name }}</p>
-            <p>If you don't transfer the amount at {{ $transferDate }}, your order will be cancelled.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you don't transfer the amount at {{ $transferDate }}, your order will be cancelled.</p>
             <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
             <p>Transfer Person Name: {{ $transferPersonName }}</p>
             <p>Thank you for shopping with us.</p>

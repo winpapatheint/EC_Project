@@ -63,31 +63,31 @@ class UserController extends Controller
                 'status' => '1',
             ]);
 
-            $buyer = Buyer::create([
-                'user_id' => $user->id,
-                'name' => $request->name,
-                'email' => $user->email,
-                'phone' => $request->phone,
-            ]);
+            // $buyer = Buyer::create([
+            //     'user_id' => $user->id,
+            //     'name' => $request->name,
+            //     'email' => $user->email,
+            //     'phone' => $request->phone,
+            // ]);
 
-            $buyerAddress = BuyerAddress::create([
-                'buyer_id' => $buyer->id,
-                'name' => $request->name,
-                'post_code' => $request->zip_code,
-                'prefecture_id' => $request->prefecture,
-                'city' => $request->city,
-                'chome' => $request->chome,
-                'building' => $request->building,
-                'room_no' => $request->room,
-                'phone' => $request->phone,
-                'place' => "HOME",
-                'default' => 1,
-                'main_address' => 1
-            ]);
+            // $buyerAddress = BuyerAddress::create([
+            //     'buyer_id' => $buyer->id,
+            //     'name' => $request->name,
+            //     'post_code' => $request->zip_code,
+            //     'prefecture_id' => $request->prefecture,
+            //     'city' => $request->city,
+            //     'chome' => $request->chome,
+            //     'building' => $request->building,
+            //     'room_no' => $request->room,
+            //     'phone' => $request->phone,
+            //     'place' => "HOME",
+            //     'default' => 1,
+            //     'main_address' => 1
+            // ]);
             DB::commit();
 
             event(new Registered($user));
-            event(new Registered($buyer));
+            // event(new Registered($buyer));
 
             $notification = Notification::find(1);
             $newval = array('time' => Carbon::now(),

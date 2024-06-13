@@ -60,7 +60,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 14px;
+            font-size: 15px;
             color: #777;
             margin: 0;
         }
@@ -76,7 +76,7 @@
                 Product <strong>registration</strong> process by <strong>{{ $admin->shop_name }}</strong> has been 
                 <strong>successfully completed!</strong>
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h2>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding registration:</p>
             <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt="" 
@@ -97,7 +97,7 @@
                     </tr>
                     <tr>
                         <td>Price(tax inc)</td>
-                        <td>{{ $product->selling_price }}</td>
+                        <td>¥{{ number_format($product->selling_price, 0, '', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Discount(%)</td>
@@ -105,7 +105,7 @@
                     </tr>
                     <tr>
                         <td>Delivery Price</td>
-                        <td>{{ $product->delivery_price }}</td>
+                        <td>¥{{ number_format($product->delivery_price, 0, '', ',') }}</td>
                     </tr>
                 </tbody>
             </table>

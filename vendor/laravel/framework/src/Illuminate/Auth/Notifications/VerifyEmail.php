@@ -63,7 +63,7 @@ class VerifyEmail extends Notification
     {
         return (new MailMessage)
             ->subject(Lang::get('Verify Email Address'))
-            ->action(Lang::get('CLICK HERE'), $url)
+            ->action(Lang::get('Verify Email'), $url)
             ->line(Lang::get(''));
     }
 

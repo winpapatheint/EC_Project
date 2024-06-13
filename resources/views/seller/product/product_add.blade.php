@@ -18,6 +18,24 @@
                                 <form method="POST" class="theme-form theme-form-2 mega-form" action="{{ route('store.product') }}" enctype="multipart/form-data" id="sellerRegister">
                                     @csrf
                                     <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <select class="custom-select" name="brand_id" id="brand_id">
+                                                    <option>Choose brand</option>
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                                                    <i data-feather="plus-square"></i>
+                                                </button>
+                                            </div>
+                                            <p class="error" style="color:red" id="error-brand_id"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" placeholder="Product Name" value="{{ old('product_name') }}" id="product_name">
@@ -36,24 +54,6 @@
                                                 @endforeach
                                             </select>
                                             <p class="error" style="color:red" id="error-country_id"></p>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Brand</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <select class="custom-select" name="brand_id" id="brand_id">
-                                                    <option>Choose brand</option>
-                                                    @foreach ($brands as $brand)
-                                                        <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBrandModal">
-                                                    <i data-feather="plus-square"></i>
-                                                </button>
-                                            </div>
-                                            <p class="error" style="color:red" id="error-brand_id"></p>
                                         </div>
                                     </div>
 

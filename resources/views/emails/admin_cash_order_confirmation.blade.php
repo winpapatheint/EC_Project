@@ -6,7 +6,7 @@
     <title>Cash Order</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -76,12 +76,12 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                <strong>Cash Order</strong> have been successfully placed with order code 
+                <strong>New Cash Order</strong> have been successfully placed with order code 
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $admin->name }},</h2>
-            <p>Here are the key details regarding order:</p>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p>Dear {{ $admin->name }},</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here are the key details regarding order:</p>
             <table>
                 <thead>
                     <tr>
@@ -97,7 +97,7 @@
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->seller->shop_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -122,13 +122,13 @@
                     </tr>
                 </tbody>
             </table>
-            <p>The total amount of {{ $totalAmount }} will be transfer to the following bank account at {{ $transferDate }} :</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The total amount of ¥{{ number_format($totalAmount, 0, '', ',') }} will be transfer to the following bank account at {{ $transferDate }} :</p>
             <p>Bank Name: {{ $bankInfo->bank_name }}</p>
             <p>Branch Name: {{ $bankInfo->branch_name }}</p>
             <p>Account Type: {{ $bankInfo->account_type }}</p>
             <p>Account Number: {{ $bankInfo->account_number }}</p>
             <p>Account Name: {{ $bankInfo->account_name }}</p>
-            <p>If you don't received the amount at {{ $transferDate }}, cancel the order.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you don't received the amount at {{ $transferDate }}, cancel the order.</p>
             <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
             <p>Transfer Person Name: {{ $transferPersonName }}</p>
         </div>

@@ -6,7 +6,7 @@
     <title>New Product Registration Successful</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -73,11 +73,10 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Product <strong>registration</strong> process by <strong>{{ $admin->shop_name }}</strong> has been 
-                <strong>successfully completed!</strong>
+                <strong>New Product</strong> has been <strong>added</strong> by <strong>{{ $admin->shop_name }}</strong> !
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $admin->name }},</h2>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding registration:</p>
             <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt="" 
                 style="width: 60px; height: 60px;">
@@ -97,7 +96,7 @@
                     </tr>
                     <tr>
                         <td>Price(tax inc)</td>
-                        <td>{{ $product->selling_price }}</td>
+                        <td>¥{{ number_format($product->selling_price, 0, '', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Discount(%)</td>
@@ -105,7 +104,7 @@
                     </tr>
                     <tr>
                         <td>Delivery Price</td>
-                        <td>{{ $product->delivery_price }}</td>
+                        <td>¥{{ number_format($product->delivery_price, 0, '', ',') }}</td>
                     </tr>
                 </tbody>
             </table>

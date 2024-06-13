@@ -6,7 +6,7 @@
     <title>New Order Received</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -79,8 +79,8 @@
                 <strong>Received</strong> an order from a customer with Order code 
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $admin->name }},</h2>
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
                 <thead>
@@ -97,7 +97,7 @@
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->seller->shop_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @endforeach
                 </tbody>

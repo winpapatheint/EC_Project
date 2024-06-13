@@ -87,7 +87,7 @@ class UserController extends Controller
             DB::commit();
 
             event(new Registered($user));
-            event(new Registered($buyer));
+            // event(new Registered($buyer));
 
             $notification = Notification::find(1);
             $newval = array('time' => Carbon::now(),

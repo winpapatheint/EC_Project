@@ -6,7 +6,7 @@
     <title>Password Changed</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         .footer {
             text-align: right;
@@ -60,12 +60,12 @@
             <p style="text-align: center;">
                 Your password have been <strong>changed</strong>!
             </p>
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $user->name }},</h2>
-            <p>We wanted to let you know that your password has been successfully changed.</p>
-            <p>If you did not make this change or if you believe an unauthorized person has accessed your account, 
+            <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+            <p>Dear {{ $user->name }},</h2>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We wanted to let you know that your password has been successfully changed.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you did not make this change or if you believe an unauthorized person has accessed your account, 
                 please contact our support team immediately.</p>
-            <p>Thank you for keeping your account secure.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for keeping your account secure.</p>
         </div>
         <div class="footer">
             <p>Thank You,</p>

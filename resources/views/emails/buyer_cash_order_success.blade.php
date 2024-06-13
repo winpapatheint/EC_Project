@@ -97,7 +97,7 @@
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->seller->shop_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @endforeach
                 </tbody>

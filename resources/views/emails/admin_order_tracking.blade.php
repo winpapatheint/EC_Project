@@ -101,7 +101,7 @@
                     <tr>
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @php
                         $amount += $detail->amount;

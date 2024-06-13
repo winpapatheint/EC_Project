@@ -97,7 +97,7 @@
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->seller->shop_name }}</td>
                         <td>{{ $detail->qty }}</td>
-                        <td>{{ $detail->price }}</td>
+                        <td>¥{{ number_format($detail->price, 0, '', ',') }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -122,7 +122,7 @@
                     </tr>
                 </tbody>
             </table>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please transfer the total amount of {{ $totalAmount }} to the following bank account:</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please transfer the total amount of ¥{{ number_format($totalAmount, 0, '', ',') }} to the following bank account:</p>
             <p>Bank Name: {{ $bankInfo->bank_name }}</p>
             <p>Branch Name: {{ $bankInfo->branch_name }}</p>
             <p>Account Type: {{ $bankInfo->account_type }}</p>

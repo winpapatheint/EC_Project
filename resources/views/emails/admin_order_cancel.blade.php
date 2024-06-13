@@ -95,7 +95,7 @@
                     <tr>
                         <td>{{ $order->product->product_name }}</td>
                         <td>{{ $order->qty }}</td>
-                        <td>{{ $order->price }}</td>
+                        <td>¥{{ number_format($order->price, 0, '', ',') }}</td>
                     </tr>
                 </tbody>
             </table>

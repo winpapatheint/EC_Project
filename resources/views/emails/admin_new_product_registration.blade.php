@@ -97,7 +97,7 @@
                     </tr>
                     <tr>
                         <td>Price(tax inc)</td>
-                        <td>{{ $product->selling_price }}</td>
+                        <td>¥{{ number_format($product->selling_price, 0, '', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Discount(%)</td>
@@ -105,7 +105,7 @@
                     </tr>
                     <tr>
                         <td>Delivery Price</td>
-                        <td>{{ $product->delivery_price }}</td>
+                        <td>¥{{ number_format($product->delivery_price, 0, '', ',') }}</td>
                     </tr>
                 </tbody>
             </table>

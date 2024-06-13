@@ -6,7 +6,7 @@
     <title>Order {{ $orderItems->first()->status }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -63,7 +63,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 15px;
+            font-size: 14px;
             color: #777;
             margin: 0;
         }
@@ -78,10 +78,10 @@
             <p style="text-align: center;">
                 Order code <strong>{{ $orderItems->first()->order->order_code }}</strong> has been 
                 <strong>{{ $orderItems->first()->status }} </strong>
-                by {{ $orderItems->first()->seller->shop_name }}!
+                by <strong>{{ $orderItems->first()->seller->shop_name }}</strong>!
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $admin->name }},</h2>
+            <p>Dear {{ $admin->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
                 <thead>

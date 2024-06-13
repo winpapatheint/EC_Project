@@ -6,7 +6,7 @@
     <title>Registration Successful</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,14 +38,14 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         .footer {
             text-align: right;
             margin-top: 40px;
         }
         .footer p {
-            font-size: 15px;
+            font-size: 14px;
             color: #777;
             margin: 0;
         }
@@ -61,7 +61,7 @@
                 Your <strong>registration</strong> process has been <strong>successfully completed!</strong>
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $user->name }},</h2>
+            <p>Dear {{ $user->name }},</h2>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to our Asian Food Museum.</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your registration is now confirmed, and you are officially a part of our valued customer. We are look forward to start together.</p>
             <p>Here are the key details regarding your registration:</p>

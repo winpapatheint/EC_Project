@@ -10,7 +10,7 @@
     @endif
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -34,7 +34,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -42,14 +42,14 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         .footer {
             text-align: right;
             margin-top: 40px;
         }
         .footer p {
-            font-size: 15px;
+            font-size: 14px;
             color: #777;
             margin: 0;
         }
@@ -62,13 +62,13 @@
         </div>
         <div class="content">
             @if ($user->role == 'buyer')
-            <p style="text-align: center;">Buyer 
+            <p style="text-align: center;"><strong>New Buyer</strong>
             @elseif ($user->role == 'seller')
-            <p style="text-align: center;">Seller 
+            <p style="text-align: center;"><strong>New Seller</strong>
             @endif
-            <strong>registration</strong> process has been <strong>successfully completed!</strong></p>
+            has been <strong>registered successfully</strong>!</p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $admin->name }},</h2>
+            <p>Dear {{ $admin->name }},</p>
             <p>Here are the key details regarding registration:</p>
             <ul>
                 <li><p>Type: {{ $user->role == 'buyer' ? 'Buyer' : 'Seller' }}</p></li>

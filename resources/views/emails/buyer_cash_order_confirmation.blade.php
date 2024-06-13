@@ -6,7 +6,7 @@
     <title>Cash Order</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -80,7 +80,7 @@
                 <strong>{{ $orderDetails->first()->order->order_code }}</strong>!
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $orderDetails->first()->buyer->name }},</h2>
+            <p>Dear {{ $orderDetails->first()->buyer->name }},</h2>
             <p>Here are the key details regarding order:</p>
             <table>
                 <thead>

@@ -7,7 +7,7 @@
     <title>Seller Contact</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -92,7 +92,7 @@
         </div>
         <div class="content">
             <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h3>Dear Admin,</h3>
+            <p>Dear Admin,</p>
             <p class="detail"><strong>Subject:</strong> {{ $data['title'] }}</p>
             <p class="detail"><strong>Message Details:</strong> {{ $data['content'] }}</p>
             <!-- Embedded Image -->

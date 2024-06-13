@@ -2800,14 +2800,6 @@ class AdminController extends Controller
     {
         if ($request->from == 'faq') {
             $inquiry_email = 'info-test@asia-hd.com';
-            $pattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
 
             $data = array('name'=>$request->name);
 
@@ -2841,14 +2833,6 @@ class AdminController extends Controller
 
         else if( $request->from == 'contact')
         {
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
-
             $adminemail =  'admin@asia-hd.com';
             $contactDate = Carbon::now()->format('M d, Y');
 

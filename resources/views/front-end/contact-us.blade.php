@@ -146,17 +146,15 @@
 
                             <div class="col-xxl-6 col-lg-12 col-sm-6">
                                 <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput2" class="form-label">Email Address</label>
+                                    <label for="email" class="form-label">Email Address</label>
                                     <div class="custom-input">
-                                        <input type="email" class="form-control" id="email"
-                                            placeholder="Enter Email Address" name="email"  value="{{ old('email') }}">
+                                        <input type="email" class="form-control" id="email" placeholder="Enter Email Address" name="email" value="{{ old('email') }}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address">
                                         <i class="fa-solid fa-envelope"></i>
-
                                         @if (!empty($error['email']))
-                                            @foreach ($error['email'] as  $key => $value)
-                                                <p class="error text-danger">{{ $value }}</p>
-                                            @endforeach
-                                        @endif
+                                        @foreach ($error['email'] as  $key => $value)
+                                            <p class="error text-danger">{{ $value }}</p>
+                                        @endforeach
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +164,7 @@
                                     <label for="exampleFormControlInput3" class="form-label">Phone Number</label>
                                     <div class="custom-input">
                                         <input type="tel" class="form-control" id="phone"
-                                            placeholder="Enter Your Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            placeholder="Enter Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
                                             this.value.slice(0, this.maxLength);" name="phone"  value="{{ old('phone') }}">
                                         <i class="fa-solid fa-mobile-screen-button"></i>
 

@@ -2800,126 +2800,78 @@ class AdminController extends Controller
     {
         if ($request->from == 'faq') {
             $inquiry_email = 'info-test@asia-hd.com';
-
-            $valarr = array(
+            $pattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+            $valarr = [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
                 'phone' => 'required|string|max:255',
                 'message' => 'required',
-
-            );
+            ];
             $request->validate($valarr);
 
             $data = array('name'=>$request->name);
 
-            if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
-                    $message->from($request->email,$request->name);
-                    $message->setBody("We received the following inquiry from the official e-commerce website.
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\nName：　".$request->name."
-                    \r\n"."Email：　".$request->email."
-                    \r\n
-                    \r\n"."Message：　
-                    \r\n".$request->message."
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                });
-            }
+            $adminemail =  'admin@asia-hd.com';
+            $faqDate = Carbon::now()->format('M d, Y');
+
+            $data = ['name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'content' => $request->message,
+                    'faqDate' => $faqDate,
+                    'adminemail' => $adminemail];
+            \Mail::to($adminemail)->send(new \App\Mail\FAQContact($data));
 
             $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
-
-            $inquiry_email = 'info-test@asia-hd.com';
-            $data = array('title' => $request->title);
-
             if (!empty(  $adminMails)) {
                 foreach ($adminMails as $email) {
-                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
-                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
-                        $message->from($request->email,$request->name);
-                        $message->setBody("We received the following inquiry from the official new style life website.
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                            \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $request->email . "
-                            \r\n
-                            \r\nMessage：　
-                            \r\n" . $request->message . "
-                            \r\n
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                    });
+                   $data = ['name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'content' => $request->message,
+                    'faqDate' => $faqDate,
+                    'adminemail' => $adminemail];
+                \Mail::to($email)->send(new \App\Mail\FAQContact($data));
                 }
             }
 
-            $notification = Notification::find(6);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $notification->update( $newval);
-
             return redirect('/faq#ts-form')->with('success','Your inquiry has been successfully sent');
-
 
         }
 
         else if( $request->from == 'contact')
         {
-            $inquiry_email = 'info-test@asia-hd.com';
-
-            $request->validate([
+            $valarr = [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
                 'phone' => 'required|string|max:255',
                 'message' => 'required',
-            ]);
+            ];
+            $request->validate($valarr);
 
-            $data = array('name'=>$request->name);
-            if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
+            $adminemail =  'admin@asia-hd.com';
+            $contactDate = Carbon::now()->format('M d, Y');
 
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
-                    $message->from($request->email,$request->name);
-                    $message->setBody("We received the following inquiry from the official e-commerce website
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\nName：　".$request->name."
-                    \r\n"."Email：　".$request->email."
-                    \r\n
-                    \r\n"."Message：　
-                    \r\n".$request->message."
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
+            $data = ['name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'content' => $request->message,
+                    'contactDate' => $contactDate,
+                    'adminemail' => $adminemail];
+            \Mail::to($adminemail)->send(new \App\Mail\GuestContact($data));
 
-                });
-            }
-
-            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-
-            $inquiry_email = 'info-test@asia-hd.com';
-            $data = array('title' => $request->title);
-
+            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
             if (!empty(  $adminMails)) {
                 foreach ($adminMails as $email) {
-                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
-                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
-                        $message->from($request->email,$request->name);
-                        $message->setBody("We received the following inquiry from the official e-commerce website.
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                            \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $inquiry_email . "
-                            \r\n
-                            \r\nMessage：　
-                            \r\n" . $request->message . "
-                            \r\n
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                    });
+                   $data = ['name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'content' => $request->message,
+                    'contactDate' => $contactDate,
+                    'adminemail' => $adminemail];
+                \Mail::to($email)->send(new \App\Mail\GuestContact($data));
                 }
             }
-
-            $notification = Notification::find(8);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $notification->update( $newval);
             return redirect('/contact#contact-form')->with('success','Your inquiry has been successfully sent');
 
         }

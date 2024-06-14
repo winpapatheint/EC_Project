@@ -294,12 +294,12 @@
                                                 } elseif ($notify->message == 'Product deleted:') {
                                                     $color = $iro[4];
                                                 }
-                                            @endphp  
-                                            <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                            @endphp
+                                            <i class="fa fa-circle me-2 font-primary notification-circle"
                                                 style="font-size:11px;color: {{ $color }} !important">
                                             </i>
                                             @else
-                                            <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                            <i class="fa fa-circle me-2 font-primary notification-circle"
                                                 style="font-size:11px;color: white !important">
                                             </i>
                                             @endif
@@ -505,7 +505,7 @@
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
                                         {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo"> --}}
                                         <i class="ri-profile-line"></i>
-                                        &nbsp;  &nbsp;<span>NewsLetter</span>
+                                        <span>NewsLetter</span>
                                     </a>
                                 </li>
 
@@ -627,7 +627,7 @@
                 e.preventDefault();
                 var link = $(this);
                 var notificationId = link.data('id');
-    
+
                 $.ajax({
                     url: '/notifications/' + notificationId + '/seen',
                     type: 'POST',

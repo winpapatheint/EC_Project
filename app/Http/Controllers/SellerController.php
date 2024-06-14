@@ -242,7 +242,7 @@ class SellerController extends Controller
         $help->name = Auth::user()->name;
         $help->shop_name = $shopName;
         $help->help_id = Auth::user()->id;
-        $help->to = 'admin@asia-hd.com';
+        $help->to = 'winpapatheint33@gmail.com';
         $help->from = Auth::user()->email;
         $help->subject = $request->title;
         $help->body =  $request->message;
@@ -250,13 +250,13 @@ class SellerController extends Controller
         $help->created_at = Carbon::now();
         $help->save();
         $helpDate = Carbon::now()->format('M d, Y');
-        $adminemail = 'admin@asia-hd.com';
+        $adminemail = 'winpapatheint33@gmail.com';
         $data = ['title' => $request->title,
                 'content' => $request->message,
                 'imgName' => $imageName,
                 'helpDate' => $helpDate,
                 'selleremail' => Auth::user()->email];
-        \Mail::to($adminemail)->send(new \App\Mail\AdminContact($data));
+        \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
         $notification = Notification::find(5);
         $newval = array('time' => Carbon::now(),
@@ -317,7 +317,7 @@ class SellerController extends Controller
                 'helpDate' => $helpDate,
 
                 'selleremail' => Auth::user()->email];
-        \Mail::to($adminemail)->send(new \App\Mail\AdminContact($data));
+        \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
         $notification = Notification::find(5);
         $newval = array('time' => Carbon::now(),

@@ -254,25 +254,38 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('emailreply') }}" class="theme-form theme-form-2 mega-form" >
+                <form method="POST" action="{{ route('emailreply') }}" class="theme-form theme-form-2 mega-form"
+                 enctype="multipart/form-data" >
                     @csrf
+                    {{ $item->help_id}}
                     <input type="hidden" name="id" value="{{ $item->id}}">
+                    <input type="hidden" name="help_id" value="{{ $item->help_id}}">
                     <input type="hidden" name="subject" value="{{ $item->subject}}">
+
                     <div class="mb-2 row align-items-center">
+                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" type="file" id="image" name="image" onchange="validateImage(this)">
+                            <img src="" id="mainThmb">
+                            <span class="error" style="color:red" id="error-image"></span>
+                        </div>
+                    </div>
+
+                    {{-- <div class="mb-2 row align-items-center">
                         <label
                             class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
                         <div class="col-md-9 col-lg-10">
-                            <input class="form-control" type="file" name="image" onchange="mainThamUrl(this)">
+                            <input class="form-control" type="file" name="image" id="image" onchange="mainThamUrl(this)">
                             <img src="" id="mainThmb">
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row align-items-center">
                         <label
                             class="col-lg-2 col-md-3 col-form-label form-label-title">Body
                             </label>
                         <div class="col-md-9 col-lg-10">
-                            <textarea class="form-control" name="body" id="" rows="8"></textarea>
+                            <textarea class="form-control" name="message" id="message" rows="8"></textarea>
                             <p style="display:none" class="body error text-danger"></p>
                             @if (!empty($error['body']))
                                 @foreach ($error['body'] as  $key => $value)
@@ -481,5 +494,25 @@
         toggleTabs('notice'); // Show only the notice tab content
     });
 });
+    </script>
+
+<script>
+    function validateImage(input) {
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if (!allowedExtensions.exec(input.value)) {
+            // alert('Invalid file type. Only images (JPG, JPEG, PNG, GIF) are allowed.');
+            document.getElementById('error-image').textContent = 'Invalid file type. Only images (JPG, JPEG, PNG, GIF) are allowed.';
+            input.value = '';
+            return false;
+        } else {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('mainThmb').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
     </script>
 </x-auth-layout>

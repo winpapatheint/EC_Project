@@ -1863,49 +1863,67 @@ class AdminController extends Controller
     public function storeReply(Request $request)
     {
 
-        $validatedData = $request->validate([
-            'body' => 'present|string|max:255',
-        ]);
+        // $validatedData = $request->validate([
+        //     'body' => 'present|string|max:255',
+        // ]);
 
-        $help = new Help();
-        if($request->hasFile('image'))
-        {
-            $img = $request->file('image');
-            $filename = time() . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('upload/shop'), $filename);
-            $help->img = $filename;
+         $help = new Help();
+
+        if (!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
         }
+
+        // $seller_email =  $seller_email ->email;
+        // $help = new Help();
+        // $help->name =$seller_name->name;
+        // $help->shop_name =  $shopName;
+        // $help->help_id = $request->selleremail;
+        // $help->to = $seller_email;
+        // $help->from = 'admin@asia-hd.com';
+        // $help->subject = $request->title;
+        // $help->body =  $request->message;
+        // $help->img = $imageName;
+        // $help->created_at = Carbon::now();
+        // $help->save();
+        // $adminemail = 'admin@asia-hd.com';
+        // $helpDate = Carbon::now()->format('M d, Y');
+
         $shopName = Seller::where('user_id', $request->help_id)->value('shop_name');
+        $seller_name = DB::table('users')->select('name')->where('id',$request->help_id)->first();
+        $seller_email = DB::table('users')->select('email')->where('id',$request->help_id)->first();
         $check = Help::find($request->id);
-        $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
+
+        // $help->help_id = $check ? $check->help_id ?? $request->id : $request->id;
         $help->name = 'admin';
         $help->shop_name =   $shopName;
         $help->to =  $check->from;
-        $help->from = 'info-test@asia-hd.com';
+        $help->from = 'admin@asia-hd.com';
         $help->subject = $request->subject;
-        $help->body = $validatedData['body'];
+        $help->body =  $request->message;
+        $help->img = $imageName;
         $help->updated_at = Carbon::now();
         $help->save();
 
-        $inquiry_email = 'info-test@asia-hd.com';
-        $sellerEmails =  $check->from;
-        $data = ['subject' => $request->subject];
+        $adminemail =  'admin@asia-hd.com';
+        $helpDate = Carbon::now()->format('M d, Y');
 
-            Mail::send([], $data, function ($message) use ($request, $sellerEmails, $inquiry_email) {
-                $message->to($sellerEmails)->subject($request->subject . 'からの質問');
-                $message->from($inquiry_email, $request->subject);
-                $message->setBody("We received the following notice message from the official e-commerce website.
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\nName：　" . $request->subject . "
-                    \r\nEmail：　" .  $inquiry_email . "
-                    \r\n
-                    \r\nMessage：　
-                    \r\n" . $request->subject . "
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-            });
+        $data = ['title' => $request->title,
+                'content' => $request->message,
+                'imgName' => $imageName,
+                'helpDate' => $helpDate,
+                'adminemail' => $adminemail,
+            'sellername' => $seller_name->name];
+        \Mail::to($seller_email)->send(new \App\Mail\AdminContact($data));
+        $notification = SellerNotification::find(2);
+        $newval = array('time' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        );
+        $notification->update( $newval);
 
-        $msg = ('Data sent successfully');
+        $msg = ('Reply message sent successfully');
         return redirect('/admin/indexhelp')->with('success', $msg);
     }
 
@@ -2800,14 +2818,6 @@ class AdminController extends Controller
     {
         if ($request->from == 'faq') {
             $inquiry_email = 'info-test@asia-hd.com';
-            $pattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
 
             $data = array('name'=>$request->name);
 
@@ -2820,7 +2830,6 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'faqDate' => $faqDate,
                     'adminemail' => $adminemail];
-            \Mail::to($adminemail)->send(new \App\Mail\FAQContact($data));
 
             $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
             if (!empty(  $adminMails)) {
@@ -2835,20 +2844,12 @@ class AdminController extends Controller
                 }
             }
 
-            return redirect('/faq#ts-form')->with('success','Your inquiry has been successfully sent');
+            return redirect('/faq#ts-form')->with('success','Your message has been successfully sent.');
 
         }
 
         else if( $request->from == 'contact')
         {
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
-
             $adminemail =  'admin@asia-hd.com';
             $contactDate = Carbon::now()->format('M d, Y');
 
@@ -2869,74 +2870,13 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'contactDate' => $contactDate,
                     'adminemail' => $adminemail];
-                \Mail::to($email)->send(new \App\Mail\GuestContact($data));
+                \Mail::to($email)->send(new \App\Mail\GuestContactIntoSubAdmin($data));
                 }
             }
-            return redirect('/contact#contact-form')->with('success','Your inquiry has been successfully sent');
+            return redirect('/contact#contact-form')->with('success','Your message has been successfully sent.');
 
         }
-        else if( $request->from == 'privacy')
-        {
-            $inquiry_email = 'info-test@asia-hd.com';
 
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ]);
-
-            $data = array('name'=>$request->name);
-            if (!empty($request->email)) {
-                $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email) {
-
-                    $message->to($inquiry_email, 'Ecommerce ')->subject($request->name.'Question form');
-                    $message->from($request->email,$request->name);
-                    $message->setBody("We received the following inquiry from the official e-commerce website
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                    \r\nName：　".$request->name."
-                    \r\n"."Email：　：　".$request->email."
-                    \r\n
-                    \r\n"."Message：　
-                    \r\n".$request->message."
-                    \r\n
-                    \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-
-                });
-            }
-
-            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-
-            $inquiry_email = 'info-test@asia-hd.com';
-            $data = array('title' => $request->title);
-
-            if (!empty(  $adminMails)) {
-                foreach ($adminMails as $email) {
-                    Mail::send([], $data, function ($message) use ($request, $adminMails) {
-                        $message->to($email, 'Ecommerce ')->subject($request->name.'Question form');
-                        $message->from($request->email,$request->name);
-                        $message->setBody("We received the following inquiry from the official e-commerce website.
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-                            \r\nName：　" . $request->title . "
-                            \r\nEmail：　" .  $inquiry_email . "
-                            \r\n
-                            \r\nMessage：　
-                            \r\n" . $request->message . "
-                            \r\n
-                            \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-                    });
-                }
-            }
-
-            $notification = Notification::find(7);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $notification->update( $newval);
-
-            return redirect('/privacy-policy#privacy-form')->with('success','Your inquiry has been successfully sent');
-
-        }
     }
 
     public function notice(Request $request)
@@ -2951,7 +2891,6 @@ class AdminController extends Controller
         } else {
             $imageName = '';
         }
-
         $seller_email =  $seller_email ->email;
         $help = new Help();
         $help->name =$seller_name->name;
@@ -2964,7 +2903,7 @@ class AdminController extends Controller
         $help->img = $imageName;
         $help->created_at = Carbon::now();
         $help->save();
-        $adminemail =  'admin@asia-hd.com';
+        $adminemail = 'admin@asia-hd.com';
         $helpDate = Carbon::now()->format('M d, Y');
 
         $data = ['title' => $request->title,
@@ -2973,7 +2912,7 @@ class AdminController extends Controller
                 'helpDate' => $helpDate,
                 'adminemail' => $adminemail,
             'sellername' => $seller_name->name];
-        \Mail::to($seller_email)->send(new \App\Mail\SellerContact($data));
+        \Mail::to($seller_email)->send(new \App\Mail\AdminContact($data));
         $notification = SellerNotification::find(2);
         $newval = array('time' => Carbon::now(),
                         'created_at' => Carbon::now(),

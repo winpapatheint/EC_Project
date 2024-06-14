@@ -20,7 +20,7 @@ class SellerContact extends Mailable
     public function build()
     {
         $data = $this->data;
-        return $this->view('emails.seller_contact', compact('data'))
+        return $this->view('emails.admin_contact', compact('data'))
                 ->with([
                     'imagePath' => public_path('images/' . $data['imgName']),
                 ]);

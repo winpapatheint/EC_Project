@@ -93,7 +93,7 @@
             <p class="detail"><strong>Message Details:</strong><br> {{ $data['content'] }}</p>
         </div>
         <div class="footer">
-            <p style="text-align: right;font-weight:100px"><strong>Best regards,</strong></p>
+            <p style="text-align: right;font-weight:120px"><strong>Best regards,</strong></p>
             <p>{{ $data['email'] }}</p>
         </div>
     </div>

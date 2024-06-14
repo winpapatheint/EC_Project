@@ -6,7 +6,7 @@
     <title>New Product Registration Successful</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -30,7 +30,7 @@
             margin: 20px 0;
         }
         .content p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.6;
         }
         .content h2 {
@@ -38,7 +38,7 @@
             margin-top: 0;
         }
         strong {
-            font-size: 18px;
+            font-size: 16px;
         }
         table {
             width: 100%;
@@ -60,7 +60,7 @@
             margin-top: 40px;
         }
         .footer p {
-            font-size: 15px;
+            font-size: 14px;
             color: #777;
             margin: 0;
         }
@@ -77,7 +77,7 @@
                 <strong>successfully completed</strong>!
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h2>Dear {{ $seller->name }},</h2>
+            <p>Dear {{ $seller->name }},</h2>
             <p>Here are the key details regarding registration:</p>
             <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt="" 
                 style="width: 60px; height: 60px;">

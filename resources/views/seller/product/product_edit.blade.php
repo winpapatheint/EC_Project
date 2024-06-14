@@ -36,6 +36,23 @@
                                     <input type="hidden" name="id" value="{{ $products->id }}">
                                     <input type="hidden" name="old_img" value="{{ $products->product_thambnail }}">
                                     <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <select class="custom-select" name="brand_id">
+                                                    <option>Choose brand</option>
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{ $brand->id }}" {{ $brand->id == $products->brand_id  ? 'selected' : '' }}>{{ $brand->brand_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                                                    <i data-feather="plus-square"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" name="product_name" type="text" value="{{ $products->product_name }}">
@@ -51,25 +68,6 @@
                                                     <option value="{{ $country->id }}" {{ $country->id == $products->country_id  ? 'selected' : '' }}> {{ $country->name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Brand</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <select class="custom-select" name="brand_id">
-                                                    <option>Choose brand</option>
-                                                    @foreach ($brands as $brand)
-                                                        <option value="{{ $brand->id }}" {{ $brand->id == $products->brand_id  ? 'selected' : '' }}>{{ $brand->brand_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <a href="{{ route('add.brand') }}">
-                                                    <button type="button" class="btn btn-light" >
-                                                        <i data-feather="plus-square"></i>
-                                                    </button>
-                                                </a>
-                                            </div>
                                         </div>
                                     </div>
 
@@ -307,6 +305,46 @@
         </div>
     </div>
     <!-- New Product Add End -->
+
+<!-- Add Brand Modal Box -->
+<div class="modal fade theme-modal remove-coupon" id="addBrandModal" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Add new brand</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('store.brand') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Name:</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" id="brand_name" type="text" name="brand_name">
+                            <p class="error" style="color:red" id="error-brand_name"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Icon:</label>
+                        <div class="col-md-9 col-lg-10">
+                            <input class="form-control" id="brand_icon" type="file" name="brand_icon" onchange="showBrand(this)">
+                            <img src="" id="showIcon">
+                            <p class="error" style="color:red" id="error-brand_icon"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-animation btn-brand">Yes</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                                style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Brand Modal Box End-->
 
 <!-- Modal Start -->
 <div class="modal fade theme-modal remove-coupon" id="addImage" aria-hidden="true" tabindex="-1">

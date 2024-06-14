@@ -1113,11 +1113,14 @@ class UserController extends Controller
                             );
             $admin_notification->update( $newval);
 
-            $seller_notification = SellerNotification::find(1);
-            $orderval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $seller_notification->update( $orderval);
+            foreach ($sellerId as $seller_id) {
+                SellerNotification::create([
+                    'seller_id' => $seller_id,
+                    'message' => 'A new order added:',
+                    'time' => Carbon::now(),
+                    'seen' => 0,
+                ]);
+            }
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
@@ -1303,11 +1306,14 @@ class UserController extends Controller
                             );
             $admin_notification->update( $newval);
 
-            $seller_notification = SellerNotification::find(1);
-            $orderval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $seller_notification->update( $orderval);
+            foreach ($sellerId as $seller_id) {
+                SellerNotification::create([
+                    'seller_id' => $seller_id,
+                    'message' => 'A new order added:',
+                    'time' => Carbon::now(),
+                    'seen' => 0,
+                ]);
+            }
 
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);

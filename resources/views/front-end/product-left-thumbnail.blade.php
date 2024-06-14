@@ -218,7 +218,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>From</td>
+                                                        <td>Made In</td>
                                                         <td>
                                                             @php
                                                                 $country = DB::table('countries')->where('id',$product->country_id)->first();

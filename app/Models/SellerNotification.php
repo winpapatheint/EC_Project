@@ -13,6 +13,7 @@ class SellerNotification extends Model
     protected $fillable = [
         'id',
         'seller_id',
+        'related_id',
         'message',
         'time',
         'seen',

@@ -31,7 +31,7 @@
                                                     <div class="mb-4 row align-items-center">
                                                         <label class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                                         <div class="col-md-9 col-lg-10">
-                                                            <img width="100" src="{{ asset('upload/shop/'.$start->img) }}">
+                                                            <img width="100" src="{{ asset('images/'.$start->img) }}">
                                                         </div>
                                                     </div>
                                                 @endif
@@ -58,7 +58,7 @@
                                                         <div class="mb-4 row align-items-center">
                                                             <label class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                                             <div class="col-md-9 col-lg-10">
-                                                                <img width="100" src="{{ asset('upload/shop/'.$item->img) }}">
+                                                                <img width="100" src="{{ asset('images/'.$item->img) }}">
                                                             </div>
                                                         </div>
                                                     @endif

@@ -63,11 +63,13 @@ class RegisterController extends Controller
         ]);
         event(new Registered($seller));
 
-        $notification = Notification::find(1);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+        Notification::create([
+            'related_id' => $seller->id,
+            'message' => 'A new store added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
+
         return view('auth.seller-verify-email',compact('user'));
     }
 }

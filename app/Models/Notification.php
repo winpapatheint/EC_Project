@@ -11,10 +11,9 @@ class Notification extends Model
     protected $table = 'notifications';
     // Define the fillable fields for mass assignment
     protected $fillable = [
-        'id',
+        'related_id',
         'message',
         'time',
-        'created_at',
-        'updated_at',
+        'seen',
     ];
 }

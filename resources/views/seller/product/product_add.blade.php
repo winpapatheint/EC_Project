@@ -100,7 +100,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Tags</label>
                                         <div class="col-sm-9">
-                                            <input type="text" name="product_tags" class="form-control" data-role="tagsinput" id="product_tags" value="New product,New" placeholder="Type tag & hit enter" value="{{ old('product_tags') }}">
+                                            <input type="text" name="product_tags" class="form-control" data-role="tagsinput" id="product_tags" value="New product,New" placeholder="Type & hit enter" value="{{ old('product_tags') }}">
                                             <p class="error" style="color:red" id="error-product_tags"></p>
                                         </div>
                                     </div>
@@ -108,7 +108,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Size/Weight</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,30Kg,40x20x10CM" placeholder="Type size & hit enter" value="{{ old('product_size') }}" id="product_size">
+                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,30Kg,40x20x10CM" placeholder="Type & hit enter" value="{{ old('product_size') }}" id="product_size">
                                             <p class="error" style="color:red" id="error-product_size"></p>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Product Color</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type color & hit enter" value="{{ old('product_color') }}" id="product_color">
+                                            <input type="text" class="form-control" name="product_color" data-role="tagsinput" value="Red,Blue,Pink" placeholder="Type & hit enter" value="{{ old('product_color') }}" id="product_color">
                                             <p class="error" style="color:red" id="error-product_color"></p>
                                         </div>
                                     </div>

@@ -1876,21 +1876,6 @@ class AdminController extends Controller
             $imageName = '';
         }
 
-        // $seller_email =  $seller_email ->email;
-        // $help = new Help();
-        // $help->name =$seller_name->name;
-        // $help->shop_name =  $shopName;
-        // $help->help_id = $request->selleremail;
-        // $help->to = $seller_email;
-        // $help->from = 'admin@asia-hd.com';
-        // $help->subject = $request->title;
-        // $help->body =  $request->message;
-        // $help->img = $imageName;
-        // $help->created_at = Carbon::now();
-        // $help->save();
-        // $adminemail = 'admin@asia-hd.com';
-        // $helpDate = Carbon::now()->format('M d, Y');
-
         $shopName = Seller::where('user_id', $request->help_id)->value('shop_name');
         $seller_name = DB::table('users')->select('name')->where('id',$request->help_id)->first();
         $seller_email = DB::table('users')->select('email')->where('id',$request->help_id)->first();
@@ -1917,11 +1902,13 @@ class AdminController extends Controller
                 'adminemail' => $adminemail,
             'sellername' => $seller_name->name];
         \Mail::to($seller_email)->send(new \App\Mail\AdminContact($data));
-        $notification = SellerNotification::find(2);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+
+        SellerNotification::create([
+            'seller_id' => $request->help_id,
+            'message' => 'A new contact added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
 
         $msg = ('Reply message sent successfully');
         return redirect('/admin/indexhelp')->with('success', $msg);
@@ -2913,11 +2900,13 @@ class AdminController extends Controller
                 'adminemail' => $adminemail,
             'sellername' => $seller_name->name];
         \Mail::to($seller_email)->send(new \App\Mail\AdminContact($data));
-        $notification = SellerNotification::find(2);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+
+        SellerNotification::create([
+            'seller_id' => $request->selleremail,
+            'message' => 'A new contact added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
 
         return redirect('/admin/indexhelp')->with('success','Sending Email successfully');
     }
@@ -3032,11 +3021,12 @@ class AdminController extends Controller
         $help->created_at = Carbon::now();
         $help->save();
 
-        $notification = SellerNotification::find(2);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+        SellerNotification::create([
+            'seller_id' => $seller->id,
+            'message' => 'A new contact added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
 
         return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
 

@@ -236,7 +236,8 @@
                     use App\Models\SellerNotification;
                     use Carbon\Carbon;
                     $today = Carbon::today();
-                    $notifications = SellerNotification::select('message', 'time')->whereDate('created_at', $today)->get();
+                    $notifications = SellerNotification::select('message', 'time')->where('seller_id', Auth::user()->id)
+                    ->where('seen', 0)->whereDate('created_at', $today)->get();
                     $notiCount = $notifications->filter(function($notify) {
                         return !empty($notify->time);
                     })->count();
@@ -261,9 +262,12 @@
                                 @if(!empty($notify->time))
                                 <li >
                                     <p>
-
-                                        <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
-                                            class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
+                                        <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                            style="font-size:11px;color: {{ $iro[$key] }} !important">
+                                        </i>{{ $notify->message }}
+                                        <span class="pull-right">
+                                            &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
+                                        </span>
                                     </p>
                                 </li>
                                 @endif
@@ -381,7 +385,6 @@
                                 </li>
                                 @endif
 
-
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.profile') }}">
                                         <i class="ri-user-3-line"></i>
@@ -396,18 +399,15 @@
                                     </a>
                                 </li>
 
-                             <li class="sidebar-list" >
+                                <li class="sidebar-list" >
                                     <a class="sidebar-link sidebar-title link-nav" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     href="javascript:void(0)">
                                         <i data-feather="log-out" style="color: #fff"></i>
                                         <span>Log Out</span>
                                     </a>
                                 </li>
-
-
                             </ul>
                         </div>
-
                         <div class="right-arrow" id="right-arrow">
                             <i data-feather="arrow-right"></i>
                         </div>

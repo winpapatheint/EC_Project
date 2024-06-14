@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class BuyerOrderTracking extends Mailable
 {
     use Queueable, SerializesModels;
-    public $orderItems;
+    public $orderDetails;
 
     /**
      * Create a new message instance.
@@ -19,7 +19,7 @@ class BuyerOrderTracking extends Mailable
      */
     public function __construct($orderItems)
     {
-        $this->orderItems = $orderItems;
+        $this->orderDetails = $orderItems;
     }
 
     /**

@@ -89,9 +89,10 @@
                                                                                 </a>
                                                                             </li>
                                                                             <li>
-                                                                                <a href="{{ route('help.detail',$item->id) }}">
+                                                                                <a href='{{ url("/helpdetails/".$item->id ) }}'>
                                                                                     <i class="ri-eye-line"></i>
                                                                                 </a>
+
                                                                             </li>
                                                                             <li>
                                                                                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deletereceiveModalToggle{{ $item->id }}">

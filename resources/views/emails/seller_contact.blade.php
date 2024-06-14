@@ -90,18 +90,13 @@
             <img src="{{ $message->embed(public_path('images/logos/MailHeader_AFM.png')) }}" alt="Asian Food Museum Logo">
         </div>
         <div class="content">
-<<<<<<< HEAD
             <p class="date">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <h3 style="text-align: center"><span class="bold-text">Received</span> <span class="normal-text">a Message!</span></h3>
             <h3 class="greet">Dear {{ $data['sellername'] }},</h3>
-=======
-            <p>{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <p>Dear {{ $data['sellername'] }},</h3>
->>>>>>> f7b199aaebd97487b44ddef6cebdfd366f836168
             <p class="detail"><strong>Subject:</strong> {{ $data['title'] }}</p>
             <p class="detail"><strong>Message Details:</strong> {{ $data['content'] }}</p>
             <!-- Embedded Image -->
-            <p class="detail"><img src="{{ $message->embed($imagePath) }}" alt="Embedded Image"></p>
+            <p class="detail">@if(empty($imagePath))<img src="{{ $message->embed($imagePath) }}" alt="Embedded Image"> @endif</p>
         </div>
         <div class="footer">
             <p style="text-align: right;font-weight:120px"><strong>Best regards,</strong></p>

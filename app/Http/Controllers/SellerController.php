@@ -232,28 +232,35 @@ class SellerController extends Controller
         //     'body' => 'present|string|max:255',
         // ]);
         $help = new Help();
-        if (!empty($request->image)) {
+
+        if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
         } else {
             $imageName = '';
         }
+
         $shopName = Seller::where('user_id', Auth::user()->id)->value('shop_name');
         $help->name = Auth::user()->name;
         $help->shop_name = $shopName;
         $help->help_id = Auth::user()->id;
-        $help->to = 'winpapatheint33@gmail.com';
+        $help->to = 'admin@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->subject = $request->title;
         $help->body =  $request->message;
-        $help->img =   $imageName;
+
+         $help->img =   $imageName;
+
         $help->created_at = Carbon::now();
         $help->save();
+
         $helpDate = Carbon::now()->format('M d, Y');
-        $adminemail = 'winpapatheint33@gmail.com';
+
+        $adminemail = 'admin@asia-hd.com';
         $data = ['title' => $request->title,
                 'content' => $request->message,
                 'imgName' => $imageName,
+
                 'helpDate' => $helpDate,
                 'selleremail' => Auth::user()->email];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
@@ -300,7 +307,7 @@ class SellerController extends Controller
         $check = Help::find($request->id);
         $help->help_id = $check->help_id;
         $help->name = Auth::user()->name;
-        $help->to = 'info-test@asia-hd.com';
+        $help->to = 'admin@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->shop_name = $shopName;
         $help->subject = $request->subject;
@@ -315,7 +322,6 @@ class SellerController extends Controller
                 'content' => $request->body,
                 'imgName' => $imageName,
                 'helpDate' => $helpDate,
-
                 'selleremail' => Auth::user()->email];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 

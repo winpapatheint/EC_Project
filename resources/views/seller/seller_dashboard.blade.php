@@ -236,7 +236,7 @@
                     use App\Models\SellerNotification;
                     use Carbon\Carbon;
                     $today = Carbon::today();
-                    $notifications = SellerNotification::select('message', 'time')->where('seller_id', Auth::user()->id)
+                    $notifications = SellerNotification::where('seller_id', Auth::user()->id)
                     ->where('seen', 0)->whereDate('created_at', $today)->get();
                     $notiCount = $notifications->filter(function($notify) {
                         return !empty($notify->time);
@@ -260,15 +260,33 @@
 
                                 @foreach($notifications as $key => $notify)
                                 @if(!empty($notify->time))
-                                <li >
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-primary notification-circle"
-                                            style="font-size:11px;color: {{ $iro[$key] }} !important">
-                                        </i>{{ $notify->message }}
-                                        <span class="pull-right">
-                                            &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
-                                        </span>
-                                    </p>
+                                <li>
+                                    @php
+                                        $color = '';
+                                        if ($notify->message == 'A new order added:') {
+                                            $color = $iro[0];
+                                        } elseif ($notify->message == 'A new contact added:') {
+                                            $color = $iro[1];
+                                        } elseif ($notify->message == 'A new product added:') {
+                                            $color = $iro[2];
+                                        }
+                                    @endphp
+                                    @if ($notify->message == 'A new order added:')
+                                    <a href="{{ route('detail.order',['id' => $notify->related_id]) }}">
+                                    @elseif ($notify->message == 'A new contact added:')
+                                    <a href="{{ route('help.detail', ['id' => $notify->related_id]) }}">
+                                    @elseif ($notify->message == 'A new product added:')
+                                    <a href="{{ route('detail.product',['id' => $notify->related_id]) }}">
+                                    @endif
+                                        <p>
+                                            <i class="fa fa-circle me-2 font-primary notification-circle"
+                                                style="font-size:11px;color: {{ $color }} !important">
+                                            </i>{{ $notify->message }}
+                                            <span class="pull-right">
+                                                &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
+                                            </span>
+                                        </p>
+                                    </a>
                                 </li>
                                 @endif
                                 @endforeach

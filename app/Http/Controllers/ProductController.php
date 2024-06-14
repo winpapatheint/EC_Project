@@ -149,50 +149,13 @@ class ProductController extends Controller
             \Mail::to($seller->email)->send(new \App\Mail\SellerNewProductRegistration($sellerData, $product, $seller));
         }
 
-        // $inquiry_email = 'info@asian-food.site';
-        // $user = User::where('id', Auth::user()->id)->select('email', 'name')->first();
-
-        // $email = $request->email;
-        // $name = $request->name;
-        // $data = array('name'=>$name);
-        // if (!empty($request->email)) {
-        //     $mail = Mail::send([], $data, function($message) use ($request, $inquiry_email,$name,$email) {
-        //         $message->to($inquiry_email, 'Asian Food Museum ')->subject($name);
-        //         $message->from($email,$name);
-        //         $message->setBody("The following notification was received from the Asian Food Museum official website.
-        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-        //         \r\n"."Name".$name."
-        //         \r\n"."Email：　".$email."
-        //         \r\n
-        //         \r\n"."Notice：　
-        //         \r\n
-        //         \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-        //     });
-        // }
-
-        // $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();
-        // if (!empty(  $adminMails)) {
-        //     foreach ($adminMails as $email) {
-        //         Mail::send([], $data, function ($message) use ($request, $adminMails,$name,$email) {
-        //             $message->to($email, 'Asian Food Museum')->subject($name);
-        //             $message->from($email,$name);
-        //             $message->setBody("The following notification was received from the Asian Food Museum official website.
-        //             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-        //             \r\n"."Name".$name."
-        //             \r\n"."Email：　".$email."
-        //             \r\n
-        //             \r\n"."Notice：　
-        //             \r\n
-        //             \r\n＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
-        //         });
-        //     }
-        // }
-
-        $sellernotification = SellerNotification::find(4);
-        $product_newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $sellernotification->update( $product_newval);
+        SellerNotification::create([
+            'seller_id' => $id,
+            'related_id' => $product_id,
+            'message' => 'A new product added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
 
         $notification = Notification::find(3);
         $newval = array('time' => Carbon::now(),

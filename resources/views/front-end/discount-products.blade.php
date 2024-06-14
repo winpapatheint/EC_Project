@@ -650,8 +650,42 @@
                                         </div>
                                     </li>
                                 </ul>
+                                <ul class="brand-list">
+                                    @php
+                                        $sizes = explode(',', $product->product_size);
+                                    @endphp
+                                    <li>
+                                        <div class="product-contain" style="display: flex;">
+                                            @foreach($sizes as $key => $size)
+                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                                    <input class="form-check-input" type="radio" name="selected_size_{{ $product->id }}" 
+                                                        value="{{ $size }}" id="size_{{ $product->id }}_{{ $size }}" 
+                                                        {{ $key === 0 ? 'checked' : '' }}>
+                                                    <label for="size_{{ $product->id }}_{{ $size }}">{{ $size }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="brand-list">
+                                    @php
+                                        $colors = explode(',', $product->product_color);
+                                    @endphp
+                                    <li>
+                                        <div class="product-contain" style="display: flex;">
+                                            @foreach($colors as $key => $color)
+                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                                    <input class="form-check-input" type="radio" name="selected_color_{{ $product->id }}" 
+                                                        value="{{ $color }}" id="color_{{ $product->id }}_{{ $color }}" 
+                                                        {{ $key === 0 ? 'checked' : '' }}>
+                                                    <label for="color_{{ $product->id }}_{{ $color }}">{{ $color }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </li>
+                                </ul>
                                 <div class="modal-button">
-                                    <button onclick="location.href = '{{ route('show_carts', ['id' => $product->id]) }}';"
+                                    <button onclick="addToCart({{ $product->id }})"
                                         class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>
                                         Add To Cart</button>
 
@@ -714,6 +748,18 @@
                 });
             }
         });
+    </script>
+    <script>
+        function addToCart(productId) {
+            const selectedSize = document.querySelector(`input[name="selected_size_${productId}"]:checked`).value;
+            const selectedColor = document.querySelector(`input[name="selected_color_${productId}"]:checked`).value;
+            
+            const url = new URL('{{ route('show_carts', ['id' => '__ID__']) }}'.replace('__ID__', productId));
+            url.searchParams.append('size', selectedSize);
+            url.searchParams.append('color', selectedColor);
+            
+            location.href = url.toString();
+        }
     </script>
 
 </x-guest-layout>

@@ -73,13 +73,13 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                <strong>Product</strong> has been <strong>canceld</strong> by <strong>{{ $admin->shop_name }}</strong> !
+                <strong>Product code {{ $product->product_code }}</strong> has been <strong>cancelled</strong> by <strong>{{ $sellerData->shop_name }}</strong> !
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <p>Dear {{ $admin->name }},</h2>
-            <p>Here are the key details regarding registration:</p>
-            {{-- <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt=""
-                style="width: 60px; height: 60px;"> --}}
+            <p>Here are the key details regarding product:</p>
+            <img src="{{ $message->embed(public_path('upload/product_thambnail/'.$product-> product_thambnail)) }}" alt=""
+                style="width: 60px; height: 60px;">
             <table>
                 <tbody>
                     <tr>

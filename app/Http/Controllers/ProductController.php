@@ -287,7 +287,7 @@ class ProductController extends Controller
         $admins = User::where('role', 'admin')->get();
 
         foreach ($admins as $admin) {
-            \Mail::to($admin->email)->send(new \App\Mail\AdminCancelProductRegistration($sellerData, $product, $admin));
+            \Mail::to($admin->email)->send(new \App\Mail\AdminProductCancel($sellerData, $product, $admin));
         }
         File::delete($product->product_thambnail);
         Product::findOrFail($id)->delete();

@@ -18,7 +18,7 @@ class AuthLayout extends Component
     public function render()
     {
         $today = Carbon::today();
-        $notifications = Notification::select('message', 'time')->whereDate('created_at', $today)->get();
+        $notifications = Notification::where('seen', 0)->whereDate('created_at', $today)->get();
         $notiCount=0;
         foreach($notifications as $notify)
         {

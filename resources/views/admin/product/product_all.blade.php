@@ -5,6 +5,50 @@
         {
             border-bottom-width:0px !important;
         }
+
+        .table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Common styling for table cells */
+th,
+td {
+    padding: 8px;
+}
+
+/* Make the first column sticky */
+th:first-child,
+td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #fff; /* Adjust the background color as needed */
+    z-index: 2; /* Ensure it's above other cells */
+}
+
+td.name,
+td.image,
+th.name,
+th.image {
+    position: sticky;
+    left: 0;
+    background-color: #fff; /* Adjust the background color as needed */
+    z-index: 2; /* Ensure it's above other cells */
+}
+
+/* Ensure the first row header cells stay above other cells */
+th:first-child {
+    z-index: 3; /* Ensure it's above other cells including the first row */
+}
+th.name,
+th.image {
+    z-index: 3; /* Ensure it's above other cells including the first row */
+}
+
     </style>
 
     <div class="page-body">
@@ -23,8 +67,8 @@
                                             <tr>
                                                 <th style="min-width: 50px">No</th>
                                                 <th >Date</th>
-                                                <th style="min-width: 200px">Product Image</th>
-                                                <th style="min-width: 300px">Product Name</th>
+                                                <th class="image" style="min-width: 200px">Product Image</th>
+                                                <th class="name" style="min-width: 300px">Product Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
                                                 <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision(%)</th>
@@ -42,15 +86,13 @@
                                                 <tr>
                                                     <td  class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
-                                                    <td style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
-                                                        <a href="{{ url("/product/".$list->id ) }}">
-                                                            @if(mb_strlen($list->product_name) > 30)
-                                                                {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
-                                                            @else
-                                                                {!! nl2br(e($list->product_name)) !!}
-                                                            @endif
-                                                        </a>
+                                                    <td class="image" data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
+                                                    <td  class="name" style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
+                                                        @if(mb_strlen($list->product_name) > 30)
+                                                            {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
+                                                        @else
+                                                            {!! nl2br(e($list->product_name)) !!}
+                                                        @endif
                                                     </td>
                                                     <td data-label="">{{ $list->product_qty }}</td>
                                                     <td data-label="">¥{{ number_format($list->selling_price, 0, '', ',') }}</td>
@@ -78,21 +120,21 @@
                                                     <td data-label="" >-</td>
                                                     @endif
                                                     <td class="col-sm-9">
-                                                    @if($list->coupon_status == 1)
-                                                        <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#removeCoupon{{ $list->id }}"
-                                                            onclick="showDeleteModal('{{ $list->id }}')"
-                                                            >Remove
-                                                        </button>
-                                                    @else
+                                                        @if($list->coupon_status == 1)
+                                                            <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#removeCoupon{{ $list->id }}"
+                                                                onclick="showDeleteModal('{{ $list->id }}')"
+                                                                >Remove
+                                                            </button>
+                                                        @else
 
                                                             <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
                                                                 onclick="">Coupon
                                                             </button>
-                                                    @endif
+                                                        @endif
                                                     </td>
                                                     <td class="col-sm-9">
                                                         @if($list->special_sub_category_id)
@@ -111,6 +153,9 @@
                                                             </button>
                                                         @endif
                                                     </td>
+                                                    @if ($list->user->created_by == 78)
+                                                    @dd($list->user->subSeller)
+                                                    @endif
                                                     <td class="col-sm-9">
                                                         <label class="switch" style="margin-top: 8px;">
                                                             <input data-width="100" data-id="{{$list->id}}"
@@ -144,12 +189,15 @@
                                                         </ul>
                                                     </td>
                                                 </tr>
-                                                    {{-- Edit Product Commission Start --}}
-                                                    <div class="modal fade theme-modal remove-commission" id="commissionModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Enter Commission(%)</h5>
+                                                {{-- Edit Product Commission Start --}}
+                                                <div class="modal fade theme-modal remove-commission" id="commissionModal{{ $list->id }}" aria-hidden="true" tabindex="-1">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header d-block text-center">
+                                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Enter Commission(%)</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
                                                             </div>
                                                             <form id="commission-form{{ $list->id }}" method="POST" action="{{ route('updateproductcommission') }}" style="display:flex;">
                                                                 @csrf
@@ -181,17 +229,16 @@
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fas fa-times"></i>
                                                                     </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="remove-box">
+                                                                    <p>This product's commission will be reset according to the shop.</p>
                                                                 </div>
-                                                                <form id="commission-form{{ $list->id }}" method="POST" action="{{ route('updateproductcommission') }}" style="display:flex;">
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
                                                                     @csrf
-                                                                <div class="modal-body">
-                                                                    <div class="form-group">
-                                                                        <input type="number" class="form-control" id="commission{{ $list->id }}"  value="{{ old('commission') ?? $list->commission ?? '' }}"
-                                                                        name="commission" placeholder="Enter commission">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                        <input type="hidden" id="commission-id{{ $list->id }}" name="commissionid" value="{{ $list->id }}">
                                                                         <input type="hidden" name="id" value="{{ $list->id }}">
                                                                         <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
                                                                             data-bs-target="#exampleModalToggle2"
@@ -202,38 +249,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {{-- Edit Product Commission End --}}
-                                                    {{-- Reser Product Commission Start --}}
-                                                    <div class="modal fade theme-modal remove-commission" id="removeCommission{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                            <i class="fas fa-times"></i>
-                                                                        </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="remove-box">
-                                                                        <p>This product's commission will be reset according to the shop.</p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <form method="POST" action="{{ route('deletecommission') }}" style="display:flex;">
-                                                                        @csrf
-                                                                            <input type="hidden" name="id" value="{{ $list->id }}">
-                                                                            <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
-                                                                                data-bs-target="#exampleModalToggle2"
-                                                                                data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-                                                                            <button type="button" class="btn btn-animation btn-md fw-bold"
-                                                                                data-bs-dismiss="modal" style="background-color: #ff6b6b;">No</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- Reser Product Commission End --}}
+                                                </div>
+                                                {{-- Reser Product Commission End --}}
                                             @endforeach
                                         </tbody>
                                     </table>

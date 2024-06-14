@@ -3982,4 +3982,21 @@ class AdminController extends Controller
         $data = BankAccount::findOrFail($request->id)->delete();
         return redirect()->route('admin.bank_account')->with('success','Deleted Successfully.');
     }
+
+    public function markAsSeen($id)
+    {
+        $notification = Notification::find($id);
+        if ($notification) {
+            $notification->seen = 1;
+            $notification->save();
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false], 404);
+    }
+
+    public function allSeen()
+    {
+        Notification::where('seen', 0)->update(['seen' => 1]);
+        return redirect()->back();
+    }
 }

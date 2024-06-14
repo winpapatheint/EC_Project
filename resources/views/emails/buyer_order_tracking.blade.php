@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order {{ $orderItems->first()->status }}</title>
+    <title>Order {{ $orderDetails->first()->status }}</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -76,8 +76,8 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                Your order has been <strong>{{ $orderItems->first()->status }}</strong> by 
-                <strong>{{ $orderItems->first()->seller->shop_name }}</strong>!
+                Your order has been <strong>{{ $orderDetails->first()->status }}</strong> by 
+                <strong>{{ $orderDetails->first()->seller->shop_name }}</strong>!
             </p>
             <p style="text-align: right">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <p>Dear {{ $orderDetails->first()->buyer->name }},</h2>
@@ -96,7 +96,7 @@
                         $delivery_price = 0;
                         $coupon_discount = 0;
                     @endphp
-                    @foreach($orderItems as $detail)
+                    @foreach($orderDetails as $detail)
                     <tr>
                         <td>{{ $detail->product->product_name }}</td>
                         <td>{{ $detail->qty }}</td>

@@ -156,12 +156,12 @@ class ProductController extends Controller
             'time' => Carbon::now(),
             'seen' => 0,
         ]);
-
-        $notification = Notification::find(3);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+        Notification::create([
+            'related_id' => $product_id,
+            'message' => 'A new product added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
 
         $msg = ('Product added Successfully');
         return redirect('/productlist')->with('success', $msg);
@@ -259,6 +259,12 @@ class ProductController extends Controller
             File::delete($img->photo_name);
             MultiImg::where('product_id', $id)->delete();
         }
+        Notification::create([
+            'related_id' => $user_id,
+            'message' => 'Product deleted:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
         $msg = ('Product deleted Successfully');
         return back()->with('success', $msg);
     }

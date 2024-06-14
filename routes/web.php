@@ -272,6 +272,11 @@ route::post('/admin/deleteorderlist',[AdminController::class,'deleteorderlist'])
 Route::get('/admin/detail/order', function () {return view('admin.order.order_detail');})->name('admin.detail.order');
 Route::get('/admin/tracking/order', function () {return view('admin.order.order_tracking');})->name('admin.order-tracking');
 
+Route::post('/notifications/{id}/seen', [AdminController::class, 'markAsSeen']);
+Route::get('/notifications/allseen', [AdminController::class, 'allSeen']);
+Route::post('/seller-notifications/{id}/seen', [SellerController::class, 'markAsSeen']);
+Route::get('/seller-notifications/allseen', [SellerController::class, 'allSeen']);
+
 
 //Seller
 Route::get('/seller', [SellerController::class, 'dashboard'])->middleware(['auth','verified','role:seller'])->name('seller.dashboard');

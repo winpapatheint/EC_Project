@@ -89,11 +89,12 @@ class UserController extends Controller
             event(new Registered($user));
             // event(new Registered($buyer));
 
-            $notification = Notification::find(1);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $notification->update( $newval);
+            Notification::create([
+                'related_id' => $user->id,
+                'message' => 'A new user added:',
+                'time' => Carbon::now(),
+                'seen' => 0,
+            ]);
 
             return view('auth.buyer-verify-email', compact('user'));
 
@@ -1110,11 +1111,12 @@ class UserController extends Controller
                 \Mail::to($seller->email)->send(new \App\Mail\SellerOrderReceived($orderDetails, $seller));
             }
 
-            $admin_notification = Notification::find(4);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $admin_notification->update( $newval);
+            Notification::create([
+                'related_id' => $order->id,
+                'message' => 'A new order added:',
+                'time' => Carbon::now(),
+                'seen' => 0,
+            ]);
 
             foreach ($sellerId as $seller_id) {
                 SellerNotification::create([
@@ -1305,11 +1307,12 @@ class UserController extends Controller
                 \Mail::to($admin->email)->send(new \App\Mail\AdminCashOrderConfirmation($orderDetails, $bankInfo, $totalAmount, $transferPersonName, $transferDate, $name, $admin));
             }
 
-            $admin_notification = Notification::find(4);
-            $newval = array('time' => Carbon::now(),
-                            'created_at' => Carbon::now(),
-                            );
-            $admin_notification->update( $newval);
+            Notification::create([
+                'related_id' => $order->id,
+                'message' => 'A new order added:',
+                'time' => Carbon::now(),
+                'seen' => 0,
+            ]);
 
             foreach ($sellerId as $seller_id) {
                 SellerNotification::create([

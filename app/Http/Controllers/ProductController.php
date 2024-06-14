@@ -338,16 +338,18 @@ class ProductController extends Controller
             }
         }
 
-        $newImg = $request->File('new_img');
-        if ($newImg->isValid()) {
-            $filename = time() . '_' . rand(100, 999) . '.' . $newImg->getClientOriginalExtension();
-            $newImg->move(public_path('upload/multiImg'), $filename);
+        if($request->hasFile('new_img')) {
+            $newImg = $request->File('new_img');
+            if ($newImg->isValid()) {
+                $filename = time() . '_' . rand(100, 999) . '.' . $newImg->getClientOriginalExtension();
+                $newImg->move(public_path('upload/multiImg'), $filename);
 
-            MultiImg::create([
-                'product_id' => $id,
-                'photo_name' => $filename,
-                'created_at' => Carbon::now(),
-            ]);
+                MultiImg::create([
+                    'product_id' => $id,
+                    'photo_name' => $filename,
+                    'created_at' => Carbon::now(),
+                ]);
+            }
         }
 
         $msg = ('Image updated Successfully');

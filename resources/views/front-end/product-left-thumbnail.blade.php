@@ -131,11 +131,39 @@
                                     </p>
                                 </div>
 
+                                @php
+                                    $sizes = explode(',', $product->product_size);
+                                @endphp
+                                <div class="product-contain" style="display: flex;">
+                                    @foreach($sizes as $key => $size)
+                                        <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                            <input class="form-check-input" type="radio" name="selected_size" 
+                                                value="{{ $size }}" id="size_{{ $size }}" 
+                                                {{ $key === 0 ? 'checked' : '' }}>
+                                            {{ $size }}
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                @php
+                                    $colors = explode(',', $product->product_color);
+                                @endphp
+                                <div class="product-contain" style="display: flex;">
+                                    @foreach($colors as $key => $color)
+                                        <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                            <input class="form-check-input" type="radio" name="selected_color" 
+                                                value="{{ $color }}" id="color_{{ $color }}" 
+                                                {{ $key === 0 ? 'checked' : '' }}>
+                                            {{ $color }}
+                                        </div>
+                                    @endforeach
+                                </div>
+
                                 <div class="note-box product-package">
-                                        <button onclick="location.href = '{{ route('show_carts', ['id' => $id]) }}';"
+                                    <button onclick="addToCart({{ $product->id }})"
                                         class="btn btn-md bg-dark cart-button text-white w-100" @if ($product->in_stock < 1) disabled @endif>
-                                        Add To Cart</button>
-                                   
+                                        Add To Cart
+                                    </button>
                                 </div>
 
                                 <div class="progress-sec">
@@ -855,4 +883,16 @@
 </div>
     @endif
     <!-- Bg overlay End -->
+    <script>
+        function addToCart(productId) {
+            const selectedSize = document.querySelector('input[name="selected_size"]:checked').value;
+            const selectedColor = document.querySelector('input[name="selected_color"]:checked').value;
+            
+            const url = new URL('{{ route('show_carts', ['id' => '__ID__']) }}'.replace('__ID__', productId));
+            url.searchParams.append('size', selectedSize);
+            url.searchParams.append('color', selectedColor);
+            
+            location.href = url.toString();
+        }
+    </script>   
 </x-guest-layout>

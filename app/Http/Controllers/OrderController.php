@@ -179,12 +179,6 @@ class OrderController extends Controller
             }
         }
 
-        $notification = Notification::find(4);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
-
         $msg = ('Order status updated Successfully');
         return back()->with('success', $msg);
 

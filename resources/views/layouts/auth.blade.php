@@ -275,7 +275,7 @@
                                     @elseif ($notify->message == 'A new contact added:')
                                     <a href="{{ url("helpdetails/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
                                     @elseif ($notify->message == 'Product deleted:')
-                                    <a href="">
+                                    <a href="" class="notification-link" data-id="{{ $notify->id }}">
                                     @endif
                                         <p>
                                             @if ($notify->seen == 0)

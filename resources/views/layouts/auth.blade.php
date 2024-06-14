@@ -235,6 +235,16 @@
                     </form>
                 </div>
                 @endif
+
+                @php
+                    use App\Models\Notification;
+                    use Carbon\Carbon;
+                    $today = Carbon::today();
+                    $notifications = Notification::whereDate('created_at', $today)->orderBy('seen', 'ASC')->get();
+                    $notiCount = $notifications->filter(function($notify) {
+                        return $notify->seen == 0;
+                    })->count();
+                @endphp
                 <div class="nav-right col-4 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">
@@ -248,21 +258,62 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#6670bd","#a927f9","#6670bd","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#6670bd","#6670bd","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)
                                 @if(!empty($notify->time))
                                 <li >
-                                    <p>
-                                        <i class="fa fa-circle me-2 font-primary notification-circle" style="font-size:11px;color: {{ $iro[$key] }} !important"></i>{{ $notify->message }}<span
-                                            class="pull-right">&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}</span>
-                                    </p>
+                                    @if ($notify->message == 'A new store added:')
+                                    <a href="{{ url("/shop/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif ($notify->message == 'A new user added:')
+                                    <a href="{{ url("/userdetail/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif ($notify->message == 'A new product added:')
+                                    <a href="{{ url("/product/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif ($notify->message == 'A new order added:')
+                                    <a href="{{ url("/admin/orderdetail/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif ($notify->message == 'A new contact added:')
+                                    <a href="{{ url("helpdetails/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif ($notify->message == 'Product deleted:')
+                                    <a href="">
+                                    @endif
+                                        <p>
+                                            @if ($notify->seen == 0)
+                                            @php
+                                                $color = '';
+                                                if ($notify->message == 'A new store added:') {
+                                                    $color = $iro[0];
+                                                } elseif ($notify->message == 'A new user added:') {
+                                                    $color = $iro[1];
+                                                } elseif ($notify->message == 'A new product added:') {
+                                                    $color = $iro[2];
+                                                } elseif ($notify->message == 'A new order added:') {
+                                                    $color = $iro[3];
+                                                } elseif ($notify->message == 'A new contact added:') {
+                                                    $color = $iro[4];
+                                                } elseif ($notify->message == 'Product deleted:') {
+                                                    $color = $iro[4];
+                                                }
+                                            @endphp  
+                                            <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                                style="font-size:11px;color: {{ $color }} !important">
+                                            </i>
+                                            @else
+                                            <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                                style="font-size:11px;color: white !important">
+                                            </i>
+                                            @endif
+                                            {{ $notify->message }}
+                                            <span class="pull-right">
+                                                &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
+                                            </span>
+                                        </p>
+                                    </a>
                                 </li>
                                 @endif
                                 @endforeach
                                 <li style="display:block">
-                                    <a class="btn btn-primary mx-auto" href="javascript:void(0)" onclick="checkAllNotifications()">Check all notification</a>
+                                    <a class="btn btn-primary mx-auto" href="{{ url('/notifications/allseen')}}">Check all notification</a>
                                 </li>
                             </ul>
                         </li>
@@ -565,22 +616,38 @@
     <script>
         // Assuming you have some JavaScript code to handle deletion
         document.querySelector('.delete-icon').addEventListener('click', function() {
-          // Code to delete the store goes here
-          // For demonstration, let's just remove the entire store element
-          document.getElementById('store').remove();
+            // Code to delete the store goes here
+            // For demonstration, let's just remove the entire store element
+            document.getElementById('store').remove();
         });
-      </script>
-      <script>
-        function checkAllNotifications() {
-            var notificationCircles = document.querySelectorAll('.notification-circle');
-            notificationCircles.forEach(function(circle) {
-                circle.style.setProperty('color', '#ffffff', 'important');
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('a.notification-link').on('click', function(e) {
+                e.preventDefault();
+                var link = $(this);
+                var notificationId = link.data('id');
+    
+                $.ajax({
+                    url: '/notifications/' + notificationId + '/seen',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            link.find('.notification-circle').css('color', 'white'); // Optionally change color to indicate it was seen
+                            window.location.href = link.attr('href'); // Redirect to the link's target
+                        } else {
+                            alert('Error marking notification as seen.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error marking notification as seen.');
+                    }
+                });
             });
-            var badge = document.getElementById('notification-badge');
-            if (badge) {
-                badge.style.display = 'none';
-            }
-        }
+        });
     </script>
 </body>
 

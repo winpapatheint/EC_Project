@@ -235,7 +235,7 @@ class ShowProductController extends Controller
                                     ->orderByDesc('frequency')
                                     ->limit(3)
                                     ->get();
-            $relatedProducts = Product::where('category_id', $product->category_id)->get();
+            $relatedProducts = Product::where('id', '!=', $id)->where('category_id', $product->category_id)->get();
             $ratingWithProductCount = [];
             $ratingWith = 0;
             $productCount = 0;

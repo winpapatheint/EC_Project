@@ -19,6 +19,7 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\SellerNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -265,11 +266,13 @@ class SellerController extends Controller
                 'selleremail' => Auth::user()->email];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
-        $notification = Notification::find(5);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+        Notification::create([
+            'related_id' => $help->id,
+            'message' => 'A new contact added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
+
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
     }
@@ -325,11 +328,13 @@ class SellerController extends Controller
                 'selleremail' => Auth::user()->email];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
-        $notification = Notification::find(5);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
+        Notification::create([
+            'related_id' => $help->id,
+            'message' => 'A new contact added:',
+            'time' => Carbon::now(),
+            'seen' => 0,
+        ]);
+
         $msg = ('Data sent successfully');
         return redirect('/help')->with('success', $msg);
     }
@@ -425,5 +430,20 @@ class SellerController extends Controller
         return back()->with('success', $msg);
     }
 
+    public function markAsSeen($id)
+    {
+        $notification = SellerNotification::find($id);
+        if ($notification) {
+            $notification->seen = 1;
+            $notification->save();
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false], 404);
+    }
 
+    public function allSeen()
+    {
+        SellerNotification::where('seen', 0)->update(['seen' => 1]);
+        return redirect()->back();
+    }
 }

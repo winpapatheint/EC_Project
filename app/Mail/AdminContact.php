@@ -21,9 +21,9 @@ class AdminContact extends Mailable
     {
         $data = $this->data;
         return $this->view('emails.seller_contact', compact('data'))
-                ->with([
-                    'imagePath' => public_path('images/' . $data['imgName']),
-                ]);
+                    ->with([
+                        'imagePath' => public_path('images/' . $data['imgName'] ?? ''),
+                    ]);
     }
 }
 

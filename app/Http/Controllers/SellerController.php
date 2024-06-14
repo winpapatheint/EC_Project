@@ -307,7 +307,7 @@ class SellerController extends Controller
         $check = Help::find($request->id);
         $help->help_id = $check->help_id;
         $help->name = Auth::user()->name;
-        $help->to = 'info-test@asia-hd.com';
+        $help->to = 'admin@asia-hd.com';
         $help->from = Auth::user()->email;
         $help->shop_name = $shopName;
         $help->subject = $request->subject;
@@ -322,7 +322,6 @@ class SellerController extends Controller
                 'content' => $request->body,
                 'imgName' => $imageName,
                 'helpDate' => $helpDate,
-
                 'selleremail' => Auth::user()->email];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 

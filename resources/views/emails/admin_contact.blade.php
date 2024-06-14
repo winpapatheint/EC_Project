@@ -96,7 +96,7 @@
             <p class="detail"><strong>Subject:</strong> {{ $data['title'] }}</p>
             <p class="detail"><strong>Message Details:</strong> {{ $data['content'] }}</p>
             <!-- Embedded Image -->
-            <p class="detail"><img src="{{ $message->embed($imagePath) }}" alt="Embedded Image"></p>
+            <p class="detail">@if(empty($imagePath))<img src="{{ $message->embed($imagePath) }}" alt="Embedded Image"> @endif</p>
         </div>
         <div class="footer">
             <p style="text-align: right;font-weight:100px"><strong>Best regards,</strong></p>

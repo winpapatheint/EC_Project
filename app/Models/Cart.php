@@ -14,6 +14,8 @@ class Cart extends Model
         'seller_id',
         'buyer_id',
         'quantity',
+        'size',
+        'color'
     ];
 
     function product() {

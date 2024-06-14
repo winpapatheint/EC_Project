@@ -1905,6 +1905,7 @@ class AdminController extends Controller
 
         SellerNotification::create([
             'seller_id' => $request->help_id,
+            'related_id' => $help->id,
             'message' => 'A new contact added:',
             'time' => Carbon::now(),
             'seen' => 0,
@@ -2903,6 +2904,7 @@ class AdminController extends Controller
 
         SellerNotification::create([
             'seller_id' => $request->selleremail,
+            'related_id' => $help->id,
             'message' => 'A new contact added:',
             'time' => Carbon::now(),
             'seen' => 0,
@@ -3023,6 +3025,7 @@ class AdminController extends Controller
 
         SellerNotification::create([
             'seller_id' => $seller->id,
+            'related_id' => $help->id,
             'message' => 'A new contact added:',
             'time' => Carbon::now(),
             'seen' => 0,

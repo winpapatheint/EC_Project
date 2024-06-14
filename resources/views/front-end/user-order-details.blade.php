@@ -162,7 +162,7 @@
                                     @endif
                                     <div class="bg-inner cart-section order-details-table">
                                         <div class="row g-4">
-                                            <div class="col-xl-8">
+                                            <div class="col-xl-9">
                                                 <div class="table-responsive table-details">
                                                     <table class="table cart-table table-borderless">
                                                         <thead>
@@ -171,7 +171,9 @@
                                                                 <th>Product Name</th>
                                                                 <th>Shop</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price(tax inc)</th>
+                                                                <th>Price (tax inc)</th>
+                                                                <th>Size</th>
+                                                                <th>Color</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -198,6 +200,12 @@
                                                                 </td>
                                                                 <td>
                                                                     <h5>¥ {{ number_format($order->selling_price * $order->qty , 0, '.', ',') }}</h5>
+                                                                </td>
+                                                                <td>
+                                                                    <h5>{{ $order->size }}</h5>
+                                                                </td>
+                                                                <td>
+                                                                    <h5>{{ $order->color }}</h5>
                                                                 </td>
                                                                 <td>
                                                                     @if ($order->payment_approved == 1)
@@ -274,7 +282,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-3">
                                                 <div class="order-success">
                                                     <div class="row g-4">
                                                         <h3>Summery</h3>

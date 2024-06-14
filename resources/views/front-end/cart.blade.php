@@ -103,6 +103,16 @@
                                         @else
                                             <h5>¥{{ number_format($cartlist->selling_price, 0, '.', ',') }}</h5>
                                         @endif
+                                            <div class="product-detail" style="width: 100px;">
+                                                <ul>
+                                                    <li class="text-content"><span class="text-title">
+                                                            Size :</span>{{ $cartlist->size }}
+                                                    </li>
+                                                    <li class="text-content"><span class="text-title">
+                                                            Color :</span>{{ $cartlist->color }}
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </td>
                       
                 

@@ -521,7 +521,11 @@
             closeButton.classList.add('close-button');
             closeButton.addEventListener('click', () => {
                 fileInputsContainer.removeChild(imageContainer);
-                fileInputsContainer.removeChild(fileInput);
+                if (fileInput !== initialFileInput) {
+                    fileInputsContainer.removeChild(fileInput);
+                } else {
+                    fileInput.value = '';
+                }
                 imageCount--;
             });
 

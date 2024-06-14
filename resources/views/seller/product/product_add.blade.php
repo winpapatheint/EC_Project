@@ -106,9 +106,9 @@
                                     </div>
 
                                     <div class="mb-4 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Product Size</label>
+                                        <label class="form-label-title col-sm-3 mb-0">Product Size/Weight</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,Medium,Large" placeholder="Type size & hit enter" value="{{ old('product_size') }}" id="product_size">
+                                            <input type="text" class="form-control" name="product_size" data-role="tagsinput" value="Small,30Kg,40x20x10CM" placeholder="Type size & hit enter" value="{{ old('product_size') }}" id="product_size">
                                             <p class="error" style="color:red" id="error-product_size"></p>
                                         </div>
                                     </div>

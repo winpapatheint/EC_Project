@@ -281,6 +281,14 @@ class ProductController extends Controller
     {
         $id = $request->id;
         $product = Product::findOrFail($id);
+
+        $user_id = Auth::user()->created_by ?? Auth::id();
+        $sellerData = Seller::where('user_id', $user_id)->first();
+        $admins = User::where('role', 'admin')->get();
+
+        foreach ($admins as $admin) {
+            \Mail::to($admin->email)->send(new \App\Mail\AdminCancelProductRegistration($sellerData, $product, $admin));
+        }
         File::delete($product->product_thambnail);
         Product::findOrFail($id)->delete();
         $images = MultiImg::where('product_id', $id)->get();
@@ -288,26 +296,6 @@ class ProductController extends Controller
             File::delete($img->photo_name);
             MultiImg::where('product_id', $id)->delete();
         }
-        $id = Auth::user()->created_by ?? Auth::id();
-        $sellerData = Seller::where('user_id', $id)->first();
-        $product = Product::find($product_id);
-        $admins = User::where('role', 'admin')->get();
-        foreach ($admins as $admin) {
-            \Mail::to($admin->email)->send(new \App\Mail\AdminCancelProductRegistration($sellerData, $product, $admin));
-        }
-
-        $notification = Notification::find(7);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $notification->update( $newval);
-
-        $sellernotification = SellerNotification::find(3);
-        $newval = array('time' => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        );
-        $sellernotification->update( $newval);
-
         $msg = ('Product deleted Successfully');
         return back()->with('success', $msg);
     }

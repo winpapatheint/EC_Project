@@ -262,7 +262,7 @@
                                 @if(!empty($notify->time))
                                 <li >
                                     <p>
-                                        <i class="fa fa-circle me-2 font-primary notification-circle" 
+                                        <i class="fa fa-circle me-2 font-primary notification-circle"
                                             style="font-size:11px;color: {{ $iro[$key] }} !important">
                                         </i>{{ $notify->message }}
                                         <span class="pull-right">
@@ -285,7 +285,7 @@
                         </li>
                         <li class="profile-nav onhover-dropdown pe-0 me-0">
                             <div class="media profile-media">
-                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
+                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('images/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
                                 <div class="user-name-hide media-body">
                                     <span>{{ Auth::user()->name }}</span>
 
@@ -394,8 +394,8 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav" href="{{ route('seller.help') }}">
-                                        <i class="ri-phone-line"></i>
-                                        <span>Help</span>
+                                        <i class="ri-mail-line"></i>
+                                        <span>Contact</span>
                                     </a>
                                 </li>
 

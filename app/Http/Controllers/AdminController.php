@@ -2817,21 +2817,11 @@ class AdminController extends Controller
     public function contact(Request $request)
     {
         if ($request->from == 'faq') {
-<<<<<<< HEAD
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
-=======
             $inquiry_email = 'info-test@asia-hd.com';
->>>>>>> f7b199aaebd97487b44ddef6cebdfd366f836168
 
             $data = array('name'=>$request->name);
 
-            $adminemail =  'winpaptheint33@gmail.com';
+            $adminemail =  'admin@asia-hd.com';
             $faqDate = Carbon::now()->format('M d, Y');
 
             $data = ['name' => $request->name,
@@ -2860,19 +2850,7 @@ class AdminController extends Controller
 
         else if( $request->from == 'contact')
         {
-<<<<<<< HEAD
-            $valarr = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'phone' => 'required|string|max:255',
-                'message' => 'required',
-            ];
-            $request->validate($valarr);
-
-            $adminemail =  'winpaptheint33@gmail.com';
-=======
             $adminemail =  'admin@asia-hd.com';
->>>>>>> f7b199aaebd97487b44ddef6cebdfd366f836168
             $contactDate = Carbon::now()->format('M d, Y');
 
             $data = ['name' => $request->name,

@@ -303,7 +303,7 @@
                         </li>
                         <li class="profile-nav onhover-dropdown pe-0 me-0">
                             <div class="media profile-media">
-                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('images/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
+                                <img src="{{ (!empty(Auth::user()->user_photo)) ? url('upload/profile/'.Auth::user()->user_photo) : url('upload/profile/profile.jpg') }}" class="user-profile rounded-circle">
                                 <div class="user-name-hide media-body">
                                     <span>{{ Auth::user()->name }}</span>
 

@@ -427,7 +427,7 @@
                                 <li class="sidebar-list" >
                                     <a class="sidebar-link sidebar-title link-nav" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     href="javascript:void(0)">
-                                        <i data-feather="log-out" style="color: #fff"></i>
+                                        <i class="ri-logout-box-r-line"></i>
                                         <span>Log Out</span>
                                     </a>
                                 </li>

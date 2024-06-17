@@ -31,8 +31,10 @@ td:first-child {
 }
 
 td.name,
+td:first-child,
 td.image,
 th.name,
+th:first-child ,
 th.image {
     position: sticky;
     left: 0;
@@ -45,6 +47,7 @@ th:first-child {
     z-index: 3; /* Ensure it's above other cells including the first row */
 }
 th.name,
+th.no,
 th.image {
     z-index: 3; /* Ensure it's above other cells including the first row */
 }
@@ -65,7 +68,7 @@ th.image {
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th style="min-width: 50px">No</th>
+                                                <th class="no" style="min-width: 50px">No</th>
                                                 <th >Date</th>
                                                 <th class="image" style="min-width: 200px">Product Image</th>
                                                 <th class="name" style="min-width: 300px">Product Name</th>
@@ -84,9 +87,9 @@ th.image {
                                         <tbody>
                                             @foreach( $lists as $key => $list )
                                                 <tr>
-                                                    <td  class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td  class="no">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td class="image" data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
+                                                    <td class="image" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
                                                     <td  class="name" style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
                                                         @if(mb_strlen($list->product_name) > 30)
                                                             {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}

@@ -223,7 +223,7 @@
                 <div class="search-box1">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group1">
-                            <input type="search" class="form-control1" name="search" placeholder="">
+                            <input type="search" class="form-control1" name="search" placeholder="" value="{{ request('search') }}">
                             <button class="btn1 theme-bg-color" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
                             </button>

@@ -2847,7 +2847,6 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'contactDate' => $contactDate,
                     'adminemail' => $adminemail];
-            \Mail::to($adminemail)->send(new \App\Mail\GuestContact($data));
 
             $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
             if (!empty(  $adminMails)) {
@@ -2858,7 +2857,7 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'contactDate' => $contactDate,
                     'adminemail' => $adminemail];
-                \Mail::to($email)->send(new \App\Mail\GuestContactIntoSubAdmin($data));
+                \Mail::to($email)->send(new \App\Mail\GuestContact($data));
                 }
             }
             return redirect('/contact#contact-form')->with('success','Your message has been successfully sent.');

@@ -97,7 +97,7 @@
                                                 <tr>
                                                     <td class="sticky sticky-1">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td class="sticky sticky-2" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
+                                                    <td class="sticky sticky-2" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;height: 50px;"></td>
                                                     <td class="sticky sticky-3" style="text-align:left; max-width: 200px;overflow: hidden;" data-label="{{ $list->product_name }}">
                                                         @if(mb_strlen($list->product_name) > 30)
                                                             {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}

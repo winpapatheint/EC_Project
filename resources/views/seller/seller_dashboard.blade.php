@@ -237,7 +237,7 @@
                     use Carbon\Carbon;
                     $today = Carbon::today();
                     $notifications = SellerNotification::where('seller_id', Auth::user()->id)
-                    ->whereDate('created_at', $today)->orderBy('seen', 'ASC')->get();
+                    ->whereDate('created_at', $today)->orderBy('seen', 'ASC')->orderBy('created_at', 'DESC')->get();
                     $notiCount = $notifications->filter(function($notify) {
                         return $notify->seen == 0;
                     })->count();

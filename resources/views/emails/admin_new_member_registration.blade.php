@@ -62,11 +62,22 @@
         </div>
         <div class="content">
             @if ($user->role == 'buyer')
-            <p style="text-align: center;"><strong>New Buyer</strong>
-            @elseif ($user->role == 'seller')
-            <p style="text-align: center;"><strong>New Seller</strong>
+                <p style="text-align: center;"><strong>New Buyer</strong>
+            @elseif ($user->role == 'seller' && $user->created_by == null)
+                <p style="text-align: center;"><strong>New Seller</strong>
+            @elseif ($user->role == 'seller' && $user->created_by != null)
+                @php
+                    $createdBy = DB::table('sellers')->where('user_id', $user->created_by)->first();
+                @endphp
+                <p style="text-align: center;"><strong>New Sub Seller</strong>
             @endif
-            has been <strong>registered successfully</strong>!</p>
+
+            @if ($user->role == 'seller' && $user->created_by != null)
+                has been <strong>registered successfully</strong> by <strong>{{ $createdBy->shop_name }}</strong>!</p>
+            @else
+                has been <strong>registered successfully</strong>!</p>
+            @endif
+        
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <p>Dear {{ $admin->name }},</p>
             <p>Here are the key details regarding registration:</p>
@@ -75,7 +86,7 @@
                 <li><p>Name: {{ $user->name }}</p></li>
                 <li><p>Email: {{ $user->email }}</p></li>
             </ul>
-        </div>
+        </div>   
         <div class="footer">
             <p>Admin Team,</p>
             <p>Asian Food Museum</p>

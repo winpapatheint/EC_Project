@@ -58,15 +58,6 @@
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
-
-                                                <tfoot>
-                                                    <tr class="table-order">
-                                                        <td colspan="3">
-                                                            <h5>Your items is on the way. Tracking information will be
-                                                        available within 24 hours.</h5>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
                                             </table>
                                         </div>
 

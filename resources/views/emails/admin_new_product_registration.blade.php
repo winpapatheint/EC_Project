@@ -73,7 +73,7 @@
         </div>
         <div class="content">
             <p style="text-align: center;">
-                <strong>New Product</strong> has been <strong>added</strong> by <strong>{{ $admin->shop_name }}</strong> !
+                <strong>New Product</strong> has been <strong>added</strong> by <strong>{{ $sellerData->shop_name }}</strong> !
             </p>
             <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
             <p>Dear {{ $admin->name }},</h2>

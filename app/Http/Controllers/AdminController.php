@@ -2847,7 +2847,6 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'contactDate' => $contactDate,
                     'adminemail' => $adminemail];
-            \Mail::to($adminemail)->send(new \App\Mail\GuestContact($data));
 
             $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
             if (!empty(  $adminMails)) {
@@ -2858,7 +2857,7 @@ class AdminController extends Controller
                     'content' => $request->message,
                     'contactDate' => $contactDate,
                     'adminemail' => $adminemail];
-                \Mail::to($email)->send(new \App\Mail\GuestContactIntoSubAdmin($data));
+                \Mail::to($email)->send(new \App\Mail\GuestContact($data));
                 }
             }
             return redirect('/contact#contact-form')->with('success','Your message has been successfully sent.');
@@ -3915,13 +3914,13 @@ class AdminController extends Controller
                                     ->where('buyer_id', $order->buyer_id)->where('order_id', $order->id)
                                     ->where('seller_id', $seller->id)->get();
                 }
-                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderSuccess($orderDetails, $seller));
+                \Mail::to($seller->email)->send(new \App\Mail\SellerOrderReceived($orderDetails, $seller));
             }
 
             // mail sent to admin
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
-                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderSuccess($orderDetails));
+                \Mail::to($admin->email)->send(new \App\Mail\AdminOrderReceived($orderDetails, $admin));
             }
 
             return redirect()->back()->with('success', 'Payment approved successfully for the order code '. $order->order_code);

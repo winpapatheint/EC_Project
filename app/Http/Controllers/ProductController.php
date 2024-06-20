@@ -261,7 +261,7 @@ class ProductController extends Controller
         }
         Notification::create([
             'related_id' => $user_id,
-            'message' => 'Product deleted:',
+            'message' => 'Product deleted by ' . $sellerData->shop_name . ':',
             'time' => Carbon::now(),
             'seen' => 0,
         ]);

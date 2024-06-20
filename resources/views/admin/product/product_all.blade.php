@@ -1,53 +1,64 @@
 <x-auth-layout>
 
     <style>
-        .table>:not(caption)>*>*
-        {
-            border-bottom-width:0px !important;
+        .table thead th,
+        .table tbody td {
+            white-space: nowrap;
         }
 
-        .table-responsive {
-    overflow-x: auto;
-}
+        .table thead th.sticky,
+        .table tbody td.sticky {
+            position: sticky;
+            background: white;
+            z-index: 1;
+        }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .table thead th.sticky-1,
+        .table tbody td.sticky-1 {
+            left: 0;
+            z-index: 2;
+        }
 
-/* Common styling for table cells */
-th,
-td {
-    padding: 8px;
-}
+        .table thead th.sticky-2,
+        .table tbody td.sticky-2 {
+            left: 50px;
+            z-index: 2;
+        }
 
-/* Make the first column sticky */
-th:first-child,
-td:first-child {
-    position: sticky;
-    left: 0;
-    background-color: #fff; /* Adjust the background color as needed */
-    z-index: 2; /* Ensure it's above other cells */
-}
+        .table thead th.sticky-3,
+        .table tbody td.sticky-3 {
+            left: 250px;
+            z-index: 2;
+        }
 
-td.name,
-td.image,
-th.name,
-th.image {
-    position: sticky;
-    left: 0;
-    background-color: #fff; /* Adjust the background color as needed */
-    z-index: 2; /* Ensure it's above other cells */
-}
+        .table-product {
+            overflow-x: auto;
+        }
 
-/* Ensure the first row header cells stay above other cells */
-th:first-child {
-    z-index: 3; /* Ensure it's above other cells including the first row */
-}
-th.name,
-th.image {
-    z-index: 3; /* Ensure it's above other cells including the first row */
-}
+        /* Add alternating row colors */
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table tbody tr:nth-child(odd) .sticky {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:nth-child(even) .sticky {
+            background-color: #ffffff;
+        }
+
+        .table tbody tr:hover .sticky {
+            background-color: #f1f1f1;
+        }
 
     </style>
 
@@ -65,10 +76,10 @@ th.image {
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th style="min-width: 50px">No</th>
+                                                <th class="sticky sticky-1" style="min-width: 50px">No</th>
                                                 <th >Date</th>
-                                                <th class="image" style="min-width: 200px">Product Image</th>
-                                                <th class="name" style="min-width: 300px">Product Name</th>
+                                                <th class="sticky sticky-2" style="min-width: 200px">Product Image</th>
+                                                <th class="sticky sticky-3" style="min-width: 300px">Product Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
                                                 <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision(%)</th>
@@ -84,10 +95,10 @@ th.image {
                                         <tbody>
                                             @foreach( $lists as $key => $list )
                                                 <tr>
-                                                    <td  class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td class="sticky sticky-1">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
                                                     <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td class="image" data-label="{{ __('auth.image') }}"><img src="{{ asset('images/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
-                                                    <td  class="name" style="text-align:left; max-width: 200px;" data-label="{{ $list->product_name }}">
+                                                    <td class="sticky sticky-2" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;height: 50px;"></td>
+                                                    <td class="sticky sticky-3" style="text-align:left; max-width: 200px;overflow: hidden;" data-label="{{ $list->product_name }}">
                                                         @if(mb_strlen($list->product_name) > 30)
                                                             {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
                                                         @else

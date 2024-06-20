@@ -227,7 +227,7 @@
                 <div class="search-box1">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group1">
-                            <input type="search" class="form-control1" name="mainSearch" placeholder="">
+                            <input type="search" class="form-control1" name="mainSearch" placeholder="" value="{{ request('mainSearch') }}">
                             <button class="btn1 theme-bg-color" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
                             </button>
@@ -240,7 +240,7 @@
                     use App\Models\Notification;
                     use Carbon\Carbon;
                     $today = Carbon::today();
-                    $notifications = Notification::whereDate('created_at', $today)->orderBy('seen', 'ASC')->get();
+                    $notifications = Notification::whereDate('created_at', $today)->orderBy('seen', 'ASC')->orderBy('created_at', 'DESC')->get();
                     $notiCount = $notifications->filter(function($notify) {
                         return $notify->seen == 0;
                     })->count();
@@ -258,7 +258,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#6670bd","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#0da487","#6670bd","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)
@@ -274,7 +274,9 @@
                                     <a href="{{ url("/admin/orderdetail/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
                                     @elseif ($notify->message == 'A new contact added:')
                                     <a href="{{ url("helpdetails/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
-                                    @elseif ($notify->message == 'Product deleted:')
+                                    @elseif (Str::contains($notify->message, 'Product deleted by'))
+                                    <a href="" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif (Str::contains($notify->message, 'A new sub seller added by'))
                                     <a href="" class="notification-link" data-id="{{ $notify->id }}">
                                     @endif
                                         <p>
@@ -291,8 +293,10 @@
                                                     $color = $iro[3];
                                                 } elseif ($notify->message == 'A new contact added:') {
                                                     $color = $iro[4];
-                                                } elseif ($notify->message == 'Product deleted:') {
-                                                    $color = $iro[4];
+                                                } elseif (Str::contains($notify->message, 'Product deleted by')) {
+                                                    $color = $iro[5];
+                                                } elseif (Str::contains($notify->message, 'A new sub seller added by')) {
+                                                    $color = $iro[6];
                                                 }
                                             @endphp
                                             <i class="fa fa-circle me-2 font-primary notification-circle"

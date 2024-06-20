@@ -68,9 +68,16 @@ class AuthenticatedSessionController extends Controller
 
         if($loginUser->role == 'admin')
         {
-            $request->authenticate();
-            $request->session()->regenerate();
-            return redirect('/admin');
+            if($loginUser->status == 1)
+            {
+                $request->authenticate();
+                $request->session()->regenerate();
+                return redirect('/admin');
+            }
+            else
+            {
+                return redirect()->back()->with('error', 'Your account have been inactivated!');
+            }
         }
 
         if($loginUser->role == 'seller')
@@ -83,7 +90,7 @@ class AuthenticatedSessionController extends Controller
             }
             else
             {
-                return redirect()->back()->with('error', 'Your account have been inactived!');
+                return redirect()->back()->with('error', 'Your account have been inactivated!');
             }
         }
 
@@ -107,7 +114,7 @@ class AuthenticatedSessionController extends Controller
             }
             else
             {
-                return redirect()->back()->with('error', 'Your account have been inactived!');
+                return redirect()->back()->with('error', 'Your account have been inactivated!');
             }
         }
 

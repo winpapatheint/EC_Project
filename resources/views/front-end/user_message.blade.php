@@ -197,7 +197,7 @@
                                                     <div class="row">
                                                         <div class="col-md-10">
                                                             @if ($userNoti->title == 'Cash Cancel')
-                                                            <p><strong>You order has been cancelled for not transfer payment.</strong></p>
+                                                            <p><strong>You order has been Cancelled.</strong></p>
                                                             @else
                                                             <p><strong>Your order has been {{ $userNoti->title == 'Cancel' ? 'Cancelled' : $userNoti->title }}.</strong></p>
                                                             @endif
@@ -208,7 +208,6 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            @if($userNoti->title != 'Cash Cancel')
                                                             <div class="row">
                                                                 <div class="col-md-1">
                                                                     <img src="{{ asset('images/'.$userNoti->orderDetail->product->product_thambnail) }}"
@@ -223,7 +222,6 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            @endif
                                                             <div class="row">
                                                                 @if($userNoti->title == 'Confirmed')
                                                                 <span>
@@ -245,7 +243,8 @@
                                                                 </span>
                                                                 @elseif($userNoti->title == 'Cash Cancel')
                                                                 <span>
-                                                                    Your order has been Cancelled because you did not transfer payment for order in time.
+                                                                    Your order has been Cancelled for no transfer payment.<br>
+                                                                    Cancelled Reason : {{ $userNoti->orderDetail->cancelled_reason }}
                                                                 </span>
                                                                 @endif
                                                             </div>

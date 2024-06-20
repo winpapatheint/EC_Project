@@ -86,7 +86,7 @@ class AdminController extends Controller
             foreach ($notPaymentOrders as $order) {
                 $checkCashBankAccount = CashBankAccount::where('order_id', $order->id)->first();
 
-                if ($checkCashBankAccount && $checkCashBankAccount->transfer_date < Carbon::now()) {
+                if ($checkCashBankAccount && $checkCashBankAccount->transfer_date < Carbon::now()->subDay()->startOfDay()) {
                     $notPaymentOrderDetails = OrderDetail::where('order_id', $order->id)->get();
 
                     foreach ($notPaymentOrderDetails as $orderDetail) {
@@ -111,10 +111,15 @@ class AdminController extends Controller
                             'seen' => 0,
                         ]);
 
-                        $orderDetail->delete();
+                        $orderDetail->update([
+                            'payment_approved' => 2,
+                            'status' => 'Cash Cancel', 
+                            'cancel_reason' => 'You did not transfer payment for this order in time.']);
+                        $order->update([
+                            'payment_approved' => 2
+                        ]);
                     }
                 }
-                $order->delete();
             }
         }
         // end not payment order in time deleted
@@ -3370,6 +3375,7 @@ class AdminController extends Controller
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select('order_details.*', 'products.*')
             ->where('order_details.status', 'Cancel')
+            ->orWhere('order_details.status', 'Cash Cancel')
             ->orderBy('order_details.created_at', 'desc');
 
         if ($mainSearch) {
@@ -3596,9 +3602,9 @@ class AdminController extends Controller
 
     public function detailProduct($id)
     {
-        $data = Product::find($id);
+        $product = Product::find($id);
         $multiImgs = MultiImg::where('product_id',$id)->get();
-        return view('admin.product_detail',compact('data','multiImgs'));
+        return view('admin.product.product_detail',compact('product','multiImgs'));
     }
 
     public function indexhelp()
@@ -3963,6 +3969,16 @@ class AdminController extends Controller
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 \Mail::to($admin->email)->send(new \App\Mail\AdminOrderReceived($orderDetails, $admin));
+            }
+
+            foreach ($sellers as $seller) {
+                SellerNotification::create([
+                    'seller_id' => $seller->id,
+                    'related_id' => $order->id,
+                    'message' => 'A new order added:',
+                    'time' => Carbon::now(),
+                    'seen' => 0,
+                ]);
             }
 
             return redirect()->back()->with('success', 'Payment approved successfully for the order code '. $order->order_code);

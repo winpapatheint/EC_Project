@@ -1,10 +1,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <x-auth-layout>
-<style>
-    .disabled-blue {
-    color: #0b6d59 !important;
-}
-</style>
+    <style>
+        .disabled-blue {
+        color: #0b6d59 !important;
+        }
+    
+        .break-line {
+        width: 200px;
+        word-wrap: break-word;
+        white-space: normal;
+        }
+    </style>
 <!-- Section start -->
 <div class="page-body">
     <div class="container-fluid">
@@ -180,9 +186,11 @@
                                                     <td>{{ $item->order->order_code }}</td>
                                                     <td><a href="{{ route('detailproduct',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
                                                     <td>
-                                                        <h6>
-                                                            {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
-                                                        </h6>
+                                                        <div class="break-line">
+                                                            <h6>
+                                                                {!! $item->product_name !!}
+                                                            </h6>
+                                                        </div>
                                                     </td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>¥{{ number_format($item->amount) }}</td>

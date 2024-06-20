@@ -152,7 +152,7 @@
                                 <div class="search-box">
                                     <form id="mainSearchForm" action="{{ route('show-product') }}" method="GET">
                                         <div class="input-group">
-                                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for...">
+                                            <input type="search" class="form-control" name="mainSearch" placeholder="I'm searching for..." value="{{ request("mainSearch") }}">
                                             <button class="btn" type="submit" id="button-addon2">
                                                 <i data-feather="search"></i>
                                             </button>

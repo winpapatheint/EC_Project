@@ -2,45 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
+use Mail;
+use DateTime;
+use Carbon\Carbon;
+use App\Models\Faq;
+use App\Models\Top;
+use App\Models\Blog;
+use App\Models\Help;
 use App\Models\User;
-use App\Models\Product;
+use App\Models\Admin;
+use App\Models\Brand;
+use App\Models\Buyer;
 use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Process;
-use App\Models\Category;
-use App\Models\SubCategoryTitle;
+use App\Models\Coupon;
 use App\Models\Review;
 use App\Models\Seller;
-use App\Models\Help;
-use App\Models\SellerNotification;
-use App\Models\Notification;
-use App\Models\MultiImg;
-use App\Models\Coupon;
-use App\Models\Transfer;
-use App\Models\Top;
-use App\Models\NewsLetter;
-use App\Models\Customer;
-use App\Models\Brand;
 use App\Models\Country;
+use App\Models\Process;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Customer;
+use App\Models\MultiImg;
+use App\Models\Transfer;
+use App\Models\NewsLetter;
+use App\Models\BankAccount;
+use App\Models\OrderDetail;
 use App\Models\SubCategory;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Models\CashBankAccount;
+use App\Models\SubCategoryTitle;
+use App\Models\UserNotification;
+use App\Models\SellerNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Carbon\Carbon;
-use Mail;
-use App\Providers\RouteServiceProvider;
-use DateTime;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Models\BankAccount;
-use App\Models\Blog;
-use App\Models\Buyer;
-use App\Models\Faq;
-use Illuminate\Support\Facades\File;
     /**
      * Store a newly created resource in storage.
      *
@@ -77,6 +79,46 @@ class AdminController extends Controller
         }
         // end coupon to be inactive for the end date
 
+        // not payment order in time deleted
+        $notPaymentOrders = Order::where('payment_approved', 0)->get();
+
+        if (!$notPaymentOrders->isEmpty()) {
+            foreach ($notPaymentOrders as $order) {
+                $checkCashBankAccount = CashBankAccount::where('order_id', $order->id)->first();
+
+                if ($checkCashBankAccount && $checkCashBankAccount->transfer_date < Carbon::now()) {
+                    $notPaymentOrderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+                    foreach ($notPaymentOrderDetails as $orderDetail) {
+                        $checkProduct = Product::where('id', $orderDetail->product_id)->first();
+
+                        if ($checkProduct) {
+                            $checkProduct->in_stock += $orderDetail->qty;
+                            $checkProduct->save();
+                        }
+
+                        UserNotification::create([
+                            'order_detail_id' => $orderDetail->id,
+                            'buyer_id' => $orderDetail->buyer_id,
+                            'title' => 'Cash Cancel',
+                            'seen' => 0
+                        ]);
+
+                        Notification::create([
+                            'related_id' => $orderDetail->buyer_id,
+                            'message' => $orderDetail->buyer->name . ' did not pay in time for cash order:',
+                            'time' => Carbon::now(),
+                            'seen' => 0,
+                        ]);
+
+                        $orderDetail->delete();
+                    }
+                }
+                $order->delete();
+            }
+        }
+        // end not payment order in time deleted
+        
         $categories = Category::where('category_name', '!=', 'Special Corner')->get();
 
         $blogs = DB::table('blogs')

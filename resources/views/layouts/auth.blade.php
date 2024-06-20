@@ -245,7 +245,7 @@
                         return $notify->seen == 0;
                     })->count();
                 @endphp
-                <div class="nav-right col-4 pull-right right-header p-0">
+                <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">
                             <div class="notification-box">
@@ -258,7 +258,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#0da487","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#0da487","#dc3545","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)
@@ -277,6 +277,8 @@
                                     @elseif (Str::contains($notify->message, 'Product deleted by'))
                                     <a href="" class="notification-link" data-id="{{ $notify->id }}">
                                     @elseif (Str::contains($notify->message, 'A new sub seller added by'))
+                                    <a href="" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif (Str::contains($notify->message, 'did not pay in time for cash order'))
                                     <a href="" class="notification-link" data-id="{{ $notify->id }}">
                                     @endif
                                         <p>
@@ -297,6 +299,8 @@
                                                     $color = $iro[5];
                                                 } elseif (Str::contains($notify->message, 'A new sub seller added by')) {
                                                     $color = $iro[6];
+                                                } elseif (Str::contains($notify->message, 'did not pay in time for cash order')) {
+                                                    $color = $iro[7];
                                                 }
                                             @endphp
                                             <i class="fa fa-circle me-2 font-primary notification-circle"

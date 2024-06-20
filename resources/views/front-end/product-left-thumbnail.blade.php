@@ -134,7 +134,7 @@
                                 @php
                                     $sizes = explode(',', $product->product_size);
                                 @endphp
-                                <div class="product-contain" style="display: flex;">
+                                <div class="product-contain" style="display: flex; flex-wrap: wrap;">
                                     @foreach($sizes as $key => $size)
                                         <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
                                             <input class="form-check-input" type="radio" name="selected_size" 
@@ -148,7 +148,7 @@
                                 @php
                                     $colors = explode(',', $product->product_color);
                                 @endphp
-                                <div class="product-contain" style="display: flex;">
+                                <div class="product-contain" style="display: flex; flex-wrap: wrap;">
                                     @foreach($colors as $key => $color)
                                         <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
                                             <input class="form-check-input" type="radio" name="selected_color" 
@@ -657,9 +657,15 @@
 
                                 <div class="product-footer">
                                     <div class="product-detail">
-                                        <span class="span-name">{{ $relatedProduct->product_name }}</span>
+                                        <span class="span-name">{{ $relatedProduct->Category->category_name }}</span>
                                         <a href="{{ route('show-product-left-thumbnail', ['id' => $relatedProduct->id]) }}">
-                                            <h5 class="name">{{ $relatedProduct->product_name }}</h5>
+                                            <h5 class="name">
+                                                @if(mb_strlen($relatedProduct->product_name) > 18)
+                                                    {!! mb_substr($relatedProduct->product_name, 0, 18) . '...' !!}
+                                                @else
+                                                    {!! nl2br(e($relatedProduct->product_name)) !!}
+                                                @endif
+                                            </h5>
                                         </a>
                                         <div class="product-rating mt-2">
                                             <ul class="rating">
@@ -673,7 +679,13 @@
                                             </ul>
                                             <span>(<?php echo number_format($starRating, 1); ?>)</span>
                                         </div>
-                                        <h6 class="unit">{{ $relatedProduct->product_size }}</h6>
+                                        <h6 class="unit">
+                                            @if(mb_strlen($relatedProduct->product_size) > 20)
+                                                {!! mb_substr($relatedProduct->product_size, 0, 20) . '...' !!}
+                                            @else
+                                                {!! nl2br(e($relatedProduct->product_size)) !!}
+                                            @endif
+                                        </h6>
                                         @if ($product->discount_percent != 0)
                                             <h5 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
                                             <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
@@ -796,6 +808,40 @@
                                         <div class="brand-box">
                                             <h5>In Stock:</h5>
                                             <h6>{{ $relproduct->in_stock }}</h6>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="brand-list">
+                                    @php
+                                        $sizes = explode(',', $relproduct->product_size);
+                                    @endphp
+                                    <li>
+                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
+                                            @foreach($sizes as $key => $size)
+                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                                    <input class="form-check-input" type="radio" name="selected_size_{{ $relproduct->id }}" 
+                                                        value="{{ $size }}" id="size_{{ $relproduct->id }}_{{ $size }}" 
+                                                        {{ $key === 0 ? 'checked' : '' }}>
+                                                    <label for="size_{{ $relproduct->id }}_{{ $size }}">{{ $size }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="brand-list">
+                                    @php
+                                        $colors = explode(',', $relproduct->product_color);
+                                    @endphp
+                                    <li>
+                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
+                                            @foreach($colors as $key => $color)
+                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
+                                                    <input class="form-check-input" type="radio" name="selected_color_{{ $relproduct->id }}" 
+                                                        value="{{ $color }}" id="color_{{ $relproduct->id }}_{{ $color }}" 
+                                                        {{ $key === 0 ? 'checked' : '' }}>
+                                                    <label for="color_{{ $relproduct->id }}_{{ $color }}">{{ $color }}</label>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </li>
                                 </ul>

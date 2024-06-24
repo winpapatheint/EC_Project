@@ -180,7 +180,7 @@
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/product/".$list->id ) }}">
+                                                                <a href="{{ route('admin.detailproduct', $list->id)}}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>

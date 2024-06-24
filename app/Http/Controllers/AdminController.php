@@ -3355,6 +3355,7 @@ class AdminController extends Controller
 
         $orderQuery = OrderDetail::with('order')
             ->where('status', '!=', 'Cancel')
+            ->where('status', '!=', 'Cash Cancel')
             ->groupBy('order_id')
             ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id, MAX(amount) as amount, MAX(status) as status')
             ->orderBy('created_at', 'desc');
@@ -3373,9 +3374,8 @@ class AdminController extends Controller
         $order = $orderQuery->paginate($limit);
         $cancelledOrderQuery = OrderDetail::with('order')
             ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->select('order_details.*', 'products.*')
-            ->where('order_details.status', 'Cancel')
-            ->orWhere('order_details.status', 'Cash Cancel')
+            ->select('order_details.*', 'products.*', 'order_details.status as order_detail_status')
+            ->where('order_details.status', 'like', '%Cancel%')
             ->orderBy('order_details.created_at', 'desc');
 
         if ($mainSearch) {
@@ -3384,7 +3384,8 @@ class AdminController extends Controller
                     ->orWhereHas('order', function($cancelledOrderQuery) use ($mainSearch) {
                         $cancelledOrderQuery->where('order_code', 'LIKE', "%{$mainSearch}%");
                     })
-                    ->orWhere('products.product_name', 'LIKE', "%{$mainSearch}%");
+                    ->orWhere('products.product_name', 'LIKE', "%{$mainSearch}%")
+                    ->orWhere('products.product_code', 'LIKE', "%{$mainSearch}%");
             });
         }
 
@@ -3396,8 +3397,6 @@ class AdminController extends Controller
 
         return view('admin.order.indexorderlist', compact('order','ttl','ttlpage','cancelledOrder','cancelttl','cancelttlPage'));
     }
-
-
 
     public function orderdetail($id)
     {

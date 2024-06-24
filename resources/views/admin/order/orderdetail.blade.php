@@ -74,7 +74,7 @@
                                                         </td>
 
                                                         <td>
-                                                            <h6>{{ $order->commission }}%</h6>
+                                                            <h6>{{ $order->commission != 0 ? $order->commission : 0 }}%</h6>
                                                         </td>
                                                         @if($order->payment_approved == 1)
                                                             <td>

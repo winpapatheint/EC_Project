@@ -164,7 +164,9 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            @include('components.noticepagination')
+                                            @if (!$notice->isEmpty())
+                                                @include('components.noticepagination')
+                                            @endif
                                         </div>
 
                                         <div class="tab-pane fade" id="info" role="tabpanel">

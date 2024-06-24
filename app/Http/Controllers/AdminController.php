@@ -3023,13 +3023,15 @@ class AdminController extends Controller
         $help->created_at = Carbon::now();
         $help->save();
 
-        SellerNotification::create([
-            'seller_id' => $seller->id,
-            'related_id' => $help->id,
-            'message' => 'A new contact added:',
-            'time' => Carbon::now(),
-            'seen' => 0,
-        ]);
+        foreach ($sellers as $seller_id) {
+            SellerNotification::create([
+                'seller_id' => $seller_id,
+                'related_id' => $order->id,
+                'message' => 'A new order added:',
+                'time' => Carbon::now(),
+                'seen' => 0,
+            ]);
+        }
 
         return redirect('/admin/indexhelp')->with('success', 'Sending Email successfully');
 
@@ -3354,6 +3356,7 @@ class AdminController extends Controller
 
     public function orderdetail($id)
     {
+        dd($id);
         $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
                 ->join('products', 'products.id', 'order_details.product_id')
                 ->with('prefecture')
@@ -3416,7 +3419,7 @@ class AdminController extends Controller
                         ->whereYear('created_at', $currentDate->year)
                         ->sum('amount');
 
-        $orderCount = OrderDetail::count();
+                        $orderCount = OrderDetail::whereMonth('created_at', '=', Carbon::now()->month)->count();
         $pending = OrderDetail::where('status', 'Pending')->count();
         $currentDate = Carbon::now()->format('Y-m-d');
         $product = Product::whereDate('created_at','<=',$currentDate)->count();

@@ -146,15 +146,6 @@
                                         <input type="email" class="form-control" id="email"
                                             placeholder="Enter Email Address" name="email"  value="{{ old('email') }}">
                                         <i class="fa-solid fa-envelope"></i>
-<<<<<<< HEAD
-
-                                        @if (!empty($error['email']))
-                                            @foreach ($error['email'] as  $key => $value)
-                                                <p class="error text-danger">{{ $value }}</p>
-                                            @endforeach
-                                        @endif
-=======
->>>>>>> f7b199aaebd97487b44ddef6cebdfd366f836168
                                     </div>
                                     <span class="error" style="color:red" id="error-email"></span>
                                 </div>
@@ -165,7 +156,7 @@
                                     <label for="exampleFormControlInput3" class="form-label">Phone Number</label>
                                     <div class="custom-input">
                                         <input type="tel" class="form-control" id="phone"
-                                            placeholder="Enter Your Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            placeholder="Enter Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
                                             this.value.slice(0, this.maxLength);" name="phone"  value="{{ old('phone') }}">
                                         <i class="fa-solid fa-mobile-screen-button"></i>
                                     </div>
@@ -209,14 +200,14 @@
     <script>
         function validateContactForm() {
             let isValid = true;
-    
+
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const message = document.getElementById('message').value.trim();
 
             document.querySelectorAll('.error').forEach(el => el.textContent = '');
-    
+
             if (!name) {
                 isValid = false;
                 document.getElementById('error-name').textContent = 'Please provide your name.';
@@ -224,7 +215,7 @@
                 isValid = false;
                 document.getElementById('error-name').textContent = 'Your name must not exceed 255 characters.';
             }
-    
+
             if (!email) {
                 isValid = false;
                 document.getElementById('error-email').textContent = 'Please provide your email.';
@@ -232,7 +223,7 @@
                 isValid = false;
                 document.getElementById('error-email').textContent = 'Please provide a valid email address.';
             }
-    
+
             if (!phone) {
                 isValid = false;
                 document.getElementById('error-phone').textContent = 'Please provide your phone number.';
@@ -240,21 +231,21 @@
                 isValid = false;
                 document.getElementById('error-phone').textContent = 'Please provide a valid phone number.(eg. 09077554361)';
             }
-    
+
             if (!message) {
                 isValid = false;
                 document.getElementById('error-message').textContent = 'Please provide your message.';
             }
-    
+
             if (isValid) {
                 document.getElementById('contact-form').submit();
             }
         }
-    
+
         document.getElementById('contact-form').addEventListener('submit', function(event) {
             event.preventDefault();
             validateContactForm();
         });
-    </script>   
+    </script>
 
 </x-guest-layout>

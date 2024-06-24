@@ -11,6 +11,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="tab-content" id="pills-tabContent">
+                                    @if ($start)
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
                                         <form method="GET" action="{{ route('help.add') }}" class="theme-form theme-form-2 mega-form" >
                                             @csrf
@@ -83,6 +84,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

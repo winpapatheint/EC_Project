@@ -205,16 +205,16 @@ class SellerController extends Controller
     public function detailHelp($id)
     {
         $getId = Help::find($id);
-        $helpId = $getId->help_id;
-        if ($helpId) {
-            $start = DB::table('helps')->where('id',$id)->first();
+        if ($getId) {
+            $helpId = $getId->help_id;
+            $start = Help::find($id);
             $reply = Help::where('help_id', $helpId)->get();
         } else {
             $start = $getId;
             $reply = null;
         }
-        return view('seller.help.help_detail', compact('start', 'reply'));
 
+        return view('seller.help.help_detail', compact('start', 'reply'));
     }
 
 
@@ -414,6 +414,19 @@ class SellerController extends Controller
             'email' => $validatedData['mail'],
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
+        ]);
+        
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            \Mail::to($admin->email)->send(new \App\Mail\AdminNewMemberRegistration($user, $admin));
+        }
+
+        $createdBy = Seller::where('user_id', $user->created_by)->first();
+        Notification::create([
+            'related_id' => $user->id,
+            'message' => 'A new sub seller added by ' . $createdBy->shop_name . ':',
+            'time' => Carbon::now(),
+            'seen' => 0,
         ]);
 
         $msg = ('Data added successfully');

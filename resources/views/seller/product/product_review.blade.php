@@ -183,15 +183,15 @@
                 @if(isset($item->id))
                     <div class="modal-body">
                         <form action="{{ route('review.update')}}" method="POST">
-                            <input type="hidden" name="review_id" value="{{ $item->id }}">
                             @csrf
+                            <input type="hidden" name="review_id" value="{{ $item->id }}">
                             <textarea class="form-control" name="comment" rows="6" cols="6">{{ $item->comment }}</textarea>
+                            <div class="modal-footer">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="submit" class="btn btn-animation">Update</button>
+                                <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <button type="submit" class="btn btn-animation">Update</button>
-                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 @endif
             </div>

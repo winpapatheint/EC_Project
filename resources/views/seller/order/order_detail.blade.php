@@ -1,6 +1,14 @@
 @extends('seller.seller_dashboard')
 @section('seller')
 
+<style>
+    .break-line {
+    width: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+    }
+</style>
+
 <!-- tracking section start -->
 <div class="page-body">
     <!-- tracking table start -->
@@ -16,7 +24,6 @@
                 }
             }
         @endphp
-    @endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
@@ -55,9 +62,11 @@
                                                         </td>
 
                                                         <td style="width: 100%;">
-                                                            <h6>
-                                                                {!! preg_replace('/(.{1,30})\s+?/', '$1<br>', $order->product_name) !!}
-                                                            </h6>
+                                                            <div class="break-line">
+                                                                <h6>
+                                                                    {!! $order->product_name !!}
+                                                                </h6>
+                                                            </div>
                                                         </td>
 
                                                         <td>
@@ -156,6 +165,7 @@
             </div>
         </div>
     </div>
+    @endif
     <!-- tracking table end -->
 </div>
 <!-- tracking section End -->

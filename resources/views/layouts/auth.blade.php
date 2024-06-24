@@ -99,7 +99,6 @@
             height: 40px;
             border-radius: 0 5px 5px 0;
             border: none;
-            background-color: #007bff;
             color: #fff;
             display: flex;
             align-items: center;
@@ -185,6 +184,11 @@
                 padding: 0 20px;
             }
         }
+        .active-link {
+            /* background-color: #90c5b5; */
+            background: linear-gradient(-45deg, #90c5b5, #8c9eaa, #0c8964);
+            /* Add any other styles you need */
+        }
     </style>
 </head>
 
@@ -227,7 +231,7 @@
                 <div class="search-box1">
                     <form id="mainSearchForm" action="{{ url()->current() }}" method="GET">
                         <div class="input-group1">
-                            <input type="search" class="form-control1" name="mainSearch" placeholder="">
+                            <input type="search" class="form-control1" name="mainSearch" placeholder="" value="{{ request('mainSearch') }}">
                             <button class="btn1 theme-bg-color" type="submit" id="button-addon2">
                                 <i data-feather="search"></i>
                             </button>
@@ -240,12 +244,12 @@
                     use App\Models\Notification;
                     use Carbon\Carbon;
                     $today = Carbon::today();
-                    $notifications = Notification::whereDate('created_at', $today)->orderBy('seen', 'ASC')->get();
+                    $notifications = Notification::whereDate('created_at', $today)->orderBy('seen', 'ASC')->orderBy('created_at', 'DESC')->get();
                     $notiCount = $notifications->filter(function($notify) {
                         return $notify->seen == 0;
                     })->count();
                 @endphp
-                <div class="nav-right col-4 pull-right right-header p-0">
+                <div class="nav-right col-6 pull-right right-header p-0">
                     <ul class="nav-menus">
                         <li class="onhover-dropdown">
                             <div class="notification-box">
@@ -258,7 +262,7 @@
                                     <h6 class="f-18 mb-0">Notitications</h6>
                                 </li>
                                 @php
-                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#6670bd","#6670bd","#6670bd"];
+                                    $iro = ["#0da487","#9e65c2","#a927f9","#6670bd","#9944ff","#dc3545","#0da487","#dc3545","#6670bd"];
                                 @endphp
 
                                 @foreach($notifications as $key => $notify)
@@ -274,8 +278,12 @@
                                     <a href="{{ url("/admin/orderdetail/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
                                     @elseif ($notify->message == 'A new contact added:')
                                     <a href="{{ url("helpdetails/".$notify->related_id ) }}" class="notification-link" data-id="{{ $notify->id }}">
-                                    @elseif ($notify->message == 'Product deleted:')
+                                    @elseif (Str::contains($notify->message, 'Product deleted by'))
                                     <a href="" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif (Str::contains($notify->message, 'A new sub seller added by'))
+                                    <a href="" class="notification-link" data-id="{{ $notify->id }}">
+                                    @elseif (Str::contains($notify->message, 'did not pay in time for cash order'))
+                                    <a href="{{ url("admin/orderlist" ) }}" class="notification-link" data-id="{{ $notify->id }}">
                                     @endif
                                         <p>
                                             @if ($notify->seen == 0)
@@ -291,8 +299,12 @@
                                                     $color = $iro[3];
                                                 } elseif ($notify->message == 'A new contact added:') {
                                                     $color = $iro[4];
-                                                } elseif ($notify->message == 'Product deleted:') {
-                                                    $color = $iro[4];
+                                                } elseif (Str::contains($notify->message, 'Product deleted by')) {
+                                                    $color = $iro[5];
+                                                } elseif (Str::contains($notify->message, 'A new sub seller added by')) {
+                                                    $color = $iro[6];
+                                                } elseif (Str::contains($notify->message, 'did not pay in time for cash order')) {
+                                                    $color = $iro[7];
                                                 }
                                             @endphp
                                             <i class="fa fa-circle me-2 font-primary notification-circle"
@@ -387,82 +399,126 @@
                                 <li class="back-btn"></li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.dashboard') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                     {{ request()->routeIs('admin.dashboard') || request()->is('admin/transfer-order-details/*') ? 'active-link' : '' }}" 
+                                      href="{{ route('admin.dashboard') }}">
                                         <i class="ri-home-line"></i>
                                         <span>Dashboard</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.shop') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/shop.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.all.shop') || request()->is('shop/*') ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.all.shop') }}">
                                         <i class="ri-store-3-line"></i>
                                         <span>Shops</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.product') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.all.product') 
+                                    || request()->is('admin/productdetail/*')
+                                    || request()->is('editproduct/*')
+                                    ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.all.product') }}">
                                         <i class="ri-product-hunt-line"></i>
                                         <span>Products</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.category') }}">
-                                        {{-- <img style="width:22px;color:white"  src="{{ asset('backend/assets/images/icon/category.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.category')
+                                    || request()->is('admin/addcategory')
+                                    || request()->is('admin/addsubtitle')
+                                    || request()->is('admin/addsubcategory')
+                                    || request()->is('editsubcategory/*/*')
+                                    ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.category') }}">
                                         <i class="ri-list-check-2"></i>
                                         <span>Categories</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('orderlist') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('orderlist')
+                                    || request()->is('admin/orderdetail/*')
+                                    || request()->is('admin/ordertracking/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('orderlist') }}">
                                         <i class="ri-archive-line"></i>
                                         <span>Orders</span>
                                     </a>
                                 </li>
 
                                  <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.blog') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.all.blog')
+                                    || request()->is('admin/add/blog')
+                                    || request()->is('blog/*')
+                                    || request()->is('editblog/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.all.blog') }}">
                                         <i class="ri-newspaper-line"></i>
                                         <span>News</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/top') }}">
-                                        {{-- <img style="width:25px;color:white"  src="{{ asset('backend/assets/images/icon/top.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.top')
+                                    || request()->is('edittop/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.top') }}">
                                         <i class="ri-list-settings-line"></i>
                                         <span>Top</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/coupon') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/coupon.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.coupon')
+                                    || request()->is('admin/addcoupon')
+                                    || request()->is('editcoupon/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.coupon') }}">
                                         <i class="ri-coupon-3-line"></i>
                                         <span>Coupon</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.product.review') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.product.review') ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.product.review') }}">
                                         <i class="ri-star-line"></i>
                                         <span>Review</span>
                                     </a>
                                 </li>
 
                                  <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.all.users') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.all.users')
+                                    || request()->is('userdetail/*')
+                                    || request()->is('edit/seller/*')
+                                    || request()->is('edit/buyer/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.all.users') }}">
                                         <i class="ri-file-user-line"></i>
                                         <span>Users</span>
                                     </a>
                                 </li>
                                 @if(auth()->user()->id == '1')
                                 <li class="sidebar-list">
-
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/subadmin') }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.subadmin')
+                                    || request()->is('admin/registersubadmin')
+                                    || request()->is('subadmindetail/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.subadmin') }}">
                                         <i class="ri-admin-line"></i>
                                         <span>SubAdmin</span>
                                     </a>
@@ -470,47 +526,65 @@
                                 @endif
 
                                 <li class="sidebar-list">
-                                   <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.bank_account') }}">
+                                   <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.bank_account')
+                                    || request()->is('admin/add-bank-account')
+                                    || request()->is('admin/edit-bank-account/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.bank_account') }}">
                                        <i class="ri-file-user-line"></i>
                                        <span>Bank Account</span>
                                    </a>
                                </li>
 
                                 <li class="sidebar-list">
-
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/faq') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/faq.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.faq')
+                                    || request()->is('admin/registerfaq')
+                                    || request()->is('faq/*')
+                                    || request()->is('editfaq/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.faq') }}">
                                         <i class="ri-question-answer-line"></i>
                                         <span>FAQ</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.indexhelp') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/help.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.indexhelp')
+                                    || request()->is('helpdetails/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.indexhelp') }}">
                                         <i class="ri-mail-line"></i>
                                         <span>Contact</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/indexcustomer') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/customer.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.indexcustomer')
+                                    || request()->is('editcustomer/*')
+                                     ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.indexcustomer') }}">
                                         <i class="ri-customer-service-2-line"></i>
                                         <span>Customer</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('admin/newsletter') }}">
-                                        {{-- <img style="width:20px;color:white"  src="{{ asset('backend/assets/images/icon/newsletter.png') }}" alt="logo"> --}}
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.newsletter') ? 'active-link' : '' }}" 
+                                     href="{{ route('admin.newsletter') }}">
                                         <i class="ri-profile-line"></i>
                                         <span>NewsLetter</span>
                                     </a>
                                 </li>
 
                                 <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav" href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->is('edit/admin/*') ? 'active-link' : '' }}" 
+                                     href="{{ url('/edit/'.auth()->user()->role.'/'.rand ( 10000 , 99999 )) }}">
                                         <i class="ri-user-3-line"></i>
                                         <span>Profile</span>
                                     </a>

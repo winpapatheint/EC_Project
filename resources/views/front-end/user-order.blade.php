@@ -179,6 +179,8 @@
                                                 <h6>{{ $item->payment_type }}</h6>
                                                 @if ($item->payment_approved == 0)
                                                 <p style="color:red; font-size:12px;">(transfer not yet!)</p>
+                                                @elseif ($item->payment_approved == 2)
+                                                <p style="color:red; font-size:12px;">(Cancelled - no transfer payment!)</p>
                                                 @endif
                                             </td>
 

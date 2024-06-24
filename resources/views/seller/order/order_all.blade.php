@@ -4,7 +4,13 @@
 <style>
     .disabled-blue {
     color: #0b6d59 !important;
-}
+    }
+
+    .break-line {
+    width: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+    }
 </style>
 <!-- Section start -->
 <div class="page-body">
@@ -129,7 +135,11 @@
                                                         <td>{{ $item->order->order_code }}</td>
                                                         <td><a href="{{ route('detail.product', $item->product->id) }}">{{ $item->product->product_code }}</a></td>
                                                         <td>
-                                                            <h6>{!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}</h6>
+                                                            <div class="break-line">
+                                                                <h6>
+                                                                    {!! $item->product_name !!}
+                                                                </h6>
+                                                            </div>
                                                         </td>
                                                         <td>{{ $item->qty }}</td>
                                                         <td>¥{{ number_format($item->amount) }}</td>

@@ -47,7 +47,7 @@
                     <div class="search-box">
                         <form id="mainSearchForm" action="{{ route('footer_search') }}" method="GET">
                             <div class="input-group">
-                                <input type="search" class="form-control" name="footerSearch" placeholder="">
+                                <input type="search" class="form-control" name="footerSearch" placeholder="" value="{{ request("footerSearch") }}">
                                 <button class="btn theme-bg-color text-white m-0" type="submit" id="button-addon1">
                                     <i data-feather="search"></i>
                                 </button>
@@ -261,7 +261,7 @@
                                         $sizes = explode(',', $product->product_size);
                                     @endphp
                                     <li>
-                                        <div class="product-contain" style="display: flex;">
+                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
                                             @foreach($sizes as $key => $size)
                                                 <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
                                                     <input class="form-check-input" type="radio" name="selected_size_{{ $product->id }}" 
@@ -278,7 +278,7 @@
                                         $colors = explode(',', $product->product_color);
                                     @endphp
                                     <li>
-                                        <div class="product-contain" style="display: flex;">
+                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
                                             @foreach($colors as $key => $color)
                                                 <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
                                                     <input class="form-check-input" type="radio" name="selected_color_{{ $product->id }}" 

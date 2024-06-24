@@ -1,10 +1,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <x-auth-layout>
-<style>
-    .disabled-blue {
-    color: #0b6d59 !important;
-}
-</style>
+    <style>
+        .disabled-blue {
+        color: #0b6d59 !important;
+        }
+    
+        .break-line {
+        width: 200px;
+        word-wrap: break-word;
+        white-space: normal;
+        }
+    </style>
 <!-- Section start -->
 <div class="page-body">
     <div class="container-fluid">
@@ -121,25 +127,6 @@
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
                                                             </li>
-
-                                                            {{-- <li>
-                                                                <a href="{{ route('invoice',$item->id) }}"
-                                                                   @if($item->status === 'Cancel')
-                                                                       onclick="return false;"
-                                                                   @endif>
-                                                                    <i class="icon-cloud-down"></i>
-                                                                </a>
-                                                            </li> --}}
-
-                                                            {{-- <li>
-                                                                <a class="btn btn-sm btn-solid text-white"
-                                                                    href="{{ route('ordertracking', $item->order_id)}}"
-                                                                    @if($item->status === 'Cancel')
-                                                                       onclick="return false;"
-                                                                    @endif>
-                                                                    Tracking
-                                                                </a>
-                                                            </li> --}}
                                                         </ul>
                                                     </td>
                                                 </tr>
@@ -163,6 +150,7 @@
                                                 <th>Product Name</th>
                                                 <th>Quantity</th>
                                                 <th>Amount</th>
+                                                <th>Cancelled By</th>
                                                 <th>Reason</th>
                                             </tr>
                                         </thead>
@@ -178,14 +166,21 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                         {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                                     <td>{{ $item->order->order_code }}</td>
-                                                    <td><a href="{{ route('detailproduct',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
+                                                    <td><a href="{{ route('admin.detailproduct',$item->product->id) }}">{{ $item->product->product_code }}</a> </td>
                                                     <td>
-                                                        <h6>
-                                                            {!! preg_replace('/(.{1,20})\s+?/', '$1<br>', $item->product_name) !!}
-                                                        </h6>
+                                                        <div class="break-line">
+                                                            <h6>
+                                                                {!! $item->product_name !!}
+                                                            </h6>
+                                                        </div>
                                                     </td>
                                                     <td>{{ $item->qty }}</td>
                                                     <td>¥{{ number_format($item->amount) }}</td>
+                                                    @if ($item->order_detail_status == 'Cash Cancel')
+                                                    <td>Automatically</td>
+                                                    @else
+                                                    <td>{{ $item->seller->shop_name }}</td>
+                                                    @endif
                                                     <td>{{ $item->cancelled_reason }}</td>
                                                 </tr>
                                             @endforeach

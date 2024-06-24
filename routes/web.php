@@ -128,7 +128,7 @@ Route::post('admin/registersubtitle', [AdminController::class, 'storesubtitle'])
 Route::post('admin/registersubcategory', [AdminController::class, 'storesubcategory'])->middleware(['auth','role:admin'])->name('registersubcategory');
 Route::get('/admin/users', function () {return view('back-end.users');});
 
-Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin']);
+Route::get('admin/subadmin', [AdminController::class, 'indexsubadmin'])->middleware(['auth','role:admin'])->name('admin.subadmin');
 Route::get('/admin/registersubadmin', function () {return view('admin.edituser');});
 Route::post('admin/registersubadmin', [AdminController::class, 'registersubadmin'])->name('registersubadmin');
 Route::get('admin/bank-account', [AdminController::class, 'indexbankaccount'])->middleware(['auth','role:admin'])->name('admin.bank_account');
@@ -143,14 +143,14 @@ Route::post('/user/status', [AdminController::class, 'indexuserstatus'])->middle
 Route::post('/user/review', [AdminController::class, 'indexreviewstatus'])->middleware(['auth','role:admin'])->name('statusreview');
 Route::get('/admin/profile', function () {return view('admin.profile');})->middleware(['auth','role:admin'])->name('admin.profile');
 Route::get('/admin/review/product', [AdminController::class,'indexreview'])->middleware(['auth','role:admin'])->name('admin.product.review');
-Route::get('/admin/faq', [AdminController::class, 'indexfaq'])->middleware(['auth','role:admin']);
+Route::get('/admin/faq', [AdminController::class, 'indexfaq'])->middleware(['auth','role:admin'])->name('admin.faq');
 Route::get('/admin/addcoupon', function () {return view('admin.addcoupon');})->middleware(['auth','role:admin'])->name('admin.addcoupon');
-Route::get('/admin/coupon', [AdminController::class, 'indexcoupon'])->middleware(['auth','role:admin']);
-Route::get('/admin/indexcustomer', [AdminController::class, 'indexcustomer'])->middleware(['auth','role:admin']);
+Route::get('/admin/coupon', [AdminController::class, 'indexcoupon'])->middleware(['auth','role:admin'])->name('admin.coupon');
+Route::get('/admin/indexcustomer', [AdminController::class, 'indexcustomer'])->middleware(['auth','role:admin'])->name('admin.indexcustomer');
 Route::get('/editcustomer/{topid}', [AdminController::class, 'editcustomer'])->middleware(['auth','role:admin']);
 Route::post('admin/registercustomer', [AdminController::class, 'storecustomer'])->middleware(['auth','role:admin'])->name('registercustomer');
-Route::get('/admin/top', [AdminController::class, 'indextop'])->middleware(['auth','role:admin']);
-Route::get('/admin/newsletter', [AdminController::class, 'indexnewsletter'])->middleware(['auth','role:admin']);
+Route::get('/admin/top', [AdminController::class, 'indextop'])->middleware(['auth','role:admin'])->name('admin.top');
+Route::get('/admin/newsletter', [AdminController::class, 'indexnewsletter'])->middleware(['auth','role:admin'])->name('admin.newsletter');
 Route::get('/edittop/{topid}', [AdminController::class, 'edittop'])->middleware(['auth','role:admin']);
 Route::post('admin/registertop', [AdminController::class, 'storetop'])->middleware(['auth','role:admin'])->name('registertop');
 Route::get('/editcoupon/{couponid}', [AdminController::class, 'editcoupon'])->middleware(['auth','role:admin']);
@@ -264,7 +264,7 @@ Route::get('/admin/edit/product', function () {return view('admin.product.produc
 
 //AdminOrder
 Route::get('/admin/orderlist', [AdminController::class, 'indexorderlist'])->name('orderlist');
-Route::get('admin/productdetail/{id}', [AdminController::class, 'detailProduct'])->middleware(['auth','role:admin'])->name('detailproduct');
+Route::get('admin/productdetail/{id}', [AdminController::class, 'detailProduct'])->middleware(['auth','role:admin'])->name('admin.detailproduct');
 Route::get('/admin/orderdetail/{id}', [AdminController::class, 'orderdetail'])->name('orderdetail');
 Route::get('/admin/ordertracking/{id}', [AdminController::class, 'ordertracking'])->name('ordertracking');
 route::post('/admin/deleteorderlist',[AdminController::class,'deleteorderlist'])->name('deleteorderlist');

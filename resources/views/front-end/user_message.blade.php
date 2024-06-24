@@ -196,7 +196,11 @@
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-10">
+                                                            @if ($userNoti->title == 'Cash Cancel')
+                                                            <p><strong>You order has been Cancelled.</strong></p>
+                                                            @else
                                                             <p><strong>Your order has been {{ $userNoti->title == 'Cancel' ? 'Cancelled' : $userNoti->title }}.</strong></p>
+                                                            @endif
                                                         </div>
                                                         <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: flex-end; margin-left: auto;">
                                                             {{ date('Y/m/d H:i', strtotime($userNoti->created_at)) }}
@@ -206,7 +210,7 @@
                                                         <div class="col-md-10">
                                                             <div class="row">
                                                                 <div class="col-md-1">
-                                                                    <img src="{{ asset('upload/product_thambnail/'.$userNoti->orderDetail->product->product_thambnail) }}"
+                                                                    <img src="{{ asset('images/'.$userNoti->orderDetail->product->product_thambnail) }}"
                                                                     class="img-fluid blur-up lazyload" alt="" style="width: 40px;height: 40px;">
                                                                 </div>
                                                                 <div class="col-md-11">
@@ -237,13 +241,20 @@
                                                                     We will notify the refund process soon.<br>
                                                                     Cancelled Reason : {{ $userNoti->orderDetail->cancelled_reason }}
                                                                 </span>
+                                                                @elseif($userNoti->title == 'Cash Cancel')
+                                                                <span>
+                                                                    Your order has been Cancelled for no transfer payment.<br>
+                                                                    Cancelled Reason : {{ $userNoti->orderDetail->cancelled_reason }}
+                                                                </span>
                                                                 @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2 text-right" style="display: flex; align-items: center; justify-content: space-between; margin-left: auto;">
                                                             <a href="javascript:void(0)" data-bs-toggle="modal" 
                                                             data-bs-target="#removeNoti{{ $userNoti->id }}">
-                                                                <i class="ri-delete-bin-line"></i></a>
+                                                                {{-- <i class="ri-delete-bin-line"></i> --}}
+                                                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                                            </a>
                                                         </div>
                                                         <!-- Remove Noti Modal Start -->
                                                         <div class="modal fade theme-modal remove-profile" id="removeNoti{{ $userNoti->id }}" tabindex="-1" aria-hidden="true">
@@ -276,7 +287,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>                                
                                     @endforeach
                                 </div>      
                             </div>

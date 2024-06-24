@@ -1,26 +1,63 @@
 <x-auth-layout>
     <style>
-        .table-responsive {
+        .table thead th,
+        .table tbody td {
+            white-space: nowrap;
+        }
+
+        .table thead th.sticky,
+        .table tbody td.sticky {
+            position: sticky;
+            background: white;
+            z-index: 1;
+        }
+
+        .table thead th.sticky-1,
+        .table tbody td.sticky-1 {
+            left: 0;
+            z-index: 2;
+        }
+
+        .table thead th.sticky-2,
+        .table tbody td.sticky-2 {
+            left: 50px;
+            z-index: 2;
+        }
+
+        .table thead th.sticky-3,
+        .table tbody td.sticky-3 {
+            left: 250px;
+            z-index: 2;
+        }
+
+        .table-product {
             overflow-x: auto;
         }
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
+        /* Add alternating row colors */
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
         }
 
-        /* Sticky columns */
-
-        th.name,
-        td.name,
-     {
-            position: sticky;
-            background-color: #fff;
+        .table tbody tr:nth-child(even) {
+            background-color: #ffffff;
         }
-tr{
-    height: 10px;
-}
 
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table tbody tr:nth-child(odd) .sticky {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:nth-child(even) .sticky {
+            background-color: #ffffff;
+        }
+
+        .table tbody tr:hover .sticky {
+            background-color: #f1f1f1;
+        }
 
     </style>
 
@@ -41,12 +78,12 @@ tr{
                                     <table class="table all-package theme-table table-product" id="table_id">
                                         <thead>
                                             <tr>
-                                                <th class="no" style="min-width: 50px">No</th>
-                                                <th  style="min-width: 10px">Date</th>
-                                                <th class="image" style="min-width: 10px">Product Image</th>
-                                                <th class="name" style="min-width: 10px">Product Name</th>
-                                                <th style="min-width: 10px">Current Qty</th>
-                                                <th style="min-width: 10px"><p>Price</p><p>(Tax inc)</p></th>
+                                                <th class="sticky sticky-1" style="min-width: 50px">No</th>
+                                                <th >Date</th>
+                                                <th class="sticky sticky-2" style="min-width: 200px">Product Image</th>
+                                                <th class="sticky sticky-3" style="min-width: 300px">Product Name</th>
+                                                <th style="min-width: 120px">Current Qty</th>
+                                                <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision(%)</th>
                                                 <th style="min-width: 150px">Commision</th>
                                                 <th style="min-width: 150px;">Coupon Code</th>
@@ -60,10 +97,10 @@ tr{
                                         <tbody>
                                             @foreach( $lists as $key => $list )
                                                 <tr>
-                                                    <td  class="no">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
-                                                    <td  data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td class="image" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;"></td>
-                                                    <td  class="name"  style="text-align:left;" data-label="{{ $list->product_name }}">
+                                                    <td class="sticky sticky-1">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                    <td class="sticky sticky-2" data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/product_thambnail/'.($list->product_thambnail)   ) }}" alt="thumb" style="width: 50px;height: 50px;"></td>
+                                                    <td class="sticky sticky-3" style="text-align:left; max-width: 200px;overflow: hidden;" data-label="{{ $list->product_name }}">
                                                         @if(mb_strlen($list->product_name) > 30)
                                                             {!! mb_substr($list->product_name, 0, 30) . '<br>' . mb_substr($list->product_name, 30, 30) . '...' !!}
                                                         @else
@@ -145,7 +182,7 @@ tr{
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                <a href="{{ url("/product/".$list->id ) }}">
+                                                                <a href="{{ route('admin.detailproduct', $list->id)}}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </a>
                                                             </li>

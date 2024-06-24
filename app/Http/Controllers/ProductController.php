@@ -261,7 +261,7 @@ class ProductController extends Controller
         }
         Notification::create([
             'related_id' => $user_id,
-            'message' => 'Product deleted:',
+            'message' => 'Product deleted by ' . $sellerData->shop_name . ':',
             'time' => Carbon::now(),
             'seen' => 0,
         ]);
@@ -374,7 +374,8 @@ class ProductController extends Controller
         $review->comment = $request->comment;
         $review->updated_at= Carbon::now();
         $review->save();
-        return redirect()->back();
+        $msg = ('Review updated Successfully');
+        return back()->with('success', $msg);
     }
 
     public function deleteReview(Request $request)

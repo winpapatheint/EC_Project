@@ -176,7 +176,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-animation ms-auto fw-bold" type="button" onclick="validateContactForm()">Send Message</button>
+                        <button class="btn btn-animation theme-bg-color ms-auto fw-bold" type="button" onclick="validateContactForm()">Send Message</button>
                         </form>
                     </div>
                 </div>

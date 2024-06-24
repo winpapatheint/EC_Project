@@ -715,7 +715,7 @@
                                         <i data-feather="mail"></i>
                                         <div class="contact-number">
                                             <h6 class="text-content">Email Address :</h6>
-                                            <h5>info@asian-food.site</h5>
+                                            <h5>support@asian-food.site</h5>
                                         </div>
                                     </div>
                                 </li>

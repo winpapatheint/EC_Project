@@ -689,6 +689,12 @@
                                 <li>
                                     <a href="{{ url('/term-and-condition') }}" class="text-content">Terms and Conditions</a>
                                 </li>
+
+                                <li class="social-app mb-0">
+                                    <a href="{{ url('/privacy-policy') }}" class="text-content">
+                                        <h5 class="mb-2 text-content">Privacy policy</h5>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -719,23 +725,11 @@
                                         </div>
                                     </div>
                                 </li>
-
-                                <li class="social-app mb-0">
-                                    <div class="footer-contain">
-                                        <ul>
-                                            <li>
-                                                <a href="{{ url('/privacy-policy') }}" class="text-content">
-                                                    <h5 class="mb-2 text-content">Privacy policy</h5>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
                             </ul>
                         </div>
                         <div class="footer">
                             <div class="sub-footer">
-                                <div class="social-link">
+                                <div class="social-link" style="margin-top: 15px;">
                                     <h6 class="text-content">Stay connected :</h6>
                                     <ul>
                                         <li>

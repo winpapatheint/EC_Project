@@ -2077,7 +2077,7 @@ class AdminController extends Controller
 
             DB::table('blogs')->where('id', $request->id)->update($updval);
 
-            return redirect('/admin/all/blog')->with('success', '「' . $request->title . '」' . __('Updated Successfully.'));
+            return redirect('/admin/all/blog')->with('success', 'Updated Successfully.');
         }
     }
 
@@ -2291,7 +2291,7 @@ class AdminController extends Controller
 
         event(new Registered($user));
 
-        return redirect('admin/subadmin')->with('success', '「' . $request->name . '」登録されました。');
+        return redirect('admin/subadmin')->with('success', 'Registered Successfully');
     }
 
     public function indexsubtitle()
@@ -3218,7 +3218,7 @@ class AdminController extends Controller
 
             DB::table('coupons')->where('id', $request->id)->update($updval);
 
-            return redirect('/admin/coupon')->with('success', '「' . $request->title . '」' . __('Updated Successfully'));
+            return redirect('/admin/coupon')->with('success', 'Updated Successfully');
         }
     }
 
@@ -3338,7 +3338,7 @@ class AdminController extends Controller
 
             DB::table('categories')->where('id', $request->id)->update($updval);
 
-            return redirect('/admin/category')->with('success', '「' . $request->title . '」' . __('Updated Successfully.'));
+            return redirect('/admin/category')->with('success', 'Updated Successfully.');
         }
     }
 

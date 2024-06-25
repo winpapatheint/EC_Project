@@ -568,9 +568,9 @@
                                                         <h6 class="name">{{ $prod->product_name }}</h6>
                                                     </a>
                                                     @if ($prod->discount_percent != 0)
-                                                        <h6 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span> <del>¥{{ $prod->original_price }}</del>
+                                                        <h6 class="price"><span class="theme-color">¥{{ number_format($prod->selling_price) }}</span> <del>¥{{ number_format($prod->original_price) }}</del>
                                                     @else
-                                                        <h5 class="price"><span class="theme-color">¥{{ $prod->selling_price }}</span>
+                                                        <h5 class="price"><span class="theme-color">¥{{ number_format($prod->selling_price) }}</span>
                                                     @endif
                                                 </div>
                                             </div>

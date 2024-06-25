@@ -535,7 +535,7 @@
 
 
      <!-- Footer Section Start -->
-     <footer class="section-t-space">
+     <footer class="section-t-space footer-section-2">
         <div class="container-fluid-lg">
             <div class="service-section">
                 <div class="row g-3">
@@ -733,6 +733,35 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="footer">
+                            <div class="sub-footer">
+                                <div class="social-link">
+                                    <h6 class="text-content">Stay connected :</h6>
+                                    <ul>
+                                        <li>
+                                            <a href="https://www.facebook.com/" target="_blank">
+                                                <i class="fa-brands fa-facebook-f"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://twitter.com/" target="_blank">
+                                                <i class="fa-brands fa-twitter"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://www.instagram.com/" target="_blank">
+                                                <i class="fa-brands fa-instagram"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://in.pinterest.com/" target="_blank">
+                                                <i class="fa-brands fa-pinterest-p"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -742,35 +771,24 @@
                     <h6 class="text-content">©2024 Asia Human Development, Inc. All rights reserved</h6>
                 </div>
 
-                <div class="payment">
-                    <img src="../assets/images/payment/1.png" class="blur-up lazyload" alt="">
-                </div>
+                <ul class="payment-box">
+                    <li>
+                        <img src="{{ asset('frontend/assets/images/icon/paymant/paypal.png') }}" style="width:80px" class="blur-up lazyload" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ asset('frontend/assets/images/icon/paymant/visa.png') }}" class="blur-up lazyload" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ asset('frontend/assets/images/icon/paymant/jcbcard.png') }}" class="blur-up lazyload" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ asset('frontend/assets/images/icon/paymant/american.png') }}" alt="" class="blur-up lazyload">
+                    </li>
+                    <li>
+                        <img src="{{ asset('frontend/assets/images/icon/paymant/master-card.png') }}" alt="" class="blur-up lazyload">
+                    </li>
 
-                <div class="social-link">
-                    <h6 class="text-content">Stay connected :</h6>
-                    <ul>
-                        <li>
-                            <a href="https://www.facebook.com/" target="_blank">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://twitter.com/" target="_blank">
-                                <i class="fa-brands fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.instagram.com/" target="_blank">
-                                <i class="fa-brands fa-instagram"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://in.pinterest.com/" target="_blank">
-                                <i class="fa-brands fa-pinterest-p"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
     </footer>

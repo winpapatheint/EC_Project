@@ -2346,7 +2346,7 @@ class AdminController extends Controller
                 Category::where('id', $categoryId)->delete();
             }
         }
-        return redirect('/admin/category')->with('success', 'deleted.');
+        return redirect()->back()->with('success', 'Deleted Successfully.');
     }
 
     public function deleteblog(Request $request)
@@ -2354,7 +2354,7 @@ class AdminController extends Controller
 
         $data = DB::table('blogs')
             ->delete($request->id);
-        return redirect('/admin/all/blog')->with('success', 'Deleted Successfully.');
+        return redirect()->back()->with('success', 'Deleted Successfully.');
     }
 
     // reset product commission
@@ -2365,7 +2365,7 @@ class AdminController extends Controller
         $item->commission_status = 0;
         $item->commission = $shop->commission;
         $item->save();
-        return redirect('/admin/product')->with('success', 'Deleted Successfully.');
+        return redirect()->back()->with('success', 'Deleted Successfully.');
     }
 
 
@@ -2374,7 +2374,7 @@ class AdminController extends Controller
 
         $data = DB::table('newsletters')
             ->delete($request->id);
-        return redirect('/admin/newsletter')->with('success', 'Deleted Successfully.');
+        return redirect()->back()->with('success', 'Deleted Successfully.');
     }
 
     public function deleteorderlist(Request $request)
@@ -2382,7 +2382,7 @@ class AdminController extends Controller
 
         $data = DB::table('orders')
             ->delete($request->id);
-        return redirect('/admin/orderlist')->with('success', '削除されました。');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 
     public function deletecoupon(Request $request)
@@ -2390,7 +2390,7 @@ class AdminController extends Controller
 
         $data = DB::table('coupons')
             ->delete($request->id);
-        return redirect('admin/coupon')->with('success', '削除されました。');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 
     public function deletefaq(Request $request)
@@ -2398,15 +2398,14 @@ class AdminController extends Controller
 
         $data = DB::table('faqs')
             ->delete($request->id);
-        return redirect('/admin/faq')->with('success', '削除されました。');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 
     public function deleteproduct(Request $request)
     {
-
         $data = DB::table('products')
             ->delete($request->id);
-        return redirect('/admin/all/product')->with('success', '削除されました。');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 
     // update coupon for shop
@@ -2523,7 +2522,7 @@ class AdminController extends Controller
 
         $data = DB::table('users')
             ->delete($request->id);
-        return redirect('/admin/all/users')->with('success', '削除されました。');
+        return redirect('/admin/all/users')->with('success', 'Successfully Deleted!');
     }
 
     public function deletesubadmin(Request $request)
@@ -2531,7 +2530,7 @@ class AdminController extends Controller
 
         $data = DB::table('users')
             ->delete($request->id);
-        return redirect('/admin/subadmin')->with('success', '削除されました。');
+        return redirect('/admin/subadmin')->with('success', 'Successfully Deleted!');
     }
     public function addsubtitle()
     {

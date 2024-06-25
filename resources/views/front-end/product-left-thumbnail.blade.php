@@ -622,8 +622,13 @@
                                                             <div class="offer-detail">
                                                                 <div>
                                                                     <a
-                                                                        href="{{ asset('upload/product_thambnail/' . $prod->product_thambnail) }}">
-                                                                        <h6 class="name">{{ $prod->product_name }}
+                                                                        href="{{ route('show-product-left-thumbnail', ['id' => $prod->id]) }}">
+                                                                        <h6 class="name">
+                                                                            @if (mb_strlen($prod->product_name) > 15)
+                                                                                {!! mb_substr($prod->product_name, 0, 15) . '<br>' . mb_substr($prod->product_name, 15, 15) . '...' !!}
+                                                                            @else
+                                                                                {!! nl2br(e($prod->product_name)) !!}
+                                                                            @endif
                                                                         </h6>
                                                                     </a>
                                                                     @if ($prod->discount_percent != 0)

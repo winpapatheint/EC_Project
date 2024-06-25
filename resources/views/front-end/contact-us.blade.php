@@ -123,60 +123,64 @@
 
                     @php $error = $errors->toArray(); @endphp
                     <div class="right-sidebar-box">
-                        <form class="contact-form" method="POST" action="{{ route('contact') }}"  id="contact-form">
-                        @csrf
-                        <input type="hidden" name="from" value="contact">
-                        <div class="row">
-                            <div class="col-xxl-12 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput" class="form-label">Name</label>
-                                    <div class="custom-input">
-                                        <input type="text" class="form-control" id="name"
-                                            placeholder="Enter Name" name="name"  value="{{ old('name') }}">
-                                        <i class="fa-solid fa-user"></i>
+                        <form class="contact-form" method="POST" action="{{ route('contact') }}" id="contact-form">
+                            @csrf
+                            <input type="hidden" name="from" value="contact">
+                            <div class="row">
+                                <div class="col-xxl-12 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="exampleFormControlInput" class="form-label">Name</label>
+                                        <div class="custom-input">
+                                            <input type="text" class="form-control" id="name"
+                                                placeholder="Enter Name" name="name" value="{{ old('name') }}">
+                                            <i class="fa-solid fa-user"></i>
+                                        </div>
+                                        <span class="error" style="color:red" id="error-name"></span>
                                     </div>
-                                    <span class="error" style="color:red" id="error-name"></span>
                                 </div>
-                            </div>
 
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput2" class="form-label">Email Address</label>
-                                    <div class="custom-input">
-                                        <input type="email" class="form-control" id="email"
-                                            placeholder="Enter Email Address" name="email"  value="{{ old('email') }}">
-                                        <i class="fa-solid fa-envelope"></i>
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="exampleFormControlInput2" class="form-label">Email Address</label>
+                                        <div class="custom-input">
+                                            <input type="email" class="form-control" id="email"
+                                                placeholder="Enter Email Address" name="email"
+                                                value="{{ old('email') }}">
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </div>
+                                        <span class="error" style="color:red" id="error-email"></span>
                                     </div>
-                                    <span class="error" style="color:red" id="error-email"></span>
                                 </div>
-                            </div>
 
-                            <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlInput3" class="form-label">Phone Number</label>
-                                    <div class="custom-input">
-                                        <input type="tel" class="form-control" id="phone"
-                                            placeholder="Enter Phone Number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                            this.value.slice(0, this.maxLength);" name="phone"  value="{{ old('phone') }}">
-                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="exampleFormControlInput3" class="form-label">Phone Number</label>
+                                        <div class="custom-input">
+                                            <input type="tel" class="form-control" id="phone"
+                                                placeholder="Enter Phone Number" maxlength="10"
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            this.value.slice(0, this.maxLength);"
+                                                name="phone" value="{{ old('phone') }}">
+                                            <i class="fa-solid fa-mobile-screen-button"></i>
+                                        </div>
+                                        <span class="error" style="color:red" id="error-phone"></span>
                                     </div>
-                                    <span class="error" style="color:red" id="error-phone"></span>
                                 </div>
-                            </div>
 
-                            <div class="col-12">
-                                <div class="mb-md-4 mb-3 custom-form">
-                                    <label for="exampleFormControlTextarea" class="form-label">Message</label>
-                                    <div class="custom-textarea">
-                                        <textarea class="form-control" id="message"
-                                            placeholder="Enter Your Message" rows="6" name="message"  value="{{ old('message') }}">{{ old('message') }}</textarea>
-                                        <i class="fa-solid fa-message"></i>
+                                <div class="col-12">
+                                    <div class="mb-md-4 mb-3 custom-form">
+                                        <label for="exampleFormControlTextarea" class="form-label">Message</label>
+                                        <div class="custom-textarea">
+                                            <textarea class="form-control" id="message" placeholder="Enter Your Message" rows="6" name="message"
+                                                value="{{ old('message') }}">{{ old('message') }}</textarea>
+                                            <i class="fa-solid fa-message"></i>
+                                        </div>
+                                        <span class="error" style="color:red" id="error-message"></span>
                                     </div>
-                                    <span class="error" style="color:red" id="error-message"></span>
                                 </div>
                             </div>
-                        </div>
-                        <button class="btn btn-animation theme-bg-color ms-auto fw-bold" type="button" onclick="validateContactForm()">Send Message</button>
+                            <button class="btn btn-animation theme-bg-color ms-auto fw-bold" type="button"
+                                onclick="validateContactForm()">Send Message</button>
                         </form>
                     </div>
                 </div>
@@ -229,7 +233,8 @@
                 document.getElementById('error-phone').textContent = 'Please provide your phone number.';
             } else if (!/^\d+$/.test(phone)) {
                 isValid = false;
-                document.getElementById('error-phone').textContent = 'Please provide a valid phone number.(eg. 09077554361)';
+                document.getElementById('error-phone').textContent =
+                    'Please provide a valid phone number.(eg. 09077554361)';
             }
 
             if (!message) {

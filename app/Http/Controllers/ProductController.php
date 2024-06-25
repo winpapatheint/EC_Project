@@ -37,7 +37,7 @@ class ProductController extends Controller
         $productsQuery = Product::where('seller_id', $id);
 
         if ($search !== null) {
-            $productsQuery->where(function($query) use ($search) {
+            $productsQuery->where(function ($query) use ($search) {
                 $query->where('product_name', 'like', '%' . $search . '%')
                     ->orWhere('product_code', 'like', '%' . $search . '%');
             });
@@ -67,8 +67,8 @@ class ProductController extends Controller
     public function detailProduct($id)
     {
         $data = Product::find($id);
-        $multiImgs = MultiImg::where('product_id',$id)->get();
-        return view('seller.product.product_detail',compact('data','multiImgs'));
+        $multiImgs = MultiImg::where('product_id', $id)->get();
+        return view('seller.product.product_detail', compact('data', 'multiImgs'));
     }
 
     public function addProduct()
@@ -78,7 +78,7 @@ class ProductController extends Controller
         $categories = Category::latest()->get();
         $subcategories = SubCategory::latest()->get();
         $subcatitle = SubCategoryTitle::latest()->get();
-        return view('seller.product.product_add',compact('brands','countries','categories','subcategories','subcatitle'));
+        return view('seller.product.product_add', compact('brands', 'countries', 'categories', 'subcategories', 'subcatitle'));
     }
 
     public function storeProduct(Request $request)
@@ -176,9 +176,9 @@ class ProductController extends Controller
         $subcategories = SubCategory::latest()->get();
         $subcatitle = SubCategoryTitle::latest()->get();
         $products = Product::findOrFail($id);
-        $multiImgs = MultiImg::where('product_id',$id)->get();
+        $multiImgs = MultiImg::where('product_id', $id)->get();
 
-        return view('seller.product.product_edit',compact('brands','countries','products','categories','subcategories','subcatitle','multiImgs'));
+        return view('seller.product.product_edit', compact('brands', 'countries', 'products', 'categories', 'subcategories', 'subcatitle', 'multiImgs'));
     }
 
     public function updateProduct(Request $request)
@@ -201,8 +201,8 @@ class ProductController extends Controller
             'estimate_date' => 'required|string',
         ]);
 
-        if($request->hasFile('product_thambnail')) {
-            if(File::exists($old_img)) {
+        if ($request->hasFile('product_thambnail')) {
+            if (File::exists($old_img)) {
                 File::delete($old_img);
             }
             $img = $request->file('product_thambnail');
@@ -214,27 +214,27 @@ class ProductController extends Controller
         $product->brand_id = $request->brand_id;
         $product->country_id = $request->country_id;
         // $product->seller_id = Auth::user()->id;
-        $product->category_id= $request->category_id;
-        $product->sub_category_id= $request->sub_category_id;
-        $product->sub_category_title_id= $request->sub_category_title_id;
-        $product->product_name= $request->product_name;
-        $product->product_qty= $request->product_qty;
-        $product->in_stock= $request->product_qty;
-        $product->product_tags= $request->product_tags;
-        $product->product_size= $request->product_size;
-        $product->product_color= $request->product_color;
-        $product->original_price= $request->original_price;
-        $product->discount_percent= $request->discount_percent ?? 0;
+        $product->category_id = $request->category_id;
+        $product->sub_category_id = $request->sub_category_id;
+        $product->sub_category_title_id = $request->sub_category_title_id;
+        $product->product_name = $request->product_name;
+        $product->product_qty = $request->product_qty;
+        $product->in_stock = $request->product_qty;
+        $product->product_tags = $request->product_tags;
+        $product->product_size = $request->product_size;
+        $product->product_color = $request->product_color;
+        $product->original_price = $request->original_price;
+        $product->discount_percent = $request->discount_percent ?? 0;
         $product->selling_price = $request->calculated_selling_price;
-        $product->short_desc= $request->short_desc;
-        $product->long_desc= $request->long_desc;
-        $product->care_instructions= $request->care_instructions;
-        $product->product_thambnail= $filename;
-        $product->estimate_date= $request->estimate_date;
+        $product->short_desc = $request->short_desc;
+        $product->long_desc = $request->long_desc;
+        $product->care_instructions = $request->care_instructions;
+        $product->product_thambnail = $filename;
+        $product->estimate_date = $request->estimate_date;
         // $product->status= 1;
-        $product->delivery_price= $request->delivery_price;
+        $product->delivery_price = $request->delivery_price;
         $product->updated_by = Auth::user()->id;
-        $product->updated_at= Carbon::now();
+        $product->updated_at = Carbon::now();
         $product->update();
         $msg = ('Product updated Successfully');
         return redirect('/productlist')->with('success', $msg);
@@ -282,7 +282,7 @@ class ProductController extends Controller
     {
         $id = $request->product_id;
         if ($request->has('multi_img')) {
-            foreach($request->multi_img as $id => $img) {
+            foreach ($request->multi_img as $id => $img) {
                 if ($img->isValid()) {
                     $filename = time() . '_' . rand(100, 999) . '.' . $img->getClientOriginalExtension();
                     $img->move(public_path('upload/multiImg'), $filename);
@@ -295,7 +295,7 @@ class ProductController extends Controller
             }
         }
 
-        if($request->hasFile('new_img')) {
+        if ($request->hasFile('new_img')) {
             $newImg = $request->File('new_img');
             if ($newImg->isValid()) {
                 $filename = time() . '_' . rand(100, 999) . '.' . $newImg->getClientOriginalExtension();
@@ -341,13 +341,13 @@ class ProductController extends Controller
         $query = Review::where('seller_id', $id);
 
         if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->whereHas('product', function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('product', function ($q) use ($search) {
                     $q->where('product_name', 'LIKE', "%{$search}%");
                 })
-                ->orWhereHas('user', function($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                });
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
@@ -372,7 +372,7 @@ class ProductController extends Controller
     {
         $review = Review::find($request->review_id);
         $review->comment = $request->comment;
-        $review->updated_at= Carbon::now();
+        $review->updated_at = Carbon::now();
         $review->save();
         $msg = ('Review updated Successfully');
         return back()->with('success', $msg);

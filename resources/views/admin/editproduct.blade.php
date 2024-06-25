@@ -287,7 +287,7 @@
                                         </thead>
                                         <tbody id="imageTableBody">
                                             <form class="theme-form theme-form-2 mega-form" method="POST"
-                                                action="{{ route('update.multiImg') }}" enctype="multipart/form-data"
+                                                action="{{ route('updatemultiImg') }}" enctype="multipart/form-data"
                                                 id="imageForm">
                                                 @csrf
                                                 @foreach ($multiImgs as $key => $img)
@@ -415,7 +415,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <form method="POST" action="{{ route('update.multiImg') }}" enctype="multipart/form-data"
+                    <form method="POST" action="{{ route('updatemultiImg') }}" enctype="multipart/form-data"
                         id="new-img-form">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $products->id }}">
@@ -428,7 +428,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-animation" onclick="validateForm()">Yes</button>
+                            <button type="button" class="btn btn-animation" onclick="validateForm()">Yess</button>
                             <button type="button" class="btn btn-animation btn-secondary"
                                 data-bs-dismiss="modal">No</button>
                         </div>
@@ -456,7 +456,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <form method="POST" action="{{ route('delete.multiImg') }}">
+                            <form method="GET" action="{{ route('deletemultiImg', $img->id) }}">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $img->id }}">
                                 <button type="submit" class="btn btn-animation">Yes</button>

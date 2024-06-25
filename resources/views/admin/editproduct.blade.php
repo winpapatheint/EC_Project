@@ -218,7 +218,7 @@
                                             <label class="col-sm-3 form-label-title">Delivery Price(tax inc)</label>
                                             <div class="col-sm-9">
                                                 <input class="form-control" name="delivery_price" type="number"
-                                                    min="1" value="{{ $products->delivery_price }}">
+                                                    value="{{ $products->delivery_price }}">
                                             </div>
                                         </div>
 

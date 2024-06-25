@@ -649,6 +649,33 @@
                                         <a href="javascript:void(0)">support@asian-food.site</a>
                                     </li>
                                 </ul>
+                                <div class="sub-footer" style="border-top: none;">
+                                    <div class="social-link" style="margin-top: 10px; justify-content: left;">
+                                        <h5 class="text-content">Stay connected :</h5>
+                                        <ul>
+                                            <li>
+                                                <a href="https://www.facebook.com/" target="_blank">
+                                                    <i class="fa-brands fa-facebook-f"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://twitter.com/" target="_blank">
+                                                    <i class="fa-brands fa-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://www.instagram.com/" target="_blank">
+                                                    <i class="fa-brands fa-instagram"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://in.pinterest.com/" target="_blank">
+                                                    <i class="fa-brands fa-pinterest-p"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -773,34 +800,6 @@
                                     {{-- just for ...... --}}
                                 </li>
                             </ul>
-                        </div>
-
-                        <div class="sub-footer" style="border-top: none;">
-                            <div class="social-link" style="margin-top: 4px;">
-                                <h6 class="text-content">Stay connected :</h6>
-                                <ul>
-                                    <li>
-                                        <a href="https://www.facebook.com/" target="_blank">
-                                            <i class="fa-brands fa-facebook-f"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://twitter.com/" target="_blank">
-                                            <i class="fa-brands fa-twitter"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.instagram.com/" target="_blank">
-                                            <i class="fa-brands fa-instagram"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://in.pinterest.com/" target="_blank">
-                                            <i class="fa-brands fa-pinterest-p"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>

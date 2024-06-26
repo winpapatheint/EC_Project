@@ -5,8 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
-    <title>Fastkart | Email template </title>
+    <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <title>Asian food museum</title>
 
     <!-- Google Font css -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,12 +136,14 @@
         <tbody>
             <tr>
                 <td>
-                    <table class="header-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <table class="header-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                        width="100%">
                         <tr class="header"
                             style="background-color: #f7f7f7;display: flex;align-items: center;justify-content: center;width: 100%;">
                             <td class="header-logo" style="padding: 10px 32px;">
                                 <a href="/" style="display: block; text-align: left;">
-                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="main-logo" alt="logo">
+                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="main-logo"
+                                        alt="logo">
                                 </a>
                             </td>
                         </tr>
@@ -150,7 +153,8 @@
                         width="100%">
                         <tr>
                             <td>
-                                <img src="{{ asset('images/order-success-poster.png') }}" alt="" style="width: 100%; height: 100%;">
+                                <img src="{{ asset('images/order-success-poster.png') }}" alt=""
+                                    style="width: 100%; height: 100%;">
                             </td>
                         </tr>
                     </table>
@@ -161,38 +165,43 @@
                             <tr>
                                 <td>
                                     <div class="title title-2 text-center">
-                                            <div class="container-fluid-lg">
-                                                <ul class="navbar-nav">
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link " href="{{ url('/') }}" style="font-size: 14px; 
+                                        <div class="container-fluid-lg">
+                                            <ul class="navbar-nav">
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link " href="{{ url('/') }}"
+                                                        style="font-size: 14px; 
                                                         font-weight: 600; color: #2a2424; text-decoration: underline; 
                                                         text-transform: capitalize; margin-left: 20px;">Home
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link" href="{{ url('/user') }}" style="font-size: 14px; 
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link" href="{{ url('/user') }}"
+                                                        style="font-size: 14px; 
                                                         font-weight: 600; color: #2a2424; text-decoration: underline; 
-                                                        text-transform: capitalize; margin-left: 20px;">My Menu
-                                                        </a>
-        
-                                                    </li>
-        
-                                                     <li class="nav-item dropdown">
-                                                        <a class="nav-link " href="{{ url('/products') }}" style="font-size: 14px; 
+                                                        text-transform: capitalize; margin-left: 20px;">My
+                                                        Menu
+                                                    </a>
+
+                                                </li>
+
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link " href="{{ url('/products') }}"
+                                                        style="font-size: 14px; 
                                                         font-weight: 600; color: #2a2424; text-decoration: underline; 
                                                         text-transform: capitalize; margin-left: 20px;">Product
-                                                        </a>
-                                                    </li>
-        
-        
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link " href="{{ route('shoplist') }}" style="font-size: 14px; 
+                                                    </a>
+                                                </li>
+
+
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link " href="{{ route('shoplist') }}"
+                                                        style="font-size: 14px; 
                                                         font-weight: 600; color: #2a2424; text-decoration: underline; 
                                                         text-transform: capitalize; margin-left: 20px;">Shop
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -200,7 +209,8 @@
                     </table>
 
                     @php
-                        function formatZipCode($zipCode) {
+                        function formatZipCode($zipCode)
+                        {
                             if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
                                 return $zipCode;
                             }
@@ -210,20 +220,25 @@
                             return $zipCode; // return as-is if not a standard 7 digit zip code
                         }
                     @endphp
-                    <table class="dilivery-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+                    <table class="dilivery-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                        width="100%"
                         style="margin: 25px 27px;padding: 20px 32px;width: fit-content; background-color:
                         #f7f7f7;">
                         <tbody>
                             <tr>
-                                <td style="text-align: left;padding-right: 28px;border-right: 2px solid rgba(217, 217, 217, 0.5);width: 50%;">
+                                <td
+                                    style="text-align: left;padding-right: 28px;border-right: 2px solid rgba(217, 217, 217, 0.5);width: 50%;">
                                     <div class="title title-2" style="text-align: left;">
-                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">We will deliver your order</h2>
+                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">We will deliver
+                                            your order</h2>
                                         <p
                                             style="font-size: 14px;margin: 0;line-height: 1.5;color: #939393;font-weight: 500;">
                                             〒{{ formatZipCode($order->orderDetail->first()->post_code) }} <br>
-                                            {{ $order->orderDetail->first()->prefecture->name }} {{ $order->orderDetail->first()->city }} 
+                                            {{ $order->orderDetail->first()->prefecture->name }}
+                                            {{ $order->orderDetail->first()->city }}
                                             {{ $order->orderDetail->first()->chome }} <br>
-                                            {{ $order->orderDetail->first()->building }} {{ $order->orderDetail->first()->room_no }} <br>    
+                                            {{ $order->orderDetail->first()->building }}
+                                            {{ $order->orderDetail->first()->room_no }} <br>
                                         </p>
                                     </div>
                                 </td>
@@ -234,7 +249,7 @@
                                             Thanks for your order</h2>
                                         <p
                                             style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
-                                            If you have any questions, 
+                                            If you have any questions,
                                             Call Us (+81) 03-3981-5090 or Contact Us (info@asian-food.site).</p>
                                     </div>
                                 </td>
@@ -242,28 +257,32 @@
                         </tbody>
                     </table>
                     @if ($order->payment_approved == 0)
-                    <table class="dilivery-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-                        style="margin: 25px 27px;padding: 20px 32px;width: fit-content; background-color:
+                        <table class="dilivery-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                            width="100%"
+                            style="margin: 25px 27px;padding: 20px 32px;width: fit-content; background-color:
                         #f7f7f7;">
-                        <tbody>
-                            <tr>
-                                <td style="text-align: left;padding-left: 32px;width: 100%;">
-                                    <div class="title title-2" style="text-align: left;">
-                                        <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">For your reminder!</h2>
-                                        <p
-                                            style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
-                                            We have send the email to you with detail order and bank informations. <br>
-                                            Please check your email!<br>
-                                            <span style="color: red">If you don't receive the email, please check your spam or junk folder.</span>
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: left;padding-left: 32px;width: 100%;">
+                                        <div class="title title-2" style="text-align: left;">
+                                            <h2 style="font-size: 16px;font-weight: 700;margin: 0 0 12px;">For your
+                                                reminder!</h2>
+                                            <p
+                                                style="font-size: 14px;margin: 0;line-height: 1.5;color:#939393;font-weight: 500;">
+                                                We have send the email to you with detail order and bank informations.
+                                                <br>
+                                                Please check your email!<br>
+                                                <span style="color: red">If you don't receive the email, please check
+                                                    your spam or junk folder.</span>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     @endif
-                    <table class="shipping-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-                        style="padding: 0 27px;">
+                    <table class="shipping-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                        width="100%" style="padding: 0 27px;">
                         <thead>
                             <tr>
                                 <th
@@ -279,26 +298,32 @@
                                         cellspacing="0" width="100%">
                                         <tbody>
                                             @foreach ($order->orderDetail as $orderDetail)
-                                            <tr>
-                                                <td
-                                                    style="padding: 28px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
-                                                    <img src="{{ asset('upload/product_thambnail/'.$orderDetail->product-> product_thambnail) }}" alt=""  style="width: 50px; height: 50px;">
-                                                </td>
-                                                <td
-                                                    style="padding: 28px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
-                                                    <ul class="product-detail">
-                                                        <li>
-                                                        @if(mb_strlen($orderDetail->product->product_name) > 30)
-                                                            {!! mb_substr($orderDetail->product->product_name, 0, 30) . '<br>' . mb_substr($orderDetail->product->product_name, 30, 30) . '...' !!}
-                                                        @else
-                                                            {!! nl2br(e($orderDetail->product->product_name)) !!}
-                                                        @endif
-                                                        </li>
-                                                        <li>Quantity: <span>{{ $orderDetail->qty }}</span></li>
-                                                        <li>Price: <span>¥{{ number_format($orderDetail->price, 0, '', ',') }}</span></li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td
+                                                        style="padding: 28px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
+                                                        <img src="{{ asset('upload/product_thambnail/' . $orderDetail->product->product_thambnail) }}"
+                                                            alt="" style="width: 50px; height: 50px;">
+                                                    </td>
+                                                    <td
+                                                        style="padding: 28px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
+                                                        <ul class="product-detail">
+                                                            <li>
+                                                                @if (mb_strlen($orderDetail->product->product_name) > 30)
+                                                                    {!! mb_substr($orderDetail->product->product_name, 0, 30) .
+                                                                        '<br>' .
+                                                                        mb_substr($orderDetail->product->product_name, 30, 30) .
+                                                                        '...' !!}
+                                                                @else
+                                                                    {!! nl2br(e($orderDetail->product->product_name)) !!}
+                                                                @endif
+                                                            </li>
+                                                            <li>Quantity: <span>{{ $orderDetail->qty }}</span></li>
+                                                            <li>Price:
+                                                                <span>¥{{ number_format($orderDetail->price, 0, '', ',') }}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -306,7 +331,8 @@
 
                                 <td style="width: 70%;">
                                     <table class="dilivery-table" align="center" border="0" cellpadding="0"
-                                        style="background-color: #F7F7F7;padding: 14px;" cellspacing="0" width="100%">
+                                        style="background-color: #F7F7F7;padding: 14px;" cellspacing="0"
+                                        width="100%">
                                         <tbody>
                                             <tr>
                                                 <td style="font-weight: 700;font-size: 17px;padding-bottom: 15px;border-bottom: 1px solid rgba(217, 217, 217, 0.5);"
@@ -326,7 +352,8 @@
                                                     Discount</td>
                                                 <td
                                                     style="text-align: right;font-size: 15px;font-weight: 400;padding: 15px 0;border-bottom: 1px solid rgba(217, 217, 217, 0.5);">
-                                                    -¥{{ number_format($order->coupon_discount_amount, 0, '', ',') }}</td>
+                                                    -¥{{ number_format($order->coupon_discount_amount, 0, '', ',') }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td
@@ -351,20 +378,22 @@
                         </tbody>
                     </table>
 
-                    <table class="text-center footer-table" align="center" border="0" cellpadding="0" cellspacing="0"
-                        width="100%"
+                    <table class="text-center footer-table" align="center" border="0" cellpadding="0"
+                        cellspacing="0" width="100%"
                         style="background-color: #282834; color: white; padding: 24px; overflow: hidden; z-index: 0;">
                         <tr>
                             <td>
-                                <table border="0" cellpadding="0" cellspacing="0" class="footer-social-icon text-center"
-                                    align="center" style="margin: 8px auto 20px;">
+                                <table border="0" cellpadding="0" cellspacing="0"
+                                    class="footer-social-icon text-center" align="center"
+                                    style="margin: 8px auto 20px;">
                                     <tr>
                                         <td style="font-size: 19px; font-weight: 700;">Shop For <span
                                                 class="theme-color">Asian Food Museum</span></td>
                                     </tr>
                                 </table>
-                                <table border="0" cellpadding="0" cellspacing="0" class="footer-social-icon text-center"
-                                    align="center" style="margin: 8px auto 20px;">
+                                <table border="0" cellpadding="0" cellspacing="0"
+                                    class="footer-social-icon text-center" align="center"
+                                    style="margin: 8px auto 20px;">
                                     <tr>
                                         <td>
                                             <a href="{{ url('/contact') }}"
@@ -381,12 +410,16 @@
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
                                         <td>
-                                            <h5 style="font-size: 13px; text-transform: uppercase; margin: 0; color:#ddd;
-                                letter-spacing:1px; font-weight: 500;">Specializing in Asian cuisine, we're dedicated to providing fresh,
-                                 top-quality food to Japan daily.
+                                            <h5
+                                                style="font-size: 13px; text-transform: uppercase; margin: 0; color:#ddd;
+                                letter-spacing:1px; font-weight: 500;">
+                                                Specializing in Asian cuisine, we're dedicated to providing fresh,
+                                                top-quality food to Japan daily.
                                             </h5>
-                                            <h5 style="font-size: 13px; text-transform: uppercase; margin: 10px 0 0; color:#ddd;
-                                letter-spacing:1px; font-weight: 500;">©2024 Asia Human Development, Inc. All rights reserved</h5>
+                                            <h5
+                                                style="font-size: 13px; text-transform: uppercase; margin: 10px 0 0; color:#ddd;
+                                letter-spacing:1px; font-weight: 500;">
+                                                ©2024 Asia Human Development, Inc. All rights reserved</h5>
                                         </td>
                                     </tr>
                                 </table>

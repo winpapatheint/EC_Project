@@ -132,16 +132,8 @@
                     </div>
 
                     <!-- User Dashboard Section End -->
-
                     <div class="col-xxl-9 col-xl-8 col-lg-6 order-detail">
                         <div class="row g-sm-4 g-3">
-
-                            {{-- <div class="col-xl-4 col-sm-6">
-                            <div class="order-image">
-                                <img src="{{ asset('upload/product_thambnail/1713779105.jpeg') }}" class="img-fluid blur-up lazyload" alt="">
-                            </div>
-                        </div> --}}
-
                             <div class="col-xl-4 col-sm-6">
                                 <div class="order-details-contain">
                                     <div class="order-tracking-icon">
@@ -151,8 +143,11 @@
                                     <div class="order-details-name">
                                         <h5 class="text-content">Product Info</h5>
                                         <h3>
-                                            @if (strlen($orderDetail->product_name) > 30)
-                                                {!! substr($orderDetail->product_name, 0, 30) . '<br>' . substr($orderDetail->product_name, 30, 30) . '...' !!}
+                                            @if (mb_strlen($orderDetail->product_name) > 30)
+                                                {!! mb_substr($orderDetail->product_name, 0, 30) .
+                                                    '<br>' .
+                                                    mb_substr($orderDetail->product_name, 30, 30) .
+                                                    '...' !!}
                                             @else
                                                 {!! nl2br(e($orderDetail->product_name)) !!}
                                             @endif

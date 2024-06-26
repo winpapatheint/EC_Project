@@ -331,8 +331,8 @@
                                                     height="30px">
 
                                                 <div class="user-name-hide media-body">
-                                                    @if (mb_strlen(Auth::user()->name) > 5)
-                                                        <span>{!! substr(Auth::user()->name, 0, 5) !!}</span>
+                                                    @if (mb_strlen(Auth::user()->name) > 3)
+                                                        <span>{!! mb_substr(Auth::user()->name, 0, 3) !!}</span>
                                                     @else
                                                         {!! nl2br(e(Auth::user()->name)) !!}
                                                     @endif

@@ -205,16 +205,16 @@ class SellerController extends Controller
     public function detailHelp($id)
     {
         $getId = Help::find($id);
-        $helpId = $getId->help_id;
-        if ($helpId) {
-            $start = DB::table('helps')->where('id',$id)->first();
+        if ($getId) {
+            $helpId = $getId->help_id;
+            $start = Help::find($id);
             $reply = Help::where('help_id', $helpId)->get();
         } else {
             $start = $getId;
             $reply = null;
         }
-        return view('seller.help.help_detail', compact('start', 'reply'));
 
+        return view('seller.help.help_detail', compact('start', 'reply'));
     }
 
 

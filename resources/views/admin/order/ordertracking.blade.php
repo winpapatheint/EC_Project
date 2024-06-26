@@ -1,10 +1,10 @@
 <x-auth-layout>
- <!-- Order Tracking Seation starts-->
-<div class="page-body">
-    <div class="container-fluid">
-        <div class="row g-sm-4 g-3 order-detail">
+    <!-- Order Tracking Seation starts-->
+    <div class="page-body">
+        <div class="container-fluid">
+            <div class="row g-sm-4 g-3 order-detail">
 
-            {{--<div class="col-xl-4 col-sm-6">
+                {{-- <div class="col-xl-4 col-sm-6">
                     <div class="order-image">
                         <img src="{{ asset('upload/product_thambnail/1713779105.jpeg') }}" class="img-fluid blur-up lazyload" alt="">
                     </div>
@@ -18,12 +18,17 @@
 
                         <div class="order-details-name">
                             <h5 class="text-content">Product Info</h5>
-                            <h3>@if(strlen($orderDetail->product_name) > 30)
-                                {!! substr($orderDetail->product_name, 0, 30) . '<br>' . substr($orderDetail->product_name, 30, 30) . '...' !!}
-                            @else
-                                {!! nl2br(e($orderDetail->product_name)) !!}
-                            @endif</h3>
-                            <h5>¥ {{ number_format($orderDetail->selling_price , 0, '.', ',') }}</h5>
+                            <h3>
+                                @if (mb_strlen($orderDetail->product_name) > 30)
+                                    {!! mb_substr($orderDetail->product_name, 0, 30) .
+                                        '<br>' .
+                                        mb_substr($orderDetail->product_name, 30, 30) .
+                                        '...' !!}
+                                @else
+                                    {!! nl2br(e($orderDetail->product_name)) !!}
+                                @endif
+                            </h3>
+                            <h5>¥ {{ number_format($orderDetail->selling_price, 0, '.', ',') }}</h5>
                         </div>
                     </div>
                 </div>
@@ -36,7 +41,7 @@
 
                         <div class="order-details-name">
                             <h5 class="text-content">Shipping Fee</h5>
-                            <h4>¥ {{ number_format($orderDetail->delivery_price , 0, '.', ',') }}</h4>
+                            <h4>¥ {{ number_format($orderDetail->delivery_price, 0, '.', ',') }}</h4>
                         </div>
                     </div>
                 </div>
@@ -55,7 +60,8 @@
                     </div>
                 </div>
                 @php
-                    function formatZipCode($zipCode) {
+                    function formatZipCode($zipCode)
+                    {
                         if (preg_match('/^\d{3}-\d{4}$/', $zipCode)) {
                             return $zipCode;
                         }
@@ -106,7 +112,8 @@
 
                         <div class="order-details-name">
                             <h5 class="text-content">Estimated Date</h5>
-                            <h4>{{ date('Y/m/d', strtotime($orderDetail->order_detail_created_at . ' + ' . $orderDetail->estimate_date . ' days')) }}</h4>
+                            <h4>{{ date('Y/m/d', strtotime($orderDetail->order_detail_created_at . ' + ' . $orderDetail->estimate_date . ' days')) }}
+                            </h4>
                         </div>
                     </div>
                 </div>
@@ -116,29 +123,29 @@
                         $status = 0;
                         $pendingDone = 'progtrckr-done';
                         $pendingDate = $orderDetail->order_detail_created_at;
-                        $confirmedDate = "Pending";
-                        $processingDate = "Pending";
-                        $pickedDate = "Pending";
-                        $shippedDate = "Pending";
-                        $deliveredDate = "Pending";
-                        if ($orderDetail->confirmed_date){
+                        $confirmedDate = 'Pending';
+                        $processingDate = 'Pending';
+                        $pickedDate = 'Pending';
+                        $shippedDate = 'Pending';
+                        $deliveredDate = 'Pending';
+                        if ($orderDetail->confirmed_date) {
                             $status = 1;
                             $confirmedDate = $orderDetail->confirmed_date;
                         }
-                        if ($orderDetail->processing_date){
-                           $status = 2;
+                        if ($orderDetail->processing_date) {
+                            $status = 2;
                             $processingDate = $orderDetail->processing_date;
                         }
-                        if ($orderDetail->picked_date){
-                           $status = 3;
+                        if ($orderDetail->picked_date) {
+                            $status = 3;
                             $pickedDate = $orderDetail->picked_date;
                         }
-                        if ($orderDetail->shipped_date){
-                           $status = 4;
+                        if ($orderDetail->shipped_date) {
+                            $status = 4;
                             $shippedDate = $orderDetail->shipped_date;
                         }
-                        if ($orderDetail->delivered_date){
-                           $status = 5;
+                        if ($orderDetail->delivered_date) {
+                            $status = 5;
                             $deliveredDate = $orderDetail->delivered_date;
                         }
 
@@ -155,42 +162,42 @@
                         </li>
                         <li class="{{ $confirmedDone }}">
                             <h5>Confirmed</h5>
-                            @if($confirmedDate != "Pending")
-                            <h6>{{ date('Y/m/d H:i', strtotime($confirmedDate)) }}</h6>
+                            @if ($confirmedDate != 'Pending')
+                                <h6>{{ date('Y/m/d H:i', strtotime($confirmedDate)) }}</h6>
                             @else
-                            <h6>{{ $confirmedDate }}</h6>
+                                <h6>{{ $confirmedDate }}</h6>
                             @endif
                         </li>
                         <li class="{{ $processingDone }}">
                             <h5>Processing</h5>
-                            @if($processingDate != "Pending")
-                            <h6>{{ date('Y/m/d H:i', strtotime($processingDate)) }}</h6>
+                            @if ($processingDate != 'Pending')
+                                <h6>{{ date('Y/m/d H:i', strtotime($processingDate)) }}</h6>
                             @else
-                            <h6>{{ $processingDate }}</h6>
+                                <h6>{{ $processingDate }}</h6>
                             @endif
                         </li>
                         <li class="{{ $pickedDone }}">
                             <h5>Picked</h5>
-                            @if($pickedDate != "Pending")
-                            <h6>{{ date('Y/m/d H:i', strtotime($pickedDate)) }}</h6>
+                            @if ($pickedDate != 'Pending')
+                                <h6>{{ date('Y/m/d H:i', strtotime($pickedDate)) }}</h6>
                             @else
-                            <h6>{{ $pickedDate }}</h6>
+                                <h6>{{ $pickedDate }}</h6>
                             @endif
                         </li>
                         <li class="{{ $shippedDone }}">
                             <h5>Shipped</h5>
-                            @if($shippedDate != "Pending")
-                            <h6>{{ date('Y/m/d H:i', strtotime($shippedDate)) }}</h6>
+                            @if ($shippedDate != 'Pending')
+                                <h6>{{ date('Y/m/d H:i', strtotime($shippedDate)) }}</h6>
                             @else
-                            <h6>{{ $shippedDate }}</h6>
+                                <h6>{{ $shippedDate }}</h6>
                             @endif
                         </li>
                         <li class="{{ $deliveredDone }}">
                             <h5>Delivered</h5>
-                            @if($deliveredDate != "Pending")
-                            <h6>{{ date('Y/m/d H:i', strtotime($deliveredDate)) }}</h6>
+                            @if ($deliveredDate != 'Pending')
+                                <h6>{{ date('Y/m/d H:i', strtotime($deliveredDate)) }}</h6>
                             @else
-                            <h6>{{ $deliveredDate }}</h6>
+                                <h6>{{ $deliveredDate }}</h6>
                             @endif
                         </li>
                     </ol>
@@ -213,40 +220,40 @@
                                     <td>{{ date('Y/m/d', strtotime($pendingDate)) }}</td>
                                     <td>{{ date('h:i A', strtotime($pendingDate)) }}</td>
                                 </tr>
-                                @if($confirmedDate != "Pending")
-                                <tr>
-                                    <td>Confirmed the Order</td>
-                                    <td>{{ date('Y/m/d', strtotime($confirmedDate)) }}</td>
-                                    <td>{{ date('h:i A', strtotime($confirmedDate)) }}</td>
-                                </tr>
+                                @if ($confirmedDate != 'Pending')
+                                    <tr>
+                                        <td>Confirmed the Order</td>
+                                        <td>{{ date('Y/m/d', strtotime($confirmedDate)) }}</td>
+                                        <td>{{ date('h:i A', strtotime($confirmedDate)) }}</td>
+                                    </tr>
                                 @endif
-                                @if($processingDate != "Pending")
-                                <tr>
-                                    <td>Processing to Ship</td>
-                                    <td>{{ date('Y/m/d', strtotime($processingDate)) }}</td>
-                                    <td>{{ date('h:i A', strtotime($processingDate)) }}</td>
-                                </tr>
+                                @if ($processingDate != 'Pending')
+                                    <tr>
+                                        <td>Processing to Ship</td>
+                                        <td>{{ date('Y/m/d', strtotime($processingDate)) }}</td>
+                                        <td>{{ date('h:i A', strtotime($processingDate)) }}</td>
+                                    </tr>
                                 @endif
-                                @if($pickedDate != "Pending")
-                                <tr>
-                                    <td>Picked for Shipping</td>
-                                    <td>{{ date('Y/m/d', strtotime($pickedDate)) }}</td>
-                                    <td>{{ date('h:i A', strtotime($pickedDate)) }}</td>
-                                </tr>
+                                @if ($pickedDate != 'Pending')
+                                    <tr>
+                                        <td>Picked for Shipping</td>
+                                        <td>{{ date('Y/m/d', strtotime($pickedDate)) }}</td>
+                                        <td>{{ date('h:i A', strtotime($pickedDate)) }}</td>
+                                    </tr>
                                 @endif
-                                @if($shippedDate != "Pending")
-                                <tr>
-                                    <td>Shipping the Product</td>
-                                    <td>{{ date('Y/m/d', strtotime($shippedDate)) }}</td>
-                                    <td>{{ date('h:i A', strtotime($shippedDate)) }}</td>
-                                </tr>
+                                @if ($shippedDate != 'Pending')
+                                    <tr>
+                                        <td>Shipping the Product</td>
+                                        <td>{{ date('Y/m/d', strtotime($shippedDate)) }}</td>
+                                        <td>{{ date('h:i A', strtotime($shippedDate)) }}</td>
+                                    </tr>
                                 @endif
-                                @if($deliveredDate != "Pending")
-                                <tr>
-                                    <td>Delivered</td>
-                                    <td>{{ date('Y/m/d', strtotime($deliveredDate)) }}</td>
-                                    <td>{{ date('h:i A', strtotime($deliveredDate)) }}</td>
-                                </tr>
+                                @if ($deliveredDate != 'Pending')
+                                    <tr>
+                                        <td>Delivered</td>
+                                        <td>{{ date('Y/m/d', strtotime($deliveredDate)) }}</td>
+                                        <td>{{ date('h:i A', strtotime($deliveredDate)) }}</td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -256,6 +263,6 @@
         </div>
     </div>
     <!-- Container-fluid Ends-->
-</div>
-<!-- Order Tracking Seation End-->
+    </div>
+    <!-- Order Tracking Seation End-->
 </x-auth-layout>

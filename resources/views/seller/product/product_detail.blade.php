@@ -40,7 +40,7 @@
                                             <label
                                                 class="col-sm-3 col-form-label form-label-title">Brand:</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $data->brand->brand_name }}</p>
+                                                <p>{{ $data->Brand->brand_name }}</p>
                                             </div>
                                         </div>
 

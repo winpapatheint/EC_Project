@@ -159,6 +159,8 @@
                                     <br>
                                     @if ($orderDetails->first()->payment_approved == 0)
                                         <p style="color:red; font-size:12px;">* Please make the transfer for this order.</p>
+                                    @elseif ($orderDetails->first()->payment_approved == 2)
+                                        <p style="color:red; font-size:12px;">* Your order have been cancelled for no transfer payment.</p>
                                     @endif
                                     <div class="bg-inner cart-section order-details-table">
                                         <div class="row g-4">
@@ -209,7 +211,7 @@
                                                                 </td>
                                                                 <td>
                                                                     @if ($order->payment_approved == 1)
-                                                                        @if ($order->status != "Cancel")
+                                                                        @if ($order->status != "Cancel" || $order->status != "Cash Cancel")
                                                                         <a type="button" class="btn btn-sm" style="background-color: #0da487; border:0.5px solid #0da487; margin-left:0.5em; color:white;"
                                                                             href="{{route ('order_detail_tracking',['id' => $order->order_detail_id]) }}">Tracking</a>
                                                                         @else
@@ -221,7 +223,7 @@
                                                             </tr>
                                                         </tbody>
                                                         <!-- Confirmation Modal for Edit -->
-                                                        @if ($order->status == "Cancel")
+                                                        @if ($order->status == "Cancel" || $order->status == "Cash Cancel")
                                                         <div class="modal fade theme-modal remove-profile" id="showCancelReason{{ $order->order_detail_id }}" tabindex="-1" aria-hidden="true">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">

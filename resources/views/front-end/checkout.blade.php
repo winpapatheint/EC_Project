@@ -191,13 +191,15 @@
                                                                     <label for="transfer-person-name">Transfer Person Name</label>
                                                                     <span class="error" style="color:red" id="error-transfer-person-name"></span>
                                                                 </div>
+                                                                <p style="color:red; font-size:12px;">* Choose the date within 7 days.</p>
                                                                 <div class="form-floating theme-form-floating" style="margin-top: 10px;">
                                                                     <input type="date" class="form-control" name="transfer-date" id="transfer-date" placeholder="Transfer Date">
                                                                     <label for="transfer-date">Transfer Date</label>
                                                                     <span class="error" style="color:red" id="error-transfer-date"></span>
                                                                 </div>
                                                                 <button class="btn" type="button" id="btnPayWithCash"
-                                                                style="layout: vertical;background-color:#009cde;color:#fff;shape:rect;label:paywithcash;height:50; font-size: 20px;font-family: Arial, sans-serif;">
+                                                                style="layout: vertical;background-color:#009cde;color:#fff;shape:rect;label:paywithcash;height:50; font-size: 20px;font-family: Arial, sans-serif;"
+                                                                {{ $bankAccounts->count() < 1 ? 'disabled' : '' }}>
                                                                     Pay With Cash
                                                                 </button>
                                                             </div>

@@ -1314,16 +1314,6 @@ class UserController extends Controller
                 'seen' => 0,
             ]);
 
-            foreach ($sellerId as $seller_id) {
-                SellerNotification::create([
-                    'seller_id' => $seller_id,
-                    'related_id' => $order->id,
-                    'message' => 'A new order added:',
-                    'time' => Carbon::now(),
-                    'seen' => 0,
-                ]);
-            }
-
             return response()->json(['message' => 'Your order has been successfully placed.'
                                     ,'orderId' => $order->id]);
 

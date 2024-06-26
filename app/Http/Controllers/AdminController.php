@@ -1601,9 +1601,9 @@ class AdminController extends Controller
 
     public function productdetail($id)
     {
-        $data = Product::find($id);
+        $product = Product::find($id);
         $multiImgs = MultiImg::where('product_id', $id)->get();
-        return view('admin.product.product_detail', compact('data', 'multiImgs'));
+        return view('admin.product.product_detail', compact('product', 'multiImgs'));
     }
 
     public function shopdetail($id)

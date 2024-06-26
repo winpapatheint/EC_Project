@@ -295,7 +295,7 @@
                                                     <a href="{{ url('/userdetail/' . $notify->related_id) }}"
                                                         class="notification-link" data-id="{{ $notify->id }}">
                                                     @elseif ($notify->message == 'A new product added:')
-                                                        <a href="{{ url('/product/' . $notify->related_id) }}"
+                                                        <a href="{{ url('admin/productdetail/' . $notify->related_id) }}"
                                                             class="notification-link" data-id="{{ $notify->id }}">
                                                         @elseif ($notify->message == 'A new order added:')
                                                             <a href="{{ url('/admin/orderdetail/' . $notify->related_id) }}"
@@ -744,9 +744,9 @@
                     success: function(response) {
                         if (response.success) {
                             link.find('.notification-circle').css('color',
-                            'white'); // Optionally change color to indicate it was seen
+                                'white'); // Optionally change color to indicate it was seen
                             window.location.href = link.attr(
-                            'href'); // Redirect to the link's target
+                                'href'); // Redirect to the link's target
                         } else {
                             alert('Error marking notification as seen.');
                         }

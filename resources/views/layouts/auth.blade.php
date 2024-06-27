@@ -254,8 +254,9 @@
                 @php
                     use App\Models\Notification;
                     use Carbon\Carbon;
-                    $today = Carbon::today();
-                    $notifications = Notification::whereDate('created_at', $today)
+                    $startDate = Carbon::now()->subDays(10)->startOfDay();
+                    $endDate = Carbon::now()->endOfDay();
+                    $notifications = Notification::whereBetween('created_at', [$startDate, $endDate])
                         ->orderBy('seen', 'ASC')
                         ->orderBy('created_at', 'DESC')
                         ->get();

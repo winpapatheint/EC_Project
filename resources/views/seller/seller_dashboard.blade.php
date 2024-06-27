@@ -249,9 +249,10 @@
                 @php
                     use App\Models\SellerNotification;
                     use Carbon\Carbon;
-                    $today = Carbon::today();
+                    $startDate = Carbon::now()->subDays(10)->startOfDay();
+                    $endDate = Carbon::now()->endOfDay();
                     $notifications = SellerNotification::where('seller_id', Auth::user()->id)
-                        ->whereDate('created_at', $today)
+                        ->whereBetween('created_at', [$startDate, $endDate])
                         ->orderBy('seen', 'ASC')
                         ->orderBy('created_at', 'DESC')
                         ->get();

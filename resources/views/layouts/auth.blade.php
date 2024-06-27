@@ -279,7 +279,9 @@
                                 <div class="scrollable-dropdown">
                                     <li style="display:block">
                                         <i class="ri-notification-line"></i>
-                                        <h6 class="f-18 mb-0">Notitications</h6>
+                                        <h6 class="f-18 mb-0">Notifications (Last 10 Days)</h6>
+                                        <p class="date-range">From: {{ date('Y/m/d', strtotime($startDate)) }}
+                                            To: {{ date('Y/m/d', strtotime($endDate)) }}</p>
                                     </li>
                                     @php
                                         $iro = [

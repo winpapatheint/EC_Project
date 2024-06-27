@@ -223,6 +223,28 @@
                                             </div>
                                         </div>
 
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Shipping Country</label>
+                                            <div class="col-sm-9">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping_country" id="japan" value="0"
+                                                            {{ $products->shipping_country == '0' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="japan">Japan</label>
+                                                    </div>
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping_country" id="abroad" value="1"
+                                                            {{ $products->shipping_country == '1' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="abroad">Abroad</label>
+                                                    </div>
+                                                </div>
+                                                <p class="error" style="color:red; margin-top: 0.1rem;"
+                                                    id="error-shipping_country"></p>
+                                            </div>
+                                        </div>
+
                                         <button type="button" class="btn btn-animation" data-bs-toggle="modal"
                                             data-bs-target="#confirmModal">Update</button>
 

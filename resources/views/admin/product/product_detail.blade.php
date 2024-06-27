@@ -186,6 +186,13 @@
                                                 </div>
                                             </div>
 
+                                            <div class="mb-2 row align-items-center">
+                                                <label class="col-sm-5 form-label-title">Shipping From:</label>
+                                                <div class="col-sm-7">
+                                                    <p>{{ $product->shipping_country == 0 ? 'Japan' : 'Abroad' }}</p>
+                                                </div>
+                                            </div>
+
                                             <a href='{{ url('/editproduct/' . $product->id) }}'>
                                                 <button type="button" class="btn btn-animation">Edit</button>
                                             </a>

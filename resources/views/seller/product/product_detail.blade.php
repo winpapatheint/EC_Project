@@ -1,7 +1,7 @@
 @extends('seller.seller_dashboard')
 @section('seller')
-<div class="page-body">
-    <!-- Product Detail Start -->
+    <div class="page-body">
+        <!-- Product Detail Start -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -29,40 +29,36 @@
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Made-in:</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Made-in:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->country->name }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Brand:</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Brand:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->Brand->brand_name }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Category:</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Category:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->category->category_name }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Subcategory:</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Subcategory:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->subcategory->sub_category_name }}</p>
                                             </div>
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Subcategory Title:</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Subcategory
+                                                Title:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->subcategorytitle->sub_category_titlename }}</p>
                                             </div>
@@ -111,11 +107,11 @@
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Thumbnail
+                                            <label class="col-sm-3 col-form-label form-label-title">Thumbnail
                                                 Image:</label>
                                             <div class="col-sm-9">
-                                                <img width="80" src="{{ asset('upload/product_thambnail/'.$data-> product_thambnail) }}">
+                                                <img width="80"
+                                                    src="{{ asset('upload/product_thambnail/' . $data->product_thambnail) }}">
                                             </div>
                                         </div>
 
@@ -123,7 +119,8 @@
                                             <label class="col-sm-3 col-form-label form-label-title">Multiple Images:</label>
                                             <div class="col-sm-9">
                                                 @foreach ($multiImgs as $key => $img)
-                                                    <img width="80" src="{{ asset('upload/multiImg/'.$img->photo_name) }}">
+                                                    <img width="80"
+                                                        src="{{ asset('upload/multiImg/' . $img->photo_name) }}">
                                                 @endforeach
                                             </div>
                                         </div>
@@ -131,7 +128,7 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price:</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{number_format($data->original_price) }}</p>
+                                                <p>¥{{ number_format($data->original_price) }}</p>
                                             </div>
                                         </div>
 
@@ -145,7 +142,7 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Price(tax inc):</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{number_format($data->selling_price) }}</p>
+                                                <p>¥{{ number_format($data->selling_price) }}</p>
                                             </div>
                                         </div>
 
@@ -162,19 +159,29 @@
                                                 <p>{{ $data->product_qty }}</p>
                                             </div>
                                         </div>
+
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Delivey Estimate Day:</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $data->estimate_date }}</p>
                                             </div>
                                         </div>
+
                                         <div class="mb-2 row align-items-center">
                                             <label class="col-sm-3 form-label-title">Delivey Price(tax inc):</label>
                                             <div class="col-sm-9">
-                                                <p>¥{{number_format($data->delivery_price) }}</p>
+                                                <p>¥{{ number_format($data->delivery_price) }}</p>
                                             </div>
                                         </div>
-                                        <a href="{{ route('edit.product',$data->id) }}">
+
+                                        <div class="mb-2 row align-items-center">
+                                            <label class="form-label-title col-sm-3 mb-0">Shipping Country:</label>
+                                            <div class="col-sm-9">
+                                                <p>{{ $data->shipping_country == 1 ? 'Abroad' : 'Japan' }}</p>
+                                            </div>
+                                        </div>
+
+                                        <a href="{{ route('edit.product', $data->id) }}">
                                             <button type="button" class="btn btn-animation">Edit</button>
                                         </a>
                                     </form>
@@ -186,5 +193,5 @@
             </div>
         </div>
         <!-- Product Detail End -->
-</div>
+    </div>
 @endsection

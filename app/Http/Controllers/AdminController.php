@@ -3252,6 +3252,7 @@ class AdminController extends Controller
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
             'estimate_date' => 'required|string|max:255',
+            'shipping_country' => 'required',
         ]);
 
         if ($request->hasFile('product_thambnail')) {
@@ -3285,6 +3286,7 @@ class AdminController extends Controller
         $product->estimate_date = $request->estimate_date;
         $product->status = 1;
         $product->delivery_price = $request->delivery_price;
+        $product->shipping_country = $request->shipping_country;
         // $product->commission = $request->commision;
         // $product->commission_status = 1;
         $product->updated_by = Auth::user()->id;

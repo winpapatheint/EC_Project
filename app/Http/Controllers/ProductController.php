@@ -125,6 +125,7 @@ class ProductController extends Controller
             'status' => $status,
             'estimate_date' => $request->estimate_date,
             'delivery_price' => $request->delivery_price,
+            'shipping_country' => $request->shipping_country,
             'created_at' => Carbon::now(),
         ]);
 
@@ -199,6 +200,7 @@ class ProductController extends Controller
             'long_desc' => 'required|string',
             'care_instructions' => 'required|string',
             'estimate_date' => 'required|string',
+            'shipping_country' => 'required',
         ]);
 
         if ($request->hasFile('product_thambnail')) {
@@ -233,6 +235,7 @@ class ProductController extends Controller
         $product->estimate_date = $request->estimate_date;
         // $product->status= 1;
         $product->delivery_price = $request->delivery_price;
+        $product->shipping_country = $request->shipping_country;
         $product->updated_by = Auth::user()->id;
         $product->updated_at = Carbon::now();
         $product->update();

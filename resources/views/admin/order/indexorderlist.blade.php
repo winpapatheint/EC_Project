@@ -89,8 +89,8 @@
                                                                             <div
                                                                                 class="modal-header d-block text-center">
                                                                                 <h5 class="modal-title w-100"
-                                                                                    id="exampleModalLabel22">Confirm
-                                                                                    Payment Received</h5>
+                                                                                    id="exampleModalLabel22">
+                                                                                    Confirm Payment Received</h5>
                                                                                 <button type="button" class="btn-close"
                                                                                     data-bs-dismiss="modal">
                                                                                     <i class="fa-solid fa-xmark"></i>
@@ -132,7 +132,7 @@
                                                                                     method="POST">
                                                                                     @csrf
                                                                                     <button type="submit"
-                                                                                        class="btn btn-animation theme-bg-color btn-md fw-bold text-light">Yes</button>
+                                                                                        class="btn btn-animation theme-bg-color btn-md fw-bold">Yes</button>
                                                                                 </form>
                                                                                 <button type="button"
                                                                                     class="btn btn-animation btn-md fw-bold"

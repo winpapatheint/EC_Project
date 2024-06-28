@@ -84,7 +84,7 @@ class AdminController extends Controller
             foreach ($notPaymentOrders as $order) {
                 $checkCashBankAccount = CashBankAccount::where('order_id', $order->id)->first();
 
-                if ($checkCashBankAccount && $checkCashBankAccount->transfer_date < Carbon::now()->subDay()->startOfDay()) {
+                if ($checkCashBankAccount && Carbon::now()->startOfDay()->gt(Carbon::parse($checkCashBankAccount->created_at)->addDays(7)->startOfDay())) {
                     $notPaymentOrderDetails = OrderDetail::where('order_id', $order->id)->get();
 
                     foreach ($notPaymentOrderDetails as $orderDetail) {

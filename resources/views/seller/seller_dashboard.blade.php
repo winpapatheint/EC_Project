@@ -426,7 +426,7 @@
                                          ? 'active-link'
                                          : '' }}"
                                         href="{{ route('all.product') }}">
-                                        <i class="ri-store-3-line"></i>
+                                        <i class="ri-product-hunt-line"></i>
                                         <span>Product</span>
                                     </a>
                                 </li>

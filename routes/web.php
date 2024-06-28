@@ -294,6 +294,8 @@ route::delete('/removefromspecial/{id}', [AdminController::class, 'removeFromSpe
 route::post('/removeCoupon', [AdminController::class, 'removeCoupon'])->name('removeCoupon');
 route::post('/remove_shop_coupon', [AdminController::class, 'remove_shopCoupon'])->name('remove_shop_coupon');
 Route::get('/admin/category', [AdminController::class, 'indexsubcategory'])->name('admin.category');
+route::post('/admin/updatesubcatname', [AdminController::class, 'updatesubcatname'])->middleware(['auth', 'role:admin'])->name('updatesubcat_Name');
+route::post('/admin/updatecategoryname', [AdminController::class, 'updatecategoryname'])->middleware(['auth', 'role:admin'])->name('updatecategory_Name');
 
 Route::get('/admin/addsubtitle', [AdminController::class, 'addsubtitle'])->name('admin.all.addsubtitle');
 Route::get('/admin/addcategory', function () {

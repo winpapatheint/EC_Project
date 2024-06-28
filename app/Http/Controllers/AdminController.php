@@ -2501,6 +2501,34 @@ class AdminController extends Controller
         return redirect('/admin/product')->with('success', 'commission added');
     }
 
+    public function  updatesubcatname(Request $request)
+    {
+        $subcat = $request->input('subcat');
+        $subcatId = $request->input('subcatid');
+        $item = SubCategoryTitle::find($subcatId);
+
+        if ($item) {
+            $item->sub_category_titlename = $subcat;
+            $item->save();
+        }
+
+        return redirect('/admin/category')->with('success', 'updated subcategory');
+    }
+
+    public function  updatecategoryname(Request $request)
+    {
+        $category = $request->input('category');
+        $categoryId = $request->input('categoryid');
+        $item = Category::find($categoryId);
+
+        if ($item) {
+            $item->category_name = $category;
+            $item->save();
+        }
+
+        return redirect('/admin/category')->with('success', 'updated category');
+    }
+
     // update coupon for product
     public function  updateproductcoupon(Request $request)
     {
@@ -3537,9 +3565,12 @@ class AdminController extends Controller
         //                     ->paginate($limit);)  as P lefjoin Seller::
         $currentMonthStart = Carbon::now()->startOfMonth()->format('Y-m-d');
         $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('Y-m-d');
+        $halfMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('Y-m-d');
         $nextMonthstartdate = Carbon::now()->endOfMonth()->addDays(1)->format('Y-m-d');
+
         $currentDate = Carbon::now()->format('Y-m-d');
         $transfer = [];
+
         $subquery = DB::table('sellers')
             ->select(
                 'sellers.user_id as seller_id',
@@ -3556,11 +3587,27 @@ class AdminController extends Controller
             ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$currentMonthStart, $currentMonthEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
 
+        $next_subquery = DB::table('sellers')
+            ->select(
+                'sellers.user_id as seller_id',
+                'sellers.shop_name',
+                'products.commission as product_commission',
+                'products.id as product_id',
+                DB::raw('(SUM(order_details.amount) * (1 - products.commission / 100) +
+                                        SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount')
+            )
+            ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
+            ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
+            ->where('products.commission', '!=', 0)
+
+            ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$halfMonthEnd, $nextMonthstartdate])
+            ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
+
         if ($currentDate === $currentMonthEnd) {
             $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
             })
-                ->Bindings($subquery)
+                ->mergeBindings($subquery)
                 ->select(
                     'sellers.user_id',
                     'sellers.commission',
@@ -3569,11 +3616,12 @@ class AdminController extends Controller
                 )
                 ->groupBy('sellers.user_id', 'sellers.commission')
                 ->paginate($limit);
-        } elseif ($currentDate === $nextMonthstartdate) {
-            $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {
+        } elseif ($currentDate === $currentDate) {
+
+            $transfer = Seller::rightJoin(DB::raw("({$next_subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
             })
-                ->Bindings($subquery)
+                ->mergeBindings($next_subquery)
                 ->select(
                     'sellers.user_id',
                     'sellers.commission',

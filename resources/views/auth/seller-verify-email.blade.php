@@ -5,8 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
-    <title>Asia Food Museum | Email template </title>
+    <link rel="icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('frontend/assets/logos/logos_foods.png') }}" type="image/x-icon">
+    <title>Asian food museum</title>
 
     <!-- Google Font css -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,12 +120,14 @@
         <tbody>
             <tr>
                 <td>
-                    <table class="header-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <table class="header-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                        width="100%">
                         <tr class="header"
                             style="background-color: #f7f7f7;display: flex;align-items: center;justify-content: space-between;width: 100%;">
                             <td class="header-logo" style="padding: 10px 32px;">
                                 <a href="{{ url('/') }}" style="display: block; text-align: left;">
-                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="main-logo" alt="logo">
+                                    <img src="{{ asset('images/logos/logo_foodsh.png') }}" class="main-logo"
+                                        alt="logo">
                                 </a>
                             </td>
                             <td class="header-menu" style="display: block; padding: 10px 32px;text-align: right;">
@@ -143,8 +146,8 @@
                         </tr>
                     </table>
 
-                    <table class="content-table" style="margin-bottom: -6px;" align="center" border="0" cellpadding="0"
-                        cellspacing="0" width="100%">
+                    <table class="content-table" style="margin-bottom: -6px;" align="center" border="0"
+                        cellpadding="0" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <td>
@@ -167,14 +170,18 @@
                                 <td>
                                     <p
                                         style="font-size: 14px;font-weight: 600;width: 82%;margin: 8px auto 0;line-height: 1.5;color: #939393;font-family: 'Nunito Sans', sans-serif;">
-                                        Be it a manufacturer, vendor or supplier, simply sell your products online on 
-                                        Asian Food Museum and become a top ecommerce player with minimum investment. 
-                                        Through a team of experts offering exclusive seller workshops, training, seller support 
-                                        and convenient seller portal, Asian Food Museum focuses on educating and empowering 
-                                        sellers across Japan. Selling on Asian Food Museum is easy and absolutely free. 
-                                        All you need is to register, list your catalogue and start selling your products. 
+                                        Be it a manufacturer, vendor or supplier, simply sell your products online on
+                                        Asian Food Museum and become a top ecommerce player with minimum investment.
+                                        Through a team of experts offering exclusive seller workshops, training, seller
+                                        support
+                                        and convenient seller portal, Asian Food Museum focuses on educating and
+                                        empowering
+                                        sellers across Japan. Selling on Asian Food Museum is easy and absolutely free.
+                                        All you need is to register, list your catalogue and start selling your
+                                        products.
                                         Before we get started, we’ll need to verify your email.<br>
-                                        <span style="color: red">If you don't receive the email, please check your spam or junk folder.</span>
+                                        <span style="color: red">If you don't receive the email, please check your spam
+                                            or junk folder.</span>
                                     </p>
                                 </td>
                             </tr>
@@ -187,8 +194,8 @@
                             <tr style="display: block;">
                                 <td style="display: block;">
                                     <form method="POST" action="{{ route('verification.send') }}">
-                                    @csrf
-                                        <input type="hidden" name="email" value="{{ $user->email ?? ''}}">
+                                        @csrf
+                                        <input type="hidden" name="email" value="{{ $user->email ?? '' }}">
                                         <button class="password-button" type="submit">Resent Email
                                         </button>
                                     </form>
@@ -198,7 +205,8 @@
                         </thead>
                     </table>
 
-                    <table class="content-table" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <table class="content-table" align="center" border="0" cellpadding="0" cellspacing="0"
+                        width="100%">
                         <thead>
                             <tr style="display: block;">
                                 <td style="display: block;">
@@ -207,8 +215,9 @@
                                         If you have any question, please email us at <span
                                             class="theme-color">info@asian-food.site</span>, call <span
                                             class="theme-color">(+81) 03-3981-5090</span> or vixit our <span
-                                            class="theme-color"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></span> 
-                                            You can also chat with a real live human
+                                            class="theme-color"><a class="nav-link"
+                                                href="{{ url('/faq') }}">FAQ</a></span>
+                                        You can also chat with a real live human
                                         during our operating hours. they can answer questions about account or help you
                                         with your meditation practice.</p>
                                 </td>
@@ -216,13 +225,14 @@
                         </thead>
                     </table>
 
-                    <table class="text-center footer-table" align="center" border="0" cellpadding="0" cellspacing="0"
-                        width="100%"
+                    <table class="text-center footer-table" align="center" border="0" cellpadding="0"
+                        cellspacing="0" width="100%"
                         style="background-color: #282834; color: white; padding: 24px; overflow: hidden; z-index: 0; margin-top: 30px;">
                         <tr>
                             <td>
-                                <table border="0" cellpadding="0" cellspacing="0" class="footer-social-icon text-center"
-                                    align="center" style="margin: 8px auto 11px;">
+                                <table border="0" cellpadding="0" cellspacing="0"
+                                    class="footer-social-icon text-center" align="center"
+                                    style="margin: 8px auto 11px;">
                                     <tr>
                                         <td>
                                             <h4 style="font-size: 19px; font-weight: 700; margin: 0;">Shop For <span
@@ -230,8 +240,9 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <table border="0" cellpadding="0" cellspacing="0" class="footer-social-icon text-center"
-                                    align="center" style="margin: 8px auto 20px;">
+                                <table border="0" cellpadding="0" cellspacing="0"
+                                    class="footer-social-icon text-center" align="center"
+                                    style="margin: 8px auto 20px;">
                                     <tr>
                                         <td>
                                             <a href="{{ url('/contact') }}"
@@ -248,12 +259,16 @@
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
                                         <td>
-                                            <h5 style="font-size: 13px; text-transform: uppercase; margin: 0; color:#ddd;
-                                letter-spacing:1px; font-weight: 500;">Specializing in Asian cuisine, we're dedicated to providing fresh,
-                                 top-quality food to Japan daily.
+                                            <h5
+                                                style="font-size: 13px; text-transform: uppercase; margin: 0; color:#ddd;
+                                letter-spacing:1px; font-weight: 500;">
+                                                Specializing in Asian cuisine, we're dedicated to providing fresh,
+                                                top-quality food to Japan daily.
                                             </h5>
-                                            <h5 style="font-size: 13px; text-transform: uppercase; margin: 10px 0 0; color:#ddd;
-                                letter-spacing:1px; font-weight: 500;">©2024 Asia Human Development, Inc. All rights reserved</h5>
+                                            <h5
+                                                style="font-size: 13px; text-transform: uppercase; margin: 10px 0 0; color:#ddd;
+                                letter-spacing:1px; font-weight: 500;">
+                                                ©2024 Asia Human Development, Inc. All rights reserved</h5>
                                         </td>
                                     </tr>
                                 </table>
@@ -265,4 +280,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

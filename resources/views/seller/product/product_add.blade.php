@@ -250,6 +250,28 @@
                                             </div>
                                         </div>
 
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="col-sm-3 form-label-title">Shipping From</label>
+                                            <div class="col-sm-9">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping_country" id="japan" value="0"
+                                                            {{ old('shipping_country') == '0' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="japan">Japan</label>
+                                                    </div>
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping_country" id="abroad" value="1"
+                                                            {{ old('shipping_country') == '1' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="abroad">Abroad</label>
+                                                    </div>
+                                                </div>
+                                                <p class="error" style="color:red; margin-top: 0.1rem;"
+                                                    id="error-shipping_country"></p>
+                                            </div>
+                                        </div>
+
                                         <button type="button" class="btn btn-animation btn-submit"
                                             data-bs-toggle="modal" data-bs-target="#confrimModal">Save</button>
 
@@ -392,6 +414,7 @@
             let product_qty = $.trim($("#product_qty").val());
             let estimate_date = $.trim($("#estimate_date").val());
             let delivery_price = $.trim($("#delivery_price").val());
+            let shipping_country = $('input[name="shipping_country"]:checked').val();
 
             let isValid = true;
 
@@ -524,6 +547,11 @@
                 isValid = false;
             } else if (!/^\d+$/.test(delivery_price)) {
                 $('#error-delivery_price').text('Please provide a valid digit.').show();
+                isValid = false;
+            }
+
+            if (!shipping_country) {
+                $('#error-shipping_country').text('Please select a valid type.').show();
                 isValid = false;
             }
 

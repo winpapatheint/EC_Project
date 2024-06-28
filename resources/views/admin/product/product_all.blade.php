@@ -83,6 +83,7 @@
                                                 <th>Date</th>
                                                 <th class="sticky sticky-2" style="min-width: 200px">Product Image</th>
                                                 <th class="sticky sticky-3" style="min-width: 300px">Product Name</th>
+                                                <th style="min-width: 120px">Shop Name</th>
                                                 <th style="min-width: 120px">Current Qty</th>
                                                 <th style="min-width: 120px">Price<br>(Tax inc)</th>
                                                 <th style="min-width: 150px">Commision(%)</th>
@@ -115,6 +116,7 @@
                                                             {!! nl2br(e($list->product_name)) !!}
                                                         @endif
                                                     </td>
+                                                    <td>{{ $list->Seller->shop_name }}</td>
                                                     <td data-label="">{{ $list->product_qty }}</td>
                                                     <td data-label="">
                                                         ¥{{ number_format($list->selling_price, 0, '', ',') }}</td>

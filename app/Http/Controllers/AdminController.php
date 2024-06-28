@@ -84,7 +84,7 @@ class AdminController extends Controller
             foreach ($notPaymentOrders as $order) {
                 $checkCashBankAccount = CashBankAccount::where('order_id', $order->id)->first();
 
-                if ($checkCashBankAccount && $checkCashBankAccount->transfer_date < Carbon::now()->subDay()->startOfDay()) {
+                if ($checkCashBankAccount && Carbon::now()->startOfDay()->gt(Carbon::parse($checkCashBankAccount->created_at)->addDays(7)->startOfDay())) {
                     $notPaymentOrderDetails = OrderDetail::where('order_id', $order->id)->get();
 
                     foreach ($notPaymentOrderDetails as $orderDetail) {
@@ -3280,6 +3280,7 @@ class AdminController extends Controller
             'short_desc' => 'required|string|max:255',
             'long_desc' => 'required|string|max:255',
             'estimate_date' => 'required|string|max:255',
+            'shipping_country' => 'required',
         ]);
 
         if ($request->hasFile('product_thambnail')) {
@@ -3313,6 +3314,7 @@ class AdminController extends Controller
         $product->estimate_date = $request->estimate_date;
         $product->status = 1;
         $product->delivery_price = $request->delivery_price;
+        $product->shipping_country = $request->shipping_country;
         // $product->commission = $request->commision;
         // $product->commission_status = 1;
         $product->updated_by = Auth::user()->id;

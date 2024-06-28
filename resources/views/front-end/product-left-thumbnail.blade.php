@@ -314,8 +314,18 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Estimated Date</td>
-                                                            <td>{{ $product->estimate_date }}</td>
+                                                            <td>Estimated Day</td>
+                                                            <td>{{ $product->estimate_date }} days</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Shipping From</td>
+                                                            <td>
+                                                                @if ($product->shipping_country == 1)
+                                                                    Abroad
+                                                                @else
+                                                                    Japan
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -192,6 +192,13 @@
             background: linear-gradient(-45deg, #90c5b5, #8c9eaa, #0c8964);
             /* Add any other styles you need */
         }
+
+        .scrollable-dropdown {
+            max-height: 500px;
+            overflow-y: auto;
+            z-index: 1000;
+            /* Ensure it's above other elements */
+        }
     </style>
 </head>
 
@@ -242,9 +249,10 @@
                 @php
                     use App\Models\SellerNotification;
                     use Carbon\Carbon;
-                    $today = Carbon::today();
+                    $startDate = Carbon::now()->subDays(10)->startOfDay();
+                    $endDate = Carbon::now()->endOfDay();
                     $notifications = SellerNotification::where('seller_id', Auth::user()->id)
-                        ->whereDate('created_at', $today)
+                        ->whereBetween('created_at', [$startDate, $endDate])
                         ->orderBy('seen', 'ASC')
                         ->orderBy('created_at', 'DESC')
                         ->get();
@@ -263,60 +271,66 @@
                                     class="badge rounded-pill badge-theme">{{ $notiCount }}</span>
                             </div>
                             <ul class="onhover-show-div">
-                                <li style="display:block">
-                                    <i class="ri-notification-line"></i>
-                                    <h6 class="f-18 mb-0">Notifications</h6>
-                                </li>
-                                @php
-                                    $iro = ['#0da487', '#9e65c2', '#a927f9', '#6670bd'];
-                                @endphp
+                                <div class="scrollable-dropdown">
+                                    <li style="display:block">
+                                        <i class="ri-notification-line"></i>
+                                        <h6 class="f-18 mb-0">Notifications (Last 10 Days)</h6>
+                                        <p class="date-range">From: {{ date('Y/m/d', strtotime($startDate)) }}
+                                            To: {{ date('Y/m/d', strtotime($endDate)) }}</p>
+                                    </li>
+                                    @php
+                                        $iro = ['#0da487', '#9e65c2', '#a927f9', '#6670bd'];
+                                    @endphp
 
-                                @foreach ($notifications as $key => $notify)
-                                    @if (!empty($notify->time))
-                                        <li>
-                                            @if ($notify->message == 'A new order added:')
-                                                <a href="{{ route('detail.order', ['id' => $notify->related_id]) }}"
-                                                    class="notification-link" data-id="{{ $notify->id }}">
-                                                @elseif ($notify->message == 'A new contact added:')
-                                                    <a href="{{ route('help.detail', ['id' => $notify->related_id]) }}"
+                                    @foreach ($notifications as $key => $notify)
+                                        @if (!empty($notify->time))
+                                            <li>
+                                                @if ($notify->message == 'A new order added:')
+                                                    <a href="{{ route('detail.order', ['id' => $notify->related_id]) }}"
                                                         class="notification-link" data-id="{{ $notify->id }}">
-                                                    @elseif ($notify->message == 'A new product added:')
-                                                        <a href="{{ route('detail.product', ['id' => $notify->related_id]) }}"
+                                                    @elseif ($notify->message == 'A new contact added:')
+                                                        <a href="{{ route('help.detail', ['id' => $notify->related_id]) }}"
                                                             class="notification-link" data-id="{{ $notify->id }}">
-                                            @endif
-                                            <p>
-                                                @if ($notify->seen == 0)
-                                                    @php
-                                                        $color = '';
-                                                        if ($notify->message == 'A new order added:') {
-                                                            $color = $iro[0];
-                                                        } elseif ($notify->message == 'A new contact added:') {
-                                                            $color = $iro[1];
-                                                        } elseif ($notify->message == 'A new product added:') {
-                                                            $color = $iro[2];
-                                                        }
-                                                    @endphp
-                                                    <i class="fa fa-circle me-2 font-primary notification-circle"
-                                                        style="font-size:11px;color: {{ $color }} !important">
-                                                    </i>
-                                                @else
-                                                    <i class="fa fa-circle me-2 font-primary notification-circle"
-                                                        style="font-size:11px;color: white !important">
-                                                    </i>
+                                                        @elseif ($notify->message == 'A new product added:')
+                                                            <a href="{{ route('detail.product', ['id' => $notify->related_id]) }}"
+                                                                class="notification-link"
+                                                                data-id="{{ $notify->id }}">
                                                 @endif
-                                                {{ $notify->message }}
-                                                <span class="pull-right">
-                                                    &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
-                                                </span>
-                                            </p>
-                                            </a>
-                                        </li>
-                                    @endif
-                                @endforeach
-                                <li style="display:block">
-                                    <a class="btn btn-primary mx-auto" href="/seller-notifications/allseen">Check all
-                                        notification</a>
-                                </li>
+                                                <p>
+                                                    @if ($notify->seen == 0)
+                                                        @php
+                                                            $color = '';
+                                                            if ($notify->message == 'A new order added:') {
+                                                                $color = $iro[0];
+                                                            } elseif ($notify->message == 'A new contact added:') {
+                                                                $color = $iro[1];
+                                                            } elseif ($notify->message == 'A new product added:') {
+                                                                $color = $iro[2];
+                                                            }
+                                                        @endphp
+                                                        <i class="fa fa-circle me-2 font-primary notification-circle"
+                                                            style="font-size:11px;color: {{ $color }} !important">
+                                                        </i>
+                                                    @else
+                                                        <i class="fa fa-circle me-2 font-primary notification-circle"
+                                                            style="font-size:11px;color: white !important">
+                                                        </i>
+                                                    @endif
+                                                    {{ $notify->message }}
+                                                    <span class="pull-right">
+                                                        &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
+                                                    </span>
+                                                </p>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    <li style="display:block">
+                                        <a class="btn btn-primary mx-auto" href="/seller-notifications/allseen">Check
+                                            all
+                                            notification</a>
+                                    </li>
+                                </div>
                             </ul>
                         </li>
 
@@ -412,7 +426,7 @@
                                          ? 'active-link'
                                          : '' }}"
                                         href="{{ route('all.product') }}">
-                                        <i class="ri-store-3-line"></i>
+                                        <i class="ri-product-hunt-line"></i>
                                         <span>Product</span>
                                     </a>
                                 </li>
@@ -577,9 +591,9 @@
                     success: function(response) {
                         if (response.success) {
                             link.find('.notification-circle').css('color',
-                            'white'); // Optionally change color to indicate it was seen
+                                'white'); // Optionally change color to indicate it was seen
                             window.location.href = link.attr(
-                            'href'); // Redirect to the link's target
+                                'href'); // Redirect to the link's target
                         } else {
                             alert('Error marking notification as seen.');
                         }

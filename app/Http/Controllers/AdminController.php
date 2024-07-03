@@ -3480,11 +3480,11 @@ class AdminController extends Controller
 
         $orderCount = OrderDetail::whereMonth('created_at', '=', Carbon::now()->month)->count();
         $pending = OrderDetail::where('status', 'Pending')->count();
-        $currentDate = Carbon::now()->format('Y-m-d');
+        $currentDate = Carbon::now();
 
         $lastDate = Carbon::now(); 
         $subtractedDate = $lastDate->subDay(); 
-        $endmonthDate = $subtractedDate->format('Y-m-d');
+        $endmonthDate = $subtractedDate;
 
         $product = Product::whereDate('created_at', '<=', $currentDate)->count();
         $transfers = OrderDetail::latest()->paginate($limit);
@@ -3503,14 +3503,14 @@ class AdminController extends Controller
             $data[$monthIndex] = $order->count;
         }
         //half month
-        $currentMonthStart = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $lastMonthHalfDay = Carbon::now()->subMonth()->setDay(16)->format('Y-m-d');
-        $currentDate = Carbon::now()->format('Y-m-d');
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthHalfEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
+        $previousMonthEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();
+        $lastMonthHalfDay = Carbon::now()->subMonth()->setDay(16);
         //-----//
-        $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(16)->subDay()->format('Y-m-d');
-        $halfMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('Y-m-d');
+        $halfMonthEnd = Carbon::now()->startOfMonth()->addDays(15);
         // $nextMonthstartdate = Carbon::now()->endOfMonth()->addDays(1)->format('Y-m-d');
-        $nextMonthstartdate = Carbon::now()->endOfMonth()->format('Y-m-d');
+        $nextMonthstartdate = Carbon::now()->endOfMonth();
 
         $transfer = [];
         $subquery = DB::table('sellers')
@@ -3524,9 +3524,8 @@ class AdminController extends Controller
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('products.commission', '!=', 0)
             ->where('order_details.payment_approved','1')
-            ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$currentMonthStart, $currentMonthEnd])
+            ->whereBetween("order_details.created_at", [$currentMonthStart, $currentMonthHalfEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
 
         $next_subquery = DB::table('sellers')
@@ -3540,12 +3539,11 @@ class AdminController extends Controller
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('products.commission', '!=', 0)
             ->where('order_details.payment_approved','1')
-            ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$lastMonthHalfDay, $endmonthDate])
+            ->whereBetween('order_details.created_at', [$currentMonthHalfEnd, $previousMonthEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission');
-
-        if ($currentDate === $currentMonthEnd) {
+ 
+        if ($currentDate >= $currentMonthHalfEnd && $currentDate <= $previousMonthEnd) {
 
             $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
@@ -3559,8 +3557,7 @@ class AdminController extends Controller
                 )
                 ->groupBy('sellers.user_id', 'sellers.commission')
                 ->paginate($limit);
-        } elseif ($currentDate === $currentMonthStart) {
-
+        } else {
             $transfer = Seller::rightJoin(DB::raw("({$next_subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
             })
@@ -3574,7 +3571,6 @@ class AdminController extends Controller
                 ->groupBy('sellers.user_id', 'sellers.commission')
                 ->paginate($limit);
         }
-
         foreach ($transfer as $record) {
             $datePrefix = date('ym');
             $sequentialNumber = 1;
@@ -3583,12 +3579,12 @@ class AdminController extends Controller
 
             // Check if a record with the same transfer code already exists
             $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
-            if ($currentDate === $currentMonthEnd) {
-                $currentMonthStart = Carbon::now()->startOfMonth()->format('y/m/d');
-                $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('y/m/d');
+            if ($currentDate >= $currentMonthHalfEnd && $currentDate <= $previousMonthEnd) {
+                $transferStart = Carbon::now()->startOfMonth();
+                $transferEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->endOfDay();
             } else {
-                $currentMonthStart = Carbon::now()->subMonth()->setDay(16)->format('Y-m-d');
-                $currentMonthEnd = Carbon::now()->format('Y-m-d');
+                $transferStart = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
+                $transferEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();
             }
 
             // If no matching record is found, create a new one
@@ -3599,8 +3595,8 @@ class AdminController extends Controller
                     'commission' => $record->commission,
                     'seller_amount' => $record->total_seller_amount,
                     'transfer_code' => $newProductCode,
-                    'start_date' => $currentMonthStart,
-                    'end_date' => $currentMonthEnd,
+                    'start_date' => $transferStart,
+                    'end_date' => $transferEnd,
                     'status' => 0,
 
                 ]);

@@ -2517,6 +2517,10 @@ class AdminController extends Controller
 
     public function  updatecategoryname(Request $request)
     {
+        if (Category::where('category_name', $request->category)->exists()) {
+            return back()->with(['error' => 'Category name already exists.']);
+        }
+
         $category = $request->input('category');
         $categoryId = $request->input('categoryid');
         $item = Category::find($categoryId);
@@ -3297,6 +3301,9 @@ class AdminController extends Controller
 
     public function storecategory(Request $request)
     {
+        if (Category::where('category_name', $request->title)->exists()) {
+            return back()->withErrors(['title' => 'Category name already exists.'])->withInput();
+        }
 
         $valarr = array('title' => 'required|string|max:255',);
 
@@ -3482,15 +3489,15 @@ class AdminController extends Controller
         $pending = OrderDetail::where('status', 'Pending')->count();
         $currentDate = Carbon::now();
 
-        $lastDate = Carbon::now(); 
-        $subtractedDate = $lastDate->subDay(); 
+        $lastDate = Carbon::now();
+        $subtractedDate = $lastDate->subDay();
         $endmonthDate = $subtractedDate;
 
         $product = Product::whereDate('created_at', '<=', $currentDate)->count();
         $transfers = OrderDetail::latest()->paginate($limit);
         $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
             ->whereYear('created_at', date('Y'))
-            ->where('order_details.payment_approved','1')
+            ->where('order_details.payment_approved', '1')
             ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
             ->orderBy(DB::raw("MONTH(created_at)"))
             ->get();
@@ -3524,7 +3531,7 @@ class AdminController extends Controller
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('order_details.payment_approved','1')
+            ->where('order_details.payment_approved', '1')
             ->whereBetween("order_details.created_at", [$currentMonthStart, $currentMonthHalfEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
 
@@ -3539,10 +3546,10 @@ class AdminController extends Controller
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('order_details.payment_approved','1')
+            ->where('order_details.payment_approved', '1')
             ->whereBetween('order_details.created_at', [$currentMonthHalfEnd, $previousMonthEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission');
- 
+
         if ($currentDate >= $currentMonthHalfEnd && $currentDate <= $previousMonthEnd) {
 
             $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {

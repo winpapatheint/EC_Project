@@ -17,7 +17,7 @@
 
                                     <form method="POST" class="theme-form theme-form-2 mega-form"
                                         action="{{ route('store.product') }}" enctype="multipart/form-data"
-                                        id="sellerRegister">
+                                        id="product-add-form">
                                         @csrf
                                         <div class="mb-4 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Brand</label>
@@ -274,35 +274,6 @@
 
                                         <button type="button" class="btn btn-animation btn-submit"
                                             data-bs-toggle="modal" data-bs-target="#confrimModal">Save</button>
-
-                                        <!-- Confirm Modal Box -->
-                                        <div class="modal fade theme-modal remove-coupon" id="confirmModal"
-                                            aria-hidden="true" tabindex="-1">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header d-block text-center">
-                                                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You
-                                                            Sure?</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="remove-box">
-                                                            <p>The data will be added permanently.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-animation">Yes</button>
-                                                        <button type="button" class="btn btn-animation btn-secondary"
-                                                            data-bs-dismiss="modal"
-                                                            style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Confirm Modal Box End-->
                                     </form>
                                 </div>
                             </div>
@@ -312,6 +283,31 @@
             </div>
         </div>
         <!-- New Product Add End -->
+        <!-- Confirm Modal Box -->
+        <div class="modal fade theme-modal remove-coupon" id="confirmModal" aria-hidden="true" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-block text-center">
+                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You
+                            Sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="remove-box">
+                            <p>The data will be added permanently.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-animation" id="confirmYes">Yes</button>
+                        <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal"
+                            style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Confirm Modal Box End-->
     </div>
 
     <!-- Add Brand Modal Box -->
@@ -556,7 +552,14 @@
             }
 
             if (isValid) {
-                $('#confirmModal').modal('show');
+                // $('#confirmModal').modal('show');
+                const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                confirmModal.show();
+
+                // Handle form submission within the confirmation modal
+                document.getElementById('confirmYes').addEventListener('click', function() {
+                    document.getElementById('product-add-form').submit();
+                });
             }
 
             return false;

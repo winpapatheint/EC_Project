@@ -2517,6 +2517,10 @@ class AdminController extends Controller
 
     public function  updatecategoryname(Request $request)
     {
+        if (Category::where('category_name', $request->category)->exists()) {
+            return back()->with(['error' => 'Category name already exists.']);
+        }
+
         $category = $request->input('category');
         $categoryId = $request->input('categoryid');
         $item = Category::find($categoryId);
@@ -2880,11 +2884,9 @@ class AdminController extends Controller
     public function contact(Request $request)
     {
         if ($request->from == 'faq') {
-            $inquiry_email = 'info-test@asia-hd.com';
-
             $data = array('name' => $request->name);
 
-            $adminemail =  'admin@asia-hd.com';
+            $inquiry_email = 'info-test@asia-hd.com';
             $faqDate = Carbon::now()->format('M d, Y');
 
             $data = [
@@ -2893,27 +2895,13 @@ class AdminController extends Controller
                 'phone' => $request->phone,
                 'content' => $request->message,
                 'faqDate' => $faqDate,
-                'adminemail' => $adminemail
+                'adminemail' => $inquiry_email
             ];
-
-            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
-            if (!empty($adminMails)) {
-                foreach ($adminMails as $email) {
-                    $data = [
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'phone' => $request->phone,
-                        'content' => $request->message,
-                        'faqDate' => $faqDate,
-                        'adminemail' => $adminemail
-                    ];
-                    \Mail::to($email)->send(new \App\Mail\FAQContact($data));
-                }
-            }
+            \Mail::to($inquiry_email)->send(new \App\Mail\FAQContact($data));
 
             return redirect('/faq#ts-form')->with('success', 'Your message has been successfully sent.');
         } else if ($request->from == 'contact') {
-            $adminemail =  'admin@asia-hd.com';
+            $inquiry_email = 'info-test@asia-hd.com';
             $contactDate = Carbon::now()->format('M d, Y');
 
             $data = [
@@ -2922,23 +2910,10 @@ class AdminController extends Controller
                 'phone' => $request->phone,
                 'content' => $request->message,
                 'contactDate' => $contactDate,
-                'adminemail' => $adminemail
+                'adminemail' => $inquiry_email
             ];
+            \Mail::to($inquiry_email)->send(new \App\Mail\GuestContact($data));
 
-            $adminMails = DB::table('users')->where('role', 'admin')->pluck('email')->toArray();;
-            if (!empty($adminMails)) {
-                foreach ($adminMails as $email) {
-                    $data = [
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'phone' => $request->phone,
-                        'content' => $request->message,
-                        'contactDate' => $contactDate,
-                        'adminemail' => $adminemail
-                    ];
-                    \Mail::to($email)->send(new \App\Mail\GuestContact($data));
-                }
-            }
             return redirect('/contact#contact-form')->with('success', 'Your message has been successfully sent.');
         }
     }
@@ -3277,8 +3252,8 @@ class AdminController extends Controller
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
             'original_price' => 'required|numeric',
-            'short_desc' => 'required|string|max:255',
-            'long_desc' => 'required|string|max:255',
+            'short_desc' => 'required|string',
+            'long_desc' => 'required|string',
             'estimate_date' => 'required|string|max:255',
             'shipping_country' => 'required',
         ]);
@@ -3312,7 +3287,7 @@ class AdminController extends Controller
         $product->care_instructions = $request->care_instructions;
         $product->product_thambnail = $filename;
         $product->estimate_date = $request->estimate_date;
-        $product->status = 1;
+        // $product->status = 1;
         $product->delivery_price = $request->delivery_price;
         $product->shipping_country = $request->shipping_country;
         // $product->commission = $request->commision;
@@ -3326,6 +3301,9 @@ class AdminController extends Controller
 
     public function storecategory(Request $request)
     {
+        if (Category::where('category_name', $request->title)->exists()) {
+            return back()->withErrors(['title' => 'Category name already exists.'])->withInput();
+        }
 
         $valarr = array('title' => 'required|string|max:255',);
 
@@ -3460,26 +3438,6 @@ class AdminController extends Controller
 
     public function ordertracking($id)
     {
-        // $process = Process::where('order_id',$id)->latest()->get();
-        // $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-        //             ->join('products', 'products.id', 'order_details.product_id')
-        //             ->join('buyers', 'orders.buyer_id', 'buyers.id')
-        //             ->with('prefecture')
-        //             ->select(
-        //                 'orders.id as order_id',
-        //                 'order_details.id as order_detail_id',
-        //                 'products.id as product_id',
-        //                 'orders.*',
-        //                 'products.*',
-        //                 'products.selling_price as price',
-        //                 'order_details.*',
-        //                 'orders.created_at as order_created_at',
-        //                 'buyers.name as buyer_name'
-        //             )
-        //             ->where('order_details.order_id', $id)
-        //             ->get();
-
-        // return view('admin.order.ordertracking',compact('orderDetails','process'));
         $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
             ->select(
                 'order_details.*',
@@ -3509,11 +3467,17 @@ class AdminController extends Controller
 
         $orderCount = OrderDetail::whereMonth('created_at', '=', Carbon::now()->month)->count();
         $pending = OrderDetail::where('status', 'Pending')->count();
-        $currentDate = Carbon::now()->format('Y-m-d');
+        $currentDate = Carbon::now();
+
+        $lastDate = Carbon::now();
+        $subtractedDate = $lastDate->subDay();
+        $endmonthDate = $subtractedDate;
+
         $product = Product::whereDate('created_at', '<=', $currentDate)->count();
         $transfers = OrderDetail::latest()->paginate($limit);
         $orders = OrderDetail::selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
             ->whereYear('created_at', date('Y'))
+            ->where('order_details.payment_approved', '1')
             ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
             ->orderBy(DB::raw("MONTH(created_at)"))
             ->get();
@@ -3525,54 +3489,18 @@ class AdminController extends Controller
             $monthIndex = $order->month_number - 1;
             $data[$monthIndex] = $order->count;
         }
+        //half month
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthHalfEnd = Carbon::now()->startOfMonth()->setDay(15)->endOfDay();
+        $previousMonthHalfStart = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
+        $previousMonthEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();
+        $lastMonthHalfDay = Carbon::now()->subMonth()->setDay(16);
+        //-----//
+        $halfMonthEnd = Carbon::now()->startOfMonth()->addDays(15);
+        // $nextMonthstartdate = Carbon::now()->endOfMonth()->addDays(1)->format('Y-m-d');
+        $nextMonthstartdate = Carbon::now()->endOfMonth();
 
-
-        // $currentMonthEnd =  Carbon::now()->endOfMonth()->format('y/m/d');
-
-        // $transfers = Seller::leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
-        //                     ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-        //                     ->select(
-        //                         'sellers.user_id as seller_id',
-        //                         'sellers.shop_name',
-        //                         'products.commission as product_commision',
-        //                         'sellers.commission as seller_commission',
-        //                         'products.id as product_id',
-        //                     //     DB::raw('(SUM(order_details.amount) + SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as total_amount'),
-        //                     //     DB::raw('(SUM(order_details.amount)  * (1 - products.commission/100) as seller_amount')+ SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END))
-        //                     // )
-
-
-        //                    DB::raw('(SUM(order_details.amount) * (1 - products.commission/100) +
-        //                    SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount'))
-
-        //                     ->where('products.commission', '!=', 0)
-        //                     ->orderBy('sellers.created_at', 'desc')
-        //                     ->groupBy('sellers.id', 'sellers.shop_name', 'products.commission', 'products.id','sellers.commission')
-        //                     ->paginate($limit);
-
-        // $transfers = (Seller::leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
-        //                     ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-        //                     ->select(
-        //                         'sellers.user_id as seller_id',
-        //                         'sellers.shop_name',
-        //                         'products.commission as product_commission',
-        //                         'sellers.commission as seller_commission',
-        //                         'products.id as product_id',
-        //                         DB::raw('(SUM(order_details.amount) * (1 - products.commission/100) +
-        //                             SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount')
-        //                     )
-        //                     ->where('products.commission', '!=', 0)
-
-        //                     ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id', 'sellers.commission')
-        //                     ->paginate($limit);)  as P lefjoin Seller::
-        $currentMonthStart = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('Y-m-d');
-        $halfMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->format('Y-m-d');
-        $nextMonthstartdate = Carbon::now()->endOfMonth()->addDays(1)->format('Y-m-d');
-
-        $currentDate = Carbon::now()->format('Y-m-d');
         $transfer = [];
-
         $subquery = DB::table('sellers')
             ->select(
                 'sellers.user_id as seller_id',
@@ -3584,9 +3512,8 @@ class AdminController extends Controller
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('products.commission', '!=', 0)
-
-            ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$currentMonthStart, $currentMonthEnd])
+            ->where('order_details.payment_approved', '1')
+            ->whereBetween("order_details.created_at", [$currentMonthStart, $currentMonthHalfEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
 
         $next_subquery = DB::table('sellers')
@@ -3594,18 +3521,18 @@ class AdminController extends Controller
                 'sellers.user_id as seller_id',
                 'sellers.shop_name',
                 'products.commission as product_commission',
-                'products.id as product_id',
+                // 'products.id as product_id',
                 DB::raw('(SUM(order_details.amount) * (1 - products.commission / 100) +
                                         SUM(CASE WHEN order_details.used_delivery_price = 1 THEN order_details.delivery_price ELSE 0 END)) as seller_amount')
             )
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-            ->where('products.commission', '!=', 0)
+            ->where('order_details.payment_approved', '1')
+            ->whereBetween('order_details.created_at', [$previousMonthHalfStart, $previousMonthEnd])
+            ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission');
 
-            ->whereBetween(DB::raw("DATE_FORMAT(order_details.created_at, '%Y-%m-%d')"), [$halfMonthEnd, $nextMonthstartdate])
-            ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission', 'products.id');
+        if ($currentDate > $currentMonthHalfEnd && $currentDate <= Carbon::now()->endOfMonth()) {
 
-        if ($currentDate === $currentMonthEnd) {
             $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
             })
@@ -3618,8 +3545,7 @@ class AdminController extends Controller
                 )
                 ->groupBy('sellers.user_id', 'sellers.commission')
                 ->paginate($limit);
-        } elseif ($currentDate === $currentDate) {
-
+        } else {
             $transfer = Seller::rightJoin(DB::raw("({$next_subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
             })
@@ -3633,7 +3559,6 @@ class AdminController extends Controller
                 ->groupBy('sellers.user_id', 'sellers.commission')
                 ->paginate($limit);
         }
-
         foreach ($transfer as $record) {
             $datePrefix = date('ym');
             $sequentialNumber = 1;
@@ -3642,8 +3567,13 @@ class AdminController extends Controller
 
             // Check if a record with the same transfer code already exists
             $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
-            $currentMonthStart = Carbon::now()->startOfMonth()->format('y/m/d');
-            $currentMonthEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->format('y/m/d');
+            if ($currentDate > $currentMonthHalfEnd && $currentDate <= Carbon::now()->endOfMonth()) {
+                $transferStart = Carbon::now()->startOfMonth();
+                $transferEnd = Carbon::now()->startOfMonth()->setDay(15)->endOfDay();
+            } else {
+                $transferStart = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
+                $transferEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();
+            }
 
             // If no matching record is found, create a new one
             if (!$existingTransfer) {
@@ -3653,8 +3583,8 @@ class AdminController extends Controller
                     'commission' => $record->commission,
                     'seller_amount' => $record->total_seller_amount,
                     'transfer_code' => $newProductCode,
-                    'start_date' => $currentMonthStart,
-                    'end_date' => $currentMonthEnd,
+                    'start_date' => $transferStart,
+                    'end_date' => $transferEnd,
                     'status' => 0,
 
                 ]);
@@ -3664,6 +3594,7 @@ class AdminController extends Controller
             $sequentialNumber++;
         }
         $transfer_history = Transfer::latest()->paginate($limit);
+        // dd($transfer_history);
         $ttl = $transfer_history->total();
         $ttlpage = (ceil($ttl / $limit));
 

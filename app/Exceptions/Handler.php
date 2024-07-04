@@ -54,6 +54,10 @@ class Handler extends ExceptionHandler
     //         return response()->view('errors.403', [], 403);
     //     }
 
+    //     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $exception->getStatusCode() == 503) {
+    //         return response()->view('front-end.maintenance', [], 503);
+    //     }
+
     //     // Render the custom 404 view for all other exceptions
     //     return response()->view('front-end.404', [], 404);
     // }

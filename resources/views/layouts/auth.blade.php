@@ -299,7 +299,8 @@
 
                                     @foreach ($notifications as $key => $notify)
                                         @if (!empty($notify->time))
-                                            <li>
+                                            <li
+                                                style="display: block; background-color: {{ $key % 2 == 0 ? '#f9f9f9' : '#f1f1f1' }}">
                                                 @if ($notify->message == 'A new store added:')
                                                     <a href="{{ url('/shop/' . $notify->related_id) }}"
                                                         class="notification-link" data-id="{{ $notify->id }}">
@@ -330,53 +331,50 @@
                                                                                     class="notification-link"
                                                                                     data-id="{{ $notify->id }}">
                                                 @endif
-                                                <p>
-                                                    @if ($notify->seen == 0)
-                                                        @php
-                                                            $color = '';
-                                                            if ($notify->message == 'A new store added:') {
-                                                                $color = $iro[0];
-                                                            } elseif ($notify->message == 'A new user added:') {
-                                                                $color = $iro[1];
-                                                            } elseif ($notify->message == 'A new product added:') {
-                                                                $color = $iro[2];
-                                                            } elseif ($notify->message == 'A new order added:') {
-                                                                $color = $iro[3];
-                                                            } elseif ($notify->message == 'A new contact added:') {
-                                                                $color = $iro[4];
-                                                            } elseif (
-                                                                Str::contains($notify->message, 'Product deleted by')
-                                                            ) {
-                                                                $color = $iro[5];
-                                                            } elseif (
-                                                                Str::contains(
-                                                                    $notify->message,
-                                                                    'A new sub seller added by',
-                                                                )
-                                                            ) {
-                                                                $color = $iro[6];
-                                                            } elseif (
-                                                                Str::contains(
-                                                                    $notify->message,
-                                                                    'did not pay in time for cash order',
-                                                                )
-                                                            ) {
-                                                                $color = $iro[7];
-                                                            }
-                                                        @endphp
+                                                @if ($notify->seen == 0)
+                                                    @php
+                                                        $color = '';
+                                                        if ($notify->message == 'A new store added:') {
+                                                            $color = $iro[0];
+                                                        } elseif ($notify->message == 'A new user added:') {
+                                                            $color = $iro[1];
+                                                        } elseif ($notify->message == 'A new product added:') {
+                                                            $color = $iro[2];
+                                                        } elseif ($notify->message == 'A new order added:') {
+                                                            $color = $iro[3];
+                                                        } elseif ($notify->message == 'A new contact added:') {
+                                                            $color = $iro[4];
+                                                        } elseif (
+                                                            Str::contains($notify->message, 'Product deleted by')
+                                                        ) {
+                                                            $color = $iro[5];
+                                                        } elseif (
+                                                            Str::contains($notify->message, 'A new sub seller added by')
+                                                        ) {
+                                                            $color = $iro[6];
+                                                        } elseif (
+                                                            Str::contains(
+                                                                $notify->message,
+                                                                'did not pay in time for cash order',
+                                                            )
+                                                        ) {
+                                                            $color = $iro[7];
+                                                        }
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $color = $key % 2 == 0 ? '#f9f9f9' : '#f1f1f1';
+                                                    @endphp
+                                                @endif
+                                                <span>
+                                                    <span style="color: var(--theme-color);">
                                                         <i class="fa fa-circle me-2 font-primary notification-circle"
                                                             style="font-size:11px;color: {{ $color }} !important">
-                                                        </i>
-                                                    @else
-                                                        <i class="fa fa-circle me-2 font-primary notification-circle"
-                                                            style="font-size:11px;color: white !important">
-                                                        </i>
-                                                    @endif
-                                                    {{ $notify->message }}
-                                                    <span class="pull-right">
-                                                        &nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y-m-d H:i') }}
+                                                        </i>{{ $notify->message }}</span>
+                                                    <span style="float: right;color: var(--theme-color);">
+                                                        &nbsp;{{ \Carbon\Carbon::parse($notify->time)->format('y/m/d H:i') }}
                                                     </span>
-                                                </p>
+                                                </span>
                                                 </a>
                                             </li>
                                         @endif

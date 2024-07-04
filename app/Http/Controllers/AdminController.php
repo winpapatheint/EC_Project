@@ -3511,7 +3511,8 @@ class AdminController extends Controller
         }
         //half month
         $currentMonthStart = Carbon::now()->startOfMonth();
-        $currentMonthHalfEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
+        $currentMonthHalfEnd = Carbon::now()->startOfMonth()->setDay(15)->endOfDay();
+        $previousMonthHalfStart = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
         $previousMonthEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();
         $lastMonthHalfDay = Carbon::now()->subMonth()->setDay(16);
         //-----//
@@ -3547,10 +3548,10 @@ class AdminController extends Controller
             ->leftJoin('order_details', 'order_details.seller_id', '=', 'sellers.user_id')
             ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
             ->where('order_details.payment_approved', '1')
-            ->whereBetween('order_details.created_at', [$currentMonthHalfEnd, $previousMonthEnd])
+            ->whereBetween('order_details.created_at', [$previousMonthHalfStart, $previousMonthEnd])
             ->groupBy('sellers.user_id', 'sellers.shop_name', 'products.commission');
 
-        if ($currentDate >= $currentMonthHalfEnd && $currentDate <= $previousMonthEnd) {
+        if ($currentDate > $currentMonthHalfEnd && $currentDate <= Carbon::now()->endOfMonth()) {
 
             $transfer = Seller::rightJoin(DB::raw("({$subquery->toSql()}) as P"), function ($join) {
                 $join->on('P.seller_id', '=', 'sellers.user_id');
@@ -3586,9 +3587,9 @@ class AdminController extends Controller
 
             // Check if a record with the same transfer code already exists
             $existingTransfer = Transfer::where('transfer_code', $newProductCode)->first();
-            if ($currentDate >= $currentMonthHalfEnd && $currentDate <= $previousMonthEnd) {
+            if ($currentDate > $currentMonthHalfEnd && $currentDate <= Carbon::now()->endOfMonth()) {
                 $transferStart = Carbon::now()->startOfMonth();
-                $transferEnd = Carbon::now()->startOfMonth()->addDays(15)->subDay()->endOfDay();
+                $transferEnd = Carbon::now()->startOfMonth()->setDay(15)->endOfDay();
             } else {
                 $transferStart = Carbon::now()->startOfMonth()->copy()->subMonth()->addDays(16)->subDay();
                 $transferEnd = Carbon::now()->startOfMonth()->copy()->subMonth()->copy()->endOfMonth();

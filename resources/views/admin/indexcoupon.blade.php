@@ -44,49 +44,55 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $lists as $key => $list )
-
+                                            @if ($lists->isEmpty())
                                                 <tr>
-                                                    <td class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
-                                                    <td >{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td >{{ $list->name }}</td>
-                                                    <td >{{ $list->coupon_code }}</td>
-                                                    <td >{{ $list->discount_amount }}</td>
-                                                    <td >{{ $list->mini_amount }}</td>
-                                                    <td >{{ $list->valid_count }}</td>
-                                                    <td >{{ $list->used_count }}</td>
-                                                    <td >{{ date('Y/m/d', strtotime($list->startdate)) }}<br>{{ date('H:i', strtotime($list->startdate)) }}</td>
-                                                    <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
-                                                    <td class="col-sm-9">
-                                                        <label class="switch">
-                                                            @php
-                                                                $isExpired = \Carbon\Carbon::parse($list->enddate)->startOfDay()->isPast();
-                                                            @endphp
-                                                           <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
-                                                           data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
-                                                           data-off="InActive" {{ $list->status ? 'checked' : '' }} {{ $isExpired ? 'disabled' : '' }}>
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                            @if (!$isExpired)
-                                                                <a href='{{ url("/editcoupon/".$list->id ) }}'>
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            @endif
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteConfirmModal{{ $list->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                    <td colspan="9">No data available</td>
                                                 </tr>
-                                            @endforeach
+                                            @else
+                                                @foreach( $lists as $key => $list )
+
+                                                    <tr>
+                                                        <td class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                        <td >{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                        <td >{{ $list->name }}</td>
+                                                        <td >{{ $list->coupon_code }}</td>
+                                                        <td >{{ $list->discount_amount }}</td>
+                                                        <td >{{ $list->mini_amount }}</td>
+                                                        <td >{{ $list->valid_count }}</td>
+                                                        <td >{{ $list->used_count }}</td>
+                                                        <td >{{ date('Y/m/d', strtotime($list->startdate)) }}<br>{{ date('H:i', strtotime($list->startdate)) }}</td>
+                                                        <td >{{ date('Y/m/d', strtotime($list->enddate)) }}<br>{{ date('H:i', strtotime($list->enddate)) }}</td>
+                                                        <td class="col-sm-9">
+                                                            <label class="switch">
+                                                                @php
+                                                                    $isExpired = \Carbon\Carbon::parse($list->enddate)->startOfDay()->isPast();
+                                                                @endphp
+                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox"
+                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
+                                                            data-off="InActive" {{ $list->status ? 'checked' : '' }} {{ $isExpired ? 'disabled' : '' }}>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                @if (!$isExpired)
+                                                                    <a href='{{ url("/editcoupon/".$list->id ) }}'>
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                @endif
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

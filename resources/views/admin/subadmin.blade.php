@@ -39,55 +39,56 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $subadmins as $key => $user )
-
+                                            @if ($subadmins->isEmpty())
                                                 <tr>
-                                                    <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($subadmins->firstItem() + $key) }}</th>
-                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($user->created_at)) }}<br>{{ date('H:i', strtotime($user->created_at)) }}</td>
-                                                    <td data-label="氏名"><a @if($user->role == 'buyer') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
-                                                        @if($user->role == 'seller') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
-                                                      >{{ $user->name }}</a></td>
-                                                    <td data-label="タイトル">{{ $user->email }}</td>
-                                                    <td data-label="タイトル">{{ $user->role }}</td>
-                                                    <td class="col-sm-9">
-                                                        <label class="switch">
-                                                            <input data-width="100" data-id="{{$user->id}}" class="toggle-class" type="checkbox"
-                                                            data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
-                                                            data-off="InActive"  {{ $user->status ? 'checked' : '' }}>
-                                                        </label>
-
-                                                    </td>
-
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ url("/subadmindetail/".$user->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="{{ url('/edit/'.$user->role.'/'.rand ( 10000 , 99999 ).$user->id ) }}">
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteConfirmModal{{ $user->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                    <td colspan="9">No data available</td>
                                                 </tr>
-                                            @endforeach
+                                            @else
+                                                @foreach( $subadmins as $key => $user )
+
+                                                    <tr>
+                                                        <th data-label="登録日" class="text-center">{{ ($ttl+1) - ($subadmins->firstItem() + $key) }}</th>
+                                                        <td data-label="登録日">{{ date('Y/m/d', strtotime($user->created_at)) }}<br>{{ date('H:i', strtotime($user->created_at)) }}</td>
+                                                        <td data-label="氏名"><a @if($user->role == 'buyer') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
+                                                            @if($user->role == 'seller') href="{{ url('/takeremote/'.rand ( 10000 , 99999 ).$user->id ) }}" @endif
+                                                        >{{ $user->name }}</a></td>
+                                                        <td data-label="タイトル">{{ $user->email }}</td>
+                                                        <td data-label="タイトル">{{ $user->role }}</td>
+                                                        <td class="col-sm-9">
+                                                            <label class="switch">
+                                                                <input data-width="100" data-id="{{$user->id}}" class="toggle-class" type="checkbox"
+                                                                data-offstyle="outline-secondary" data-toggle="toggle" data-on="Active"
+                                                                data-off="InActive"  {{ $user->status ? 'checked' : '' }}>
+                                                            </label>
+
+                                                        </td>
+
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ url("/subadmindetail/".$user->id ) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="{{ url('/edit/'.$user->role.'/'.rand ( 10000 , 99999 ).$user->id ) }}">
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteConfirmModal{{ $user->id }}">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
-                                    @if(count($subadmins) < 1)
-                  <div style="text-align: center;">
-                  登録された管理者がありません。
-                  </div>
-                  @endif
                                 </div>
                             </div>
                         </div>

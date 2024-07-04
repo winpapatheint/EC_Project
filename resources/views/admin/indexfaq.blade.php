@@ -37,53 +37,59 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach ($faqlists as $key => $list)
+                                            @if ($faqlists->isEmpty())
                                                 <tr>
-                                                    <td data-label="登録日" class="text-center">
-                                                        {{ $ttl + 1 - ($faqlists->firstItem() + $key) }}</td>
-                                                    <td data-label="登録日">
-                                                        {{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}
-                                                    </td>
-                                                    <td data-label="タイトル">{{ $list->title }}</td>
-
-                                                    <td data-label="タイトル">
-                                                        @if (mb_strlen($list->que) > 50)
-                                                            {!! nl2br(mb_substr($list->que, 0, 50)) . '<br>' . nl2br(mb_substr($list->que, 50, 50)) . '...' !!}
-                                                        @else
-                                                            {!! $list->que !!}
-                                                        @endif
-                                                    </td>
-                                                    <td data-label="タイトル">
-                                                        @if (mb_strlen($list->ans) > 50)
-                                                            {!! mb_substr($list->ans, 0, 50) . '<br>' . mb_substr($list->ans, 50, 50) . '...' !!}
-                                                        @else
-                                                            {!! $list->ans !!}
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ url('/faq/' . $list->id) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href='{{ url('/editfaq/' . $list->id) }}'>
-                                                                    <i class="ri-pencil-line"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteConfirmModal{{ $list->id }}">
-                                                                    <i class="ri-delete-bin-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                    <td colspan="9">No data available</td>
                                                 </tr>
-                                            @endforeach
+                                            @else
+                                                @foreach ($faqlists as $key => $list)
+                                                    <tr>
+                                                        <td data-label="登録日" class="text-center">
+                                                            {{ $ttl + 1 - ($faqlists->firstItem() + $key) }}</td>
+                                                        <td data-label="登録日">
+                                                            {{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}
+                                                        </td>
+                                                        <td data-label="タイトル">{{ $list->title }}</td>
+
+                                                        <td data-label="タイトル">
+                                                            @if (mb_strlen($list->que) > 50)
+                                                                {!! nl2br(mb_substr($list->que, 0, 50)) . '<br>' . nl2br(mb_substr($list->que, 50, 50)) . '...' !!}
+                                                            @else
+                                                                {!! $list->que !!}
+                                                            @endif
+                                                        </td>
+                                                        <td data-label="タイトル">
+                                                            @if (mb_strlen($list->ans) > 50)
+                                                                {!! mb_substr($list->ans, 0, 50) . '<br>' . mb_substr($list->ans, 50, 50) . '...' !!}
+                                                            @else
+                                                                {!! $list->ans !!}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ url('/faq/' . $list->id) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href='{{ url('/editfaq/' . $list->id) }}'>
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteConfirmModal{{ $list->id }}">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

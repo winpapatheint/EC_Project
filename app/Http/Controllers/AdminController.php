@@ -3252,8 +3252,8 @@ class AdminController extends Controller
             'product_size' => 'required|string|max:255',
             'product_color' => 'required|string|max:255',
             'original_price' => 'required|numeric',
-            'short_desc' => 'required|string|max:255',
-            'long_desc' => 'required|string|max:255',
+            'short_desc' => 'required|string',
+            'long_desc' => 'required|string',
             'estimate_date' => 'required|string|max:255',
             'shipping_country' => 'required',
         ]);
@@ -3287,7 +3287,7 @@ class AdminController extends Controller
         $product->care_instructions = $request->care_instructions;
         $product->product_thambnail = $filename;
         $product->estimate_date = $request->estimate_date;
-        $product->status = 1;
+        // $product->status = 1;
         $product->delivery_price = $request->delivery_price;
         $product->shipping_country = $request->shipping_country;
         // $product->commission = $request->commision;
@@ -3438,26 +3438,6 @@ class AdminController extends Controller
 
     public function ordertracking($id)
     {
-        // $process = Process::where('order_id',$id)->latest()->get();
-        // $orderDetails = OrderDetail::join('orders', 'order_details.order_id', 'orders.id')
-        //             ->join('products', 'products.id', 'order_details.product_id')
-        //             ->join('buyers', 'orders.buyer_id', 'buyers.id')
-        //             ->with('prefecture')
-        //             ->select(
-        //                 'orders.id as order_id',
-        //                 'order_details.id as order_detail_id',
-        //                 'products.id as product_id',
-        //                 'orders.*',
-        //                 'products.*',
-        //                 'products.selling_price as price',
-        //                 'order_details.*',
-        //                 'orders.created_at as order_created_at',
-        //                 'buyers.name as buyer_name'
-        //             )
-        //             ->where('order_details.order_id', $id)
-        //             ->get();
-
-        // return view('admin.order.ordertracking',compact('orderDetails','process'));
         $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
             ->select(
                 'order_details.*',

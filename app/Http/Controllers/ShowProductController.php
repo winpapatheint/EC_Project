@@ -459,13 +459,12 @@ class ShowProductController extends Controller
             }
 
             if ($topic == 'new-arrivals') {
-                if ($page == 5) $limit = 2;
                 $products = $query->with('Category')
                     ->where('products.status', '=', '1')
                     ->orderBy('created_at', 'desc')
                     ->paginate($limit, ['*'], 'page', $page);
 
-                $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('created_at', 'desc')->take(50)->get();
+                $filterForProduct = Product::with('Category')->where('products.status', '=', '1')->orderBy('created_at', 'desc')->take(48)->get();
             }
 
             $categoryIds = $filterForProduct->pluck('Category.id')->unique()->toArray();
@@ -504,9 +503,12 @@ class ShowProductController extends Controller
                 ->first();
         }
         $ttl = $products->total();
-        if (($topic == 'top-50-offers' || $topic == 'new-arrivals') && $ttl > 50) {
+        if ($topic == 'top-50-offers' && $ttl > 50) {
             $ttl = 50;
             $ttlpage = 5; // Assigning specific value when $ttl is limited to 50
+        } elseif ($topic == 'new-arrivals' && $ttl > 48) {
+            $ttl = 48;
+            $ttlpage = 4;
         } else {
             $ttlpage = ceil($ttl / $limit);
         }

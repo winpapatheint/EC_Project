@@ -19,7 +19,8 @@
                                     </div>
                                     @php $action= route('registersubcategory'); @endphp
 
-                                    <form class="theme-form theme-form-2 mega-form" id="registersubcategory" method="POST" action="{{ $action }}" enctype="multipart/form-data">
+                                    <form class="theme-form theme-form-2 mega-form" id="registersubcategory"
+                                        method="POST" action="{{ $action }}" enctype="multipart/form-data">
                                         @csrf
                                         @if ($editmode)
                                             <input type="hidden" name="id" value="{{ $subtitle->id }}">
@@ -28,10 +29,12 @@
                                         <div class="mb-4 row align-items-center">
                                             <label class="col-sm-3 col-form-label form-label-title">Category</label>
                                             <div class="col-sm-8">
-                                                <select class="js-example-basic-single w-100" name="category" id="category">
-                                                    <option value="0">select Category</option>
-                                                    @foreach($categories as $category)
-                                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                                <select class="js-example-basic-single w-100" name="category"
+                                                    id="category">
+                                                    <option value="0">Select Category</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">
+                                                            {{ $category->category_name }}</option>
                                                     @endforeach
                                                 </select>
                                                 <p style="display:none" class="category error text-danger"></p>
@@ -44,9 +47,11 @@
                                         </div>
 
                                         <div class="mb-4 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">SubCategory Title</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">SubCategory
+                                                Title</label>
                                             <div class="col-sm-8">
-                                                <select class="js-example-basic-single w-100 get_subcategory" name="subcategory" id="subcategory"></select>
+                                                <select class="js-example-basic-single w-100 get_subcategory"
+                                                    name="subcategory" id="subcategory"></select>
                                                 <p style="display:none" class="subcategory error text-danger"></p>
                                                 @if (!empty($error['subcategory']))
                                                     @foreach ($error['subcategory'] as $key => $value)
@@ -60,9 +65,13 @@
                                             <label class="form-label-title col-sm-3 mb-0">SubCategory Name</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" placeholder="SubCategory Name" name="subname[]" id="subname" value="{{ old('subname') }}">
-                                                    <div class="input-group-append align-self-center mx-auto justify-content-center">
-                                                        <a href="#" class="align-items-center d-flex" id="add-more-field">
+                                                    <input class="form-control" type="text"
+                                                        placeholder="SubCategory Name" name="subname[]" id="subname"
+                                                        value="{{ old('subname') }}">
+                                                    <div
+                                                        class="input-group-append align-self-center mx-auto justify-content-center">
+                                                        <a href="#" class="align-items-center d-flex"
+                                                            id="add-more-field">
                                                             <i data-feather="plus-square"></i> Add
                                                         </a>
                                                     </div>
@@ -86,12 +95,16 @@
                                         </button>
 
                                         <!-- Confirm Modal Box -->
-                                        <div class="modal fade theme-modal remove-coupon" id="confirmModal" tabindex="-1" data-bs-toggle="modal" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal fade theme-modal remove-coupon" id="confirmModal"
+                                            tabindex="-1" data-bs-toggle="modal" role="dialog"
+                                            aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header d-block text-center">
-                                                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You
+                                                            Sure?</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     </div>
@@ -101,10 +114,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-submit btn-animation btn-md fw-bold me-2">
+                                                        <button type="submit"
+                                                            class="btn btn-submit btn-animation btn-md fw-bold me-2">
                                                             Yes
                                                         </button>
-                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" style="background-color: #ff6b6b; border-color: #ff6b6b;">No</button>
+                                                        <button type="button" class="btn btn-animation btn-md fw-bold"
+                                                            data-bs-dismiss="modal"
+                                                            style="background-color: #ff6b6b; border-color: #ff6b6b;">No</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,7 +156,8 @@
                             let all_options = "<option value=''>Select Sub Category</option>";
                             let all_subcategories = res.subcategories;
                             $.each(all_subcategories, function(index, value) {
-                                all_options += "<option value='" + value.id + "'>" + value.sub_category_titlename + "</option>";
+                                all_options += "<option value='" + value.id + "'>" +
+                                    value.sub_category_titlename + "</option>";
                             });
                             $(".get_subcategory").html(all_options);
                         } else {
@@ -157,7 +174,8 @@
         $('.btn-submit').click(function() {
             $('.error').hide();
 
-            if ($.trim($("#category").val()) === "0" || $.trim($("#subcategory").val()) === "" || $.trim($("#subname").val()) === "") {
+            if ($.trim($("#category").val()) === "0" || $.trim($("#subcategory").val()) === "" || $.trim($(
+                    "#subname").val()) === "") {
                 if ($.trim($("#category").val()) === "0") {
                     $('.error.category').text('Category Name is required').show();
                 }

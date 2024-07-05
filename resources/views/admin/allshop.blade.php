@@ -34,65 +34,71 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach( $lists as $key => $list )
+                                            @if ($lists->isEmpty())
+                                                    <tr>
+                                                        <td colspan="9">No data available</td>
+                                                    </tr>
+                                            @else
+                                                @foreach( $lists as $key => $list )
 
-                                                <tr>
-                                                    <td data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
-                                                    <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
-                                                    <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/shop/'.($list->shop_logo)   ) }}" alt="thumb"  style="width: 50px;"></td>
-                                                    <td data-label="氏名"><a
-                                                      href="{{ url('/shoptakeremote/'.rand ( 10000 , 99999 ).$list->user_id ) }}"
-                                                      >{{ $list->shop_name }}</a></td>
-                                                    <td data-label="" >{{ $list->commission }}%</td>
-                                                    <td class="col-sm-9">
+                                                    <tr>
+                                                        <td data-label="" class="text-center">{{ ($ttl+1) - ($lists->firstItem() + $key) }}</td>
+                                                        <td data-label="登録日">{{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}</td>
+                                                        <td data-label="{{ __('auth.image') }}"><img src="{{ asset('upload/shop/'.($list->shop_logo)   ) }}" alt="thumb"  style="width: 50px;"></td>
+                                                        <td data-label="氏名"><a
+                                                        href="{{ url('/shoptakeremote/'.rand ( 10000 , 99999 ).$list->user_id ) }}"
+                                                        >{{ $list->shop_name }}</a></td>
+                                                        <td data-label="" >{{ $list->commission }}%</td>
+                                                        <td class="col-sm-9">
 
-                                                        <button class="btn w-50 theme-bg-color" style = "margin-left: 50px;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#commissionModal{{ $list->id }}"
-                                                                onclick="">Commission
-                                                        </button>
-
-                                                    </td>
-                                                    @if ($list->coupon_status == 1)
-                                                    <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
-                                                    @else
-                                                    <td data-label="" >-</td>
-                                                    @endif
-                                                    <td class="col-sm-9">
-                                                        @if($list->coupon_status == 1)
-                                                            <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                            <button class="btn w-50 theme-bg-color" style = "margin-left: 50px;"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#removeProfile{{ $list->id }}"
-                                                                    onclick="showDeleteModal('{{ $list->id }}')"
-                                                                    onclick="">Remove
+                                                                    data-bs-target="#commissionModal{{ $list->id }}"
+                                                                    onclick="">Commission
                                                             </button>
+
+                                                        </td>
+                                                        @if ($list->coupon_status == 1)
+                                                        <td data-label="" ><a href='{{ url("/coupon/".$list->coupon_id ) }}'>{{ $list->coupon_code }}</a></td>
                                                         @else
-                                                            <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
-                                                                    onclick="">Coupon
-                                                            </button>
+                                                        <td data-label="" >-</td>
                                                         @endif
-                                                    </td>
-                                                    <td class="col-sm-9">
-                                                        <label class="switch">
-                                                            <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
-                                                            data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
-                                                        </label>
-                                                    </td>
+                                                        <td class="col-sm-9">
+                                                            @if($list->coupon_status == 1)
+                                                                <button class="btn w-50" style = "background-color: #ff6b6b;margin-left: 30px;"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#removeProfile{{ $list->id }}"
+                                                                        onclick="showDeleteModal('{{ $list->id }}')"
+                                                                        onclick="">Remove
+                                                                </button>
+                                                            @else
+                                                                <button class="btn w-50 theme-bg-color" style = "margin-left: 30px;"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#couponModal{{ $list->id . $list->coupon_id }}"
+                                                                        onclick="">Coupon
+                                                                </button>
+                                                            @endif
+                                                        </td>
+                                                        <td class="col-sm-9">
+                                                            <label class="switch">
+                                                                <input data-width="100" data-id="{{$list->id}}" class="toggle-class" type="checkbox" data-offstyle="outline-secondary" data-toggle="toggle"
+                                                                data-on="Active" data-off="InActive"  {{ $list->status ? 'checked' : '' }}>
+                                                            </label>
+                                                        </td>
 
 
-                                                    <td>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="{{ url("/shop/".$list->id ) }}">
-                                                                    <i class="ri-eye-line"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                        <td>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="{{ url("/shop/".$list->id ) }}">
+                                                                        <i class="ri-eye-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

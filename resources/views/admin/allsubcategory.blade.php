@@ -49,82 +49,88 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach ($lists as $key => $list)
-                                                <tr>
-                                                    <td class="text-center" style="min-width: 5px !important">
-                                                        {{ $ttl + 1 - ($lists->firstItem() + $key) }}
-                                                    </td>
-                                                    {{-- <td data-label="タイトル" style="font-size:14px;">{{ $list->category }}
-                                                <a href='' data-bs-t="modal"
-                                                    data-bs-target="#categoryModal{{ $list->categoryId }}">
-                                                    <i class="ri-pencil-line"></i>
-                                                </a>
-                                                </td> --}}
+                                            @if ($lists->isEmpty())
+                                                    <tr>
+                                                        <td colspan="9">No data available</td>
+                                                    </tr>
+                                            @else
+                                                @foreach ($lists as $key => $list)
+                                                    <tr>
+                                                        <td class="text-center" style="min-width: 5px !important">
+                                                            {{ $ttl + 1 - ($lists->firstItem() + $key) }}
+                                                        </td>
+                                                        {{-- <td data-label="タイトル" style="font-size:14px;">{{ $list->category }}
+                                                    <a href='' data-bs-t="modal"
+                                                        data-bs-target="#categoryModal{{ $list->categoryId }}">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                    </td> --}}
 
-                                                    <td data-label="タイトル" style="font-size: 14px;">
-                                                        <div style="vertical-align: middle;">
-                                                            {!! $list->category !!}
+                                                        <td data-label="タイトル" style="font-size: 14px;">
+                                                            <div style="vertical-align: middle;">
+                                                                {!! $list->category !!}
 
-                                                            <a href='' data-bs-toggle="modal"
-                                                                data-bs-target="#categoryModal{{ $list->categoryId }}">
-                                                                <i class="ri-pencil-line"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                    <td data-label="タイトル" style="font-size: 14px;">
-                                                        <div style="vertical-align: middle;">
-                                                            {!! $list->sub_category_titlename !!}
-                                                            <a href='' data-bs-toggle="modal"
-                                                                data-bs-target="#subTitleModal{{ $list->subCatTitleId }}">
-                                                                <i class="ri-pencil-line"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                    <td data-label="タイトル" style="font-size:14px;">
-                                                        {{ $list->sub_category_name }}
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            @php
-                                                                $id = '0';
-                                                                $type = 0;
-
-                                                                if ($list->subCatId != null) {
-                                                                    $id = $list->subCatId;
-                                                                    $type = 3;
-                                                                } elseif ($list->subCatTitleId != null) {
-                                                                    $id = $list->subCatTitleId;
-                                                                    $type = 2;
-                                                                } elseif ($list->subCatId == null) {
-                                                                    $id = $list->categoryId;
-                                                                    $type = 1;
-                                                                }
-
-                                                            @endphp
-
-                                                            <li>
-                                                                <a
-                                                                    href='{{ url('/editsubcategory/' . $type . '/' . $id) }}'>
+                                                                <a href='' data-bs-toggle="modal"
+                                                                    data-bs-target="#categoryModal{{ $list->categoryId }}">
                                                                     <i class="ri-pencil-line"></i>
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                @if (empty($list->sub_category_name))
-                                                                    {{-- <a href='{{ url("/deletecategory/".$type.'/'.$id ) }}'>
-                                                            <i class="ri-delete-bin-line"></i>
-                                                            </a> --}}
-                                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                                        data-bs-target="#deleteConfirmModal{{ $id . $type }}">
-                                                                        <i class="ri-delete-bin-line"></i>
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="タイトル" style="font-size: 14px;">
+                                                            <div style="vertical-align: middle;">
+                                                                {!! $list->sub_category_titlename !!}
+                                                                <a href='' data-bs-toggle="modal"
+                                                                    data-bs-target="#subTitleModal{{ $list->subCatTitleId }}">
+                                                                    <i class="ri-pencil-line"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="タイトル" style="font-size:14px;">
+                                                            {{ $list->sub_category_name }}
+                                                        </td>
+                                                        <td>
+                                                            <ul>
+                                                                @php
+                                                                    $id = '0';
+                                                                    $type = 0;
+
+                                                                    if ($list->subCatId != null) {
+                                                                        $id = $list->subCatId;
+                                                                        $type = 3;
+                                                                    } elseif ($list->subCatTitleId != null) {
+                                                                        $id = $list->subCatTitleId;
+                                                                        $type = 2;
+                                                                    } elseif ($list->subCatId == null) {
+                                                                        $id = $list->categoryId;
+                                                                        $type = 1;
+                                                                    }
+
+                                                                @endphp
+
+                                                                <li>
+                                                                    <a
+                                                                        href='{{ url('/editsubcategory/' . $type . '/' . $id) }}'>
+                                                                        <i class="ri-pencil-line"></i>
                                                                     </a>
-                                                                @endif
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                                </li>
+                                                                <li>
+                                                                    @if (empty($list->sub_category_name))
+                                                                        {{-- <a href='{{ url("/deletecategory/".$type.'/'.$id ) }}'>
+                                                                <i class="ri-delete-bin-line"></i>
+                                                                </a> --}}
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                            data-bs-target="#deleteConfirmModal{{ $id . $type }}">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

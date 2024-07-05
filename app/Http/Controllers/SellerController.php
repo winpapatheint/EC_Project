@@ -29,28 +29,28 @@ class SellerController extends Controller
 {
     public function dashboard()
     {
-        $limit=10;
+        $limit = 10;
         $id = Auth::user()->created_by ?? Auth::id();
         $revenue = OrderDetail::where('seller_id', $id)->where('status', 'Delivered')->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->sum('amount');
         $order = OrderDetail::where('seller_id', $id)
-                ->where('status', '!=', 'Cancel')
-                ->where('payment_approved', 1)
-                ->groupBy('order_id')
-                ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id')
-                ->get();
+            ->where('status', '!=', 'Cancel')
+            ->where('payment_approved', 1)
+            ->groupBy('order_id')
+            ->selectRaw('order_id, MAX(created_at) as created_at, MAX(id) as id')
+            ->get();
         $pending = OrderDetail::where('seller_id', $id)->where('status', 'Pending')->get();
         $product = Product::where('seller_id', $id)->get();
         // $transfer = OrderDetail::where('seller_id',$id)->latest()->paginate($limit);
-        $orders = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
-                ->whereYear('created_at', date('Y'))
-                ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
-                ->pluck('count', 'month_name');
+        $orders = OrderDetail::where('seller_id', $id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name")
+            ->whereYear('created_at', date('Y'))
+            ->groupBy(DB::raw("MONTH(created_at)"), 'created_at')
+            ->pluck('count', 'month_name');
 
-        $ordergraph = OrderDetail::where('seller_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
-                    ->whereYear('created_at', date('Y'))
-                    ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
-                    ->orderBy(DB::raw("MONTH(created_at)"))
-                    ->get();
+        $ordergraph = OrderDetail::where('seller_id', $id)->selectRaw("COUNT(*) as count, DATE_FORMAT(created_at, '%M') as month_name, MONTH(created_at) as month_number")
+            ->whereYear('created_at', date('Y'))
+            ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("DATE_FORMAT(created_at, '%M')"))
+            ->orderBy(DB::raw("MONTH(created_at)"))
+            ->get();
 
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $data = array_fill(0, 12, 0);
@@ -61,14 +61,14 @@ class SellerController extends Controller
         }
 
         $transfer_history = Transfer::latest()
-                                ->with('seller')
-                                ->where('seller_id',Auth::user()->id) // Eager load the seller relationship
-                                ->paginate($limit);
+            ->with('seller')
+            ->where('seller_id', Auth::user()->id) // Eager load the seller relationship
+            ->paginate($limit);
 
         $ttl = $transfer_history->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('seller.index',compact('labels', 'data','transfer_history','revenue','order','pending','product','ttl','ttlpage'));
+        return view('seller.index', compact('labels', 'data', 'transfer_history', 'revenue', 'order', 'pending', 'product', 'ttl', 'ttlpage'));
     }
 
 
@@ -169,6 +169,7 @@ class SellerController extends Controller
 
     public function help()
     {
+        $limit = 10;
         $validated = request()->validate([
             'search' => 'string|nullable',
         ]);
@@ -178,29 +179,31 @@ class SellerController extends Controller
         $receivedQuery = Help::where('to', $userEmail)->latest();
         $sentQuery = Help::where('from', $userEmail)->latest();
         if ($search) {
-            $receivedQuery->where(function($q) use ($search) {
+            $receivedQuery->where(function ($q) use ($search) {
                 $q->where('to', 'LIKE', "%{$search}%")
-                ->orWhere('from', 'LIKE', "%{$search}%")
-                ->orWhere('subject', 'LIKE', "%{$search}%")
-                ->orWhere('body', 'LIKE', "%{$search}%");
+                    ->orWhere('from', 'LIKE', "%{$search}%")
+                    ->orWhere('subject', 'LIKE', "%{$search}%")
+                    ->orWhere('body', 'LIKE', "%{$search}%");
             });
 
-            $sentQuery->where(function($q) use ($search) {
+            $sentQuery->where(function ($q) use ($search) {
                 $q->where('to', 'LIKE', "%{$search}%")
-                ->orWhere('from', 'LIKE', "%{$search}%")
-                ->orWhere('subject', 'LIKE', "%{$search}%")
-                ->orWhere('body', 'LIKE', "%{$search}%");
+                    ->orWhere('from', 'LIKE', "%{$search}%")
+                    ->orWhere('subject', 'LIKE', "%{$search}%")
+                    ->orWhere('body', 'LIKE', "%{$search}%");
             });
         }
 
-        $received = $receivedQuery->paginate(10);
-        $sent = $sentQuery->paginate(10);
+        $received = $receivedQuery->paginate($limit);
+        $sent = $sentQuery->paginate($limit);
 
-        return view('seller.help.help', compact('received', 'sent'));
+        $ttl = $received->total();
+        $ttlpage = ceil($ttl / $limit);
+        $sentttl = $sent->total();
+        $sentttlpage = ceil($sentttl / $limit);
+
+        return view('seller.help.help', compact('received', 'sent', 'ttl', 'ttlpage', 'sentttl', 'sentttlpage'));
     }
-
-
-
 
     public function detailHelp($id)
     {
@@ -235,7 +238,7 @@ class SellerController extends Controller
         $help = new Help();
 
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.$request->image->extension();
+            $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
         } else {
             $imageName = '';
@@ -250,7 +253,7 @@ class SellerController extends Controller
         $help->subject = $request->title;
         $help->body =  $request->message;
 
-         $help->img =   $imageName;
+        $help->img =   $imageName;
 
         $help->created_at = Carbon::now();
         $help->save();
@@ -258,12 +261,14 @@ class SellerController extends Controller
         $helpDate = Carbon::now()->format('M d, Y');
 
         $adminemail = 'admin@asia-hd.com';
-        $data = ['title' => $request->title,
-                'content' => $request->message,
-                'imgName' => $imageName,
+        $data = [
+            'title' => $request->title,
+            'content' => $request->message,
+            'imgName' => $imageName,
 
-                'helpDate' => $helpDate,
-                'selleremail' => Auth::user()->email];
+            'helpDate' => $helpDate,
+            'selleremail' => Auth::user()->email
+        ];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
         Notification::create([
@@ -282,10 +287,10 @@ class SellerController extends Controller
         $getId = Help::find($id);
         $helpId = $getId->help_id;
         $data = Help::where(function ($query) use ($helpId) {
-                $query->where('help_id', $helpId)
+            $query->where('help_id', $helpId)
                 ->orWhere('id', $helpId);
-                })->get();
-        return view('seller.help.help_reply',compact('data'));
+        })->get();
+        return view('seller.help.help_reply', compact('data'));
     }
 
 
@@ -294,15 +299,13 @@ class SellerController extends Controller
         // $validatedData = $request->validate([
         //     'body' => 'present|string|max:255',
         // ]);
-         $help = new Help();
+        $help = new Help();
 
-         if (!empty($request->image)) {
+        if (!empty($request->image)) {
             $img = $request->image;
-            $imageName = time().'.'.$img->extension();
+            $imageName = time() . '.' . $img->extension();
             $request->image->move(public_path('images'), $imageName);
-
-         }
-         else {
+        } else {
             $imageName = '';
         }
 
@@ -321,11 +324,13 @@ class SellerController extends Controller
 
         $helpDate = Carbon::now()->format('M d, Y');
         $adminemail = 'admin@asia-hd.com';
-        $data = ['title' => $request->subject,
-                'content' => $request->body,
-                'imgName' => $imageName,
-                'helpDate' => $helpDate,
-                'selleremail' => Auth::user()->email];
+        $data = [
+            'title' => $request->subject,
+            'content' => $request->body,
+            'imgName' => $imageName,
+            'helpDate' => $helpDate,
+            'selleremail' => Auth::user()->email
+        ];
         \Mail::to($adminemail)->send(new \App\Mail\SellerContact($data));
 
         Notification::create([
@@ -366,9 +371,9 @@ class SellerController extends Controller
         $query =  User::where('created_by', $id);
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('email', 'LIKE', "%{$search}%");
+                    ->orWhere('email', 'LIKE', "%{$search}%");
             });
         }
 
@@ -381,8 +386,8 @@ class SellerController extends Controller
     public function addSubseller()
     {
         $id = Auth::user()->id;
-        $seller =  Seller::where('user_id',$id)->latest()->first();;
-        return view('seller.subseller.subseller_add',compact('seller'));
+        $seller =  Seller::where('user_id', $id)->latest()->first();;
+        return view('seller.subseller.subseller_add', compact('seller'));
     }
 
 
@@ -415,7 +420,7 @@ class SellerController extends Controller
             'password' => Hash::make($validatedData['passwords']),
             'phone' => $request->input('phone'),
         ]);
-        
+
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin) {
             \Mail::to($admin->email)->send(new \App\Mail\AdminNewMemberRegistration($user, $admin));
@@ -437,8 +442,8 @@ class SellerController extends Controller
     public function deleteSubseller(Request $request)
     {
         $id = $request->id;
-        User::where('id',$id)->delete();
-        Subseller::where('id',$id)->delete();
+        User::where('id', $id)->delete();
+        Subseller::where('id', $id)->delete();
         $msg = ('Subseller deleted successfully');
         return back()->with('success', $msg);
     }

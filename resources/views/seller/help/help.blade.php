@@ -97,6 +97,9 @@
                                                             @endif
                                                         </tbody>
                                                     </table>
+                                                    <div>
+                                                        @include('components.pagination')
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -149,6 +152,12 @@
                                                             @endif
                                                         </tbody>
                                                     </table>
+                                                </div>
+                                                @php
+                                                    $ttlpage = $sentttlpage;
+                                                @endphp
+                                                <div>
+                                                    @include('components.pagination')
                                                 </div>
                                             </div>
                                         </div>

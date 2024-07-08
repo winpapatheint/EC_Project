@@ -1690,12 +1690,7 @@ class AdminController extends Controller
 
     public function userdetail($id)
     {
-        $userlist = DB::table('users')
-            ->select('users.*')
-            ->where('users.id', $id)->get();
-
-        // print_r($blog[0]->created_at);die;
-        $user = $userlist[0];
+        $user = User::where('users.id', $id)->first();
 
         return view('admin.usersdetail', compact('user'));
     }
@@ -2203,11 +2198,7 @@ class AdminController extends Controller
         // print_r($type);die;
 
         $users = $query->whereIn('role', ['seller', 'buyer'])
-            ->where('email_verified_at', '<>', '')
-            ->where(function ($query) {
-                $query->whereNotNull('email_verified_at')
-                    ->orWhereNull('email_verified_at');
-            })
+            ->whereNotNull('email_verified_at')
             ->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $users->total();

@@ -1,6 +1,6 @@
 <x-auth-layout>
-<div class="page-body">
-    <!-- Product Detail Start -->
+    <div class="page-body">
+        <!-- Product Detail Start -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -16,7 +16,11 @@
                                         <div class="mb-2 row align-items-center">
                                             <label class="form-label-title col-sm-3 mb-0">Roles</label>
                                             <div class="col-sm-9">
-                                                <p>{{ $user->role }}</p>
+                                                @if ($user->created_by)
+                                                    <p>sub seller</p>
+                                                @else
+                                                    <p>{{ $user->role }}</p>
+                                                @endif
                                             </div>
                                         </div>
 
@@ -28,27 +32,59 @@
                                         </div>
 
                                         <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Phone</label>
-                                            <div class="col-sm-9">
-                                                <p>{{ $user->phone }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2 row align-items-center">
-                                            <label
-                                                class="col-sm-3 col-form-label form-label-title">Email</label>
+                                            <label class="col-sm-3 col-form-label form-label-title">Email</label>
                                             <div class="col-sm-9">
                                                 <p>{{ $user->email }}</p>
                                             </div>
                                         </div>
+
                                         <div class="mb-2 row align-items-center">
-     <label
-         class="col-sm-3 col-form-label form-label-title">Address</label>
-     <div class="col-sm-9">
-         <p>{{ $user->address }}</p>
-     </div>
- </div>
+                                            <label class="col-sm-3 col-form-label form-label-title">Phone</label>
+                                            <div class="col-sm-9">
+                                                @if ($user->role == 'buyer')
+                                                    <p>{{ $user->buyer->phone }}</p>
+                                                @else
+                                                    @if ($user->created_by)
+                                                        <p>{{ $user->subSeller->phone }}</p>
+                                                    @else
+                                                        <p>{{ $user->seller->phone }}</p>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        @if (!$user->created_by)
+                                            <div class="mb-2 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Address</label>
+                                                <div class="col-sm-9">
+                                                    @if ($user->role == 'buyer')
+                                                        @php
+                                                            $defaultAddress = $user->buyer->buyerAddresses->firstWhere(
+                                                                'main_address',
+                                                                1,
+                                                            );
+                                                        @endphp
+                                                        <p>
+                                                            〒{{ $defaultAddress->post_code }}
+                                                            {{ $defaultAddress->prefecture->name }}
+                                                            {{ $defaultAddress->city }}
+                                                            {{ $defaultAddress->chome }}
+                                                            {{ $defaultAddress->building }}
+                                                            {{ $defaultAddress->room_no }}
+                                                        </p>
+                                                    @else
+                                                        <p>
+                                                            〒{{ $user->seller->zip_code }}
+                                                            {{ $user->seller->prefecture->name }}
+                                                            {{ $user->seller->city }}
+                                                            {{ $user->seller->chome }}
+                                                            {{ $user->seller->building }}
+                                                            {{ $user->seller->room }}
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
 
                                     </form>
                                 </div>
@@ -59,11 +95,5 @@
             </div>
         </div>
         <!-- Product Detail End -->
-</div>
+    </div>
 </x-auth-layout>
-
-
-
-
-
-

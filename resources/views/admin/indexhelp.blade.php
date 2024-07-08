@@ -36,28 +36,6 @@
                                                         class="icon-cloud-up">Notice</i></button>
                                             </li>
                                         </ul>
-                                        {{-- <ul class="nav nav-tabs custom-nav right-options" id="myTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                                data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">
-                                                <i class="icon-cloud-down">Inbox</i>
-                                            </button>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="info-tab" data-bs-toggle="tab"
-                                                data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="false">
-                                                <i class="icon-cloud-up">Sent</i>
-                                            </button>
-                                        </li>
-
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="notice-tab" data-bs-toggle="tab"
-                                                data-bs-target="#notice" type="button" role="tab" aria-controls="notice" aria-selected="false">
-                                                <i class="icon-cloud-up">Notice</i>
-                                            </button>
-                                        </li>
-                                    </ul> --}}
 
                                         <div class="tab-content custom-tab" id="myTabContent">
                                             <div class="tab-pane fade show active" id="description" role="tabpanel">
@@ -124,7 +102,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                @include('components.pagination')
+                                                <div>
+                                                    @include('components.pagination')
+                                                </div>
                                             </div>
 
 
@@ -167,7 +147,7 @@
                                                                             <ul>
                                                                                 <li>
                                                                                     <a
-                                                                                        href='{{ url('/helpdetail/' . $item->id) }}'>
+                                                                                        href='{{ url('/helpdetails/' . $item->id) }}'>
                                                                                         <i class="ri-eye-line"></i>
                                                                                     </a>
 
@@ -188,9 +168,13 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                @if (!$notice->isEmpty())
-                                                    @include('components.noticepagination')
-                                                @endif
+                                                @php
+                                                    $ttlpage = $sent_ttlpage;
+                                                @endphp
+                                                <div>
+                                                    @include('components.pagination')
+                                                </div>
+
                                             </div>
 
                                             <div class="tab-pane fade" id="info" role="tabpanel">
@@ -261,7 +245,12 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                @include('components.sendpagination')
+                                                @php
+                                                    $ttlpage = $notice_ttlpage;
+                                                @endphp
+                                                <div>
+                                                    @include('components.pagination')
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -292,7 +281,7 @@
                         <form method="POST" action="{{ route('emailreply') }}"
                             class="theme-form theme-form-2 mega-form" enctype="multipart/form-data">
                             @csrf
-                            {{ $item->help_id }}
+
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <input type="hidden" name="help_id" value="{{ $item->help_id }}">
                             <input type="hidden" name="subject" value="{{ $item->subject }}">
@@ -550,6 +539,7 @@
                     var reader = new FileReader();
                     reader.onload = function(e) {
                         document.getElementById('mainThmb').src = e.target.result;
+                        document.getElementById('mainThmb').style.width = '100px';
                     }
                     reader.readAsDataURL(input.files[0]);
                 }

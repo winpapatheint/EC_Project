@@ -176,8 +176,16 @@ class SellerController extends Controller
 
         $search = $validated['search'] ?? null;
         $userEmail = Auth::user()->email;
-        $receivedQuery = Help::where('to', $userEmail)->latest();
-        $sentQuery = Help::where('from', $userEmail)->latest();
+        $receivedQuery = Help::where('to', $userEmail)
+            ->select('helps.*')
+            ->join(DB::raw('(SELECT MAX(id) as id FROM helps WHERE `to` = "' . $userEmail . '" GROUP BY subject) as latest_help'), function ($join) {
+                $join->on('helps.id', '=', 'latest_help.id');
+            });
+        $sentQuery = Help::where('from', $userEmail)
+            ->select('helps.*')
+            ->join(DB::raw('(SELECT MAX(id) as id FROM helps WHERE `from` = "' . $userEmail . '" GROUP BY subject) as latest_help'), function ($join) {
+                $join->on('helps.id', '=', 'latest_help.id');
+            });
         if ($search) {
             $receivedQuery->where(function ($q) use ($search) {
                 $q->where('to', 'LIKE', "%{$search}%")
@@ -194,8 +202,8 @@ class SellerController extends Controller
             });
         }
 
-        $received = $receivedQuery->paginate($limit);
-        $sent = $sentQuery->paginate($limit);
+        $received = $receivedQuery->orderBy('created_at', 'desc')->paginate($limit);
+        $sent = $sentQuery->orderBy('created_at', 'desc')->paginate($limit);
 
         $ttl = $received->total();
         $ttlpage = ceil($ttl / $limit);
@@ -205,29 +213,24 @@ class SellerController extends Controller
         return view('seller.help.help', compact('received', 'sent', 'ttl', 'ttlpage', 'sentttl', 'sentttlpage'));
     }
 
+
+
     public function detailHelp($id)
     {
-        $getId = Help::find($id);
-        if ($getId) {
-            $helpId = $getId->help_id;
-            $start = Help::find($id);
-            $reply = Help::where('help_id', $helpId)->get();
+        $start = Help::find($id);
+        if ($start) {
+            $reply = Help::where('help_id', $start->help_id)->where('subject', $start->subject)->get();
         } else {
-            $start = $getId;
             $reply = null;
         }
 
         return view('seller.help.help_detail', compact('start', 'reply'));
     }
 
-
-
     public function addHelp()
     {
         return view('seller.help.help_add');
     }
-
-
 
     public function storeHelp(Request $request)
     {
@@ -296,9 +299,6 @@ class SellerController extends Controller
 
     public function storeReply(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'body' => 'present|string|max:255',
-        // ]);
         $help = new Help();
 
         if (!empty($request->image)) {
@@ -313,19 +313,19 @@ class SellerController extends Controller
         $check = Help::find($request->id);
         $help->help_id = $check->help_id;
         $help->name = Auth::user()->name;
-        $help->to = 'admin@asia-hd.com';
+        $help->to = $check->to == Auth::user()->email ? $check->from : $check->to;
         $help->from = Auth::user()->email;
         $help->shop_name = $shopName;
-        $help->subject = $request->subject;
+        $help->subject = $check->subject;
         $help->body = $request->body;
         $help->img = $imageName;
         $help->updated_at = Carbon::now();
         $help->save();
 
         $helpDate = Carbon::now()->format('M d, Y');
-        $adminemail = 'admin@asia-hd.com';
+        $adminemail = $help->to;
         $data = [
-            'title' => $request->subject,
+            'title' => $check->subject,
             'content' => $request->body,
             'imgName' => $imageName,
             'helpDate' => $helpDate,

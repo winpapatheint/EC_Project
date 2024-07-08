@@ -279,6 +279,7 @@ Route::post('/admin/sendall', [AdminController::class, 'noticeall'])->name('noti
 Route::post('/admin/noticedelete', [AdminController::class, 'deleteNotice'])->name('noticedelete');
 Route::post('/admin/reveivedelete', [AdminController::class, 'deleteReceive'])->name('receivedelete');
 Route::post('/admin/replyemail', [AdminController::class, 'storeReply'])->name('emailreply');
+Route::post('/adminreplyresent', [AdminController::class, 'storeReply'])->middleware(['auth', 'role:admin'])->name('admin.reply.sent');
 //endhelp
 
 //startcategory

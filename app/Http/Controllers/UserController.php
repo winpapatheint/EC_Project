@@ -42,7 +42,7 @@ class UserController extends Controller
     {
 
         $prefecture = Prefecture::get();
-        return view('front-end.user-register',compact('prefecture'));
+        return view('front-end.user-register', compact('prefecture'));
     }
 
     //for new user registration for login
@@ -97,7 +97,6 @@ class UserController extends Controller
             ]);
 
             return view('auth.buyer-verify-email', compact('user'));
-
         } catch (\Exception $e) {
             DB::rollback();
             return back()->withErrors(['error' => 'An error occurred while processing your request. Please try again.']);
@@ -105,7 +104,7 @@ class UserController extends Controller
     }
     public function indexuser()
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
 
         if (Auth::check()) {
             $address = BuyerAddress::join('buyers', 'buyers.id', 'buyer_addresses.buyer_id')
@@ -113,7 +112,7 @@ class UserController extends Controller
 
             $profile = route('user_profile');
 
-            $buyer = DB::table('buyers')->where('user_id',Auth::user()->id)->first();
+            $buyer = DB::table('buyers')->where('user_id', Auth::user()->id)->first();
             $orderCount = Order::where('buyer_id', $buyer->id)->count();
 
             $orderDetails = OrderDetail::where('buyer_id', $buyer->id)->get();
@@ -149,7 +148,6 @@ class UserController extends Controller
         } else {
             return redirect()->route('login');
         }
-
     }
     //Show Orders
     public function showOrders(Request $request)
@@ -162,7 +160,7 @@ class UserController extends Controller
             $orders = DB::table('orders')
                 ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
                 ->where('buyers.user_id', $user->id)
-                ->select('orders.*','orders.created_at as order_created_at', 'orders.id as order_id', 'buyers.*')
+                ->select('orders.*', 'orders.created_at as order_created_at', 'orders.id as order_id', 'buyers.*')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($limit);
 
@@ -174,7 +172,7 @@ class UserController extends Controller
             return redirect()->route('login');
         }
     }
-   //Show Order Details
+    //Show Order Details
     public function showOrderDetails(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
@@ -184,27 +182,42 @@ class UserController extends Controller
             ->join('products', 'products.id', 'order_details.product_id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->with('prefecture')
-            ->select('orders.id as order_id', 'order_details.id as order_detail_id','products.id as product_id','orders.*',
-            'products.*','products.selling_price as price', 'order_details.*', 'orders.created_at as order_created_at',
-            'order_details.name as order_details_name', 'order_details.phone as order_details_phone')
+            ->select(
+                'orders.id as order_id',
+                'order_details.id as order_detail_id',
+                'products.id as product_id',
+                'orders.*',
+                'products.*',
+                'products.selling_price as price',
+                'order_details.*',
+                'orders.created_at as order_created_at',
+                'order_details.name as order_details_name',
+                'order_details.phone as order_details_phone'
+            )
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $request->id)
             ->get();
 
         return view('front-end.user-order-details', compact('orderDetails', 'user'));
-
     }
 
     public function showOrderDetailTracking(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $orderDetail = OrderDetail::with('prefecture')->with('seller')->with('seller.prefecture')
-                                    ->select('order_details.*', 'products.*','order_details.post_code as cus_post_code', 'order_details.city as cus_city',
-                                            'order_details.chome as cus_chome','order_details.building as cus_building',
-                                            'order_details.room_no as cus_room', 'order_details.created_at as order_detail_created_at')
-                                    ->leftjoin('products', 'order_details.product_id', 'products.id')
-                                    ->where('order_details.id', $request->id)
-                                    ->first();
+            ->select(
+                'order_details.*',
+                'products.*',
+                'order_details.post_code as cus_post_code',
+                'order_details.city as cus_city',
+                'order_details.chome as cus_chome',
+                'order_details.building as cus_building',
+                'order_details.room_no as cus_room',
+                'order_details.created_at as order_detail_created_at'
+            )
+            ->leftjoin('products', 'order_details.product_id', 'products.id')
+            ->where('order_details.id', $request->id)
+            ->first();
         return view('front-end.user-order-detail-tracking', compact('user', 'orderDetail'));
     }
     //Show Order Tracking
@@ -213,22 +226,20 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $id = $request->id;
         $order = Order::find($id);
-        $process = Process::where('order_id',$id)->latest()->get();
+        $process = Process::where('order_id', $id)->latest()->get();
         $orderDetails = DB::table('order_details')
             ->join('sellers', 'order_details.seller_id', '=', 'sellers.id')
             ->join('buyers', 'order_details.buyer_id', '=', 'buyers.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('order_details.id', $id)
-            ->select('order_details.*', 'order_details.id as order_id','sellers.*','order_details.post_code as code','order_details.city as buyercity','order_details.chome as buyerchome','order_details.building as buyerbuilding','order_details.room_no as buyerroom' )
+            ->select('order_details.*', 'order_details.id as order_id', 'sellers.*', 'order_details.post_code as code', 'order_details.city as buyercity', 'order_details.chome as buyerchome', 'order_details.building as buyerbuilding', 'order_details.room_no as buyerroom')
             ->get();
 
-            foreach ($orderDetails as $location)
-            {
-                $locationcity = $location->buyercity;
-                $locationchome = $location->buyerchome;
-            }
-        return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails','locationcity','locationcity'));
-
+        foreach ($orderDetails as $location) {
+            $locationcity = $location->buyercity;
+            $locationchome = $location->buyerchome;
+        }
+        return view('front-end.user-order-tracking', compact('user', 'order', 'process', 'orderDetails', 'locationcity', 'locationcity'));
     }
     //Show Delivery Status
     public function showDelistatus(Request $request)
@@ -237,29 +248,28 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $orders = Product::leftjoin('order_details', 'products.id', 'order_details.product_id')
-                    ->leftjoin('orders', 'order_details.order_id', 'orders.id')
-                    ->where('order_details.buyer_id', $buyer->id)
-                    ->orderBy('orders.order_code', 'desc')
-                    ->paginate($limit);
+            ->leftjoin('orders', 'order_details.order_id', 'orders.id')
+            ->where('order_details.buyer_id', $buyer->id)
+            ->orderBy('orders.order_code', 'desc')
+            ->paginate($limit);
 
         $ttl = $orders->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        return view('front-end.user-delivery-status', compact('user','orders','ttl', 'ttlpage'));
-
+        return view('front-end.user-delivery-status', compact('user', 'orders', 'ttl', 'ttlpage'));
     }
     //Show Addresses
     public function showAddresses(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                     ->where('buyers.user_id', $user->id)
-                     ->with('prefecture')->get();
+        $data = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username', 'buyers.email as useremail',)
+            ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', $user->id)
+            ->with('prefecture')->get();
 
         //$user = Buyers::first();
-            return view('front-end.user-address',compact('data','user','prefecture'));
+        return view('front-end.user-address', compact('data', 'user', 'prefecture'));
     }
     //Add New Address
     public function createNewaddress(Request $request)
@@ -294,12 +304,12 @@ class UserController extends Controller
             'phone.required' => 'Please provide your phone number.',
             'phone.min' => 'The phone number must not be exceed 255 characters.',
         ]);
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $prefecture = Prefecture::get();
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city','buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id','buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                     ->get();
+        $data = BuyerAddress::select('buyer_addresses.id', 'buyer_addresses.name', 'buyer_addresses.post_code', 'buyer_addresses.city', 'buyer_addresses.chome', 'buyer_addresses.building', 'buyer_addresses.room_no', 'buyer_addresses.prefecture_id', 'buyer_addresses.phone', 'buyer_addresses.place', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail',)
+            ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+            ->get();
 
         if ($request->filled('name', 'post_code', 'city', 'chome', 'building', 'roomno', 'place', 'phone')) {
 
@@ -319,7 +329,7 @@ class UserController extends Controller
             ]);
 
             if ($Buyer_addresses) {
-                return redirect()->route('user_addresses',compact('data','user','prefecture'));
+                return redirect()->route('user_addresses', compact('data', 'user', 'prefecture'));
             } else {
                 // Handle failure to save
                 return back()->withInput()->withErrors(['error' => 'Failed to save address.']);
@@ -333,17 +343,29 @@ class UserController extends Controller
     //Edit Address
     public function editAddress(Request $request)
     {
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $buyer =Buyer::where('user_id', Auth::user()->id)->first();
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $prefecture = Prefecture::get();
 
         $buyerAddress = BuyerAddress::find($request->id);
 
-        $data = BuyerAddress::select('buyer_addresses.id','buyer_addresses.name','buyer_addresses.post_code','buyer_addresses.city',
-                                    'buyer_addresses.chome','buyer_addresses.building','buyer_addresses.room_no','buyer_addresses.prefecture_id',
-                                    'buyer_addresses.phone','buyer_addresses.place','buyers.id as userid', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                     ->get();
+        $data = BuyerAddress::select(
+            'buyer_addresses.id',
+            'buyer_addresses.name',
+            'buyer_addresses.post_code',
+            'buyer_addresses.city',
+            'buyer_addresses.chome',
+            'buyer_addresses.building',
+            'buyer_addresses.room_no',
+            'buyer_addresses.prefecture_id',
+            'buyer_addresses.phone',
+            'buyer_addresses.place',
+            'buyers.id as userid',
+            'buyers.name as username',
+            'buyers.email as useremail',
+        )
+            ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+            ->get();
 
         if ($buyerAddress) {
 
@@ -359,7 +381,7 @@ class UserController extends Controller
                 'place' => $request->place,
                 'phone' => $request->phone,
             ]);
-            return redirect()->route('user_addresses',compact('data','user','prefecture'));
+            return redirect()->route('user_addresses', compact('data', 'user', 'prefecture'));
         } else {
             // Return an error response
             return response()->json(['error' => 'Address not found'], 404);
@@ -370,60 +392,57 @@ class UserController extends Controller
     {
         $prefecture = Prefecture::get();
         $address = BuyerAddress::find($id);
-        if ($address)
-        {
+        if ($address) {
             $address->delete();
-            return redirect()->route('user_addresses',compact('prefecture'));
-        }
-        else
-        {
+            return redirect()->route('user_addresses', compact('prefecture'));
+        } else {
             return back()->with('error', 'Address not found.');
         }
     }
     //Show Payment Method
     public function showCard(Request $request)
     {
-    // Retrieve the encrypted account number from the database
-    //$encryptedAccountNumber = $model->account_number; // Assuming $model contains the database record
+        // Retrieve the encrypted account number from the database
+        //$encryptedAccountNumber = $model->account_number; // Assuming $model contains the database record
 
-    // Decrypt the account number
-    //$decryptedAccountNumber = Crypt::decryptString($encryptedAccountNumber);
+        // Decrypt the account number
+        //$decryptedAccountNumber = Crypt::decryptString($encryptedAccountNumber);
 
-    // Extract the last four digits
-    //$lastFourDigits = substr($decryptedAccountNumber, -4);
+        // Extract the last four digits
+        //$lastFourDigits = substr($decryptedAccountNumber, -4);
 
-    // Use $lastFourDigits as needed
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $data = BuyerPayment::select('buyer_payments.*','buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
-        ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
-        ->where('buyers.user_id', Auth::user()->id)
-        ->get();
-        return view('front-end.user-payment-method',compact('data','user'));
+        // Use $lastFourDigits as needed
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $data = BuyerPayment::select('buyer_payments.*', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
+            ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->get();
+        return view('front-end.user-payment-method', compact('data', 'user'));
     }
     //Add New Card
     public function createNewcard(Request $request)
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $validatedData = $request->validate([
-                'acc_name' => 'required|string|max:255',
-                'acc_no_1' => 'required|string|max:4',
-                'acc_no_2' => 'required|string|max:4',
-                'acc_no_3' => 'required|string|max:4',
-                'acc_no_4' => 'required|string|max:4',
-                'expired_date_1' => 'required|string|max:2',
-                'expired_date_2' => 'required|string|max:2',
-                'card_type' => 'required|in:Visa,Master,RuPay,Maestro',
+            'acc_name' => 'required|string|max:255',
+            'acc_no_1' => 'required|string|max:4',
+            'acc_no_2' => 'required|string|max:4',
+            'acc_no_3' => 'required|string|max:4',
+            'acc_no_4' => 'required|string|max:4',
+            'expired_date_1' => 'required|string|max:2',
+            'expired_date_2' => 'required|string|max:2',
+            'card_type' => 'required|in:Visa,Master,RuPay,Maestro',
 
-            ], [
-                'acc_name.required' => 'Please provide your account name.',
-                'acc_name.max' => 'The account name must not exceed 255 characters.',
-                'acc_no_*.required' => 'Please provide your account number.',
-                'acc_no_*.max' => 'Each part of the account number must not exceed 4 characters.',
-                'expired_date_*.required' => 'Please provide the expired date.',
-                'expired_date_*.max' => 'Each part of the expiration date must not exceed 2 characters.',
-                'card_type.required' => 'Please select a card type.',
-                'card_type.in' => 'Please select a valid card type (Visa, Master, RuPay, Maestro).',
-            ]);
+        ], [
+            'acc_name.required' => 'Please provide your account name.',
+            'acc_name.max' => 'The account name must not exceed 255 characters.',
+            'acc_no_*.required' => 'Please provide your account number.',
+            'acc_no_*.max' => 'Each part of the account number must not exceed 4 characters.',
+            'expired_date_*.required' => 'Please provide the expired date.',
+            'expired_date_*.max' => 'Each part of the expiration date must not exceed 2 characters.',
+            'card_type.required' => 'Please select a card type.',
+            'card_type.in' => 'Please select a valid card type (Visa, Master, RuPay, Maestro).',
+        ]);
         $acc_no = $request->acc_no_1 . $request->acc_no_2 . $request->acc_no_3 . $request->acc_no_4;
         $expired_date = $request->expired_date_1 . $request->expired_date_2;
 
@@ -447,7 +466,7 @@ class UserController extends Controller
         if ($buyerCard) {
 
             $buyerCard->update([
-                'id'=> $request->id,
+                'id' => $request->id,
                 'acc_name' => $request->acc_name,
                 'acc_no' => $request->acc_no,
                 'expired_date' => $request->expired_date,
@@ -459,39 +478,36 @@ class UserController extends Controller
             return response()->json(['error' => 'Address not found'], 404);
         }
     }
-   //Remove Card
-   public function removeCard($id)
-   {
-       $card = BuyerPayment::find($id);
-       if ($card) {
-       $card->delete();
-       return back()->with('success', 'Address removed successfully.');
-       return redirect()->route('user_cards');
-       } else {
-           return back()->with('error', 'Address not found.');
-       }
-   }
-   //Show Profile
-   public function showProfile(Request $request)
-   {
-        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+    //Remove Card
+    public function removeCard($id)
+    {
+        $card = BuyerPayment::find($id);
+        if ($card) {
+            $card->delete();
+            return back()->with('success', 'Address removed successfully.');
+            return redirect()->route('user_cards');
+        } else {
+            return back()->with('error', 'Address not found.');
+        }
+    }
+    //Show Profile
+    public function showProfile(Request $request)
+    {
+        $user = User::where('id', Auth::user()->id)->first();
         $buyer = DB::table('buyers')
-                    ->join('users', 'buyers.user_id', '=', 'users.id')
-                    ->where('buyers.user_id', Auth::user()->id)
-                    ->select('users.*', 'buyers.*')
-                    ->first();
+            ->join('users', 'buyers.user_id', '=', 'users.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->select('users.*', 'buyers.*')
+            ->first();
         $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
         $maskedPassword = str_repeat('*', strlen($user->password));
         $prefecture = Prefecture::get();
-        if($user && $buyer)
-        {
-            return view('front-end.user-profile',compact('user','buyer', 'buyerAddress','maskedPassword', 'prefecture'));
-        }
-        else
-        {
+        if ($user && $buyer) {
+            return view('front-end.user-profile', compact('user', 'buyer', 'buyerAddress', 'maskedPassword', 'prefecture'));
+        } else {
             return redirect()->route('login');
         }
-   }
+    }
     //Edit Profile
     public function editProfile(Request $request)
     {
@@ -499,8 +515,7 @@ class UserController extends Controller
         $buyer = Buyer::find($request->buyer_id);
         $buyerAddress = BuyerAddress::where('buyer_id', $buyer->id)->where('main_address', 1)->first();
 
-        if ($user && $buyer && $buyerAddress)
-        {
+        if ($user && $buyer && $buyerAddress) {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -523,9 +538,7 @@ class UserController extends Controller
                 'place' => $request->place,
             ]);
             return redirect()->route('user_profile');
-        }
-        else
-        {
+        } else {
             return response()->json(['error' => 'Profile not found'], 404);
         }
     }
@@ -566,11 +579,11 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $productid = $request->id;
 
-        if(isset($productid)){
+        if (isset($productid)) {
             $product = DB::table('products')->where('id', $productid)->first();
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
 
-            if($product)
+            if ($product)
                 $cart = Cart::firstorcreate([
                     'product_id' => $product->id,
                     'seller_id' => $product->seller_id,
@@ -582,38 +595,38 @@ class UserController extends Controller
         }
 
         $cartLists = DB::table('carts')
-                    ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                    ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                    ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                    ->where('buyers.user_id', Auth::user()->id)
-                    ->select(
-                        'carts.*',
-                        'carts.id as cart_id',
-                        'buyers.*',
-                        'buyers.id as buyer_id',
-                        'carts.product_id as product_id',
-                        'products.*',
-                        DB::raw('CASE
+            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->select(
+                'carts.*',
+                'carts.id as cart_id',
+                'buyers.*',
+                'buyers.id as buyer_id',
+                'carts.product_id as product_id',
+                'products.*',
+                DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                     WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
                                     ELSE NULL
                                 END AS coupon_id'),
-                        DB::raw('CASE
+                DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id AND status = 1)
                                     WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id AND status = 1)
                                     ELSE NULL
                                 END AS coupon_code')
-                    )
-                    ->get();
+            )
+            ->get();
         $maxDeliveryPrices = [];
-        foreach($cartLists as $key => $cartItem){
+        foreach ($cartLists as $key => $cartItem) {
             $productID = $cartItem->id;
             $sellerID = $cartItem->seller_id;
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.user_id', $sellerID)
-                        ->select('sellers.shop_name as shopname')
-                        ->first();
+                ->where('sellers.user_id', $sellerID)
+                ->select('sellers.shop_name as shopname')
+                ->first();
             $cartItem->shop_name = $shopName->shopname;
 
             $sellerID = $cartItem->seller_id;
@@ -629,48 +642,48 @@ class UserController extends Controller
 
         $discount = 0;
         $couponapplycheck = 0;
-        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck' ,'shippingFee', 'maxDeliveryPrices'));
+        return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
     }
 
     public function removeCart($id)
     {
         $cartItem = DB::table('carts')
-                    ->delete($id);
+            ->delete($id);
 
-                    $cartLists = DB::table('carts')
-                    ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                    ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                    ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                    ->where('buyers.user_id', Auth::user()->id)
-                    ->select(
-                        'carts.*',
-                        'carts.id as cart_id',
-                        'buyers.*',
-                        'buyers.id as buyer_id',
-                        'carts.product_id as product_id',
-                        'products.*',
-                        DB::raw('CASE
+        $cartLists = DB::table('carts')
+            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->select(
+                'carts.*',
+                'carts.id as cart_id',
+                'buyers.*',
+                'buyers.id as buyer_id',
+                'carts.product_id as product_id',
+                'products.*',
+                DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                     WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
                                     ELSE NULL
                                 END AS coupon_id'),
-                        DB::raw('CASE
+                DB::raw('CASE
                                     WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                     WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
                                     ELSE NULL
                                 END AS coupon_code')
-                    )
-                    ->get();
+            )
+            ->get();
 
         $maxDeliveryPrices = [];
-        foreach($cartLists as $key => $cartItem){
+        foreach ($cartLists as $key => $cartItem) {
             $productID = $cartItem->id;
             $sellerID = $cartItem->seller_id;
 
             $shopName = DB::table('sellers')
-                        ->where('sellers.user_id', $sellerID)
-                        ->select('sellers.shop_name as shopname')
-                        ->first();
+                ->where('sellers.user_id', $sellerID)
+                ->select('sellers.shop_name as shopname')
+                ->first();
             $cartItem->shop_name = $shopName->shopname;
 
             $sellerID = $cartItem->seller_id;
@@ -685,14 +698,13 @@ class UserController extends Controller
             $shippingFee = 0;
 
         $result = DB::table('coupons')
-                ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
-                ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
-                ->select('coupons.discount_amount')
-                ->pluck('coupons.discount_amount');
-                $discount = 0;
+            ->join('coupon_details', 'coupon_details.coupon_id', '=', 'coupons.id')
+            ->join('buyers', 'coupon_details.buyer_id', '=', 'buyers.id')
+            ->select('coupons.discount_amount')
+            ->pluck('coupons.discount_amount');
+        $discount = 0;
         $couponapplycheck = 0;
         return view('front-end.cart', compact('cartLists', 'discount', 'couponapplycheck', 'shippingFee', 'maxDeliveryPrices'));
-
     }
     public function removeCartProduct($id)
     {
@@ -718,39 +730,39 @@ class UserController extends Controller
             $cartItem->save();
 
             $cartLists = DB::table('carts')
-                            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-                            ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                            ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
-                            ->where('buyers.user_id', Auth::user()->id)
-                            ->select(
-                                'carts.*',
-                                'carts.id as cart_id',
-                                'buyers.*',
-                                'buyers.id as buyer_id',
-                                'carts.product_id as product_id',
-                                'products.*',
-                                DB::raw('CASE
+                ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+                ->leftJoin('buyers', 'carts.buyer_id', '=', 'buyers.id')
+                ->leftJoin('sellers', 'carts.seller_id', '=', 'sellers.user_id')
+                ->where('buyers.user_id', Auth::user()->id)
+                ->select(
+                    'carts.*',
+                    'carts.id as cart_id',
+                    'buyers.*',
+                    'buyers.id as buyer_id',
+                    'carts.product_id as product_id',
+                    'products.*',
+                    DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN sellers.coupon_id
                                             WHEN products.coupon_id IS NOT NULL THEN products.coupon_id
                                             ELSE NULL
                                         END AS coupon_id'),
-                                DB::raw('CASE
+                    DB::raw('CASE
                                             WHEN sellers.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = sellers.coupon_id)
                                             WHEN products.coupon_id IS NOT NULL THEN (SELECT coupon_code FROM coupons WHERE id = products.coupon_id)
                                             ELSE NULL
                                         END AS coupon_code')
-                            )
-                            ->get();
+                )
+                ->get();
 
             $maxDeliveryPrices = [];
-            foreach($cartLists as $key => $cartItem){
+            foreach ($cartLists as $key => $cartItem) {
                 $productID = $cartItem->id;
                 $sellerID = $cartItem->seller_id;
 
                 $shopName = DB::table('sellers')
-                            ->where('sellers.user_id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
+                    ->where('sellers.user_id', $sellerID)
+                    ->select('sellers.shop_name as shopname')
+                    ->first();
                 $cartItem->shop_name = $shopName->shopname;
 
                 $sellerID = $cartItem->seller_id;
@@ -784,66 +796,50 @@ class UserController extends Controller
     public function applyCouponCode(Request $request)
     {
         $coupon = Coupon::where('coupon_code', $request->coupon)
-                    ->where('status', 1)->first();
-        if (!$coupon)
-        {
+            ->where('status', 1)->first();
+        if (!$coupon) {
             $refreshCart = 'Invalid Coupon Code. Please try again!';
             return redirect()->back()->with(compact('refreshCart'));
-        }
-        else
-        {
+        } else {
             $couponCountCheck = CouponDetail::where('coupon_id', $coupon->id)->count();
-            if ($couponCountCheck >= $coupon->valid_count)
-            {
+            if ($couponCountCheck >= $coupon->valid_count) {
                 $refreshCart = "The coupon (" . $request->coupon . ") has reached its maximum usage limit.";
                 return redirect()->back()->with(compact('refreshCart'));
             }
-            if ($coupon->startdate > Carbon::now()->endOfDay())
-            {
+            if ($coupon->startdate > Carbon::now()->endOfDay()) {
                 $refreshCart = "The coupon (" . $request->coupon . ") cannot be used until " . date('Y/m/d', strtotime($coupon->startdate)) . ".";
                 return redirect()->back()->with(compact('refreshCart'));
             }
-            if ($coupon->enddate < Carbon::now()->startOfDay())
-            {
+            if ($coupon->enddate < Carbon::now()->startOfDay()) {
                 $refreshCart = "This coupon (" . $request->coupon . ") is already expired.";
                 return redirect()->back()->with(compact('refreshCart'));
             }
             $buyer = Buyer::where('user_id', Auth::user()->id)->first();
             $cartLists = Cart::with('product')->with('buyer')->with('seller')
-                        ->where('buyer_id', $buyer->id)->get();
+                ->where('buyer_id', $buyer->id)->get();
             $cartSellerTotalAmount = [];
             $couponUsedSeller = 0;
             $couponUsedSellerName = "";
             $couponUsedProduct = 0;
-            foreach ($cartLists as $cart)
-            {
-                if ($cart->seller->coupon_status == 1 && $cart->seller->coupon_id == $coupon->id)
-                {
+            foreach ($cartLists as $cart) {
+                if ($cart->seller->coupon_status == 1 && $cart->seller->coupon_id == $coupon->id) {
                     $couponUsedSeller = $cart->seller_id;
                     $couponUsedSellerName = $cart->seller->shop_name;
-                }
-                else if ($cart->product->coupon_status == 1 && $cart->product->coupon_id == $coupon->id)
-                {
+                } else if ($cart->product->coupon_status == 1 && $cart->product->coupon_id == $coupon->id) {
                     $couponUsedProduct = $cart->product_id;
                 }
-                if (!isset($cartSellerTotalAmount[$cart->seller_id]))
-                {
+                if (!isset($cartSellerTotalAmount[$cart->seller_id])) {
                     $cartSellerTotalAmount[$cart->seller_id] = $cart->quantity * $cart->product->selling_price;
-                }
-                else
-                {
+                } else {
                     $cartSellerTotalAmount[$cart->seller_id] += $cart->quantity * $cart->product->selling_price;
                 }
             }
-            if ($couponUsedSeller == 0 && $couponUsedProduct == 0)
-            {
+            if ($couponUsedSeller == 0 && $couponUsedProduct == 0) {
                 $refreshCart = 'Invalid Coupon Code. Please use the displayed coupon code!';
                 return redirect()->back()->with(compact('refreshCart'));
-            }
-            else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount)
-            {
+            } else if ($couponUsedSeller != 0 && $cartSellerTotalAmount[$couponUsedSeller] < $coupon->mini_amount) {
                 $refreshCart = 'To use coupon (' . $request->coupon . '), minimum order is ¥'
-                . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
+                    . $coupon->mini_amount . ' at ' . $couponUsedSellerName . '. Please try again!';
                 return redirect()->back()->with(compact('refreshCart'));
             }
             $discount = $coupon->discount_amount;
@@ -857,25 +853,21 @@ class UserController extends Controller
     {
         // for the updated cart check
         $realCart = Cart::leftjoin('buyers', 'buyers.id', 'carts.buyer_id')
-                    ->where('buyers.user_id', Auth::user()->id)->get();
-        if($realCart->count() != count($request->product))
-        {
+            ->where('buyers.user_id', Auth::user()->id)->get();
+        if ($realCart->count() != count($request->product)) {
             $refreshCart = 'Updated your cart. Please try again!';
             return redirect()->back()->with(compact('refreshCart'));
         }
 
         // for the instock check
         $instockCheck = [];
-        foreach ($request->product as $key => $prod)
-        {
+        foreach ($request->product as $key => $prod) {
             $checkInstockProduct = Product::where('id', $prod)->first();
-            if ($checkInstockProduct->in_stock < $request->quantity[$key])
-            {
+            if ($checkInstockProduct->in_stock < $request->quantity[$key]) {
                 $instockCheck[] = $checkInstockProduct->id;
             }
         }
-        if ($instockCheck)
-        {
+        if ($instockCheck) {
             $refreshCart = 'Please adjust your order quantity!';
             return redirect()->back()->with(compact('refreshCart', 'instockCheck'));
         }
@@ -890,48 +882,60 @@ class UserController extends Controller
         $couponUsedSellerId = 0;
         $couponUsedProductId = 0;
         $couponId = 0;
-        if(isset($request->coupon_used_seller_id))
-        $couponUsedSellerId = $request->coupon_used_seller_id;
-        if(isset($request->coupon_used_product_id))
-        $couponUsedProductId = $request->coupon_used_product_id;
-        if(isset($request->coupon_id))
-        $couponId = $request->coupon_id;
+        if (isset($request->coupon_used_seller_id))
+            $couponUsedSellerId = $request->coupon_used_seller_id;
+        if (isset($request->coupon_used_product_id))
+            $couponUsedProductId = $request->coupon_used_product_id;
+        if (isset($request->coupon_id))
+            $couponId = $request->coupon_id;
 
-        $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username','buyers.email as useremail',)
-                     ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
-                     ->where('buyers.user_id', Auth::user()->id)
-                     ->with('prefecture')->get();
+        $buyerAddress = BuyerAddress::select('buyer_addresses.*', 'buyers.name as username', 'buyers.email as useremail',)
+            ->join('buyers', 'buyer_addresses.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->with('prefecture')->get();
 
         $buyerPayment = BuyerPayment::select('buyer_payments.id', 'buyer_payments.acc_name', 'buyer_payments.acc_no', 'buyer_payments.card_type', 'buyer_payments.expired_date', 'buyer_payments.security_code', 'buyer_payments.img', 'buyers.id as userid', 'buyers.name as username', 'buyers.email as useremail')
-                    ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
-                    ->where('buyers.user_id', Auth::user()->id)
-                    ->get();
+            ->join('buyers', 'buyer_payments.buyer_id', '=', 'buyers.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->get();
 
         $cartLists = DB::table('carts')
-                    ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
-                    ->join('products', 'carts.product_id', '=', 'products.id')
-                    ->where('buyers.user_id', Auth::user()->id)
-                    ->select('carts.*', 'carts.id as cart_id','buyers.*','buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
-                    ->get();
+            ->join('buyers', 'carts.buyer_id', '=', 'buyers.id')
+            ->join('products', 'carts.product_id', '=', 'products.id')
+            ->where('buyers.user_id', Auth::user()->id)
+            ->select('carts.*', 'carts.id as cart_id', 'buyers.*', 'buyers.id as buyer_id', 'carts.product_id as product_id', 'products.*')
+            ->get();
 
-            foreach($cartLists as $cartItem){
+        foreach ($cartLists as $cartItem) {
 
-                $productID = $cartItem->id;
-                $sellerID = $cartItem->seller_id;
+            $productID = $cartItem->id;
+            $sellerID = $cartItem->seller_id;
 
 
-                $shopName = DB::table('sellers')
-                            ->where('sellers.user_id', $sellerID)
-                            ->select('sellers.shop_name as shopname')
-                            ->first();
-                $cartItem->shop_name = $shopName->shopname;
-            }
+            $shopName = DB::table('sellers')
+                ->where('sellers.user_id', $sellerID)
+                ->select('sellers.shop_name as shopname')
+                ->first();
+            $cartItem->shop_name = $shopName->shopname;
+        }
 
         $bankAccounts = BankAccount::all();
 
-            return view('front-end.checkout',compact('buyerAddress','buyerPayment','cartLists','subTotal','couponDiscount',
-            'shippingFee','total1', 'shop', 'maxDeli', 'couponUsedSellerId', 'couponUsedProductId', 'couponId', 'bankAccounts'));
-
+        return view('front-end.checkout', compact(
+            'buyerAddress',
+            'buyerPayment',
+            'cartLists',
+            'subTotal',
+            'couponDiscount',
+            'shippingFee',
+            'total1',
+            'shop',
+            'maxDeli',
+            'couponUsedSellerId',
+            'couponUsedProductId',
+            'couponId',
+            'bankAccounts'
+        ));
     }
     //Purchase
     public function paymentCompleted(Request $request)
@@ -997,13 +1001,12 @@ class UserController extends Controller
                 'coupon_used_seller_id' => $couponUsedSellerId,
                 'coupon_used_product_id' => $couponUsedProductId,
                 'shipping_fee' => $shippingFee,
-                'total_qty'=> $totalQty,
-                'payment_type'=> $payment,
-                'payment_approved'=> $paymentApproved,
+                'total_qty' => $totalQty,
+                'payment_type' => $payment,
+                'payment_approved' => $paymentApproved,
             ]);
 
-            if ($couponId != 0)
-            {
+            if ($couponId != 0) {
                 CouponDetail::create([
                     'buyer_id' => (int)$buyerId,
                     'coupon_id' => $couponId,
@@ -1013,8 +1016,7 @@ class UserController extends Controller
                 $couponDetailCheck = CouponDetail::where('coupon_id', $couponId)->get();
                 $couponCheck->used_count = $couponDetailCheck->count();
                 $couponCheck->save();
-                if ($couponDetailCheck->count() >= $couponCheck->valid_count)
-                {
+                if ($couponDetailCheck->count() >= $couponCheck->valid_count) {
                     $couponCheck->status = 0;
                     $couponCheck->save();
                 }
@@ -1026,7 +1028,7 @@ class UserController extends Controller
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 'payment_method' => $payment
-                ]);
+            ]);
 
             foreach ($productIds as $key => $product_id) {
                 $orderedProduct = Product::where('id', $product_id)->first();
@@ -1034,10 +1036,8 @@ class UserController extends Controller
                 $usedDeliStatus = 0;
                 $usedShopCouponStatus = 0;
                 $usedProductCouponStatus = 0;
-                foreach ($shopIds as $shopKey => $shopId)
-                {
-                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey])
-                    {
+                foreach ($shopIds as $shopKey => $shopId) {
+                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey]) {
                         $usedDeliStatus = 1;
                         unset($shopIds[$shopKey]);
                         unset($maxDelis[$shopKey]);
@@ -1051,45 +1051,45 @@ class UserController extends Controller
                 if ($order->coupon_used_product_id == (int)$product_id)
                     $usedProductCouponStatus = 1;
 
-                    $orderdetailsData = [
-                        'order_id' => $order->id,
-                        'buyer_id' => (int)$buyerId,
-                        'seller_id' => $sellerId[$key],
-                        'product_id' => (int)$product_id,
-                        'prefecture_id' => $prefectureId,
-                        'color' => $cart->color,
-                        'size' => $cart->size,
-                        'qty' => $quantities[$key],
-                        'price' => $orderedProduct->selling_price,
-                        'delivery_price' => $orderedProduct->delivery_price,
-                        'used_delivery_price' => $usedDeliStatus,
-                        'used_shop_coupon_status' => $usedShopCouponStatus,
-                        'used_product_coupon_status' => $usedProductCouponStatus,
-                        'payment_approved' => $paymentApproved,
-                        'amount' => $productamounts[$key],
-                        'commission' => $orderedProduct->commission,
-                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
-                        'transfer_status' => 0,
-                        'name' => $name,
-                        'phone' => $phone,
-                        'post_code' => $postcode,
-                        'city' => $city,
-                        'chome' => $chome,
-                        'building' => $building,
-                        'room_no' => $room,
-                    ];
+                $orderdetailsData = [
+                    'order_id' => $order->id,
+                    'buyer_id' => (int)$buyerId,
+                    'seller_id' => $sellerId[$key],
+                    'product_id' => (int)$product_id,
+                    'prefecture_id' => $prefectureId,
+                    'color' => $cart->color,
+                    'size' => $cart->size,
+                    'qty' => $quantities[$key],
+                    'price' => $orderedProduct->selling_price,
+                    'delivery_price' => $orderedProduct->delivery_price,
+                    'used_delivery_price' => $usedDeliStatus,
+                    'used_shop_coupon_status' => $usedShopCouponStatus,
+                    'used_product_coupon_status' => $usedProductCouponStatus,
+                    'payment_approved' => $paymentApproved,
+                    'amount' => $productamounts[$key],
+                    'commission' => $orderedProduct->commission,
+                    'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                    'transfer_status' => 0,
+                    'name' => $name,
+                    'phone' => $phone,
+                    'post_code' => $postcode,
+                    'city' => $city,
+                    'chome' => $chome,
+                    'building' => $building,
+                    'room_no' => $room,
+                ];
                 OrderDetail::create($orderdetailsData);
 
                 $productForInStock = Product::find($product_id);
                 $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];
                 $productForInStock->save();
             }
-            $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
-                    ->delete();
+            $cartItem = DB::table('carts')->where('buyer_id', $buyerId)
+                ->delete();
 
             DB::commit();
             $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
-                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
+                ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 \Mail::to($admin->email)->send(new \App\Mail\AdminOrderReceived($orderDetails, $admin));
@@ -1100,13 +1100,12 @@ class UserController extends Controller
             foreach ($sellers as $seller) {
                 if ($seller->created_by) {
                     $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
-                                    ->where('buyer_id', $buyerId)->where('order_id', $order->id)
-                                    ->where('seller_id', $seller->created_by)->get();
-                }
-                else {
+                        ->where('buyer_id', $buyerId)->where('order_id', $order->id)
+                        ->where('seller_id', $seller->created_by)->get();
+                } else {
                     $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
-                                    ->where('buyer_id', $buyerId)->where('order_id', $order->id)
-                                    ->where('seller_id', $seller->id)->get();
+                        ->where('buyer_id', $buyerId)->where('order_id', $order->id)
+                        ->where('seller_id', $seller->id)->get();
                 }
                 \Mail::to($seller->email)->send(new \App\Mail\SellerOrderReceived($orderDetails, $seller));
             }
@@ -1128,14 +1127,14 @@ class UserController extends Controller
                 ]);
             }
 
-            return response()->json(['message' => 'Your order has been successfully placed.'
-                                    ,'orderId' => $order->id]);
-
+            return response()->json([
+                'message' => 'Your order has been successfully placed.', 'orderId' => $order->id
+            ]);
         } catch (\Exception $e) {
             // Log any exceptions for debugging
             DB::rollBack();
             // Log the exception for debugging
-            Log::error('Order placement failed: '.$e->getMessage());
+            Log::error('Order placement failed: ' . $e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }
@@ -1175,8 +1174,8 @@ class UserController extends Controller
             $couponUsedProductId = $request->couponUsedProductId;
             $couponId = $request->couponId;
             $bankAccountId = $request->bankAccount;
-            $transferPersonName= $request->transferPersonName;
-            $transferDate= $request->transferDate;
+            $transferPersonName = $request->transferPersonName;
+            $transferDate = $request->transferDate;
 
             $paymentApproved = ($payment === 'Cash') ? 0 : 1;
 
@@ -1198,9 +1197,9 @@ class UserController extends Controller
                 'coupon_used_seller_id' => $couponUsedSellerId,
                 'coupon_used_product_id' => $couponUsedProductId,
                 'shipping_fee' => $shippingFee,
-                'total_qty'=> $totalQty,
-                'payment_type'=> $payment,
-                'payment_approved'=> $paymentApproved,
+                'total_qty' => $totalQty,
+                'payment_type' => $payment,
+                'payment_approved' => $paymentApproved,
             ]);
 
             CashBankAccount::create([
@@ -1210,8 +1209,7 @@ class UserController extends Controller
                 'bank_account_id' => $bankAccountId
             ]);
 
-            if ($couponId != 0)
-            {
+            if ($couponId != 0) {
                 CouponDetail::create([
                     'buyer_id' => (int)$buyerId,
                     'coupon_id' => $couponId,
@@ -1221,8 +1219,7 @@ class UserController extends Controller
                 $couponDetailCheck = CouponDetail::where('coupon_id', $couponId)->get();
                 $couponCheck->used_count = $couponDetailCheck->count();
                 $couponCheck->save();
-                if ($couponDetailCheck->count() >= $couponCheck->valid_count)
-                {
+                if ($couponDetailCheck->count() >= $couponCheck->valid_count) {
                     $couponCheck->status = 0;
                     $couponCheck->save();
                 }
@@ -1234,7 +1231,7 @@ class UserController extends Controller
                 'buyer_id' => (int)$buyerId,
                 'total_amount' => $totalAmount,
                 'payment_method' => $payment
-                ]);
+            ]);
 
             foreach ($productIds as $key => $product_id) {
                 $orderedProduct = Product::where('id', $product_id)->first();
@@ -1242,10 +1239,8 @@ class UserController extends Controller
                 $usedDeliStatus = 0;
                 $usedShopCouponStatus = 0;
                 $usedProductCouponStatus = 0;
-                foreach ($shopIds as $shopKey => $shopId)
-                {
-                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey])
-                    {
+                foreach ($shopIds as $shopKey => $shopId) {
+                    if ($orderedProduct->seller_id == $shopId && $orderedProduct->delivery_price == $maxDelis[$shopKey]) {
                         $usedDeliStatus = 1;
                         unset($shopIds[$shopKey]);
                         unset($maxDelis[$shopKey]);
@@ -1259,44 +1254,44 @@ class UserController extends Controller
                 if ($order->coupon_used_product_id == (int)$product_id)
                     $usedProductCouponStatus = 1;
 
-                    $orderdetailsData = [
-                        'order_id' => $order->id,
-                        'buyer_id' => (int)$buyerId,
-                        'seller_id' => $sellerId[$key],
-                        'product_id' => (int)$product_id,
-                        'prefecture_id' => $prefectureId,
-                        'color' => $cart->color,
-                        'size' => $cart->size,
-                        'qty' => $quantities[$key],
-                        'price' => $orderedProduct->selling_price,
-                        'delivery_price' => $orderedProduct->delivery_price,
-                        'used_delivery_price' => $usedDeliStatus,
-                        'used_shop_coupon_status' => $usedShopCouponStatus,
-                        'used_product_coupon_status' => $usedProductCouponStatus,
-                        'payment_approved' => $paymentApproved,
-                        'amount' => $productamounts[$key],
-                        'commission' => $orderedProduct->commission,
-                        'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
-                        'transfer_status' => 0,
-                        'name' => $name,
-                        'phone' => $phone,
-                        'post_code' => $postcode,
-                        'city' => $city,
-                        'chome' => $chome,
-                        'building' => $building,
-                        'room_no' => $room,
-                    ];
+                $orderdetailsData = [
+                    'order_id' => $order->id,
+                    'buyer_id' => (int)$buyerId,
+                    'seller_id' => $sellerId[$key],
+                    'product_id' => (int)$product_id,
+                    'prefecture_id' => $prefectureId,
+                    'color' => $cart->color,
+                    'size' => $cart->size,
+                    'qty' => $quantities[$key],
+                    'price' => $orderedProduct->selling_price,
+                    'delivery_price' => $orderedProduct->delivery_price,
+                    'used_delivery_price' => $usedDeliStatus,
+                    'used_shop_coupon_status' => $usedShopCouponStatus,
+                    'used_product_coupon_status' => $usedProductCouponStatus,
+                    'payment_approved' => $paymentApproved,
+                    'amount' => $productamounts[$key],
+                    'commission' => $orderedProduct->commission,
+                    'commission_amount' => floor($productamounts[$key] * ($orderedProduct->commission / 100)),
+                    'transfer_status' => 0,
+                    'name' => $name,
+                    'phone' => $phone,
+                    'post_code' => $postcode,
+                    'city' => $city,
+                    'chome' => $chome,
+                    'building' => $building,
+                    'room_no' => $room,
+                ];
                 OrderDetail::create($orderdetailsData);
 
                 $productForInStock = Product::find($product_id);
                 $productForInStock->in_stock = $productForInStock->product_qty - $quantities[$key];
                 $productForInStock->save();
             }
-            $cartItem = DB::table('carts')->where('buyer_id',$buyerId)
-                    ->delete();
+            $cartItem = DB::table('carts')->where('buyer_id', $buyerId)
+                ->delete();
             $orderedBuyer = Buyer::find($buyerId);
             $orderDetails = OrderDetail::with('order')->with('buyer')->with('seller')
-                            ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
+                ->where('buyer_id', $buyerId)->where('order_id', $order->id)->get();
             $bankInfo = BankAccount::find($bankAccountId);
 
             DB::commit();
@@ -1314,14 +1309,14 @@ class UserController extends Controller
                 'seen' => 0,
             ]);
 
-            return response()->json(['message' => 'Your order has been successfully placed.'
-                                    ,'orderId' => $order->id]);
-
+            return response()->json([
+                'message' => 'Your order has been successfully placed.', 'orderId' => $order->id
+            ]);
         } catch (\Exception $e) {
             // Log any exceptions for debugging
             DB::rollBack();
             // Log the exception for debugging
-            Log::error('Order placement failed: '.$e->getMessage());
+            Log::error('Order placement failed: ' . $e->getMessage());
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }
@@ -1329,32 +1324,30 @@ class UserController extends Controller
     public function orderSuccess($id)
     {
         $order = Order::with('orderDetail')->with('orderDetail.buyer')->with('orderDetail.seller')->with('orderDetail.prefecture')
-                    ->with('orderDetail.product')
-                    ->where('id', $id)->first();
+            ->with('orderDetail.product')
+            ->where('id', $id)->first();
         return view('front-end.order-success', compact('order'));
     }
-        //Show Footer Tracking
+    //Show Footer Tracking
     public function footertracking(Request $request)
     {
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $id = $request->id;
         $order = Order::find($id);
-        $process = Process::where('order_id',$id)->latest()->get();
+        $process = Process::where('order_id', $id)->latest()->get();
         $orderDetails = DB::table('orders')
             ->join('sellers', 'orders.seller_id', '=', 'sellers.id')
             ->join('buyers', 'orders.buyer_id', '=', 'buyers.id')
             ->where('buyers.user_id', Auth::user()->id)
             ->where('orders.id', $id)
-            ->select('orders.*', 'orders.id as order_id','sellers.*','orders.post_code as code','orders.city as buyercity','orders.chome as buyerchome','orders.building as buyerbuilding','orders.room_no as buyerroom' )
+            ->select('orders.*', 'orders.id as order_id', 'sellers.*', 'orders.post_code as code', 'orders.city as buyercity', 'orders.chome as buyerchome', 'orders.building as buyerbuilding', 'orders.room_no as buyerroom')
             ->get();
 
-            foreach ($orderDetails as $location)
-            {
-                $locationcity = $location->buyercity;
-                $locationchome = $location->buyerchome;
-            }
-        return view('front-end.user-order-tracking', compact('user', 'order', 'process','orderDetails',));
-
+        foreach ($orderDetails as $location) {
+            $locationcity = $location->buyercity;
+            $locationchome = $location->buyerchome;
+        }
+        return view('front-end.user-order-tracking', compact('user', 'order', 'process', 'orderDetails',));
     }
 
     public function userProfileUpload(Request $request)
@@ -1388,15 +1381,11 @@ class UserController extends Controller
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         $buyerAddresses = BuyerAddress::where('buyer_id', $buyer->id)->get();
-        foreach($buyerAddresses as $buyerAddress)
-        {
-            if($buyerAddress->id == $id)
-            {
+        foreach ($buyerAddresses as $buyerAddress) {
+            if ($buyerAddress->id == $id) {
                 $buyerAddress->default = TRUE;
                 $buyerAddress->save();
-            }
-            else
-            {
+            } else {
                 $buyerAddress->default = FALSE;
                 $buyerAddress->save();
             }
@@ -1412,7 +1401,7 @@ class UserController extends Controller
         $user = DB::table('users')->where('id', Auth::user()->id)->first();
         $buyer = Buyer::where('user_id', $user->id)->first();
         $userNotis = UserNotification::with('orderDetail')->with('orderDetail.product')->with('orderDetail.order')
-                    ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->orderBy('id', 'DESC')->paginate($limit);
+            ->with('orderDetail.seller')->where('buyer_id', $buyer->id)->orderBy('id', 'DESC')->paginate($limit);
 
         // to be seen
         UserNotification::where('buyer_id', $buyer->id)->update(['seen' => 1]);
@@ -1424,8 +1413,7 @@ class UserController extends Controller
     public function removeMessage($id)
     {
         $message = UserNotification::find($id);
-        if ($message)
-        {
+        if ($message) {
             $message->delete();
         }
         return redirect()->back()->with('success', 'Message is deleted successfully!');

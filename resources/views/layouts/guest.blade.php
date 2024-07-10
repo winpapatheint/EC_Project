@@ -1046,6 +1046,10 @@
 
     <!-- theme setting js -->
     <script src="{{ asset('frontend/assets/js/theme-setting.js') }}"></script>
+
+    <!-- sidebar open js -->
+    <script src="{{ asset('frontend/assets/js/filter-sidebar.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $.ajaxSetup({

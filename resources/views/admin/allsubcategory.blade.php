@@ -1,12 +1,34 @@
 <x-auth-layout>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
-    <!-- bootstrap  css -->
     <style>
         .table>:not(caption)>*>* {
             border-bottom-width: 0px !important;
+        }
+
+        /* Extra small devices (phones, less than 576px) */
+        @media (max-width: 575.98px) {
+            .d-inline-flex {
+                display: block !important;
+            }
+
+            .d-inline-flex .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Small devices (phones, 576px and up) */
+        @media (min-width: 576px) {
+            .d-inline-flex {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between;
+            }
+
+            .d-inline-flex .btn {
+                width: auto;
+                margin-bottom: 0;
+            }
         }
     </style>
 
@@ -50,9 +72,9 @@
 
                                         <tbody>
                                             @if ($lists->isEmpty())
-                                                    <tr>
-                                                        <td colspan="9">No data available</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td colspan="9">No data available</td>
+                                                </tr>
                                             @else
                                                 @foreach ($lists as $key => $list)
                                                     <tr>
@@ -120,7 +142,8 @@
                                                                         {{-- <a href='{{ url("/deletecategory/".$type.'/'.$id ) }}'>
                                                                 <i class="ri-delete-bin-line"></i>
                                                                 </a> --}}
-                                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                                        <a href="javascript:void(0)"
+                                                                            data-bs-toggle="modal"
                                                                             data-bs-target="#deleteConfirmModal{{ $id . $type }}">
                                                                             <i class="ri-delete-bin-line"></i>
                                                                         </a>
@@ -196,43 +219,6 @@
                 </div>
             </div>
         @endforeach
-
-        {{-- @foreach ($lists as $key => $list)
-            <div class="modal fade theme-modal remove-commission" id="categoryModal{{ $list->categoryId }}"
-        aria-hidden="true" aria-labelledby="categoryModalLabel{{ $list->categoryId }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-block text-center">
-                    <h5 class="modal-title w-100" id="exampleModalLabel22">
-                        Edit Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <form id="commission-form{{ $list->categoryId }}" method="POST"
-                    action="{{ route('updatecategory_Name') }}" style="display:flex;">
-                    @csrf
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="category{{ $list->categoryId }}"
-                                value="{{ old('category') ?? ($list->category ?? '') }}" name="category"
-                                placeholder={{ $list->category }}>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="category-id{{ $list->categoryId }}" name="categoryid"
-                            value="{{ $list->categoryId }}">
-                        <input type="hidden" name="id" value="{{ $list->categoryId }}">
-                        <button type="submit" class="btn btn-animation btn-md fw-bold me-2">Save</button>
-                </form>
-                <button type="button" class="btn btn-animation btn-md fw-bold me-2" data-bs-dismiss="modal"
-                    style="background-color: #ff6b6b;border-color: #ff6b6b;">Cancel</button>
-
-            </div>
-        </div>
-    </div>
-    @endforeach --}}
 
         <div class="modal fade theme-modal remove-commission" id="categoryModal{{ $list->categoryId }}"
             aria-hidden="true" aria-labelledby="subTitleModalLabel{{ $list->categoryId }}" tabindex="-1">

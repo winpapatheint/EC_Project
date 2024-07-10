@@ -31,16 +31,20 @@
             <div class="row g-4">
                 <div class="col-xxl-3 col-xl-4 col-lg-5">
                     <div class="left-sidebar-box wow fadeInUp">
-                    <form id="searchForm" action="/news" method="GET">
-                        <div class="accordion-item">
-                            <div style="display: flex; align-items: center;">
-                                <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
-                                style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
-                                style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
+                        <form id="searchForm" action="/news" method="GET">
+                            <div class="accordion-item">
+                                <div style="display: flex; align-items: center;">
+                                    <input class="form-control form-control-sm mr-sm-2" type="search"
+                                        placeholder="Search" aria-label="Search" id="search" name="search"
+                                        value="{{ $search }}"
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem; border-radius: 5px 0 0 5px;">
+                                    <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit"
+                                        id="searchBtn"
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem; background-color: var(--theme-color); border-radius: 0 5px 5px 0;">
+                                        <i data-feather="search" style="stroke: white;"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
 
                         <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
@@ -54,20 +58,20 @@
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                                     <div class="accordion-body pt-0">
                                         <div class="recent-post-box">
-                                            @foreach($latestblog as $list)
-                                            <div class="recent-box">
-                                                <a href="{{ url('/blogdetail/'.$list->id ) }}" class="recent-image">
-                                                    <img src="{{ asset('images/'.$list->image ) }}"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="{{ url('/blogdetail/'.$list->id ) }}">
-                                                        <h5 class="recent-name">{{ $list->title }}</h5>
+                                            @foreach ($latestblog as $list)
+                                                <div class="recent-box">
+                                                    <a href="{{ url('/blogdetail/' . $list->id) }}" class="recent-image">
+                                                        <img src="{{ asset('images/' . $list->image) }}"
+                                                            class="img-fluid blur-up lazyload" alt="">
                                                     </a>
-                                                    <h6> {{ date('Y/m/d', strtotime($blog->created_at)) }}</h6>
+
+                                                    <div class="recent-detail">
+                                                        <a href="{{ url('/blogdetail/' . $list->id) }}">
+                                                            <h5 class="recent-name">{{ $list->title }}</h5>
+                                                        </a>
+                                                        <h6> {{ date('Y/m/d', strtotime($blog->created_at)) }}</h6>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @endforeach
                                         </div>
                                     </div>
@@ -78,7 +82,7 @@
                 </div>
                 <div class="col-xxl-9 col-xl-8 col-lg-7 ratio_50">
                     <div class="blog-detail-image rounded-3 mb-4">
-                        <img src="{{ asset('images/'.$blog->image ) }}" class="bg-img blur-up lazyload" alt="">
+                        <img src="{{ asset('images/' . $blog->image) }}" class="bg-img blur-up lazyload" alt="">
                         <div class="blog-image-contain">
                             <h2>{{ $blog->title }}</h2>
                             <ul class="contain-comment-list">
@@ -113,30 +117,47 @@
                             $firstHalf = mb_substr($content, 0, $splitIndex);
                             $secondHalf = mb_substr($content, $splitIndex);
 
-                            $sentenceStartingChars = ['!', '?', ')', ']', '}', '–', '—', ':', ';', '。', '」', '』', '）', '？', '！', '〜'];
+                            $sentenceStartingChars = [
+                                '!',
+                                '?',
+                                ')',
+                                ']',
+                                '}',
+                                '–',
+                                '—',
+                                ':',
+                                ';',
+                                '。',
+                                '」',
+                                '』',
+                                '）',
+                                '？',
+                                '！',
+                                '〜',
+                            ];
                             if (in_array(mb_substr($secondHalf, 0, 1), $sentenceStartingChars)) {
                                 $firstHalf .= mb_substr($secondHalf, 0, 1);
                                 $secondHalf = mb_substr($secondHalf, 1);
                             }
 
-                            $startOrEndChars = ["’", '"', '`', '、'];
+                            $startOrEndChars = ['’', '"', '`', '、'];
                             if (in_array(mb_substr($secondHalf, 0, 1), $startOrEndChars)) {
                                 $charCount = mb_substr_count($firstHalf, mb_substr($secondHalf, 0, 1));
-                                if (($charCount % 2) != 0) {
+                                if ($charCount % 2 != 0) {
                                     $firstHalf .= mb_substr($secondHalf, 0, 1);
                                     $secondHalf = mb_substr($secondHalf, 1);
                                 }
                             }
                         }
                     @endphp
-        
+
                     <div class="blog-detail-contain">
                         <p>
                             <span class="first">{!! mb_substr($firstHalf, 0, 1) !!}</span>{!! mb_substr($firstHalf, 1) !!}
                         </p>
 
                         <div class="blog-details-quote">
-                            <h3>{{ $blog->title}}</h3>
+                            <h3>{{ $blog->title }}</h3>
                             <h5>- {{ $blog->authorby }}</h5>
                         </div>
 

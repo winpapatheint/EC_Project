@@ -1,21 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Contact</title>
     <style>
         body {
-<<<<<<< HEAD
-            font-family: 'Times New Roman', Times, serif; /* Change font family to Times New Roman */
-=======
             font-family: 'Times New Roman', Times, serif;
->>>>>>> f7b199aaebd97487b44ddef6cebdfd366f836168
             margin: 0;
             padding: 0;
             color: #333;
         }
+
         .container {
             width: 80%;
             margin: 0 auto;
@@ -23,17 +20,21 @@
             background-color: #f4f4f4;
             border: 1px solid #ddd;
         }
+
         .header {
             text-align: center;
             padding: 10px 0;
         }
+
         .header img {
             max-width: 100%;
             height: auto;
         }
+
         .content {
             margin: 20px 0;
         }
+
         .content p {
             font-size: 15px;
             line-height: 1.6;
@@ -43,28 +44,37 @@
             font-size: 24px;
             margin-top: 0;
         }
+
         .footer {
             text-align: right;
             margin-top: 40px;
         }
+
         .footer h3 {
             font-size: 15px;
             color: #333;
         }
+
         .footer p {
             font-size: 14px;
             color: #777;
             margin: 0;
         }
+
         .content h3.greet {
             font-size: 15px;
             margin-top: 20px;
-            margin-left: 0; /* Remove left margin */
-            text-align: left; /* Center-align the heading */
-            font-weight: normal; /* Make the Dear Admin not bold */
+            margin-left: 0;
+            /* Remove left margin */
+            text-align: left;
+            /* Center-align the heading */
+            font-weight: normal;
+            /* Make the Dear Admin not bold */
         }
+
         .content p.date {
-            text-align: right; /* Align date to the right */
+            text-align: right;
+            /* Align date to the right */
         }
 
         .content p.detail {
@@ -73,13 +83,20 @@
             margin-left: 40px;
             font-weight: 100px;
         }
+
         .bold-text {
             font-weight: bold;
             font-size: 15px;
         }
+
         .normal-text {
             font-weight: normal;
             font-size: 15px;
+        }
+
+        .detail-img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -91,12 +108,17 @@
         </div>
         <div class="content">
             <p class="date">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-            <h3 style="text-align: center"><span class="bold-text">Received</span> <span class="normal-text">a Message!</span></h3>
+            <h3 style="text-align: center"><span class="bold-text">Received</span> <span class="normal-text">a
+                    Message!</span></h3>
             <h3 class="greet">Dear {{ $data['sellername'] }},</h3>
             <p class="detail"><strong>Subject:</strong> {{ $data['title'] }}</p>
             <p class="detail"><strong>Message Details:</strong> {{ $data['content'] }}</p>
             <!-- Embedded Image -->
-            <p class="detail">@if(empty($imagePath))<img src="{{ $message->embed($imagePath) }}" alt="Embedded Image"> @endif</p>
+            <p class="detail">
+                @if (empty($imagePath))
+                    <img class="detail-img" src="{{ $message->embed($imagePath) }}" alt="Embedded Image">
+                @endif
+            </p>
         </div>
         <div class="footer">
             <p style="text-align: right;font-weight:120px"><strong>Best regards,</strong></p>
@@ -104,6 +126,5 @@
         </div>
     </div>
 </body>
+
 </html>
-
-

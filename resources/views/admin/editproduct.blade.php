@@ -298,86 +298,91 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <table class="table variation-table table-responsive-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">Image</th>
-                                                <th scope="col">Change Image</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="imageTableBody">
-                                            <form class="theme-form theme-form-2 mega-form" method="POST"
-                                                action="{{ route('updatemultiImg') }}" enctype="multipart/form-data"
-                                                id="imageForm">
-                                                @csrf
-                                                @foreach ($multiImgs as $key => $img)
-                                                    <tr>
-                                                        <th>{{ $key + 1 }}</th>
-                                                        <td><img src="{{ asset('upload/multiImg/' . $img->photo_name) }}"
-                                                                width="80"></td>
-                                                        <td>
-                                                            <input type="file" class="form-control"
-                                                                name="multi_img[{{ $img->id }}]"
-                                                                onchange="checkFile(this)">
-                                                            @error('multi_img.' . $img->id)
-                                                                <p class="multi_img error text-danger">{{ $message }}
-                                                                </p>
-                                                            @enderror
-                                                        </td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-primary px-4"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#confirmBox_{{ $img->id }}"
-                                                                    disabled>Update</button>
-                                                                <button type="button"
-                                                                    class="btn btn-secondary px-4 ms-2"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal_{{ $img->id }}">Delete</button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- Confirm Modal Box -->
-                                                    <div class="modal fade theme-modal remove-coupon"
-                                                        id="confirmBox_{{ $img->id }}" aria-hidden="true"
-                                                        tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100"
-                                                                        id="exampleModalLabel22">Are You Sure?</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal" aria-label="Close">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="remove-box">
-                                                                        <p>The data will be added permanently.</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit"
-                                                                        class="btn btn-animation">Yes</button>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered variation-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">No</th>
+                                                    <th scope="col">Image</th>
+                                                    <th scope="col">Change Image</th>
+                                                    <th scope="col">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="imageTableBody">
+                                                <form class="theme-form theme-form-2 mega-form" method="POST"
+                                                    action="{{ route('updatemultiImg') }}"
+                                                    enctype="multipart/form-data" id="imageForm">
+                                                    @csrf
+                                                    @foreach ($multiImgs as $key => $img)
+                                                        <tr>
+                                                            <th>{{ $key + 1 }}</th>
+                                                            <td>
+                                                                <img src="{{ asset('upload/multiImg/' . $img->photo_name) }}"
+                                                                    width="80" class="img-fluid">
+                                                            </td>
+                                                            <td>
+                                                                <input type="file" class="form-control"
+                                                                    name="multi_img[{{ $img->id }}]"
+                                                                    onchange="checkFile(this)">
+                                                                @error('multi_img.' . $img->id)
+                                                                    <p class="multi_img error text-danger">
+                                                                        {{ $message }}</p>
+                                                                @enderror
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-group">
                                                                     <button type="button"
-                                                                        class="btn btn-animation btn-secondary"
-                                                                        data-bs-dismiss="modal"
-                                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                                        class="btn btn-primary px-4"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#confirmBox_{{ $img->id }}"
+                                                                        disabled>Update</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary px-4 ms-2"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal_{{ $img->id }}">Delete</button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        <!-- Confirm Modal Box -->
+                                                        <div class="modal fade theme-modal remove-coupon"
+                                                            id="confirmBox_{{ $img->id }}" aria-hidden="true"
+                                                            tabindex="-1">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-block text-center">
+                                                                        <h5 class="modal-title w-100"
+                                                                            id="exampleModalLabel22">Are You Sure?</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="remove-box">
+                                                                            <p>The data will be added permanently.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit"
+                                                                            class="btn btn-animation">Yes</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-animation btn-secondary"
+                                                                            data-bs-dismiss="modal"
+                                                                            style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <!-- Confirm Modal Box End-->
-                                                @endforeach
-                                            </form>
-                                        </tbody>
-                                    </table>
+                                                        <!-- Confirm Modal Box End-->
+                                                    @endforeach
+                                                </form>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -450,7 +455,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-animation" onclick="validateForm()">Yess</button>
+                            <button type="button" class="btn btn-animation" onclick="validateForm()">Yes</button>
                             <button type="button" class="btn btn-animation btn-secondary"
                                 data-bs-dismiss="modal">No</button>
                         </div>

@@ -15,18 +15,21 @@
         .table thead th.sticky-1,
         .table tbody td.sticky-1 {
             left: 0;
+            min-width: 50px;
             z-index: 2;
         }
 
         .table thead th.sticky-2,
         .table tbody td.sticky-2 {
             left: 50px;
+            min-width: 200px;
             z-index: 2;
         }
 
         .table thead th.sticky-3,
         .table tbody td.sticky-3 {
             left: 250px;
+            min-width: 300px;
             z-index: 2;
         }
 
@@ -58,10 +61,51 @@
         .table tbody tr:hover .sticky {
             background-color: #f1f1f1;
         }
+
+        @media (max-width: 575.98px) {
+
+            .table thead th.sticky-1,
+            .table tbody td.sticky-1 {
+                left: 0px;
+                min-width: 20px;
+            }
+
+            .table thead th.sticky-2,
+            .table tbody td.sticky-2 {
+                left: 40px;
+                min-width: 30px;
+            }
+
+            .table thead th.sticky-3,
+            .table tbody td.sticky-3 {
+                left: 40px;
+                min-width: 50px;
+                max-width: 140px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+
+            .table thead th.sticky-1,
+            .table tbody td.sticky-1 {
+                left: 0px;
+                min-width: 20px;
+            }
+
+            .table thead th.sticky-2,
+            .table tbody td.sticky-2 {
+                left: 40px;
+                min-width: 30px;
+            }
+
+            .table thead th.sticky-3,
+            .table tbody td.sticky-3 {
+                left: 40px;
+                min-width: 50px;
+                max-width: 140px;
+            }
+        }
     </style>
-
-
-
 
     <div class="page-body">
         <div class="container-fluid">
@@ -98,9 +142,9 @@
 
                                         <tbody>
                                             @if ($lists->isEmpty())
-                                                    <tr>
-                                                        <td colspan="9">No data available</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td colspan="9">No data available</td>
+                                                </tr>
                                             @else
                                                 @foreach ($lists as $key => $list)
                                                     <tr>
@@ -109,9 +153,10 @@
                                                         <td data-label="登録日">
                                                             {{ date('Y/m/d', strtotime($list->created_at)) }}<br>{{ date('H:i', strtotime($list->created_at)) }}
                                                         </td>
-                                                        <td class="sticky sticky-2" data-label="{{ __('auth.image') }}"><img
-                                                                src="{{ asset('upload/product_thambnail/' . $list->product_thambnail) }}"
-                                                                alt="thumb" style="width: 50px;height: 50px;"></td>
+                                                        <td class="sticky sticky-2" data-label="{{ __('auth.image') }}">
+                                                            <img src="{{ asset('upload/product_thambnail/' . $list->product_thambnail) }}"
+                                                                alt="thumb" style="width: 50px;height: 50px;">
+                                                        </td>
                                                         <td class="sticky sticky-3"
                                                             style="text-align:left; max-width: 200px;overflow: hidden;"
                                                             data-label="{{ $list->product_name }}">
@@ -190,8 +235,9 @@
                                                             <label class="switch" style="margin-top: 8px;">
                                                                 <input data-width="100" data-id="{{ $list->id }}"
                                                                     class="toggle-class" type="checkbox"
-                                                                    data-offstyle="outline-secondary" data-toggle="toggle"
-                                                                    data-on="Active" data-off="InActive"
+                                                                    data-offstyle="outline-secondary"
+                                                                    data-toggle="toggle" data-on="Active"
+                                                                    data-off="InActive"
                                                                     {{ $list->status ? 'checked' : '' }}
                                                                     {{ $list->Seller->status == 0 ? 'disabled' : '' }}>
                                                             </label>
@@ -227,7 +273,8 @@
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">
+                                                                    <h5 class="modal-title w-100"
+                                                                        id="exampleModalLabel22">
                                                                         Enter Commission(%)</h5>
                                                                     <button type="button" class="btn-close"
                                                                         data-bs-dismiss="modal" aria-label="Close">
@@ -266,61 +313,61 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    </div>
-                                                    {{-- Edit Product Commission End --}}
-                                                    {{-- Reser Product Commission Start --}}
-                                                    <div class="modal fade theme-modal remove-commission"
-                                                        id="removeCommission{{ $list->id }}" aria-hidden="true" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-block text-center">
-                                                                    <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?
-                                                                    </h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                        aria-label="Close">
-                                                                        <i class="fas fa-times"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="remove-box">
-                                                                        <p>This product's commission will be reset according to the shop.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <form method="POST" action="{{ route('deletecommission') }}"
-                                                                        style="display:flex;">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $list->id }}">
-                                                                        <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
-                                                                            data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-                                                                            data-bs-dismiss="modal">Yes</button>
-                                                                        <button type="button" class="btn btn-animation btn-md fw-bold"
-                                                                            data-bs-dismiss="modal"
-                                                                            style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- Reser Product Commission End --}}
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
                                 </div>
+                                {{-- Edit Product Commission End --}}
+                                {{-- Reser Product Commission Start --}}
+                                <div class="modal fade theme-modal remove-commission"
+                                    id="removeCommission{{ $list->id }}" aria-hidden="true" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header d-block text-center">
+                                                <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure?
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="remove-box">
+                                                    <p>This product's commission will be reset according to the shop.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <form method="POST" action="{{ route('deletecommission') }}"
+                                                    style="display:flex;">
+                                                    @csrf
+                                                    <input type="hidden" name="id"
+                                                        value="{{ $list->id }}">
+                                                    <button type="submit"class="btn btn-animation btn-md fw-bold me-2"
+                                                        data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                                                        data-bs-dismiss="modal">Yes</button>
+                                                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                                                        data-bs-dismiss="modal"
+                                                        style="background-color: #ff6b6b;border-color: #ff6b6b;">No</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- Reser Product Commission End --}}
+                                @endforeach
+                                @endif
+                                </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--pagination -->
-                @include('components.pagination')
-
             </div>
+            <!--pagination -->
+            @include('components.pagination')
+
         </div>
-        <!-- Container-fluid Ends-->
+    </div>
+    <!-- Container-fluid Ends-->
     </div>
     <!-- Coupon Modal -->
     @foreach ($lists as $key => $list)

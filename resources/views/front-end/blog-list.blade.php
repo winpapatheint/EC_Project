@@ -78,10 +78,12 @@
                                 <div style="display: flex; align-items: center;">
                                     <input class="form-control form-control-sm mr-sm-2" type="search"
                                         placeholder="Search" aria-label="Search" id="search" name="search"
-                                        value="{{ $search }}" style="font-size: 15px; padding: 0.25rem 0.5rem;">
+                                        value="{{ $search }}"
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem; border-radius: 5px 0 0 5px;">
                                     <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit"
-                                        id="searchBtn" style="font-size: 15px; padding: 0.25rem 0.5rem;"><i
-                                            data-feather="search"></i></button>
+                                        id="searchBtn"
+                                        style="font-size: 15px; padding: 0.25rem 0.5rem; background-color: var(--theme-color); border-radius: 0 5px 5px 0;">
+                                        <i data-feather="search" style="stroke: white;"></i></button>
                                 </div>
                             </div>
                         </form>
@@ -100,7 +102,8 @@
                                         <div class="recent-post-box">
                                             @foreach ($latestblog as $list)
                                                 <div class="recent-box">
-                                                    <a href="{{ url('/blogdetail/' . $list->id) }}" class="recent-image">
+                                                    <a href="{{ url('/blogdetail/' . $list->id) }}"
+                                                        class="recent-image">
                                                         <img src="{{ asset('images/' . $list->image) }}"
                                                             class="img-fluid blur-up lazyload" alt="">
                                                     </a>

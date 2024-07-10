@@ -30,339 +30,365 @@
             <div class="row">
                 <div class="col-custom-3">
                     <div class="left-box wow fadeInUp">
-                    <form id="searchForm" action="{{ route('show-discount-product') }}" method="GET">
-                        <div class="shop-left-sidebar">
-                            <div class="back-button">
-                                <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
-                            </div>
-                            <div class="filter-category">
-                                <div class="filter-title">
-                                    <h2>Filters</h2>
-                                    @if (!empty($ids))
-                                        <a href="{{ route('show-discount-product', ['ids' => $ids]) }}">Clear All</a>
-                                    @else
-                                        <a href="{{ route('show-discount-product', ['topic' => $topic]) }}">Clear All</a>
-                                    @endif
+                        <form id="searchForm" action="{{ route('show-discount-product') }}" method="GET">
+                            <div class="shop-left-sidebar">
+                                <div class="back-button">
+                                    <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
                                 </div>
-                                {{-- <ul>
-                                @if(!empty($searchHistory))
-                                @foreach($searchHistory as $searchHist)
-                                    <li style="background-color: {{ $searchHist === $sHistory ? '#ffcccb' : 'transparent' }}">
-                                        <a href="#" onclick="updateSearchHist('{{ $searchHist }}')">{{ $searchHist }}</a>
-                                        <span class="remove-search-item" data-search="{{ $searchHist }}" onclick="removeSearchItem(this)" style="margin-left: 5px;padding-top: 5px;">
-                                        <i class="fa-solid fa-xmark"></i></span>
-                                    </li>
-                                @endforeach
-                                @endif
-                                </ul> --}}
-                            </div>
-                            <div class="accordion custom-accordion" id="accordionExample">
-                                <div class="accordion-item">
-                                    <div style="display: flex; align-items: center;">
-                                        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search" value="{{ $search }}"
-                                        style="font-size: 15px; padding: 0.25rem 0.5rem;">
-                                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit" id="searchBtn"
-                                        style="font-size: 15px; padding: 0.25rem 0.5rem;"><i data-feather="search"></i></button>
+                                <div class="filter-category">
+                                    <div class="filter-title">
+                                        <h2>Filters</h2>
+                                        @if (!empty($ids))
+                                            <a href="{{ route('show-discount-product', ['ids' => $ids]) }}">Clear
+                                                All</a>
+                                        @else
+                                            <a href="{{ route('show-discount-product', ['topic' => $topic]) }}">Clear
+                                                All</a>
+                                        @endif
                                     </div>
                                 </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne">
-                                            <span>Categories</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding custom-height">
-                                            @foreach ($categoryWithProductCount as $category)
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" id="{{ $category->id }}"
-                                                        name="categories[]" value= "{{ $category->id }}" data-category="{{ $category->id }}"
-                                                        {{ in_array($category->id, $categories) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="{{ $category->category_name }}">
-                                                            <span class="name">{{ $category->category_name }}</span>
-                                                            <span class="number">({{ $category->product_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                            </ul>
+                                <div class="accordion custom-accordion" id="accordionExample">
+                                    <div class="accordion-item">
+                                        <div style="display: flex; align-items: center;">
+                                            <input class="form-control form-control-sm mr-sm-2" type="search"
+                                                placeholder="Search" aria-label="Search" id="search" name="search"
+                                                value="{{ $search }}"
+                                                style="font-size: 15px; padding: 0.25rem 0.5rem; border-radius: 5px 0 0 5px;">
+                                            <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit"
+                                                id="searchBtn"
+                                                style="font-size: 15px; padding: 0.25rem 0.5rem; background-color: var(--theme-color); border-radius: 0 5px 5px 0;">
+                                                <i data-feather="search" style="stroke: white;"></i></button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingThree">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseThree">
-                                            <span>Price</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="range-slider">
-                                                <input type="text" class="js-range-slider" name="price" value="{{ $price }}">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne">
+                                                <span>Categories</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <ul class="category-list custom-padding custom-height">
+                                                    @foreach ($categoryWithProductCount as $category)
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="{{ $category->id }}" name="categories[]"
+                                                                    value= "{{ $category->id }}"
+                                                                    data-category="{{ $category->id }}"
+                                                                    {{ in_array($category->id, $categories) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="{{ $category->category_name }}">
+                                                                    <span
+                                                                        class="name">{{ $category->category_name }}</span>
+                                                                    <span
+                                                                        class="number">({{ $category->product_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingSix">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseSix">
-                                            <span>Rating</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseSix" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="5"
-                                                        {{ in_array("5", $rating) ? 'checked' : '' }}>
-                                                        <div class="form-check-label">
-                                                            <ul class="rating">
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                            </ul>
-
-                                                            @if($ratingWithProductCount->has(5))
-                                                                <span class="text-content">({{ $ratingWithProductCount[5] }})</span>
-                                                            @else
-                                                                <span class="text-content">(0)</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="4"
-                                                        {{ in_array("4", $rating) ? 'checked' : '' }}>
-
-                                                        <div class="form-check-label">
-                                                            <ul class="rating">
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                            </ul>
-                                                            @if($ratingWithProductCount->has(4))
-                                                                <span class="text-content">({{ $ratingWithProductCount[4] }})</span>
-                                                            @else
-                                                                <span class="text-content">(0)</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="3"
-                                                        {{ in_array("3", $rating) ? 'checked' : '' }}>
-                                                        <div class="form-check-label">
-                                                            <ul class="rating">
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                            </ul>
-                                                            @if($ratingWithProductCount->has(3))
-                                                                <span class="text-content">({{ $ratingWithProductCount[3] }})</span>
-                                                            @else
-                                                                <span class="text-content">(0)</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="2"
-                                                        {{ in_array("2", $rating) ? 'checked' : '' }}>
-                                                        <div class="form-check-label">
-                                                            <ul class="rating">
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                            </ul>
-                                                            @if($ratingWithProductCount->has(2))
-                                                                <span class="text-content">({{ $ratingWithProductCount[2] }})</span>
-                                                            @else
-                                                                <span class="text-content">(0)</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox" name="rating[]" value="1"
-                                                        {{ in_array("1", $rating) ? 'checked' : '' }}>
-                                                        <div class="form-check-label">
-                                                            <ul class="rating">
-                                                                <li>
-                                                                    <i data-feather="star" class="fill"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <i data-feather="star"></i>
-                                                                </li>
-                                                            </ul>
-                                                            @if($ratingWithProductCount->has(1))
-                                                                <span class="text-content">({{ $ratingWithProductCount[1] }})</span>
-                                                            @else
-                                                                <span class="text-content">(0)</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                                <span>Price</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseThree" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="range-slider">
+                                                    <input type="text" class="js-range-slider" name="price"
+                                                        value="{{ $price }}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                @if(empty($ids))
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingFour">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseFour">
-                                            <span>Discount</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseFour" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding">
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault" name="discount[]" value="1"
-                                                            {{ in_array("1", $discount) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexCheckDefault">
-                                                            <span class="name">upto 5%</span>
-                                                            <span class="number">({{ $discountWithProductCount->group_1_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingSix">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                                                <span>Rating</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseSix" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <ul class="category-list custom-padding">
+                                                    <li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated" type="checkbox"
+                                                                name="rating[]" value="5"
+                                                                {{ in_array('5', $rating) ? 'checked' : '' }}>
+                                                            <div class="form-check-label">
+                                                                <ul class="rating">
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                </ul>
 
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault1" name="discount[]" value="2"
-                                                            {{ in_array("2", $discount) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexCheckDefault1">
-                                                            <span class="name">5% - 10%</span>
-                                                            <span class="number">({{ $discountWithProductCount->group_2_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                                                @if ($ratingWithProductCount->has(5))
+                                                                    <span
+                                                                        class="text-content">({{ $ratingWithProductCount[5] }})</span>
+                                                                @else
+                                                                    <span class="text-content">(0)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </li>
 
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault2" name="discount[]" value="3"
-                                                            {{ in_array("3", $discount) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexCheckDefault2">
-                                                            <span class="name">10% - 15%</span>
-                                                            <span class="number">({{ $discountWithProductCount->group_3_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                                    <li>
 
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault3" name="discount[]" value="4"
-                                                            {{ in_array("4", $discount) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexCheckDefault3">
-                                                            <span class="name">15% - 25%</span>
-                                                            <span class="number">({{ $discountWithProductCount->group_4_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated" type="checkbox"
+                                                                name="rating[]" value="4"
+                                                                {{ in_array('4', $rating) ? 'checked' : '' }}>
 
-                                                <li>
-                                                    <div class="form-check ps-0 m-0 category-list-box">
-                                                        <input class="checkbox_animated" type="checkbox"
-                                                            id="flexCheckDefault4" name="discount[]" value="5"
-                                                            {{ in_array("5", $discount) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexCheckDefault4">
-                                                            <span class="name">More than 25%</span>
-                                                            <span class="number">({{ $discountWithProductCount->group_5_count }})</span>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                                            <div class="form-check-label">
+                                                                <ul class="rating">
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                </ul>
+                                                                @if ($ratingWithProductCount->has(4))
+                                                                    <span
+                                                                        class="text-content">({{ $ratingWithProductCount[4] }})</span>
+                                                                @else
+                                                                    <span class="text-content">(0)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                    <li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated" type="checkbox"
+                                                                name="rating[]" value="3"
+                                                                {{ in_array('3', $rating) ? 'checked' : '' }}>
+                                                            <div class="form-check-label">
+                                                                <ul class="rating">
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                </ul>
+                                                                @if ($ratingWithProductCount->has(3))
+                                                                    <span
+                                                                        class="text-content">({{ $ratingWithProductCount[3] }})</span>
+                                                                @else
+                                                                    <span class="text-content">(0)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                    <li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated" type="checkbox"
+                                                                name="rating[]" value="2"
+                                                                {{ in_array('2', $rating) ? 'checked' : '' }}>
+                                                            <div class="form-check-label">
+                                                                <ul class="rating">
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                </ul>
+                                                                @if ($ratingWithProductCount->has(2))
+                                                                    <span
+                                                                        class="text-content">({{ $ratingWithProductCount[2] }})</span>
+                                                                @else
+                                                                    <span class="text-content">(0)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                    <li>
+                                                        <div class="form-check ps-0 m-0 category-list-box">
+                                                            <input class="checkbox_animated" type="checkbox"
+                                                                name="rating[]" value="1"
+                                                                {{ in_array('1', $rating) ? 'checked' : '' }}>
+                                                            <div class="form-check-label">
+                                                                <ul class="rating">
+                                                                    <li>
+                                                                        <i data-feather="star" class="fill"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i data-feather="star"></i>
+                                                                    </li>
+                                                                </ul>
+                                                                @if ($ratingWithProductCount->has(1))
+                                                                    <span
+                                                                        class="text-content">({{ $ratingWithProductCount[1] }})</span>
+                                                                @else
+                                                                    <span class="text-content">(0)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    @if (empty($ids))
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingFour">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                                    <span>Discount</span>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseFour" class="accordion-collapse collapse show">
+                                                <div class="accordion-body">
+                                                    <ul class="category-list custom-padding">
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="flexCheckDefault" name="discount[]"
+                                                                    value="1"
+                                                                    {{ in_array('1', $discount) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="flexCheckDefault">
+                                                                    <span class="name">upto 5%</span>
+                                                                    <span
+                                                                        class="number">({{ $discountWithProductCount->group_1_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="flexCheckDefault1" name="discount[]"
+                                                                    value="2"
+                                                                    {{ in_array('2', $discount) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="flexCheckDefault1">
+                                                                    <span class="name">5% - 10%</span>
+                                                                    <span
+                                                                        class="number">({{ $discountWithProductCount->group_2_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="flexCheckDefault2" name="discount[]"
+                                                                    value="3"
+                                                                    {{ in_array('3', $discount) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="flexCheckDefault2">
+                                                                    <span class="name">10% - 15%</span>
+                                                                    <span
+                                                                        class="number">({{ $discountWithProductCount->group_3_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="flexCheckDefault3" name="discount[]"
+                                                                    value="4"
+                                                                    {{ in_array('4', $discount) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="flexCheckDefault3">
+                                                                    <span class="name">15% - 25%</span>
+                                                                    <span
+                                                                        class="number">({{ $discountWithProductCount->group_4_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="form-check ps-0 m-0 category-list-box">
+                                                                <input class="checkbox_animated" type="checkbox"
+                                                                    id="flexCheckDefault4" name="discount[]"
+                                                                    value="5"
+                                                                    {{ in_array('5', $discount) ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="flexCheckDefault4">
+                                                                    <span class="name">More than 25%</span>
+                                                                    <span
+                                                                        class="number">({{ $discountWithProductCount->group_5_count }})</span>
+                                                                </label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
-                                @endif
                             </div>
-                        </div>
                     </div>
                 </div>
-                @foreach($ids as $id)
-                <input type="hidden" id="ids" name="ids[]" value="{{ $id }}">
+                @foreach ($ids as $id)
+                    <input type="hidden" id="ids" name="ids[]" value="{{ $id }}">
                 @endforeach
                 <input type="hidden" id="topic" name="topic" value="{{ $topic }}">
                 <input type="hidden" id="sortValue" name="sort" value="{{ $sort !== 0 ? $sort : '1' }}">
@@ -397,31 +423,37 @@
                                         @else
                                             <span>Choose Sorting</span>
                                         @endif
-                                            <i class="fa-solid fa-angle-down"></i>
+                                        <i class="fa-solid fa-angle-down"></i>
                                     </button>
 
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a class="dropdown-item" id="drop1" name="sort" value="1" href="#">Low - High Price</a>
+                                            <a class="dropdown-item" id="drop1" name="sort" value="1"
+                                                href="#">Low - High Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop2" name="sort" value="2" href="#">High - Low
+                                            <a class="dropdown-item" id="drop2" name="sort" value="2"
+                                                href="#">High - Low
                                                 Price</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop3" name="sort" value="3" href="#">Average
+                                            <a class="dropdown-item" id="drop3" name="sort" value="3"
+                                                href="#">Average
                                                 Rating</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop4" name="sort" value="4" href="#">A - Z
+                                            <a class="dropdown-item" id="drop4" name="sort" value="4"
+                                                href="#">A - Z
                                                 Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop5" name="sort" value="5" href="#">Z - A
+                                            <a class="dropdown-item" id="drop5" name="sort" value="5"
+                                                href="#">Z - A
                                                 Order</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" id="drop6" name="sort" value="6" href="#">% Off - Hight To
+                                            <a class="dropdown-item" id="drop6" name="sort" value="6"
+                                                href="#">% Off - Hight To
                                                 Low</a>
                                         </li>
                                     </ul>
@@ -435,17 +467,20 @@
                                             <img src="{{ asset('frontend/assets/svg/grid-4.svg') }}"
                                                 class="blur-up lazyload d-lg-inline-block d-none" alt="">
                                             <img src="{{ asset('frontend/assets/svg/grid.svg') }}"
-                                                class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
+                                                class="blur-up lazyload img-fluid d-lg-none d-inline-block"
+                                                alt="">
                                         </a>
                                     </li>
                                     <li class="three-grid">
                                         <a href="javascript:void(0)">
-                                            <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}" class="blur-up lazyload" alt="">
+                                            <img src="{{ asset('frontend/assets/svg/grid-3.svg') }}"
+                                                class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                     <li class="list-btn">
                                         <a href="javascript:void(0)">
-                                            <img src="{{ asset('frontend/assets/svg/list.svg') }}" class="blur-up lazyload" alt="">
+                                            <img src="{{ asset('frontend/assets/svg/list.svg') }}"
+                                                class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                 </ul>
@@ -453,11 +488,12 @@
                         </div>
                     </div>
 
-                    @if($products->count() < 1)
+                    @if ($products->count() < 1)
                         <h1 class="text-center">No Products Found</h1>
                     @endif
-                    <div class="row g-sm-4 g-3 product-list-section row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
-                    
+                    <div
+                        class="row g-sm-4 g-3 product-list-section row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2">
+
                         @foreach ($products as $product)
                             @php
                                 $starRating = 0;
@@ -476,44 +512,136 @@
                                     $starRating = $starRating / $count;
                                 @endphp
                             @endif
-                        <div>
-                            <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="{{ $loop->index * 0.05 }}s">
-                                <div class="product-header">
-                                    <div class="product-image">
+                            <div>
+                                <div class="product-box-3 h-100 wow fadeInUp"
+                                    data-wow-delay="{{ $loop->index * 0.05 }}s">
+                                    <div class="product-header">
+                                        <div class="product-image">
 
-                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
-                                        <img width="100" src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
-                                                class="img-fluid blur-up lazyload" alt="">
-                                        </a>
+                                            <a
+                                                href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
+                                                <img width="100"
+                                                    src="{{ asset('upload/product_thambnail/' . $product->product_thambnail) }}"
+                                                    class="img-fluid blur-up lazyload" alt="">
+                                            </a>
 
-                                        <ul class="product-option d-flex justify-content-center">
-                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#view-product{{ $product->id }}" data-product="{{ $product->id }}">
-                                                    <i data-feather="eye"></i>
-                                                </a>
-                                            </li>
-                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
-                                                <a href="{{ route('show-comparelist', ['id' => $product->id ]) }}">
-                                                    <i data-feather="refresh-cw"></i>
-                                                </a>
-                                            </li>
-                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Wishlist">
-                                                <a href="{{ route('show-wishlist', ['id' => $product->id]) }}" class="notifi-wishlist">
-                                                    <i data-feather="heart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                            <ul class="product-option d-flex justify-content-center">
+                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                        data-bs-target="#view-product{{ $product->id }}"
+                                                        data-product="{{ $product->id }}">
+                                                        <i data-feather="eye"></i>
+                                                    </a>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Compare">
+                                                    <a href="{{ route('show-comparelist', ['id' => $product->id]) }}">
+                                                        <i data-feather="refresh-cw"></i>
+                                                    </a>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Wishlist">
+                                                    <a href="{{ route('show-wishlist', ['id' => $product->id]) }}"
+                                                        class="notifi-wishlist">
+                                                        <i data-feather="heart"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product-footer">
+                                        <div class="product-detail">
+                                            <span class="span-name">{{ $product->Category->category_name }}</span>
+                                            <a
+                                                href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
+                                                <h5 class="name">{{ $product->product_name }}</h5>
+                                            </a>
+                                            <p class="text-content mt-1 mb-2 product-content">
+                                                {{ $product->short_desc }}</p>
+                                            <div class="product-rating mt-2">
+                                                <ul class="rating">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <= $starRating)
+                                                            <li><i data-feather="star" class="fill"></i></li>
+                                                        @else
+                                                            <li><i data-feather="star"></i></li>
+                                                        @endif
+                                                    @endfor
+                                                </ul>
+                                                <span>(<?php echo number_format($starRating, 1); ?>)</span>
+                                            </div>
+                                            <h6 class="unit">{{ mb_substr($product->product_size, 0, 20) }}</h6>
+                                            <h5 class="price">
+                                                @if ($product->discount_percent != 0)
+                                                    <h4 class="price"><span
+                                                            class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                                        <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                                    @else
+                                                        <h4 class="price"><span
+                                                                class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                                @endif
+                                            </h5>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="product-footer">
-                                    <div class="product-detail">
-                                        <span class="span-name">{{ $product->Category->category_name }}</span>
-                                        <a href="{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}">
-                                            <h5 class="name">{{ $product->product_name }}</h5>
-                                        </a>
-                                        <p class="text-content mt-1 mb-2 product-content">{{ $product->short_desc }}</p>
-                                        <div class="product-rating mt-2">
+                            </div>
+                        @endforeach
+                    </div>
+                    @include('components.pagination')
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+    @foreach ($products as $product)
+        @if ($product->status == 1)
+            @php
+                $starRating = 0;
+                $count = 0;
+            @endphp
+            @foreach ($reviews as $review)
+                @if ($product->id == $review->product_id)
+                    @php
+                        $count += 1;
+                        $starRating += $review->stars_rated;
+                    @endphp
+                @endif
+            @endforeach
+            @if ($count != 0)
+                @php
+                    $starRating = $starRating / $count;
+                @endphp
+            @endif
+            <!-- Quick View Modal Box Start -->
+            <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header p-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-sm-4 g-2">
+                                <div class="col-lg-6">
+                                    <div class="slider-image">
+                                        <img src="{{ asset('upload/product_thambnail/' . $product->product_thambnail) }}"
+                                            class="img-fluid blur-up lazyload" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="right-sidebar-modal">
+                                        <h4 class="title-name">{{ $product->product_name }}</h4>
+                                        @if ($product->discount_percent != 0)
+                                            <h4 class="price"><span
+                                                    class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                                <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
+                                            @else
+                                                <h4 class="price"><span
+                                                        class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
+                                        @endif
+                                        <div class="product-rating">
                                             <ul class="rating">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     @if ($i <= $starRating)
@@ -523,185 +651,119 @@
                                                     @endif
                                                 @endfor
                                             </ul>
-                                            <span>(<?php echo number_format($starRating, 1); ?>)</span>
+                                            <span class="ms-2">{{ $count }} Reviews</span>
                                         </div>
-                                            <h6 class="unit">{{ $product->product_size }}</h6>
-                                        <h5 class="price">
-                                        @if ($product->discount_percent != 0)
-                                            <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                            <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
-                                        @else
-                                            <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                        @endif
-                                        </h5>
+
+                                        <div class="product-detail">
+                                            <h4>Product Details :</h4>
+                                            <p>{!! $product->long_desc !!}</p>
+                                        </div>
+
+                                        <ul class="brand-list">
+                                            <li>
+                                                <div class="brand-box">
+                                                    <h5>Brand Name:</h5>
+                                                    <h6>
+                                                        @php
+                                                            $brand = DB::table('brands')
+                                                                ->where('id', $product->brand_id)
+                                                                ->first();
+                                                        @endphp
+                                                        {{ $brand->brand_name }}
+                                                    </h6>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="brand-box">
+                                                    <h5>Product Code:</h5>
+                                                    <h6>{{ $product->product_code }}</h6>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="brand-box">
+                                                    <h5>Category:</h5>
+                                                    <h6>
+                                                        @php
+                                                            $category = DB::table('categories')
+                                                                ->where('id', $product->category_id)
+                                                                ->first();
+                                                        @endphp
+                                                        {{ $category->category_name }}
+                                                    </h6>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="brand-box">
+                                                    <h5>In Stock:</h5>
+                                                    <h6>{{ $product->in_stock }}</h6>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul class="brand-list">
+                                            @php
+                                                $sizes = explode(',', $product->product_size);
+                                            @endphp
+                                            <li>
+                                                <div class="product-contain" style="display: flex; flex-wrap: wrap;">
+                                                    @foreach ($sizes as $key => $size)
+                                                        <div class="form-check"
+                                                            style="margin-left: 10px; margin-top: 15px;">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selected_size_{{ $product->id }}"
+                                                                value="{{ $size }}"
+                                                                id="size_{{ $product->id }}_{{ $size }}"
+                                                                {{ $key === 0 ? 'checked' : '' }}>
+                                                            <label
+                                                                for="size_{{ $product->id }}_{{ $size }}">{{ $size }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul class="brand-list">
+                                            @php
+                                                $colors = explode(',', $product->product_color);
+                                            @endphp
+                                            <li>
+                                                <div class="product-contain" style="display: flex; flex-wrap: wrap;">
+                                                    @foreach ($colors as $key => $color)
+                                                        <div class="form-check"
+                                                            style="margin-left: 10px; margin-top: 15px;">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selected_color_{{ $product->id }}"
+                                                                value="{{ $color }}"
+                                                                id="color_{{ $product->id }}_{{ $color }}"
+                                                                {{ $key === 0 ? 'checked' : '' }}>
+                                                            <label
+                                                                for="color_{{ $product->id }}_{{ $color }}">{{ $color }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="modal-button">
+                                            <button onclick="addToCart({{ $product->id }})"
+                                                class="btn btn-md add-cart-button icon"
+                                                @if ($product->in_stock < 1) disabled @endif>
+                                                Add To Cart</button>
+
+                                            <button
+                                                onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
+                                                class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
+                                                View More Details</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
                     </div>
-                @include('components.pagination')
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Shop Section End -->
-
-    @foreach ($products as $product)
-    @if ($product->status == 1)
-    @php
-        $starRating = 0;
-        $count = 0;
-    @endphp
-    @foreach ($reviews as $review)
-        @if ($product->id == $review->product_id)
-            @php
-                $count += 1;
-                $starRating += $review->stars_rated;
-            @endphp
+            <!-- Quick View Modal Box End -->
         @endif
-    @endforeach
-    @if ($count != 0)
-        @php
-            $starRating = $starRating / $count;
-        @endphp
-    @endif
-    <!-- Quick View Modal Box Start -->
-     <div class="modal fade theme-modal view-modal" id="view-product{{ $product->id }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header p-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-sm-4 g-2">
-                        <div class="col-lg-6">
-                            <div class="slider-image">
-                                <img src="{{ asset('upload/product_thambnail/'.$product-> product_thambnail) }}"
-                                    class="img-fluid blur-up lazyload" alt="">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="right-sidebar-modal">
-                                <h4 class="title-name">{{ $product->product_name }}</h4>
-                                @if ($product->discount_percent != 0)
-                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                    <del>¥{{ number_format($product->original_price, 0, '', ',') }}</del>
-                                @else
-                                    <h4 class="price"><span class="theme-color">¥{{ number_format($product->selling_price, 0, '', ',') }}</span>
-                                @endif
-                                <div class="product-rating">
-                                    <ul class="rating">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            @if ($i <= $starRating)
-                                                <li><i data-feather="star" class="fill"></i></li>
-                                            @else
-                                                <li><i data-feather="star"></i></li>
-                                            @endif
-                                        @endfor
-                                    </ul>
-                                    <span class="ms-2">{{ $count}} Reviews</span>
-                                </div>
-
-                                <div class="product-detail">
-                                    <h4>Product Details :</h4>
-                                    <p>{!! ($product->long_desc) !!}</p>
-                                </div>
-
-                                <ul class="brand-list">
-                                    <li>
-                                        <div class="brand-box">
-                                            <h5>Brand Name:</h5>
-                                            <h6>
-                                                @php
-                                                    $brand = DB::table('brands')->where('id',$product->brand_id)->first();
-                                                @endphp
-                                                {{ $brand->brand_name }}
-                                            </h6>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="brand-box">
-                                            <h5>Product Code:</h5>
-                                            <h6>{{ $product->product_code }}</h6>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="brand-box">
-                                            <h5>Category:</h5>
-                                            <h6>
-                                                @php
-                                                    $category = DB::table('categories')->where('id',$product->category_id)->first();
-                                                @endphp
-                                                {{ $category->category_name }}
-                                            </h6>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="brand-box">
-                                            <h5>In Stock:</h5>
-                                            <h6>{{ $product->in_stock }}</h6>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul class="brand-list">
-                                    @php
-                                        $sizes = explode(',', $product->product_size);
-                                    @endphp
-                                    <li>
-                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
-                                            @foreach($sizes as $key => $size)
-                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
-                                                    <input class="form-check-input" type="radio" name="selected_size_{{ $product->id }}" 
-                                                        value="{{ $size }}" id="size_{{ $product->id }}_{{ $size }}" 
-                                                        {{ $key === 0 ? 'checked' : '' }}>
-                                                    <label for="size_{{ $product->id }}_{{ $size }}">{{ $size }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul class="brand-list">
-                                    @php
-                                        $colors = explode(',', $product->product_color);
-                                    @endphp
-                                    <li>
-                                        <div class="product-contain" style="display: flex; flex-wrap: wrap;">
-                                            @foreach($colors as $key => $color)
-                                                <div class="form-check" style="margin-left: 10px; margin-top: 15px;">
-                                                    <input class="form-check-input" type="radio" name="selected_color_{{ $product->id }}" 
-                                                        value="{{ $color }}" id="color_{{ $product->id }}_{{ $color }}" 
-                                                        {{ $key === 0 ? 'checked' : '' }}>
-                                                    <label for="color_{{ $product->id }}_{{ $color }}">{{ $color }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="modal-button">
-                                    <button onclick="addToCart({{ $product->id }})"
-                                        class="btn btn-md add-cart-button icon" @if ($product->in_stock < 1) disabled @endif>
-                                        Add To Cart</button>
-
-                                    <button onclick="location.href = '{{ route('show-product-left-thumbnail', ['id' => $product->id]) }}';"
-                                        class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
-                                        View More Details</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Quick View Modal Box End -->
-    @endif
     @endforeach
 
     <script>
@@ -753,11 +815,11 @@
         function addToCart(productId) {
             const selectedSize = document.querySelector(`input[name="selected_size_${productId}"]:checked`).value;
             const selectedColor = document.querySelector(`input[name="selected_color_${productId}"]:checked`).value;
-            
+
             const url = new URL('{{ route('show_carts', ['id' => '__ID__']) }}'.replace('__ID__', productId));
             url.searchParams.append('size', selectedSize);
             url.searchParams.append('color', selectedColor);
-            
+
             location.href = url.toString();
         }
     </script>

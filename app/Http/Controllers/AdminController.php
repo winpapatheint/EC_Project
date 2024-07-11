@@ -14,6 +14,7 @@ use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Buyer;
 use App\Models\Order;
+use App\Models\Story;
 use App\Models\Coupon;
 use App\Models\Review;
 use App\Models\Seller;
@@ -4014,5 +4015,78 @@ class AdminController extends Controller
     {
         Notification::where('seen', 0)->update(['seen' => 1]);
         return redirect()->back();
+    }
+
+    public function indexstory()
+    {
+        $limit = 10;
+
+        $lists = Story::orderBy('part', 'asc')->paginate($limit);
+
+        $ttl = $lists->total();
+        $ttlpage = (ceil($ttl / $limit));
+
+        return view('admin.story', compact('lists', 'ttlpage', 'ttl'));
+    }
+
+    public function ourStory()
+    {
+        $stories = Story::all();
+
+        return view('front-end.our-story', compact('stories'));
+    }
+
+    public function storeStory(Request $request)
+    {
+        if (!empty($request->image)) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = '';
+        }
+
+        if (empty($request->id)) {
+
+            $user = Story::create([
+                'part' => $request->part,
+                'title' => $request->title,
+                'title' => $request->title_jp,
+                'body' => $request->body,
+                'body_jp' => $request->body_jp,
+                'image' => $imageName,
+            ]);
+
+            return redirect('/admin/story')->with('success', 'Story Added Successfully');
+        } else {
+
+            $updval = [
+                'part' => $request->part,
+                'title' => $request->title,
+                'title_jp' => $request->title_jp,
+                'body' => $request->body,
+                'body_jp' => $request->body_jp,
+            ];
+
+            if (!empty($request->image)) {
+                $updval['image'] = $imageName;
+            }
+
+            Story::where('id', $request->id)->update($updval);
+            return redirect('/admin/story')->with('success', 'Story Updated Successfully');
+        }
+    }
+
+    public function editStory($id)
+    {
+        $story = Story::find($id);
+        $editmode = true;
+
+        return view('admin.addstory', compact('story', 'editmode'));
+    }
+
+    public function deleteStory(Request $request)
+    {
+        $data = Story::where('id', $request->id)->delete();
+        return redirect()->back()->with('success', 'Story Deleted Successfully.');
     }
 }

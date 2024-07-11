@@ -126,7 +126,9 @@ Route::get('/buyer-term-and-condition', function () {
 Route::get('/seller-term-and-condition', function () {
     return view('front-end.seller-term-and-condition');
 });
-
+Route::get('/our-story', function () {
+    return view('front-end.our-story');
+});
 Route::get('/cart', function () {
     return view('front-end.cart');
 });
@@ -338,6 +340,21 @@ Route::get('/admin/detail/order', function () {
 Route::get('/admin/tracking/order', function () {
     return view('admin.order.order_tracking');
 })->name('admin.order-tracking');
+
+// story
+Route::get('/our-story', [AdminController::class, 'ourStory']);
+Route::get('/admin/story', [AdminController::class, 'indexstory'])->middleware(['auth', 'role:admin'])->name('admin.story');
+Route::get('/admin/addstory', function () {
+    return view('admin.addstory');
+})->name('admin.add.story');
+Route::post('/admin/addstory', [AdminController::class, 'storeStory'])->name('admin.store.story');
+Route::post('/admin/deletestory', [AdminController::class, 'deleteStory'])->middleware(['auth', 'role:admin'])->name('admin.delete.story');
+Route::get('/editstory/{id}', [AdminController::class, 'editStory'])->middleware(['auth', 'role:admin']);
+
+Route::post('/notifications/{id}/seen', [AdminController::class, 'markAsSeen']);
+Route::get('/notifications/allseen', [AdminController::class, 'allSeen']);
+Route::post('/seller-notifications/{id}/seen', [SellerController::class, 'markAsSeen']);
+Route::get('/seller-notifications/allseen', [SellerController::class, 'allSeen']);
 
 Route::post('/notifications/{id}/seen', [AdminController::class, 'markAsSeen']);
 Route::get('/notifications/allseen', [AdminController::class, 'allSeen']);

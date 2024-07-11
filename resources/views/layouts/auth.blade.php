@@ -530,29 +530,6 @@
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link sidebar-title link-nav
-                                    {{ request()->routeIs('admin.all.blog') ||
-                                    request()->is('admin/add/blog') ||
-                                    request()->is('blog/*') ||
-                                    request()->is('editblog/*')
-                                        ? 'active-link'
-                                        : '' }}"
-                                        href="{{ route('admin.all.blog') }}">
-                                        <i class="ri-newspaper-line"></i>
-                                        <span>News</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav
-                                    {{ request()->routeIs('admin.top') || request()->is('edittop/*') ? 'active-link' : '' }}"
-                                        href="{{ route('admin.top') }}">
-                                        <i class="ri-list-settings-line"></i>
-                                        <span>Top</span>
-                                    </a>
-                                </li>
-
-                                <li class="sidebar-list">
-                                    <a class="sidebar-link sidebar-title link-nav
                                     {{ request()->routeIs('admin.coupon') || request()->is('admin/addcoupon') || request()->is('editcoupon/*')
                                         ? 'active-link'
                                         : '' }}"
@@ -650,6 +627,40 @@
                                         href="{{ route('admin.newsletter') }}">
                                         <i class="ri-profile-line"></i>
                                         <span>NewsLetter</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.all.blog') ||
+                                    request()->is('admin/add/blog') ||
+                                    request()->is('blog/*') ||
+                                    request()->is('editblog/*')
+                                        ? 'active-link'
+                                        : '' }}"
+                                        href="{{ route('admin.all.blog') }}">
+                                        <i class="ri-newspaper-line"></i>
+                                        <span>News</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.top') || request()->is('edittop/*') ? 'active-link' : '' }}"
+                                        href="{{ route('admin.top') }}">
+                                        <i class="ri-list-settings-line"></i>
+                                        <span>Top</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav
+                                    {{ request()->routeIs('admin.story') || request()->is('admin/addstory') || request()->is('editstory/*')
+                                        ? 'active-link'
+                                        : '' }}"
+                                        href="{{ route('admin.story') }}">
+                                        <i class="ri-list-settings-line"></i>
+                                        <span>Story</span>
                                     </a>
                                 </li>
 

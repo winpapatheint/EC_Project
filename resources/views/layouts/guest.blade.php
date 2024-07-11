@@ -719,6 +719,9 @@
                                 <li>
                                     <a href="{{ url('/contact') }}" class="text-content">Contact Us</a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('/our-story') }}" class="text-content">Our Story</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

@@ -126,7 +126,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('reply.sent') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('reply.sent') }}" id="replyForm" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="{{ $start->id }}">
                         @csrf
                         <div class="mb-2 row align-items-center">
@@ -141,18 +141,13 @@
                             <label class="col-lg-2 col-md-3 col-form-label form-label-title">Body
                             </label>
                             <div class="col-md-9 col-lg-10">
-                                <textarea class="form-control" name="body" id="" rows="8"></textarea>
-                                <p style="display:none" class="body error text-danger"></p>
-                                @if (!empty($error['body']))
-                                    @foreach ($error['body'] as $key => $value)
-                                        <p class="body error text-danger">{{ $value }}</p>
-                                    @endforeach
-                                @endif
+                                <textarea class="form-control" name="body" id="body" rows="8"></textarea>
+                                <span class="error" style="color:red" id="error-body"></span>
                             </div>
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-animation">Reply</button>
+                    <button type="button" class="btn btn-animation" onclick="validateReplyForm()">Reply</button>
                     </form>
                     <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
@@ -182,5 +177,25 @@
                 }
             }
         }
+    </script>
+    <script>
+        function validateReplyForm() {
+            let isValid = true;
+
+            var body = document.getElementById("body").value.trim();
+
+            if (!body) {
+                isValid = false;
+                document.getElementById("error-body").textContent = "Enter your reply body.";
+            }
+
+            if (isValid) {
+                document.getElementById("replyForm").submit();
+            }
+        }
+        document.getElementById('replyForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            validateReplyForm();
+        });
     </script>
 @endsection

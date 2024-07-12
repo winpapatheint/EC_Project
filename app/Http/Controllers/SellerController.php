@@ -202,15 +202,15 @@ class SellerController extends Controller
             });
         }
 
-        $received = $receivedQuery->orderBy('created_at', 'desc')->paginate($limit);
-        $sent = $sentQuery->orderBy('created_at', 'desc')->paginate($limit);
+        $received = $receivedQuery->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', request()->get('page', 1));
+        $sent = $sentQuery->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'second_page', request()->get('second_page', 1));
 
         $ttl = $received->total();
         $ttlpage = ceil($ttl / $limit);
-        $sentttl = $sent->total();
-        $sentttlpage = ceil($sentttl / $limit);
+        $second_ttl = $sent->total();
+        $second_ttlpage = ceil($second_ttl / $limit);
 
-        return view('seller.help.help', compact('received', 'sent', 'ttl', 'ttlpage', 'sentttl', 'sentttlpage'));
+        return view('seller.help.help', compact('received', 'sent', 'ttl', 'ttlpage', 'second_ttl', 'second_ttlpage'));
     }
 
 

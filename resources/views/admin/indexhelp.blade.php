@@ -19,26 +19,33 @@
                                         <h5>Contact</h5>
                                     </div>
                                     <div class="product-section-box ">
-                                        <ul class="nav nav-tabs custom-nav right-options" id="myTab" role="tablist">
+                                        <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+                                            @php
+                                                $activeTab = request()->tab ?? 'list';
+                                            @endphp
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="description-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#description" type="button"
-                                                    role="tab"><i class="icon-cloud-down">Inbox</i></button>
+                                                <button class="nav-link {{ $activeTab == 'list' ? 'active' : '' }}"
+                                                    id="description-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#description" type="button" role="tab"><i
+                                                        class="icon-cloud-down"></i>Inbox</button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="info-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#info" type="button" role="tab"><i
-                                                        class="icon-cloud-up">Sent</i></button>
+                                                <button class="nav-link {{ $activeTab == 'second' ? 'active' : '' }}"
+                                                    id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
+                                                    type="button" role="tab"><i
+                                                        class="icon-cloud-up"></i>Sent</button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="notice-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#notice" type="button" role="tab"><i
-                                                        class="icon-cloud-up">Notice</i></button>
+                                                <button class="nav-link {{ $activeTab == 'third' ? 'active' : '' }}"
+                                                    id="notice-tab" data-bs-toggle="tab" data-bs-target="#notice"
+                                                    type="button" role="tab"><i
+                                                        class="icon-cloud-up"></i>Notice</button>
                                             </li>
                                         </ul>
 
                                         <div class="tab-content custom-tab" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                                            <div class="tab-pane fade {{ $activeTab == 'list' ? 'show active' : '' }}"
+                                                id="description" role="tabpanel">
                                                 <!-- Content for Description tab -->
                                                 <div class="table-responsive category-table">
                                                     <table class="table all-package theme-table" id="table_id">
@@ -107,77 +114,8 @@
                                                 </div>
                                             </div>
 
-
-                                            <div class="tab-pane fade" id="notice" role="tabpanel">
-                                                <div class="right-options" style="text-align:right;margin-bottom:20px">
-                                                    <ul>
-                                                        <li>
-                                                            <a class="btn btn-solid"
-                                                                href="{{ route('admin.addnotice') }}">Notice</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="table-responsive category-table">
-                                                    <table class="table all-package theme-table" id="table_id">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Title</th>
-                                                                <th>Name</th>
-                                                                <th>Content</th>
-                                                                <th>Date</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if ($notice->isEmpty())
-                                                                <tr>
-                                                                    <td colspan="9">No data available</td>
-                                                                </tr>
-                                                            @else
-                                                                @foreach ($notice as $item)
-                                                                    <tr>
-                                                                        <td>{{ $item->subject }}</td>
-                                                                        <td>All Seller</td>
-                                                                        <td>{{ mb_strlen($item->body) > 50 ? mb_substr($item->body, 0, 50) . '...' : $item->body }}
-                                                                        </td>
-                                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
-                                                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
-                                                                        </td>
-                                                                        <td>
-                                                                            <ul>
-                                                                                <li>
-                                                                                    <a
-                                                                                        href='{{ url('/helpdetails/' . $item->id) }}'>
-                                                                                        <i class="ri-eye-line"></i>
-                                                                                    </a>
-
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a href="javascript:void(0)"
-                                                                                        data-bs-toggle="modal"
-                                                                                        data-bs-target="#deletenoticeModalToggle{{ $item->id }}">
-                                                                                        <i
-                                                                                            class="ri-delete-bin-line"></i>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                @php
-                                                    $ttlpage = $sent_ttlpage;
-                                                @endphp
-                                                <div>
-                                                    @include('components.pagination')
-                                                </div>
-
-                                            </div>
-
-                                            <div class="tab-pane fade" id="info" role="tabpanel">
+                                            <div class="tab-pane fade {{ $activeTab == 'second' ? 'show active' : '' }}"
+                                                id="info" role="tabpanel">
                                                 <div class="right-options" style="text-align:right;margin-bottom:20px">
                                                     <ul>
                                                         <li>
@@ -245,11 +183,74 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                @php
-                                                    $ttlpage = $notice_ttlpage;
-                                                @endphp
                                                 <div>
-                                                    @include('components.pagination')
+                                                    @include('components.secondpagination')
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade {{ $activeTab == 'third' ? 'show active' : '' }}"
+                                                id="notice" role="tabpanel">
+                                                <div class="right-options" style="text-align:right;margin-bottom:20px">
+                                                    <ul>
+                                                        <li>
+                                                            <a class="btn btn-solid"
+                                                                href="{{ route('admin.addnotice') }}">Notice</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="table-responsive category-table">
+                                                    <table class="table all-package theme-table" id="table_id">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Title</th>
+                                                                <th>Name</th>
+                                                                <th>Content</th>
+                                                                <th>Date</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if ($notice->isEmpty())
+                                                                <tr>
+                                                                    <td colspan="9">No data available</td>
+                                                                </tr>
+                                                            @else
+                                                                @foreach ($notice as $item)
+                                                                    <tr>
+                                                                        <td>{{ $item->subject }}</td>
+                                                                        <td>All Seller</td>
+                                                                        <td>{{ mb_strlen($item->body) > 50 ? mb_substr($item->body, 0, 50) . '...' : $item->body }}
+                                                                        </td>
+                                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
+                                                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <a
+                                                                                        href='{{ url('/helpdetails/' . $item->id) }}'>
+                                                                                        <i class="ri-eye-line"></i>
+                                                                                    </a>
+
+                                                                                </li>
+                                                                                <li>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#deletenoticeModalToggle{{ $item->id }}">
+                                                                                        <i
+                                                                                            class="ri-delete-bin-line"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    @include('components.thirdpagination')
                                                 </div>
                                             </div>
                                         </div>
@@ -295,15 +296,6 @@
                                     <span class="error" style="color:red" id="error-image"></span>
                                 </div>
                             </div>
-
-                            {{-- <div class="mb-2 row align-items-center">
-                        <label
-                            class="col-lg-2 col-md-3 col-form-label form-label-title">Image</label>
-                        <div class="col-md-9 col-lg-10">
-                            <input class="form-control" type="file" name="image" id="image" onchange="mainThamUrl(this)">
-                            <img src="" id="mainThmb">
-                        </div>
-                    </div> --}}
 
                             <div class="row align-items-center">
                                 <label class="col-lg-2 col-md-3 col-form-label form-label-title">Body
@@ -483,7 +475,7 @@
         </div>
     @endforeach
     <!-- Delete Modal Box End -->
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             var descriptionTab = document.getElementById('description-tab');
             var infoTab = document.getElementById('info-tab');
@@ -523,7 +515,7 @@
                 toggleTabs('notice'); // Show only the notice tab content
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         function validateImage(input) {

@@ -27,23 +27,26 @@
                                         </div>
                                     </div>
                                     <div class="product-section-box">
-                                        <ul class="nav nav-tabs custom-nav right-options" id="myTab" role="tablist">
+                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                            @php
+                                                $activeTab = request()->tab ?? 'list';
+                                            @endphp
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#description" type="button" role="tab"><i
-                                                        class="icon-cloud-down">Inbox</i></button>
+                                                <button class="nav-link {{ $activeTab == 'list' ? 'active' : '' }}"
+                                                    id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
+                                                    type="button" role="tab"><i
+                                                        class="icon-cloud-down"></i>Inbox</button>
                                             </li>
-
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="info-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#info" type="button" role="tab"><i
-                                                        class="icon-cloud-up">Sent</i></button>
+                                                <button class="nav-link {{ $activeTab == 'second' ? 'active' : '' }}"
+                                                    id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
+                                                    type="button" role="tab"><i class="icon-cloud-up"></i>Sent</button>
                                             </li>
-
                                         </ul>
 
                                         <div class="tab-content custom-tab" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                                            <div class="tab-pane fade {{ $activeTab == 'list' ? 'show active' : '' }}"
+                                                id="description" role="tabpanel">
                                                 <div class="table-responsive category-table">
                                                     <table class="table all-package theme-table" id="table_id">
                                                         <thead>
@@ -103,7 +106,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade" id="info" role="tabpanel">
+                                            <div class="tab-pane fade {{ $activeTab == 'second' ? 'show active' : '' }}"
+                                                id="info" role="tabpanel">
                                                 <div class="table-responsive category-table">
                                                     <table class="table all-package theme-table" id="table_id">
                                                         <thead>
@@ -153,11 +157,8 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                @php
-                                                    $ttlpage = $sentttlpage;
-                                                @endphp
                                                 <div>
-                                                    @include('components.pagination')
+                                                    @include('components.secondpagination')
                                                 </div>
                                             </div>
                                         </div>

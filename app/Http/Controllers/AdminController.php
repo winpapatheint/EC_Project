@@ -3309,7 +3309,6 @@ class AdminController extends Controller
             });
         }
 
-        $order = $orderQuery->paginate($limit);
         $cancelledOrderQuery = OrderDetail::with('order')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select('order_details.*', 'products.*', 'order_details.status as order_detail_status')
@@ -3327,13 +3326,15 @@ class AdminController extends Controller
             });
         }
 
-        $cancelledOrder = $cancelledOrderQuery->paginate($limit);
+        $order = $orderQuery->paginate($limit, ['*'], 'page', request()->get('page', 1));
+        $cancelledOrder = $cancelledOrderQuery->paginate($limit, ['*'], 'second_page', request()->get('second_page', 1));
+
         $ttl = $order->total();
         $ttlpage = ceil($ttl / $limit);
-        $cancelttl = $cancelledOrder->total();
-        $cancelttlPage = ceil($cancelttl / $limit);
+        $second_ttl = $cancelledOrder->total();
+        $second_ttlpage = ceil($second_ttl / $limit);
 
-        return view('admin.order.indexorderlist', compact('order', 'ttl', 'ttlpage', 'cancelledOrder', 'cancelttl', 'cancelttlPage'));
+        return view('admin.order.indexorderlist', compact('order', 'ttl', 'ttlpage', 'cancelledOrder', 'second_ttl', 'second_ttlpage'));
     }
 
     public function orderdetail($id)
@@ -3579,20 +3580,20 @@ class AdminController extends Controller
             });
         }
 
-        $received = $receivedQuery->orderBy('created_at', 'desc')->paginate($limit);
-        $sent = $sentQuery->orderBy('created_at', 'desc')->paginate($limit);
-        $notice = $noticeQuery->orderBy('created_at', 'desc')->paginate($limit);
+        $received = $receivedQuery->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', request()->get('page', 1));
+        $sent = $sentQuery->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'second_page', request()->get('second_page', 1));
+        $notice = $noticeQuery->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'third_page', request()->get('third_page', 1));
 
         $ttl = $received->total();
         $ttlpage = (ceil($ttl / $limit));
 
-        $sent_ttl = $sent->total();
-        $sent_ttlpage = (ceil($sent_ttl / $limit));
+        $second_ttl = $sent->total();
+        $second_ttlpage = (ceil($second_ttl / $limit));
 
-        $notice_ttl = $sent->total();
-        $notice_ttlpage = (ceil($notice_ttl / $limit));
+        $third_ttl = $notice->total();
+        $third_ttlpage = (ceil($third_ttl / $limit));
 
-        return view('admin.indexhelp', compact('received', 'sent', 'notice', 'ttl', 'ttlpage', 'sent_ttl', 'sent_ttlpage', 'notice_ttl', 'notice_ttlpage'));
+        return view('admin.indexhelp', compact('received', 'sent', 'notice', 'ttl', 'ttlpage', 'second_ttl', 'second_ttlpage', 'third_ttl', 'third_ttlpage'));
     }
 
     public function addToSpecial(Request $request)

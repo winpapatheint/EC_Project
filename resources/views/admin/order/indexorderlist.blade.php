@@ -23,20 +23,26 @@
                             <div class="title-header option-title">
                                 <h5>Order List</h5>
                             </div>
+                            @php
+                                $activeTab = request()->tab ?? 'list';
+                            @endphp
 
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-home" type="button">List</button>
+                                    <button class="nav-link {{ $activeTab == 'list' ? 'active' : '' }}"
+                                        id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                                        type="button">List</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-profile" type="button">Cancelled Order</button>
+                                    <button class="nav-link {{ $activeTab == 'second' ? 'active' : '' }}"
+                                        id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                                        type="button">Cancelled Order</button>
                                 </li>
                             </ul>
 
                             <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                                <div class="tab-pane fade {{ $activeTab == 'list' ? 'show active' : '' }}"
+                                    id="pills-home" role="tabpanel">
                                     <div class="table-responsive">
                                         <table class="table all-package order-table theme-table dataTable no-footer"
                                             id="table_id">
@@ -160,9 +166,12 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!--pagination -->
+                                    @include('components.pagination')
                                 </div>
 
-                                <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                                <div class="tab-pane fade {{ $activeTab == 'second' ? 'show active' : '' }}"
+                                    id="pills-profile" role="tabpanel">
                                     <div class="table-responsive">
                                         <table class="table all-package order-table theme-table dataTable no-footer"
                                             id="table_id">
@@ -187,7 +196,7 @@
                                                 @else
                                                     @foreach ($cancelledOrder as $key => $item)
                                                         <tr>
-                                                            <td>{{ $cancelttl + 1 - ($cancelledOrder->firstItem() + $key) }}
+                                                            <td>{{ $second_ttl + 1 - ($cancelledOrder->firstItem() + $key) }}
                                                             </td>
                                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y/m/d') }}<br>
                                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
@@ -217,19 +226,21 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!--pagination -->
+                                    @include('components.secondpagination')
                                 </div>
                             </div>
                         </div>
                         <!-- Table End -->
                     </div>
                 </div>
-                <!--pagination -->
-                @include('components.pagination')
             </div>
         </div>
         <!-- Container-fluid Ends-->
     </div>
     <!-- Section End -->
+
+
 
     <script>
         $(document).ready(function() {

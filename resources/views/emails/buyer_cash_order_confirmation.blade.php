@@ -36,7 +36,7 @@
         }
 
         .content p {
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.6;
         }
 
@@ -137,18 +137,24 @@
                     </tr>
                 </tbody>
             </table>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please transfer the total amount of
+            <p>Please transfer the total amount of
                 ¥{{ number_format($totalAmount, 0, '', ',') }} to the following bank account:</p>
-            <p>Bank Name: {{ $bankInfo->bank_name }}</p>
-            <p>Branch Name: {{ $bankInfo->branch_name }}</p>
-            <p>Account Type: {{ $bankInfo->account_type }}</p>
-            <p>Account Number: {{ $bankInfo->account_number }}</p>
-            <p>Account Name: {{ $bankInfo->account_name }}</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you don't transfer the amount within 7 days, your order will
-                be cancelled.</p>
+            <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bank Name: {{ $bankInfo->bank_name }}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Branch Name: {{ $bankInfo->branch_name }}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account Type: {{ $bankInfo->account_type }}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account Number: {{ $bankInfo->account_number }}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account Name: {{ $bankInfo->account_name }}
+            </p>
+
             <p>Please make sure the transfer person name to be the following name for the transfer process:</p>
-            <p>Transfer Person Name: {{ $transferPersonName }}</p>
-            <p>Planed Transfer Date: {{ $transferDate }}</p>
+            <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: {{ $transferPersonName }}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: {{ $transferDate }}
+            </p>
+
+            <p style="color: red;">***If you don't transfer the amount within 7 days, your order will
+                be cancelled.</p>
             <p>Thank you for shopping with us.</p>
         </div>
         <div class="footer">

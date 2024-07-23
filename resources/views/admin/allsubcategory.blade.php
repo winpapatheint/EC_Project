@@ -138,7 +138,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    @if (empty($list->sub_category_name))
+                                                                    @if (empty($list->sub_category_name) || $list->category == 'Special Corner')
                                                                         {{-- <a href='{{ url("/deletecategory/".$type.'/'.$id ) }}'>
                                                                 <i class="ri-delete-bin-line"></i>
                                                                 </a> --}}
